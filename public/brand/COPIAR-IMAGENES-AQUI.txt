@@ -1,0 +1,8 @@
+Copia aquí tus 3 archivos con ESTOS nombres exactos (como en src/lib/brand.ts):
+
+1. logo.png              → logo circular Transporte Social
+2. ilustracion-nevera.jpg → dibujo nevera / «Portes para todos…»
+3. ilustracion-sofa.jpg   → dibujo sofá / Mortadelo y Filemón
+
+Formato: PNG o JPG.
+Después recarga la web (F5 o Ctrl+F5 en http://localhost:3000).
