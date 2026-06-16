@@ -24,11 +24,11 @@ export async function HomeSubscriptionBanner() {
     <Card className="space-y-4 border-emerald-200 bg-emerald-50/80">
       <div className="space-y-2 text-base text-zinc-800 sm:text-lg">
         <p className="font-semibold text-zinc-900">
-          Para usar esta herramienta, activa tu suscripción.
+          Buscar y aceptar el viaje que te sirva es completamente gratis
         </p>
-        <p>Por solo 95 céntimos/mes llévala siempre contigo.</p>
-        <p>Con la suscripción, tus 3 primeras publicaciones son GRATIS.</p>
-        <p>Luego tan solo 90 céntimos/publicación.</p>
+        <p>Suscríbete por tan solo 95 céntimos/mes y lleva la App siempre contigo</p>
+        <p>Y tus 3 primeras publicaciones son GRATIS.</p>
+        <p>Luego tan solo 90 céntimos por publicación.</p>
       </div>
       {subscriptionActive ? (
         <p className="text-sm font-medium text-emerald-800">

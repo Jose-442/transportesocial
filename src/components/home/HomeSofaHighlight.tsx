@@ -25,12 +25,12 @@ export function HomeSofaHighlight() {
         <br />
         {FRASE_IZQ_SUB}
       </p>
-      <div className="mx-auto flex w-full max-w-[17rem] shrink-0 justify-center leading-none sm:max-w-[19rem]">
+      <div className="mx-auto flex w-full max-w-[17rem] shrink-0 justify-center leading-none sm:max-w-[19rem] lg:max-w-[32rem]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={BRAND.heroSofa}
           alt="Transporte Social — compartiendo ruta con humor"
-          className="mx-auto h-auto w-full max-w-[17rem] sm:max-w-[19rem]"
+          className="mx-auto h-auto w-full max-w-[17rem] sm:max-w-[19rem] lg:max-w-[32rem]"
         />
       </div>
       <FraseTitular>{FRASE_DER}</FraseTitular>
