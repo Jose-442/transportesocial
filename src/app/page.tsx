@@ -56,7 +56,7 @@ export default async function HomePage() {
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:p-10 xl:p-12">
             <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-2 sm:mb-4 sm:gap-2 lg:mb-6">
               <div className="w-[38%] max-w-[6.75rem] shrink-0 overflow-hidden sm:max-w-[7.5rem] md:w-[58%] md:max-w-none md:overflow-visible md:origin-left md:scale-110 md:translate-x-[-2cm] md:translate-y-[3mm] lg:max-w-[320px] lg:scale-[1.2] xl:max-w-[360px] xl:scale-[1.3]">
-                <div className="origin-top-left -translate-x-[5mm] -translate-y-[1mm] scale-[1.35] md:translate-x-0 md:translate-y-0 md:scale-100">
+                <div className="origin-top-left -translate-x-[5mm] -translate-y-[2mm] scale-[1.35] md:translate-x-0 md:translate-y-0 md:scale-100">
                   <BrandLogo
                     size="hero"
                     showText={false}
@@ -90,7 +90,7 @@ export default async function HomePage() {
                 fullWidth
                 className="border-white/30 bg-white/10 text-white hover:bg-white/20"
               >
-                Conductor, busca una ruta por necesidad de porte
+                Conductor busca ruta con necesidad de porte y/o pasajero
               </ButtonLink>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:gap-5">
             <ButtonLink
-              href="/rutas/nueva"
+              href="/suscribir-requerida?dest=%2Frutas%2Fnueva"
               variant="primary"
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left text-sm sm:min-h-[7.5rem] sm:gap-5 sm:px-4 sm:text-base"
@@ -121,12 +121,12 @@ export default async function HomePage() {
                 Pulsa aquí para:
               </span>
               <span>
-                Conductor, ofrece tu viaje: di el espacio del que dispones y
-                ponle precio
+                Conductor, ofrece tu viaje: di el espacio de que dispones y/o
+                los asientos que tienes libres y ponle precio
               </span>
             </ButtonLink>
             <ButtonLink
-              href="/bultos/nuevo"
+              href="/suscribir-requerida?dest=%2Fbultos%2Fnuevo"
               variant="secondary"
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left text-sm sm:min-h-[7.5rem] sm:gap-5 sm:px-4 sm:text-base"
