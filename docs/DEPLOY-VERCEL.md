@@ -19,8 +19,8 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 | `STRIPE_SECRET_KEY` | Sí (cobros) | Stripe Dashboard → Developers → API keys |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Sí (cobros) | Misma pantalla |
 | `STRIPE_WEBHOOK_SECRET` | Sí (cobros) | Stripe → Webhooks → signing secret |
-| `RESEND_API_KEY` | No | Resend (email bienvenida / nueva oferta) |
-| `RESEND_FROM_EMAIL` | No | Remitente verificado en Resend |
+| `RESEND_API_KEY` | **Sí (emails)** | [Resend](https://resend.com) → API Keys → `re_...` |
+| `RESEND_FROM_EMAIL` | **Sí (emails)** | `Transporte Social <onboarding@resend.dev>` (prueba) o `noreply@tu-dominio` (prod) |
 
 \* También vale `NEXT_PUBLIC_SUPABASE_ANON_KEY` (alias antiguo; el código acepta ambos).
 
@@ -31,7 +31,9 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 | `SUPABASE_SERVICE_ROLE_KEY` | Notificaciones de chat, webhook Stripe, cron, disputas y borrado de cuenta degradan o fallan |
 | `CRON_SECRET` | `/api/cron/reservas` responde 401; no expiran aprobaciones ni se libera escrow automático |
 | Stripe | No hay suscripción, aportación ni pago de viajes |
-| Resend | Registro y ofertas funcionan; sin emails |
+| Resend | Sin emails de bienvenida, suscripción ni aviso de ofertas |
+
+Guía detallada: [`docs/RESEND-SETUP.md`](RESEND-SETUP.md).
 
 ---
 

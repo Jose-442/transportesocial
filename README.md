@@ -41,6 +41,10 @@ git commit -m "descripción breve del estado"
 
 ## 1. Migración en Supabase
 
+**Guía completa (001 → 020):** ver [`docs/SUPABASE-CHECKLIST.md`](docs/SUPABASE-CHECKLIST.md) — diagnóstico paso a paso y queries de verificación.
+
+Resumen mínimo (solo proyecto nuevo):
+
 1. Entra en [Supabase Dashboard](https://supabase.com/dashboard) → proyecto **transporte-social**.
 2. Ve a **SQL Editor** → **New query**.
 3. Copia y pega **todo** el contenido de:
@@ -69,7 +73,7 @@ En **Authentication → URL Configuration**:
 
 En **Authentication → Providers → Email**, desactiva **«Confirmar el correo electrónico»**. Tras registrarse, el usuario entra directamente (sin correo de confirmación).
 
-Opcional: correo de bienvenida vía [Resend](https://resend.com). Añade `RESEND_API_KEY` y `RESEND_FROM_EMAIL` en `.env.local`. Sin esas variables, el registro funciona igual pero no se envía el email.
+Correos (bienvenida, suscripción, ofertas) vía [Resend](https://resend.com). Guía paso a paso: [`docs/RESEND-SETUP.md`](docs/RESEND-SETUP.md). Variables: `RESEND_API_KEY` y `RESEND_FROM_EMAIL` en `.env.local` y Vercel.
 
 El enlace `/auth/callback` sigue usándose para otros flujos de auth (p. ej. recuperación de contraseña).
 
@@ -81,35 +85,24 @@ En **Database → Replication**, confirma que `notificaciones` está en la publi
 
 ## 2. Variables de entorno
 
-Crea `.env.local` (local) con:
+Guía completa: [`docs/DEPLOY-VERCEL.md`](docs/DEPLOY-VERCEL.md)
+
+```bash
+cp .env.local.example .env.local
+```
+
+Mínimo local:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJ...
 ```
 
-Las encuentras en **Project Settings → API**.
+En **producción** añade también `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` y las claves Stripe (ver guía de deploy).
 
-> No subas `.env.local` a git. La `anon key` es pública por diseño; la `service_role` **nunca** en el cliente.
+## 3. Despliegue en Vercel
 
-## 3. Despliegue en Vercel (cuando quieras)
-
-1. Sube el repo a GitHub (o conecta la carpeta con `vercel`).
-2. En Vercel → proyecto del equipo `transporte-social` → **Import**.
-3. Framework: **Next.js** (auto-detectado).
-4. Añade las mismas variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-5. Deploy.
-
-Después del primer deploy, actualiza en Supabase las **Redirect URLs** con la URL de Vercel (`*.vercel.app`) y más adelante `https://transporte.moteria.es`.
-
-### DNS DonDominio (fase posterior)
-
-Cuando la app esté estable en Vercel:
-
-- CNAME `transporte` → `cname.vercel-dns.com` (o el que indique Vercel en **Domains**)
-- No tocar `mercado.moteria.es` (WordPress)
+Ver [`docs/DEPLOY-VERCEL.md`](docs/DEPLOY-VERCEL.md) (variables, cron, webhook Stripe, Auth Supabase).
 
 ## Estructura del proyecto
 

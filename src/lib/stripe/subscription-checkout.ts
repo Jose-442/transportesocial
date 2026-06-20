@@ -1,3 +1,7 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type Stripe from "stripe";
+import { sendSubscriptionWelcomeEmail } from "@/lib/email/subscription-welcome";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { SUBSCRIPTION_MONTHLY_EUR } from "@/lib/constants";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -8,12 +12,83 @@ import {
   subscriptionEndsAtFromPeriodEnd,
   syncProfileSubscription,
 } from "./sync-subscription";
-import type Stripe from "stripe";
 
 export type CreateSubscriptionCheckoutResult =
   | { ok: true; alreadySubscribed: true }
   | { ok: true; alreadySubscribed: false; url: string }
   | { ok: false; error: string };
+
+async function resolveSubscriberEmail(
+  userId: string,
+  session: Stripe.Checkout.Session,
+  supabase: SupabaseClient
+): Promise<string | null> {
+  const fromSession =
+    session.customer_details?.email?.trim() ||
+    (typeof session.customer_email === "string"
+      ? session.customer_email.trim()
+      : null);
+
+  if (fromSession) {
+    return fromSession;
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user?.id === userId && user.email?.trim()) {
+    return user.email.trim();
+  }
+
+  const admin = createAdminClient();
+  if (!admin) {
+    return null;
+  }
+
+  const { data, error } = await admin.auth.admin.getUserById(userId);
+  if (error) {
+    console.error("[subscription-welcome-email] getUserById", error);
+    return null;
+  }
+
+  return data.user?.email?.trim() ?? null;
+}
+
+async function maybeSendSubscriptionWelcomeEmail(
+  userId: string,
+  session: Stripe.Checkout.Session,
+  subscription: Stripe.Subscription,
+  supabase: SupabaseClient,
+  wasAlreadyActive: boolean
+): Promise<void> {
+  const willBeActive =
+    subscription.status === "active" || subscription.status === "trialing";
+
+  if (wasAlreadyActive || !willBeActive) {
+    return;
+  }
+
+  const { data: profileBefore } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const email = await resolveSubscriberEmail(userId, session, supabase);
+  if (!email) {
+    console.warn(
+      "[subscription-welcome-email] No se encontró email para el usuario",
+      userId
+    );
+    return;
+  }
+
+  await sendSubscriptionWelcomeEmail({
+    to: email,
+    displayName: profileBefore?.display_name ?? "",
+  });
+}
 
 export async function createSubscriptionCheckoutSession(
   afterDest?: PublicationDest
@@ -94,7 +169,7 @@ export async function createSubscriptionCheckoutSession(
 }
 
 export async function applyStripeSubscription(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: SupabaseClient,
   userId: string,
   subscription: Stripe.Subscription
 ): Promise<{ error?: string }> {
@@ -119,7 +194,7 @@ export async function applyStripeSubscription(
 export async function completeSubscriptionCheckout(
   checkoutSessionId: string,
   expectedUserId: string,
-  supabaseOverride?: Awaited<ReturnType<typeof createClient>>
+  supabaseOverride?: SupabaseClient
 ): Promise<{ error?: string }> {
   if (!isStripeConfigured()) {
     return { error: "Stripe no configurado en el servidor." };
@@ -148,5 +223,30 @@ export async function completeSubscriptionCheckout(
   }
 
   const supabase = supabaseOverride ?? (await createClient());
-  return applyStripeSubscription(supabase, expectedUserId, subscription);
+
+  const { data: profileBefore } = await supabase
+    .from("profiles")
+    .select("subscription_active")
+    .eq("id", expectedUserId)
+    .maybeSingle();
+
+  const wasAlreadyActive = profileBefore?.subscription_active ?? false;
+
+  const result = await applyStripeSubscription(
+    supabase,
+    expectedUserId,
+    subscription
+  );
+
+  if (!result.error) {
+    await maybeSendSubscriptionWelcomeEmail(
+      expectedUserId,
+      session,
+      subscription,
+      supabase,
+      wasAlreadyActive
+    );
+  }
+
+  return result;
 }

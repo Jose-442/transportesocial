@@ -37,7 +37,7 @@ export async function registrarUsuario(input: {
     };
   }
 
-  void sendWelcomeEmail({ to: email, displayName }).catch((err) => {
+  await sendWelcomeEmail({ to: email, displayName }).catch((err) => {
     console.error("[welcome-email]", err);
   });
 
