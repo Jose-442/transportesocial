@@ -27,13 +27,13 @@ export default function QuienesSomosPage() {
 
       <p className="mb-6 text-base leading-relaxed sm:text-lg">
         Somos una plataforma que conecta a conductores que tienen un viaje ya
-        programado y disponen de espacio libre, con personas que necesitan
+        programado y disponen de espacio libre con personas que necesitan
         enviar algo muy voluminoso, haciendo de esa conexion que un porte sea
         economico, rapido, eficiente y sostenible, con cero emisiones añadidas,
-        ya que el viaje se iba ha hacer de todas maneras. En nuestra plataforma
-        la persona que necesita hacer un porte tambien puede publicar su
-        solicitud, para que los conductores que hagan esa ruta puedan ofrecerle
-        un precio. Así de fácil, un éxito para ambas partes.
+        ya que el viaje se iba ha hacer de todas maneras. También en nuestra
+        plataforma puede publicar su solicitud la persona que necesita hacer un
+        porte para que los conductores que hagan esa ruta puedan ofrecerle un
+        precio. Así de fácil, un éxito para ambas partes.
       </p>
 
       <Image

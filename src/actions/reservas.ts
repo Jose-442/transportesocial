@@ -245,8 +245,13 @@ export async function prepararReservaBulto(ofertaId: string) {
     .eq("id", ofertaId)
     .single();
 
-  if (!oferta || oferta.estado !== "pendiente") {
-    return { error: "Esta oferta ya no está disponible." };
+  if (!oferta) {
+    return { error: "Propuesta no encontrada." };
+  }
+  if (oferta.estado !== "pendiente") {
+    return {
+      error: "Esta propuesta ya no está disponible. Recarga la página.",
+    };
   }
 
   const { data: bulto } = await supabase
@@ -301,7 +306,10 @@ export async function prepararReservaBulto(ofertaId: string) {
 
   const checkout = await createTripCheckoutSession(reserva.id);
   if (!checkout.ok) {
-    return { error: checkout.error };
+    return {
+      error: `${checkout.error} La reserva está creada: ve a Cuenta → Mis viajes o a /reservas/${reserva.id} para completar el pago.`,
+      reservaId: reserva.id,
+    };
   }
 
   revalidatePath(`/bultos/${oferta.anuncio_bulto_id}`);

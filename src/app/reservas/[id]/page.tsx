@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
+import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { createClient } from "@/lib/supabase/server";
 import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
@@ -110,6 +111,7 @@ export default async function ReservaDetallePage({
 
   return (
     <div className="space-y-4">
+      <MarcarNotificacionesEnlaceLeida enlace={`/reservas/${id}`} />
       <Link
         href="/cuenta/viajes"
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"

@@ -8,11 +8,31 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
+import { perfilVehiculoIncompleto, ERROR_VEHICULO_INCOMPLETO } from "@/lib/vehiculo";
 import {
   assertCanPublish,
   consumePublicationCredit,
   shouldConsumePublicationCredit,
 } from "@/actions/publication-fee";
+
+async function rollbackRutaTrasFallo(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  rutaId: string,
+  motivo: string
+): Promise<{ error: string }> {
+  const { error: deleteError } = await supabase
+    .from("rutas_conductores")
+    .delete()
+    .eq("id", rutaId);
+
+  if (deleteError) {
+    return {
+      error: `${motivo} No se pudo deshacer el borrador de la ruta (${supabaseErrorMessage(deleteError)}).`,
+    };
+  }
+
+  return { error: motivo };
+}
 
 export async function crearRuta(formData: FormData) {
   const supabase = await createClient();
@@ -31,6 +51,10 @@ export async function crearRuta(formData: FormData) {
   const access = await assertCanPublish(profile, user.id, "/rutas/nueva");
   if (access.error) return { error: access.error };
 
+  if (perfilVehiculoIncompleto(profile)) {
+    return { error: ERROR_VEHICULO_INCOMPLETO };
+  }
+
   const precioNeto = parseFloat(String(formData.get("precio_neto")));
   if (!precioNeto || precioNeto <= 0) {
     return { error: "Indica un precio neto válido." };
@@ -46,23 +70,6 @@ export async function crearRuta(formData: FormData) {
     espacioTamano,
     String(formData.get("espacio_detalle") ?? "")
   );
-
-  const { data, error } = await supabase
-    .from("rutas_conductores")
-    .insert({
-      user_id: user.id,
-      origen: formatCiudad(String(formData.get("origen"))),
-      destino: formatCiudad(String(formData.get("destino"))),
-      fecha_salida: String(formData.get("fecha_salida")),
-      fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
-      espacio_disponible: espacioDisponible,
-      precio_neto: precioNeto,
-      precio_publicado: precioPublicado,
-    })
-    .select("id")
-    .single();
-
-  if (error) return { error: supabaseErrorMessage(error) };
 
   const plazasAcompanante = parseInt(
     String(formData.get("plazas_acompanante") ?? "1"),
@@ -85,6 +92,23 @@ export async function crearRuta(formData: FormData) {
 
   const precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
 
+  const { data, error } = await supabase
+    .from("rutas_conductores")
+    .insert({
+      user_id: user.id,
+      origen: formatCiudad(String(formData.get("origen"))),
+      destino: formatCiudad(String(formData.get("destino"))),
+      fecha_salida: String(formData.get("fecha_salida")),
+      fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
+      espacio_disponible: espacioDisponible,
+      precio_neto: precioNeto,
+      precio_publicado: precioPublicado,
+    })
+    .select("id")
+    .single();
+
+  if (error) return { error: supabaseErrorMessage(error) };
+
   const { error: ofertaError } = await supabase.from("ofertas_capacidad").insert({
     ruta_conductor_id: data.id,
     tipo: "asiento",
@@ -96,8 +120,11 @@ export async function crearRuta(formData: FormData) {
   });
 
   if (ofertaError) {
-    await supabase.from("rutas_conductores").delete().eq("id", data.id);
-    return { error: supabaseErrorMessage(ofertaError) };
+    return rollbackRutaTrasFallo(
+      supabase,
+      data.id,
+      supabaseErrorMessage(ofertaError)
+    );
   }
 
   if (await shouldConsumePublicationCredit(user.id, profile)) {

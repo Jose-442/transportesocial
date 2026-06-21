@@ -3,6 +3,7 @@ import { RutaCard } from "@/components/rutas/RutaCard";
 import { ListadoFiltros } from "@/components/listados/ListadoFiltros";
 import { createClient } from "@/lib/supabase/server";
 import {
+  filtrosToSearchQuery,
   parseFiltros,
   tieneBusquedaCompleta,
   tieneFiltrosActivos,
@@ -10,6 +11,8 @@ import {
 import { formatCiudad } from "@/lib/format-ciudad";
 import { listarRutasConCapacidad } from "@/lib/capacidad/rutas-listado";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Buscar viajes" };
 
@@ -21,6 +24,7 @@ export default async function RutasPage({
   const filtros = parseFiltros(await searchParams);
   const busquedaCompleta = tieneBusquedaCompleta(filtros);
   const hayFiltros = tieneFiltrosActivos(filtros);
+  const listadoSearch = busquedaCompleta ? filtrosToSearchQuery(filtros) : null;
 
   let rutas: RutaListadoItem[] = [];
 
@@ -69,7 +73,7 @@ export default async function RutasPage({
             })}
           </p>
           {rutas.map((ruta) => (
-            <RutaCard key={ruta.id} ruta={ruta} />
+            <RutaCard key={ruta.id} ruta={ruta} listadoSearch={listadoSearch} />
           ))}
         </div>
       )}

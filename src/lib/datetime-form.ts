@@ -24,11 +24,25 @@ export function daysInMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate();
 }
 
-export function yearOptions(from = new Date().getFullYear(), span = 3) {
-  return Array.from({ length: span }, (_, i) => {
-    const y = String(from + i);
-    return { value: y, label: y };
-  });
+/** Año actual, o el siguiente si día/mes ya pasaron este año. */
+export function resolveYearForMonthDay(month: string, day: string): string {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  if (!month || !day) return String(currentYear);
+
+  const m = parseInt(month, 10);
+  const d = parseInt(day, 10);
+  if (Number.isNaN(m) || Number.isNaN(d)) return String(currentYear);
+
+  const candidate = new Date(currentYear, m - 1, d);
+  const today = new Date(currentYear, now.getMonth(), now.getDate());
+  if (candidate < today) return String(currentYear + 1);
+  return String(currentYear);
+}
+
+export function formatDateFromMonthDay(month: string, day: string): string {
+  if (!month || !day) return "";
+  return formatDate(resolveYearForMonthDay(month, day), month, day);
 }
 
 /** Combina hora y minuto en HH:mm. */

@@ -9,6 +9,7 @@ import { getRequestOrigin } from "@/lib/stripe/origin";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
 import { getStripeServer, isStripeConfigured } from "@/lib/stripe/server";
 import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
+import { isDistintivoAmbiental } from "@/lib/vehiculo";
 
 export async function actualizarNombreMostrar(
   displayName: string
@@ -36,6 +37,88 @@ export async function actualizarNombreMostrar(
 
   revalidatePath("/cuenta");
   revalidatePath(`/perfil/${user.id}`);
+  return { ok: true };
+}
+
+export async function actualizarSobreTi(
+  sobreTi: string
+): Promise<{ error?: string; ok?: boolean }> {
+  const texto = sobreTi.trim();
+  if (texto.length > 280) {
+    return { error: "El texto no puede superar 280 caracteres." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ sobre_ti: texto || null })
+    .eq("id", user.id);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/cuenta");
+  revalidatePath(`/perfil/${user.id}`);
+  revalidatePath("/bultos", "layout");
+  return { ok: true };
+}
+
+export async function actualizarVehiculo(input: {
+  marca: string;
+  modelo: string;
+  anio: string;
+  distintivo: string;
+}): Promise<{ error?: string; ok?: boolean }> {
+  const marca = input.marca.trim();
+  const modelo = input.modelo.trim();
+  const anio = parseInt(input.anio, 10);
+
+  if (!marca || marca.length < 2) {
+    return { error: "Indica la marca del vehículo." };
+  }
+  if (marca.length > 60) {
+    return { error: "La marca es demasiado larga." };
+  }
+  if (!modelo || modelo.length < 1) {
+    return { error: "Indica el modelo del vehículo." };
+  }
+  if (modelo.length > 60) {
+    return { error: "El modelo es demasiado largo." };
+  }
+  if (!Number.isInteger(anio) || anio < 1980 || anio > 2030) {
+    return { error: "Indica un año de matriculación válido (1980–2030)." };
+  }
+
+  if (!isDistintivoAmbiental(input.distintivo)) {
+    return { error: "Selecciona tu distintivo ambiental." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      vehiculo_marca: marca,
+      vehiculo_modelo: modelo,
+      vehiculo_anio: anio,
+      distintivo_ambiental: input.distintivo,
+    })
+    .eq("id", user.id);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/cuenta");
+  revalidatePath(`/perfil/${user.id}`);
+  revalidatePath("/bultos", "layout");
+  revalidatePath("/rutas", "layout");
   return { ok: true };
 }
 

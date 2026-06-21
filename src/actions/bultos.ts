@@ -5,7 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
+import {
+  incluyeBulto,
+  isTipoSolicitud,
+  type TipoSolicitud,
+} from "@/lib/solicitud-viaje";
 import {
   assertCanPublish,
   consumePublicationCredit,
@@ -29,6 +35,12 @@ export async function crearBulto(formData: FormData) {
   const access = await assertCanPublish(profile, user.id, "/bultos/nuevo");
   if (access.error) return { error: access.error };
 
+  const tipoRaw = String(formData.get("tipo_solicitud")).trim();
+  if (!isTipoSolicitud(tipoRaw)) {
+    return { error: "Selecciona qué necesitas para el viaje." };
+  }
+  const tipoSolicitud: TipoSolicitud = tipoRaw;
+
   let fotoUrl: string | null = null;
   const foto = formData.get("foto");
   if (foto instanceof File && foto.size > 0) {
@@ -46,26 +58,46 @@ export async function crearBulto(formData: FormData) {
   }
 
   const fechaLimite = formData.get("fecha_limite");
+  const necesitaBulto = incluyeBulto(tipoSolicitud);
 
-  const espacioTamano = String(formData.get("espacio_tamano")).trim();
-  if (!ESPACIO_OPCIONES.includes(espacioTamano as (typeof ESPACIO_OPCIONES)[number])) {
-    return { error: "Selecciona el espacio que necesitas." };
+  let descripcion = String(formData.get("descripcion") ?? "").trim();
+  let medidas = "";
+
+  if (necesitaBulto) {
+    const espacioTamano = String(formData.get("espacio_tamano")).trim();
+    if (
+      !ESPACIO_OPCIONES.includes(
+        espacioTamano as (typeof ESPACIO_OPCIONES)[number]
+      )
+    ) {
+      return { error: "Selecciona el espacio que necesitas." };
+    }
+    medidas = combinarEspacio(
+      espacioTamano,
+      String(formData.get("espacio_detalle") ?? "")
+    );
+  } else if (!descripcion) {
+    descripcion = "Solo pasajeros, sin bulto.";
   }
-  const medidas = combinarEspacio(
-    espacioTamano,
-    String(formData.get("espacio_detalle") ?? "")
-  );
+
+  const origenInput = formatCiudad(String(formData.get("origen")));
+  const destinoInput = formatCiudad(String(formData.get("destino")));
+  const origenResuelto = resolverMunicipioFormulario(origenInput, "salida");
+  if (origenResuelto.error) return { error: origenResuelto.error };
+  const destinoResuelto = resolverMunicipioFormulario(destinoInput, "destino");
+  if (destinoResuelto.error) return { error: destinoResuelto.error };
 
   const { data, error } = await supabase
     .from("anuncios_bultos")
     .insert({
       user_id: user.id,
-      origen: formatCiudad(String(formData.get("origen"))),
-      destino: formatCiudad(String(formData.get("destino"))),
-      descripcion: String(formData.get("descripcion")).trim(),
+      origen: origenResuelto.municipio!.nombre,
+      destino: destinoResuelto.municipio!.nombre,
+      descripcion,
       medidas,
       foto_url: fotoUrl,
       fecha_limite: fechaLimite ? String(fechaLimite) : null,
+      tipo_solicitud: tipoSolicitud,
     })
     .select("id")
     .single();

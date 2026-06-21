@@ -23,13 +23,13 @@ export default async function SuscribirRequeridaPage({
   }
 
   const session = await getProfileForPublication();
-  if (!session) {
-    redirect(`/login?redirect=${encodeURIComponent(dest)}`);
-  }
-
-  if (session.profile.subscription_active) {
+  if (session?.profile.subscription_active) {
     redirect(dest);
   }
+
+  const subscribeTarget = suscribirHref(dest);
+  const loginHref = `/login?redirect=${encodeURIComponent(subscribeTarget)}`;
+  const registroHref = `/registro?redirect=${encodeURIComponent(dest)}`;
 
   return (
     <div className="space-y-4">
@@ -39,9 +39,23 @@ export default async function SuscribirRequeridaPage({
           Este servicio requiere la suscripción previa por tan solo 95
           céntimos/mes, con 3 publicaciones GRATIS.
         </p>
-        <ButtonLink href={suscribirHref(dest)} fullWidth>
-          Aceptar
-        </ButtonLink>
+        {session ? (
+          <ButtonLink href={subscribeTarget} fullWidth>
+            Aceptar
+          </ButtonLink>
+        ) : (
+          <>
+            <ButtonLink href={registroHref} fullWidth>
+              Aceptar
+            </ButtonLink>
+            <p className="text-center text-sm text-zinc-600">
+              ¿Ya tienes cuenta?{" "}
+              <Link href={loginHref} className="font-semibold text-emerald-700">
+                Entrar
+              </Link>
+            </p>
+          </>
+        )}
         <Link
           href="/"
           className="block text-center text-sm font-medium text-zinc-500 hover:text-zinc-700"

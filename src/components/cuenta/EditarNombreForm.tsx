@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { actualizarNombreMostrar } from "@/actions/cuenta";
 
@@ -43,7 +44,12 @@ export function EditarNombreForm({ nombreInicial }: { nombreInicial: string }) {
       />
       {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <Button type="submit" variant="secondary" disabled={loading}>
+      <Button
+        type="submit"
+        variant="secondary"
+        className={CUENTA_BTN_SECONDARY}
+        disabled={loading}
+      >
         {loading ? "Guardando…" : "Guardar nombre"}
       </Button>
     </form>

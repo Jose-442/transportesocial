@@ -16,6 +16,8 @@ type Ctx = {
   unreadCount: number;
   notifications: Notificacion[];
   markAsRead: (id: string) => Promise<void>;
+  markAllAsRead: () => Promise<void>;
+  markAsReadByEnlace: (enlace: string) => Promise<void>;
   refresh: () => Promise<void>;
 };
 
@@ -73,14 +75,43 @@ export function NotificationProvider({
 
   const markAsRead = useCallback(
     async (id: string) => {
+      if (!userId) return;
       const supabase = createClient();
       await supabase
         .from("notificaciones")
         .update({ leida: true })
         .eq("id", id)
-        .eq("user_id", userId ?? "");
+        .eq("user_id", userId);
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, leida: true } : n))
+      );
+    },
+    [userId]
+  );
+
+  const markAllAsRead = useCallback(async () => {
+    if (!userId) return;
+    const supabase = createClient();
+    await supabase
+      .from("notificaciones")
+      .update({ leida: true })
+      .eq("user_id", userId)
+      .eq("leida", false);
+    setNotifications((prev) => prev.map((n) => ({ ...n, leida: true })));
+  }, [userId]);
+
+  const markAsReadByEnlace = useCallback(
+    async (enlace: string) => {
+      if (!userId) return;
+      const supabase = createClient();
+      await supabase
+        .from("notificaciones")
+        .update({ leida: true })
+        .eq("user_id", userId)
+        .eq("enlace", enlace)
+        .eq("leida", false);
+      setNotifications((prev) =>
+        prev.map((n) => (n.enlace === enlace ? { ...n, leida: true } : n))
       );
     },
     [userId]
@@ -122,7 +153,7 @@ export function NotificationProvider({
 
   return (
     <NotificationContext.Provider
-      value={{ unreadCount, notifications, markAsRead, refresh }}
+      value={{ unreadCount, notifications, markAsRead, markAllAsRead, markAsReadByEnlace, refresh }}
     >
       {children}
       {toast && (

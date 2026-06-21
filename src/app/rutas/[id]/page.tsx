@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
+import { hrefVolverListado } from "@/lib/listado-filters";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
 export async function generateMetadata({
@@ -23,10 +24,14 @@ export async function generateMetadata({
 
 export default async function RutaDetallePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
+  const resolvedSearchParams = await searchParams;
+  const volverHref = hrefVolverListado("/rutas", resolvedSearchParams);
   const supabase = await createClient();
   const {
     data: { user },
@@ -81,7 +86,7 @@ export default async function RutaDetallePage({
   return (
     <div className="space-y-4">
       <Link
-        href="/rutas"
+        href={volverHref}
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
       >
         ← Volver a buscar viajes

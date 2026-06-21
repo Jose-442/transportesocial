@@ -1,10 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
+import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Button } from "@/components/ui/Button";
-import { CIUDADES_ESPAÑA } from "@/lib/ciudades-espana";
+import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
+import { resolverMunicipio } from "@/lib/municipios-espana";
 
 type Props = {
   tipo?: "viajes" | "bultos";
@@ -15,25 +16,53 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const origen = searchParams.get("origen") ?? "";
-  const destino = searchParams.get("destino") ?? "";
-  const fecha = searchParams.get("fecha") ?? "";
+  const origenParam = searchParams.get("origen") ?? "";
+  const destinoParam = searchParams.get("destino") ?? "";
+  const fechaParam = searchParams.get("fecha") ?? "";
+
+  const [origen, setOrigen] = useState(origenParam);
+  const [destino, setDestino] = useState(destinoParam);
+  const [fecha, setFecha] = useState(fechaParam);
+  const [errorOrigen, setErrorOrigen] = useState("");
+  const [errorDestino, setErrorDestino] = useState("");
+
+  useEffect(() => {
+    setOrigen(origenParam);
+    setDestino(destinoParam);
+    setFecha(fechaParam);
+  }, [origenParam, destinoParam, fechaParam]);
 
   function aplicar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
+    setErrorOrigen("");
+    setErrorDestino("");
+
+    const origenValido = resolverMunicipio(origen);
+    const destinoValido = resolverMunicipio(destino);
+
+    if (!origenValido) {
+      setErrorOrigen("Selecciona una población de la lista");
+      return;
+    }
+    if (!destinoValido) {
+      setErrorDestino("Selecciona una población de la lista");
+      return;
+    }
+    if (!fecha.trim()) return;
+
     const params = new URLSearchParams();
-    const o = String(form.get("origen") ?? "").trim();
-    const d = String(form.get("destino") ?? "").trim();
-    const f = String(form.get("fecha") ?? "").trim();
-    if (o) params.set("origen", o);
-    if (d) params.set("destino", d);
-    if (f) params.set("fecha", f);
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname);
+    params.set("origen", origenValido.nombre);
+    params.set("destino", destinoValido.nombre);
+    params.set("fecha", fecha.trim());
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   function limpiar() {
+    setOrigen("");
+    setDestino("");
+    setFecha("");
+    setErrorOrigen("");
+    setErrorDestino("");
     router.push(pathname);
   }
 
@@ -50,28 +79,28 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         exacto y la hora.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Select
+        <MunicipioAutocomplete
           name="origen"
-          label="Ciudad de salida"
-          options={CIUDADES_ESPAÑA}
-          defaultValue={origen}
-          placeholder="Ciudad de salida…"
+          label="Salida"
+          value={origen}
+          onChange={setOrigen}
           required
+          error={errorOrigen}
         />
-        <Select
+        <MunicipioAutocomplete
           name="destino"
-          label="Ciudad de llegada"
-          options={CIUDADES_ESPAÑA}
-          defaultValue={destino}
-          placeholder="Ciudad de llegada…"
+          label="Llegada"
+          value={destino}
+          onChange={setDestino}
           required
+          error={errorDestino}
         />
       </div>
-      <Input
+      <DatePickerInput
         name="fecha"
         label={tipo === "viajes" ? "Día del viaje" : "Día (fecha límite)"}
-        type="date"
-        defaultValue={fecha}
+        value={fecha}
+        onChange={setFecha}
         required
       />
       <div className="flex gap-2">

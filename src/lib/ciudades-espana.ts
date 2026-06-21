@@ -1,4 +1,5 @@
 /**
+ * @deprecated Usar `@/lib/municipios-espana` (catálogo INE completo).
  * Principales ciudades de España (capitales de provincia y grandes municipios).
  * Orden alfabético. Para búsqueda amplia por provincia/radio → fase posterior.
  */

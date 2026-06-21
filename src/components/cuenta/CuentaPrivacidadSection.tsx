@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { solicitarCambioContrasena } from "@/actions/cuenta";
 import { EditarNombreForm } from "@/components/cuenta/EditarNombreForm";
 import { LEGAL_TITULAR } from "@/lib/legal-info";
@@ -40,6 +41,7 @@ export function CuentaPrivacidadSection({
           type="button"
           variant="secondary"
           fullWidth
+          className={CUENTA_BTN_SECONDARY}
           disabled={passwordLoading}
           onClick={onCambiarContrasena}
         >
@@ -56,7 +58,7 @@ export function CuentaPrivacidadSection({
       <div className="border-t border-zinc-100 pt-4">
         <Link
           href="/notificaciones"
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
+          className={`inline-flex min-h-11 w-full items-center justify-center rounded-xl border px-4 text-sm font-semibold ${CUENTA_BTN_SECONDARY}`}
         >
           Ver notificaciones
         </Link>
@@ -65,7 +67,7 @@ export function CuentaPrivacidadSection({
       <div className="border-t border-zinc-100 pt-4">
         <a
           href="/api/cuenta/export"
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
+          className={`inline-flex min-h-11 w-full items-center justify-center rounded-xl border px-4 text-sm font-semibold ${CUENTA_BTN_SECONDARY}`}
         >
           Descargar mis datos
         </a>

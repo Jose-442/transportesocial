@@ -1,7 +1,16 @@
+import type { OfertaDesglose, TipoSolicitud } from "@/lib/solicitud-viaje";
+
+export type { TipoSolicitud, OfertaDesglose };
+
 export type Profile = {
   id: string;
   display_name: string;
   avatar_url: string | null;
+  sobre_ti: string | null;
+  vehiculo_marca: string | null;
+  vehiculo_modelo: string | null;
+  vehiculo_anio: number | null;
+  distintivo_ambiental: import("@/lib/vehiculo").DistintivoAmbiental | null;
   phone: string | null;
   trial_ends_at: string;
   subscription_active: boolean;
@@ -19,7 +28,16 @@ export type Profile = {
 
 export type PerfilPublico = Pick<
   Profile,
-  "id" | "display_name" | "avatar_url" | "rating_promedio" | "rating_cantidad"
+  | "id"
+  | "display_name"
+  | "avatar_url"
+  | "sobre_ti"
+  | "vehiculo_marca"
+  | "vehiculo_modelo"
+  | "vehiculo_anio"
+  | "distintivo_ambiental"
+  | "rating_promedio"
+  | "rating_cantidad"
 >;
 
 export type TipoOfertaCapacidad = "bulto" | "asiento";
@@ -118,6 +136,8 @@ export type ChatMensaje = {
   canal_id: string;
   remitente_id: string;
   cuerpo: string;
+  editado_en: string | null;
+  eliminado: boolean;
   created_at: string;
 };
 
@@ -162,6 +182,7 @@ export type AnuncioBulto = {
   medidas: string;
   foto_url: string | null;
   fecha_limite: string | null;
+  tipo_solicitud: TipoSolicitud;
   estado: "activo" | "reservado" | "completado" | "cancelado";
   created_at: string;
   updated_at: string;
@@ -174,6 +195,7 @@ export type OfertaPrecio = {
   precio_neto: number;
   precio_total: number;
   mensaje: string | null;
+  desglose: OfertaDesglose | null;
   estado: "pendiente" | "aceptada" | "rechazada" | "expirada";
   created_at: string;
   updated_at: string;

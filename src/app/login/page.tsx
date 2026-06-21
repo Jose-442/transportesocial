@@ -17,10 +17,18 @@ export default async function LoginPage({
   const registroHref = rawRedirect
     ? `/registro?redirect=${encodeURIComponent(rawRedirect)}`
     : "/registro";
+  const esRedirectBulto =
+    typeof rawRedirect === "string" && rawRedirect.startsWith("/bultos/");
 
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
+      {esRedirectBulto && (
+        <p className="text-base text-zinc-600">
+          Casi listo. Inicia sesión o crea cuenta para enviar tu propuesta de
+          precio. El solicitante solo verá tu oferta cuando estés registrado.
+        </p>
+      )}
       <Card>
         <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
           <LoginForm />

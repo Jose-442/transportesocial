@@ -30,19 +30,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
   const protectedPrefixes = [
     "/rutas/nueva",
     "/bultos/nuevo",
     "/cuenta",
     "/aportacion",
     "/pagar-aportacion",
-    "/suscribir",
-    "/suscribir-requerida",
   ];
 
-  const isProtected = protectedPrefixes.some((prefix) =>
-    request.nextUrl.pathname.startsWith(prefix)
-  );
+  const isProtected =
+    pathname === "/suscribir" ||
+    pathname.startsWith("/suscribir/") ||
+    protectedPrefixes.some((prefix) => pathname.startsWith(prefix));
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();

@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { getResenasPublicasPerfil } from "@/actions/resenas";
 import { createClient } from "@/lib/supabase/server";
+import { loadPerfilPublico } from "@/lib/profile";
+import { resumenVehiculoPublico } from "@/lib/vehiculo";
 import { UserAvatar } from "@/components/profile/UserAvatar";
-import type { PerfilPublico } from "@/types/database";
 
 export async function generateMetadata({
   params,
@@ -12,7 +13,13 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return { title: `Perfil ${id.slice(0, 8)}` };
+  const supabase = await createClient();
+  const perfil = await loadPerfilPublico(supabase, id);
+  return {
+    title: perfil?.display_name
+      ? `Perfil de ${perfil.display_name}`
+      : `Perfil ${id.slice(0, 8)}`,
+  };
 }
 
 export default async function PerfilPublicoPage({
@@ -23,21 +30,21 @@ export default async function PerfilPublicoPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: perfilData } = await supabase
-    .from("profiles")
-    .select("id, display_name, avatar_url, rating_promedio, rating_cantidad")
-    .eq("id", id)
-    .single();
-
-  if (!perfilData) notFound();
-  const perfil = perfilData as PerfilPublico;
+  const perfil = await loadPerfilPublico(supabase, id);
+  if (!perfil) notFound();
 
   const resenas = await getResenasPublicasPerfil(id);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const volverHref = user?.id === id ? "/cuenta" : "/bultos";
+  const vehiculo = resumenVehiculoPublico(perfil);
 
   return (
     <div className="space-y-4">
       <Link
-        href="/cuenta"
+        href={volverHref}
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
       >
         ← Volver
@@ -58,6 +65,19 @@ export default async function PerfilPublicoPage({
               ★ {Number(perfil.rating_promedio).toFixed(1)} ·{" "}
               {perfil.rating_cantidad}{" "}
               {perfil.rating_cantidad === 1 ? "valoración" : "valoraciones"}
+            </p>
+          )}
+          {perfil.sobre_ti?.trim() ? (
+            <p className="mt-2 text-base text-zinc-600">{perfil.sobre_ti.trim()}</p>
+          ) : (
+            <p className="mt-2 text-base text-zinc-500">
+              Sin presentación pública aún.
+            </p>
+          )}
+          {vehiculo && (
+            <p className="mt-2 text-sm text-zinc-600">
+              <span className="font-semibold text-zinc-800">Vehículo:</span>{" "}
+              {vehiculo}
             </p>
           )}
         </div>

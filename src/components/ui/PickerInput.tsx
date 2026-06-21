@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   daysInMonth,
-  formatDate,
+  formatDateFromMonthDay,
   formatTime,
   parseDate,
   parseTime,
-  yearOptions,
+  resolveYearForMonthDay,
 } from "@/lib/datetime-form";
 
 type FieldProps = {
@@ -42,7 +42,20 @@ const MONTH_OPTIONS = [
 ];
 
 const selectClassName =
-  "w-full min-h-11 cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200";
+  "w-full min-h-11 cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200";
+
+function selectClasses(hasError?: boolean) {
+  return hasError
+    ? `${selectClassName} border-red-400 ring-2 ring-red-100 focus:border-red-500 focus:ring-red-200`
+    : selectClassName;
+}
+
+type MonthDayParts = { month: string; day: string };
+
+function parseMonthDay(value: string): MonthDayParts {
+  const { month, day } = parseDate(value);
+  return { month, day };
+}
 
 type DatePickerInputProps = FieldProps & {
   value: string;
@@ -60,41 +73,47 @@ export function DatePickerInput({
   required,
   name,
 }: DatePickerInputProps) {
-  const [parts, setParts] = useState(() => parseDate(value));
-  const years = useMemo(() => yearOptions(), []);
+  const [parts, setParts] = useState<MonthDayParts>(() => parseMonthDay(value));
 
   useEffect(() => {
-    const parsed = parseDate(value);
-    if (parsed.year && parsed.month && parsed.day) {
+    const parsed = parseMonthDay(value);
+    if (parsed.month && parsed.day) {
       setParts(parsed);
+    } else if (!value) {
+      setParts({ month: "", day: "" });
     }
   }, [value]);
 
   const dayOptions = useMemo(() => {
-    const y = parseInt(parts.year, 10);
-    const m = parseInt(parts.month, 10);
-    const max = daysInMonth(y, m);
+    if (!parts.month) return [];
+    const year = parseInt(
+      resolveYearForMonthDay(parts.month, parts.day || "01"),
+      10
+    );
+    const month = parseInt(parts.month, 10);
+    const max = daysInMonth(year, month);
     return Array.from({ length: max }, (_, i) => {
       const d = String(i + 1).padStart(2, "0");
       return { value: d, label: d };
     });
-  }, [parts.year, parts.month]);
+  }, [parts.month, parts.day]);
 
-  function update(part: "year" | "month" | "day", next: string) {
-    const nextYear = part === "year" ? next : parts.year;
+  function update(part: "month" | "day", next: string) {
     const nextMonth = part === "month" ? next : parts.month;
     let nextDay = part === "day" ? next : parts.day;
 
-    if (nextYear && nextMonth && nextDay) {
-      const max = daysInMonth(parseInt(nextYear, 10), parseInt(nextMonth, 10));
+    if (nextMonth && nextDay) {
+      const year = parseInt(resolveYearForMonthDay(nextMonth, nextDay), 10);
+      const month = parseInt(nextMonth, 10);
+      const max = daysInMonth(year, month);
       if (parseInt(nextDay, 10) > max) {
         nextDay = String(max).padStart(2, "0");
       }
     }
 
-    const newParts = { year: nextYear, month: nextMonth, day: nextDay };
+    const newParts = { month: nextMonth, day: nextDay };
     setParts(newParts);
-    onChange(formatDate(nextYear, nextMonth, nextDay));
+    onChange(formatDateFromMonthDay(nextMonth, nextDay));
   }
 
   return (
@@ -103,31 +122,12 @@ export function DatePickerInput({
       {name && (
         <input type="hidden" name={name} value={value} required={required} />
       )}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <label className="block space-y-1">
-          <span className="text-xs text-zinc-500">Día</span>
-          <select
-            aria-label="Día"
-            className={selectClassName}
-            value={parts.day}
-            required={required}
-            onChange={(e) => update("day", e.target.value)}
-          >
-            <option value="" disabled hidden>
-              Día
-            </option>
-            {dayOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Mes</span>
           <select
             aria-label="Mes"
-            className={selectClassName}
+            className={selectClasses(!!error)}
             value={parts.month}
             required={required}
             onChange={(e) => update("month", e.target.value)}
@@ -143,22 +143,29 @@ export function DatePickerInput({
           </select>
         </label>
         <label className="block space-y-1">
-          <span className="text-xs text-zinc-500">Año</span>
+          <span className="text-xs text-zinc-500">Día</span>
           <select
-            aria-label="Año"
-            className={selectClassName}
-            value={parts.year}
+            aria-label="Día"
+            className={selectClasses(!!error)}
+            value={parts.day}
             required={required}
-            onChange={(e) => update("year", e.target.value)}
+            disabled={!parts.month}
+            onChange={(e) => update("day", e.target.value)}
           >
-            <option value="" disabled hidden>
-              Año
-            </option>
-            {years.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
+            {!parts.month ? (
+              <option value="">Elige mes primero</option>
+            ) : (
+              <>
+                <option value="" disabled hidden>
+                  Día
+                </option>
+                {dayOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </>
+            )}
           </select>
         </label>
       </div>
@@ -205,7 +212,7 @@ export function TimePickerInput({
           <span className="text-xs text-zinc-500">Hora</span>
           <select
             aria-label="Hora"
-            className={selectClassName}
+            className={selectClasses(!!error)}
             value={hour}
             required={required}
             onChange={(e) => updateHour(e.target.value)}
@@ -224,7 +231,7 @@ export function TimePickerInput({
           <span className="text-xs text-zinc-500">Minutos</span>
           <select
             aria-label="Minutos"
-            className={selectClassName}
+            className={selectClasses(!!error)}
             value={minute}
             required={required}
             onChange={(e) => updateMinute(e.target.value)}

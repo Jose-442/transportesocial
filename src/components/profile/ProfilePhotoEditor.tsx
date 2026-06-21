@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { deleteAvatar, uploadAvatar } from "@/lib/upload-avatar";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { Button } from "@/components/ui/Button";
+import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 
 export function ProfilePhotoEditor({
   userId,
@@ -98,7 +99,7 @@ export function ProfilePhotoEditor({
         <Button
           type="button"
           variant="secondary"
-          className="min-h-9 px-3 py-1.5 text-xs"
+          className={`min-h-9 px-3 py-1.5 text-xs ${CUENTA_BTN_SECONDARY}`}
           disabled={loading}
           onClick={() => inputRef.current?.click()}
         >

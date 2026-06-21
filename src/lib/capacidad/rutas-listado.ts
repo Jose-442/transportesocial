@@ -1,5 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { aplicarFiltrosRuta, type FiltrosListado } from "@/lib/listado-filters";
+import {
+  coincideFiltrosRuta,
+  type FiltrosListado,
+} from "@/lib/listado-filters";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
@@ -14,28 +17,29 @@ export async function listarRutasConCapacidad(
   supabase: SupabaseClient,
   filtros: FiltrosListado
 ): Promise<RutaListadoItem[]> {
-  let queryActivas = supabase
+  const queryActivas = supabase
     .from("rutas_conductores")
     .select("*")
     .eq("estado", "activa")
     .order("fecha_llegada_prevista", { ascending: true });
 
-  queryActivas = aplicarFiltrosRuta(queryActivas, filtros);
-  const { data: activas } = await queryActivas;
+  const { data: activasRaw } = await queryActivas;
 
-  let queryReservadas = supabase
+  const queryReservadas = supabase
     .from("rutas_conductores")
     .select("*")
     .eq("estado", "reservada")
     .order("fecha_llegada_prevista", { ascending: true });
 
-  queryReservadas = aplicarFiltrosRuta(queryReservadas, filtros);
-  const { data: reservadas } = await queryReservadas;
+  const { data: reservadasRaw } = await queryReservadas;
 
-  const todasLasRutas = [
-    ...((activas as RutaConductor[]) ?? []),
-    ...((reservadas as RutaConductor[]) ?? []),
-  ];
+  const filtrarPorFiltros = (rutas: RutaConductor[]) =>
+    rutas.filter((r) => coincideFiltrosRuta(r, filtros));
+
+  const activas = filtrarPorFiltros((activasRaw as RutaConductor[]) ?? []);
+  const reservadas = filtrarPorFiltros((reservadasRaw as RutaConductor[]) ?? []);
+
+  const todasLasRutas = [...activas, ...reservadas];
   const todosLosIds = todasLasRutas.map((r) => r.id);
   const ofertasPorRuta = new Map<string, OfertaCapacidad[]>();
 
@@ -69,10 +73,10 @@ export async function listarRutasConCapacidad(
     };
   }
 
-  const activasItems = ((activas as RutaConductor[]) ?? []).map(enrichRuta);
+  const activasItems = activas.map(enrichRuta);
 
   const reservadasConOferta: RutaListadoItem[] = [];
-  for (const ruta of (reservadas as RutaConductor[]) ?? []) {
+  for (const ruta of reservadas) {
     const item = enrichRuta(ruta);
     if (item.tieneCapacidadExtra) {
       reservadasConOferta.push(item);

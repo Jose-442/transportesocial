@@ -3,13 +3,16 @@ import { BultoCard } from "@/components/bultos/BultoCard";
 import { ListadoFiltros } from "@/components/listados/ListadoFiltros";
 import { createClient } from "@/lib/supabase/server";
 import {
-  aplicarFiltrosBulto,
+  coincideFiltrosBulto,
+  filtrosToSearchQuery,
   parseFiltros,
   tieneBusquedaCompleta,
   tieneFiltrosActivos,
 } from "@/lib/listado-filters";
 import { formatCiudad } from "@/lib/format-ciudad";
 import type { AnuncioBulto } from "@/types/database";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Buscar bultos" };
 
@@ -21,20 +24,21 @@ export default async function BultosPage({
   const filtros = parseFiltros(await searchParams);
   const busquedaCompleta = tieneBusquedaCompleta(filtros);
   const hayFiltros = tieneFiltrosActivos(filtros);
+  const listadoSearch = busquedaCompleta ? filtrosToSearchQuery(filtros) : null;
 
   let bultos: AnuncioBulto[] = [];
 
   if (busquedaCompleta) {
     const supabase = await createClient();
-    let query = supabase
+    const { data } = await supabase
       .from("anuncios_bultos")
       .select("*")
       .eq("estado", "activo")
       .order("created_at", { ascending: false });
 
-    query = aplicarFiltrosBulto(query, filtros);
-    const { data } = await query;
-    bultos = (data as AnuncioBulto[]) ?? [];
+    bultos = ((data as AnuncioBulto[]) ?? []).filter((b) =>
+      coincideFiltrosBulto(b, filtros)
+    );
   }
 
   return (
@@ -72,7 +76,7 @@ export default async function BultosPage({
             {formatCiudad(filtros.origen!)} → {formatCiudad(filtros.destino!)}
           </p>
           {bultos.map((bulto) => (
-            <BultoCard key={bulto.id} bulto={bulto} />
+            <BultoCard key={bulto.id} bulto={bulto} listadoSearch={listadoSearch} />
           ))}
         </div>
       )}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
+import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { chatPermitido } from "@/lib/reservas/labels";
 import type { ChatMensaje, PerfilPublico, Reserva } from "@/types/database";
@@ -82,6 +83,7 @@ export default async function ReservaChatPage({
 
   return (
     <div className="space-y-4">
+      <MarcarNotificacionesEnlaceLeida enlace={`/reservas/${id}/chat`} />
       <Link
         href={`/reservas/${id}`}
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"

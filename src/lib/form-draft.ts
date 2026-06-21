@@ -71,6 +71,27 @@ export const DRAFT_KEYS = {
   oferta: (bultoId: string) => `transporte-social-oferta-draft-${bultoId}`,
 } as const;
 
+const ofertaPostLoginKey = (bultoId: string) =>
+  `transporte-social-oferta-post-login-${bultoId}`;
+
+export function setOfertaPostLogin(bultoId: string) {
+  if (typeof window === "undefined") return;
+  sessionStorage.setItem(ofertaPostLoginKey(bultoId), "1");
+}
+
+export function consumeOfertaPostLogin(bultoId: string): boolean {
+  if (typeof window === "undefined") return false;
+  const key = ofertaPostLoginKey(bultoId);
+  if (sessionStorage.getItem(key) !== "1") return false;
+  sessionStorage.removeItem(key);
+  return true;
+}
+
+export function clearOfertaPostLogin(bultoId: string) {
+  if (typeof window === "undefined") return;
+  sessionStorage.removeItem(ofertaPostLoginKey(bultoId));
+}
+
 export type LoginDraft = {
   email: string;
   password: string;
@@ -89,6 +110,7 @@ export type NuevaRutaDraft = {
 };
 
 export type NuevoBultoDraft = {
+  tipo_solicitud: import("@/lib/solicitud-viaje").TipoSolicitud;
   origen: string;
   destino: string;
   descripcion: string;
@@ -99,7 +121,9 @@ export type NuevoBultoDraft = {
 };
 
 export type OfertaDraft = {
-  precio_neto: string;
+  precio_neto_bulto: string;
+  precio_neto_plaza: string;
+  plazas_ofrecidas: string;
   mensaje: string;
 };
 
@@ -116,6 +140,7 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
 };
 
 export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
+  tipo_solicitud: "solo_bulto",
   origen: "",
   destino: "",
   descripcion: "",

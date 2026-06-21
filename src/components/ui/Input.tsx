@@ -3,12 +3,14 @@ import { type InputHTMLAttributes, type TextareaHTMLAttributes } from "react";
 type FieldProps = {
   label: string;
   hint?: string;
+  hintClassName?: string;
   error?: string;
 };
 
 export function Input({
   label,
   hint,
+  hintClassName = "text-xs text-zinc-500",
   error,
   className = "",
   id,
@@ -21,13 +23,13 @@ export function Input({
       <input
         id={inputId}
         className={[
-          "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
-          error ? "border-red-400" : "",
+          "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
+          error ? "border-red-400 ring-2 ring-red-100" : "",
           className,
         ].join(" ")}
         {...props}
       />
-      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
+      {hint && !error && <p className={hintClassName}>{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
     </label>
   );
@@ -36,6 +38,7 @@ export function Input({
 export function Textarea({
   label,
   hint,
+  hintClassName = "text-xs text-zinc-500",
   error,
   className = "",
   id,
@@ -48,13 +51,13 @@ export function Textarea({
       <textarea
         id={inputId}
         className={[
-          "w-full min-h-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
-          error ? "border-red-400" : "",
+          "w-full min-h-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
+          error ? "border-red-400 ring-2 ring-red-100" : "",
           className,
         ].join(" ")}
         {...props}
       />
-      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
+      {hint && !error && <p className={hintClassName}>{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
     </label>
   );
