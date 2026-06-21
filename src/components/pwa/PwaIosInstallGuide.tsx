@@ -56,3 +56,40 @@ export function PwaIosInstallGuide({ open, onClose }: PwaIosInstallGuideProps) {
     </div>
   );
 }
+
+const GENERIC_GUIDE_TEXT =
+  "Usa el menú del navegador (⋮ o …) y elige «Añadir a pantalla de inicio» o «Instalar aplicación» para tener el icono de la app en tu móvil.";
+
+type PwaGenericInstallGuideProps = {
+  open: boolean;
+  onClose: () => void;
+};
+
+export function PwaGenericInstallGuide({
+  open,
+  onClose,
+}: PwaGenericInstallGuideProps) {
+  if (!open) return null;
+
+  return (
+    <div
+      id="ts-pwa-generic-guide"
+      className="ts-pwa-ios-guide"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="ts-pwa-ios-box"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Instrucciones para instalar la aplicación"
+      >
+        <p className="ts-pwa-ios-txt ts-pwa-generic-txt">{GENERIC_GUIDE_TEXT}</p>
+        <button type="button" className="ts-pwa-ios-ok" onClick={onClose}>
+          Entendido
+        </button>
+      </div>
+    </div>
+  );
+}

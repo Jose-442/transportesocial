@@ -3,11 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
 import { BRAND } from "@/lib/brand";
-import { COOKIE_CONSENT_KEY, getConsent } from "@/lib/cookies/consent";
-import { PwaIosInstallGuide } from "@/components/pwa/PwaIosInstallGuide";
+import {
+  PwaGenericInstallGuide,
+  PwaIosInstallGuide,
+} from "@/components/pwa/PwaIosInstallGuide";
 
-const DISMISS_KEY = "ts_pwa_banner_dismiss";
-const LEGACY_DISMISS_KEY = "ts_a2hs_dismissed";
+const DISMISS_KEY = "ts_pwa_banner_dismiss_v2";
+const LEGACY_DISMISS_KEYS = ["ts_pwa_banner_dismiss", "ts_a2hs_dismissed"] as const;
 const DISMISS_MS = 15 * 86400000;
 
 type Platform = "ios" | "android";
@@ -34,7 +36,7 @@ function isIOS(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent || "";
   if (/Android/i.test(ua)) return false;
-  if (/iPad|iPhone|iPod/i.test(ua)) return true;
+  if (/iPhone|iPad|iPod|EdgiOS|CriOS|FxiOS/i.test(ua)) return true;
   return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
@@ -42,6 +44,23 @@ function isAndroid(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent || "";
   return /Android/i.test(ua) && !/iPad|iPhone|iPod/i.test(ua);
+}
+
+function isDesktopUserAgent(): boolean {
+  const ua = navigator.userAgent || "";
+  return /Windows NT|Macintosh|X11; Linux x86/i.test(ua);
+}
+
+function isMobileBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  if (isIOS() || isAndroid()) return true;
+  const ua = navigator.userAgent || "";
+  if (/Mobi|EdgiOS|CriOS|FxiOS|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+    return true;
+  }
+  if (isMobileViewport() && navigator.maxTouchPoints > 0) return true;
+  if (isDesktopUserAgent() && !isMobileViewport()) return false;
+  return isMobileViewport();
 }
 
 function detectPlatform(): Platform | null {
@@ -52,9 +71,8 @@ function detectPlatform(): Platform | null {
 
 function migrateLegacyDismiss(): void {
   try {
-    if (localStorage.getItem(LEGACY_DISMISS_KEY) === "1") {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()));
-      localStorage.removeItem(LEGACY_DISMISS_KEY);
+    for (const key of LEGACY_DISMISS_KEYS) {
+      localStorage.removeItem(key);
     }
   } catch {
     /* ignore */
@@ -71,16 +89,10 @@ function isDismissed(): boolean {
   }
 }
 
-function isTargetMobileDevice(): boolean {
-  if (isIOS() || isAndroid()) return true;
-  return isMobileViewport();
-}
-
 function canShowBanner(): boolean {
   if (isStandalone()) return false;
-  if (!isTargetMobileDevice()) return false;
+  if (!isMobileBrowser()) return false;
   if (isDismissed()) return false;
-  if (getConsent() === null) return false;
   return true;
 }
 
@@ -88,17 +100,19 @@ export function AddToHomeScreenBanner() {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
   const [iosGuideOpen, setIosGuideOpen] = useState(false);
+  const [genericGuideOpen, setGenericGuideOpen] = useState(false);
   const [showIcon, setShowIcon] = useState(true);
   const [platform, setPlatform] = useState<Platform | null>(null);
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
 
   const refreshVisibility = useCallback(() => {
-    const platformDetected = detectPlatform();
-    setPlatform(platformDetected);
-    setVisible(canShowBanner());
-    if (!canShowBanner()) {
+    setPlatform(detectPlatform());
+    const show = canShowBanner();
+    setVisible(show);
+    if (!show) {
       setIosGuideOpen(false);
+      setGenericGuideOpen(false);
     }
   }, []);
 
@@ -109,6 +123,7 @@ export function AddToHomeScreenBanner() {
       /* ignore */
     }
     setIosGuideOpen(false);
+    setGenericGuideOpen(false);
     setClosing(true);
     window.setTimeout(() => {
       setVisible(false);
@@ -128,7 +143,7 @@ export function AddToHomeScreenBanner() {
     }
 
     function onStorage(event: StorageEvent) {
-      if (event.key === COOKIE_CONSENT_KEY || event.key === DISMISS_KEY) {
+      if (event.key === DISMISS_KEY) {
         refreshVisibility();
       }
     }
@@ -137,33 +152,12 @@ export function AddToHomeScreenBanner() {
     window.addEventListener("appinstalled", onAppInstalled);
     window.addEventListener("storage", onStorage);
 
-    const consentPoll =
-      getConsent() === null
-        ? window.setInterval(() => {
-            if (getConsent() !== null) {
-              refreshVisibility();
-            }
-          }, 400)
-        : undefined;
-
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("appinstalled", onAppInstalled);
       window.removeEventListener("storage", onStorage);
-      if (consentPoll !== undefined) window.clearInterval(consentPoll);
     };
   }, [dismiss, refreshVisibility]);
-
-  useEffect(() => {
-    function onConsentChosen() {
-      refreshVisibility();
-    }
-
-    window.addEventListener("ts-cookie-consent", onConsentChosen);
-    return () => {
-      window.removeEventListener("ts-cookie-consent", onConsentChosen);
-    };
-  }, [refreshVisibility]);
 
   useEffect(() => {
     function onBeforeInstallPrompt(event: Event) {
@@ -179,8 +173,7 @@ export function AddToHomeScreenBanner() {
   }, []);
 
   async function handleInstallClick() {
-    if (platform === "android") {
-      if (!installPrompt) return;
+    if (platform === "android" && installPrompt) {
       await installPrompt.prompt();
       const choice = await installPrompt.userChoice;
       setInstallPrompt(null);
@@ -189,9 +182,13 @@ export function AddToHomeScreenBanner() {
       }
       return;
     }
-    if (platform === "ios" || isIOS()) {
+    if (isIOS()) {
+      setGenericGuideOpen(false);
       setIosGuideOpen(true);
+      return;
     }
+    setIosGuideOpen(false);
+    setGenericGuideOpen(true);
   }
 
   if (!visible) return null;
@@ -238,6 +235,10 @@ export function AddToHomeScreenBanner() {
       <PwaIosInstallGuide
         open={iosGuideOpen}
         onClose={() => setIosGuideOpen(false)}
+      />
+      <PwaGenericInstallGuide
+        open={genericGuideOpen}
+        onClose={() => setGenericGuideOpen(false)}
       />
     </>
   );
