@@ -82,14 +82,19 @@ export default async function HomePage() {
               enviar algo voluminoso o necesitan solamente viajar.
             </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mt-8 lg:max-w-md lg:gap-4">
-              <ButtonLink href="/rutas" variant="secondary" fullWidth>
+              <ButtonLink
+                href="/rutas"
+                variant="secondary"
+                fullWidth
+                className="!text-base leading-snug sm:!text-lg"
+              >
                 Buscar ruta de un conductor con espacio libre
               </ButtonLink>
               <ButtonLink
                 href="/bultos"
                 variant="secondary"
                 fullWidth
-                className="border-white/30 bg-white/10 text-white hover:bg-white/20"
+                className="border-white/30 bg-white/10 text-white hover:bg-white/20 !text-base leading-snug sm:!text-lg"
               >
                 Conductor busca ruta con necesidad de porte y/o pasajero
               </ButtonLink>
@@ -116,12 +121,12 @@ export default async function HomePage() {
               href="/suscribir-requerida?dest=%2Frutas%2Fnueva"
               variant="primary"
               fullWidth
-              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left text-sm sm:min-h-[7.5rem] sm:gap-5 sm:px-4 sm:text-base"
+              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
-              <span className="text-xs font-semibold text-amber-200 sm:text-sm">
+              <span className="text-sm font-semibold text-amber-200 sm:text-base">
                 Pulsa aquí para:
               </span>
-              <span>
+              <span className="text-base leading-snug sm:text-lg">
                 Conductor, ofrece tu viaje: di el espacio de que dispones y/o
                 los asientos que tienes libres y ponle precio
               </span>
@@ -130,12 +135,14 @@ export default async function HomePage() {
               href="/suscribir-requerida?dest=%2Fbultos%2Fnuevo"
               variant="secondary"
               fullWidth
-              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left text-sm sm:min-h-[7.5rem] sm:gap-5 sm:px-4 sm:text-base"
+              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
-              <span className="text-xs font-semibold text-zinc-500 sm:text-sm">
+              <span className="text-sm font-semibold text-emerald-900 sm:text-base">
                 Pulsa aquí para:
               </span>
-              <span>Solicitar llevar un bulto y/o viajar de acompañante</span>
+              <span className="text-base leading-snug sm:text-lg">
+                Solicitar llevar un bulto y/o viajar de acompañante
+              </span>
             </ButtonLink>
           </div>
         </section>

@@ -17,7 +17,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
           </ButtonLink>
           <Link
             href="/terminos"
-            className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 sm:px-3 sm:text-sm"
+            className="ml-3 inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 sm:px-3 sm:text-base"
           >
             Términos
           </Link>

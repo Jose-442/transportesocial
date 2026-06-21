@@ -26,7 +26,7 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={[
-                "flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium",
+                "flex min-h-14 flex-col items-center justify-center gap-0.5 text-base font-semibold sm:text-lg",
                 active ? "text-emerald-700" : "text-zinc-500",
               ].join(" ")}
             >

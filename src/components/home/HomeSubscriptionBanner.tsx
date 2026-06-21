@@ -38,7 +38,7 @@ export async function HomeSubscriptionBanner() {
         <ButtonLink
           href={subscribeHref}
           fullWidth
-          className="!text-lg !font-bold uppercase tracking-wide"
+          className="!text-xl !font-bold uppercase tracking-wide sm:!text-2xl"
         >
           SUSCRIBIRME
         </ButtonLink>
