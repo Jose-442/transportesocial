@@ -11,7 +11,7 @@ export function Main({ children }: { children: ReactNode }) {
       className={[
         "mx-auto w-full flex-1",
         isHome
-          ? "max-w-none px-0 py-0 pb-24"
+          ? "max-w-none bg-emerald-100 px-0 py-0 pb-24"
           : "min-h-[calc(100dvh-7rem)] max-w-lg px-4 py-4 pb-24 md:max-w-2xl lg:max-w-4xl",
       ].join(" ")}
     >

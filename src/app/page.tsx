@@ -52,7 +52,7 @@ export default async function HomePage() {
     <div className="space-y-6 px-4 py-4 lg:space-y-0 lg:px-0 lg:py-0">
       <div className="lg:flex lg:min-h-[calc(100dvh-7rem)] lg:flex-col">
         {/* Hero: en PC ocupa la mitad superior de la pantalla */}
-        <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white md:grid-cols-2 md:overflow-hidden lg:min-h-0 lg:flex-[3] lg:rounded-none">
+        <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 md:overflow-hidden lg:min-h-0 lg:flex-[3] lg:rounded-none">
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:p-10 xl:p-12">
             <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-2 sm:mb-4 sm:gap-2 lg:mb-6">
               <div className="w-[38%] max-w-[6.75rem] shrink-0 overflow-hidden sm:max-w-[7.5rem] md:w-[58%] md:max-w-none md:overflow-visible md:origin-left md:scale-110 md:translate-x-[-2cm] md:translate-y-[3mm] lg:max-w-[320px] lg:scale-[1.2] xl:max-w-[360px] xl:scale-[1.3]">
