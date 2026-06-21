@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   description:
     "Portes y gastos compartidos entre particulares. Publica rutas o envía bultos con conductores de confianza.",
   icons: {
-    icon: "/brand/logo.png",
-    apple: "/brand/logo.png",
+    icon: "/brand/icon-192.png",
+    apple: "/brand/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
   appleWebApp: {

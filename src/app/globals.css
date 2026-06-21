@@ -44,9 +44,9 @@ body {
 .ts-pwa-banner .ts-pwa-ico {
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: 50%;
   flex-shrink: 0;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .ts-pwa-banner .ts-pwa-txt {

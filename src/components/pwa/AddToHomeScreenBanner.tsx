@@ -204,7 +204,7 @@ export function AddToHomeScreenBanner() {
         {showIcon && (
           <img
             className="ts-pwa-ico"
-            src={BRAND.logo}
+            src={BRAND.pwaIcon}
             alt=""
             width={44}
             height={44}
