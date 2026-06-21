@@ -2,10 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
+import { BRAND } from "@/lib/brand";
+import { COOKIE_CONSENT_KEY, getConsent } from "@/lib/cookies/consent";
+import { PwaIosInstallGuide } from "@/components/pwa/PwaIosInstallGuide";
 
-const DISMISS_KEY = "ts_a2hs_dismissed";
+const DISMISS_KEY = "ts_pwa_banner_dismiss";
+const LEGACY_DISMISS_KEY = "ts_a2hs_dismissed";
+const DISMISS_MS = 15 * 86400000;
 
-type Platform = "ios" | "android" | "other";
+type Platform = "ios" | "android";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -15,6 +20,7 @@ interface BeforeInstallPromptEvent extends Event {
 function isStandalone(): boolean {
   if (typeof window === "undefined") return false;
   if (window.matchMedia("(display-mode: standalone)").matches) return true;
+  if (window.matchMedia("(display-mode: fullscreen)").matches) return true;
   const nav = navigator as Navigator & { standalone?: boolean };
   return nav.standalone === true;
 }
@@ -24,66 +30,139 @@ function isMobileViewport(): boolean {
   return window.matchMedia("(max-width: 767px)").matches;
 }
 
-function detectPlatform(): Platform {
-  if (typeof navigator === "undefined") return "other";
-  const ua = navigator.userAgent;
-  const isIos =
-    /iPad|iPhone|iPod/.test(ua) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  if (isIos) return "ios";
-  if (/Android/i.test(ua)) return "android";
-  return "other";
+function isIOS(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  if (/Android/i.test(ua)) return false;
+  if (/iPad|iPhone|iPod/i.test(ua)) return true;
+  return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
-function bannerMessage(platform: Platform): string {
-  if (platform === "ios") {
-    return `Pulsa Compartir (↑) y elige «Añadir a la pantalla de inicio» para tener el icono de ${APP_NAME} como una app.`;
+function isAndroid(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /Android/i.test(ua) && !/iPad|iPhone|iPod/i.test(ua);
+}
+
+function detectPlatform(): Platform | null {
+  if (isIOS()) return "ios";
+  if (isAndroid()) return "android";
+  return null;
+}
+
+function migrateLegacyDismiss(): void {
+  try {
+    if (localStorage.getItem(LEGACY_DISMISS_KEY) === "1") {
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+      localStorage.removeItem(LEGACY_DISMISS_KEY);
+    }
+  } catch {
+    /* ignore */
   }
-  if (platform === "android") {
-    return "Pulsa el menú (⋮) y elige «Instalar aplicación» o «Añadir a la pantalla de inicio».";
+}
+
+function isDismissed(): boolean {
+  try {
+    migrateLegacyDismiss();
+    const t = parseInt(localStorage.getItem(DISMISS_KEY) || "", 10);
+    return t > 0 && Date.now() - t < DISMISS_MS;
+  } catch {
+    return false;
   }
-  return `Añade ${APP_NAME} a la pantalla de inicio desde el menú de tu navegador para abrirla como una app.`;
+}
+
+function canShowBanner(): boolean {
+  if (isStandalone()) return false;
+  if (!isMobileViewport()) return false;
+  if (isDismissed()) return false;
+  if (getConsent() === null) return false;
+  return true;
 }
 
 export function AddToHomeScreenBanner() {
   const [visible, setVisible] = useState(false);
-  const [platform, setPlatform] = useState<Platform>("other");
+  const [closing, setClosing] = useState(false);
+  const [iosGuideOpen, setIosGuideOpen] = useState(false);
+  const [showIcon, setShowIcon] = useState(true);
+  const [platform, setPlatform] = useState<Platform | null>(null);
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
 
+  const refreshVisibility = useCallback(() => {
+    const platformDetected = detectPlatform();
+    setPlatform(platformDetected);
+    setVisible(canShowBanner());
+    if (!canShowBanner()) {
+      setIosGuideOpen(false);
+    }
+  }, []);
+
   const dismiss = useCallback(() => {
     try {
-      localStorage.setItem(DISMISS_KEY, "1");
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
-    setVisible(false);
+    setIosGuideOpen(false);
+    setClosing(true);
+    window.setTimeout(() => {
+      setVisible(false);
+      setClosing(false);
+    }, 280);
   }, []);
 
   useEffect(() => {
-    if (isStandalone()) return;
-    try {
-      if (localStorage.getItem(DISMISS_KEY) === "1") return;
-    } catch {
-      /* ignore */
-    }
-    if (!isMobileViewport()) return;
-
-    setPlatform(detectPlatform());
-    setVisible(true);
+    refreshVisibility();
 
     function onResize() {
-      if (!isMobileViewport() || isStandalone()) {
-        setVisible(false);
+      refreshVisibility();
+    }
+
+    function onAppInstalled() {
+      dismiss();
+    }
+
+    function onStorage(event: StorageEvent) {
+      if (event.key === COOKIE_CONSENT_KEY || event.key === DISMISS_KEY) {
+        refreshVisibility();
       }
     }
 
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+    window.addEventListener("appinstalled", onAppInstalled);
+    window.addEventListener("storage", onStorage);
+
+    const consentPoll =
+      getConsent() === null
+        ? window.setInterval(() => {
+            if (getConsent() !== null) {
+              refreshVisibility();
+            }
+          }, 400)
+        : undefined;
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("appinstalled", onAppInstalled);
+      window.removeEventListener("storage", onStorage);
+      if (consentPoll !== undefined) window.clearInterval(consentPoll);
+    };
+  }, [dismiss, refreshVisibility]);
+
+  useEffect(() => {
+    function onConsentChosen() {
+      refreshVisibility();
+    }
+
+    window.addEventListener("ts-cookie-consent", onConsentChosen);
+    return () => {
+      window.removeEventListener("ts-cookie-consent", onConsentChosen);
+    };
+  }, [refreshVisibility]);
 
   useEffect(() => {
     function onBeforeInstallPrompt(event: Event) {
+      if (!isMobileViewport() || !isAndroid() || isIOS()) return;
       event.preventDefault();
       setInstallPrompt(event as BeforeInstallPromptEvent);
     }
@@ -94,48 +173,68 @@ export function AddToHomeScreenBanner() {
     };
   }, []);
 
-  async function handleInstall() {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    await installPrompt.userChoice;
-    setInstallPrompt(null);
-    dismiss();
+  async function handleInstallClick() {
+    if (platform === "android") {
+      if (!installPrompt) return;
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      setInstallPrompt(null);
+      if (choice.outcome === "accepted") {
+        dismiss();
+      }
+      return;
+    }
+    if (platform === "ios" || platform === null) {
+      setIosGuideOpen(true);
+    }
   }
 
   if (!visible) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-label="Instalar en la pantalla de inicio"
-      className="add-to-home-screen-banner fixed left-0 right-0 z-[45] mx-auto max-w-lg px-3 md:hidden"
-    >
-      <div className="rounded-xl border border-emerald-200 bg-white px-3 py-3 shadow-lg">
-        <p className="text-sm leading-snug text-zinc-800">
-          {bannerMessage(platform)}
-        </p>
-        <div className="mt-3 flex gap-2">
-          {installPrompt && (
-            <button
-              type="button"
-              onClick={handleInstall}
-              className="flex-1 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white"
-            >
-              Instalar
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={dismiss}
-            className={[
-              "rounded-lg border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700",
-              installPrompt ? "flex-1" : "w-full",
-            ].join(" ")}
-          >
-            Entendido
-          </button>
+    <>
+      <aside
+        aria-label={`Instalar aplicación ${APP_NAME}`}
+        className={[
+          "ts-pwa-banner md:hidden",
+          closing ? "ts-pwa-banner--out" : "",
+        ].join(" ")}
+      >
+        {showIcon && (
+          <img
+            className="ts-pwa-ico"
+            src={BRAND.logo}
+            alt=""
+            width={44}
+            height={44}
+            loading="lazy"
+            onError={() => setShowIcon(false)}
+          />
+        )}
+        <div className="ts-pwa-txt">
+          <strong>{APP_NAME}</strong>
+          <span>Instala la app</span>
         </div>
-      </div>
-    </div>
+        <button
+          type="button"
+          className="ts-pwa-btn"
+          onClick={handleInstallClick}
+        >
+          Instalar App
+        </button>
+        <button
+          type="button"
+          className="ts-pwa-close"
+          onClick={dismiss}
+          aria-label="Cerrar"
+        >
+          &times;
+        </button>
+      </aside>
+      <PwaIosInstallGuide
+        open={iosGuideOpen}
+        onClose={() => setIosGuideOpen(false)}
+      />
+    </>
   );
 }

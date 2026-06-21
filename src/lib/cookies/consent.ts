@@ -17,6 +17,7 @@ export function setConsent(value: CookieConsent): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(COOKIE_CONSENT_KEY, value);
+    window.dispatchEvent(new CustomEvent("ts-cookie-consent"));
   } catch {
     // Sin espacio: la preferencia no se persiste.
   }
