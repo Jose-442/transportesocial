@@ -16,3 +16,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
+
+@media (max-width: 767px) {
+  .add-to-home-screen-banner {
+    bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}

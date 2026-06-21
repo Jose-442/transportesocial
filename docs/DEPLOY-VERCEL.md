@@ -108,7 +108,16 @@ Añade también `http://localhost:3000/auth/callback**` para desarrollo local.
 
 ---
 
-## 7. Comprobación post-deploy
+## 7. PWA — icono en pantalla de inicio (móvil)
+
+- Manifest: `public/manifest.webmanifest`
+- Icono requerido: **`public/brand/logo.png`** (cuadrado, ideal 512×512 px; el mismo sirve para 192 y 512)
+- En móvil aparece un banner con instrucciones (iOS/Android); se oculta si ya está instalada o el usuario pulsa «Entendido»
+- Comprueba en un móvil real: Safari → Compartir → Añadir a pantalla de inicio; Chrome Android → Instalar aplicación
+
+---
+
+## 8. Comprobación post-deploy
 
 1. Abre la URL de producción → `/bultos` y `/rutas` (listados sin login).
 2. Registro + login.
@@ -126,7 +135,7 @@ npm run check
 
 ---
 
-## 8. DNS (DonDominio)
+## 9. DNS (DonDominio)
 
 Cuando la app esté estable:
 

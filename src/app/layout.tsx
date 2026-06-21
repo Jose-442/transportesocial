@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
 import { CookieBanner } from "@/components/legal/CookieBanner";
+import { AddToHomeScreenBanner } from "@/components/pwa/AddToHomeScreenBanner";
 import { APP_NAME } from "@/lib/constants";
 import "./globals.css";
 
@@ -21,6 +22,12 @@ export const metadata: Metadata = {
     icon: "/brand/logo.png",
     apple: "/brand/logo.png",
   },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: APP_NAME,
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {
@@ -39,6 +46,7 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} h-full`}>
       <body className="min-h-dvh antialiased">
         <AppShell>{children}</AppShell>
+        <AddToHomeScreenBanner />
         <CookieBanner />
       </body>
     </html>
