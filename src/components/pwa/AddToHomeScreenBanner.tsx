@@ -71,9 +71,14 @@ function isDismissed(): boolean {
   }
 }
 
+function isTargetMobileDevice(): boolean {
+  if (isIOS() || isAndroid()) return true;
+  return isMobileViewport();
+}
+
 function canShowBanner(): boolean {
   if (isStandalone()) return false;
-  if (!isMobileViewport()) return false;
+  if (!isTargetMobileDevice()) return false;
   if (isDismissed()) return false;
   if (getConsent() === null) return false;
   return true;
@@ -162,7 +167,7 @@ export function AddToHomeScreenBanner() {
 
   useEffect(() => {
     function onBeforeInstallPrompt(event: Event) {
-      if (!isMobileViewport() || !isAndroid() || isIOS()) return;
+      if (!isAndroid() || isIOS()) return;
       event.preventDefault();
       setInstallPrompt(event as BeforeInstallPromptEvent);
     }
@@ -184,7 +189,7 @@ export function AddToHomeScreenBanner() {
       }
       return;
     }
-    if (platform === "ios" || platform === null) {
+    if (platform === "ios" || isIOS()) {
       setIosGuideOpen(true);
     }
   }
@@ -195,10 +200,9 @@ export function AddToHomeScreenBanner() {
     <>
       <aside
         aria-label={`Instalar aplicación ${APP_NAME}`}
-        className={[
-          "ts-pwa-banner md:hidden",
-          closing ? "ts-pwa-banner--out" : "",
-        ].join(" ")}
+        className={["ts-pwa-banner", closing ? "ts-pwa-banner--out" : ""].join(
+          " ",
+        )}
       >
         {showIcon && (
           <img

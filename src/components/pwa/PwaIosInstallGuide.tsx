@@ -34,7 +34,7 @@ export function PwaIosInstallGuide({ open, onClose }: PwaIosInstallGuideProps) {
   return (
     <div
       id="ts-pwa-ios-guide"
-      className="ts-pwa-ios-guide md:hidden"
+      className="ts-pwa-ios-guide"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
