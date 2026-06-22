@@ -92,7 +92,7 @@ export default async function BultoDetallePage({
             {origen} → {destino}
           </h1>
           <p className="mt-2 text-base font-semibold text-emerald-800">
-            Necesita enviar: {labelTipoSolicitud(tipoSolicitud)}
+            Necesita viaje: {labelTipoSolicitud(tipoSolicitud)}
           </p>
           {bulto.descripcion && (
             <p className="mt-1 text-base text-zinc-600">{bulto.descripcion}</p>
