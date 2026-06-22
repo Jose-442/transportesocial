@@ -41,9 +41,6 @@ export default async function SuscribirRequeridaPage({
           Este servicio requiere la suscripción previa por tan solo 95
           céntimos/mes, con 3 publicaciones GRATIS.
         </p>
-        <p className="text-sm text-zinc-700">
-          Primero crea tu cuenta; después el pago de 95 céntimos/mes.
-        </p>
         {session ? (
           <ButtonLink href={subscribeTarget} fullWidth>
             Aceptar
