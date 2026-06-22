@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { BultoCard } from "@/components/bultos/BultoCard";
 import { RutaCard } from "@/components/rutas/RutaCard";
+import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import type { AnuncioBulto, RutaConductor } from "@/types/database";
 
 const ESTADO_BULTO_LABELS: Record<AnuncioBulto["estado"], string> = {
@@ -85,6 +86,9 @@ export function MisPublicaciones({
             </Badge>
           )}
           <BultoCard bulto={bulto} />
+          {bulto.estado === "activo" && (
+            <CancelarPublicacionButton id={bulto.id} tipo="bulto" />
+          )}
         </div>
       ))}
       {rutas.map((ruta) => (
@@ -95,6 +99,9 @@ export function MisPublicaciones({
             </Badge>
           )}
           <RutaCard ruta={ruta} />
+          {ruta.estado === "activa" && (
+            <CancelarPublicacionButton id={ruta.id} tipo="ruta" />
+          )}
         </div>
       ))}
     </div>

@@ -134,3 +134,62 @@ export async function crearRuta(formData: FormData) {
   revalidatePath("/rutas");
   return { id: data.id };
 }
+
+const RESERVA_EN_CURSO_ESTADOS = [
+  "pendiente_pago",
+  "pendiente_aprobacion",
+  "confirmada",
+  "pagado_escrow",
+  "en_transito",
+  "entregado",
+  "disputa",
+] as const;
+
+const ERROR_RESERVA_O_PROPUESTA_EN_CURSO =
+  "No se puede cancelar: ya hay una reserva o propuesta en curso.";
+
+export async function cancelarRutaPublicacion(
+  rutaId: string
+): Promise<{ error?: string; ok?: boolean }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado." };
+
+  const { data: ruta } = await supabase
+    .from("rutas_conductores")
+    .select("id, user_id, estado")
+    .eq("id", rutaId)
+    .single();
+
+  if (!ruta || ruta.user_id !== user.id) {
+    return { error: "No autorizado." };
+  }
+  if (ruta.estado !== "activa") {
+    return { error: "Solo puedes cancelar anuncios activos." };
+  }
+
+  const { count } = await supabase
+    .from("reservas")
+    .select("id", { count: "exact", head: true })
+    .eq("ruta_conductor_id", rutaId)
+    .in("estado", [...RESERVA_EN_CURSO_ESTADOS]);
+
+  if ((count ?? 0) > 0) {
+    return { error: ERROR_RESERVA_O_PROPUESTA_EN_CURSO };
+  }
+
+  const { error } = await supabase
+    .from("rutas_conductores")
+    .update({ estado: "cancelada" })
+    .eq("id", rutaId)
+    .eq("user_id", user.id)
+    .eq("estado", "activa");
+
+  if (error) return { error: supabaseErrorMessage(error) };
+
+  revalidatePath("/cuenta");
+  revalidatePath("/rutas");
+  return { ok: true };
+}
