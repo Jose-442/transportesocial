@@ -45,6 +45,7 @@ export function destinoTrasConfirmarEmail(
 
 export function parseAuthCallbackNext(value: string | null): string {
   if (value === "/cuenta") return "/cuenta";
+  if (value === "/nueva-contrasena") return "/nueva-contrasena";
   const parsed = parseRegistroRedirect(value ?? undefined);
   return parsed ?? "/cuenta";
 }

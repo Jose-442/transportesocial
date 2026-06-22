@@ -134,7 +134,7 @@ export async function solicitarCambioContrasena(): Promise<{
 
   const origin = await getRequestOrigin();
   const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: `${origin}/auth/callback?next=/cuenta`,
+    redirectTo: `${origin}/auth/callback?next=${encodeURIComponent("/nueva-contrasena")}`,
   });
 
   if (error) return { error: error.message };
