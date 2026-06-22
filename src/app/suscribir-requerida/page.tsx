@@ -33,11 +33,16 @@ export default async function SuscribirRequeridaPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">Suscripción requerida</h1>
+      <h1 className="text-2xl font-bold text-zinc-900">
+        Suscripción requerida (Puedes cancelar cuando quieras)
+      </h1>
       <Card className="space-y-4">
         <p className="text-sm text-zinc-700">
           Este servicio requiere la suscripción previa por tan solo 95
           céntimos/mes, con 3 publicaciones GRATIS.
+        </p>
+        <p className="text-sm text-zinc-700">
+          Primero crea tu cuenta; después el pago de 95 céntimos/mes.
         </p>
         {session ? (
           <ButtonLink href={subscribeTarget} fullWidth>

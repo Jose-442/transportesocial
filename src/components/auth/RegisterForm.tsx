@@ -12,6 +12,10 @@ import {
 } from "@/lib/register-draft";
 import { uploadAvatar } from "@/lib/upload-avatar";
 import { registrarUsuario } from "@/actions/registro";
+import {
+  destinoTrasRegistroPublicacion,
+  type RegistroRedirect,
+} from "@/lib/registro-redirect";
 import { saveRegistroVolverUrl } from "@/lib/terminos-volver-registro";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
@@ -20,8 +24,10 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 
 export function RegisterForm({
   redirectAfter = null,
+  esFlujoSuscripcion = false,
 }: {
   redirectAfter?: string | null;
+  esFlujoSuscripcion?: boolean;
 }) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState("");
@@ -71,7 +77,11 @@ export function RegisterForm({
   }, [foto]);
 
   function irTrasRegistro() {
-    router.push(redirectAfter ?? "/cuenta");
+    const destino =
+      esFlujoSuscripcion && redirectAfter
+        ? destinoTrasRegistroPublicacion(redirectAfter as RegistroRedirect)
+        : (redirectAfter ?? "/cuenta");
+    router.push(destino);
     router.refresh();
   }
 
@@ -201,7 +211,11 @@ export function RegisterForm({
         label="Contraseña"
         autoComplete="new-password"
         required
-        hint="No pedimos tarjeta al registrarte."
+        hint={
+          esFlujoSuscripcion
+            ? "Tras aceptar irás al pago seguro con tarjeta."
+            : "No pedimos tarjeta al registrarte."
+        }
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -236,7 +250,13 @@ export function RegisterForm({
         </p>
       )}
       <Button type="submit" fullWidth disabled={loading || !aceptaTerminos}>
-        {loading ? "Creando cuenta…" : "Crear cuenta"}
+        {loading
+          ? esFlujoSuscripcion
+            ? "Un momento…"
+            : "Creando cuenta…"
+          : esFlujoSuscripcion
+            ? "Acepto el pago de 95 céntimos"
+            : "Crear cuenta"}
       </Button>
     </form>
   );

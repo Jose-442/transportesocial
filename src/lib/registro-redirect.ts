@@ -1,3 +1,5 @@
+import { suscribirHref } from "@/lib/publication-flow";
+
 export const REGISTRO_REDIRECTS = ["/rutas/nueva", "/bultos/nuevo"] as const;
 
 export type RegistroRedirect = (typeof REGISTRO_REDIRECTS)[number];
@@ -12,14 +14,24 @@ export function parseRegistroRedirect(
   return null;
 }
 
+export function esRegistroParaPublicacion(
+  redirect: string | null | undefined
+): redirect is RegistroRedirect {
+  return parseRegistroRedirect(redirect ?? undefined) !== null;
+}
+
+export function destinoTrasRegistroPublicacion(redirect: RegistroRedirect): string {
+  return suscribirHref(redirect);
+}
+
 export function mensajeRegistroRedirect(
   redirect: RegistroRedirect | null
 ): string | null {
   if (redirect === "/rutas/nueva") {
-    return "Para proponer una ruta es necesario registrarse";
+    return "Para publicar una ruta, crea tu suscripción y acepta el pago de 95 céntimos/mes.";
   }
   if (redirect === "/bultos/nuevo") {
-    return "Para proponer un envío es necesario registrarse";
+    return "Para proponer un envío, crea tu suscripción y acepta el pago de 95 céntimos/mes.";
   }
   return null;
 }
