@@ -27,7 +27,7 @@ export function PasswordInput({
           id={inputId}
           type={visible ? "text" : "password"}
           className={[
-            "w-full min-h-11 rounded-xl border border-zinc-200 bg-white py-2 pl-3 pr-11 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
+            "w-full min-h-11 rounded-xl border border-zinc-200 bg-white py-2 pl-3 pr-11 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden",
             error ? "border-red-400" : "",
             className,
           ].join(" ")}
