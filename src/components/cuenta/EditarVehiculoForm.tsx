@@ -68,7 +68,7 @@ export function EditarVehiculoForm({
           label="Marca"
           value={marca}
           onChange={(e) => setMarca(e.target.value)}
-          placeholder="Ej. Seat"
+          placeholder="Ej. Ford"
           required
           maxLength={60}
         />
@@ -76,7 +76,7 @@ export function EditarVehiculoForm({
           label="Modelo"
           value={modelo}
           onChange={(e) => setModelo(e.target.value)}
-          placeholder="Ej. León"
+          placeholder="Ej. Transit"
           required
           maxLength={60}
         />
