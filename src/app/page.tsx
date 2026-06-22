@@ -141,8 +141,8 @@ export default async function HomePage() {
                 Pulsa aquí para:
               </span>
               <span className="text-base leading-snug sm:text-lg">
-                Solicitar a un conductor un viaje para enviar un bulto y/o
-                viajar de acompañante
+                Proponer un viaje para enviar un bulto y/o viajar de acompañante
+                para que un conductor le ponga precio
               </span>
             </ButtonLink>
           </div>
