@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { crearRuta } from "@/actions/rutas";
+import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
@@ -275,12 +275,12 @@ export function NuevaRutaForm({
             Para publicar una ruta necesitas indicar marca, modelo, año y
             distintivo ambiental de tu vehículo.
           </p>
-          <Link
-            href="/cuenta#vehiculo"
-            className="mt-1 inline-block font-semibold text-emerald-700 hover:text-emerald-800"
-          >
+          <ButtonLink href={cuentaHrefConVolver("/rutas/nueva")} className="mt-2">
             Completar mi vehículo
-          </Link>
+          </ButtonLink>
+          <p className="mt-2">
+            Completar también los datos de tu perfil da confianza a tu viaje.
+          </p>
         </div>
       )}
       <Button type="submit" fullWidth disabled={loading}>

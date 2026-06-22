@@ -22,10 +22,18 @@ import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { loadMisPublicaciones } from "@/lib/cuenta/mis-publicaciones";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
+import { parseCuentaVolver } from "@/lib/cuenta-volver";
 
 export const metadata = { title: "Mi cuenta" };
 
-export default async function CuentaPage() {
+export default async function CuentaPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const volverTrasVehiculo = parseCuentaVolver(params.volver);
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -116,7 +124,10 @@ export default async function CuentaPage() {
               reciba tu propuesta.
             </p>
           </div>
-          <EditarVehiculoForm vehiculoInicial={profile} />
+          <EditarVehiculoForm
+            vehiculoInicial={profile}
+            volverTrasGuardar={volverTrasVehiculo}
+          />
         </Card>
       </div>
 

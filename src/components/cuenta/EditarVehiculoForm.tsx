@@ -16,6 +16,7 @@ import type { Profile } from "@/types/database";
 
 export function EditarVehiculoForm({
   vehiculoInicial,
+  volverTrasGuardar = null,
 }: {
   vehiculoInicial: Pick<
     Profile,
@@ -24,6 +25,7 @@ export function EditarVehiculoForm({
     | "vehiculo_anio"
     | "distintivo_ambiental"
   >;
+  volverTrasGuardar?: string | null;
 }) {
   const router = useRouter();
   const [marca, setMarca] = useState(vehiculoInicial.vehiculo_marca ?? "");
@@ -54,6 +56,11 @@ export function EditarVehiculoForm({
 
     if (result.error) {
       setError(result.error);
+      return;
+    }
+
+    if (volverTrasGuardar) {
+      router.push(volverTrasGuardar);
       return;
     }
 
