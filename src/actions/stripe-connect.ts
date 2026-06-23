@@ -30,15 +30,19 @@ export async function sincronizarStripeConnectUsuario(
   const accountId = profile?.stripe_connect_account_id;
   if (!accountId) return;
 
-  const account = await obtenerCuentaConnect(accountId);
-  const listo =
-    connectPayoutsActivos(account) || connectOnboardingCompletado(account);
-  await admin
-    .from("profiles")
-    .update({
-      stripe_connect_payouts_enabled: listo,
-    })
-    .eq("id", userId);
+  try {
+    const account = await obtenerCuentaConnect(accountId);
+    const listo =
+      connectPayoutsActivos(account) || connectOnboardingCompletado(account);
+    await admin
+      .from("profiles")
+      .update({
+        stripe_connect_payouts_enabled: listo,
+      })
+      .eq("id", userId);
+  } catch (err) {
+    console.error("[sincronizarStripeConnectUsuario]", accountId, err);
+  }
 
   revalidatePath("/cuenta");
 }

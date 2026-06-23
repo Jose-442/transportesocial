@@ -20,11 +20,12 @@ export async function crearEnlaceOnboardingConnect(
   origin: string
 ): Promise<string> {
   const stripe = getStripeServer();
+  const account = await stripe.accounts.retrieve(accountId);
   const link = await stripe.accountLinks.create({
     account: accountId,
     refresh_url: `${origin}/cuenta?connect=refresh`,
     return_url: `${origin}/cuenta?connect=return`,
-    type: "account_onboarding",
+    type: account.details_submitted ? "account_update" : "account_onboarding",
   });
   if (!link.url) {
     throw new Error("No se pudo crear el enlace de Stripe.");

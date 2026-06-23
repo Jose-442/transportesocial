@@ -50,7 +50,15 @@ export default async function CuentaPage({
     redirect("/cuenta");
   }
 
-  const result = await getOrCreateProfile(supabase, user);
+  let result = await getOrCreateProfile(supabase, user);
+
+  if (
+    result.profile?.stripe_connect_account_id &&
+    !result.profile.stripe_connect_payouts_enabled
+  ) {
+    await sincronizarStripeConnectUsuario(user.id);
+    result = await getOrCreateProfile(supabase, user);
+  }
 
   if (result.error || !result.profile) {
     return (
