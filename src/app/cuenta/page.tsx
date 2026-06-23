@@ -18,7 +18,9 @@ import { MisViajesTabs } from "@/components/cuenta/MisViajesTabs";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
 import { EditarVehiculoForm } from "@/components/cuenta/EditarVehiculoForm";
+import { StripeConnectSection } from "@/components/cuenta/StripeConnectSection";
 import { abrirPortalSuscripcion } from "@/actions/cuenta";
+import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { loadMisPublicaciones } from "@/lib/cuenta/mis-publicaciones";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
@@ -40,6 +42,12 @@ export default async function CuentaPage({
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login?redirect=/cuenta");
+
+  const connectParam =
+    typeof params.connect === "string" ? params.connect : undefined;
+  if (connectParam === "return" || connectParam === "refresh") {
+    await sincronizarStripeConnectUsuario(user.id);
+  }
 
   const result = await getOrCreateProfile(supabase, user);
 
@@ -69,6 +77,8 @@ export default async function CuentaPage({
   const tienePublicacionesActivas =
     publicaciones.bultos.some((b) => b.estado === "activo") ||
     publicaciones.rutas.some((r) => r.estado === "activa");
+
+  const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
 
   return (
     <div className="space-y-4">
@@ -166,6 +176,7 @@ export default async function CuentaPage({
         <AceptacionAutomaticaToggle
           inicial={profile.aceptacion_automatica ?? false}
         />
+        <StripeConnectSection payoutsEnabled={payoutsEnabled} />
         {(profile.saldo_acumulado ?? 0) > 0 && (
           <p className="text-sm text-zinc-700">
             Saldo acumulado:{" "}
@@ -177,10 +188,11 @@ export default async function CuentaPage({
             </strong>
           </p>
         )}
-        {(profile.saldo_acumulado ?? 0) > 0 && (
+        {(profile.saldo_acumulado ?? 0) > 0 && !payoutsEnabled && (
           <p className="text-xs text-zinc-500">
             Saldo pendiente de viajes completados; se acumula tras el plazo de
-            reclamación. Por ahora no hay retirada bancaria automática.
+            reclamación. Conecta tu cuenta bancaria arriba para recibir pagos
+            automáticamente.
           </p>
         )}
       </Card>

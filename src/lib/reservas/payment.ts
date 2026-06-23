@@ -375,7 +375,7 @@ export async function liberarPagoConductor(
 ) {
   const { data: tx } = await admin
     .from("transacciones")
-    .select("id, estado_escrow")
+    .select("id, estado_escrow, stripe_payment_intent_id")
     .eq("reserva_id", reserva.id)
     .eq("tipo", "cobro_viaje")
     .maybeSingle();
@@ -384,22 +384,50 @@ export async function liberarPagoConductor(
 
   const { data: perfil } = await admin
     .from("profiles")
-    .select("saldo_acumulado")
+    .select(
+      "saldo_acumulado, stripe_connect_account_id, stripe_connect_payouts_enabled"
+    )
     .eq("id", reserva.transportista_id)
     .single();
 
   const saldoActual = Number(perfil?.saldo_acumulado ?? 0);
   const neto = Number(reserva.precio_neto);
+  let mensajePago = `Se ha acreditado ${neto.toFixed(2)} € en tu saldo.`;
+  let transferId: string | null = null;
 
-  await admin
-    .from("profiles")
-    .update({ saldo_acumulado: saldoActual + neto })
-    .eq("id", reserva.transportista_id);
+  const puedeTransferir =
+    perfil?.stripe_connect_account_id &&
+    perfil.stripe_connect_payouts_enabled &&
+    tx.stripe_payment_intent_id;
+
+  if (puedeTransferir) {
+    try {
+      const { transferirAlConductor } = await import("@/lib/stripe/connect");
+      const transfer = await transferirAlConductor({
+        amountEur: neto,
+        destinationAccountId: perfil.stripe_connect_account_id!,
+        paymentIntentId: tx.stripe_payment_intent_id!,
+        reservaId: reserva.id,
+      });
+      transferId = transfer.id;
+      mensajePago = `Se han transferido ${neto.toFixed(2)} € a tu cuenta bancaria.`;
+    } catch (err) {
+      console.error("[liberarPagoConductor] transfer", err);
+    }
+  }
+
+  if (!transferId) {
+    await admin
+      .from("profiles")
+      .update({ saldo_acumulado: saldoActual + neto })
+      .eq("id", reserva.transportista_id);
+  }
 
   await admin
     .from("transacciones")
     .update({
       estado_escrow: "liberado",
+      ...(transferId ? { stripe_transfer_id: transferId } : {}),
     })
     .eq("id", tx.id);
 
@@ -433,7 +461,7 @@ export async function liberarPagoConductor(
     user_id: reserva.transportista_id,
     tipo: "reserva_actualizada",
     titulo: "Pago liberado",
-    mensaje: `Se ha acreditado ${neto.toFixed(2)} € en tu saldo.`,
+    mensaje: mensajePago,
     enlace: `/cuenta/viajes`,
   });
 

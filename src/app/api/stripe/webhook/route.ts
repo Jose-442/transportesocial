@@ -7,6 +7,7 @@ import {
   completeSubscriptionCheckout,
 } from "@/lib/stripe/subscription-checkout";
 import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
+import { sincronizarStripeConnectPorCuenta } from "@/actions/stripe-connect";
 import { confirmarPagoReserva } from "@/lib/reservas/payment";
 
 export async function POST(request: Request) {
@@ -88,6 +89,13 @@ export async function POST(request: Request) {
         });
       } else {
         await applyStripeSubscription(admin, userId, subscription);
+      }
+      break;
+    }
+    case "account.updated": {
+      const account = event.data.object as Stripe.Account;
+      if (account.id) {
+        await sincronizarStripeConnectPorCuenta(account.id);
       }
       break;
     }
