@@ -46,7 +46,8 @@ export default function TerminosPage() {
             (en adelante, los «Términos») que regulan el acceso y uso de la
             plataforma web <strong>{APP_NAME}</strong> (en adelante, la
             «Plataforma»), operada por <strong>{nombre}</strong> (en adelante,
-            el «Titular»), con NIF {nif} y domicilio en {domicilio}.
+            el «Titular»), con NIF {nif}
+            {domicilio ? ` y domicilio en ${domicilio}` : ""}.
           </p>
           <p className="mt-3">
             Al registrarse y utilizar la Plataforma, usted adquiere la condición
@@ -301,9 +302,11 @@ export default function TerminosPage() {
             <li>
               <strong>NIF:</strong> {nif}
             </li>
-            <li>
-              <strong>Domicilio:</strong> {domicilio}
-            </li>
+            {domicilio ? (
+              <li>
+                <strong>Domicilio:</strong> {domicilio}
+              </li>
+            ) : null}
             <li>
               <strong>Email:</strong>{" "}
               <a
