@@ -395,22 +395,30 @@ export async function liberarPagoConductor(
   let mensajePago = `Se ha acreditado ${neto.toFixed(2)} € en tu saldo.`;
   let transferId: string | null = null;
 
-  const puedeTransferir =
+  if (
     perfil?.stripe_connect_account_id &&
     perfil.stripe_connect_payouts_enabled &&
-    tx.stripe_payment_intent_id;
-
-  if (puedeTransferir) {
+    tx.stripe_payment_intent_id
+  ) {
     try {
-      const { transferirAlConductor } = await import("@/lib/stripe/connect");
-      const transfer = await transferirAlConductor({
-        amountEur: neto,
-        destinationAccountId: perfil.stripe_connect_account_id!,
-        paymentIntentId: tx.stripe_payment_intent_id!,
-        reservaId: reserva.id,
-      });
-      transferId = transfer.id;
-      mensajePago = `Se han transferido ${neto.toFixed(2)} € a tu cuenta bancaria.`;
+      const {
+        transferirAlConductor,
+        obtenerCuentaConnect,
+        connectPayoutsActivos,
+      } = await import("@/lib/stripe/connect");
+      const account = await obtenerCuentaConnect(
+        perfil.stripe_connect_account_id
+      );
+      if (connectPayoutsActivos(account)) {
+        const transfer = await transferirAlConductor({
+          amountEur: neto,
+          destinationAccountId: perfil.stripe_connect_account_id,
+          paymentIntentId: tx.stripe_payment_intent_id,
+          reservaId: reserva.id,
+        });
+        transferId = transfer.id;
+        mensajePago = `Se han transferido ${neto.toFixed(2)} € a tu cuenta bancaria.`;
+      }
     } catch (err) {
       console.error("[liberarPagoConductor] transfer", err);
     }

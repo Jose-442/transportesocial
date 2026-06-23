@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { isStripeConfigured } from "@/lib/stripe/server";
 import {
+  connectOnboardingCompletado,
   connectPayoutsActivos,
   crearCuentaConnectExpress,
   crearEnlaceOnboardingConnect,
@@ -30,10 +31,12 @@ export async function sincronizarStripeConnectUsuario(
   if (!accountId) return;
 
   const account = await obtenerCuentaConnect(accountId);
+  const listo =
+    connectPayoutsActivos(account) || connectOnboardingCompletado(account);
   await admin
     .from("profiles")
     .update({
-      stripe_connect_payouts_enabled: connectPayoutsActivos(account),
+      stripe_connect_payouts_enabled: listo,
     })
     .eq("id", userId);
 
@@ -49,10 +52,12 @@ export async function sincronizarStripeConnectPorCuenta(
   if (!admin) return;
 
   const account = await obtenerCuentaConnect(accountId);
+  const listo =
+    connectPayoutsActivos(account) || connectOnboardingCompletado(account);
   await admin
     .from("profiles")
     .update({
-      stripe_connect_payouts_enabled: connectPayoutsActivos(account),
+      stripe_connect_payouts_enabled: listo,
     })
     .eq("stripe_connect_account_id", accountId);
 }
@@ -82,7 +87,9 @@ export async function iniciarOnboardingStripeConnect(): Promise<{
   if (!accountId) {
     const account = await crearCuentaConnectExpress(user.email);
     accountId = account.id;
-    const { error } = await supabase
+    const admin = createAdminClient();
+    if (!admin) return { error: "Servidor no configurado." };
+    const { error } = await admin
       .from("profiles")
       .update({
         stripe_connect_account_id: accountId,

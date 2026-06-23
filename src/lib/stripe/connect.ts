@@ -32,8 +32,17 @@ export async function crearEnlaceOnboardingConnect(
   return link.url;
 }
 
+/** Onboarding Express completado (formulario enviado en Stripe). */
+export function connectOnboardingCompletado(account: Stripe.Account): boolean {
+  return Boolean(account.details_submitted);
+}
+
+/** Puede recibir transferencias de la plataforma al banco. */
 export function connectPayoutsActivos(account: Stripe.Account): boolean {
-  return Boolean(account.payouts_enabled && account.details_submitted);
+  if (!account.details_submitted) return false;
+  const transfers = account.capabilities?.transfers;
+  if (transfers === "active") return true;
+  return Boolean(account.payouts_enabled);
 }
 
 export async function obtenerCuentaConnect(

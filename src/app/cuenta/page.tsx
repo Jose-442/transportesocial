@@ -47,6 +47,7 @@ export default async function CuentaPage({
     typeof params.connect === "string" ? params.connect : undefined;
   if (connectParam === "return" || connectParam === "refresh") {
     await sincronizarStripeConnectUsuario(user.id);
+    redirect("/cuenta");
   }
 
   const result = await getOrCreateProfile(supabase, user);
@@ -176,7 +177,10 @@ export default async function CuentaPage({
         <AceptacionAutomaticaToggle
           inicial={profile.aceptacion_automatica ?? false}
         />
-        <StripeConnectSection payoutsEnabled={payoutsEnabled} />
+        <StripeConnectSection
+          payoutsEnabled={payoutsEnabled}
+          accountId={profile.stripe_connect_account_id ?? null}
+        />
         {(profile.saldo_acumulado ?? 0) > 0 && (
           <p className="text-sm text-zinc-700">
             Saldo acumulado:{" "}

@@ -7,8 +7,10 @@ import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 
 export function StripeConnectSection({
   payoutsEnabled,
+  accountId,
 }: {
   payoutsEnabled: boolean;
+  accountId: string | null;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,28 @@ export function StripeConnectSection({
         Cuenta bancaria conectada. Los pagos de tus viajes se transferirán
         automáticamente a tu banco.
       </p>
+    );
+  }
+
+  if (accountId) {
+    return (
+      <div className="space-y-2 border-t border-zinc-100 pt-4">
+        <p className="text-sm text-amber-700">
+          Cuenta en revisión. Si acabas de conectar, recarga la página en unos
+          segundos o pulsa de nuevo para completar datos en Stripe.
+        </p>
+        <Button
+          type="button"
+          variant="secondary"
+          fullWidth
+          className={CUENTA_BTN_SECONDARY}
+          disabled={loading}
+          onClick={onConectar}
+        >
+          {loading ? "Abriendo Stripe…" : "Completar en Stripe"}
+        </Button>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+      </div>
     );
   }
 
