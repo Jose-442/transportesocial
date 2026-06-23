@@ -10,8 +10,11 @@ import { PROFILE_SOBRE_TI_MAX } from "@/lib/profile";
 
 export function EditarSobreTiForm({
   sobreTiInicial,
+  compactPc = false,
 }: {
   sobreTiInicial: string | null;
+  /** Menos altura en escritorio (flujo ?volver= en /cuenta). Móvil sin cambios. */
+  compactPc?: boolean;
 }) {
   const router = useRouter();
   const [sobreTi, setSobreTi] = useState(sobreTiInicial ?? "");
@@ -48,6 +51,7 @@ export function EditarSobreTiForm({
         hintClassName="text-sm text-zinc-500"
         maxLength={PROFILE_SOBRE_TI_MAX}
         rows={4}
+        className={compactPc ? "md:min-h-0 md:h-[4.25rem]" : ""}
       />
       {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}

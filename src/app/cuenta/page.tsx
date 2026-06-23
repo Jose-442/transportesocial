@@ -88,14 +88,29 @@ export default async function CuentaPage({
     publicaciones.rutas.some((r) => r.estado === "activa");
 
   const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
+  const perfilCompactPc = volverTrasVehiculo !== null;
 
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">Mi cuenta</h1>
 
-      <Card className="space-y-4">
+      <Card
+        className={[
+          "space-y-4",
+          perfilCompactPc && "md:space-y-2 md:p-3",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <h2 className="font-semibold text-zinc-900">Mi perfil</h2>
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div
+          className={[
+            "flex flex-col gap-4 sm:flex-row sm:items-start",
+            perfilCompactPc && "md:gap-2",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <ProfilePhotoEditor
             userId={user.id}
             displayName={profile.display_name}
@@ -125,10 +140,18 @@ export default async function CuentaPage({
             </p>
           </div>
         </div>
-        <EditarSobreTiForm sobreTiInicial={profile.sobre_ti} />
+        <EditarSobreTiForm
+          sobreTiInicial={profile.sobre_ti}
+          compactPc={perfilCompactPc}
+        />
         <Link
           href={`/perfil/${user.id}`}
-          className="inline-flex min-h-11 items-center font-semibold text-emerald-700 hover:text-emerald-800"
+          className={[
+            "inline-flex min-h-11 items-center font-semibold text-emerald-700 hover:text-emerald-800",
+            perfilCompactPc && "md:min-h-0 md:py-1",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         >
           Ver cómo me ven los demás
         </Link>
