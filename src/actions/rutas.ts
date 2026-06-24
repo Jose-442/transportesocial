@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -92,12 +93,19 @@ export async function crearRuta(formData: FormData) {
 
   const precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
 
+  const origenInput = formatCiudad(String(formData.get("origen")));
+  const destinoInput = formatCiudad(String(formData.get("destino")));
+  const origenResuelto = resolverMunicipioFormulario(origenInput, "salida");
+  if (origenResuelto.error) return { error: origenResuelto.error };
+  const destinoResuelto = resolverMunicipioFormulario(destinoInput, "destino");
+  if (destinoResuelto.error) return { error: destinoResuelto.error };
+
   const { data, error } = await supabase
     .from("rutas_conductores")
     .insert({
       user_id: user.id,
-      origen: formatCiudad(String(formData.get("origen"))),
-      destino: formatCiudad(String(formData.get("destino"))),
+      origen: origenResuelto.municipio!.nombre,
+      destino: destinoResuelto.municipio!.nombre,
       fecha_salida: String(formData.get("fecha_salida")),
       fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
       espacio_disponible: espacioDisponible,

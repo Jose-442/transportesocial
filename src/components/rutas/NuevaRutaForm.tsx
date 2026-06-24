@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
+import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
+import { resolverMunicipio } from "@/lib/municipios-espana";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -80,8 +82,16 @@ export function NuevaRutaForm({
 
   function validateForm(): Partial<Record<RutaFieldKey, string>> {
     const errors: Partial<Record<RutaFieldKey, string>> = {};
-    if (!form.origen.trim()) errors.origen = "Indica la salida.";
-    if (!form.destino.trim()) errors.destino = "Indica el destino.";
+    if (!form.origen.trim()) {
+      errors.origen = "Indica la salida.";
+    } else if (!resolverMunicipio(form.origen)) {
+      errors.origen = "Selecciona un municipio válido en salida.";
+    }
+    if (!form.destino.trim()) {
+      errors.destino = "Indica el destino.";
+    } else if (!resolverMunicipio(form.destino)) {
+      errors.destino = "Selecciona un municipio válido en destino.";
+    }
     if (!form.fecha_salida) errors.fecha_salida = "Indica la fecha de salida.";
     if (!form.hora_salida) errors.hora_salida = "Indica la hora de salida.";
     if (!form.espacio_tamano) {
@@ -151,23 +161,23 @@ export function NuevaRutaForm({
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
-      <Input
+      <MunicipioAutocomplete
         name="origen"
         label="Salida"
         required
-        placeholder="Ej. Madrid"
         value={form.origen}
         error={fieldErrors.origen}
-        onChange={(e) => updateField("origen", e.target.value)}
+        hint="Elige un municipio de la lista. El punto exacto se concreta después."
+        onChange={(value) => updateField("origen", value)}
       />
-      <Input
+      <MunicipioAutocomplete
         name="destino"
         label="Destino"
         required
-        placeholder="Ej. Valencia"
         value={form.destino}
         error={fieldErrors.destino}
-        onChange={(e) => updateField("destino", e.target.value)}
+        hint="Elige un municipio de la lista. El punto exacto se concreta después."
+        onChange={(value) => updateField("destino", value)}
       />
       <DatePickerInput
         name="fecha_salida"
