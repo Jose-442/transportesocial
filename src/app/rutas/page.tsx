@@ -40,8 +40,9 @@ export default async function RutasPage({
           Buscar viajes
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Todos los viajes del día entre la ciudad de salida y la de llegada
-          que indiques. Pulsa en uno para ver el punto exacto y la hora.
+          Viajes del día con salida y llegada en la misma provincia que indiques,
+          hasta 50 km de cada ciudad. Pulsa en uno para ver el punto exacto y la
+          hora.
         </p>
       </div>
 

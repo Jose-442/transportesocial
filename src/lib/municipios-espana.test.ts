@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  coincideMunicipioBusqueda,
   filtrarMunicipios,
   resolverMunicipio,
 } from "@/lib/municipios-espana";
@@ -28,5 +29,10 @@ describe("municipios-espana", () => {
 
   it('resolverMunicipio("texto inventado") devuelve null', () => {
     expect(resolverMunicipio("texto inventado")).toBeNull();
+  });
+
+  it("coincideMunicipioBusqueda: Getafe coincide con filtro Madrid", () => {
+    expect(coincideMunicipioBusqueda("Getafe", "Madrid")).toBe(true);
+    expect(coincideMunicipioBusqueda("Barcelona", "Madrid")).toBe(false);
   });
 });

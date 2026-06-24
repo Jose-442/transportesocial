@@ -1,6 +1,9 @@
 import { parseDate } from "@/lib/datetime-form";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { normalizarTextoBusqueda } from "@/lib/municipios-espana";
+import {
+  coincideMunicipioBusqueda,
+  normalizarTextoBusqueda,
+} from "@/lib/municipios-espana";
 
 export type FiltrosListado = {
   origen?: string;
@@ -104,10 +107,16 @@ export function coincideFiltrosRuta(
   ruta: { origen: string; destino: string; fecha_salida: string },
   filtros: FiltrosListado
 ): boolean {
-  if (filtros.origen && !ciudadCoincide(ruta.origen, filtros.origen)) {
+  if (
+    filtros.origen &&
+    !coincideMunicipioBusqueda(ruta.origen, filtros.origen)
+  ) {
     return false;
   }
-  if (filtros.destino && !ciudadCoincide(ruta.destino, filtros.destino)) {
+  if (
+    filtros.destino &&
+    !coincideMunicipioBusqueda(ruta.destino, filtros.destino)
+  ) {
     return false;
   }
   if (filtros.fecha && !mismaFechaMesDia(ruta.fecha_salida, filtros.fecha)) {
