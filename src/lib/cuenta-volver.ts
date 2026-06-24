@@ -13,5 +13,5 @@ export function parseCuentaVolver(
 }
 
 export function cuentaHrefConVolver(dest: CuentaVolverDest): string {
-  return `/cuenta?volver=${encodeURIComponent(dest)}#vehiculo`;
+  return `/cuenta?volver=${encodeURIComponent(dest)}`;
 }
