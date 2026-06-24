@@ -1,6 +1,6 @@
 export const LEGAL_TITULAR = {
   nombre: "Jose Ezequiel Martín",
-  nif: "13137269Z",
+  nif: "",
   domicilio: "",
   email: "jemartarrero@gmail.com",
 } as const;
