@@ -19,6 +19,13 @@ export function RutaCard({
     day: "numeric",
     month: "short",
   });
+  const horaSalida = new Date(ruta.fecha_llegada_prevista).toLocaleTimeString(
+    "es-ES",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
   const item = ruta as RutaListadoItem;
   const reservadaConExtra = item.tieneCapacidadExtra;
@@ -43,7 +50,9 @@ export function RutaCard({
           <p className="font-semibold text-zinc-900">
             {formatCiudad(ruta.origen)} → {formatCiudad(ruta.destino)}
           </p>
-          <p className="mt-1 text-sm text-zinc-600">{fecha}</p>
+          <p className="mt-1 text-sm text-zinc-600">
+            {fecha} · {horaSalida}
+          </p>
           <p className="mt-1 text-sm font-medium text-emerald-800">
             {labelOfertaRuta(ofertaInput)}
           </p>
@@ -60,7 +69,7 @@ export function RutaCard({
             </div>
           )}
           <p className="mt-1 text-xs text-zinc-500">
-            Pulsa para ver punto y hora exactos
+            Pulsa para ver detalles
           </p>
         </div>
         <div className="shrink-0 text-right">
