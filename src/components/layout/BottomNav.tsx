@@ -48,7 +48,7 @@ function NavLink({
     <Link
       href={href}
       className={[
-        "flex w-full flex-col items-center justify-center gap-1 text-center font-semibold leading-tight",
+        "flex w-full flex-col items-center justify-center gap-0.5 text-center font-semibold leading-tight",
         active ? "text-emerald-700" : "text-zinc-500",
         className,
       ].join(" ")}
@@ -88,7 +88,7 @@ export function BottomNav() {
             href={item.href}
             label={item.label}
             active={isActive(pathname, item.href)}
-            className="min-h-[5.25rem] border-r border-zinc-100 px-3 py-2 text-base last:border-r-0 lg:min-h-[5.75rem] lg:px-4 lg:text-lg [&>span:first-child]:h-2 [&>span:first-child]:w-2"
+            className="min-h-[3.75rem] border-r border-zinc-100 px-2 py-1 text-base last:border-r-0 lg:min-h-16 lg:text-lg [&>span:first-child]:h-1.5 [&>span:first-child]:w-1.5"
           />
         ))}
       </div>
