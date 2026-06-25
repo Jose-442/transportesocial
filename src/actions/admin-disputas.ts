@@ -1,10 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { isAdminUser } from "@/lib/admin";
+import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
 import {
   liberarPagoConductor,
   reembolsarReserva,
@@ -18,34 +15,42 @@ export type DisputaAdminItem = {
   motivo: Disputa["motivo"];
   descripcion: string;
   version_conductor: string | null;
+  estado: Disputa["estado"];
   created_at: string;
+  resuelta_en: string | null;
   reserva_estado: Reserva["estado"];
 };
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user || !isAdminUser(user)) {
-    redirect("/");
-  }
-  return user;
+export type FiltroDisputasAdmin = "abiertas" | "resueltas" | "todas";
+
+function revalidateAdminDisputas() {
+  revalidatePath("/admin");
+  revalidatePath("/admin/disputas");
 }
 
-export async function loadDisputasAbiertas(): Promise<DisputaAdminItem[]> {
-  await requireAdmin();
+export async function loadDisputasAdmin(
+  filtro: FiltroDisputasAdmin = "abiertas"
+): Promise<DisputaAdminItem[]> {
+  await requireAdminUser();
 
-  const admin = createAdminClient();
+  const admin = getAdminDb();
   if (!admin) return [];
 
-  const { data } = await admin
+  let query = admin
     .from("disputas")
     .select(
-      "id, reserva_id, motivo, descripcion, version_conductor, created_at, reservas!inner(estado)"
+      "id, reserva_id, motivo, descripcion, version_conductor, estado, created_at, resuelta_en, reservas!inner(estado)"
     )
-    .eq("estado", "abierta")
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false })
+    .limit(80);
+
+  if (filtro === "abiertas") {
+    query = query.eq("estado", "abierta");
+  } else if (filtro === "resueltas") {
+    query = query.in("estado", ["resuelta_cliente", "resuelta_conductor"]);
+  }
+
+  const { data } = await query;
 
   return (data ?? []).map((row) => {
     const reservaRaw = row.reservas;
@@ -58,14 +63,21 @@ export async function loadDisputasAbiertas(): Promise<DisputaAdminItem[]> {
       motivo: row.motivo as Disputa["motivo"],
       descripcion: row.descripcion,
       version_conductor: row.version_conductor,
+      estado: row.estado as Disputa["estado"],
       created_at: row.created_at,
+      resuelta_en: row.resuelta_en,
       reserva_estado: reservaEstado?.estado ?? "disputa",
     };
   });
 }
 
+/** @deprecated Usar loadDisputasAdmin */
+export async function loadDisputasAbiertas(): Promise<DisputaAdminItem[]> {
+  return loadDisputasAdmin("abiertas");
+}
+
 async function restaurarEscrowRetenido(
-  admin: NonNullable<ReturnType<typeof createAdminClient>>,
+  admin: NonNullable<ReturnType<typeof getAdminDb>>,
   reservaId: string
 ) {
   await admin
@@ -79,9 +91,9 @@ async function restaurarEscrowRetenido(
 export async function resolverDisputaFavorCliente(
   disputaId: string
 ): Promise<{ error?: string; ok?: boolean }> {
-  await requireAdmin();
+  await requireAdminUser();
 
-  const admin = createAdminClient();
+  const admin = getAdminDb();
   if (!admin) return { error: "Servidor no configurado." };
 
   const { data: disputa } = await admin
@@ -124,7 +136,7 @@ export async function resolverDisputaFavorCliente(
     });
   }
 
-  revalidatePath("/admin/disputas");
+  revalidateAdminDisputas();
   revalidatePath(`/reservas/${reserva.id}`);
   return { ok: true };
 }
@@ -132,9 +144,9 @@ export async function resolverDisputaFavorCliente(
 export async function resolverDisputaFavorConductor(
   disputaId: string
 ): Promise<{ error?: string; ok?: boolean }> {
-  await requireAdmin();
+  await requireAdminUser();
 
-  const admin = createAdminClient();
+  const admin = getAdminDb();
   if (!admin) return { error: "Servidor no configurado." };
 
   const { data: disputa } = await admin
@@ -177,7 +189,7 @@ export async function resolverDisputaFavorConductor(
     });
   }
 
-  revalidatePath("/admin/disputas");
+  revalidateAdminDisputas();
   revalidatePath(`/reservas/${reserva.id}`);
   return { ok: true };
 }

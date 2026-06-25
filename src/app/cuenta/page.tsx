@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { cerrarSesion } from "@/actions/auth";
 import { createClient } from "@/lib/supabase/server";
+import { isAdminUser } from "@/lib/admin";
 import { FREE_PUBLICATIONS } from "@/lib/constants";
 import {
   countUserPublications,
@@ -93,6 +94,17 @@ export default async function CuentaPage({
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">Mi cuenta</h1>
+
+      {isAdminUser(user) && (
+        <p className="text-sm">
+          <Link
+            href="/admin"
+            className="font-semibold text-emerald-700 hover:text-emerald-800"
+          >
+            Panel de administración
+          </Link>
+        </p>
+      )}
 
       <Card
         className={[

@@ -1,37 +1,38 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { isAdminUser } from "@/lib/admin";
-import { loadDisputasAbiertas } from "@/actions/admin-disputas";
+import {
+  loadDisputasAdmin,
+  type FiltroDisputasAdmin,
+} from "@/actions/admin-disputas";
 import { DisputasAdminPanel } from "@/components/admin/DisputasAdminPanel";
 
-export const metadata = { title: "Disputas abiertas" };
+export const metadata = { title: "Disputas — Administración" };
 
-export default async function AdminDisputasPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+function parseFiltro(
+  raw: string | string[] | undefined
+): FiltroDisputasAdmin {
+  const v = typeof raw === "string" ? raw : "abiertas";
+  if (v === "resueltas" || v === "todas") return v;
+  return "abiertas";
+}
 
-  if (!user) {
-    redirect("/login?redirect=/admin/disputas");
-  }
-  if (!isAdminUser(user)) {
-    redirect("/");
-  }
-
-  const disputas = await loadDisputasAbiertas();
+export default async function AdminDisputasPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const filtro = parseFiltro(params.filtro);
+  const disputas = await loadDisputasAdmin(filtro);
 
   return (
     <div className="space-y-4">
-      <Link
-        href="/cuenta"
-        className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
-      >
-        ← Mi cuenta
-      </Link>
-      <h1 className="text-2xl font-bold text-zinc-900">Disputas abiertas</h1>
-      <DisputasAdminPanel disputas={disputas} />
+      <div>
+        <h1 className="text-2xl font-bold text-zinc-900">Disputas</h1>
+        <p className="mt-1 text-sm text-zinc-600">
+          Revisa reclamaciones y resuélvelas a favor del cliente o del
+          conductor.
+        </p>
+      </div>
+      <DisputasAdminPanel disputas={disputas} filtro={filtro} />
     </div>
   );
 }
