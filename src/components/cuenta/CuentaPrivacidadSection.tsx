@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { solicitarCambioContrasena } from "@/actions/cuenta";
 import { EditarNombreForm } from "@/components/cuenta/EditarNombreForm";
+import { PasswordRecoveryEmailSent } from "@/components/auth/PasswordRecoveryEmailSent";
 import { LEGAL_TITULAR } from "@/lib/legal-info";
 
 export function CuentaPrivacidadSection({
@@ -13,13 +14,13 @@ export function CuentaPrivacidadSection({
 }: {
   displayName: string;
 }) {
-  const [passwordMsg, setPasswordMsg] = useState<string | null>(null);
+  const [passwordMsg, setPasswordMsg] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordLoading, setPasswordLoading] = useState(false);
 
   async function onCambiarContrasena() {
     setPasswordLoading(true);
-    setPasswordMsg(null);
+    setPasswordMsg(false);
     setPasswordError(null);
 
     const result = await solicitarCambioContrasena();
@@ -29,29 +30,35 @@ export function CuentaPrivacidadSection({
       setPasswordError(result.error);
       return;
     }
-    setPasswordMsg("Te hemos enviado un enlace a tu email.");
+    setPasswordMsg(true);
   }
 
   return (
     <div className="space-y-5">
       <EditarNombreForm nombreInicial={displayName} />
 
-      <div className="border-t border-zinc-100 pt-4">
-        <Button
-          type="button"
-          variant="secondary"
-          fullWidth
-          className={CUENTA_BTN_SECONDARY}
-          disabled={passwordLoading}
-          onClick={onCambiarContrasena}
-        >
-          {passwordLoading ? "Enviando…" : "Cambiar contraseña"}
-        </Button>
-        {passwordMsg && (
-          <p className="mt-2 text-sm text-emerald-700">{passwordMsg}</p>
+      <div className="border-t border-zinc-100 pt-4 space-y-3">
+        {!passwordMsg ? (
+          <>
+            <p className="text-sm text-zinc-600">
+              Te enviaremos un enlace a tu email para elegir una contraseña nueva.
+            </p>
+            <Button
+              type="button"
+              variant="secondary"
+              fullWidth
+              className={CUENTA_BTN_SECONDARY}
+              disabled={passwordLoading}
+              onClick={onCambiarContrasena}
+            >
+              {passwordLoading ? "Enviando…" : "Cambiar contraseña"}
+            </Button>
+          </>
+        ) : (
+          <PasswordRecoveryEmailSent />
         )}
         {passwordError && (
-          <p className="mt-2 text-sm text-red-600">{passwordError}</p>
+          <p className="text-sm text-red-600">{passwordError}</p>
         )}
       </div>
 

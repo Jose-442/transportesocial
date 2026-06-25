@@ -8,6 +8,10 @@ describe("traducirErrorAuth", () => {
     );
   });
 
+  it("traduce límite de envío de correo", () => {
+    expect(traducirErrorAuth("Email rate limit exceeded")).toContain("1 hora");
+  });
+
   it("devuelve el mensaje original si no hay traducción", () => {
     expect(traducirErrorAuth("Error desconocido de prueba")).toBe(
       "Error desconocido de prueba"

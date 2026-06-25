@@ -8,6 +8,9 @@ export default function RecuperarContrasenaPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">Recuperar contraseña</h1>
+      <p className="text-sm text-zinc-600">
+        ¿Olvidaste la contraseña? Te mandamos un enlace al email de tu cuenta.
+      </p>
       <Card>
         <RecuperarContrasenaForm />
       </Card>

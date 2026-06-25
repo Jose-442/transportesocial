@@ -10,9 +10,11 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "Unable to validate email address: invalid format":
     "El formato del email no es válido.",
   "Email rate limit exceeded":
-    "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+    "Demasiados intentos de envío de correo. Espera al menos 1 hora y vuelve a intentarlo.",
+  "over_email_send_rate_limit":
+    "Demasiados intentos de envío de correo. Espera al menos 1 hora y vuelve a intentarlo.",
   "For security purposes, you can only request this once every 60 seconds":
-    "Por seguridad, solo puedes solicitarlo una vez cada 60 segundos.",
+    "Por seguridad, solo puedes solicitarlo una vez cada 60 segundos. Espera un minuto.",
 };
 
 export function traducirErrorAuth(message: string): string {

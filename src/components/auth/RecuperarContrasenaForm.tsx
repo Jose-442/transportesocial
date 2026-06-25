@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { traducirErrorAuth } from "@/lib/auth-errors";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { PasswordRecoveryEmailSent } from "@/components/auth/PasswordRecoveryEmailSent";
 
 export function RecuperarContrasenaForm() {
   const [email, setEmail] = useState("");
@@ -36,11 +37,16 @@ export function RecuperarContrasenaForm() {
   }
 
   if (enviado) {
-    return <p className="text-sm text-emerald-700">Revisa tu email.</p>;
+    return <PasswordRecoveryEmailSent email={email.trim()} />;
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <p className="text-sm text-zinc-600">
+        Escribe el <strong>mismo email</strong> con el que te registraste. Te
+        enviaremos un enlace para elegir una contraseña nueva (el correo lo envía
+        el sistema de acceso, no el de avisos de la app).
+      </p>
       <Input
         label="Email"
         type="email"

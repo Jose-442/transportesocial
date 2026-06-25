@@ -10,6 +10,7 @@ import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
 import { getStripeServer, isStripeConfigured } from "@/lib/stripe/server";
 import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
 import { isDistintivoAmbiental } from "@/lib/vehiculo";
+import { traducirErrorAuth } from "@/lib/auth-errors";
 
 export async function actualizarNombreMostrar(
   displayName: string
@@ -137,7 +138,7 @@ export async function solicitarCambioContrasena(): Promise<{
     redirectTo: `${origin}/auth/callback?next=${encodeURIComponent("/nueva-contrasena")}`,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: traducirErrorAuth(error.message) };
   return { ok: true };
 }
 
