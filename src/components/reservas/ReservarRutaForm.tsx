@@ -40,8 +40,8 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-600">
-        Describe tu bulto y paga por adelantado. La coordinación será solo por
-        el chat interno una vez confirmada la reserva.
+        Describe tu bulto y paga para reservar. La coordinación será por el chat
+        interno una vez confirmada la reserva.
       </p>
       <Textarea
         label="Descripción del bulto"
