@@ -78,8 +78,11 @@ export default function QuienesSomosPage() {
               segura hasta que el envío se complete según estas condiciones.
             </li>
             <li>
-              Puedes reservar un viaje ya publicado (Rutas) o publicar un bulto
-              y aceptar una oferta de un conductor (Bultos).
+              Puedes reservar un viaje ya publicado (
+              <strong>Viajes propuestos por conductores</strong>) o publicar una
+              solicitud de envío y aceptar una oferta de un conductor (
+              <strong>Propuestas de personas que necesitan enviar bulto</strong>
+              ).
             </li>
             <li>
               Si el conductor no tiene activada la aceptación automática, dispone

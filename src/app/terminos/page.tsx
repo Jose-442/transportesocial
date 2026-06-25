@@ -20,7 +20,7 @@ const comisionPct = "22 %";
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "15 de junio de 2026";
+  const fechaActualizacion = "25 de junio de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -84,10 +84,12 @@ export default function TerminosPage() {
               permanece ajeno a esa relación contractual.
             </li>
             <li>
-              La Plataforma ofrece dos modalidades: <strong>Rutas</strong> (el
-              Conductor publica un viaje con espacio para un bulto principal) y{" "}
-              <strong>Bultos</strong> (el Emisor publica una solicitud y los
-              Conductores pueden ofertar un precio).
+              La Plataforma ofrece dos modalidades:{" "}
+              <strong>Viajes propuestos por conductores</strong> (el Conductor
+              publica un viaje con espacio para un bulto principal) y{" "}
+              <strong>Propuestas de personas que necesitan enviar bulto</strong>{" "}
+              (el Emisor publica una solicitud y los Conductores pueden ofertar
+              un precio).
             </li>
           </ul>
         </section>
@@ -235,7 +237,7 @@ export default function TerminosPage() {
               Publicaciones: <strong>{FREE_PUBLICATIONS} publicaciones
               gratuitas</strong> incluidas; a partir de la siguiente,{" "}
               <strong>{formatEur(PUBLICATION_FEE_EUR)}</strong> por publicación
-              (ruta o bulto).
+              (viaje propuesto por conductor o propuesta de envío de bulto).
             </li>
             <li>
               Viajes concertados: comisión del <strong>{comisionPct}</strong>{" "}
@@ -332,7 +334,8 @@ export default function TerminosPage() {
           <ul className="mb-4 list-disc space-y-2 pl-5">
             <li>Gestión de registros, perfiles y cuenta de usuario.</li>
             <li>
-              Tramitación de reservas, publicación de rutas y bultos, plazas de
+              Tramitación de reservas, publicación de viajes propuestos por
+              conductores y de propuestas de envío de bulto, plazas de
               acompañante, chat interno y pasarela de pagos.
             </li>
             <li>Gestión de disputas, reseñas y notificaciones del servicio.</li>
