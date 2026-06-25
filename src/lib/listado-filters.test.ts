@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { coincideFiltrosRuta } from "@/lib/listado-filters";
+import { coincideFiltrosBulto, coincideFiltrosRuta } from "@/lib/listado-filters";
 
 const FECHA = "2026-06-24";
 
@@ -46,5 +46,36 @@ describe("coincideFiltrosRuta — provincia y radio 50 km", () => {
         filtros
       )
     ).toBe(false);
+  });
+});
+
+function bulto(origen: string, destino: string) {
+  return {
+    origen,
+    destino,
+    fecha_limite: `${FECHA}T23:59:00.000Z`,
+  };
+}
+
+describe("coincideFiltrosBulto — provincia y radio 50 km", () => {
+  it("misma lógica que viajes: Burgos→Madrid incluye zona metropolitana", () => {
+    const bultos = [
+      bulto("Burgos", "Madrid"),
+      bulto("Burgos", "Getafe"),
+      bulto("Quintanilla del Agua y Tordueles", "Madrid"),
+      bulto("Burgos", "Alcobendas"),
+    ];
+    for (const anuncio of bultos) {
+      expect(coincideFiltrosBulto(anuncio, filtros)).toBe(true);
+    }
+  });
+
+  it("excluye otra provincia en salida o llegada", () => {
+    expect(coincideFiltrosBulto(bulto("Valladolid", "Madrid"), filtros)).toBe(
+      false
+    );
+    expect(coincideFiltrosBulto(bulto("Burgos", "Barcelona"), filtros)).toBe(
+      false
+    );
   });
 });

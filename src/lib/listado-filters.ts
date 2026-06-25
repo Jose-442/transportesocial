@@ -1,9 +1,6 @@
 import { parseDate } from "@/lib/datetime-form";
 import { formatCiudad } from "@/lib/format-ciudad";
-import {
-  coincideMunicipioBusqueda,
-  normalizarTextoBusqueda,
-} from "@/lib/municipios-espana";
+import { coincideMunicipioBusqueda } from "@/lib/municipios-espana";
 
 export type FiltrosListado = {
   origen?: string;
@@ -78,23 +75,20 @@ export function mismaFechaMesDia(
   );
 }
 
-function ciudadCoincide(ciudad: string, filtro: string): boolean {
-  const normalizada = normalizarTextoBusqueda(formatCiudad(ciudad));
-  const filtroNormalizado = normalizarTextoBusqueda(formatCiudad(filtro));
-  return (
-    normalizada.includes(filtroNormalizado) ||
-    filtroNormalizado.includes(normalizada)
-  );
-}
-
 export function coincideFiltrosBulto(
   bulto: { origen: string; destino: string; fecha_limite: string | null },
   filtros: FiltrosListado
 ): boolean {
-  if (filtros.origen && !ciudadCoincide(bulto.origen, filtros.origen)) {
+  if (
+    filtros.origen &&
+    !coincideMunicipioBusqueda(bulto.origen, filtros.origen)
+  ) {
     return false;
   }
-  if (filtros.destino && !ciudadCoincide(bulto.destino, filtros.destino)) {
+  if (
+    filtros.destino &&
+    !coincideMunicipioBusqueda(bulto.destino, filtros.destino)
+  ) {
     return false;
   }
   if (filtros.fecha && !mismaFechaMesDia(bulto.fecha_limite, filtros.fecha)) {

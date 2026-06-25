@@ -48,8 +48,9 @@ export default async function BultosPage({
           Buscar bultos
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Envíos publicados entre la ciudad de salida y la de llegada que
-          indiques. Pulsa en uno para ver medidas y afinar el punto exacto.
+          Envíos del día con salida y llegada en la misma provincia que indiques,
+          hasta 50 km de cada ciudad. Pulsa en uno para ver medidas y afinar el
+          punto exacto.
         </p>
       </div>
 
