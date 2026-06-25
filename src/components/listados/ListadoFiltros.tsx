@@ -74,10 +74,12 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4"
     >
       <p className="text-sm font-semibold text-zinc-800">Buscar</p>
-      <p className="text-xs text-zinc-500">
-        Elige ciudad de salida, de llegada y día. En cada viaje afinarás el punto
-        exacto y la hora.
-      </p>
+      {tipo === "bultos" && (
+        <p className="text-xs text-zinc-500">
+          Elige ciudad de salida, de llegada y día. En cada viaje afinarás el punto
+          exacto y la hora.
+        </p>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         <MunicipioAutocomplete
           name="origen"

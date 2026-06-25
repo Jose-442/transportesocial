@@ -14,7 +14,7 @@ import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Buscar viajes" };
+export const metadata = { title: "Buscar viajes propuestos por conductores" };
 
 export default async function RutasPage({
   searchParams,
@@ -37,13 +37,8 @@ export default async function RutasPage({
     <div className="space-y-4">
       <div>
         <h1 className="text-xl font-bold leading-snug text-zinc-900 sm:text-2xl">
-          Buscar viajes
+          Buscar viajes propuestos por conductores
         </h1>
-        <p className="mt-1 text-sm text-zinc-600">
-          Viajes del día con salida y llegada en la misma provincia que indiques,
-          hasta 50 km de cada ciudad. Pulsa en uno para ver el punto exacto y la
-          hora.
-        </p>
       </div>
 
       <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
