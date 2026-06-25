@@ -2,13 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 
-const items = [
+type NavItem = {
+  href: string;
+  label: ReactNode;
+};
+
+const items: NavItem[] = [
   { href: "/", label: "Inicio" },
   { href: "/rutas", label: "Viajes propuestos por conductores" },
-  { href: "/bultos", label: "Propuestas de personas que necesitan enviar bulto" },
+  {
+    href: "/bultos",
+    label: (
+      <>
+        Propuestas de personas que necesitan
+        <br />
+        enviar bulto
+      </>
+    ),
+  },
   { href: "/cuenta", label: "Cuenta" },
-] as const;
+];
 
 const mobileItems = items.filter(
   (item) => item.href === "/" || item.href === "/cuenta"
@@ -25,7 +40,7 @@ function NavLink({
   className,
 }: {
   href: string;
-  label: string;
+  label: ReactNode;
   active: boolean;
   className: string;
 }) {
@@ -33,7 +48,7 @@ function NavLink({
     <Link
       href={href}
       className={[
-        "flex flex-col items-center justify-center gap-1 text-center font-semibold leading-tight",
+        "flex w-full flex-col items-center justify-center gap-1 text-center font-semibold leading-tight",
         active ? "text-emerald-700" : "text-zinc-500",
         className,
       ].join(" ")}
@@ -53,7 +68,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-200 bg-white pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-200 bg-white pb-[env(safe-area-inset-bottom)] md:pb-0">
       <div className="mx-auto grid max-w-lg grid-cols-2 gap-1 py-2 md:hidden">
         {mobileItems.map((item) => (
           <NavLink
@@ -66,14 +81,14 @@ export function BottomNav() {
         ))}
       </div>
 
-      <div className="mx-auto hidden max-w-6xl grid-cols-4 gap-2 px-6 py-4 md:grid lg:px-10">
+      <div className="hidden w-full grid-cols-4 md:grid">
         {items.map((item) => (
           <NavLink
             key={item.href}
             href={item.href}
             label={item.label}
             active={isActive(pathname, item.href)}
-            className="min-h-24 rounded-2xl px-3 text-lg lg:min-h-28 lg:text-xl [&>span:first-child]:h-2.5 [&>span:first-child]:w-2.5"
+            className="min-h-[5.25rem] border-r border-zinc-100 px-3 py-2 text-base last:border-r-0 lg:min-h-[5.75rem] lg:px-4 lg:text-lg [&>span:first-child]:h-2 [&>span:first-child]:w-2"
           />
         ))}
       </div>
