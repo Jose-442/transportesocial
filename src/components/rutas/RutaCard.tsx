@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { badgeOfertaRuta, labelOfertaRuta } from "@/lib/oferta-ruta-labels";
+import { badgeOfertaRuta, lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
 import type { RutaConductor } from "@/types/database";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
 
@@ -53,9 +53,11 @@ export function RutaCard({
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
-          <p className="mt-1 text-sm font-medium text-emerald-800">
-            {labelOfertaRuta(ofertaInput)}
-          </p>
+          <div className="mt-1 space-y-0.5 text-sm font-medium text-emerald-800">
+            {lineasOfertaRuta(ofertaInput).map((linea) => (
+              <p key={linea}>{linea}</p>
+            ))}
+          </div>
           {tieneAsientos && (
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">

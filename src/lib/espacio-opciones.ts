@@ -18,3 +18,13 @@ export function combinarEspacio(tamano: string, detalle?: string): string {
   if (!extra) return base;
   return `${base}. ${extra}`;
 }
+
+/** Texto del tamaño en listados y fichas, con referencias explícitas. */
+export function formatEspacioDisponibleListado(espacio: string): string {
+  const valor = espacio.trim();
+  if (!valor) return "Sin especificar";
+  if (valor === "Más grande") {
+    return "Más grande que un frigorífico estándar";
+  }
+  return valor;
+}

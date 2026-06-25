@@ -1,3 +1,4 @@
+import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import type { RutaConductor } from "@/types/database";
 
 export type OfertaRutaInput = {
@@ -7,26 +8,30 @@ export type OfertaRutaInput = {
   estado: RutaConductor["estado"];
 };
 
-export function labelOfertaRuta({
-  espacio_disponible,
-  asientoOfrecidas = 0,
-  tieneCapacidadExtra,
-  estado,
-}: OfertaRutaInput): string {
-  const espacio = espacio_disponible.trim();
+function lineaBulto(espacio: string): string {
+  const tamano = formatEspacioDisponibleListado(espacio);
+  return `Bulto (Tamaño del espacio disponible: ${tamano})`;
+}
+
+function lineaAcompanantes(asientoOfrecidas: number): string | null {
+  if (asientoOfrecidas <= 0) return null;
+  const plural = asientoOfrecidas === 1 ? "acompañante" : "acompañantes";
+  return `+ ${asientoOfrecidas} ${plural}`;
+}
+
+export function lineasOfertaRuta(input: OfertaRutaInput): string[] {
+  const { espacio_disponible, asientoOfrecidas = 0, tieneCapacidadExtra, estado } =
+    input;
+  const lineas: string[] = [lineaBulto(espacio_disponible)];
+
+  const acompanantes = lineaAcompanantes(asientoOfrecidas);
+  if (acompanantes) lineas.push(acompanantes);
 
   if (estado === "reservada" && tieneCapacidadExtra) {
-    return espacio
-      ? `Viaje reservado · Más espacio para bulto · ${espacio}`
-      : "Viaje reservado · Más espacio para bulto";
+    lineas.push("Viaje reservado · Más espacio para bulto");
   }
 
-  if (asientoOfrecidas <= 0) {
-    return `Porte de bulto · ${espacio}`;
-  }
-
-  const plural = asientoOfrecidas === 1 ? "acompañante" : "acompañantes";
-  return `Bulto + ${asientoOfrecidas} ${plural} · ${espacio}`;
+  return lineas;
 }
 
 export function badgeOfertaRuta(input: OfertaRutaInput): string {

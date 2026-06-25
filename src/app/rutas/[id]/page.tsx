@@ -7,6 +7,7 @@ import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm"
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { createClient } from "@/lib/supabase/server";
+import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -145,7 +146,9 @@ export default async function RutaDetallePage({
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-zinc-500">Espacio</p>
-          <p className="mt-1 text-sm text-zinc-800">{ruta.espacio_disponible}</p>
+          <p className="mt-1 text-sm text-zinc-800">
+            {formatEspacioDisponibleListado(ruta.espacio_disponible)}
+          </p>
         </div>
       </Card>
 
