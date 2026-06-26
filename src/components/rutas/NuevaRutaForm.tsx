@@ -149,7 +149,7 @@ export function NuevaRutaForm({
     const result = await crearRuta(formData);
 
     setLoading(false);
-    if (result.error) {
+    if ("error" in result) {
       setError(result.error);
       return;
     }
