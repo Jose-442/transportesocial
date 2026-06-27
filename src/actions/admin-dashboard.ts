@@ -1,6 +1,10 @@
 "use server";
 
 import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
+import {
+  formatSupabaseError,
+  probeProfilesRest,
+} from "@/lib/supabase/admin";
 
 export type AdminDashboardStats = {
   disputasAbiertas: number;
@@ -25,11 +29,6 @@ const STATS_VACIOS: AdminDashboardStats = {
   suscripcionesActivas: 0,
 };
 
-function formatSupabaseError(error: { message?: string; code?: string }) {
-  const message = error.message?.trim() || "Error desconocido de Supabase";
-  return error.code ? `${message} (${error.code})` : message;
-}
-
 export async function loadAdminDashboardStats(): Promise<AdminDashboardLoadResult> {
   await requireAdminUser();
   const admin = getAdminDb();
@@ -44,11 +43,18 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardLoadResul
   const perfilesProbe = await admin
     .from("profiles")
     .select("id", { count: "exact", head: true });
+
+  let usuariosDesdeRest: number | null = null;
   if (perfilesProbe.error) {
-    return {
-      stats: STATS_VACIOS,
-      avisoServidor: formatSupabaseError(perfilesProbe.error),
-    };
+    const restProbe = await probeProfilesRest();
+    if (!restProbe.ok) {
+      const sdkError = formatSupabaseError(perfilesProbe.error);
+      return {
+        stats: STATS_VACIOS,
+        avisoServidor: `${sdkError} · REST: ${restProbe.error}`,
+      };
+    }
+    usuariosDesdeRest = restProbe.count;
   }
 
   const [
@@ -88,7 +94,8 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardLoadResul
       reservasPendientesAprobacion: reservas.count ?? 0,
       viajesActivos: viajes.count ?? 0,
       propuestasBultoActivas: bultos.count ?? 0,
-      usuariosRegistrados: perfiles.count ?? 0,
+      usuariosRegistrados:
+        usuariosDesdeRest ?? perfiles.count ?? perfilesProbe.count ?? 0,
       suscripcionesActivas: suscripciones.count ?? 0,
     },
   };
