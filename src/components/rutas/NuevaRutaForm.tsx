@@ -150,7 +150,7 @@ export function NuevaRutaForm({
 
     setLoading(false);
     if ("error" in result) {
-      setError(result.error);
+      setError(result.error ?? "No se pudo publicar la ruta.");
       return;
     }
 
