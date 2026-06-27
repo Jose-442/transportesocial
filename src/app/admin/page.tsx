@@ -4,10 +4,15 @@ import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
 
 export default async function AdminHomePage() {
-  const stats = await loadAdminDashboardStats();
+  const { stats, avisoServidor } = await loadAdminDashboardStats();
 
   return (
     <div className="space-y-6">
+      {avisoServidor && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+          {avisoServidor}
+        </div>
+      )}
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Resumen</h1>
         <p className="mt-1 text-sm text-zinc-600">
