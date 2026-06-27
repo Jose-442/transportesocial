@@ -25,6 +25,11 @@ const STATS_VACIOS: AdminDashboardStats = {
   suscripcionesActivas: 0,
 };
 
+function formatSupabaseError(error: { message?: string; code?: string }) {
+  const message = error.message?.trim() || "Error desconocido de Supabase";
+  return error.code ? `${message} (${error.code})` : message;
+}
+
 export async function loadAdminDashboardStats(): Promise<AdminDashboardLoadResult> {
   await requireAdminUser();
   const admin = getAdminDb();
@@ -42,8 +47,7 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardLoadResul
   if (perfilesProbe.error) {
     return {
       stats: STATS_VACIOS,
-      avisoServidor:
-        "La URL de Supabase y la service_role no coinciden. Revisa en Vercel NEXT_PUBLIC_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY (mismo proyecto).",
+      avisoServidor: formatSupabaseError(perfilesProbe.error),
     };
   }
 
