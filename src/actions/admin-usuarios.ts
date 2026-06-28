@@ -1,6 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
+import { obtenerBloqueosEliminacion } from "@/lib/cuenta/eliminacion";
+import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-usuario";
 
 export type UsuarioAdminItem = {
   id: string;
@@ -37,4 +40,41 @@ export async function loadAdminUsuarios(): Promise<UsuarioAdminItem[]> {
     subscription_active: Boolean(p.subscription_active),
     created_at: p.created_at,
   }));
+}
+
+export async function adminEliminarUsuario(
+  userId: string
+): Promise<{ error?: string }> {
+  const adminUser = await requireAdminUser();
+  if (adminUser.id === userId) {
+    return { error: "No puedes eliminar tu propia cuenta de administrador." };
+  }
+
+  const admin = getAdminDb();
+  if (!admin) return { error: "Servidor no configurado." };
+
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (!profile) return { error: "Usuario no encontrado." };
+
+  const saldo = Number(profile.saldo_acumulado ?? 0);
+  const bloqueos = await obtenerBloqueosEliminacion(admin, userId, saldo);
+  if (bloqueos.length > 0) {
+    return {
+      error: bloqueos.map((b) => b.mensaje).join(" "),
+    };
+  }
+
+  const eliminacion = await ejecutarEliminacionUsuario(admin, userId, profile);
+  if (eliminacion.error) {
+    return eliminacion;
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/usuarios");
+  return {};
 }

@@ -5,10 +5,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { obtenerBloqueosEliminacion } from "@/lib/cuenta/eliminacion";
+import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-usuario";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
-import { getStripeServer, isStripeConfigured } from "@/lib/stripe/server";
-import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
 import { isDistintivoAmbiental } from "@/lib/vehiculo";
 import { traducirErrorAuth } from "@/lib/auth-errors";
 
@@ -198,69 +197,9 @@ export async function eliminarCuentaDefinitivamente(): Promise<{
     };
   }
 
-  if (
-    profile?.stripe_subscription_id &&
-    isStripeConfigured()
-  ) {
-    try {
-      const stripe = getStripeServer();
-      await stripe.subscriptions.cancel(profile.stripe_subscription_id);
-      await syncProfileSubscription(admin, user.id, {
-        subscription_active: false,
-        subscription_ends_at: new Date().toISOString(),
-        stripe_customer_id: profile.stripe_customer_id,
-        stripe_subscription_id: null,
-      });
-    } catch {
-      return {
-        error:
-          "No se pudo cancelar la suscripción. Inténtalo de nuevo o contacta con soporte.",
-      };
-    }
-  }
-
-  await admin
-    .from("rutas_conductores")
-    .update({ estado: "cancelada" })
-    .eq("user_id", user.id)
-    .in("estado", ["activa", "reservada"]);
-
-  await admin
-    .from("anuncios_bultos")
-    .update({ estado: "cancelado" })
-    .eq("user_id", user.id)
-    .in("estado", ["activo", "reservado"]);
-
-  const { count: totalReservas } = await admin
-    .from("reservas")
-    .select("id", { count: "exact", head: true })
-    .or(`cliente_id.eq.${user.id},transportista_id.eq.${user.id}`);
-
-  if ((totalReservas ?? 0) === 0) {
-    const { error: deleteError } = await admin.auth.admin.deleteUser(user.id);
-    if (deleteError) {
-      return { error: deleteError.message };
-    }
-  } else {
-    await admin
-      .from("profiles")
-      .update({
-        display_name: "Usuario eliminado",
-        avatar_url: null,
-        phone: null,
-        aceptacion_automatica: false,
-        subscription_active: false,
-        stripe_subscription_id: null,
-      })
-      .eq("id", user.id);
-
-    const { error: banError } = await admin.auth.admin.updateUserById(
-      user.id,
-      { ban_duration: "876000h" }
-    );
-    if (banError) {
-      return { error: banError.message };
-    }
+  const eliminacion = await ejecutarEliminacionUsuario(admin, user.id, profile);
+  if (eliminacion.error) {
+    return eliminacion;
   }
 
   await supabase.auth.signOut();

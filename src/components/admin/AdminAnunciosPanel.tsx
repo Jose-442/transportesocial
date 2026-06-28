@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type {
-  PropuestaBultoAdminItem,
-  ViajeAdminItem,
+import {
+  adminEliminarBulto,
+  adminEliminarViaje,
+  type PropuestaBultoAdminItem,
+  type ViajeAdminItem,
 } from "@/actions/admin-anuncios";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import {
   ESTADO_BULTO_LABELS,
   ESTADO_RUTA_LABELS,
@@ -42,7 +47,57 @@ export function AdminAnunciosPanel({
   bultos: PropuestaBultoAdminItem[];
 }) {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const estados = tab === "viajes" ? ESTADOS_VIAJE : ESTADOS_BULTO;
+
+  async function eliminarViaje(viaje: ViajeAdminItem) {
+    if (
+      !confirm(
+        `¿Eliminar el viaje ${formatCiudad(viaje.origen)} → ${formatCiudad(viaje.destino)}? Esta acción es irreversible.`
+      )
+    ) {
+      return;
+    }
+
+    setLoadingId(viaje.id);
+    setError(null);
+
+    const result = await adminEliminarViaje(viaje.id);
+
+    setLoadingId(null);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    router.refresh();
+  }
+
+  async function eliminarBulto(bulto: PropuestaBultoAdminItem) {
+    if (
+      !confirm(
+        `¿Eliminar el bulto ${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}? Esta acción es irreversible.`
+      )
+    ) {
+      return;
+    }
+
+    setLoadingId(bulto.id);
+    setError(null);
+
+    const result = await adminEliminarBulto(bulto.id);
+
+    setLoadingId(null);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    router.refresh();
+  }
 
   function cambiar(nextTab: Tab, nextEstado: string) {
     const params = new URLSearchParams();
@@ -99,6 +154,12 @@ export function AdminAnunciosPanel({
         ))}
       </div>
 
+      {error && (
+        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
       {tab === "viajes" ? (
         viajes.length === 0 ? (
           <Card>
@@ -121,12 +182,23 @@ export function AdminAnunciosPanel({
                       {new Date(v.fecha_salida).toLocaleDateString("es-ES")}
                     </p>
                   </div>
-                  <Link
-                    href={`/rutas/${v.id}`}
-                    className="text-sm font-semibold text-emerald-700"
-                  >
-                    Ver detalle
-                  </Link>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <Link
+                      href={`/rutas/${v.id}`}
+                      className="text-sm font-semibold text-emerald-700"
+                    >
+                      Ver detalle
+                    </Link>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className={CUENTA_BTN_SECONDARY}
+                      disabled={loadingId === v.id}
+                      onClick={() => eliminarViaje(v)}
+                    >
+                      {loadingId === v.id ? "Eliminando…" : "Eliminar"}
+                    </Button>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -157,12 +229,23 @@ export function AdminAnunciosPanel({
                       : "Sin fecha límite"}
                   </p>
                 </div>
-                <Link
-                  href={`/bultos/${b.id}`}
-                  className="text-sm font-semibold text-emerald-700"
-                >
-                  Ver detalle
-                </Link>
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  <Link
+                    href={`/bultos/${b.id}`}
+                    className="text-sm font-semibold text-emerald-700"
+                  >
+                    Ver detalle
+                  </Link>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className={CUENTA_BTN_SECONDARY}
+                    disabled={loadingId === b.id}
+                    onClick={() => eliminarBulto(b)}
+                  >
+                    {loadingId === b.id ? "Eliminando…" : "Eliminar"}
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}

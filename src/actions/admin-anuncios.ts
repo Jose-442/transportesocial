@@ -1,6 +1,11 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
+import {
+  ERROR_RESERVA_O_PROPUESTA_EN_CURSO,
+  RESERVA_EN_CURSO_ESTADOS,
+} from "@/lib/admin/publicacion-en-curso";
 import type { AnuncioBulto, RutaConductor } from "@/types/database";
 
 export type ViajeAdminItem = {
@@ -115,4 +120,86 @@ export async function loadAdminPropuestasBulto(
     autor_nombre: nombres.get(r.user_id) ?? "—",
     created_at: r.created_at,
   }));
+}
+
+export async function adminEliminarViaje(
+  rutaId: string
+): Promise<{ error?: string }> {
+  await requireAdminUser();
+  const admin = getAdminDb();
+  if (!admin) return { error: "Servidor no configurado." };
+
+  const { data: ruta } = await admin
+    .from("rutas_conductores")
+    .select("id")
+    .eq("id", rutaId)
+    .single();
+
+  if (!ruta) return { error: "Viaje no encontrado." };
+
+  const { count } = await admin
+    .from("reservas")
+    .select("id", { count: "exact", head: true })
+    .eq("ruta_conductor_id", rutaId)
+    .in("estado", [...RESERVA_EN_CURSO_ESTADOS]);
+
+  if ((count ?? 0) > 0) {
+    return { error: ERROR_RESERVA_O_PROPUESTA_EN_CURSO };
+  }
+
+  const { error } = await admin
+    .from("rutas_conductores")
+    .delete()
+    .eq("id", rutaId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/anuncios");
+  return {};
+}
+
+export async function adminEliminarBulto(
+  bultoId: string
+): Promise<{ error?: string }> {
+  await requireAdminUser();
+  const admin = getAdminDb();
+  if (!admin) return { error: "Servidor no configurado." };
+
+  const { data: bulto } = await admin
+    .from("anuncios_bultos")
+    .select("id")
+    .eq("id", bultoId)
+    .single();
+
+  if (!bulto) return { error: "Bulto no encontrado." };
+
+  const [{ count: reservasActivas }, { count: ofertasPendientes }] =
+    await Promise.all([
+      admin
+        .from("reservas")
+        .select("id", { count: "exact", head: true })
+        .eq("anuncio_bulto_id", bultoId)
+        .in("estado", [...RESERVA_EN_CURSO_ESTADOS]),
+      admin
+        .from("ofertas_precio")
+        .select("id", { count: "exact", head: true })
+        .eq("anuncio_bulto_id", bultoId)
+        .eq("estado", "pendiente"),
+    ]);
+
+  if ((reservasActivas ?? 0) > 0 || (ofertasPendientes ?? 0) > 0) {
+    return { error: ERROR_RESERVA_O_PROPUESTA_EN_CURSO };
+  }
+
+  const { error } = await admin
+    .from("anuncios_bultos")
+    .delete()
+    .eq("id", bultoId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/anuncios");
+  return {};
 }
