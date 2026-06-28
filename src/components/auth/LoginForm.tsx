@@ -51,15 +51,36 @@ export function LoginForm() {
       password,
     });
 
-    setLoading(false);
     if (authError) {
+      setLoading(false);
       setError(traducirErrorAuth(authError.message));
       return;
     }
 
+    let tieneSesion = false;
+    for (let intento = 0; intento < 3; intento++) {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        tieneSesion = true;
+        break;
+      }
+      if (intento < 2) {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      }
+    }
+
+    if (!tieneSesion) {
+      setLoading(false);
+      setError(
+        "No se pudo iniciar la sesión. Inténtalo de nuevo en unos segundos."
+      );
+      return;
+    }
+
     clearDraft(DRAFT_KEYS.login);
-    router.push(redirect);
     router.refresh();
+    router.push(redirect);
+    setLoading(false);
   }
 
   return (
