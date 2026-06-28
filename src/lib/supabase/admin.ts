@@ -1,25 +1,15 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseServerUrl } from "./env";
 
-function isJwtApiKey(key: string) {
-  return key.startsWith("eyJ");
-}
-
 /**
- * Claves sb_secret_ no son JWT: Supabase rechaza Authorization: Bearer con ellas.
- * fetchWithAuth las añade; este fetch las corrige en la petición final.
+ * PostgREST en este proyecto rechaza Bearer con service_role (403 sin GRANT).
+ * Solo apikey funciona (probado en scripts/probe-supabase-admin.mjs).
  */
 function createAdminFetch(serviceRole: string): typeof fetch {
   return async (input, init) => {
     const headers = new Headers(init?.headers);
+    headers.delete("Authorization");
     headers.set("apikey", serviceRole);
-    if (isJwtApiKey(serviceRole)) {
-      if (!headers.has("Authorization")) {
-        headers.set("Authorization", `Bearer ${serviceRole}`);
-      }
-    } else {
-      headers.delete("Authorization");
-    }
     return fetch(input, { ...init, headers });
   };
 }
@@ -72,7 +62,7 @@ export function formatSupabaseError(error: unknown): string {
   return "Error desconocido de Supabase";
 }
 
-/** Probe REST directo (solo apikey; sin Bearer en claves sb_secret_). */
+/** Probe REST directo (solo header apikey). */
 export async function probeProfilesRest(): Promise<
   { ok: true; count: number } | { ok: false; error: string }
 > {
@@ -87,9 +77,6 @@ export async function probeProfilesRest(): Promise<
     apikey: serviceRole,
     Prefer: "count=exact",
   };
-  if (isJwtApiKey(serviceRole)) {
-    headers.Authorization = `Bearer ${serviceRole}`;
-  }
 
   try {
     const res = await fetch(`${base}/rest/v1/profiles?select=id`, {

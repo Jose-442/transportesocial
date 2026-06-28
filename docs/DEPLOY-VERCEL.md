@@ -14,8 +14,12 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 |----------|-------------|-----------------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Sí | Supabase → Project Settings → API |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Sí* | Misma pantalla (clave anon/public) |
-| `SUPABASE_SERVICE_ROLE_KEY` | **Sí en prod** | API → `service_role` (secreta) |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Sí en prod** | Supabase → API → **Legacy** `service_role` (`eyJ…`) **o** **Secret keys** `default` (`sb_secret_…`). Mismo proyecto que la URL. El servidor usa solo el header `apikey` (no hace falta rotar si ya funciona en local). |
 | `CRON_SECRET` | **Sí en prod** | Inventa una cadena larga (32+ caracteres) |
+
+\* También vale `NEXT_PUBLIC_SUPABASE_ANON_KEY` (alias antiguo; el código acepta ambos).
+
+**Diagnóstico local (sin pegar claves):** `npm run probe:admin` — debe mostrar `HEAD → 200` y `content-range` con el total de `profiles`.
 | `STRIPE_SECRET_KEY` | Sí (cobros) | Stripe Dashboard → Developers → API keys |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Sí (cobros) | Misma pantalla |
 | `STRIPE_WEBHOOK_SECRET` | Sí (cobros) | Stripe → Webhooks → signing secret |
