@@ -24,6 +24,7 @@ type Props = {
   placeholder?: string;
   error?: string;
   hint?: string;
+  incluirFrontera?: boolean;
 };
 
 export function MunicipioAutocomplete({
@@ -35,6 +36,7 @@ export function MunicipioAutocomplete({
   placeholder = "Escribe la población",
   error,
   hint,
+  incluirFrontera = false,
 }: Props) {
   const listId = useId();
   const inputId = `${listId}-input`;
@@ -48,10 +50,13 @@ export function MunicipioAutocomplete({
     setInputText(value);
   }, [value]);
 
-  const actualizarSugerencias = useCallback((texto: string) => {
-    setSugerencias(filtrarMunicipios(texto));
-    setResaltado(0);
-  }, []);
+  const actualizarSugerencias = useCallback(
+    (texto: string) => {
+      setSugerencias(filtrarMunicipios(texto, 10, { incluirFrontera }));
+      setResaltado(0);
+    },
+    [incluirFrontera]
+  );
 
   function seleccionar(municipio: MunicipioEspana) {
     onChange(municipio.nombre);
@@ -74,7 +79,7 @@ export function MunicipioAutocomplete({
 
   function onBlur() {
     window.setTimeout(() => {
-      const resuelto = resolverMunicipio(inputText);
+      const resuelto = resolverMunicipio(inputText, { incluirFrontera });
       if (resuelto) {
         onChange(resuelto.nombre);
         setInputText(resuelto.nombre);

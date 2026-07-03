@@ -31,8 +31,23 @@ describe("municipios-espana", () => {
     expect(resolverMunicipio("texto inventado")).toBeNull();
   });
 
+  it('resolverMunicipio("oporto", { incluirFrontera: true }) devuelve Oporto, Portugal', () => {
+    const municipio = resolverMunicipio("oporto", { incluirFrontera: true });
+    expect(municipio?.nombre).toBe("Oporto");
+    expect(municipio?.provincia).toBe("Portugal");
+  });
+
+  it('resolverMunicipio("oporto") sin frontera devuelve null', () => {
+    expect(resolverMunicipio("oporto")).toBeNull();
+  });
+
   it("coincideMunicipioBusqueda: Getafe coincide con filtro Madrid", () => {
     expect(coincideMunicipioBusqueda("Getafe", "Madrid")).toBe(true);
     expect(coincideMunicipioBusqueda("Barcelona", "Madrid")).toBe(false);
+  });
+
+  it("coincideMunicipioBusqueda: Oporto coincide con filtro Oporto (PT)", () => {
+    expect(coincideMunicipioBusqueda("Oporto", "Oporto")).toBe(true);
+    expect(coincideMunicipioBusqueda("Oporto", "Lisboa")).toBe(false);
   });
 });

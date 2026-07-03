@@ -100,7 +100,9 @@ export async function crearRuta(formData: FormData) {
   const destinoInput = formatCiudad(String(formData.get("destino")));
   const origenResuelto = resolverMunicipioFormulario(origenInput, "salida");
   if (origenResuelto.error) return { error: origenResuelto.error };
-  const destinoResuelto = resolverMunicipioFormulario(destinoInput, "destino");
+  const destinoResuelto = resolverMunicipioFormulario(destinoInput, "destino", {
+    incluirFrontera: true,
+  });
   if (destinoResuelto.error) return { error: destinoResuelto.error };
 
   const { data, error } = await supabase

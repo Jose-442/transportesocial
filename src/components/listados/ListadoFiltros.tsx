@@ -38,7 +38,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     setErrorDestino("");
 
     const origenValido = resolverMunicipio(origen);
-    const destinoValido = resolverMunicipio(destino);
+    const destinoValido = resolverMunicipio(destino, { incluirFrontera: true });
 
     if (!origenValido) {
       setErrorOrigen("Selecciona una población de la lista");
@@ -96,6 +96,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           onChange={setDestino}
           required
           error={errorDestino}
+          incluirFrontera
         />
       </div>
       <DatePickerInput

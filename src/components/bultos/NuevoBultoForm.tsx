@@ -87,7 +87,7 @@ export function NuevoBultoForm() {
     }
     if (!form.destino.trim()) {
       errors.destino = "Indica el destino.";
-    } else if (!resolverMunicipio(form.destino)) {
+    } else if (!resolverMunicipio(form.destino, { incluirFrontera: true })) {
       errors.destino = "Selecciona un municipio válido en destino.";
     }
     if (Object.keys(errors).length > 0) {
@@ -168,6 +168,7 @@ export function NuevoBultoForm() {
         error={fieldErrors.destino}
         hint="Elige un municipio de la lista. El punto exacto se concreta después."
         onChange={(value) => updateField("destino", value)}
+        incluirFrontera
       />
 
       {necesitaBulto ? (

@@ -109,7 +109,7 @@ export function NuevaRutaForm({
     }
     if (!draft.destino.trim()) {
       errors.destino = "Indica el destino.";
-    } else if (!resolverMunicipio(draft.destino)) {
+    } else if (!resolverMunicipio(draft.destino, { incluirFrontera: true })) {
       errors.destino = "Selecciona un municipio válido en destino.";
     }
     if (!draft.fecha_salida) errors.fecha_salida = "Indica la fecha de salida.";
@@ -204,6 +204,7 @@ export function NuevaRutaForm({
         error={fieldErrors.destino}
         hint="Elige un municipio de la lista. El punto exacto se concreta después."
         onChange={(value) => updateField("destino", value)}
+        incluirFrontera
       />
       <DatePickerInput
         name="fecha_salida"
