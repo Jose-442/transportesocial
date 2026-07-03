@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { traducirErrorAuth } from "@/lib/auth-errors";
+import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 import {
   clearDraft,
   DRAFT_KEYS,
@@ -16,9 +17,9 @@ import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
 
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/";
+  const redirect =
+    parseSafeInternalRedirect(searchParams.get("redirect")) ?? "/cuenta";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,9 +79,7 @@ export function LoginForm() {
     }
 
     clearDraft(DRAFT_KEYS.login);
-    router.refresh();
-    router.push(redirect);
-    setLoading(false);
+    window.location.href = redirect;
   }
 
   return (

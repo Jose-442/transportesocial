@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Card } from "@/components/ui/Card";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { createClient } from "@/lib/supabase/server";
+import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 
 export const metadata = { title: "Entrar" };
 
@@ -14,6 +17,17 @@ export default async function LoginPage({
   const rawRedirect = Array.isArray(params.redirect)
     ? params.redirect[0]
     : params.redirect;
+  const destinoTrasLogin =
+    parseSafeInternalRedirect(rawRedirect) ?? "/cuenta";
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) {
+    redirect(destinoTrasLogin);
+  }
+
   const registroHref = rawRedirect
     ? `/registro?redirect=${encodeURIComponent(rawRedirect)}`
     : "/registro";
