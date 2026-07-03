@@ -10,9 +10,11 @@ import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
 export function RutaCard({
   ruta,
   listadoSearch = null,
+  variant = "listado",
 }: {
   ruta: RutaConductor | RutaListadoItem;
   listadoSearch?: string | null;
+  variant?: "listado" | "cuenta";
 }) {
   const fecha = new Date(ruta.fecha_salida).toLocaleDateString("es-ES", {
     weekday: "short",
@@ -78,13 +80,28 @@ export function RutaCard({
           {reservadaConExtra ? (
             <p className="text-sm font-semibold text-amber-700">Más sitio</p>
           ) : (
-            <p className="text-lg font-bold text-emerald-700">
-              {formatEur(Number(ruta.precio_publicado))}
-            </p>
+            variant === "listado" && (
+              <p className="text-lg font-bold text-emerald-700">
+                {formatEur(Number(ruta.precio_publicado))}
+              </p>
+            )
           )}
-          <Badge tone={reservadaConExtra ? "amber" : "green"}>
-            {badgeOfertaRuta(ofertaInput)}
-          </Badge>
+          {variant === "cuenta" ? (
+            <>
+              {!reservadaConExtra && (
+                <p className="text-lg font-bold text-emerald-700">
+                  {formatEur(Number(ruta.precio_publicado))}
+                </p>
+              )}
+              <p className="mt-1 max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-emerald-800 sm:max-w-none sm:text-xs">
+                Propuesta de viaje
+              </p>
+            </>
+          ) : (
+            <Badge tone={reservadaConExtra ? "amber" : "green"}>
+              {badgeOfertaRuta(ofertaInput)}
+            </Badge>
+          )}
         </div>
       </div>
     </CardLink>

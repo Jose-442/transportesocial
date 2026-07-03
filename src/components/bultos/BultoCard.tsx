@@ -7,9 +7,11 @@ import type { AnuncioBulto } from "@/types/database";
 export function BultoCard({
   bulto,
   listadoSearch = null,
+  variant = "listado",
 }: {
   bulto: AnuncioBulto;
   listadoSearch?: string | null;
+  variant?: "listado" | "cuenta";
 }) {
   const fechaLimite = bulto.fecha_limite
     ? new Date(bulto.fecha_limite).toLocaleDateString("es-ES", {
@@ -45,7 +47,15 @@ export function BultoCard({
             {fechaLimite ? ` · límite ${fechaLimite}` : ""}
           </p>
         </div>
-        <Badge tone="blue">Solicitud</Badge>
+        <div className="shrink-0 text-right">
+          {variant === "cuenta" ? (
+            <p className="max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-sky-800 sm:max-w-none sm:text-xs">
+              Solicitud de viaje
+            </p>
+          ) : (
+            <Badge tone="blue">Solicitud</Badge>
+          )}
+        </div>
       </div>
     </CardLink>
   );

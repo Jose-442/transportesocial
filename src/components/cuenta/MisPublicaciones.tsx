@@ -85,7 +85,7 @@ export function MisPublicaciones({
               {ESTADO_BULTO_LABELS[bulto.estado]}
             </Badge>
           )}
-          <BultoCard bulto={bulto} />
+          <BultoCard bulto={bulto} variant="cuenta" />
           {bulto.estado === "activo" && (
             <CancelarPublicacionButton id={bulto.id} tipo="bulto" />
           )}
@@ -98,7 +98,7 @@ export function MisPublicaciones({
               {ESTADO_RUTA_LABELS[ruta.estado]}
             </Badge>
           )}
-          <RutaCard ruta={ruta} />
+          <RutaCard ruta={ruta} variant="cuenta" />
           {ruta.estado === "activa" && (
             <CancelarPublicacionButton id={ruta.id} tipo="ruta" />
           )}
