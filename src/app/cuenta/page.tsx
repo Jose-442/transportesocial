@@ -20,6 +20,7 @@ import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSec
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
 import { EditarVehiculoForm } from "@/components/cuenta/EditarVehiculoForm";
 import { StripeConnectSection } from "@/components/cuenta/StripeConnectSection";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
@@ -108,13 +109,16 @@ export default async function CuentaPage({
 
       <Card
         className={[
-          "space-y-4",
+          "relative space-y-4",
           perfilCompactPc && "md:space-y-2 md:p-3",
         ]
           .filter(Boolean)
           .join(" ")}
       >
-        <h2 className="font-semibold text-zinc-900">Mi perfil</h2>
+        <div className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
+          <NotificationBell />
+        </div>
+        <h2 className="font-semibold text-zinc-900 pr-12">Mi perfil</h2>
         <div
           className={[
             "flex flex-col gap-4 sm:flex-row sm:items-start",

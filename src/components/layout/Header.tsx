@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
-import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { HeaderAuthActions } from "@/components/layout/HeaderAuthActions";
 
 export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
@@ -23,17 +23,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
           </Link>
         </div>
 
-        {isLoggedIn ? (
-          <div className="flex shrink-0 flex-row items-center gap-1 sm:gap-2">
-            <NotificationBell />
-            <Link
-              href="/cuenta"
-              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
-            >
-              Cuenta
-            </Link>
-          </div>
-        ) : null}
+        {isLoggedIn ? <HeaderAuthActions /> : null}
       </div>
     </header>
   );
