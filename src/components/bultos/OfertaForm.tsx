@@ -283,7 +283,7 @@ export function OfertaForm({
             href="/cuenta#vehiculo"
             className="mt-1 inline-block font-semibold text-emerald-700 hover:text-emerald-800"
           >
-            Completar mi vehículo
+            Datos de mi vehículo
           </Link>
         </div>
       )}

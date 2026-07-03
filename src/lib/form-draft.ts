@@ -171,7 +171,10 @@ export function normalizeNuevaRutaDraft(
     hora_salida,
     espacio_tamano: String(raw.espacio_tamano ?? ""),
     espacio_detalle: String(raw.espacio_detalle ?? ""),
-    plazas_acompanante: String(raw.plazas_acompanante ?? "1"),
+    plazas_acompanante: (() => {
+      const p = String(raw.plazas_acompanante ?? "1");
+      return p === "0" || p === "1" || p === "2" || p === "3" ? p : "1";
+    })(),
     precio_neto_plaza: String(raw.precio_neto_plaza ?? ""),
     precio_neto: String(raw.precio_neto ?? ""),
   };

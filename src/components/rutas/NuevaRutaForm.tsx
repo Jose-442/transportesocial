@@ -61,7 +61,13 @@ export function NuevaRutaForm({
 
   const neto = parseFloat(form.precio_neto) || 0;
   const publicado = neto > 0 ? calcPrecioConComision(neto) : 0;
-  const plazas = parseInt(form.plazas_acompanante, 10) || 1;
+  const plazas = parseInt(form.plazas_acompanante, 10);
+  const soloBulto = form.plazas_acompanante === "0";
+  const plazasOfrecidas = soloBulto
+    ? 0
+    : Number.isNaN(plazas)
+      ? 1
+      : plazas;
   const netoPlaza = parseFloat(form.precio_neto_plaza) || 0;
   const publicadoPlaza =
     netoPlaza > 0 ? calcPrecioConComision(netoPlaza) : 0;
@@ -70,39 +76,59 @@ export function NuevaRutaForm({
     field: K,
     value: NuevaRutaDraft[K]
   ) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (field in fieldErrors) {
+    const nextForm = { ...form, [field]: value };
+    setForm(nextForm);
+    if (field === "plazas_acompanante" && value === "0") {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next.precio_neto_plaza;
+        return next;
+      });
+    } else if (field in fieldErrors) {
       setFieldErrors((prev) => {
         const next = { ...prev };
         delete next[field as RutaFieldKey];
         return next;
       });
     }
+    if (Object.keys(validateForm(nextForm)).length === 0) {
+      setError((prev) =>
+        prev === "Completa los campos marcados en rojo." ? "" : prev
+      );
+    }
   }
 
-  function validateForm(): Partial<Record<RutaFieldKey, string>> {
+  function validateForm(
+    draft: NuevaRutaDraft = form
+  ): Partial<Record<RutaFieldKey, string>> {
     const errors: Partial<Record<RutaFieldKey, string>> = {};
-    if (!form.origen.trim()) {
+    if (!draft.origen.trim()) {
       errors.origen = "Indica la salida.";
-    } else if (!resolverMunicipio(form.origen)) {
+    } else if (!resolverMunicipio(draft.origen)) {
       errors.origen = "Selecciona un municipio válido en salida.";
     }
-    if (!form.destino.trim()) {
+    if (!draft.destino.trim()) {
       errors.destino = "Indica el destino.";
-    } else if (!resolverMunicipio(form.destino)) {
+    } else if (!resolverMunicipio(draft.destino)) {
       errors.destino = "Selecciona un municipio válido en destino.";
     }
-    if (!form.fecha_salida) errors.fecha_salida = "Indica la fecha de salida.";
-    if (!form.hora_salida) errors.hora_salida = "Indica la hora de salida.";
-    if (!form.espacio_tamano) {
+    if (!draft.fecha_salida) errors.fecha_salida = "Indica la fecha de salida.";
+    if (!draft.hora_salida) errors.hora_salida = "Indica la hora de salida.";
+    if (!draft.espacio_tamano) {
       errors.espacio_tamano = "Selecciona el espacio del que dispones.";
     }
-    const precioNeto = parseFloat(form.precio_neto);
+    const precioNeto = parseFloat(draft.precio_neto);
     if (!precioNeto || precioNeto <= 0) {
       errors.precio_neto = "Indica un precio válido para el bulto.";
     }
-    const precioPlaza = parseFloat(form.precio_neto_plaza);
-    if (!precioPlaza || precioPlaza <= 0) {
+    const precioPlaza = parseFloat(draft.precio_neto_plaza);
+    const plazasDraft = parseInt(draft.plazas_acompanante, 10);
+    const soloBultoDraft = draft.plazas_acompanante === "0";
+    if (
+      !soloBultoDraft &&
+      plazasDraft > 0 &&
+      (!precioPlaza || precioPlaza <= 0)
+    ) {
       errors.precio_neto_plaza = "Indica un precio válido por acompañante.";
     }
     return errors;
@@ -228,14 +254,17 @@ export function NuevaRutaForm({
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
             Marcar nº de asientos disponibles
           </p>
-          <AsientosLibresDots ofrecidas={plazas} ocupadas={0} />
+          {!soloBulto && (
+            <AsientosLibresDots ofrecidas={plazasOfrecidas} ocupadas={0} />
+          )}
         </div>
         <p className="text-xs text-zinc-500">
-          Máximo {MAX_ASIENTOS_POR_VIAJE} plazas por viaje. Los circulitos cambiarán a
-          rojos cuando alguien reserve y pague una plaza.
+          {soloBulto
+            ? "Solo transporte de bulto: no ofreces plazas de acompañante."
+            : `Máximo ${MAX_ASIENTOS_POR_VIAJE} plazas por viaje. Los circulitos cambiarán a rojos cuando alguien reserve y pague una plaza.`}
         </p>
         <div className="flex gap-2">
-          {([1, 2, 3] as const).map((n) => (
+          {([0, 1, 2, 3] as const).map((n) => (
             <button
               key={n}
               type="button"
@@ -244,16 +273,18 @@ export function NuevaRutaForm({
               }
               className={[
                 "min-h-11 flex-1 rounded-xl border text-sm font-semibold transition-colors",
-                plazas === n
+                (n === 0 ? soloBulto : plazasOfrecidas === n)
                   ? "border-emerald-600 bg-emerald-50 text-emerald-800"
                   : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300",
               ].join(" ")}
             >
-              {n}
+              {n === 0 ? "Solo bulto" : n}
             </button>
           ))}
         </div>
 
+        {!soloBulto && (
+          <>
         <Input
           name="precio_neto_plaza"
           label="PRECIO POR ACOMPAÑANTE"
@@ -271,10 +302,14 @@ export function NuevaRutaForm({
             <strong>{formatEur(publicadoPlaza)}</strong>
           </p>
         )}
+          </>
+        )}
 
       </div>
 
-      {error && (
+      {error &&
+        (error !== "Completa los campos marcados en rojo." ||
+          Object.keys(fieldErrors).length > 0) && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
         </p>
@@ -286,7 +321,7 @@ export function NuevaRutaForm({
             distintivo ambiental de tu vehículo.
           </p>
           <ButtonLink href={cuentaHrefConVolver("/rutas/nueva")} className="mt-2">
-            Completar mi vehículo
+            Datos de mi vehículo
           </ButtonLink>
           <p className="mt-2">
             Completar también los datos de tu perfil da confianza a tu viaje.

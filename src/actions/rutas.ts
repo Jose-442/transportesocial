@@ -78,20 +78,23 @@ export async function crearRuta(formData: FormData) {
   );
   if (
     !Number.isInteger(plazasAcompanante) ||
-    plazasAcompanante < 1 ||
+    plazasAcompanante < 0 ||
     plazasAcompanante > MAX_ASIENTOS_POR_VIAJE
   ) {
     return {
-      error: `Indica entre 1 y ${MAX_ASIENTOS_POR_VIAJE} acompañantes.`,
+      error: `Indica entre 0 y ${MAX_ASIENTOS_POR_VIAJE} acompañantes.`,
     };
   }
 
-  const precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
-  if (!precioNetoPlaza || precioNetoPlaza <= 0) {
-    return { error: "Indica un precio neto válido por plaza." };
+  let precioNetoPlaza = 0;
+  let precioPublicadoPlaza = 0;
+  if (plazasAcompanante > 0) {
+    precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
+    if (!precioNetoPlaza || precioNetoPlaza <= 0) {
+      return { error: "Indica un precio neto válido por plaza." };
+    }
+    precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
   }
-
-  const precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
 
   const origenInput = formatCiudad(String(formData.get("origen")));
   const destinoInput = formatCiudad(String(formData.get("destino")));
@@ -117,22 +120,24 @@ export async function crearRuta(formData: FormData) {
 
   if (error) return { error: supabaseErrorMessage(error) };
 
-  const { error: ofertaError } = await supabase.from("ofertas_capacidad").insert({
-    ruta_conductor_id: data.id,
-    tipo: "asiento",
-    plazas_totales: plazasAcompanante,
-    plazas_ocupadas: 0,
-    precio_neto: precioNetoPlaza,
-    precio_publicado: precioPublicadoPlaza,
-    estado: "disponible",
-  });
+  if (plazasAcompanante > 0) {
+    const { error: ofertaError } = await supabase.from("ofertas_capacidad").insert({
+      ruta_conductor_id: data.id,
+      tipo: "asiento",
+      plazas_totales: plazasAcompanante,
+      plazas_ocupadas: 0,
+      precio_neto: precioNetoPlaza,
+      precio_publicado: precioPublicadoPlaza,
+      estado: "disponible",
+    });
 
-  if (ofertaError) {
-    return rollbackRutaTrasFallo(
-      supabase,
-      data.id,
-      supabaseErrorMessage(ofertaError)
-    );
+    if (ofertaError) {
+      return rollbackRutaTrasFallo(
+        supabase,
+        data.id,
+        supabaseErrorMessage(ofertaError)
+      );
+    }
   }
 
   if (await shouldConsumePublicationCredit(user.id, profile)) {
