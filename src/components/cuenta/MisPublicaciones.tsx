@@ -18,7 +18,7 @@ const ESTADO_RUTA_LABELS: Record<RutaConductor["estado"], string> = {
   activa: "Activa",
   reservada: "Reservada",
   completada: "Completada",
-  cancelada: "Cancelada",
+  cancelada: "Cancelado",
 };
 
 function estadoBultoTone(
