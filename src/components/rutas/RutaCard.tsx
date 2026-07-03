@@ -55,6 +55,11 @@ export function RutaCard({
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
+          {variant === "cuenta" && !reservadaConExtra && (
+            <p className="mt-1 text-lg font-bold text-emerald-700">
+              {formatEur(Number(ruta.precio_publicado))}
+            </p>
+          )}
           <div className="mt-1 space-y-0.5 text-sm font-medium text-emerald-800">
             {lineasOfertaRuta(ofertaInput).map((linea) => (
               <p key={linea}>{linea}</p>
@@ -77,27 +82,18 @@ export function RutaCard({
           </p>
         </div>
         <div className="shrink-0 text-right">
-          {reservadaConExtra ? (
+          {variant === "cuenta" ? (
+            <p className="max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-emerald-800 sm:max-w-none sm:text-xs">
+              {reservadaConExtra ? "Más sitio" : "Propuesta de viaje"}
+            </p>
+          ) : reservadaConExtra ? (
             <p className="text-sm font-semibold text-amber-700">Más sitio</p>
           ) : (
-            variant === "listado" && (
-              <p className="text-lg font-bold text-emerald-700">
-                {formatEur(Number(ruta.precio_publicado))}
-              </p>
-            )
+            <p className="text-lg font-bold text-emerald-700">
+              {formatEur(Number(ruta.precio_publicado))}
+            </p>
           )}
-          {variant === "cuenta" ? (
-            <>
-              {!reservadaConExtra && (
-                <p className="text-lg font-bold text-emerald-700">
-                  {formatEur(Number(ruta.precio_publicado))}
-                </p>
-              )}
-              <p className="mt-1 max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-emerald-800 sm:max-w-none sm:text-xs">
-                Propuesta de viaje
-              </p>
-            </>
-          ) : (
+          {variant === "listado" && (
             <Badge tone={reservadaConExtra ? "amber" : "green"}>
               {badgeOfertaRuta(ofertaInput)}
             </Badge>
