@@ -57,9 +57,9 @@ export function MisPublicaciones({
             fullWidth
             className={`flex-1 py-3 text-base ${CUENTA_BTN_SECONDARY}`}
           >
-            {`Si necesitas hacer un envio o viajar como pasajero,`}
+            {`Si necesitas hacer un envio o viajar como pasajero.`}
             <br />
-            {`Publicalo AQUÍ`}
+            {`Publica aqui la ruta que necesitas`}
           </ButtonLink>
           <ButtonLink
             href="/rutas/nueva"
