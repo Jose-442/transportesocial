@@ -4,14 +4,10 @@ import {
   AUTO_DELIVERED_AFTER_ARRIVAL_HOURS,
   CONDUCTOR_APPROVAL_HOURS,
   DISPUTE_WINDOW_HOURS,
-  FREE_PUBLICATIONS,
   MAX_ASIENTOS_POR_VIAJE,
-  PUBLICATION_FEE_EUR,
   REVIEW_WINDOW_DAYS,
-  SUBSCRIPTION_MONTHLY_EUR,
 } from "@/lib/constants";
 import { LEGAL_TITULAR } from "@/lib/legal-info";
-import { formatEur } from "@/lib/pricing";
 import { TerminosVolverRegistro } from "@/components/legal/TerminosVolverRegistro";
 
 export const metadata = { title: "Términos y privacidad" };
@@ -228,23 +224,14 @@ export default function TerminosPage() {
           <h3 className="mb-2 font-semibold text-zinc-900">
             6. Tarifas de la Plataforma
           </h3>
-          <ul className="list-disc space-y-2 pl-5">
-            <li>
-              Suscripción:{" "}
-              <strong>{formatEur(SUBSCRIPTION_MONTHLY_EUR)}/mes</strong>.
-            </li>
-            <li>
-              Publicaciones: <strong>{FREE_PUBLICATIONS} publicaciones
-              gratuitas</strong> incluidas; a partir de la siguiente,{" "}
-              <strong>{formatEur(PUBLICATION_FEE_EUR)}</strong> por publicación
-              (viaje propuesto por conductor o propuesta de envío de bulto).
-            </li>
-            <li>
-              Viajes concertados: comisión del <strong>{comisionPct}</strong>{" "}
-              sobre el importe acordado, incluida en el precio visible al
-              reservar.
-            </li>
-          </ul>
+          <p>
+            Para el mantenimiento de la plataforma y como contribución al uso de
+            Transporte Social, la suscripción requiere una pequeña aportación de
+            95 céntimos/mes. Incluye 3 publicaciones GRATIS todos los meses; a
+            partir de la 4.ª publicación: 90 céntimos por publicación. En los
+            viajes completados satisfactoriamente se aplica un 22 % para poder
+            cubrir los gastos de gestión que la plataforma tiene.
+          </p>
         </section>
 
         <section>

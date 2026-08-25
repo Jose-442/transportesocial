@@ -47,11 +47,12 @@ export default function QuienesSomosPage() {
 
       <h2 className="mb-3 text-lg font-semibold">Tarifas y condiciones</h2>
       <p className="mb-6 text-base leading-relaxed text-zinc-700 sm:text-lg">
-        Para el mantenimiento de la plataforma y como aportación para el uso de
+        Para el mantenimiento de la plataforma y como contribución al uso de
         Transporte Social, la suscripción requiere una pequeña aportación de 95
-        céntimos/mes. Incluye 3 publicaciones GRATIS; a partir de la 4.ª
-        publicación: 90 céntimos por publicación. En los viajes concertados a
-        través de la plataforma se aplica una comisión del 22 %.
+        céntimos/mes. Incluye 3 publicaciones GRATIS todos los meses; a partir
+        de la 4.ª publicación: 90 céntimos por publicación. En los viajes
+        completados satisfactoriamente se aplica un 22 % para poder cubrir los
+        gastos de gestión que la plataforma tiene.
       </p>
 
       <h2 className="mb-3 text-lg font-semibold">
