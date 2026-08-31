@@ -72,8 +72,8 @@ export function EliminarCuentaForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <p className="text-sm text-zinc-700">
-        Esta acción es <strong>irreversible</strong>. Se cancelará tu suscripción
-        (si la tienes) y dejarás de poder acceder con esta cuenta.
+        Esta acción es <strong>irreversible</strong>. Dejarás de poder acceder
+        con esta cuenta. Si tenías una suscripción antigua, se cancelará.
       </p>
 
       <label className="flex cursor-pointer items-start gap-3 text-sm text-zinc-700">

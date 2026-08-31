@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { FREE_PUBLICATIONS } from "@/lib/constants";
 import type { Profile } from "@/types/database";
 
 export async function countUserPublications(userId: string): Promise<number> {
@@ -19,22 +18,17 @@ export async function countUserPublications(userId: string): Promise<number> {
   return (rutas ?? 0) + (bultos ?? 0);
 }
 
-export function hasFreePublicationSlot(publicationCount: number): boolean {
-  return publicationCount < FREE_PUBLICATIONS;
+export function hasFreePublicationSlot(_publicationCount?: number): boolean {
+  return true;
 }
 
-export function freePublicationsRemaining(publicationCount: number): number {
-  return Math.max(0, FREE_PUBLICATIONS - publicationCount);
+export function freePublicationsRemaining(_publicationCount?: number): number {
+  return Number.POSITIVE_INFINITY;
 }
 
 export async function requiresPublicationPayment(
-  userId: string,
-  profile: Pick<Profile, "subscription_active">
+  _userId?: string,
+  _profile?: Pick<Profile, "subscription_active">
 ): Promise<boolean> {
-  if (!profile.subscription_active) {
-    return false;
-  }
-
-  const count = await countUserPublications(userId);
-  return !hasFreePublicationSlot(count);
+  return false;
 }

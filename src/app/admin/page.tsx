@@ -50,7 +50,7 @@ export default async function AdminHomePage() {
           href="/admin/usuarios"
         />
         <AdminStatCard
-          label="Suscripciones activas"
+          label="Suscripciones antiguas"
           value={stats.suscripcionesActivas}
           href="/admin/pagos"
         />

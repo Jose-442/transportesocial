@@ -19,9 +19,9 @@ export function formatEur(amount: number): string {
   }).format(amount);
 }
 
-/** @deprecated Usar requiresPublicationPayment en servidor. */
+/** Publicar es gratis; solo se cobra el 17 % al pagar el viaje. */
 export function requiresPublicationFee(): boolean {
-  return true;
+  return false;
 }
 
 export function publicationFeeAmount(): number {

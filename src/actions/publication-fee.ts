@@ -4,15 +4,12 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PUBLICATION_FEE_EUR } from "@/lib/constants";
 import {
-  countUserPublications,
-  hasFreePublicationSlot,
   requiresPublicationPayment,
 } from "@/lib/publications";
 import { getStripeServer } from "@/lib/stripe/server";
 import {
   parsePublicationDest,
   publicationFeeTipo,
-  suscribirRequeridaHref,
   type PublicationDest,
 } from "@/lib/publication-flow";
 import type { Profile } from "@/types/database";
@@ -67,20 +64,11 @@ export async function hasPublicationCredit(
 }
 
 export async function hasPublicationAccess(
-  userId: string,
-  profile: Pick<Profile, "subscription_active">,
-  dest: PublicationDest
+  _userId: string,
+  _profile: Pick<Profile, "subscription_active">,
+  _dest: PublicationDest
 ): Promise<boolean> {
-  if (!profile.subscription_active) {
-    return false;
-  }
-
-  const count = await countUserPublications(userId);
-  if (hasFreePublicationSlot(count)) {
-    return true;
-  }
-
-  return hasPublicationCredit(userId, dest);
+  return true;
 }
 
 export async function requirePublicationAccess(dest: PublicationDest) {
@@ -89,20 +77,6 @@ export async function requirePublicationAccess(dest: PublicationDest) {
     redirect(
       `/login?redirect=${encodeURIComponent(dest)}`
     );
-  }
-
-  if (!session.profile.subscription_active) {
-    redirect(suscribirRequeridaHref(dest));
-  }
-
-  const allowed = await hasPublicationAccess(
-    session.userId,
-    session.profile,
-    dest
-  );
-
-  if (!allowed) {
-    redirect(`/aportacion?dest=${encodeURIComponent(dest)}`);
   }
 }
 
@@ -230,23 +204,9 @@ export async function confirmPublicationPayment(
 }
 
 export async function assertCanPublish(
-  profile: Pick<Profile, "trial_ends_at" | "subscription_active">,
-  userId: string,
-  dest: PublicationDest
+  _profile: Pick<Profile, "trial_ends_at" | "subscription_active">,
+  _userId: string,
+  _dest: PublicationDest
 ): Promise<{ error?: string }> {
-  if (!profile.subscription_active) {
-    return {
-      error: "Necesitas una suscripción activa para publicar.",
-    };
-  }
-
-  const allowed = await hasPublicationAccess(userId, profile, dest);
-  if (!allowed) {
-    return {
-      error:
-        "Debes abonar la aportación de publicación antes de publicar.",
-    };
-  }
-
   return {};
 }

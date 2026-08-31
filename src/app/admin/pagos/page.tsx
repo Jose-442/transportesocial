@@ -9,10 +9,10 @@ export default async function AdminPagosPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Pagos y suscripciones</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">Pagos</h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Resumen de suscripciones y transacciones en la plataforma. Para el
-          detalle completo, usa Stripe.
+          Resumen de transacciones en la plataforma. El detalle de cobros está
+          en Stripe.
         </p>
       </div>
       <AdminPagosPanel resumen={resumen} />

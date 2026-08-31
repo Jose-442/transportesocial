@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendNuevaOfertaEmail } from "@/lib/email/nueva-oferta";
+import { crearNotificacion } from "@/lib/reservas/notify";
+import { enviarPushNotificacion } from "@/lib/push/send";
 import { publicationFeeAmount } from "@/lib/pricing";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -115,6 +117,15 @@ export async function enviarOferta(formData: FormData) {
 
   if (error) return { error: error.message };
 
+  void enviarPushNotificacion({
+    userId: bulto.user_id,
+    titulo: "Nueva propuesta de precio",
+    mensaje: `Un conductor propone ${precio_total} € para tu bulto ${bulto.origen} → ${bulto.destino}.`,
+    enlace: `/bultos/${bultoId}`,
+  }).catch((err) => {
+    console.error("[nueva-oferta-push]", err);
+  });
+
   const admin = createAdminClient();
   if (admin) {
     const [{ data: ownerProfile }, { data: ownerAuth }] = await Promise.all([
@@ -211,7 +222,7 @@ export async function rechazarOferta(
     return { error: supabaseErrorMessage(updateError) };
   }
 
-  const { error: notifError } = await supabase.from("notificaciones").insert({
+  const { error: notifError } = await crearNotificacion(supabase, {
     user_id: oferta.conductor_id,
     tipo: "oferta_rechazada",
     titulo: "Propuesta no seleccionada",

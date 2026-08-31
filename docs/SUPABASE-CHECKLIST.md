@@ -643,6 +643,16 @@ Con `npm run dev` y la BD al día:
 
 ---
 
+### Avisos push (migración 022)
+
+```sql
+SELECT to_regclass('public.push_subscriptions') AS tabla;
+```
+
+**Esperado:** `push_subscriptions`. Si es `null`, ejecuta `supabase/migrations/022_push_subscriptions.sql`.
+
+---
+
 Cuando todo esté OK, pasa a [`DEPLOY-VERCEL.md`](DEPLOY-VERCEL.md) (variables y Vercel).
 
 ---

@@ -4,6 +4,7 @@ import {
   AUTO_DELIVERED_AFTER_ARRIVAL_HOURS,
   CONDUCTOR_APPROVAL_HOURS,
   DISPUTE_WINDOW_HOURS,
+  COMMISSION_PERCENT_LABEL,
   MAX_ASIENTOS_POR_VIAJE,
   REVIEW_WINDOW_DAYS,
 } from "@/lib/constants";
@@ -12,11 +13,9 @@ import { TerminosVolverRegistro } from "@/components/legal/TerminosVolverRegistr
 
 export const metadata = { title: "Términos y privacidad" };
 
-const comisionPct = "22 %";
-
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "25 de junio de 2026";
+  const fechaActualizacion = "31 de agosto de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -208,7 +207,7 @@ export default function TerminosPage() {
             </li>
             <li>
               Si no se abre reclamación en ese plazo, el importe correspondiente
-              al Conductor (menos la comisión del {comisionPct}) se libera
+              al Conductor (menos la comisión del {COMMISSION_PERCENT_LABEL}) se libera
               automáticamente a su saldo en la Plataforma.
             </li>
             <li>
@@ -225,12 +224,11 @@ export default function TerminosPage() {
             6. Tarifas de la Plataforma
           </h3>
           <p>
-            Para el mantenimiento de la plataforma y como contribución al uso de
-            Transporte Social, la suscripción requiere una pequeña aportación de
-            95 céntimos/mes. Incluye 3 publicaciones GRATIS todos los meses; a
-            partir de la 4.ª publicación: 90 céntimos por publicación. En los
-            viajes completados satisfactoriamente se aplica un 22 % para poder
-            cubrir los gastos de gestión que la plataforma tiene.
+            Usar Transporte Social es gratuito: registrarse, publicar viajes y
+            buscar no tiene coste. El importe del viaje se paga siempre por
+            adelantado y queda retenido hasta confirmar que el viaje o el porte
+            ha salido bien. Entonces se aplica un {COMMISSION_PERCENT_LABEL}{" "}
+            para cubrir los gastos de gestión de la plataforma.
           </p>
         </section>
 
@@ -326,9 +324,7 @@ export default function TerminosPage() {
               acompañante, chat interno y pasarela de pagos.
             </li>
             <li>Gestión de disputas, reseñas y notificaciones del servicio.</li>
-            <li>
-              Facturación de la suscripción y de las publicaciones de pago.
-            </li>
+            <li>Tramitación de pagos de viajes y retención hasta la entrega.</li>
           </ul>
 
           <h3 className="mb-2 font-semibold text-zinc-900">

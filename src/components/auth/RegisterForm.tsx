@@ -24,10 +24,8 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 
 export function RegisterForm({
   redirectAfter = null,
-  esFlujoSuscripcion = false,
 }: {
   redirectAfter?: string | null;
-  esFlujoSuscripcion?: boolean;
 }) {
   const router = useRouter();
   const [displayName, setDisplayName] = useState("");
@@ -77,10 +75,9 @@ export function RegisterForm({
   }, [foto]);
 
   function irTrasRegistro() {
-    const destino =
-      esFlujoSuscripcion && redirectAfter
-        ? destinoTrasRegistroPublicacion(redirectAfter as RegistroRedirect)
-        : (redirectAfter ?? "/cuenta");
+    const destino = redirectAfter
+      ? destinoTrasRegistroPublicacion(redirectAfter as RegistroRedirect)
+      : "/cuenta";
     router.push(destino);
     router.refresh();
   }
@@ -211,11 +208,7 @@ export function RegisterForm({
         label="Contraseña"
         autoComplete="new-password"
         required
-        hint={
-          esFlujoSuscripcion
-            ? "Tras aceptar irás al pago seguro con tarjeta."
-            : "No pedimos tarjeta al registrarte."
-        }
+        hint="No pedimos tarjeta al registrarte."
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -250,13 +243,7 @@ export function RegisterForm({
         </p>
       )}
       <Button type="submit" fullWidth disabled={loading || !aceptaTerminos}>
-        {loading
-          ? esFlujoSuscripcion
-            ? "Un momento…"
-            : "Creando cuenta…"
-          : esFlujoSuscripcion
-            ? "Acepto el pago de 95 céntimos"
-            : "Crear cuenta"}
+        {loading ? "Creando cuenta…" : "Crear cuenta"}
       </Button>
     </form>
   );

@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
 import { CookieBanner } from "@/components/legal/CookieBanner";
 import { AddToHomeScreenBanner } from "@/components/pwa/AddToHomeScreenBanner";
+import { ServiceWorkerRegistrar } from "@/components/pwa/ServiceWorkerRegistrar";
 import { APP_NAME } from "@/lib/constants";
 import "./globals.css";
 
@@ -46,6 +47,7 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} h-full`}>
       <body className="min-h-dvh antialiased">
         <AppShell>{children}</AppShell>
+        <ServiceWorkerRegistrar />
         <AddToHomeScreenBanner />
         <CookieBanner />
       </body>

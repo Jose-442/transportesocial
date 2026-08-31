@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { puedeEnviarResena } from "@/lib/resenas/visibility";
+import { crearNotificacion } from "@/lib/reservas/notify";
 import type { Resena, Reserva, RolResena } from "@/types/database";
 
 export type EstadoResenas = {
@@ -161,7 +162,7 @@ export async function enviarResena(
     for (const resena of despues ?? []) {
       const prev = (antes ?? []).find((a) => a.id === resena.id);
       if ((!prev || !prev.is_visible) && resena.is_visible) {
-        await admin.from("notificaciones").insert({
+        await crearNotificacion(admin, {
           user_id: resena.destinatario_id,
           tipo: "resena_publicada",
           titulo: "Nueva valoración visible",

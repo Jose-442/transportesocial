@@ -118,7 +118,7 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:gap-5">
             <ButtonLink
-              href="/suscribir-requerida?dest=%2Frutas%2Fnueva"
+              href="/rutas/nueva"
               variant="primary"
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
@@ -132,7 +132,7 @@ export default async function HomePage() {
               </span>
             </ButtonLink>
             <ButtonLink
-              href="/suscribir-requerida?dest=%2Fbultos%2Fnuevo"
+              href="/bultos/nuevo"
               variant="secondary"
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"

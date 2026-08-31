@@ -6,9 +6,9 @@ import {
 } from "@/lib/pricing";
 
 describe("pricing", () => {
-  it("aplica comisión del 22 % al precio neto", () => {
-    expect(calcPrecioConComision(100)).toBe(122);
-    expect(calcComision(100)).toBe(22);
+  it("aplica comisión del 17 % al precio neto", () => {
+    expect(calcPrecioConComision(100)).toBe(117);
+    expect(calcComision(100)).toBe(17);
   });
 
   it("formatea euros en español", () => {

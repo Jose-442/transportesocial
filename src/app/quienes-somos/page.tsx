@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import {
   AUTO_DELIVERED_AFTER_ARRIVAL_HOURS,
+  COMMISSION_PERCENT_LABEL,
   CONDUCTOR_APPROVAL_HOURS,
   DISPUTE_WINDOW_HOURS,
 } from "@/lib/constants";
@@ -47,12 +48,11 @@ export default function QuienesSomosPage() {
 
       <h2 className="mb-3 text-lg font-semibold">Tarifas y condiciones</h2>
       <p className="mb-6 text-base leading-relaxed text-zinc-700 sm:text-lg">
-        Para el mantenimiento de la plataforma y como contribución al uso de
-        Transporte Social, la suscripción requiere una pequeña aportación de 95
-        céntimos/mes. Incluye 3 publicaciones GRATIS todos los meses; a partir
-        de la 4.ª publicación: 90 céntimos por publicación. En los viajes
-        completados satisfactoriamente se aplica un 22 % para poder cubrir los
-        gastos de gestión que la plataforma tiene.
+        Usar Transporte Social es gratuito: registrarse, publicar viajes y
+        buscar no tiene coste. El importe del viaje se paga siempre por
+        adelantado y queda retenido hasta confirmar que el viaje o el porte ha
+        salido bien. Entonces se aplica un {COMMISSION_PERCENT_LABEL} para
+        cubrir los gastos de gestión de la plataforma.
       </p>
 
       <h2 className="mb-3 text-lg font-semibold">

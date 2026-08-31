@@ -1,16 +1,11 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { cerrarSesion } from "@/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
-import { FREE_PUBLICATIONS } from "@/lib/constants";
-import {
-  countUserPublications,
-  freePublicationsRemaining,
-} from "@/lib/publications";
-import { subscriptionFeeLabel } from "@/lib/pricing";
+import { COMMISSION_PERCENT_LABEL } from "@/lib/constants";
 import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
@@ -77,9 +72,6 @@ export default async function CuentaPage({
   }
 
   const profile = result.profile;
-  const publicationCount = await countUserPublications(user.id);
-  const freeRemaining = freePublicationsRemaining(publicationCount);
-  const freeUsed = Math.min(publicationCount, FREE_PUBLICATIONS);
   const [viajes, publicaciones] = await Promise.all([
     loadMisViajes(supabase, user.id),
     loadMisPublicaciones(supabase, user.id),
@@ -249,32 +241,12 @@ export default async function CuentaPage({
       </Card>
 
       <Card className="space-y-3">
-        <h2 className="font-semibold text-zinc-900">Plan y tarifas</h2>
-        {profile.subscription_active ? (
-          <p className="text-sm text-zinc-700">
-            Suscripción activa ({subscriptionFeeLabel()}/mes).
-          </p>
-        ) : (
-          <p className="text-sm text-zinc-700">
-            Sin suscripción activa. Suscríbete para usar la herramienta.
-          </p>
-        )}
-        {profile.subscription_active && (
-          <p className="text-sm text-zinc-700">
-            Publicaciones gratis:{" "}
-            <strong>
-              {freeUsed} de {FREE_PUBLICATIONS}
-            </strong>
-            {freeRemaining > 0
-              ? ` (${freeRemaining} restantes)`
-              : " (agotadas)"}
-          </p>
-        )}
-        {!profile.subscription_active && (
-          <ButtonLink href="/suscribir" fullWidth>
-            Suscribirme
-          </ButtonLink>
-        )}
+        <h2 className="font-semibold text-zinc-900">Tarifas</h2>
+        <p className="text-sm text-zinc-700">
+          Publicar y buscar es gratis. Al reservar un viaje el pago se hace por
+          adelantado y se retiene hasta confirmar que ha salido bien. Entonces
+          se aplica un {COMMISSION_PERCENT_LABEL} de gestión.
+        </p>
         {profile.subscription_active && profile.stripe_customer_id && (
           <form action={abrirPortalSuscripcion}>
             <Button
@@ -283,7 +255,7 @@ export default async function CuentaPage({
               fullWidth
               className={CUENTA_BTN_SECONDARY}
             >
-              Gestionar suscripción
+              Cancelar suscripción antigua
             </Button>
           </form>
         )}

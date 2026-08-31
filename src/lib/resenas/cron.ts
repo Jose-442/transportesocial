@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { crearNotificacion } from "@/lib/reservas/notify";
 
 type AdminClient = SupabaseClient;
 
@@ -39,7 +40,7 @@ export async function procesarResenasExpiradas(admin: AdminClient) {
       const prev = (antes ?? []).find((a) => a.id === resena.id);
       if (prev && !prev.is_visible && resena.is_visible) {
         reveladas++;
-        await admin.from("notificaciones").insert({
+        await crearNotificacion(admin, {
           user_id: resena.destinatario_id,
           tipo: "resena_publicada",
           titulo: "Nueva valoración visible",

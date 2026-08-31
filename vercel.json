@@ -4,6 +4,21 @@
       "NODE_OPTIONS": "--max-old-space-size=6144"
     }
   },
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/reservas",

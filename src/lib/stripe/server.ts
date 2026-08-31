@@ -25,6 +25,15 @@ export function isStripeConfigured(): boolean {
   );
 }
 
+/** Claves pk_test_ / sk_test_: pagos de mentira. Al poner pk_live_ desaparece. */
+export function isStripeTestMode(): boolean {
+  return (
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim().startsWith(
+      "pk_test_"
+    ) === true
+  );
+}
+
 export function getStripeServer(): Stripe {
   if (!stripeClient) {
     stripeClient = new Stripe(getStripeSecretKey());

@@ -78,6 +78,10 @@ body {
   flex-shrink: 0;
 }
 
+.ts-pwa-banner.ts-push-banner {
+  z-index: 46;
+}
+
 .ts-pwa-banner .ts-pwa-close {
   width: 32px;
   height: 32px;

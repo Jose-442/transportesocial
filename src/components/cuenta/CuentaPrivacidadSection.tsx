@@ -8,6 +8,7 @@ import { solicitarCambioContrasena } from "@/actions/cuenta";
 import { EditarNombreForm } from "@/components/cuenta/EditarNombreForm";
 import { PasswordRecoveryEmailSent } from "@/components/auth/PasswordRecoveryEmailSent";
 import { LEGAL_TITULAR } from "@/lib/legal-info";
+import { PushSettings } from "@/components/notifications/PushSettings";
 
 export function CuentaPrivacidadSection({
   displayName,
@@ -60,6 +61,10 @@ export function CuentaPrivacidadSection({
         {passwordError && (
           <p className="text-sm text-red-600">{passwordError}</p>
         )}
+      </div>
+
+      <div className="border-t border-zinc-100 pt-4">
+        <PushSettings />
       </div>
 
       <div className="border-t border-zinc-100 pt-4">

@@ -155,7 +155,7 @@ export async function abrirPortalSuscripcion(): Promise<void> {
     .single();
 
   if (!profile?.stripe_customer_id || !profile.subscription_active) {
-    redirect("/suscribir");
+    redirect("/cuenta");
   }
 
   const portal = await createBillingPortalSession(profile.stripe_customer_id);

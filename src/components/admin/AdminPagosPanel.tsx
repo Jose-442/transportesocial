@@ -7,15 +7,18 @@ import {
   TIPO_TRANSACCION_LABELS,
 } from "@/lib/admin/labels";
 import { formatEur } from "@/lib/pricing";
+import { isStripeTestMode } from "@/lib/stripe/server";
 
-const STRIPE_DASHBOARD = "https://dashboard.stripe.com/";
+const STRIPE_DASHBOARD = isStripeTestMode()
+  ? "https://dashboard.stripe.com/test"
+  : "https://dashboard.stripe.com/";
 
 export function AdminPagosPanel({ resumen }: { resumen: AdminPagosResumen }) {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <AdminStatCard
-          label="Suscripciones activas"
+          label="Suscripciones antiguas"
           value={resumen.suscripcionesActivas}
         />
         <Card className="flex flex-col justify-center gap-2">

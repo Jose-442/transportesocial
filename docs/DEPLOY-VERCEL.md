@@ -25,6 +25,10 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 | `STRIPE_WEBHOOK_SECRET` | Sí (cobros) | Stripe → Webhooks → signing secret |
 | `RESEND_API_KEY` | **Sí (emails)** | [Resend](https://resend.com) → API Keys → `re_...` |
 | `RESEND_FROM_EMAIL` | **Sí (emails)** | `Transporte Social <onboarding@resend.dev>` (prueba) o `noreply@tu-dominio` (prod) |
+| `NEXT_PUBLIC_SITE_URL` | Recomendada | `https://transportesocial.es` (enlaces de avisos push) |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Sí (avisos push) | `npx web-push generate-vapid-keys` → clave pública |
+| `VAPID_PRIVATE_KEY` | Sí (avisos push) | La clave privada de ese mismo comando (nunca al cliente) |
+| `VAPID_SUBJECT` | Opcional | `mailto:jemartarrero@gmail.com` |
 
 \* También vale `NEXT_PUBLIC_SUPABASE_ANON_KEY` (alias antiguo; el código acepta ambos).
 
@@ -36,6 +40,9 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 | `CRON_SECRET` | `/api/cron/reservas` responde 401; no expiran aprobaciones ni se libera escrow automático |
 | Stripe | No hay suscripción, aportación ni pago de viajes |
 | Resend | Sin emails de bienvenida, suscripción ni aviso de ofertas |
+| VAPID / Web Push | Campana y toasts sí; no hay aviso del sistema con la web cerrada |
+
+También hay que crear la tabla `push_subscriptions` en Supabase (migración `022_push_subscriptions.sql`).
 
 Guía detallada: [`docs/RESEND-SETUP.md`](RESEND-SETUP.md).
 
