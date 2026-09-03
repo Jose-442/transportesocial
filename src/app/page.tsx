@@ -88,7 +88,7 @@ export default async function HomePage() {
                 fullWidth
                 className="!text-base leading-snug sm:!text-lg"
               >
-                Buscar ruta de un conductor con espacio libre
+                Pasajero, busca ruta de un conductor con espacio libre y/o asientos libres
               </ButtonLink>
               <ButtonLink
                 href="/bultos"
@@ -96,7 +96,7 @@ export default async function HomePage() {
                 fullWidth
                 className="border-white/30 bg-white/10 text-white hover:bg-white/20 !text-base leading-snug sm:!text-lg"
               >
-                Conductor busca ruta con necesidad de porte y/o pasajero
+                Conductor, busca ruta con necesidad de porte y/o pasajero
               </ButtonLink>
             </div>
           </div>
