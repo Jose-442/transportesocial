@@ -68,9 +68,9 @@ export default async function HomePage() {
                 </div>
               </div>
               <h1 className="min-w-0 flex-1 text-sm font-bold leading-[1.12] text-white sm:text-base md:pl-3 md:text-lg lg:text-2xl xl:text-3xl">
-                <span className="block">Lleva o envía</span>
-                <span className="block">bultos compartiendo</span>
-                <span className="block">ruta</span>
+                <span className="block">Viaja barato, además lleva,</span>
+                <span className="block">o que te lleven bultos</span>
+                <span className="block">compartiendo ruta</span>
               </h1>
             </div>
             <p className="text-xs text-emerald-100/90 sm:text-sm lg:text-base">
@@ -141,8 +141,8 @@ export default async function HomePage() {
                 Pulsa aquí para:
               </span>
               <span className="text-base leading-snug sm:text-lg">
-                Proponer un viaje para enviar un bulto y/o viajar de acompañante
-                para que un conductor le ponga precio
+                Proponer un viaje porque necesito enviar un bulto y/o necesito
+                viajar; para que un conductor le ponga precio
               </span>
             </ButtonLink>
           </div>
