@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { resolverMunicipioFormulario } from "@/lib/municipios-espana";
+import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -109,8 +109,8 @@ export async function crearRuta(formData: FormData) {
     .from("rutas_conductores")
     .insert({
       user_id: user.id,
-      origen: origenResuelto.municipio!.nombre,
-      destino: destinoResuelto.municipio!.nombre,
+      origen: etiquetaMunicipio(origenResuelto.municipio!),
+      destino: etiquetaMunicipio(destinoResuelto.municipio!),
       fecha_salida: String(formData.get("fecha_salida")),
       fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
       espacio_disponible: espacioDisponible,

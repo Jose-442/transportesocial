@@ -24,6 +24,7 @@ describe("coincideFiltrosRuta — provincia y radio 50 km", () => {
       ruta("Burgos", "Getafe"),
       ruta("Quintanilla del Agua y Tordueles", "Madrid"),
       ruta("Burgos", "Alcobendas"),
+      ruta("Burgos (Burgos)", "Madrid (Madrid)"),
     ];
     for (const viaje of rutas) {
       expect(coincideFiltrosRuta(viaje, filtros)).toBe(true);

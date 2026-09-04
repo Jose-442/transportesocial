@@ -23,8 +23,23 @@ describe("municipios-espana", () => {
     ).toBe(true);
   });
 
-  it('resolverMunicipio("madrid") devuelve Madrid canónico', () => {
-    expect(resolverMunicipio("madrid")?.nombre).toBe("Madrid");
+  it('resolverMunicipio("Torrelodones (Madrid)") conserva la provincia', () => {
+    const municipio = resolverMunicipio("Torrelodones (Madrid)");
+    expect(municipio?.nombre).toBe("Torrelodones");
+    expect(municipio?.provincia).toBe("Madrid");
+  });
+
+  it('resolverMunicipio("torrelodones") sigue resolviendo el municipio', () => {
+    expect(resolverMunicipio("torrelodones")?.nombre).toBe("Torrelodones");
+  });
+
+  it("coincideMunicipioBusqueda acepta ciudad guardada con provincia", () => {
+    expect(
+      coincideMunicipioBusqueda("Torrelodones (Madrid)", "Torrelodones")
+    ).toBe(true);
+    expect(
+      coincideMunicipioBusqueda("Torrelodones", "Torrelodones (Madrid)")
+    ).toBe(true);
   });
 
   it('resolverMunicipio("texto inventado") devuelve null', () => {

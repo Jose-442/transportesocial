@@ -59,8 +59,9 @@ export function MunicipioAutocomplete({
   );
 
   function seleccionar(municipio: MunicipioEspana) {
-    onChange(municipio.nombre);
-    setInputText(municipio.nombre);
+    const etiqueta = etiquetaMunicipio(municipio);
+    onChange(etiqueta);
+    setInputText(etiqueta);
     setAbierto(false);
     setSugerencias([]);
   }
@@ -81,8 +82,9 @@ export function MunicipioAutocomplete({
     window.setTimeout(() => {
       const resuelto = resolverMunicipio(inputText, { incluirFrontera });
       if (resuelto) {
-        onChange(resuelto.nombre);
-        setInputText(resuelto.nombre);
+        const etiqueta = etiquetaMunicipio(resuelto);
+        onChange(etiqueta);
+        setInputText(etiqueta);
       } else if (value) {
         setInputText(value);
       } else {

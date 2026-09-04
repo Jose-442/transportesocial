@@ -1,6 +1,5 @@
 import { parseDate } from "@/lib/datetime-form";
-import { formatCiudad } from "@/lib/format-ciudad";
-import { coincideMunicipioBusqueda } from "@/lib/municipios-espana";
+import { coincideMunicipioBusqueda, resolverMunicipio } from "@/lib/municipios-espana";
 
 export type FiltrosListado = {
   origen?: string;
@@ -56,6 +55,12 @@ export function hrefVolverListado(
 
 function ilikeValor(valor: string): string {
   return valor.replace(/,/g, " ").replace(/%/g, "");
+}
+
+function ilikeMunicipio(valor: string): string {
+  const resuelto = resolverMunicipio(valor, { incluirFrontera: true });
+  const texto = resuelto ? resuelto.nombre : valor.trim();
+  return ilikeValor(texto);
 }
 
 export function mismaFechaMesDia(
@@ -123,10 +128,10 @@ export function coincideFiltrosRuta(
 export function aplicarFiltrosRuta(query: any, filtros: FiltrosListado) {
   let q = query;
   if (filtros.origen) {
-    q = q.ilike("origen", `%${ilikeValor(formatCiudad(filtros.origen))}%`);
+    q = q.ilike("origen", `%${ilikeMunicipio(filtros.origen)}%`);
   }
   if (filtros.destino) {
-    q = q.ilike("destino", `%${ilikeValor(formatCiudad(filtros.destino))}%`);
+    q = q.ilike("destino", `%${ilikeMunicipio(filtros.destino)}%`);
   }
   return q;
 }
@@ -135,10 +140,10 @@ export function aplicarFiltrosRuta(query: any, filtros: FiltrosListado) {
 export function aplicarFiltrosBulto(query: any, filtros: FiltrosListado) {
   let q = query;
   if (filtros.origen) {
-    q = q.ilike("origen", `%${ilikeValor(formatCiudad(filtros.origen))}%`);
+    q = q.ilike("origen", `%${ilikeMunicipio(filtros.origen)}%`);
   }
   if (filtros.destino) {
-    q = q.ilike("destino", `%${ilikeValor(formatCiudad(filtros.destino))}%`);
+    q = q.ilike("destino", `%${ilikeMunicipio(filtros.destino)}%`);
   }
   return q;
 }

@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Button } from "@/components/ui/Button";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
-import { resolverMunicipio } from "@/lib/municipios-espana";
+import { etiquetaMunicipio, resolverMunicipio } from "@/lib/municipios-espana";
 
 type Props = {
   tipo?: "viajes" | "bultos";
@@ -51,8 +51,8 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     if (!fecha.trim()) return;
 
     const params = new URLSearchParams();
-    params.set("origen", origenValido.nombre);
-    params.set("destino", destinoValido.nombre);
+    params.set("origen", etiquetaMunicipio(origenValido));
+    params.set("destino", etiquetaMunicipio(destinoValido));
     params.set("fecha", fecha.trim());
     router.push(`${pathname}?${params.toString()}`);
   }

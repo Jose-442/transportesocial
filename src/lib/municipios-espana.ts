@@ -56,16 +56,53 @@ export function etiquetaMunicipio(m: MunicipioEspana): string {
   return `${m.nombre} (${m.provincia})`;
 }
 
+/** Separa "Torrelodones (Madrid)" en nombre y provincia. */
+export function parseNombreYProvincia(valor: string): {
+  nombre: string;
+  provincia: string | null;
+} {
+  const trimmed = valor.trim();
+  if (!trimmed) return { nombre: "", provincia: null };
+  const cerrado = trimmed.match(/^(.*?)\s+\(([^)]+)\)\s*$/);
+  if (cerrado) {
+    return { nombre: cerrado[1].trim(), provincia: cerrado[2].trim() };
+  }
+  const idx = trimmed.lastIndexOf(" (");
+  if (idx > 0) {
+    return {
+      nombre: trimmed.slice(0, idx).trim(),
+      provincia: trimmed.slice(idx + 2).replace(/\)+$/g, "").trim() || null,
+    };
+  }
+  return { nombre: trimmed, provincia: null };
+}
+
 export function resolverMunicipio(
   valor: string,
   opts?: MunicipiosOpts
 ): MunicipioEspana | null {
-  const key = normalizarTextoBusqueda(valor);
-  if (!key) return null;
-  const espanol = indicePorNombre.get(key);
+  const { nombre, provincia } = parseNombreYProvincia(valor);
+  const nombreKey = normalizarTextoBusqueda(nombre);
+  if (!nombreKey) return null;
+
+  const catalogo = opts?.incluirFrontera
+    ? [...MUNICIPIOS_ESPAÑA, ...MUNICIPIOS_FRONTERA]
+    : MUNICIPIOS_ESPAÑA;
+
+  if (provincia) {
+    const provinciaKey = normalizarTextoBusqueda(provincia);
+    const exacto = catalogo.find(
+      (m) =>
+        normalizarTextoBusqueda(m.nombre) === nombreKey &&
+        normalizarTextoBusqueda(m.provincia) === provinciaKey
+    );
+    return exacto ?? null;
+  }
+
+  const espanol = indicePorNombre.get(nombreKey);
   if (espanol) return espanol;
   if (opts?.incluirFrontera) {
-    return indiceFronteraPorNombre.get(key) ?? null;
+    return indiceFronteraPorNombre.get(nombreKey) ?? null;
   }
   return null;
 }
@@ -89,7 +126,8 @@ export function filtrarMunicipios(
   limit = 10,
   opts?: MunicipiosOpts
 ): MunicipioEspana[] {
-  const queryNorm = normalizarTextoBusqueda(query);
+  const { nombre } = parseNombreYProvincia(query);
+  const queryNorm = normalizarTextoBusqueda(nombre);
   if (queryNorm.length < 2) return [];
 
   const catalogo = opts?.incluirFrontera

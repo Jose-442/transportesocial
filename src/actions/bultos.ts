@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { resolverMunicipioFormulario } from "@/lib/municipios-espana";
+import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
   incluyeBulto,
@@ -93,8 +93,8 @@ export async function crearBulto(formData: FormData) {
     .from("anuncios_bultos")
     .insert({
       user_id: user.id,
-      origen: origenResuelto.municipio!.nombre,
-      destino: destinoResuelto.municipio!.nombre,
+      origen: etiquetaMunicipio(origenResuelto.municipio!),
+      destino: etiquetaMunicipio(destinoResuelto.municipio!),
       descripcion,
       medidas,
       foto_url: fotoUrl,
