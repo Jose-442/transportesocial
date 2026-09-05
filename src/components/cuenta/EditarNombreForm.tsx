@@ -6,10 +6,15 @@ import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { actualizarNombreMostrar } from "@/actions/cuenta";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function EditarNombreForm({ nombreInicial }: { nombreInicial: string }) {
   const router = useRouter();
-  const [nombre, setNombre] = useState(nombreInicial);
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarNombre, {
+    nombre: nombreInicial,
+  });
+  const nombre = form.nombre;
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +34,7 @@ export function EditarNombreForm({ nombreInicial }: { nombreInicial: string }) {
     }
 
     setMensaje("Nombre actualizado.");
+    clear();
     router.refresh();
   }
 
@@ -37,7 +43,7 @@ export function EditarNombreForm({ nombreInicial }: { nombreInicial: string }) {
       <Input
         label="Nombre para mostrar"
         value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
+        onChange={(e) => setForm({ nombre: e.target.value })}
         required
         minLength={2}
         maxLength={80}

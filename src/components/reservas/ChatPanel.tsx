@@ -11,6 +11,8 @@ import {
 import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
 import { createClient } from "@/lib/supabase/client";
 import type { ChatMensaje, PerfilPublico } from "@/types/database";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 function ultimoMensajeActivoId(mensajes: ChatMensaje[]): string | null {
   const activos = mensajes.filter((m) => !m.eliminado);
@@ -40,6 +42,9 @@ export function ChatPanel({
       editado_en: m.editado_en ?? null,
     }))
   );
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.chat(reservaId), {
+    cuerpo: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [accionId, setAccionId] = useState<string | null>(null);
@@ -99,15 +104,15 @@ export function ChatPanel({
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const form = e.currentTarget;
-    const cuerpo = String(new FormData(form).get("cuerpo") ?? "");
+    const cuerpo = form.cuerpo;
     const result = await enviarMensajeChat(reservaId, cuerpo);
     setLoading(false);
     if (result.error) {
       setError(result.error);
       return;
     }
-    form.reset();
+    clear();
+    setForm({ cuerpo: "" });
   }
 
   async function onEditar(m: ChatMensaje) {
@@ -230,6 +235,10 @@ export function ChatPanel({
           required
           rows={2}
           placeholder="Escribe tu mensaje…"
+          value={form.cuerpo}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, cuerpo: e.target.value }))
+          }
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <Button type="submit" disabled={loading} fullWidth>

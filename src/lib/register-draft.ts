@@ -11,6 +11,7 @@ export type RegisterDraft = {
   email: string;
   password: string;
   photo: StoredPhoto | null;
+  aceptaTerminos?: boolean;
 };
 
 function fileToDataUrl(file: File): Promise<string> {
@@ -54,7 +55,8 @@ export async function saveRegisterDraft(
   displayName: string,
   email: string,
   password: string,
-  foto: File | null
+  foto: File | null,
+  aceptaTerminos = false
 ) {
   if (typeof window === "undefined") return;
 
@@ -68,7 +70,13 @@ export async function saveRegisterDraft(
     }
   }
 
-  const draft: RegisterDraft = { displayName, email, password, photo };
+  const draft: RegisterDraft = {
+    displayName,
+    email,
+    password,
+    photo,
+    aceptaTerminos,
+  };
 
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
@@ -76,7 +84,7 @@ export async function saveRegisterDraft(
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayName, email, password, photo: null })
+        JSON.stringify({ displayName, email, password, photo: null, aceptaTerminos })
       );
     } catch {
       // Sin espacio: no bloqueamos el registro.

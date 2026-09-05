@@ -6,9 +6,12 @@ import { traducirErrorAuth } from "@/lib/auth-errors";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { PasswordRecoveryEmailSent } from "@/components/auth/PasswordRecoveryEmailSent";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function RecuperarContrasenaForm() {
-  const [email, setEmail] = useState("");
+  const { form, setForm } = useFormDraft(DRAFT_KEYS.recuperar, { email: "" });
+  const email = form.email;
   const [error, setError] = useState("");
   const [enviado, setEnviado] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,7 +56,7 @@ export function RecuperarContrasenaForm() {
         autoComplete="email"
         required
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setForm({ email: e.target.value })}
       />
       {error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">

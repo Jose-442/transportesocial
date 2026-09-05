@@ -10,6 +10,8 @@ import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { plazasAsientoDisponiblesRestantes } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function AnadirCapacidadForm({
   rutaId,
@@ -19,7 +21,14 @@ export function AnadirCapacidadForm({
   ofertasExistentes: OfertaCapacidad[];
 }) {
   const router = useRouter();
-  const [tipo, setTipo] = useState<"bulto" | "asiento">("bulto");
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.capacidad(rutaId), {
+    tipo: "bulto" as "bulto" | "asiento",
+    espacio_tamano: "",
+    espacio_detalle: "",
+    plazas_totales: "1",
+    precio_neto: "",
+  });
+  const tipo = form.tipo;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -42,9 +51,15 @@ export function AnadirCapacidadForm({
       return;
     }
 
+    clear();
+    setForm({
+      tipo: "bulto",
+      espacio_tamano: "",
+      espacio_detalle: "",
+      plazas_totales: "1",
+      precio_neto: "",
+    });
     router.refresh();
-    (e.target as HTMLFormElement).reset();
-    setTipo("bulto");
   }
 
   return (
@@ -57,7 +72,7 @@ export function AnadirCapacidadForm({
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => setTipo("bulto")}
+          onClick={() => setForm((prev) => ({ ...prev, tipo: "bulto" }))}
           className={[
             "flex-1 rounded-xl border px-3 py-2 text-sm font-medium",
             tipo === "bulto"
@@ -69,7 +84,7 @@ export function AnadirCapacidadForm({
         </button>
         <button
           type="button"
-          onClick={() => setTipo("asiento")}
+          onClick={() => setForm((prev) => ({ ...prev, tipo: "asiento" }))}
           disabled={plazasRestantes < 1}
           className={[
             "flex-1 rounded-xl border px-3 py-2 text-sm font-medium disabled:opacity-50",
@@ -89,11 +104,19 @@ export function AnadirCapacidadForm({
             name="espacio_tamano"
             options={ESPACIO_SELECT_OPTIONS}
             required
+            value={form.espacio_tamano}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, espacio_tamano: e.target.value }))
+            }
           />
           <Textarea
             label="Detalle (opcional)"
             name="espacio_detalle"
             placeholder="Ej. hueco en maletero, sin apilar"
+            value={form.espacio_detalle}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, espacio_detalle: e.target.value }))
+            }
           />
         </>
       ) : (
@@ -103,7 +126,10 @@ export function AnadirCapacidadForm({
           type="number"
           min={1}
           max={plazasRestantes}
-          defaultValue={Math.min(1, plazasRestantes)}
+          value={form.plazas_totales}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, plazas_totales: e.target.value }))
+          }
           required
           hint={`Máximo ${plazasRestantes} plazas más en este viaje.`}
         />
@@ -115,6 +141,10 @@ export function AnadirCapacidadForm({
         type="number"
         step="0.01"
         min="0.01"
+        value={form.precio_neto}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, precio_neto: e.target.value }))
+        }
         required
         hint={
           tipo === "asiento"

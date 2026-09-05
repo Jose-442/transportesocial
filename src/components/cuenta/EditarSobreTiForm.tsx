@@ -7,6 +7,8 @@ import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Textarea } from "@/components/ui/Input";
 import { actualizarSobreTi } from "@/actions/cuenta";
 import { PROFILE_SOBRE_TI_MAX } from "@/lib/profile";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function EditarSobreTiForm({
   sobreTiInicial,
@@ -17,7 +19,10 @@ export function EditarSobreTiForm({
   compactPc?: boolean;
 }) {
   const router = useRouter();
-  const [sobreTi, setSobreTi] = useState(sobreTiInicial ?? "");
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarSobreTi, {
+    sobreTi: sobreTiInicial ?? "",
+  });
+  const sobreTi = form.sobreTi;
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +42,7 @@ export function EditarSobreTiForm({
     }
 
     setMensaje("Presentación guardada.");
+    clear();
     router.refresh();
   }
 
@@ -45,7 +51,7 @@ export function EditarSobreTiForm({
       <Textarea
         label="Cuéntanos quién eres"
         value={sobreTi}
-        onChange={(e) => setSobreTi(e.target.value)}
+        onChange={(e) => setForm({ sobreTi: e.target.value })}
         placeholder="Ej.: Soy conductor con furgoneta. Puntual y cuidadoso."
         hint="Si propones precio para transportar bultos y/o pasajeros, a las personas que necesiten esos servicios les gustará saber algo de ti"
         hintClassName="text-sm text-zinc-500"

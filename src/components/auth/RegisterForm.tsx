@@ -55,14 +55,15 @@ export function RegisterForm({
       setEmail(draft.email);
       setPassword(draft.password);
       setFoto(draftToFoto(draft));
+      setAceptaTerminos(!!draft.aceptaTerminos);
     }
     setReady(true);
   }, []);
 
   useEffect(() => {
     if (!ready) return;
-    void saveRegisterDraft(displayName, email, password, foto);
-  }, [ready, displayName, email, password, foto]);
+    void saveRegisterDraft(displayName, email, password, foto, aceptaTerminos);
+  }, [ready, displayName, email, password, foto, aceptaTerminos]);
 
   useEffect(() => {
     if (!foto) {

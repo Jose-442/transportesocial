@@ -69,6 +69,18 @@ export const DRAFT_KEYS = {
   nuevaRuta: "transporte-social-nueva-ruta-draft",
   nuevoBulto: "transporte-social-nuevo-bulto-draft",
   oferta: (bultoId: string) => `transporte-social-oferta-draft-${bultoId}`,
+  filtrosViajes: "transporte-social-filtros-viajes-draft",
+  filtrosBultos: "transporte-social-filtros-bultos-draft",
+  recuperar: "transporte-social-recuperar-draft",
+  editarNombre: "transporte-social-editar-nombre-draft",
+  editarSobreTi: "transporte-social-editar-sobre-ti-draft",
+  editarVehiculo: "transporte-social-editar-vehiculo-draft",
+  reservarRuta: (rutaId: string) =>
+    `transporte-social-reservar-ruta-draft-${rutaId}`,
+  capacidad: (rutaId: string) => `transporte-social-capacidad-draft-${rutaId}`,
+  disputa: (reservaId: string) =>
+    `transporte-social-disputa-draft-${reservaId}`,
+  chat: (reservaId: string) => `transporte-social-chat-draft-${reservaId}`,
 } as const;
 
 const ofertaPostLoginKey = (bultoId: string) =>

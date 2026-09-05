@@ -5,9 +5,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { solicitarReservaRuta } from "@/actions/reservas";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
   const router = useRouter();
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
+    bulto_descripcion: "",
+    bulto_medidas: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +32,8 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
       setError(result.error);
       return;
     }
+
+    clear();
 
     if (result.checkoutUrl) {
       window.location.href = result.checkoutUrl;
@@ -48,11 +56,19 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
         name="bulto_descripcion"
         required
         placeholder="Ej. caja mediana con ropa, frágil"
+        value={form.bulto_descripcion}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, bulto_descripcion: e.target.value }))
+        }
       />
       <Input
         label="Medidas aproximadas (opcional)"
         name="bulto_medidas"
         placeholder="Ej. 40×30×25 cm"
+        value={form.bulto_medidas}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
+        }
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button type="submit" fullWidth disabled={loading}>

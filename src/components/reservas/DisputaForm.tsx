@@ -12,6 +12,8 @@ import {
   MOTIVOS_DISPUTA_CONDUCTOR,
 } from "@/lib/reservas/labels";
 import type { MotivoDisputa } from "@/types/database";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function DisputaForm({
   reservaId,
@@ -21,12 +23,15 @@ export function DisputaForm({
   esConductor: boolean;
 }) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
   const motivos = esConductor
     ? MOTIVOS_DISPUTA_CONDUCTOR
     : MOTIVOS_DISPUTA_CLIENTE;
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.disputa(reservaId), {
+    motivo: motivos[0],
+    descripcion: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const options = motivos.map((m) => ({
     value: m,
@@ -45,6 +50,7 @@ export function DisputaForm({
       setError(result.error);
       return;
     }
+    clear();
     router.refresh();
   }
 
@@ -55,7 +61,10 @@ export function DisputaForm({
         name="motivo"
         required
         options={options}
-        defaultValue={motivos[0]}
+        value={form.motivo}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, motivo: e.target.value }))
+        }
       />
       <Textarea
         label="Explica qué ha pasado"
@@ -63,6 +72,10 @@ export function DisputaForm({
         required
         minLength={10}
         placeholder="Describe brevemente el problema…"
+        value={form.descripcion}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, descripcion: e.target.value }))
+        }
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button type="submit" variant="danger" fullWidth disabled={loading}>

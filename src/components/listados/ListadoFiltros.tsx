@@ -6,6 +6,7 @@ import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Button } from "@/components/ui/Button";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
 import { etiquetaMunicipio, resolverMunicipio } from "@/lib/municipios-espana";
+import { clearDraft, DRAFT_KEYS, loadDraft, saveDraft } from "@/lib/form-draft";
 
 type Props = {
   tipo?: "viajes" | "bultos";
@@ -20,17 +21,40 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const destinoParam = searchParams.get("destino") ?? "";
   const fechaParam = searchParams.get("fecha") ?? "";
 
+  const draftKey =
+    tipo === "bultos" ? DRAFT_KEYS.filtrosBultos : DRAFT_KEYS.filtrosViajes;
   const [origen, setOrigen] = useState(origenParam);
   const [destino, setDestino] = useState(destinoParam);
   const [fecha, setFecha] = useState(fechaParam);
   const [errorOrigen, setErrorOrigen] = useState("");
   const [errorDestino, setErrorDestino] = useState("");
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setOrigen(origenParam);
-    setDestino(destinoParam);
-    setFecha(fechaParam);
-  }, [origenParam, destinoParam, fechaParam]);
+    if (origenParam || destinoParam || fechaParam) {
+      setOrigen(origenParam);
+      setDestino(destinoParam);
+      setFecha(fechaParam);
+      setReady(true);
+      return;
+    }
+    const draft = loadDraft<{
+      origen?: string;
+      destino?: string;
+      fecha?: string;
+    }>(draftKey);
+    if (draft) {
+      setOrigen(draft.origen ?? "");
+      setDestino(draft.destino ?? "");
+      setFecha(draft.fecha ?? "");
+    }
+    setReady(true);
+  }, [draftKey, origenParam, destinoParam, fechaParam]);
+
+  useEffect(() => {
+    if (!ready) return;
+    saveDraft(draftKey, { origen, destino, fecha });
+  }, [ready, draftKey, origen, destino, fecha]);
 
   function aplicar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,6 +87,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     setFecha("");
     setErrorOrigen("");
     setErrorDestino("");
+    clearDraft(draftKey);
     router.push(pathname);
   }
 

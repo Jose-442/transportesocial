@@ -13,6 +13,8 @@ import {
   VEHICULO_ANIO_MIN,
 } from "@/lib/vehiculo";
 import type { Profile } from "@/types/database";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 export function EditarVehiculoForm({
   vehiculoInicial,
@@ -28,14 +30,15 @@ export function EditarVehiculoForm({
   volverTrasGuardar?: string | null;
 }) {
   const router = useRouter();
-  const [marca, setMarca] = useState(vehiculoInicial.vehiculo_marca ?? "");
-  const [modelo, setModelo] = useState(vehiculoInicial.vehiculo_modelo ?? "");
-  const [anio, setAnio] = useState(
-    vehiculoInicial.vehiculo_anio ? String(vehiculoInicial.vehiculo_anio) : ""
-  );
-  const [distintivo, setDistintivo] = useState(
-    vehiculoInicial.distintivo_ambiental ?? ""
-  );
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarVehiculo, {
+    marca: vehiculoInicial.vehiculo_marca ?? "",
+    modelo: vehiculoInicial.vehiculo_modelo ?? "",
+    anio: vehiculoInicial.vehiculo_anio
+      ? String(vehiculoInicial.vehiculo_anio)
+      : "",
+    distintivo: vehiculoInicial.distintivo_ambiental ?? "",
+  });
+  const { marca, modelo, anio, distintivo } = form;
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -59,6 +62,8 @@ export function EditarVehiculoForm({
       return;
     }
 
+    clear();
+
     if (volverTrasGuardar) {
       router.push(volverTrasGuardar);
       return;
@@ -74,7 +79,7 @@ export function EditarVehiculoForm({
         <Input
           label="Marca"
           value={marca}
-          onChange={(e) => setMarca(e.target.value)}
+          onChange={(e) => setForm((prev) => ({ ...prev, marca: e.target.value }))}
           placeholder="Ej. Ford"
           required
           maxLength={60}
@@ -82,7 +87,7 @@ export function EditarVehiculoForm({
         <Input
           label="Modelo"
           value={modelo}
-          onChange={(e) => setModelo(e.target.value)}
+          onChange={(e) => setForm((prev) => ({ ...prev, modelo: e.target.value }))}
           placeholder="Ej. Transit"
           required
           maxLength={60}
@@ -95,14 +100,16 @@ export function EditarVehiculoForm({
         min={VEHICULO_ANIO_MIN}
         max={VEHICULO_ANIO_MAX}
         value={anio}
-        onChange={(e) => setAnio(e.target.value)}
+        onChange={(e) => setForm((prev) => ({ ...prev, anio: e.target.value }))}
         placeholder={`Ej. ${VEHICULO_ANIO_MAX - 5}`}
         required
       />
       <Select
         label="Distintivo ambiental"
         value={distintivo}
-        onChange={(e) => setDistintivo(e.target.value)}
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, distintivo: e.target.value }))
+        }
         options={DISTINTIVO_AMBIENTAL_OPTIONS}
         required
         hint="Obligatorio si propones precio o publicas una ruta como conductor."
