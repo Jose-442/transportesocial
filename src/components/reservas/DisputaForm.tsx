@@ -63,7 +63,10 @@ export function DisputaForm({
         options={options}
         value={form.motivo}
         onChange={(e) =>
-          setForm((prev) => ({ ...prev, motivo: e.target.value }))
+          setForm((prev) => ({
+            ...prev,
+            motivo: e.target.value as MotivoDisputa,
+          }))
         }
       />
       <Textarea
