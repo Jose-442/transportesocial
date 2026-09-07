@@ -22,7 +22,7 @@ const items: NavItem[] = [
       </>
     ),
   },
-  { href: "/cuenta", label: "Cuenta" },
+  { href: "/cuenta", label: "Mi cuenta" },
 ];
 
 const mobileItems = items.filter(
