@@ -9,8 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { actualizarVehiculo } from "@/actions/cuenta";
 import {
   DISTINTIVO_AMBIENTAL_OPTIONS,
-  VEHICULO_ANIO_MAX,
-  VEHICULO_ANIO_MIN,
+  VEHICULO_ANIO_OPTIONS,
 } from "@/lib/vehiculo";
 import type { Profile } from "@/types/database";
 import { DRAFT_KEYS } from "@/lib/form-draft";
@@ -93,15 +92,11 @@ export function EditarVehiculoForm({
           maxLength={60}
         />
       </div>
-      <Input
+      <Select
         label="Año de matriculación"
-        type="number"
-        inputMode="numeric"
-        min={VEHICULO_ANIO_MIN}
-        max={VEHICULO_ANIO_MAX}
         value={anio}
         onChange={(e) => setForm((prev) => ({ ...prev, anio: e.target.value }))}
-        placeholder={`Ej. ${VEHICULO_ANIO_MAX - 5}`}
+        options={VEHICULO_ANIO_OPTIONS}
         required
       />
       <Select

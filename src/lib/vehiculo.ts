@@ -25,6 +25,13 @@ export const DISTINTIVO_AMBIENTAL_OPTIONS = DISTINTIVOS_AMBIENTALES.map(
 
 export const VEHICULO_ANIO_MIN = 1980;
 export const VEHICULO_ANIO_MAX = 2030;
+export const VEHICULO_ANIO_OPTIONS = Array.from(
+  { length: VEHICULO_ANIO_MAX - VEHICULO_ANIO_MIN + 1 },
+  (_, i) => {
+    const year = String(VEHICULO_ANIO_MAX - i);
+    return { value: year, label: year };
+  }
+);
 export const VEHICULO_MARCA_MAX = 60;
 export const VEHICULO_MODELO_MAX = 60;
 
