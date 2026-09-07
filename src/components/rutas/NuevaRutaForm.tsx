@@ -251,11 +251,11 @@ export function NuevaRutaForm({
       )}
 
       <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
-        <p className="text-sm font-semibold text-zinc-800">
+        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
           Además del espacio para el bulto, ¿dispones de plazas para pasajeros?
         </p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
+          <p className="text-sm font-medium text-zinc-600">
             Marcar nº de asientos disponibles
           </p>
           {!soloBulto && (
