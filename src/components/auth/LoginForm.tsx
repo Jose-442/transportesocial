@@ -5,13 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { traducirErrorAuth } from "@/lib/auth-errors";
 import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
-import {
-  clearDraft,
-  DRAFT_KEYS,
-  loadDraft,
-  type LoginDraft,
-  saveDraft,
-} from "@/lib/form-draft";
+import { clearDraft, DRAFT_KEYS } from "@/lib/form-draft";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
@@ -25,21 +19,10 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const draft = loadDraft<LoginDraft>(DRAFT_KEYS.login);
-    if (draft) {
-      setEmail(draft.email);
-      setPassword(draft.password);
-    }
-    setReady(true);
+    clearDraft(DRAFT_KEYS.login);
   }, []);
-
-  useEffect(() => {
-    if (!ready) return;
-    saveDraft<LoginDraft>(DRAFT_KEYS.login, { email, password });
-  }, [ready, email, password]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
