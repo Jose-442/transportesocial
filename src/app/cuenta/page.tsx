@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/Button";
 import { cerrarSesion } from "@/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
-import { COMMISSION_PERCENT_LABEL } from "@/lib/constants";
 import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
@@ -249,12 +248,7 @@ export default async function CuentaPage({
       </Card>
 
       <Card className="space-y-3">
-        <h2 className="font-semibold text-zinc-900">Tarifas</h2>
-        <p className="text-sm text-zinc-700">
-          Publicar y buscar es gratis. Al reservar un viaje el pago se hace por
-          adelantado y se retiene hasta confirmar que ha salido bien. Entonces
-          se aplica un {COMMISSION_PERCENT_LABEL} de gestión.
-        </p>
+        <h2 className="font-semibold text-zinc-900">Cuenta y privacidad</h2>
         {profile.subscription_active && profile.stripe_customer_id && (
           <form action={abrirPortalSuscripcion}>
             <Button
@@ -267,10 +261,6 @@ export default async function CuentaPage({
             </Button>
           </form>
         )}
-      </Card>
-
-      <Card className="space-y-3">
-        <h2 className="font-semibold text-zinc-900">Cuenta y privacidad</h2>
         <CuentaPrivacidadSection displayName={profile.display_name} />
       </Card>
 
