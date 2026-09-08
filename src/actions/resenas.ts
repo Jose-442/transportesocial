@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { puedeEnviarResena } from "@/lib/resenas/visibility";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import type { Resena, Reserva, RolResena } from "@/types/database";
 
 export type EstadoResenas = {
@@ -149,7 +150,7 @@ export async function enviarResena(
     : { data: [] };
 
   const { error } = await supabase.from("resenas").insert(insert);
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   if (admin) {
     await actualizarVisibilidadResenas(admin, reservaId);

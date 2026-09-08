@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Textarea } from "@/components/ui/Input";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
-import { DatePickerInput } from "@/components/ui/PickerInput";
+import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { crearBulto } from "@/actions/bultos";
@@ -14,15 +14,17 @@ import {
   TIPO_SOLICITUD_OPTIONS,
   type TipoSolicitud,
 } from "@/lib/solicitud-viaje";
+import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
   clearDraft,
   DRAFT_KEYS,
   EMPTY_NUEVO_BULTO_DRAFT,
-  loadDraft,
+  loadOwnedDraft,
   type NuevoBultoDraft,
-  saveDraft,
+  saveOwnedDraft,
 } from "@/lib/form-draft";
 import { resolverMunicipio } from "@/lib/municipios-espana";
+import { extractDateFromDatetime, extractTimeFromDatetime } from "@/lib/datetime-form";
 
 export function NuevoBultoForm() {
   const router = useRouter();
@@ -30,33 +32,51 @@ export function NuevoBultoForm() {
   const [fieldErrors, setFieldErrors] = useState<{
     origen?: string;
     destino?: string;
+    fecha_limite?: string;
+    hora_limite?: string;
   }>({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [form, setForm] = useState<NuevoBultoDraft>(EMPTY_NUEVO_BULTO_DRAFT);
+  const uidRef = useRef("");
 
   const necesitaBulto = incluyeBulto(form.tipo_solicitud);
 
   useEffect(() => {
-    const draft = loadDraft<NuevoBultoDraft>(DRAFT_KEYS.nuevoBulto);
-    if (draft) {
-      setForm({
-        tipo_solicitud: draft.tipo_solicitud ?? "solo_bulto",
-        origen: draft.origen,
-        destino: draft.destino,
-        descripcion: draft.descripcion,
-        espacio_tamano: draft.espacio_tamano,
-        espacio_detalle: draft.espacio_detalle,
-        fecha_limite: draft.fecha_limite,
-        foto: null,
-      });
-    }
-    setReady(true);
+    let cancelled = false;
+    void sincronizarCuentaBorradores().then((uid) => {
+      if (cancelled) return;
+      uidRef.current = uid;
+      const draft = loadOwnedDraft<NuevoBultoDraft>(DRAFT_KEYS.nuevoBulto, uid);
+      if (draft) {
+        setForm({
+          tipo_solicitud: draft.tipo_solicitud ?? "solo_bulto",
+          origen: draft.origen,
+          destino: draft.destino,
+          descripcion: draft.descripcion,
+          espacio_tamano: draft.espacio_tamano,
+          espacio_detalle: draft.espacio_detalle,
+          fecha_limite:
+            extractDateFromDatetime(draft.fecha_limite) || draft.fecha_limite,
+          hora_limite:
+            draft.hora_limite || extractTimeFromDatetime(draft.fecha_limite),
+          foto: null,
+        });
+      }
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     if (!ready) return;
-    saveDraft<NuevoBultoDraft>(DRAFT_KEYS.nuevoBulto, { ...form, foto: null });
+    saveOwnedDraft(
+      DRAFT_KEYS.nuevoBulto,
+      { ...form, foto: null },
+      uidRef.current
+    );
   }, [ready, form]);
 
   function updateField<K extends keyof Omit<NuevoBultoDraft, "foto">>(
@@ -79,7 +99,12 @@ export function NuevoBultoForm() {
     setError("");
     setFieldErrors({});
 
-    const errors: { origen?: string; destino?: string } = {};
+    const errors: {
+      origen?: string;
+      destino?: string;
+      fecha_limite?: string;
+      hora_limite?: string;
+    } = {};
     if (!form.origen.trim()) {
       errors.origen = "Indica la salida.";
     } else if (!resolverMunicipio(form.origen)) {
@@ -89,6 +114,12 @@ export function NuevoBultoForm() {
       errors.destino = "Indica el destino.";
     } else if (!resolverMunicipio(form.destino, { incluirFrontera: true })) {
       errors.destino = "Selecciona un municipio válido en destino.";
+    }
+    if (!form.fecha_limite.trim()) {
+      errors.fecha_limite = "Indica la fecha.";
+    }
+    if (!form.hora_limite.trim()) {
+      errors.hora_limite = "Indica la hora.";
     }
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -103,7 +134,8 @@ export function NuevoBultoForm() {
     formData.set("destino", form.destino);
     formData.set("descripcion", form.descripcion);
     formData.set("espacio_tamano", form.espacio_tamano);
-    if (form.fecha_limite) formData.set("fecha_limite", form.fecha_limite);
+    formData.set("fecha_limite", form.fecha_limite);
+    formData.set("hora_limite", form.hora_limite);
 
     const result = await crearBulto(formData);
 
@@ -203,8 +235,18 @@ export function NuevoBultoForm() {
       <DatePickerInput
         name="fecha_limite"
         label="Fecha"
+        required
         value={form.fecha_limite}
+        error={fieldErrors.fecha_limite}
         onChange={(value) => updateField("fecha_limite", value)}
+      />
+      <TimePickerInput
+        name="hora_limite"
+        label="Hora"
+        required
+        value={form.hora_limite}
+        error={fieldErrors.hora_limite}
+        onChange={(value) => updateField("hora_limite", value)}
       />
       {error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">

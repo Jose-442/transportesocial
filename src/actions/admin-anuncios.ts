@@ -7,6 +7,7 @@ import {
   RESERVA_EN_CURSO_ESTADOS,
 } from "@/lib/admin/publicacion-en-curso";
 import type { AnuncioBulto, RutaConductor } from "@/types/database";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 export type ViajeAdminItem = {
   id: string;
@@ -152,7 +153,7 @@ export async function adminEliminarViaje(
     .delete()
     .eq("id", rutaId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/admin");
   revalidatePath("/admin/anuncios");
@@ -197,7 +198,7 @@ export async function adminEliminarBulto(
     .delete()
     .eq("id", bultoId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/admin");
   revalidatePath("/admin/anuncios");

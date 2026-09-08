@@ -115,7 +115,7 @@ export async function enviarOferta(formData: FormData) {
     desglose,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   void enviarPushNotificacion({
     userId: bulto.user_id,

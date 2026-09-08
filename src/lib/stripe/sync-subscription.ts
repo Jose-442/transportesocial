@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 type SubscriptionSync = {
   subscription_active: boolean;
@@ -23,7 +24,7 @@ export async function syncProfileSubscription(
     .eq("id", userId);
 
   if (error) {
-    return { error: error.message };
+    return { error: supabaseErrorMessage(error) };
   }
 
   return {};

@@ -15,7 +15,7 @@ export function HeaderAuthActions() {
         href="/cuenta"
         className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl px-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
       >
-        Cuenta
+        Mi cuenta
       </Link>
     </div>
   );

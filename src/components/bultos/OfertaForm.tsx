@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Textarea } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -10,14 +10,15 @@ import { enviarOferta } from "@/actions/ofertas";
 import { calcOfertaTotales, incluyeBulto, numPasajeros } from "@/lib/solicitud-viaje";
 import { formatEur } from "@/lib/pricing";
 import type { TipoSolicitud } from "@/lib/solicitud-viaje";
+import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
   clearDraft,
   clearOfertaPostLogin,
   consumeOfertaPostLogin,
   DRAFT_KEYS,
-  loadDraft,
+  loadOwnedDraft,
   type OfertaDraft,
-  saveDraft,
+  saveOwnedDraft,
   setOfertaPostLogin,
 } from "@/lib/form-draft";
 
@@ -57,30 +58,39 @@ export function OfertaForm({
     ...EMPTY_OFERTA_DRAFT,
     plazas_ofrecidas: String(plazas),
   }));
+  const uidRef = useRef("");
 
   useEffect(() => {
-    const draft = loadDraft<OfertaDraft>(draftKey);
-    if (draft) {
-      const ofrecidas = parseInt(draft.plazas_ofrecidas ?? "", 10);
-      setForm({
-        precio_neto_bulto: draft.precio_neto_bulto ?? "",
-        precio_neto_plaza: draft.precio_neto_plaza ?? "",
-        plazas_ofrecidas:
-          plazas > 0 &&
-          Number.isInteger(ofrecidas) &&
-          ofrecidas >= 1 &&
-          ofrecidas <= plazas
-            ? String(ofrecidas)
-            : String(plazas),
-        mensaje: draft.mensaje ?? "",
-      });
-    }
-    setReady(true);
+    let cancelled = false;
+    void sincronizarCuentaBorradores().then((uid) => {
+      if (cancelled) return;
+      uidRef.current = uid;
+      const draft = loadOwnedDraft<OfertaDraft>(draftKey, uid);
+      if (draft) {
+        const ofrecidas = parseInt(draft.plazas_ofrecidas ?? "", 10);
+        setForm({
+          precio_neto_bulto: draft.precio_neto_bulto ?? "",
+          precio_neto_plaza: draft.precio_neto_plaza ?? "",
+          plazas_ofrecidas:
+            plazas > 0 &&
+            Number.isInteger(ofrecidas) &&
+            ofrecidas >= 1 &&
+            ofrecidas <= plazas
+              ? String(ofrecidas)
+              : String(plazas),
+          mensaje: draft.mensaje ?? "",
+        });
+      }
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [draftKey, plazas]);
 
   useEffect(() => {
     if (!ready) return;
-    saveDraft(draftKey, form);
+    saveOwnedDraft(draftKey, form, uidRef.current);
   }, [ready, form, draftKey]);
 
   useEffect(() => {

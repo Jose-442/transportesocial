@@ -78,10 +78,8 @@ export function PushEnableBanner({ userId }: { userId: string | null }) {
       }
       await subscribeUserToPush();
       hide(true);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "No se pudieron activar los avisos."
-      );
+    } catch {
+      setError("No se pudieron activar los avisos.");
       setBusy(false);
     }
   }

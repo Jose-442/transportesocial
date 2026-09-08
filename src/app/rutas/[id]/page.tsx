@@ -116,7 +116,8 @@ export default async function RutaDetallePage({
             </p>
             <p className="mt-1 text-sm font-medium text-zinc-900">{origen}</p>
             <p className="mt-1 text-xs text-zinc-500">
-              Punto exacto de recogida: a concretar con el conductor al reservar.
+              El punto exacto de recogida se concretará por el chat interno al
+              aceptar la propuesta.
             </p>
           </div>
           <div>
@@ -125,7 +126,8 @@ export default async function RutaDetallePage({
             </p>
             <p className="mt-1 text-sm font-medium text-zinc-900">{destino}</p>
             <p className="mt-1 text-xs text-zinc-500">
-              Punto exacto de entrega: a concretar con el conductor al reservar.
+              El punto exacto de entrega se concretará por el chat interno al
+              aceptar la propuesta.
             </p>
           </div>
         </div>
@@ -139,9 +141,6 @@ export default async function RutaDetallePage({
               Hora de salida
             </p>
             <p className="mt-1 text-sm text-zinc-800">{horaLlegada}</p>
-            <p className="mt-1 text-xs text-zinc-500">
-              La hora de salida se acuerda al reservar.
-            </p>
           </div>
         </div>
         <div>

@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Button } from "@/components/ui/Button";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
 import { etiquetaMunicipio, resolverMunicipio } from "@/lib/municipios-espana";
-import { clearDraft, DRAFT_KEYS, loadDraft, saveDraft } from "@/lib/form-draft";
+import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
+import {
+  clearDraft,
+  DRAFT_KEYS,
+  loadOwnedDraft,
+  saveOwnedDraft,
+} from "@/lib/form-draft";
 
 type Props = {
   tipo?: "viajes" | "bultos";
@@ -29,31 +35,40 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const [errorOrigen, setErrorOrigen] = useState("");
   const [errorDestino, setErrorDestino] = useState("");
   const [ready, setReady] = useState(false);
+  const uidRef = useRef("");
 
   useEffect(() => {
-    if (origenParam || destinoParam || fechaParam) {
-      setOrigen(origenParam);
-      setDestino(destinoParam);
-      setFecha(fechaParam);
+    let cancelled = false;
+    void sincronizarCuentaBorradores().then((uid) => {
+      if (cancelled) return;
+      uidRef.current = uid;
+      if (origenParam || destinoParam || fechaParam) {
+        setOrigen(origenParam);
+        setDestino(destinoParam);
+        setFecha(fechaParam);
+        setReady(true);
+        return;
+      }
+      const draft = loadOwnedDraft<{
+        origen?: string;
+        destino?: string;
+        fecha?: string;
+      }>(draftKey, uid);
+      if (draft) {
+        setOrigen(draft.origen ?? "");
+        setDestino(draft.destino ?? "");
+        setFecha(draft.fecha ?? "");
+      }
       setReady(true);
-      return;
-    }
-    const draft = loadDraft<{
-      origen?: string;
-      destino?: string;
-      fecha?: string;
-    }>(draftKey);
-    if (draft) {
-      setOrigen(draft.origen ?? "");
-      setDestino(draft.destino ?? "");
-      setFecha(draft.fecha ?? "");
-    }
-    setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [draftKey, origenParam, destinoParam, fechaParam]);
 
   useEffect(() => {
     if (!ready) return;
-    saveDraft(draftKey, { origen, destino, fecha });
+    saveOwnedDraft(draftKey, { origen, destino, fecha }, uidRef.current);
   }, [ready, draftKey, origen, destino, fecha]);
 
   function aplicar(e: React.FormEvent<HTMLFormElement>) {

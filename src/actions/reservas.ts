@@ -227,7 +227,7 @@ export async function toggleAceptacionAutomatica(activa: boolean) {
     .update({ aceptacion_automatica: activa })
     .eq("id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
   revalidatePath("/cuenta");
   return { ok: true };
 }

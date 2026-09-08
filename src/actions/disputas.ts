@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { puedeReclamar } from "@/lib/reservas/labels";
 import type { MotivoDisputa, Reserva } from "@/types/database";
 
@@ -68,7 +69,7 @@ export async function abrirDisputa(formData: FormData) {
     descripcion,
   });
 
-  if (insertError) return { error: insertError.message };
+  if (insertError) return { error: supabaseErrorMessage(insertError) };
 
   const admin = createAdminClient();
   if (admin) {
@@ -127,7 +128,7 @@ export async function anadirVersionConductorDisputa(
     .update({ version_conductor: texto })
     .eq("reserva_id", reservaId);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
   revalidatePath(`/reservas/${reservaId}`);
   return { ok: true };
 }

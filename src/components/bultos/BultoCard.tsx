@@ -1,6 +1,7 @@
 import { CardLink } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { formatFechaHoraEs } from "@/lib/datetime-form";
 import { labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
 
@@ -14,11 +15,7 @@ export function BultoCard({
   variant?: "listado" | "cuenta";
 }) {
   const fechaLimite = bulto.fecha_limite
-    ? new Date(bulto.fecha_limite).toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+    ? formatFechaHoraEs(bulto.fecha_limite)
     : null;
 
   const tipoLabel = labelTipoSolicitud(

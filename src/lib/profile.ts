@@ -1,6 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 import type { PerfilPublico, Profile } from "@/types/database";
 import type { createClient } from "@/lib/supabase/server";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 type ServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -149,7 +150,7 @@ export async function getOrCreateProfile(
     .maybeSingle();
 
   if (readError) {
-    return { error: readError.message };
+    return { error: supabaseErrorMessage(readError) };
   }
 
   if (existing) {
@@ -168,7 +169,7 @@ export async function getOrCreateProfile(
   if (insertError) {
     return {
       error:
-        insertError.message ||
+        supabaseErrorMessage(insertError) ||
         "No se pudo crear tu perfil. Contacta con soporte.",
     };
   }

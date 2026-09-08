@@ -43,7 +43,14 @@ export function clearAllFormDrafts() {
   const locales: string[] = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith(DRAFT_PREFIX)) locales.push(k);
+    if (
+      k &&
+      k.startsWith(DRAFT_PREFIX) &&
+      k !== CUENTA_ID_KEY &&
+      k !== "transporte-social-cookie-consent"
+    ) {
+      locales.push(k);
+    }
   }
   for (const k of locales) localStorage.removeItem(k);
 
@@ -59,7 +66,7 @@ export function syncBorradoresConCuenta(userId: string | null) {
   if (typeof window === "undefined") return;
   const last = localStorage.getItem(CUENTA_ID_KEY) ?? "";
   const uid = userId ?? "";
-  if (last && last !== uid) {
+  if (last !== uid) {
     clearAllFormDrafts();
   }
   if (uid) {
@@ -67,6 +74,38 @@ export function syncBorradoresConCuenta(userId: string | null) {
   } else {
     localStorage.removeItem(CUENTA_ID_KEY);
   }
+}
+
+type DraftConUid<T> = T & { _uid?: string };
+
+export function borradorEsDeCuenta(raw: unknown, uid: string): boolean {
+  if (!raw || typeof raw !== "object") return false;
+  const draftUid = String((raw as { _uid?: string })._uid ?? "");
+  if (uid) return draftUid === uid;
+  return draftUid === "";
+}
+
+export function loadOwnedDraft<T extends object>(
+  key: string,
+  uid: string
+): T | null {
+  const raw = loadDraft<DraftConUid<T> | null>(key);
+  if (!raw || typeof raw !== "object") return null;
+  if (!borradorEsDeCuenta(raw, uid)) {
+    clearDraft(key);
+    return null;
+  }
+  const rest = { ...raw };
+  delete rest._uid;
+  return rest as T;
+}
+
+export function saveOwnedDraft<T extends object>(
+  key: string,
+  data: T,
+  uid: string
+) {
+  saveDraft(key, { ...data, _uid: uid });
 }
 
 export function fileToDataUrl(file: File): Promise<string> {
@@ -141,7 +180,6 @@ export function clearOfertaPostLogin(bultoId: string) {
 
 export type LoginDraft = {
   email: string;
-  password: string;
 };
 
 export type NuevaRutaDraft = {
@@ -164,6 +202,7 @@ export type NuevoBultoDraft = {
   espacio_tamano: string;
   espacio_detalle: string;
   fecha_limite: string;
+  hora_limite: string;
   foto: StoredFile | null;
 };
 
@@ -194,6 +233,7 @@ export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
   espacio_tamano: "",
   espacio_detalle: "",
   fecha_limite: "",
+  hora_limite: "",
   foto: null,
 };
 

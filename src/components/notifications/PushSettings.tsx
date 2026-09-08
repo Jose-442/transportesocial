@@ -76,10 +76,8 @@ export function PushSettings() {
       }
       await subscribeUserToPush();
       await refresh();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "No se pudieron activar los avisos."
-      );
+    } catch {
+      setError("No se pudieron activar los avisos.");
     }
     setBusy(false);
   }
@@ -90,10 +88,8 @@ export function PushSettings() {
     try {
       await unsubscribeUserFromPush();
       await refresh();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "No se pudieron desactivar los avisos."
-      );
+    } catch {
+      setError("No se pudieron desactivar los avisos.");
     }
     setBusy(false);
   }

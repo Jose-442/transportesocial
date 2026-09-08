@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 const ALLOWED_EXT = ["jpg", "jpeg", "png", "webp", "gif"];
 
@@ -10,7 +11,7 @@ async function removeAvatarFiles(
     .from("avatars")
     .list(userId);
 
-  if (listError) return listError.message;
+  if (listError) return supabaseErrorMessage(listError);
   if (!files?.length) return null;
 
   const paths = files.map((file) => `${userId}/${file.name}`);
@@ -18,7 +19,7 @@ async function removeAvatarFiles(
     .from("avatars")
     .remove(paths);
 
-  return removeError?.message ?? null;
+  return removeError ? supabaseErrorMessage(removeError) : null;
 }
 
 export async function uploadAvatar(
@@ -42,7 +43,7 @@ export async function uploadAvatar(
     .from("avatars")
     .upload(path, file, { upsert: true, contentType: file.type });
 
-  if (uploadError) return { error: uploadError.message };
+  if (uploadError) return { error: supabaseErrorMessage(uploadError) };
 
   const { data: publicUrl } = supabase.storage.from("avatars").getPublicUrl(path);
   const url = `${publicUrl.publicUrl}?v=${Date.now()}`;
@@ -52,7 +53,7 @@ export async function uploadAvatar(
     .update({ avatar_url: url })
     .eq("id", userId);
 
-  if (profileError) return { error: profileError.message };
+  if (profileError) return { error: supabaseErrorMessage(profileError) };
 
   return { url };
 }
@@ -69,7 +70,7 @@ export async function deleteAvatar(
     .update({ avatar_url: null })
     .eq("id", userId);
 
-  if (profileError) return { error: profileError.message };
+  if (profileError) return { error: supabaseErrorMessage(profileError) };
 
   return { ok: true };
 }

@@ -10,6 +10,7 @@ import { getRequestOrigin } from "@/lib/stripe/origin";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
 import { isDistintivoAmbiental } from "@/lib/vehiculo";
 import { traducirErrorAuth } from "@/lib/auth-errors";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 export async function actualizarNombreMostrar(
   displayName: string
@@ -33,7 +34,7 @@ export async function actualizarNombreMostrar(
     .update({ display_name: nombre })
     .eq("id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/cuenta");
   revalidatePath(`/perfil/${user.id}`);
@@ -59,7 +60,7 @@ export async function actualizarSobreTi(
     .update({ sobre_ti: texto || null })
     .eq("id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/cuenta");
   revalidatePath(`/perfil/${user.id}`);
@@ -113,7 +114,7 @@ export async function actualizarVehiculo(input: {
     })
     .eq("id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/cuenta");
   revalidatePath(`/perfil/${user.id}`);

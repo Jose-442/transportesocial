@@ -9,7 +9,7 @@ type StoredPhoto = {
 export type RegisterDraft = {
   displayName: string;
   email: string;
-  password: string;
+  password?: string;
   photo: StoredPhoto | null;
   aceptaTerminos?: boolean;
 };
@@ -36,7 +36,16 @@ export function loadRegisterDraft(): RegisterDraft | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as RegisterDraft;
+    const parsed = JSON.parse(raw) as RegisterDraft;
+    if (parsed.password) {
+      parsed.password = undefined;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+      } catch {
+        // Si no se puede reescribir, al menos no devolvemos la contraseña.
+      }
+    }
+    return { ...parsed, password: undefined };
   } catch {
     return null;
   }
@@ -73,7 +82,7 @@ export async function saveRegisterDraft(
   const draft: RegisterDraft = {
     displayName,
     email,
-    password,
+    password: "",
     photo,
     aceptaTerminos,
   };
@@ -84,7 +93,7 @@ export async function saveRegisterDraft(
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ displayName, email, password, photo: null, aceptaTerminos })
+        JSON.stringify({ displayName, email, password: "", photo: null, aceptaTerminos })
       );
     } catch {
       // Sin espacio: no bloqueamos el registro.

@@ -50,7 +50,7 @@ export async function ejecutarEliminacionUsuario(
   if ((totalReservas ?? 0) === 0) {
     const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
     if (deleteError) {
-      return { error: deleteError.message };
+      return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
     }
     return {};
   }
@@ -68,14 +68,14 @@ export async function ejecutarEliminacionUsuario(
     .eq("id", userId);
 
   if (profileError) {
-    return { error: profileError.message };
+    return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
   }
 
   const { error: banError } = await admin.auth.admin.updateUserById(userId, {
     ban_duration: "876000h",
   });
   if (banError) {
-    return { error: banError.message };
+    return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
   }
 
   return {};

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { combineDateAndTime } from "@/lib/datetime-form";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
@@ -49,7 +50,7 @@ export async function crearBulto(formData: FormData) {
     const { error: uploadError } = await supabase.storage
       .from("bultos-fotos")
       .upload(path, foto, { upsert: false });
-    if (uploadError) return { error: uploadError.message };
+    if (uploadError) return { error: supabaseErrorMessage(uploadError) };
 
     const { data: publicUrl } = supabase.storage
       .from("bultos-fotos")
@@ -57,7 +58,15 @@ export async function crearBulto(formData: FormData) {
     fotoUrl = publicUrl.publicUrl;
   }
 
-  const fechaLimite = formData.get("fecha_limite");
+  const fechaLimiteDia = String(formData.get("fecha_limite") ?? "").trim();
+  const horaLimite = String(formData.get("hora_limite") ?? "").trim();
+  if (!fechaLimiteDia || !horaLimite) {
+    return { error: "Indica la fecha y la hora." };
+  }
+  const fechaLimite = combineDateAndTime(fechaLimiteDia, horaLimite);
+  if (!fechaLimite) {
+    return { error: "Fecha u hora no válida." };
+  }
   const necesitaBulto = incluyeBulto(tipoSolicitud);
 
   let descripcion = String(formData.get("descripcion") ?? "").trim();
@@ -98,7 +107,7 @@ export async function crearBulto(formData: FormData) {
       descripcion,
       medidas,
       foto_url: fotoUrl,
-      fecha_limite: fechaLimite ? String(fechaLimite) : null,
+      fecha_limite: fechaLimite,
       tipo_solicitud: tipoSolicitud,
     })
     .select("id")

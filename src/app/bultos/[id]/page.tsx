@@ -8,6 +8,8 @@ import { OfertasList } from "@/components/bultos/OfertasList";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
+import { formatFechaHoraEs } from "@/lib/datetime-form";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
@@ -132,26 +134,24 @@ export default async function BultoDetallePage({
           </div>
         </div>
         <p className="text-sm text-zinc-500">
-          El punto exacto de recogida y entrega se concreta al aceptar una
-          propuesta.
+          El punto exacto de recogida y entrega se concretará por el chat
+          interno al aceptar la propuesta.
         </p>
         <div>
           <p className="text-sm uppercase tracking-wide text-zinc-500">Medidas</p>
           <p className="text-sm text-zinc-800">
-            {necesitaBulto && bulto.medidas ? bulto.medidas : "—"}
+            {necesitaBulto && bulto.medidas
+              ? formatEspacioDisponibleListado(bulto.medidas)
+              : "—"}
           </p>
         </div>
         {bulto.fecha_limite && (
           <div>
             <p className="text-sm uppercase tracking-wide text-zinc-500">
-              Fecha límite
+              Fecha y hora
             </p>
             <p className="text-sm text-zinc-800">
-              {new Date(bulto.fecha_limite).toLocaleDateString("es-ES", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-              })}
+              {formatFechaHoraEs(bulto.fecha_limite)}
             </p>
           </div>
         )}

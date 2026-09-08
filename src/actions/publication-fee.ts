@@ -14,6 +14,7 @@ import {
 } from "@/lib/publication-flow";
 import type { Profile } from "@/types/database";
 import { getOrCreateProfile } from "@/lib/profile";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 type PublicationCreditMetadata = {
   dest: PublicationDest;
@@ -198,7 +199,7 @@ export async function confirmPublicationPayment(
     } satisfies PublicationCreditMetadata,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   return { dest };
 }

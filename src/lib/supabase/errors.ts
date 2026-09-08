@@ -44,7 +44,7 @@ export function supabaseErrorMessage(error: { message: string }): string {
   }
 
   if (
-    /\b(the|and|missing|invalid|denied|failed|unable|please|required)\b/i.test(
+    /\b(the|and|missing|invalid|denied|failed|unable|please|required|not found|already exists|violates|duplicate|bucket|jwt|row-level|payload|mime)\b/i.test(
       msg
     )
   ) {

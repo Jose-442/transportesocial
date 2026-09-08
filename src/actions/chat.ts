@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import type { ChatCanal, Reserva } from "@/types/database";
 
 type ChatAcceso =
@@ -97,7 +98,7 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
     cuerpo: texto,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   const otroId =
     user.id === reserva.cliente_id
@@ -144,7 +145,7 @@ export async function editarUltimoMensajeChat(
     })
     .eq("id", ultimo.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath(`/reservas/${reservaId}/chat`);
   return { ok: true };
@@ -166,7 +167,7 @@ export async function eliminarUltimoMensajeChat(reservaId: string) {
     .update({ eliminado: true })
     .eq("id", ultimo.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath(`/reservas/${reservaId}/chat`);
   return { ok: true };

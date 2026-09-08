@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
@@ -15,14 +15,15 @@ import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { combineDateAndTime } from "@/lib/datetime-form";
+import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
   clearDraft,
   DRAFT_KEYS,
   EMPTY_NUEVA_RUTA_DRAFT,
-  loadDraft,
+  loadOwnedDraft,
   normalizeNuevaRutaDraft,
   type NuevaRutaDraft,
-  saveDraft,
+  saveOwnedDraft,
 } from "@/lib/form-draft";
 
 type RutaFieldKey =
@@ -47,16 +48,28 @@ export function NuevaRutaForm({
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
+  const uidRef = useRef("");
 
   useEffect(() => {
-    const draft = loadDraft<Record<string, unknown>>(DRAFT_KEYS.nuevaRuta);
-    if (draft) setForm(normalizeNuevaRutaDraft(draft));
-    setReady(true);
+    let cancelled = false;
+    void sincronizarCuentaBorradores().then((uid) => {
+      if (cancelled) return;
+      uidRef.current = uid;
+      const draft = loadOwnedDraft<Record<string, unknown>>(
+        DRAFT_KEYS.nuevaRuta,
+        uid
+      );
+      if (draft) setForm(normalizeNuevaRutaDraft(draft));
+      setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     if (!ready) return;
-    saveDraft(DRAFT_KEYS.nuevaRuta, form);
+    saveOwnedDraft(DRAFT_KEYS.nuevaRuta, form, uidRef.current);
   }, [ready, form]);
 
   const neto = parseFloat(form.precio_neto) || 0;

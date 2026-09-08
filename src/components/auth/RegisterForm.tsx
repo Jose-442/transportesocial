@@ -53,7 +53,6 @@ export function RegisterForm({
     if (draft) {
       setDisplayName(draft.displayName);
       setEmail(draft.email);
-      setPassword(draft.password);
       setFoto(draftToFoto(draft));
       setAceptaTerminos(!!draft.aceptaTerminos);
     }
@@ -62,8 +61,8 @@ export function RegisterForm({
 
   useEffect(() => {
     if (!ready) return;
-    void saveRegisterDraft(displayName, email, password, foto, aceptaTerminos);
-  }, [ready, displayName, email, password, foto, aceptaTerminos]);
+    void saveRegisterDraft(displayName, email, "", foto, aceptaTerminos);
+  }, [ready, displayName, email, foto, aceptaTerminos]);
 
   useEffect(() => {
     if (!foto) {

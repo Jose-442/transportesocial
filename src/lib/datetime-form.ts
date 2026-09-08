@@ -88,3 +88,21 @@ export function extractDateFromDatetime(value: string): string {
   const match = value.match(/^(\d{4}-\d{2}-\d{2})/);
   return match?.[1] ?? "";
 }
+
+/** Fecha en español; añade hora si el valor la trae de verdad. */
+export function formatFechaHoraEs(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  const fecha = d.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value.trim())) return fecha;
+  if (d.getHours() === 0 && d.getMinutes() === 0) return fecha;
+  const hora = d.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${fecha}, ${hora}`;
+}
