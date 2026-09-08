@@ -2,7 +2,7 @@ import { CardLink } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaHoraEs } from "@/lib/datetime-form";
-import { separarHoraOculta } from "@/lib/bulto-hora";
+import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
 
@@ -15,9 +15,8 @@ export function BultoCard({
   listadoSearch?: string | null;
   variant?: "listado" | "cuenta";
 }) {
-  const { texto: descripcionVisible, hora: horaBulto } = separarHoraOculta(
-    bulto.descripcion
-  );
+  const { texto: descripcionVisible } = separarHoraOculta(bulto.descripcion);
+  const horaBulto = horaDeAnuncio(bulto.descripcion, bulto.medidas);
   const fechaLimite = bulto.fecha_limite
     ? formatFechaHoraEs(bulto.fecha_limite, horaBulto)
     : null;

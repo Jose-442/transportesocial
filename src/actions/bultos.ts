@@ -91,6 +91,7 @@ export async function crearBulto(formData: FormData) {
   }
 
   descripcion = adjuntarHoraOculta(descripcion, horaLimite);
+  medidas = adjuntarHoraOculta(medidas, horaLimite);
 
   const origenInput = formatCiudad(String(formData.get("origen")));
   const destinoInput = formatCiudad(String(formData.get("destino")));
@@ -110,7 +111,7 @@ export async function crearBulto(formData: FormData) {
       descripcion,
       medidas,
       foto_url: fotoUrl,
-      fecha_limite: fechaLimite,
+      fecha_limite: fechaLimiteDia,
       tipo_solicitud: tipoSolicitud,
     })
     .select("id")

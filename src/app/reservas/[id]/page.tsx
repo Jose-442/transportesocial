@@ -162,7 +162,7 @@ export default async function ReservaDetallePage({
             </strong>{" "}
             {separarHoraOculta(reserva.bulto_descripcion).texto}
             {reserva.bulto_medidas
-              ? ` (${formatEspacioDisponibleListado(reserva.bulto_medidas)})`
+              ? ` (${formatEspacioDisponibleListado(separarHoraOculta(reserva.bulto_medidas).texto)})`
               : ""}
             {reserva.tipo === "capacidad_extra" && (reserva.cantidad ?? 1) > 1 && (
               <span className="text-zinc-500"> · ×{reserva.cantidad}</span>

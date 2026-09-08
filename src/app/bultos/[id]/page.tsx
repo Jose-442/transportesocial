@@ -10,7 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
-import { separarHoraOculta } from "@/lib/bulto-hora";
+import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
@@ -50,9 +50,9 @@ export default async function BultoDetallePage({
 
   const origen = formatCiudad(bulto.origen);
   const destino = formatCiudad(bulto.destino);
-  const { texto: descripcionVisible, hora: horaBulto } = separarHoraOculta(
-    bulto.descripcion
-  );
+  const { texto: descripcionVisible } = separarHoraOculta(bulto.descripcion);
+  const { texto: medidasVisibles } = separarHoraOculta(bulto.medidas);
+  const horaBulto = horaDeAnuncio(bulto.descripcion, bulto.medidas);
 
   const { data: ofertasData } = await supabase
     .from("ofertas_precio")
@@ -150,8 +150,8 @@ export default async function BultoDetallePage({
         <div>
           <p className="text-sm uppercase tracking-wide text-zinc-500">Medidas</p>
           <p className="text-sm text-zinc-800">
-            {necesitaBulto && bulto.medidas
-              ? formatEspacioDisponibleListado(bulto.medidas)
+            {necesitaBulto && medidasVisibles
+              ? formatEspacioDisponibleListado(medidasVisibles)
               : "—"}
           </p>
         </div>

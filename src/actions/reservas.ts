@@ -284,7 +284,7 @@ export async function prepararReservaBulto(ofertaId: string) {
       estado: "pendiente_pago",
       fecha_llegada_prevista: llegada,
       bulto_descripcion: separarHoraOculta(bulto.descripcion).texto,
-      bulto_medidas: bulto.medidas,
+      bulto_medidas: separarHoraOculta(bulto.medidas).texto,
     })
     .select("id")
     .single();
