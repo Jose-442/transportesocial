@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type KeyboardEvent,
@@ -40,15 +41,28 @@ export function MunicipioAutocomplete({
 }: Props) {
   const listId = useId();
   const inputId = `${listId}-input`;
-  const containerRef = useRef<HTMLDivElement>(null);
+  const campoRef = useRef<HTMLDivElement>(null);
   const [inputText, setInputText] = useState(value);
   const [abierto, setAbierto] = useState(false);
+  const [abreArriba, setAbreArriba] = useState(false);
   const [resaltado, setResaltado] = useState(0);
   const [sugerencias, setSugerencias] = useState<MunicipioEspana[]>([]);
 
   useEffect(() => {
     setInputText(value);
   }, [value]);
+
+  useLayoutEffect(() => {
+    if (!abierto) return;
+    const campo = campoRef.current;
+    if (!campo) return;
+    const rect = campo.getBoundingClientRect();
+    const margenNav = 96;
+    const espacioAbajo = window.innerHeight - rect.bottom - margenNav;
+    const espacioArriba = rect.top - 8;
+    const altoLista = Math.min(192, Math.max(sugerencias.length, 1) * 44);
+    setAbreArriba(espacioAbajo < altoLista && espacioArriba > espacioAbajo);
+  }, [abierto, sugerencias.length]);
 
   const actualizarSugerencias = useCallback(
     (texto: string) => {
@@ -117,63 +131,70 @@ export function MunicipioAutocomplete({
   }
 
   return (
-    <div ref={containerRef} className="relative block space-y-1.5">
+    <div className="block space-y-1.5">
       <label htmlFor={inputId} className="block">
         <span className="text-sm font-medium text-zinc-800">{label}</span>
-        <input
-          id={inputId}
-          name={name}
-          type="text"
-          role="combobox"
-          aria-expanded={abierto}
-          aria-autocomplete="list"
-          aria-controls={listId}
-          autoComplete="off"
-          required={required}
-          placeholder={placeholder}
-          value={inputText}
-          onChange={(e) => onInputChange(e.target.value)}
-          onFocus={() => {
-            if (inputText.trim().length >= 2) {
-              actualizarSugerencias(inputText);
-              setAbierto(true);
-            }
-          }}
-          onBlur={onBlur}
-          onKeyDown={onKeyDown}
-          className={[
-            "mt-1.5 w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
-            error ? "border-red-400 ring-2 ring-red-100" : "",
-          ].join(" ")}
-        />
+        <div ref={campoRef} className="relative mt-1.5">
+          <input
+            id={inputId}
+            name={name}
+            type="text"
+            role="combobox"
+            aria-expanded={abierto}
+            aria-autocomplete="list"
+            aria-controls={listId}
+            autoComplete="off"
+            required={required}
+            placeholder={placeholder}
+            value={inputText}
+            onChange={(e) => onInputChange(e.target.value)}
+            onFocus={() => {
+              if (inputText.trim().length >= 2) {
+                actualizarSugerencias(inputText);
+                setAbierto(true);
+              }
+            }}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
+            className={[
+              "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
+              error ? "border-red-400 ring-2 ring-red-100" : "",
+            ].join(" ")}
+          />
+          {abierto && sugerencias.length > 0 && (
+            <ul
+              id={listId}
+              role="listbox"
+              className={[
+                "absolute z-50 max-h-48 w-full overflow-y-auto overscroll-contain rounded-xl border border-zinc-200 bg-white py-1 shadow-lg",
+                abreArriba ? "bottom-full mb-1" : "top-full mt-1",
+              ].join(" ")}
+            >
+              {sugerencias.map((municipio, index) => (
+                <li
+                  key={`${municipio.codigoIne ?? municipio.nombre}-${municipio.provincia}`}
+                >
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={index === resaltado}
+                    className={[
+                      "flex min-h-11 w-full items-center px-3 py-2 text-left text-sm text-zinc-800",
+                      index === resaltado ? "bg-emerald-50" : "hover:bg-zinc-50",
+                    ].join(" ")}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => seleccionar(municipio)}
+                  >
+                    {etiquetaMunicipio(municipio)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </label>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
-      {abierto && sugerencias.length > 0 && (
-        <ul
-          id={listId}
-          role="listbox"
-          className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg"
-        >
-          {sugerencias.map((municipio, index) => (
-            <li key={`${municipio.codigoIne ?? municipio.nombre}-${municipio.provincia}`}>
-              <button
-                type="button"
-                role="option"
-                aria-selected={index === resaltado}
-                className={[
-                  "flex min-h-11 w-full items-center px-3 py-2 text-left text-sm text-zinc-800",
-                  index === resaltado ? "bg-emerald-50" : "hover:bg-zinc-50",
-                ].join(" ")}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => seleccionar(municipio)}
-              >
-                {etiquetaMunicipio(municipio)}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
