@@ -12,7 +12,19 @@ describe("traducirErrorAuth", () => {
     expect(traducirErrorAuth("Email rate limit exceeded")).toContain("1 hora");
   });
 
-  it("devuelve el mensaje original si no hay traducción", () => {
+  it("traduce email o teléfono faltante", () => {
+    expect(traducirErrorAuth("missing email or phone")).toBe(
+      "Escribe el email y la contraseña."
+    );
+  });
+
+  it("no deja pasar un error en inglés", () => {
+    expect(traducirErrorAuth("Unable to process request")).toMatch(
+      /completo|datos/i
+    );
+  });
+
+  it("deja un mensaje que ya está en español", () => {
     expect(traducirErrorAuth("Error desconocido de prueba")).toBe(
       "Error desconocido de prueba"
     );

@@ -24,15 +24,27 @@ export function LoginForm() {
     clearDraft(DRAFT_KEYS.login);
   }, []);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    const datos = new FormData(e.currentTarget);
+    const emailVal = String(datos.get("email") ?? "").trim();
+    const passwordVal = String(datos.get("password") ?? "");
+    setEmail(emailVal);
+    setPassword(passwordVal);
+
+    if (!emailVal || !passwordVal) {
+      setLoading(false);
+      setError("Escribe el email y la contraseña.");
+      return;
+    }
+
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: emailVal,
+      password: passwordVal,
     });
 
     if (authError) {
@@ -68,6 +80,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
+        name="email"
         label="Email"
         type="email"
         autoComplete="email"
@@ -76,6 +89,7 @@ export function LoginForm() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <PasswordInput
+        name="password"
         label="Contraseña"
         autoComplete="current-password"
         required

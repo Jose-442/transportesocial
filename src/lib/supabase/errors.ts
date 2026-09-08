@@ -43,5 +43,13 @@ export function supabaseErrorMessage(error: { message: string }): string {
     return "Falta una tabla en la base de datos. Revisa las migraciones en Supabase.";
   }
 
+  if (
+    /\b(the|and|missing|invalid|denied|failed|unable|please|required)\b/i.test(
+      msg
+    )
+  ) {
+    return "No se ha podido completar. Inténtalo de nuevo.";
+  }
+
   return msg;
 }
