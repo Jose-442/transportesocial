@@ -12,6 +12,7 @@ import { chatPermitido } from "@/lib/reservas/labels";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
+import { separarHoraOculta } from "@/lib/bulto-hora";
 import type {
   Disputa,
   PerfilPublico,
@@ -159,7 +160,7 @@ export default async function ReservaDetallePage({
                 : "Bulto"}
               :
             </strong>{" "}
-            {reserva.bulto_descripcion}
+            {separarHoraOculta(reserva.bulto_descripcion).texto}
             {reserva.bulto_medidas
               ? ` (${formatEspacioDisponibleListado(reserva.bulto_medidas)})`
               : ""}

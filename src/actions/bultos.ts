@@ -6,6 +6,7 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { combineDateAndTime } from "@/lib/datetime-form";
+import { adjuntarHoraOculta } from "@/lib/bulto-hora";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
@@ -88,6 +89,8 @@ export async function crearBulto(formData: FormData) {
   } else if (!descripcion) {
     descripcion = "Solo pasajeros, sin bulto.";
   }
+
+  descripcion = adjuntarHoraOculta(descripcion, horaLimite);
 
   const origenInput = formatCiudad(String(formData.get("origen")));
   const destinoInput = formatCiudad(String(formData.get("destino")));

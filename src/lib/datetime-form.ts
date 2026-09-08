@@ -89,20 +89,27 @@ export function extractDateFromDatetime(value: string): string {
   return match?.[1] ?? "";
 }
 
-/** Fecha en español; añade hora si el valor la trae de verdad. */
-export function formatFechaHoraEs(value: string): string {
+export function formatFechaDiaEs(value: string): string {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
-  const fecha = d.toLocaleDateString("es-ES", {
+  return d.toLocaleDateString("es-ES", {
     weekday: "long",
     day: "numeric",
     month: "long",
   });
+}
+
+/** Fecha en español; añade hora si el valor la trae de verdad. */
+export function formatFechaHoraEs(value: string, hora?: string | null): string {
+  const fecha = formatFechaDiaEs(value);
+  if (hora && /^\d{2}:\d{2}$/.test(hora)) return `${fecha}, ${hora}`;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return fecha;
   if (/^\d{4}-\d{2}-\d{2}$/.test(value.trim())) return fecha;
   if (d.getHours() === 0 && d.getMinutes() === 0) return fecha;
-  const hora = d.toLocaleTimeString("es-ES", {
+  const horaIso = d.toLocaleTimeString("es-ES", {
     hour: "2-digit",
     minute: "2-digit",
   });
-  return `${fecha}, ${hora}`;
+  return `${fecha}, ${horaIso}`;
 }

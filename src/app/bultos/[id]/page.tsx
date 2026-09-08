@@ -9,7 +9,8 @@ import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/Marc
 import { createClient } from "@/lib/supabase/server";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
-import { formatFechaHoraEs } from "@/lib/datetime-form";
+import { formatFechaDiaEs } from "@/lib/datetime-form";
+import { separarHoraOculta } from "@/lib/bulto-hora";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
@@ -49,6 +50,9 @@ export default async function BultoDetallePage({
 
   const origen = formatCiudad(bulto.origen);
   const destino = formatCiudad(bulto.destino);
+  const { texto: descripcionVisible, hora: horaBulto } = separarHoraOculta(
+    bulto.descripcion
+  );
 
   const { data: ofertasData } = await supabase
     .from("ofertas_precio")
@@ -96,12 +100,18 @@ export default async function BultoDetallePage({
           <p className="mt-2 text-base font-semibold text-emerald-800">
             Necesita viaje: {labelTipoSolicitud(tipoSolicitud)}
           </p>
-          {bulto.descripcion && (
-            <p className="mt-1 text-base text-zinc-600">{bulto.descripcion}</p>
-          )}
         </div>
         <Badge tone="blue">{bulto.estado}</Badge>
       </div>
+
+      {descripcionVisible ? (
+        <Card>
+          <p className="text-sm uppercase tracking-wide text-zinc-500">
+            Descripción
+          </p>
+          <p className="mt-1 text-base text-zinc-800">{descripcionVisible}</p>
+        </Card>
+      ) : null}
 
       {bulto.foto_url && (
         <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
@@ -146,13 +156,23 @@ export default async function BultoDetallePage({
           </p>
         </div>
         {bulto.fecha_limite && (
-          <div>
-            <p className="text-sm uppercase tracking-wide text-zinc-500">
-              Fecha y hora
-            </p>
-            <p className="text-sm text-zinc-800">
-              {formatFechaHoraEs(bulto.fecha_limite)}
-            </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <p className="text-sm uppercase tracking-wide text-zinc-500">
+                Fecha
+              </p>
+              <p className="text-sm font-medium text-zinc-800">
+                {formatFechaDiaEs(bulto.fecha_limite)}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm uppercase tracking-wide text-zinc-500">
+                Hora
+              </p>
+              <p className="text-sm font-medium text-zinc-800">
+                {horaBulto ?? "—"}
+              </p>
+            </div>
           </div>
         )}
       </Card>

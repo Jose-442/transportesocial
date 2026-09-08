@@ -13,6 +13,7 @@ import {
 import { reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { createTripCheckoutSession } from "@/lib/stripe/trip-checkout";
+import { separarHoraOculta } from "@/lib/bulto-hora";
 import type { Reserva } from "@/types/database";
 
 async function getReservaParticipante(reservaId: string) {
@@ -282,7 +283,7 @@ export async function prepararReservaBulto(ofertaId: string) {
         Number(oferta.precio_total) - Number(oferta.precio_neto),
       estado: "pendiente_pago",
       fecha_llegada_prevista: llegada,
-      bulto_descripcion: bulto.descripcion,
+      bulto_descripcion: separarHoraOculta(bulto.descripcion).texto,
       bulto_medidas: bulto.medidas,
     })
     .select("id")
