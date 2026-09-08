@@ -9,6 +9,12 @@ describe("formatEspacioDisponibleListado", () => {
     );
   });
 
+  it("amplía Más grande también si hay detalle detrás", () => {
+    expect(formatEspacioDisponibleListado("Más grande. Hueco extra")).toBe(
+      "Más grande que un frigorífico estándar. Hueco extra"
+    );
+  });
+
   it("deja el resto de opciones tal cual", () => {
     expect(formatEspacioDisponibleListado("Medio (Frigorífico estándar)")).toBe(
       "Medio (Frigorífico estándar)"

@@ -7,9 +7,13 @@ export const ESPACIO_OPCIONES = [
 
 export type EspacioOpcion = (typeof ESPACIO_OPCIONES)[number];
 
-export const ESPACIO_SELECT_OPTIONS = ESPACIO_OPCIONES.map((label) => ({
-  value: label,
-  label,
+const ESPACIO_ETIQUETA: Partial<Record<EspacioOpcion, string>> = {
+  "Más grande": "Más grande que un frigorífico estándar",
+};
+
+export const ESPACIO_SELECT_OPTIONS = ESPACIO_OPCIONES.map((value) => ({
+  value,
+  label: ESPACIO_ETIQUETA[value] ?? value,
 }));
 
 export function combinarEspacio(tamano: string, detalle?: string): string {
@@ -23,8 +27,11 @@ export function combinarEspacio(tamano: string, detalle?: string): string {
 export function formatEspacioDisponibleListado(espacio: string): string {
   const valor = espacio.trim();
   if (!valor) return "Sin especificar";
-  if (valor === "Más grande") {
-    return "Más grande que un frigorífico estándar";
+  if (/^Más grande(\.|$)/.test(valor) && !/frigorífico/i.test(valor)) {
+    return valor.replace(
+      /^Más grande/,
+      "Más grande que un frigorífico estándar"
+    );
   }
   return valor;
 }

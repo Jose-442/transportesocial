@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
 import { formatEur } from "@/lib/pricing";
+import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
 
@@ -14,7 +15,12 @@ function etiquetaOferta(oferta: OfertaCapacidad): string {
     const libres = plazasLibresOferta(oferta);
     return `Plaza de acompañante · ${libres} disponible${libres !== 1 ? "s" : ""}`;
   }
-  const espacio = [oferta.espacio_tamano, oferta.espacio_detalle]
+  const espacio = [
+    oferta.espacio_tamano
+      ? formatEspacioDisponibleListado(oferta.espacio_tamano)
+      : "",
+    oferta.espacio_detalle,
+  ]
     .filter(Boolean)
     .join(" · ");
   return `Bulto extra · ${espacio}`;

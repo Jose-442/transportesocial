@@ -213,7 +213,7 @@ export default async function RutaDetallePage({
               .filter((o) => o.tipo === "bulto")
               .map((o) => (
               <li key={o.id}>
-                {`Bulto extra · ${o.espacio_tamano}`}
+                {`Bulto extra · ${formatEspacioDisponibleListado(o.espacio_tamano ?? "")}`}
                 {" — "}
                 <span className="font-semibold text-emerald-700">
                   {formatEur(Number(o.precio_publicado))}
@@ -267,7 +267,7 @@ export default async function RutaDetallePage({
                   <li key={o.id}>
                     {o.tipo === "asiento"
                       ? `${o.plazas_ocupadas}/${o.plazas_totales} plazas · ${formatEur(Number(o.precio_publicado))}/plaza`
-                      : `${o.espacio_tamano} · ${formatEur(Number(o.precio_publicado))}`}
+                      : `${formatEspacioDisponibleListado(o.espacio_tamano ?? "")} · ${formatEur(Number(o.precio_publicado))}`}
                     {" · "}
                     <span className="text-zinc-500">{o.estado}</span>
                   </li>
