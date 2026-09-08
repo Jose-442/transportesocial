@@ -34,6 +34,41 @@ export function clearDraft(key: string) {
   localStorage.removeItem(key);
 }
 
+const DRAFT_PREFIX = "transporte-social-";
+export const CUENTA_ID_KEY = "transporte-social-cuenta-id";
+
+/** Borra borradores del navegador (no se mezclan entre cuentas). */
+export function clearAllFormDrafts() {
+  if (typeof window === "undefined") return;
+  const locales: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(DRAFT_PREFIX)) locales.push(k);
+  }
+  for (const k of locales) localStorage.removeItem(k);
+
+  const sesion: string[] = [];
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const k = sessionStorage.key(i);
+    if (k && k.startsWith(DRAFT_PREFIX)) sesion.push(k);
+  }
+  for (const k of sesion) sessionStorage.removeItem(k);
+}
+
+export function syncBorradoresConCuenta(userId: string | null) {
+  if (typeof window === "undefined") return;
+  const last = localStorage.getItem(CUENTA_ID_KEY) ?? "";
+  const uid = userId ?? "";
+  if (last && last !== uid) {
+    clearAllFormDrafts();
+  }
+  if (uid) {
+    localStorage.setItem(CUENTA_ID_KEY, uid);
+  } else {
+    localStorage.removeItem(CUENTA_ID_KEY);
+  }
+}
+
 export function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

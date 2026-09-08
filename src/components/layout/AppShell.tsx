@@ -5,6 +5,7 @@ import { BottomNav } from "./BottomNav";
 import { StripeTestBanner } from "./StripeTestBanner";
 import { NotificationProvider } from "@/components/notifications/NotificationProvider";
 import { PushEnableBanner } from "@/components/notifications/PushEnableBanner";
+import { SessionDraftGuard } from "./SessionDraftGuard";
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -14,6 +15,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <NotificationProvider userId={user?.id ?? null}>
+      <SessionDraftGuard />
       <StripeTestBanner />
       <Header isLoggedIn={!!user} />
       <Main>{children}</Main>
