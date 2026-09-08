@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getRequestOrigin } from "@/lib/stripe/origin";
@@ -44,8 +43,6 @@ export async function sincronizarStripeConnectUsuario(
   } catch (err) {
     console.error("[sincronizarStripeConnectUsuario]", accountId, err);
   }
-
-  revalidatePath("/cuenta");
 }
 
 export async function sincronizarStripeConnectPorCuenta(

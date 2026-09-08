@@ -43,7 +43,11 @@ export default async function CuentaPage({
   const connectParam =
     typeof params.connect === "string" ? params.connect : undefined;
   if (connectParam === "return" || connectParam === "refresh") {
-    await sincronizarStripeConnectUsuario(user.id);
+    try {
+      await sincronizarStripeConnectUsuario(user.id);
+    } catch (err) {
+      console.error("[cuenta connect return]", err);
+    }
     redirect("/cuenta");
   }
 
@@ -53,8 +57,12 @@ export default async function CuentaPage({
     result.profile?.stripe_connect_account_id &&
     !result.profile.stripe_connect_payouts_enabled
   ) {
-    await sincronizarStripeConnectUsuario(user.id);
-    result = await getOrCreateProfile(supabase, user);
+    try {
+      await sincronizarStripeConnectUsuario(user.id);
+      result = await getOrCreateProfile(supabase, user);
+    } catch (err) {
+      console.error("[cuenta connect sync]", err);
+    }
   }
 
   if (result.error || !result.profile) {
