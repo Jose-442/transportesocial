@@ -11,6 +11,7 @@ import { getEstadoResenas } from "@/actions/resenas";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import type {
   Disputa,
   PerfilPublico,
@@ -159,7 +160,9 @@ export default async function ReservaDetallePage({
               :
             </strong>{" "}
             {reserva.bulto_descripcion}
-            {reserva.bulto_medidas ? ` (${reserva.bulto_medidas})` : ""}
+            {reserva.bulto_medidas
+              ? ` (${formatEspacioDisponibleListado(reserva.bulto_medidas)})`
+              : ""}
             {reserva.tipo === "capacidad_extra" && (reserva.cantidad ?? 1) > 1 && (
               <span className="text-zinc-500"> · ×{reserva.cantidad}</span>
             )}
