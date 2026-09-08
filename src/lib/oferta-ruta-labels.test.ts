@@ -5,14 +5,20 @@ import { lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
 describe("formatEspacioDisponibleListado", () => {
   it("amplía Más grande con referencia al frigorífico", () => {
     expect(formatEspacioDisponibleListado("Más grande")).toBe(
-      "Más grande que un frigorífico estándar"
+      "Más grande (referencia: frigorífico estándar)"
     );
   });
 
   it("amplía Más grande también si hay detalle detrás", () => {
     expect(formatEspacioDisponibleListado("Más grande. Hueco extra")).toBe(
-      "Más grande que un frigorífico estándar. Hueco extra"
+      "Más grande (referencia: frigorífico estándar). Hueco extra"
     );
+  });
+
+  it("cambia la frase larga antigua a la de referencia", () => {
+    expect(
+      formatEspacioDisponibleListado("Más grande que un frigorífico estándar")
+    ).toBe("Más grande (referencia: frigorífico estándar)");
   });
 
   it("deja el resto de opciones tal cual", () => {
@@ -31,7 +37,7 @@ describe("lineasOfertaRuta", () => {
         estado: "activa",
       })
     ).toEqual([
-      "Bulto (Tamaño del espacio disponible: Más grande que un frigorífico estándar)",
+      "Bulto (Tamaño del espacio disponible: Más grande (referencia: frigorífico estándar))",
       "+ 1 acompañante",
     ]);
   });
