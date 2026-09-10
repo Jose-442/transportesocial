@@ -7,6 +7,31 @@ type ProfileEliminacion = {
   stripe_customer_id: string | null;
 };
 
+function motivoFalloEliminacion(
+  error: { message?: string; status?: number; code?: string } | null,
+  contexto: string
+): string {
+  const raw = (error?.message ?? "").trim();
+  const status = error?.status;
+  if (
+    status === 401 ||
+    status === 403 ||
+    /not allowed|unauthorized|invalid jwt|invalid api key|forbidden/i.test(raw)
+  ) {
+    return "No se ha podido eliminar: el servidor no tiene permiso para borrar cuentas.";
+  }
+  if (/database error deleting user|foreign key|violates/i.test(raw)) {
+    return "No se ha podido eliminar: esta cuenta todavía tiene reservas u otros datos ligados. Ciérralos antes.";
+  }
+  if (/user not found/i.test(raw)) {
+    return "No se ha podido eliminar: esta cuenta ya no existe.";
+  }
+  if (raw && !/\b(the|and|missing|invalid|denied|failed|unable|please|unauthorized|forbidden|database error)\b/i.test(raw)) {
+    return `${contexto} ${raw}`;
+  }
+  return `${contexto} Inténtalo de nuevo.`;
+}
+
 export async function ejecutarEliminacionUsuario(
   admin: SupabaseClient,
   userId: string,
@@ -50,7 +75,12 @@ export async function ejecutarEliminacionUsuario(
   if ((totalReservas ?? 0) === 0) {
     const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
     if (deleteError) {
-      return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
+      return {
+        error: motivoFalloEliminacion(
+          deleteError,
+          "No se ha podido borrar el acceso a la cuenta."
+        ),
+      };
     }
     return {};
   }
@@ -68,14 +98,24 @@ export async function ejecutarEliminacionUsuario(
     .eq("id", userId);
 
   if (profileError) {
-    return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
+    return {
+      error: motivoFalloEliminacion(
+        profileError,
+        "No se han podido borrar o anonimizar los datos de la ficha."
+      ),
+    };
   }
 
   const { error: banError } = await admin.auth.admin.updateUserById(userId, {
     ban_duration: "876000h",
   });
   if (banError) {
-    return { error: "No se ha podido eliminar la cuenta. Inténtalo de nuevo." };
+    return {
+      error: motivoFalloEliminacion(
+        banError,
+        "No se ha podido cerrar el acceso a la cuenta."
+      ),
+    };
   }
 
   return {};

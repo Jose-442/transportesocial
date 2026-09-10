@@ -3,13 +3,24 @@ import { getSupabaseServerUrl } from "./env";
 
 /**
  * PostgREST en este proyecto rechaza Bearer con service_role (403 sin GRANT).
- * Solo apikey funciona (probado en scripts/probe-supabase-admin.mjs).
+ * En REST solo va apikey. En Auth (borrar/cerrar cuenta) sí hace falta Bearer.
  */
 function createAdminFetch(serviceRole: string): typeof fetch {
   return async (input, init) => {
+    const url =
+      typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.href
+          : input.url;
     const headers = new Headers(init?.headers);
-    headers.delete("Authorization");
     headers.set("apikey", serviceRole);
+    const esRest = /\/rest\/v1(?:\/|\?|$)/.test(url);
+    if (esRest) {
+      headers.delete("Authorization");
+    } else {
+      headers.set("Authorization", `Bearer ${serviceRole}`);
+    }
     return fetch(input, { ...init, headers });
   };
 }
