@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { eliminarCuentaDefinitivamente } from "@/actions/cuenta";
 import type { BloqueoEliminacion } from "@/lib/cuenta/eliminacion";
 
@@ -15,12 +14,10 @@ export function EliminarCuentaForm({
 }) {
   const router = useRouter();
   const [entiendo, setEntiendo] = useState(false);
-  const [confirmacion, setConfirmacion] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const puedeEliminar =
-    bloqueos.length === 0 && entiendo && confirmacion === "ELIMINAR";
+  const puedeEliminar = bloqueos.length === 0 && entiendo;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -85,14 +82,6 @@ export function EliminarCuentaForm({
         />
         <span>Entiendo que se eliminarán o anonimizarán mis datos personales.</span>
       </label>
-
-      <Input
-        label='Escribe "ELIMINAR" para confirmar'
-        value={confirmacion}
-        onChange={(e) => setConfirmacion(e.target.value)}
-        placeholder="ELIMINAR"
-        autoComplete="off"
-      />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
