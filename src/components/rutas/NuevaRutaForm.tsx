@@ -43,14 +43,14 @@ type RutaFieldKey =
   | "precio_neto_plaza";
 
 const TIPOS_BOTON: { value: TipoOfertaRuta; label: string }[] = [
-  { value: "solo_bulto", label: "Solo bulto" },
-  { value: "solo_pasajeros", label: "Solo pasajeros" },
-  { value: "bulto_y_pasajeros", label: "Bulto y pasajeros" },
+  { value: "solo_bulto", label: "Solo para bulto" },
+  { value: "solo_pasajeros", label: "Solo para pasajeros" },
+  { value: "bulto_y_pasajeros", label: "Para bulto y pasajeros" },
 ];
 
 function botonClase(activo: boolean): string {
   return [
-    "min-h-11 flex-1 rounded-xl border text-sm font-semibold transition-colors",
+    "min-h-11 flex-1 rounded-xl border px-2 py-2 text-sm font-semibold leading-snug transition-colors",
     activo
       ? "border-emerald-600 bg-emerald-50 text-emerald-800"
       : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300",
