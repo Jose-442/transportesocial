@@ -32,6 +32,7 @@ type RutaFieldKey =
   | "fecha_salida"
   | "hora_salida"
   | "espacio_tamano"
+  | "plazas_acompanante"
   | "precio_neto"
   | "precio_neto_plaza";
 
@@ -76,11 +77,14 @@ export function NuevaRutaForm({
   const publicado = neto > 0 ? calcPrecioConComision(neto) : 0;
   const plazas = parseInt(form.plazas_acompanante, 10);
   const soloBulto = form.plazas_acompanante === "0";
-  const plazasOfrecidas = soloBulto
+  const plazasMarcadas =
+    form.plazas_acompanante === "0" ||
+    form.plazas_acompanante === "1" ||
+    form.plazas_acompanante === "2" ||
+    form.plazas_acompanante === "3";
+  const plazasOfrecidas = soloBulto || !plazasMarcadas || Number.isNaN(plazas)
     ? 0
-    : Number.isNaN(plazas)
-      ? 1
-      : plazas;
+    : plazas;
   const netoPlaza = parseFloat(form.precio_neto_plaza) || 0;
   const publicadoPlaza =
     netoPlaza > 0 ? calcPrecioConComision(netoPlaza) : 0;
@@ -89,12 +93,18 @@ export function NuevaRutaForm({
     field: K,
     value: NuevaRutaDraft[K]
   ) {
-    const nextForm = { ...form, [field]: value };
+    const nextForm =
+      field === "plazas_acompanante"
+        ? { ...form, [field]: value, plazas_marcadas: true }
+        : { ...form, [field]: value };
     setForm(nextForm);
-    if (field === "plazas_acompanante" && value === "0") {
+    if (field === "plazas_acompanante") {
       setFieldErrors((prev) => {
         const next = { ...prev };
-        delete next.precio_neto_plaza;
+        delete next.plazas_acompanante;
+        if (value === "0") {
+          delete next.precio_neto_plaza;
+        }
         return next;
       });
     } else if (field in fieldErrors) {
@@ -137,6 +147,15 @@ export function NuevaRutaForm({
     const precioPlaza = parseFloat(draft.precio_neto_plaza);
     const plazasDraft = parseInt(draft.plazas_acompanante, 10);
     const soloBultoDraft = draft.plazas_acompanante === "0";
+    const plazasMarcadasDraft =
+      draft.plazas_acompanante === "0" ||
+      draft.plazas_acompanante === "1" ||
+      draft.plazas_acompanante === "2" ||
+      draft.plazas_acompanante === "3";
+    if (!plazasMarcadasDraft) {
+      errors.plazas_acompanante =
+        "Marca si ofreces plazas para pasajeros o solo bulto.";
+    }
     if (
       !soloBultoDraft &&
       plazasDraft > 0 &&
@@ -271,7 +290,7 @@ export function NuevaRutaForm({
           <p className="text-sm font-medium text-zinc-600">
             Marcar nº de asientos disponibles
           </p>
-          {!soloBulto && (
+          {!soloBulto && plazasOfrecidas > 0 && (
             <AsientosLibresDots ofrecidas={plazasOfrecidas} ocupadas={0} />
           )}
         </div>
@@ -290,7 +309,7 @@ export function NuevaRutaForm({
               }
               className={[
                 "min-h-11 flex-1 rounded-xl border text-sm font-semibold transition-colors",
-                (n === 0 ? soloBulto : plazasOfrecidas === n)
+                form.plazas_acompanante === String(n)
                   ? "border-emerald-600 bg-emerald-50 text-emerald-800"
                   : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300",
               ].join(" ")}
@@ -299,8 +318,11 @@ export function NuevaRutaForm({
             </button>
           ))}
         </div>
+        {fieldErrors.plazas_acompanante && (
+          <p className="text-sm text-red-700">{fieldErrors.plazas_acompanante}</p>
+        )}
 
-        {!soloBulto && (
+        {plazasOfrecidas > 0 && (
           <>
         <Input
           name="precio_neto_plaza"

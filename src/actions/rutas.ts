@@ -72,17 +72,16 @@ export async function crearRuta(formData: FormData) {
     String(formData.get("espacio_detalle") ?? "")
   );
 
-  const plazasAcompanante = parseInt(
-    String(formData.get("plazas_acompanante") ?? "1"),
-    10
-  );
+  const plazasRaw = String(formData.get("plazas_acompanante") ?? "").trim();
+  const plazasAcompanante = parseInt(plazasRaw, 10);
   if (
+    plazasRaw === "" ||
     !Number.isInteger(plazasAcompanante) ||
     plazasAcompanante < 0 ||
     plazasAcompanante > MAX_ASIENTOS_POR_VIAJE
   ) {
     return {
-      error: `Indica entre 0 y ${MAX_ASIENTOS_POR_VIAJE} acompañantes.`,
+      error: "Marca si ofreces plazas para pasajeros o solo bulto.",
     };
   }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { borradorEsDeCuenta } from "@/lib/form-draft";
+import { borradorEsDeCuenta, normalizeNuevaRutaDraft } from "@/lib/form-draft";
 
 describe("borradorEsDeCuenta", () => {
   it("acepta el borrador de la misma cuenta", () => {
@@ -26,5 +26,37 @@ describe("borradorEsDeCuenta", () => {
     expect(borradorEsDeCuenta({ origen: "Madrid", _uid: "user-a" }, "")).toBe(
       false
     );
+  });
+});
+
+describe("normalizeNuevaRutaDraft plazas", () => {
+  it("no marca ninguna plaza en un formulario vacío", () => {
+    const draft = normalizeNuevaRutaDraft({});
+    expect(draft.plazas_acompanante).toBe("");
+    expect(draft.plazas_marcadas).toBe(false);
+  });
+
+  it("quita el 1 que se guardaba solo, sin precio de acompañante", () => {
+    const draft = normalizeNuevaRutaDraft({
+      espacio_tamano: "XXL (Mudanza completa)",
+      plazas_acompanante: "1",
+      precio_neto_plaza: "",
+    });
+    expect(draft.plazas_acompanante).toBe("");
+  });
+
+  it("conserva Solo bulto si ya estaba marcado", () => {
+    expect(
+      normalizeNuevaRutaDraft({ plazas_acompanante: "0" }).plazas_acompanante
+    ).toBe("0");
+  });
+
+  it("conserva 1 plaza si el conductor ya puso precio", () => {
+    expect(
+      normalizeNuevaRutaDraft({
+        plazas_acompanante: "1",
+        precio_neto_plaza: "15",
+      }).plazas_acompanante
+    ).toBe("1");
   });
 });

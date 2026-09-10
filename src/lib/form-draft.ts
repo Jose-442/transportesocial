@@ -190,6 +190,7 @@ export type NuevaRutaDraft = {
   espacio_tamano: string;
   espacio_detalle: string;
   plazas_acompanante: string;
+  plazas_marcadas?: boolean;
   precio_neto_plaza: string;
   precio_neto: string;
 };
@@ -220,7 +221,8 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
   hora_salida: "",
   espacio_tamano: "",
   espacio_detalle: "",
-  plazas_acompanante: "1",
+  plazas_acompanante: "",
+  plazas_marcadas: false,
   precio_neto_plaza: "",
   precio_neto: "",
 };
@@ -236,6 +238,32 @@ export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
   hora_limite: "",
   foto: null,
 };
+
+/** El «1» antiguo se guardaba solo, aunque nadie lo hubiera marcado. */
+function normalizePlazasAcompananteDraft(
+  raw: Record<string, unknown>
+): Pick<NuevaRutaDraft, "plazas_acompanante" | "plazas_marcadas"> {
+  const p = String(raw.plazas_acompanante ?? "");
+  const valid = p === "0" || p === "1" || p === "2" || p === "3" ? p : "";
+  const marcadas = raw.plazas_marcadas === true;
+
+  if (marcadas) {
+    return {
+      plazas_acompanante: valid,
+      plazas_marcadas: valid !== "",
+    };
+  }
+
+  if (valid === "0" || valid === "2" || valid === "3") {
+    return { plazas_acompanante: valid, plazas_marcadas: true };
+  }
+
+  if (valid === "1" && String(raw.precio_neto_plaza ?? "").trim() !== "") {
+    return { plazas_acompanante: "1", plazas_marcadas: true };
+  }
+
+  return { plazas_acompanante: "", plazas_marcadas: false };
+}
 
 /** Migra borradores antiguos que guardaban `fecha_llegada_prevista` como datetime-local. */
 export function normalizeNuevaRutaDraft(
@@ -258,10 +286,7 @@ export function normalizeNuevaRutaDraft(
     hora_salida,
     espacio_tamano: String(raw.espacio_tamano ?? ""),
     espacio_detalle: String(raw.espacio_detalle ?? ""),
-    plazas_acompanante: (() => {
-      const p = String(raw.plazas_acompanante ?? "1");
-      return p === "0" || p === "1" || p === "2" || p === "3" ? p : "1";
-    })(),
+    ...normalizePlazasAcompananteDraft(raw),
     precio_neto_plaza: String(raw.precio_neto_plaza ?? ""),
     precio_neto: String(raw.precio_neto ?? ""),
   };
