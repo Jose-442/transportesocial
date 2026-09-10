@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
-import { lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
+import { badgeOfertaRuta, lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
 
 describe("formatEspacioDisponibleListado", () => {
   it("amplía Más grande con referencia al frigorífico", () => {
@@ -52,5 +52,22 @@ describe("lineasOfertaRuta", () => {
     ).toEqual([
       "Bulto (Tamaño del espacio disponible: Pequeño (Maleta))",
     ]);
+  });
+
+  it("solo pasajeros si no hay espacio para bulto", () => {
+    expect(
+      lineasOfertaRuta({
+        espacio_disponible: "Sin espacio para bultos",
+        asientoOfrecidas: 2,
+        estado: "activa",
+      })
+    ).toEqual(["2 acompañantes"]);
+    expect(
+      badgeOfertaRuta({
+        espacio_disponible: "Sin espacio para bultos",
+        asientoOfrecidas: 2,
+        estado: "activa",
+      })
+    ).toBe("Solo pasajeros");
   });
 });

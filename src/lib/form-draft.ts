@@ -2,6 +2,7 @@ import {
   extractDateFromDatetime,
   extractTimeFromDatetime,
 } from "@/lib/datetime-form";
+import { parseTipoOfertaRuta } from "@/lib/ruta-oferta";
 
 export type StoredFile = {
   name: string;
@@ -187,6 +188,7 @@ export type NuevaRutaDraft = {
   destino: string;
   fecha_salida: string;
   hora_salida: string;
+  tipo_oferta: import("@/lib/ruta-oferta").TipoOfertaRuta | "";
   espacio_tamano: string;
   espacio_detalle: string;
   plazas_acompanante: string;
@@ -219,6 +221,7 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
   destino: "",
   fecha_salida: "",
   hora_salida: "",
+  tipo_oferta: "",
   espacio_tamano: "",
   espacio_detalle: "",
   plazas_acompanante: "",
@@ -265,6 +268,24 @@ function normalizePlazasAcompananteDraft(
   return { plazas_acompanante: "", plazas_marcadas: false };
 }
 
+function inferTipoOfertaDraft(
+  raw: Record<string, unknown>,
+  plazas: string
+): NuevaRutaDraft["tipo_oferta"] {
+  const parsed = parseTipoOfertaRuta(raw.tipo_oferta);
+  if (parsed) return parsed;
+
+  const espacio = String(raw.espacio_tamano ?? "").trim();
+  if (espacio && (plazas === "1" || plazas === "2" || plazas === "3")) {
+    return "bulto_y_pasajeros";
+  }
+  if (espacio) return "solo_bulto";
+  if (plazas === "1" || plazas === "2" || plazas === "3") {
+    return "solo_pasajeros";
+  }
+  return "";
+}
+
 /** Migra borradores antiguos que guardaban `fecha_llegada_prevista` como datetime-local. */
 export function normalizeNuevaRutaDraft(
   raw: Record<string, unknown> | null | undefined
@@ -278,15 +299,31 @@ export function normalizeNuevaRutaDraft(
   const hora_salida =
     String(raw.hora_salida ?? "") ||
     extractTimeFromDatetime(legacyDatetime);
+  const plazas = normalizePlazasAcompananteDraft(raw);
+  const tipo_oferta = inferTipoOfertaDraft(raw, plazas.plazas_acompanante);
+  let plazas_acompanante = plazas.plazas_acompanante;
+  let plazas_marcadas = plazas.plazas_marcadas;
+  if (tipo_oferta === "solo_bulto") {
+    plazas_acompanante = "0";
+    plazas_marcadas = true;
+  } else if (
+    (tipo_oferta === "solo_pasajeros" || tipo_oferta === "bulto_y_pasajeros") &&
+    plazas_acompanante === "0"
+  ) {
+    plazas_acompanante = "";
+    plazas_marcadas = false;
+  }
 
   return {
     origen: String(raw.origen ?? ""),
     destino: String(raw.destino ?? ""),
     fecha_salida,
     hora_salida,
+    tipo_oferta,
     espacio_tamano: String(raw.espacio_tamano ?? ""),
     espacio_detalle: String(raw.espacio_detalle ?? ""),
-    ...normalizePlazasAcompananteDraft(raw),
+    plazas_acompanante,
+    plazas_marcadas,
     precio_neto_plaza: String(raw.precio_neto_plaza ?? ""),
     precio_neto: String(raw.precio_neto ?? ""),
   };

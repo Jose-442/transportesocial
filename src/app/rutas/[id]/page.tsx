@@ -7,7 +7,7 @@ import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm"
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { createClient } from "@/lib/supabase/server";
-import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
+import { formatEspacioDisponibleListado, rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -60,6 +60,7 @@ export default async function RutaDetallePage({
   const { ofrecidas: asientoOfrecidas, ocupadas: asientoOcupadas } =
     resumenAsientosRuta(ofertas);
   const tieneAsientos = asientoOfrecidas > 0;
+  const ofreceBulto = rutaOfreceBulto(ruta.espacio_disponible);
   const plazasAsientoLibres = ofertasDisponibles
     .filter((o) => o.tipo === "asiento")
     .some(ofertaDisponible);
@@ -146,7 +147,9 @@ export default async function RutaDetallePage({
         <div>
           <p className="text-xs uppercase tracking-wide text-zinc-500">Espacio</p>
           <p className="mt-1 text-sm text-zinc-800">
-            {formatEspacioDisponibleListado(ruta.espacio_disponible)}
+            {ofreceBulto
+              ? formatEspacioDisponibleListado(ruta.espacio_disponible)
+              : "Este viaje no ofrece espacio para bultos."}
           </p>
         </div>
       </Card>
@@ -188,7 +191,7 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {ruta.estado === "activa" && (
+      {ruta.estado === "activa" && ofreceBulto && (
         <Card className="space-y-2">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
             Precio final
@@ -223,7 +226,7 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {!esPropio && user && ruta.estado === "activa" && (
+      {!esPropio && user && ruta.estado === "activa" && ofreceBulto && (
         <Card className="bg-zinc-50">
           <ReservarRutaForm rutaId={ruta.id} />
         </Card>

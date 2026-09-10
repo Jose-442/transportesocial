@@ -34,15 +34,25 @@ describe("normalizeNuevaRutaDraft plazas", () => {
     const draft = normalizeNuevaRutaDraft({});
     expect(draft.plazas_acompanante).toBe("");
     expect(draft.plazas_marcadas).toBe(false);
+    expect(draft.tipo_oferta).toBe("");
   });
 
   it("quita el 1 que se guardaba solo, sin precio de acompañante", () => {
     const draft = normalizeNuevaRutaDraft({
-      espacio_tamano: "XXL (Mudanza completa)",
       plazas_acompanante: "1",
       precio_neto_plaza: "",
     });
     expect(draft.plazas_acompanante).toBe("");
+    expect(draft.tipo_oferta).toBe("");
+  });
+
+  it("si había espacio y no plazas, es solo bulto", () => {
+    const draft = normalizeNuevaRutaDraft({
+      espacio_tamano: "XXL (Mudanza completa)",
+      plazas_acompanante: "0",
+    });
+    expect(draft.tipo_oferta).toBe("solo_bulto");
+    expect(draft.plazas_acompanante).toBe("0");
   });
 
   it("conserva Solo bulto si ya estaba marcado", () => {
@@ -52,11 +62,21 @@ describe("normalizeNuevaRutaDraft plazas", () => {
   });
 
   it("conserva 1 plaza si el conductor ya puso precio", () => {
-    expect(
-      normalizeNuevaRutaDraft({
-        plazas_acompanante: "1",
-        precio_neto_plaza: "15",
-      }).plazas_acompanante
-    ).toBe("1");
+    const draft = normalizeNuevaRutaDraft({
+      plazas_acompanante: "1",
+      precio_neto_plaza: "15",
+    });
+    expect(draft.plazas_acompanante).toBe("1");
+    expect(draft.tipo_oferta).toBe("solo_pasajeros");
+  });
+
+  it("espacio y plazas con precio es bulto y pasajeros", () => {
+    const draft = normalizeNuevaRutaDraft({
+      espacio_tamano: "Pequeño (Maleta)",
+      plazas_acompanante: "2",
+      precio_neto_plaza: "10",
+    });
+    expect(draft.tipo_oferta).toBe("bulto_y_pasajeros");
+    expect(draft.plazas_acompanante).toBe("2");
   });
 });

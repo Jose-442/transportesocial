@@ -3,13 +3,18 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
-import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
+import { combinarEspacio, ESPACIO_OPCIONES, ESPACIO_SIN_BULTO } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
 import { perfilVehiculoIncompleto, ERROR_VEHICULO_INCOMPLETO } from "@/lib/vehiculo";
+import {
+  parseTipoOfertaRuta,
+  tipoOfertaLlevaBulto,
+  tipoOfertaLlevaPasajeros,
+} from "@/lib/ruta-oferta";
 import {
   assertCanPublish,
   consumePublicationCredit,
@@ -56,43 +61,60 @@ export async function crearRuta(formData: FormData) {
     return { error: ERROR_VEHICULO_INCOMPLETO };
   }
 
-  const precioNeto = parseFloat(String(formData.get("precio_neto")));
-  if (!precioNeto || precioNeto <= 0) {
-    return { error: "Indica un precio neto válido." };
+  const tipoOferta = parseTipoOfertaRuta(formData.get("tipo_oferta"));
+  if (!tipoOferta) {
+    return { error: "Marca si ofreces bulto, pasajeros o las dos cosas." };
   }
+  const conBulto = tipoOfertaLlevaBulto(tipoOferta);
+  const conPasajeros = tipoOfertaLlevaPasajeros(tipoOferta);
 
-  const precioPublicado = calcPrecioConComision(precioNeto);
+  let espacioDisponible = ESPACIO_SIN_BULTO;
+  let precioNeto = 0;
+  let precioPublicado = 0;
+  if (conBulto) {
+    precioNeto = parseFloat(String(formData.get("precio_neto")));
+    if (!precioNeto || precioNeto <= 0) {
+      return { error: "Indica un precio neto válido." };
+    }
+    precioPublicado = calcPrecioConComision(precioNeto);
 
-  const espacioTamano = String(formData.get("espacio_tamano")).trim();
-  if (!ESPACIO_OPCIONES.includes(espacioTamano as (typeof ESPACIO_OPCIONES)[number])) {
-    return { error: "Selecciona el espacio del que dispones." };
+    const espacioTamano = String(formData.get("espacio_tamano")).trim();
+    if (!ESPACIO_OPCIONES.includes(espacioTamano as (typeof ESPACIO_OPCIONES)[number])) {
+      return { error: "Selecciona el espacio del que dispones." };
+    }
+    espacioDisponible = combinarEspacio(
+      espacioTamano,
+      String(formData.get("espacio_detalle") ?? "")
+    );
   }
-  const espacioDisponible = combinarEspacio(
-    espacioTamano,
-    String(formData.get("espacio_detalle") ?? "")
-  );
 
   const plazasRaw = String(formData.get("plazas_acompanante") ?? "").trim();
   const plazasAcompanante = parseInt(plazasRaw, 10);
-  if (
-    plazasRaw === "" ||
-    !Number.isInteger(plazasAcompanante) ||
-    plazasAcompanante < 0 ||
-    plazasAcompanante > MAX_ASIENTOS_POR_VIAJE
-  ) {
-    return {
-      error: "Marca si ofreces plazas para pasajeros o solo bulto.",
-    };
+  if (conPasajeros) {
+    if (
+      !Number.isInteger(plazasAcompanante) ||
+      plazasAcompanante < 1 ||
+      plazasAcompanante > MAX_ASIENTOS_POR_VIAJE
+    ) {
+      return { error: "Marca cuántas plazas ofreces." };
+    }
+  } else if (plazasRaw !== "" && plazasRaw !== "0") {
+    return { error: "Marca si ofreces plazas para pasajeros o solo bulto." };
   }
 
   let precioNetoPlaza = 0;
   let precioPublicadoPlaza = 0;
-  if (plazasAcompanante > 0) {
+  if (conPasajeros) {
     precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
     if (!precioNetoPlaza || precioNetoPlaza <= 0) {
       return { error: "Indica un precio neto válido por plaza." };
     }
     precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
+  }
+
+  if (!conBulto && conPasajeros) {
+    precioNeto = precioNetoPlaza;
+    precioPublicado = precioPublicadoPlaza;
   }
 
   const origenInput = formatCiudad(String(formData.get("origen")));
@@ -121,7 +143,7 @@ export async function crearRuta(formData: FormData) {
 
   if (error) return { error: supabaseErrorMessage(error) };
 
-  if (plazasAcompanante > 0) {
+  if (conPasajeros) {
     const { error: ofertaError } = await supabase.from("ofertas_capacidad").insert({
       ruta_conductor_id: data.id,
       tipo: "asiento",

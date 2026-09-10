@@ -1,9 +1,16 @@
+export const ESPACIO_SIN_BULTO = "Sin espacio para bultos";
+
 export const ESPACIO_OPCIONES = [
   "Pequeño (Maleta)",
   "Medio (Frigorífico estándar)",
   "Más grande",
   "XXL (Mudanza completa)",
 ] as const;
+
+export function rutaOfreceBulto(espacio: string | null | undefined): boolean {
+  const valor = (espacio ?? "").trim();
+  return valor !== "" && valor !== ESPACIO_SIN_BULTO;
+}
 
 export type EspacioOpcion = (typeof ESPACIO_OPCIONES)[number];
 

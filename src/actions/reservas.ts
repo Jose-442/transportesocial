@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcComision } from "@/lib/pricing";
+import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
   aceptarReservaInterno,
   marcarEntregadoManual,
@@ -62,6 +63,10 @@ export async function solicitarReservaRuta(formData: FormData) {
 
   if (!ruta || ruta.estado !== "activa") {
     return { error: "Este viaje ya no está disponible." };
+  }
+
+  if (!rutaOfreceBulto(ruta.espacio_disponible)) {
+    return { error: "Este viaje no ofrece espacio para bultos." };
   }
 
   if (ruta.user_id === user.id) {
