@@ -33,7 +33,8 @@ export function AceptacionAutomaticaToggle({
       <span className="text-sm text-zinc-700">
         <strong className="text-zinc-900">Aceptación automática</strong>
         <br />
-        Las reservas en tus viajes se confirman al instante tras el pago.
+        Las reservas en tus viajes se confirman al instante tras el pago. Si no
+        lo marcas, tendrás que aceptarlas a mano.
       </span>
     </label>
   );
