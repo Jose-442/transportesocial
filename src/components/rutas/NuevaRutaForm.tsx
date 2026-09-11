@@ -445,14 +445,13 @@ export function NuevaRutaForm({
       )}
       {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
-          <p>
-            Para publicar una ruta necesitas indicar marca, modelo, año y
-            distintivo ambiental de tu vehículo.
+          <p className="uppercase">
+            Para publicar una ruta necesitas indicar los datos de tu vehículo
           </p>
           <ButtonLink href={cuentaHrefConVolver("/rutas/nueva")} className="mt-2">
             Datos de mi vehículo
           </ButtonLink>
-          <p className="mt-2">
+          <p className="mt-2 uppercase">
             Completar también los datos de tu perfil da confianza a tu viaje.
           </p>
         </div>
