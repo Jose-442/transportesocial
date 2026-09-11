@@ -389,8 +389,7 @@ export function NuevaRutaForm({
             )}
           </div>
           <p className="text-xs text-zinc-500">
-            Máximo {MAX_ASIENTOS_POR_VIAJE} plazas por viaje. Los circulitos
-            cambiarán a rojos cuando alguien reserve y pague una plaza.
+            Máximo {MAX_ASIENTOS_POR_VIAJE} plazas por viaje.
           </p>
           <div className="flex gap-2">
             {([1, 2, 3] as const).map((n) => (

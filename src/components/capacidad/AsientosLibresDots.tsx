@@ -20,49 +20,24 @@ export function AsientosLibresDots({
 }: Props) {
   const ofrecidasClamped = Math.min(max, Math.max(0, ofrecidas));
   const ocupadasClamped = Math.min(ofrecidasClamped, Math.max(0, ocupadas));
+  const libres = ofrecidasClamped - ocupadasClamped;
   const dotSize = sizeClasses[size];
 
   return (
     <div
       className="flex items-center gap-2"
       role="img"
-      aria-label={`${ofrecidasClamped - ocupadasClamped} asiento${
-        ofrecidasClamped - ocupadasClamped !== 1 ? "s" : ""
-      } libre${ofrecidasClamped - ocupadasClamped !== 1 ? "s" : ""} de ${ofrecidasClamped}`}
+      aria-label={`${libres} asiento${libres !== 1 ? "s" : ""} libre${
+        libres !== 1 ? "s" : ""
+      }`}
     >
-      {Array.from({ length: max }, (_, i) => {
-        const index = i + 1;
-        let estado: "libre" | "ocupada" | "no-ofrecida";
-        if (index > ofrecidasClamped) {
-          estado = "no-ofrecida";
-        } else if (index <= ocupadasClamped) {
-          estado = "ocupada";
-        } else {
-          estado = "libre";
-        }
-
-        const color =
-          estado === "libre"
-            ? "bg-emerald-500"
-            : estado === "ocupada"
-              ? "bg-red-500"
-              : "bg-zinc-200";
-
-        const label =
-          estado === "libre"
-            ? "libre"
-            : estado === "ocupada"
-              ? "ocupada"
-              : "no ofrecida";
-
-        return (
-          <span
-            key={i}
-            className={`inline-block rounded-full ${dotSize} ${color}`}
-            aria-label={`Plaza ${index}: ${label}`}
-          />
-        );
-      })}
+      {Array.from({ length: libres }, (_, i) => (
+        <span
+          key={i}
+          className={`inline-block rounded-full ${dotSize} bg-emerald-500`}
+          aria-label={`Plaza libre ${i + 1}`}
+        />
+      ))}
     </div>
   );
 }
