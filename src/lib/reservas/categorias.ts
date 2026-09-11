@@ -15,11 +15,20 @@ export const ESTADOS_ACEPTADOS: EstadoReserva[] = [
 
 export const ESTADOS_HISTORIAL: EstadoReserva[] = ["liberado", "cancelado"];
 
-export type ApartadoViajes = "propuestos" | "aceptados" | "historial";
+export type ApartadoViajes =
+  | "propuestos"
+  | "aceptados"
+  | "para_mi"
+  | "historial";
 
-export function apartadoReserva(estado: EstadoReserva): ApartadoViajes | null {
-  if (ESTADOS_PROPUESTOS.includes(estado)) return "propuestos";
-  if (ESTADOS_ACEPTADOS.includes(estado)) return "aceptados";
+export function apartadoReserva(
+  estado: EstadoReserva,
+  esCliente = false
+): ApartadoViajes | null {
   if (ESTADOS_HISTORIAL.includes(estado)) return "historial";
+  if (ESTADOS_PROPUESTOS.includes(estado)) return "propuestos";
+  if (ESTADOS_ACEPTADOS.includes(estado)) {
+    return esCliente ? "para_mi" : "aceptados";
+  }
   return null;
 }

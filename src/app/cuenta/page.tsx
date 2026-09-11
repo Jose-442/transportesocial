@@ -84,10 +84,6 @@ export default async function CuentaPage({
     loadMisPublicaciones(supabase, user.id),
   ]);
 
-  const tienePublicacionesActivas =
-    publicaciones.bultos.some((b) => b.estado === "activo") ||
-    publicaciones.rutas.some((r) => r.estado === "activa");
-
   const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
   const perfilCompactPc = volverTrasVehiculo !== null;
 
@@ -192,8 +188,7 @@ export default async function CuentaPage({
         <div>
           <h2 className="font-semibold text-zinc-900">Mis publicaciones</h2>
           <p className="mt-1 text-base text-zinc-600">
-            Tus anuncios activos. Cuando recibas propuestas, también las verás en
-            Mis viajes → Propuestos.
+            Tus anuncios activos. También los verás en Mis viajes → Propuestos.
           </p>
         </div>
         <MisPublicaciones
@@ -206,15 +201,15 @@ export default async function CuentaPage({
         <div>
           <h2 className="font-semibold text-zinc-900">Mis viajes</h2>
           <p className="mt-1 text-base text-zinc-600">
-            Reservas y propuestas de precio. Tus anuncios publicados están arriba,
-            en Mis publicaciones.
+            Lo que tú has propuesto, lo que te han pagado y lo que te ofrecen
+            para viajar.
           </p>
         </div>
         <MisViajesTabs
           propuestos={viajes.propuestos}
           aceptados={viajes.aceptados}
+          paraMi={viajes.paraMi}
           historial={viajes.historial}
-          tienePublicacionesActivas={tienePublicacionesActivas}
         />
       </Card>
 

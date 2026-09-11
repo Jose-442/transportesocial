@@ -30,11 +30,23 @@ export type OfertaViajeItem = {
   fecha: string;
 };
 
-export type ViajeListItem = ReservaViajeItem | OfertaViajeItem;
+export type PublicacionViajeItem = {
+  kind: "publicacion";
+  id: string;
+  tipo: "ruta" | "bulto";
+  titulo: string;
+  fecha: string;
+};
+
+export type ViajeListItem =
+  | ReservaViajeItem
+  | OfertaViajeItem
+  | PublicacionViajeItem;
 
 const TABS: { id: ApartadoViajes; label: string }[] = [
   { id: "propuestos", label: "Propuestos" },
   { id: "aceptados", label: "Aceptados" },
+  { id: "para_mi", label: "Para mí" },
   { id: "historial", label: "Historial" },
 ];
 
@@ -45,7 +57,7 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
         <div>
           <p className="font-semibold text-zinc-900">{item.titulo}</p>
           <p className="text-xs text-zinc-500">
-            {item.esCliente ? "Como cliente" : "Como conductor"} ·{" "}
+            {item.esCliente ? "Como pasajero" : "Como conductor"} ·{" "}
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
         </div>
@@ -74,8 +86,8 @@ function OfertaCard({ item }: { item: OfertaViajeItem }) {
           <p className="font-semibold text-zinc-900">{item.titulo}</p>
           <p className="text-sm text-zinc-600">
             {item.esRecibida
-              ? `Propuesta recibida para el viaje: ${item.titulo}`
-              : `Propuesta enviada para el viaje: ${item.titulo}`}
+              ? "Un conductor te ha puesto precio para este viaje."
+              : "Tú has puesto precio a este viaje."}
           </p>
         </div>
         <Badge tone="amber">Pendiente</Badge>
@@ -90,6 +102,32 @@ function OfertaCard({ item }: { item: OfertaViajeItem }) {
         className={CUENTA_BTN_SECONDARY}
       >
         VER PROPUESTA
+      </ButtonLink>
+    </Card>
+  );
+}
+
+function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
+  const href = item.tipo === "ruta" ? `/rutas/${item.id}` : `/bultos/${item.id}`;
+  return (
+    <Card className="space-y-2">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="font-semibold text-zinc-900">{item.titulo}</p>
+          <p className="text-xs text-zinc-500">
+            {item.tipo === "ruta" ? "Como conductor" : "Como pasajero"} ·{" "}
+            {new Date(item.fecha).toLocaleDateString("es-ES")}
+          </p>
+        </div>
+        <Badge tone="green">Publicado</Badge>
+      </div>
+      <ButtonLink
+        href={href}
+        fullWidth
+        variant="secondary"
+        className={CUENTA_BTN_SECONDARY}
+      >
+        Ver anuncio
       </ButtonLink>
     </Card>
   );
@@ -112,13 +150,15 @@ function ListaApartado({
 
   return (
     <div className="space-y-3">
-      {items.map((item) =>
-        item.kind === "reserva" ? (
-          <ReservaCard key={`r-${item.id}`} item={item} />
-        ) : (
-          <OfertaCard key={`o-${item.id}`} item={item} />
-        )
-      )}
+      {items.map((item) => {
+        if (item.kind === "reserva") {
+          return <ReservaCard key={`r-${item.id}`} item={item} />;
+        }
+        if (item.kind === "oferta") {
+          return <OfertaCard key={`o-${item.id}`} item={item} />;
+        }
+        return <PublicacionCard key={`p-${item.tipo}-${item.id}`} item={item} />;
+      })}
     </div>
   );
 }
@@ -126,28 +166,35 @@ function ListaApartado({
 export function MisViajesTabs({
   propuestos,
   aceptados,
+  paraMi,
   historial,
-  tienePublicacionesActivas = false,
 }: {
   propuestos: ViajeListItem[];
   aceptados: ViajeListItem[];
+  paraMi: ViajeListItem[];
   historial: ViajeListItem[];
-  tienePublicacionesActivas?: boolean;
 }) {
   const [tab, setTab] = useState<ApartadoViajes>("propuestos");
 
   const counts = {
     propuestos: propuestos.length,
     aceptados: aceptados.length,
+    para_mi: paraMi.length,
     historial: historial.length,
   };
 
-  const listas = { propuestos, aceptados, historial };
+  const listas: Record<ApartadoViajes, ViajeListItem[]> = {
+    propuestos,
+    aceptados,
+    para_mi: paraMi,
+    historial,
+  };
   const vacios: Record<ApartadoViajes, string> = {
-    propuestos: tienePublicacionesActivas
-      ? "Aún no hay propuestas de precio para tus solicitudes. Cuando un conductor proponga, aparecerá aquí. Mientras tanto, revisa tu anuncio arriba, en Mis publicaciones."
-      : "Aquí verás propuestas de precio y reservas pendientes de tu decisión o pago.",
-    aceptados: "No tienes viajes activos en este momento.",
+    propuestos: "Aún no has propuesto ningún viaje.",
+    aceptados:
+      "Aquí saldrán los viajes en los que un pasajero haya pagado una propuesta tuya.",
+    para_mi:
+      "Aquí saldrán los viajes en los que un conductor te haya puesto precio para que viajes tú.",
     historial: "Aún no hay viajes completados o cancelados.",
   };
 
@@ -165,13 +212,13 @@ export function MisViajesTabs({
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={[
-              "flex-1 rounded-lg px-2 py-2.5 text-center text-xs font-semibold transition-colors sm:text-sm",
+              "min-w-0 flex-1 rounded-lg px-1 py-2.5 text-center text-[11px] font-semibold leading-tight transition-colors sm:px-2 sm:text-sm",
               tab === t.id ? CUENTA_TAB_ACTIVE : CUENTA_TAB_INACTIVE,
             ].join(" ")}
           >
             {t.label}
             {counts[t.id] > 0 && (
-              <span className="ml-1 text-zinc-500">({counts[t.id]})</span>
+              <span className="ml-0.5 text-zinc-500">({counts[t.id]})</span>
             )}
           </button>
         ))}

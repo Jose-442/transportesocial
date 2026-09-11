@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
   OfertaViajeItem,
+  PublicacionViajeItem,
   ReservaViajeItem,
   ViajeListItem,
 } from "@/components/cuenta/MisViajesTabs";
@@ -42,17 +43,33 @@ function ordenarPorFecha(items: ViajeListItem[]): ViajeListItem[] {
 }
 
 export async function loadMisViajes(supabase: DbClient, userId: string) {
-  const [{ data: reservas }, { data: misBultos }] = await Promise.all([
-    supabase
-      .from("reservas")
-      .select("*")
-      .or(`cliente_id.eq.${userId},transportista_id.eq.${userId}`)
-      .order("created_at", { ascending: false }),
-    supabase.from("anuncios_bultos").select("id").eq("user_id", userId),
-  ]);
+  const [{ data: reservas }, { data: misBultos }, { data: misRutas }] =
+    await Promise.all([
+      supabase
+        .from("reservas")
+        .select("*")
+        .or(`cliente_id.eq.${userId},transportista_id.eq.${userId}`)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("anuncios_bultos")
+        .select("id, origen, destino, created_at, estado")
+        .eq("user_id", userId),
+      supabase
+        .from("rutas_conductores")
+        .select("id, origen, destino, created_at, estado")
+        .eq("user_id", userId),
+    ]);
 
   const lista = (reservas ?? []) as Reserva[];
-  const bultoIds = (misBultos ?? []).map((b) => b.id);
+  const bultos = (misBultos ?? []) as Pick<
+    AnuncioBulto,
+    "id" | "origen" | "destino" | "created_at" | "estado"
+  >[];
+  const rutas = (misRutas ?? []) as Pick<
+    RutaConductor,
+    "id" | "origen" | "destino" | "created_at" | "estado"
+  >[];
+  const bultoIds = bultos.map((b) => b.id);
 
   const rutaIds = lista
     .map((r) => r.ruta_conductor_id)
@@ -60,21 +77,47 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
 
   let rutasMap: Record<string, RutaConductor> = {};
   if (rutaIds.length > 0) {
-    const { data: rutas } = await supabase
+    const { data: rutasReserva } = await supabase
       .from("rutas_conductores")
       .select("id, origen, destino")
       .in("id", rutaIds);
     rutasMap = Object.fromEntries(
-      (rutas ?? []).map((r) => [r.id, r as RutaConductor])
+      (rutasReserva ?? []).map((r) => [r.id, r as RutaConductor])
     );
   }
 
   const propuestos: ViajeListItem[] = [];
   const aceptados: ViajeListItem[] = [];
+  const paraMi: ViajeListItem[] = [];
   const historial: ViajeListItem[] = [];
 
+  for (const ruta of rutas) {
+    if (ruta.estado !== "activa") continue;
+    const item: PublicacionViajeItem = {
+      kind: "publicacion",
+      id: ruta.id,
+      tipo: "ruta",
+      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      fecha: ruta.created_at,
+    };
+    propuestos.push(item);
+  }
+
+  for (const bulto of bultos) {
+    if (bulto.estado !== "activo") continue;
+    const item: PublicacionViajeItem = {
+      kind: "publicacion",
+      id: bulto.id,
+      tipo: "bulto",
+      titulo: `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`,
+      fecha: bulto.created_at,
+    };
+    propuestos.push(item);
+  }
+
   for (const r of lista) {
-    const apartado = apartadoReserva(r.estado);
+    const esCliente = r.cliente_id === userId;
+    const apartado = apartadoReserva(r.estado, esCliente);
     if (!apartado) continue;
 
     const item: ReservaViajeItem = {
@@ -83,12 +126,13 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       titulo: tituloReserva(r, rutasMap),
       precioTotal: Number(r.precio_total),
       estado: r.estado,
-      esCliente: r.cliente_id === userId,
+      esCliente,
       fecha: r.created_at,
     };
 
     if (apartado === "propuestos") propuestos.push(item);
     else if (apartado === "aceptados") aceptados.push(item);
+    else if (apartado === "para_mi") paraMi.push(item);
     else historial.push(item);
   }
 
@@ -111,29 +155,45 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   const ofertasEnviadas = (ofertasEnviadasData as OfertaConBulto[] | null) ?? [];
   const ofertasVistas = new Set<string>();
 
-  for (const o of [...ofertasRecibidas, ...ofertasEnviadas]) {
+  for (const o of ofertasEnviadas) {
     if (ofertasVistas.has(o.id)) continue;
     ofertasVistas.add(o.id);
-
     const item: OfertaViajeItem = {
       kind: "oferta",
       id: o.id,
       bultoId: o.anuncio_bulto_id,
       titulo: tituloOferta(o),
       precioTotal: Number(o.precio_total),
-      esRecibida: bultoIds.includes(o.anuncio_bulto_id),
+      esRecibida: false,
       fecha: o.created_at,
     };
     propuestos.push(item);
   }
 
+  for (const o of ofertasRecibidas) {
+    if (ofertasVistas.has(o.id)) continue;
+    ofertasVistas.add(o.id);
+    const item: OfertaViajeItem = {
+      kind: "oferta",
+      id: o.id,
+      bultoId: o.anuncio_bulto_id,
+      titulo: tituloOferta(o),
+      precioTotal: Number(o.precio_total),
+      esRecibida: true,
+      fecha: o.created_at,
+    };
+    paraMi.push(item);
+  }
+
   return {
     propuestos: ordenarPorFecha(propuestos),
     aceptados: ordenarPorFecha(aceptados),
+    paraMi: ordenarPorFecha(paraMi),
     historial: ordenarPorFecha(historial),
     todoVacio:
       propuestos.length === 0 &&
       aceptados.length === 0 &&
+      paraMi.length === 0 &&
       historial.length === 0,
   };
 }
