@@ -46,7 +46,7 @@ export type ViajeListItem =
 const TABS: { id: ApartadoViajes; label: string }[] = [
   { id: "propuestos", label: "Propuestos" },
   { id: "aceptados", label: "Aceptados" },
-  { id: "para_mi", label: "Aceptan conductores" },
+  { id: "para_mi", label: "Aceptaciones de conductores" },
   { id: "historial", label: "Historial" },
 ];
 
@@ -194,7 +194,7 @@ export function MisViajesTabs({
     aceptados:
       "Aquí saldrán los viajes en los que un pasajero haya pagado una propuesta tuya.",
     para_mi:
-      "Aquí saldrán los viajes que han aceptado conductores para que viajes tú.",
+      "Aquí saldrán las aceptaciones de conductores.",
     historial: "Aún no hay viajes completados o cancelados.",
   };
 

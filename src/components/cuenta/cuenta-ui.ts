@@ -2,7 +2,7 @@
 export const CUENTA_BTN_SECONDARY =
   "!border-emerald-300 !bg-emerald-50 !text-emerald-900 hover:!bg-emerald-100";
 
-/** Pestañas Mis viajes (Propuestos / Aceptados / Aceptan conductores / Historial). */
+/** Pestañas Mis viajes (Propuestos / Aceptados / Aceptaciones de conductores / Historial). */
 export const CUENTA_TABS_LIST = "border-zinc-300 bg-zinc-100";
 
 export const CUENTA_TAB_ACTIVE =
