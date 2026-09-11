@@ -46,7 +46,7 @@ export type ViajeListItem =
 const TABS: { id: ApartadoViajes; label: string }[] = [
   { id: "propuestos", label: "Propuestos" },
   { id: "aceptados", label: "Aceptados" },
-  { id: "para_mi", label: "Para mí" },
+  { id: "para_mi", label: "Aceptan conductores" },
   { id: "historial", label: "Historial" },
 ];
 
@@ -194,7 +194,7 @@ export function MisViajesTabs({
     aceptados:
       "Aquí saldrán los viajes en los que un pasajero haya pagado una propuesta tuya.",
     para_mi:
-      "Aquí saldrán los viajes en los que un conductor te haya puesto precio para que viajes tú.",
+      "Aquí saldrán los viajes que han aceptado conductores para que viajes tú.",
     historial: "Aún no hay viajes completados o cancelados.",
   };
 
@@ -212,7 +212,7 @@ export function MisViajesTabs({
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={[
-              "min-w-0 flex-1 rounded-lg px-1 py-2.5 text-center text-[11px] font-semibold leading-tight transition-colors sm:px-2 sm:text-sm",
+              "min-w-0 flex-1 rounded-lg px-0.5 py-2 text-center text-[10px] font-semibold leading-tight transition-colors sm:px-2 sm:py-2.5 sm:text-sm",
               tab === t.id ? CUENTA_TAB_ACTIVE : CUENTA_TAB_INACTIVE,
             ].join(" ")}
           >
