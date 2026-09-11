@@ -29,14 +29,15 @@ export default async function MisViajesPage() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Mis viajes</h1>
         <p className="mt-1 text-base text-zinc-600">
-          Lo que tú has propuesto, lo que tú has pagado y las aceptaciones de
-          conductores.
+          Lo que tú has propuesto, lo que has aceptado como conductor, lo que
+          tú has pagado y las aceptaciones de conductores.
         </p>
       </div>
 
       <MisViajesTabs
         propuestos={viajes.propuestos}
         aceptados={viajes.aceptados}
+        pagados={viajes.pagados}
         paraMi={viajes.paraMi}
         historial={viajes.historial}
       />

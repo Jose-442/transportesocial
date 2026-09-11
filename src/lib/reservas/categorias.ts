@@ -16,6 +16,7 @@ export const ESTADOS_HISTORIAL: EstadoReserva[] = ["liberado", "cancelado"];
 export type ApartadoViajes =
   | "propuestos"
   | "aceptados"
+  | "pagados"
   | "para_mi"
   | "historial";
 
@@ -26,7 +27,7 @@ export function apartadoReserva(
   if (ESTADOS_HISTORIAL.includes(estado)) return "historial";
   if (ESTADOS_PROPUESTOS.includes(estado)) return "propuestos";
   if (ESTADOS_ACEPTADOS.includes(estado)) {
-    return esCliente ? "aceptados" : "para_mi";
+    return esCliente ? "pagados" : "aceptados";
   }
   return null;
 }

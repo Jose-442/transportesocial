@@ -45,7 +45,8 @@ export type ViajeListItem =
 
 const TABS: { id: ApartadoViajes; label: string }[] = [
   { id: "propuestos", label: "Propuestos" },
-  { id: "aceptados", label: "Aceptados por mí" },
+  { id: "aceptados", label: "Aceptados por mí como conductor" },
+  { id: "pagados", label: "Pagados por mí" },
   { id: "para_mi", label: "Aceptaciones de conductores" },
   { id: "historial", label: "Historial" },
 ];
@@ -166,11 +167,13 @@ function ListaApartado({
 export function MisViajesTabs({
   propuestos,
   aceptados,
+  pagados,
   paraMi,
   historial,
 }: {
   propuestos: ViajeListItem[];
   aceptados: ViajeListItem[];
+  pagados: ViajeListItem[];
   paraMi: ViajeListItem[];
   historial: ViajeListItem[];
 }) {
@@ -179,6 +182,7 @@ export function MisViajesTabs({
   const counts = {
     propuestos: propuestos.length,
     aceptados: aceptados.length,
+    pagados: pagados.length,
     para_mi: paraMi.length,
     historial: historial.length,
   };
@@ -186,21 +190,23 @@ export function MisViajesTabs({
   const listas: Record<ApartadoViajes, ViajeListItem[]> = {
     propuestos,
     aceptados,
+    pagados,
     para_mi: paraMi,
     historial,
   };
   const vacios: Record<ApartadoViajes, string> = {
     propuestos: "Aún no has propuesto ningún viaje.",
-    aceptados: "Aquí saldrán los viajes que tú hayas pagado.",
+    aceptados: "Aquí saldrán los viajes que hayas aceptado como conductor.",
+    pagados: "Aquí saldrán los viajes que tú hayas pagado.",
     para_mi:
-      "Aquí saldrán las aceptaciones de conductores.",
+      "Aquí saldrán los viajes propuestos por ti y que algún conductor haya puesto precio.",
     historial: "Aún no hay viajes completados o cancelados.",
   };
 
   return (
     <div className="space-y-4">
       <div
-        className={`flex gap-1 rounded-xl border p-1 ${CUENTA_TABS_LIST}`}
+        className={`flex flex-wrap gap-1 rounded-xl border p-1 ${CUENTA_TABS_LIST}`}
         role="tablist"
       >
         {TABS.map((t) => (
@@ -211,7 +217,7 @@ export function MisViajesTabs({
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={[
-              "min-w-0 flex-1 rounded-lg px-0.5 py-2 text-center text-[10px] font-semibold leading-tight transition-colors sm:px-2 sm:py-2.5 sm:text-sm",
+              "min-w-[46%] flex-1 rounded-lg px-1 py-2 text-center text-[10px] font-semibold leading-tight transition-colors sm:min-w-0 sm:px-2 sm:py-2.5 sm:text-sm",
               tab === t.id ? CUENTA_TAB_ACTIVE : CUENTA_TAB_INACTIVE,
             ].join(" ")}
           >

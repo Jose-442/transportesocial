@@ -88,6 +88,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
 
   const propuestos: ViajeListItem[] = [];
   const aceptados: ViajeListItem[] = [];
+  const pagados: ViajeListItem[] = [];
   const paraMi: ViajeListItem[] = [];
   const historial: ViajeListItem[] = [];
 
@@ -132,6 +133,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
 
     if (apartado === "propuestos") propuestos.push(item);
     else if (apartado === "aceptados") aceptados.push(item);
+    else if (apartado === "pagados") pagados.push(item);
     else if (apartado === "para_mi") paraMi.push(item);
     else historial.push(item);
   }
@@ -188,11 +190,13 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   return {
     propuestos: ordenarPorFecha(propuestos),
     aceptados: ordenarPorFecha(aceptados),
+    pagados: ordenarPorFecha(pagados),
     paraMi: ordenarPorFecha(paraMi),
     historial: ordenarPorFecha(historial),
     todoVacio:
       propuestos.length === 0 &&
       aceptados.length === 0 &&
+      pagados.length === 0 &&
       paraMi.length === 0 &&
       historial.length === 0,
   };
