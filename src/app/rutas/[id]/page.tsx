@@ -14,6 +14,8 @@ import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos"
 import { hrefVolverListado } from "@/lib/listado-filters";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
@@ -280,7 +282,15 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {!user && (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
+      {esPropio && ruta.estado === "activa" && (
+        <p className="text-center text-sm text-zinc-600">
+          Este viaje lo has publicado tú.
+        </p>
+      )}
+
+      {!esPropio &&
+        !user &&
+        (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
         <p className="text-center text-sm text-zinc-600">
           <a href="/login" className="font-semibold text-emerald-700">
             Inicia sesión
