@@ -191,8 +191,7 @@ export function MisViajesTabs({
   };
   const vacios: Record<ApartadoViajes, string> = {
     propuestos: "Aún no has propuesto ningún viaje.",
-    aceptados:
-      "Aquí saldrán los viajes en los que un pasajero haya pagado una propuesta tuya.",
+    aceptados: "Aquí saldrán los viajes que tú hayas pagado.",
     para_mi:
       "Aquí saldrán las aceptaciones de conductores.",
     historial: "Aún no hay viajes completados o cancelados.",

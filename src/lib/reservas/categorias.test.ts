@@ -7,14 +7,15 @@ describe("apartadoReserva", () => {
     expect(apartadoReserva("pendiente_pago", true)).toBe("propuestos");
   });
 
-  it("si un pasajero pagó tu propuesta, va a Aceptados", () => {
-    expect(apartadoReserva("pagado_escrow", false)).toBe("aceptados");
-    expect(apartadoReserva("confirmada", false)).toBe("aceptados");
+  it("si tú has pagado, va a Aceptados por mí", () => {
+    expect(apartadoReserva("pagado_escrow", true)).toBe("aceptados");
+    expect(apartadoReserva("confirmada", true)).toBe("aceptados");
+    expect(apartadoReserva("pendiente_aprobacion", true)).toBe("aceptados");
   });
 
-  it("si un conductor te lleva a ti, va a Para mí", () => {
-    expect(apartadoReserva("pagado_escrow", true)).toBe("para_mi");
-    expect(apartadoReserva("confirmada", true)).toBe("para_mi");
+  it("si eres conductor y te han aceptado el viaje, va a Aceptaciones de conductores", () => {
+    expect(apartadoReserva("pagado_escrow", false)).toBe("para_mi");
+    expect(apartadoReserva("confirmada", false)).toBe("para_mi");
   });
 
   it("lo cerrado va a Historial", () => {

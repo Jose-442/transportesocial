@@ -29,7 +29,7 @@ export default async function MisViajesPage() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Mis viajes</h1>
         <p className="mt-1 text-base text-zinc-600">
-          Lo que tú has propuesto, lo que te han pagado y las aceptaciones de
+          Lo que tú has propuesto, lo que tú has pagado y las aceptaciones de
           conductores.
         </p>
       </div>
