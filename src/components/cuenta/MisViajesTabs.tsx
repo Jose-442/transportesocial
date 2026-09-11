@@ -45,7 +45,7 @@ export type ViajeListItem =
 
 const TABS: { id: ApartadoViajes; label: string }[] = [
   { id: "propuestos", label: "Propuestos" },
-  { id: "aceptados", label: "Aceptados" },
+  { id: "aceptados", label: "Aceptados por mí" },
   { id: "para_mi", label: "Aceptaciones de conductores" },
   { id: "historial", label: "Historial" },
 ];
