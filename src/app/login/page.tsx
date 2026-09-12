@@ -40,7 +40,9 @@ export default async function LoginPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
+      <h1 className="text-2xl font-bold text-zinc-900">
+        Entrar (Solo si ya tienes cuenta)
+      </h1>
       {contrasenaActualizada && (
         <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
           Contraseña actualizada. Ya puedes entrar.
