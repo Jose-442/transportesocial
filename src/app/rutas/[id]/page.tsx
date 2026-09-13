@@ -212,13 +212,15 @@ export default async function RutaDetallePage({
       {ruta.estado === "activa" && ofreceBulto && (
         <Card className="space-y-2">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Precio final
+            Precio del bulto
           </p>
           <p className="text-3xl font-bold text-emerald-700">
             {formatEur(Number(ruta.precio_publicado))}
           </p>
           <p className="text-xs text-zinc-500">
-            Gastos compartidos con comisión incluida.
+            {tieneAsientos
+              ? "Solo el bulto, con comisión incluida. Las plazas tienen su precio aparte."
+              : "Gastos compartidos con comisión incluida."}
           </p>
         </Card>
       )}
