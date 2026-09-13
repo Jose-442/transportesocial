@@ -17,10 +17,9 @@ export function CancelarPublicacionButton({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pideConfirmacion, setPideConfirmacion] = useState(false);
 
-  async function handleClick() {
-    if (!confirm("¿Cancelar este anuncio?")) return;
-
+  async function confirmarCancelacion() {
     setLoading(true);
     setError(null);
 
@@ -36,7 +35,41 @@ export function CancelarPublicacionButton({
       return;
     }
 
+    setPideConfirmacion(false);
     router.refresh();
+  }
+
+  if (pideConfirmacion) {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-zinc-800">
+          ¿Seguro que quieres quitar este anuncio?
+        </p>
+        <Button
+          type="button"
+          variant="danger"
+          fullWidth
+          disabled={loading}
+          onClick={confirmarCancelacion}
+        >
+          {loading ? "Quitando…" : "Sí, quitar el anuncio"}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          fullWidth
+          className={CUENTA_BTN_SECONDARY}
+          disabled={loading}
+          onClick={() => {
+            setPideConfirmacion(false);
+            setError(null);
+          }}
+        >
+          No, dejarlo publicado
+        </Button>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+      </div>
+    );
   }
 
   return (
@@ -47,9 +80,12 @@ export function CancelarPublicacionButton({
         fullWidth
         className={CUENTA_BTN_SECONDARY}
         disabled={loading}
-        onClick={handleClick}
+        onClick={() => {
+          setError(null);
+          setPideConfirmacion(true);
+        }}
       >
-        {loading ? "Cancelando…" : "Cancelar anuncio"}
+        Cancelar anuncio
       </Button>
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
