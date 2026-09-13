@@ -142,8 +142,8 @@ export default function QuienesSomosPage() {
             </li>
             <li>
               Si no hay reclamación en ese plazo, el pago correspondiente al
-              conductor se libera automáticamente (menos la comisión de la
-              plataforma).
+              conductor se libera automáticamente (menos los gastos de gestión de
+              la plataforma).
             </li>
             <li>
               Al abrir una reclamación, el dinero queda <strong>congelado</strong>{" "}

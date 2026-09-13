@@ -148,8 +148,8 @@ export function AnadirCapacidadForm({
         required
         hint={
           tipo === "asiento"
-            ? "Precio por plaza; la comisión se añade al publicar."
-            : "Precio neto del bulto; la comisión se añade al publicar."
+            ? "Precio por plaza; los gastos de gestión se añaden al publicar."
+            : "Precio neto del bulto; los gastos de gestión se añaden al publicar."
         }
       />
 

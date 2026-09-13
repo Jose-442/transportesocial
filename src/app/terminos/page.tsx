@@ -207,7 +207,7 @@ export default function TerminosPage() {
             </li>
             <li>
               Si no se abre reclamación en ese plazo, el importe correspondiente
-              al Conductor (menos la comisión del {COMMISSION_PERCENT_LABEL}) se libera
+              al Conductor (menos los gastos de gestión del {COMMISSION_PERCENT_LABEL}) se libera
               automáticamente a su saldo en la Plataforma.
             </li>
             <li>

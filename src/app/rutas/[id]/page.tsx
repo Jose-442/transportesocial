@@ -219,8 +219,8 @@ export default async function RutaDetallePage({
           </p>
           <p className="text-xs text-zinc-500">
             {tieneAsientos
-              ? "Solo el bulto, con comisión incluida. Las plazas tienen su precio aparte."
-              : "Gastos compartidos con comisión incluida."}
+              ? "Solo el bulto, con gastos de gestión incluidos. Las plazas tienen su precio aparte."
+              : "Gastos compartidos, con gastos de gestión incluidos."}
           </p>
         </Card>
       )}
