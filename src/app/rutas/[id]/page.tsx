@@ -199,12 +199,17 @@ export default async function RutaDetallePage({
           {ofertas
             .filter((o) => o.tipo === "asiento")
             .map((o) => (
-              <p key={o.id} className="text-sm text-zinc-600">
-                Precio por plaza:{" "}
-                <span className="font-semibold text-emerald-700">
-                  {formatEur(Number(o.precio_publicado))}
-                </span>
-              </p>
+              <div key={o.id} className="space-y-1">
+                <p className="text-sm text-zinc-600">
+                  Precio por plaza:{" "}
+                  <span className="font-semibold text-emerald-700">
+                    {formatEur(Number(o.precio_publicado))}
+                  </span>
+                </p>
+                <p className="text-xs text-zinc-500">
+                  Gastos de gestión incluidos.
+                </p>
+              </div>
             ))}
         </Card>
       )}
@@ -219,8 +224,8 @@ export default async function RutaDetallePage({
           </p>
           <p className="text-xs text-zinc-500">
             {tieneAsientos
-              ? "Solo el bulto, con gastos de gestión incluidos. Las plazas tienen su precio aparte."
-              : "Gastos compartidos, con gastos de gestión incluidos."}
+              ? "Gastos de gestión incluidos. Las plazas tienen su precio aparte."
+              : "Gastos de gestión incluidos."}
           </p>
         </Card>
       )}
