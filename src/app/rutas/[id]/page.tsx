@@ -12,6 +12,7 @@ import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
 import { hrefVolverListado } from "@/lib/listado-filters";
+import { loadPerfilPublico } from "@/lib/profile";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +50,8 @@ export default async function RutaDetallePage({
   if (!data) notFound();
   const ruta = data as RutaConductor;
   const esPropio = user?.id === ruta.user_id;
+  const proponente = await loadPerfilPublico(supabase, ruta.user_id);
+  const nombreProponente = proponente?.display_name?.trim() || "Usuario";
 
   const { data: ofertasRaw } = await supabase
     .from("ofertas_capacidad")
@@ -112,6 +115,19 @@ export default async function RutaDetallePage({
         <p className="text-sm font-semibold text-zinc-800">
           Detalle del trayecto
         </p>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-zinc-500">
+            Propuesto por
+          </p>
+          <p className="mt-1 text-sm font-medium text-zinc-900">
+            <Link
+              href={`/perfil/${ruta.user_id}`}
+              className="font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              {nombreProponente}
+            </Link>
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <p className="text-xs uppercase tracking-wide text-zinc-500">

@@ -45,6 +45,8 @@ export default async function BultoDetallePage({
   if (!data) notFound();
   const bulto = data as AnuncioBulto;
   const esDueno = user?.id === bulto.user_id;
+  const proponente = await loadPerfilPublico(supabase, bulto.user_id);
+  const nombreProponente = proponente?.display_name?.trim() || "Usuario";
   const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
   const necesitaBulto = incluyeBulto(tipoSolicitud);
 
@@ -129,6 +131,19 @@ export default async function BultoDetallePage({
         <p className="text-sm font-semibold text-zinc-800">
           Detalle del viaje ({labelTipoSolicitud(tipoSolicitud)})
         </p>
+        <div>
+          <p className="text-sm uppercase tracking-wide text-zinc-500">
+            Propuesto por
+          </p>
+          <p className="mt-1 text-sm font-medium text-zinc-900">
+            <Link
+              href={`/perfil/${bulto.user_id}`}
+              className="font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              {nombreProponente}
+            </Link>
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <p className="text-sm uppercase tracking-wide text-zinc-500">
