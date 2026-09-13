@@ -100,8 +100,21 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       tipo: "ruta",
       titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.created_at,
+      estado: "publicado",
     };
     propuestos.push(item);
+  }
+
+  for (const ruta of rutas) {
+    if (ruta.estado !== "cancelada") continue;
+    historial.push({
+      kind: "publicacion",
+      id: ruta.id,
+      tipo: "ruta",
+      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      fecha: ruta.created_at,
+      estado: "cancelado",
+    });
   }
 
   for (const bulto of bultos) {
@@ -112,8 +125,21 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       tipo: "bulto",
       titulo: `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`,
       fecha: bulto.created_at,
+      estado: "publicado",
     };
     propuestos.push(item);
+  }
+
+  for (const bulto of bultos) {
+    if (bulto.estado !== "cancelado") continue;
+    historial.push({
+      kind: "publicacion",
+      id: bulto.id,
+      tipo: "bulto",
+      titulo: `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`,
+      fecha: bulto.created_at,
+      estado: "cancelado",
+    });
   }
 
   for (const r of lista) {

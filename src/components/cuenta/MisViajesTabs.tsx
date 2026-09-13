@@ -36,6 +36,7 @@ export type PublicacionViajeItem = {
   tipo: "ruta" | "bulto";
   titulo: string;
   fecha: string;
+  estado: "publicado" | "cancelado";
 };
 
 export type ViajeListItem =
@@ -120,7 +121,9 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
         </div>
-        <Badge tone="green">Publicado</Badge>
+        <Badge tone={item.estado === "cancelado" ? "zinc" : "green"}>
+          {item.estado === "cancelado" ? "Cancelado" : "Publicado"}
+        </Badge>
       </div>
       <ButtonLink
         href={href}

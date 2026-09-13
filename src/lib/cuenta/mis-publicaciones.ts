@@ -48,8 +48,15 @@ export async function loadMisPublicaciones(
       .order("created_at", { ascending: false }),
   ]);
 
+  const bultos = ((bultosRaw as AnuncioBulto[]) ?? []).filter(
+    (b) => b.estado !== "cancelado"
+  );
+  const rutas = ((rutasRaw as RutaConductor[]) ?? []).filter(
+    (r) => r.estado !== "cancelada"
+  );
+
   return {
-    bultos: ordenarBultos((bultosRaw as AnuncioBulto[]) ?? []),
-    rutas: ordenarRutas((rutasRaw as RutaConductor[]) ?? []),
+    bultos: ordenarBultos(bultos),
+    rutas: ordenarRutas(rutas),
   };
 }
