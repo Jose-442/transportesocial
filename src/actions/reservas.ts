@@ -127,6 +127,133 @@ export async function solicitarReservaRuta(formData: FormData) {
   return { checkoutUrl: checkout.url, reservaId: reserva.id };
 }
 
+export async function solicitarReservaViaje(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: "Debes iniciar sesión para reservar." };
+
+  const rutaId = String(formData.get("ruta_id"));
+  const descripcion = String(formData.get("bulto_descripcion") ?? "").trim();
+  const medidas = String(formData.get("bulto_medidas") ?? "").trim();
+  const cantidadRaw = Number(formData.get("cantidad") ?? 0);
+  const cantidadPlazas =
+    Number.isInteger(cantidadRaw) && cantidadRaw > 0 ? cantidadRaw : 0;
+  const ofertaId = String(formData.get("oferta_id") ?? "");
+
+  const { data: ruta } = await supabase
+    .from("rutas_conductores")
+    .select("*")
+    .eq("id", rutaId)
+    .single();
+
+  if (!ruta || ruta.estado !== "activa") {
+    return { error: "Este viaje ya no está disponible." };
+  }
+
+  if (ruta.user_id === user.id) {
+    return { error: "No puedes reservar tu propio viaje." };
+  }
+
+  const conBulto = rutaOfreceBulto(ruta.espacio_disponible) && descripcion.length > 0;
+  if (!conBulto && cantidadPlazas < 1) {
+    return {
+      error: rutaOfreceBulto(ruta.espacio_disponible)
+        ? "Describe el bulto o elige al menos una plaza."
+        : "Elige al menos una plaza.",
+    };
+  }
+
+  if (rutaOfreceBulto(ruta.espacio_disponible) && !descripcion && cantidadPlazas < 1) {
+    return { error: "Describe el bulto o elige al menos una plaza." };
+  }
+
+  let reservaPrincipalId: string | null = null;
+
+  if (conBulto) {
+    const { data: activa } = await supabase
+      .from("reservas")
+      .select("id")
+      .eq("ruta_conductor_id", rutaId)
+      .eq("tipo", "ruta_directa")
+      .in("estado", [
+        "pendiente_pago",
+        "pendiente_aprobacion",
+        "confirmada",
+        "pagado_escrow",
+        "en_transito",
+        "entregado",
+        "disputa",
+      ])
+      .maybeSingle();
+
+    if (activa) {
+      return { error: "Este viaje ya tiene una reserva de bulto activa." };
+    }
+
+    const precioNeto = Number(ruta.precio_neto);
+    const precioTotal = Number(ruta.precio_publicado);
+    const { data: reserva, error } = await supabase
+      .from("reservas")
+      .insert({
+        tipo: "ruta_directa",
+        ruta_conductor_id: rutaId,
+        transportista_id: ruta.user_id,
+        cliente_id: user.id,
+        precio_neto: precioNeto,
+        precio_total: precioTotal,
+        comision_plataforma: calcComision(precioNeto),
+        estado: "pendiente_pago",
+        fecha_llegada_prevista: ruta.fecha_llegada_prevista,
+        bulto_descripcion: descripcion,
+        bulto_medidas: medidas || null,
+      })
+      .select("id")
+      .single();
+
+    if (error || !reserva) {
+      return { error: supabaseErrorMessage(error) };
+    }
+    reservaPrincipalId = reserva.id;
+  }
+
+  if (cantidadPlazas >= 1) {
+    const plazaForm = new FormData();
+    plazaForm.set("oferta_id", ofertaId);
+    plazaForm.set("cantidad", String(cantidadPlazas));
+    const plaza = await solicitarReservaCapacidadSinCheckout(plazaForm);
+    if ("error" in plaza && plaza.error) {
+      return { error: plaza.error, reservaId: reservaPrincipalId ?? undefined };
+    }
+    if (!reservaPrincipalId && plaza.reservaId) {
+      reservaPrincipalId = plaza.reservaId;
+    }
+  }
+
+  if (!reservaPrincipalId) {
+    return { error: "No se pudo crear la reserva." };
+  }
+
+  const checkout = await createTripCheckoutSession(reservaPrincipalId);
+  if (!checkout.ok) {
+    return { error: checkout.error, reservaId: reservaPrincipalId };
+  }
+
+  revalidatePath(`/rutas/${rutaId}`);
+  return { checkoutUrl: checkout.url, reservaId: reservaPrincipalId };
+}
+
+async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise<
+  { error: string } | { reservaId: string }
+> {
+  const result = await solicitarReservaCapacidad(formData, { conPago: false });
+  if (result.error) return { error: result.error };
+  if (!result.reservaId) return { error: "No se pudo crear la reserva de plazas." };
+  return { reservaId: result.reservaId };
+}
+
 export async function iniciarPagoReserva(reservaId: string): Promise<void> {
   const checkout = await createTripCheckoutSession(reservaId);
   if (checkout.ok) {
@@ -336,7 +463,10 @@ export async function prepararReservaBulto(ofertaId: string) {
   return { checkoutUrl: checkout.url, reservaId: reserva.id };
 }
 
-export async function solicitarReservaCapacidad(formData: FormData) {
+export async function solicitarReservaCapacidad(
+  formData: FormData,
+  opts?: { conPago?: boolean }
+) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -345,9 +475,9 @@ export async function solicitarReservaCapacidad(formData: FormData) {
   if (!user) return { error: "Debes iniciar sesión para reservar." };
 
   const ofertaId = String(formData.get("oferta_id"));
-  const cantidadRaw = Number(formData.get("cantidad") ?? 1);
+  const cantidadRaw = Number(formData.get("cantidad") ?? 0);
   const cantidad =
-    Number.isInteger(cantidadRaw) && cantidadRaw >= 1 ? cantidadRaw : 1;
+    Number.isInteger(cantidadRaw) && cantidadRaw >= 1 ? cantidadRaw : 0;
 
   const descripcion = String(formData.get("bulto_descripcion") ?? "").trim();
   const medidas = String(formData.get("bulto_medidas") ?? "").trim();
@@ -387,6 +517,9 @@ export async function solicitarReservaCapacidad(formData: FormData) {
   }
 
   const plazasLibres = oferta.plazas_totales - oferta.plazas_ocupadas;
+  if (oferta.tipo === "asiento" && cantidad < 1) {
+    return { error: "Elige cuántas plazas quieres." };
+  }
   if (plazasLibres < cantidad) {
     return { error: "No hay suficientes plazas disponibles." };
   }
@@ -450,6 +583,11 @@ export async function solicitarReservaCapacidad(formData: FormData) {
 
   if (error || !reserva) {
     return { error: supabaseErrorMessage(error) };
+  }
+
+  if (opts?.conPago === false) {
+    revalidatePath(`/rutas/${ruta.id}`);
+    return { reservaId: reserva.id };
   }
 
   const checkout = await createTripCheckoutSession(reserva.id);

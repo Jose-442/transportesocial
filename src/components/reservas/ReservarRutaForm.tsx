@@ -4,18 +4,50 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
-import { solicitarReservaRuta } from "@/actions/reservas";
+import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
+import { solicitarReservaViaje } from "@/actions/reservas";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
+import { formatEur } from "@/lib/pricing";
+import { plazasLibresOferta } from "@/lib/capacidad/asientos";
+import type { OfertaCapacidad } from "@/types/database";
 
-export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
+export function ReservarRutaForm({
+  rutaId,
+  ofreceBulto,
+  precioBulto,
+  ofertas,
+}: {
+  rutaId: string;
+  ofreceBulto: boolean;
+  precioBulto: number | null;
+  ofertas: OfertaCapacidad[];
+}) {
   const router = useRouter();
+  const ofertaAsiento = ofertas.find(
+    (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
+  );
+  const plazasLibres = ofertaAsiento ? plazasLibresOferta(ofertaAsiento) : 0;
+  const precioPlaza = ofertaAsiento
+    ? Number(ofertaAsiento.precio_publicado)
+    : null;
+
   const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
     bulto_descripcion: "",
     bulto_medidas: "",
+    plazas: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const cantidad = Math.min(
+    plazasLibres,
+    Math.max(0, Number.parseInt(form.plazas, 10) || 0)
+  );
+  const llevaBulto = ofreceBulto && form.bulto_descripcion.trim().length > 0;
+  const total =
+    (llevaBulto && precioBulto != null ? precioBulto : 0) +
+    (precioPlaza != null ? precioPlaza * cantidad : 0);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,8 +56,10 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
 
     const formData = new FormData(e.currentTarget);
     formData.set("ruta_id", rutaId);
+    formData.set("cantidad", String(cantidad));
+    if (ofertaAsiento) formData.set("oferta_id", ofertaAsiento.id);
 
-    const result = await solicitarReservaRuta(formData);
+    const result = await solicitarReservaViaje(formData);
     setLoading(false);
 
     if (result.error) {
@@ -48,28 +82,58 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-600">
-        Describe tu bulto y paga para reservar. La coordinación será por el chat
-        interno una vez confirmada la reserva.
+        La coordinación con el conductor será por el chat interno una vez hecha
+        la reserva.
       </p>
-      <Textarea
-        label="Descripción del bulto"
-        name="bulto_descripcion"
-        required
-        placeholder="Ej. caja mediana con ropa, frágil"
-        value={form.bulto_descripcion}
-        onChange={(e) =>
-          setForm((prev) => ({ ...prev, bulto_descripcion: e.target.value }))
-        }
-      />
-      <Input
-        label="Medidas aproximadas (opcional)"
-        name="bulto_medidas"
-        placeholder="Ej. 40×30×25 cm"
-        value={form.bulto_medidas}
-        onChange={(e) =>
-          setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
-        }
-      />
+      {ofreceBulto && (
+        <>
+          <Textarea
+            label="Descripción del bulto"
+            name="bulto_descripcion"
+            required={plazasLibres <= 0}
+            placeholder="Ej. caja mediana con ropa, frágil"
+            value={form.bulto_descripcion}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, bulto_descripcion: e.target.value }))
+            }
+          />
+          <Input
+            label="Medidas aproximadas (opcional)"
+            name="bulto_medidas"
+            placeholder="Ej. 40×30×25 cm"
+            value={form.bulto_medidas}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
+            }
+          />
+        </>
+      )}
+      {plazasLibres > 0 && ofertaAsiento && (
+        <Input
+          label="Número de plazas"
+          labelRight={
+            <AsientosLibresDots
+              ofrecidas={ofertaAsiento.plazas_totales}
+              ocupadas={ofertaAsiento.plazas_ocupadas}
+            />
+          }
+          name="cantidad_ui"
+          type="number"
+          min={0}
+          max={plazasLibres}
+          placeholder="Elige 1, 2 o 3"
+          value={form.plazas}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, plazas: e.target.value }))
+          }
+          hint={`Plazas libres ahora: ${plazasLibres}. Déjalo vacío si no viajas de pasajero.`}
+        />
+      )}
+      {total > 0 && (
+        <p className="text-sm font-semibold text-emerald-700">
+          Total: {formatEur(total)}
+        </p>
+      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button type="submit" fullWidth disabled={loading}>
         {loading ? "Preparando pago…" : "Pagar y solicitar reserva"}

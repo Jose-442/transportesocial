@@ -12,7 +12,8 @@ type AdminClient = SupabaseClient;
 export async function confirmarPagoReserva(
   admin: AdminClient,
   paymentIntentId: string,
-  reservaId: string
+  reservaId: string,
+  opts?: { omitirImporte?: boolean }
 ): Promise<{ error?: string }> {
   const stripe = getStripeServer();
   const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -37,15 +38,18 @@ export async function confirmarPagoReserva(
     return {};
   }
 
-  const expectedCents = Math.round(Number(r.precio_total) * 100);
-  if (intent.amount !== expectedCents || intent.currency !== "eur") {
-    return { error: "Importe de pago no válido." };
+  if (!opts?.omitirImporte) {
+    const expectedCents = Math.round(Number(r.precio_total) * 100);
+    if (intent.amount !== expectedCents || intent.currency !== "eur") {
+      return { error: "Importe de pago no válido." };
+    }
   }
 
   const { data: existingTx } = await admin
     .from("transacciones")
     .select("id")
     .eq("stripe_payment_intent_id", paymentIntentId)
+    .eq("reserva_id", reservaId)
     .maybeSingle();
 
   if (!existingTx) {
@@ -74,6 +78,43 @@ export async function confirmarPagoReserva(
   }
 
   return confirmarReservaRuta(admin, r);
+}
+
+export async function confirmarPagoReservas(
+  admin: AdminClient,
+  paymentIntentId: string,
+  reservaIds: string[]
+): Promise<{ error?: string }> {
+  const ids = [...new Set(reservaIds.filter(Boolean))];
+  if (ids.length === 0) {
+    return { error: "Reserva no encontrada." };
+  }
+  if (ids.length === 1) {
+    return confirmarPagoReserva(admin, paymentIntentId, ids[0]);
+  }
+
+  const stripe = getStripeServer();
+  const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  if (intent.status !== "succeeded") {
+    return { error: "El pago no se ha completado." };
+  }
+
+  const { data: filas } = await admin.from("reservas").select("*").in("id", ids);
+  const reservas = (filas ?? []) as Reserva[];
+  const esperado = Math.round(
+    reservas.reduce((sum, item) => sum + Number(item.precio_total), 0) * 100
+  );
+  if (intent.amount !== esperado || intent.currency !== "eur") {
+    return { error: "Importe de pago no válido." };
+  }
+
+  for (const item of reservas) {
+    const result = await confirmarPagoReserva(admin, paymentIntentId, item.id, {
+      omitirImporte: true,
+    });
+    if (result.error) return result;
+  }
+  return {};
 }
 
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {

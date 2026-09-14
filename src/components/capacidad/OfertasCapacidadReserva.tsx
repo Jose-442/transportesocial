@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
+import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
@@ -41,16 +42,17 @@ export function OfertasCapacidadReserva({
   });
 
   const [ofertaId, setOfertaId] = useState(disponibles[0]?.id ?? "");
-  const [cantidad, setCantidad] = useState(1);
+  const [cantidad, setCantidad] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
+  const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const esAsiento = ofertaSel?.tipo === "asiento";
   const total =
-    ofertaSel && cantidad > 0
-      ? Number(ofertaSel.precio_publicado) * cantidad
+    ofertaSel && plazasElegidas > 0
+      ? Number(ofertaSel.precio_publicado) * plazasElegidas
       : 0;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -62,7 +64,7 @@ export function OfertasCapacidadReserva({
 
     const formData = new FormData(e.currentTarget);
     formData.set("oferta_id", ofertaSel.id);
-    formData.set("cantidad", String(cantidad));
+    formData.set("cantidad", String(plazasElegidas));
 
     const result = await solicitarReservaCapacidad(formData);
     setLoading(false);
@@ -98,7 +100,7 @@ export function OfertasCapacidadReserva({
           value={ofertaId}
           onChange={(e) => {
             setOfertaId(e.target.value);
-            setCantidad(1);
+            setCantidad("");
           }}
           className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
           required
@@ -112,20 +114,23 @@ export function OfertasCapacidadReserva({
         </select>
       </label>
 
-      {esAsiento && maxCantidad > 1 && (
+      {esAsiento && ofertaSel && maxCantidad >= 1 && (
         <Input
           label="Número de plazas"
+          labelRight={
+            <AsientosLibresDots
+              ofrecidas={ofertaSel.plazas_totales}
+              ocupadas={ofertaSel.plazas_ocupadas}
+            />
+          }
           name="cantidad_ui"
           type="number"
-          min={1}
+          min={0}
           max={maxCantidad}
+          placeholder="Elige 1, 2 o 3"
           value={cantidad}
-          onChange={(e) =>
-            setCantidad(
-              Math.min(maxCantidad, Math.max(1, Number(e.target.value) || 1))
-            )
-          }
-          hint={`Hasta ${maxCantidad} plazas en esta oferta.`}
+          onChange={(e) => setCantidad(e.target.value)}
+          hint={`Plazas libres ahora: ${maxCantidad}.`}
         />
       )}
 

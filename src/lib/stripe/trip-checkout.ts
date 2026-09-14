@@ -24,7 +24,7 @@ export async function createTripCheckoutSession(
 
   const { data: reserva, error } = await supabase
     .from("reservas")
-    .select("id, cliente_id, precio_total, estado")
+    .select("id, cliente_id, precio_total, estado, ruta_conductor_id")
     .eq("id", reservaId)
     .single();
 
@@ -40,12 +40,34 @@ export async function createTripCheckoutSession(
     return { ok: false, error: "Esta reserva ya no está pendiente de pago." };
   }
 
+  let cobros = [
+    { id: reserva.id, precio_total: Number(reserva.precio_total) },
+  ];
+  if (reserva.ruta_conductor_id) {
+    const { data: hermanas } = await supabase
+      .from("reservas")
+      .select("id, precio_total")
+      .eq("cliente_id", user.id)
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+      .eq("estado", "pendiente_pago");
+    if (hermanas && hermanas.length > 0) {
+      cobros = hermanas.map((r) => ({
+        id: r.id,
+        precio_total: Number(r.precio_total),
+      }));
+    }
+  }
+
   const origin = await getRequestOrigin();
   const stripe = getStripeServer();
-  const amountCents = Math.round(Number(reserva.precio_total) * 100);
+  const amountCents = Math.round(
+    cobros.reduce((sum, r) => sum + r.precio_total, 0) * 100
+  );
+  const reservaIds = cobros.map((r) => r.id).join(",");
   const metadata = {
     user_id: user.id,
     reserva_id: reservaId,
+    reserva_ids: reservaIds,
     tipo: "cobro_viaje",
   };
 
@@ -98,7 +120,12 @@ export async function completeTripCheckout(
     return { error: "El pago no se ha completado." };
   }
 
-  if (session.metadata?.reserva_id !== reservaId) {
+  const idsMeta = session.metadata?.reserva_ids ?? session.metadata?.reserva_id;
+  const ids = (idsMeta ?? reservaId)
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+  if (!ids.includes(reservaId) && session.metadata?.reserva_id !== reservaId) {
     return { error: "Reserva no válida." };
   }
 
@@ -111,6 +138,6 @@ export async function completeTripCheckout(
     return { error: "No se pudo verificar el pago." };
   }
 
-  const { confirmarPagoReserva } = await import("@/lib/reservas/payment");
-  return confirmarPagoReserva(admin, paymentIntentId, reservaId);
+  const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
+  return confirmarPagoReservas(admin, paymentIntentId, ids);
 }

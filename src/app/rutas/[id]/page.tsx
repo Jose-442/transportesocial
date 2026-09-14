@@ -287,24 +287,16 @@ export default async function RutaDetallePage({
         user &&
         !reservaPendienteId &&
         ruta.estado === "activa" &&
-        ofreceBulto && (
+        (ofreceBulto || plazasAsientoLibres) && (
         <Card className="bg-zinc-50">
-          <ReservarRutaForm rutaId={ruta.id} />
+          <ReservarRutaForm
+            rutaId={ruta.id}
+            ofreceBulto={ofreceBulto}
+            precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
+            ofertas={ofertas}
+          />
         </Card>
       )}
-
-      {!esPropio &&
-        user &&
-        !reservaPendienteId &&
-        ruta.estado === "activa" &&
-        plazasAsientoLibres && (
-          <Card className="bg-zinc-50">
-            <OfertasCapacidadReserva
-              ofertas={ofertas}
-              rutaEstado="activa"
-            />
-          </Card>
-        )}
 
       {!esPropio &&
         user &&

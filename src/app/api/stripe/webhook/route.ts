@@ -8,7 +8,7 @@ import {
 } from "@/lib/stripe/subscription-checkout";
 import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
 import { sincronizarStripeConnectPorCuenta } from "@/actions/stripe-connect";
-import { confirmarPagoReserva } from "@/lib/reservas/payment";
+import { confirmarPagoReservas } from "@/lib/reservas/payment";
 
 export async function POST(request: Request) {
   if (!isStripeConfigured()) {
@@ -66,7 +66,11 @@ export async function POST(request: Request) {
             : session.payment_intent?.id;
 
         if (reservaId && paymentIntentId) {
-          await confirmarPagoReserva(admin, paymentIntentId, reservaId);
+          const ids = (session.metadata?.reserva_ids ?? reservaId)
+            .split(",")
+            .map((id) => id.trim())
+            .filter(Boolean);
+          await confirmarPagoReservas(admin, paymentIntentId, ids);
         }
       }
       break;

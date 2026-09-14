@@ -1,14 +1,34 @@
-import { type InputHTMLAttributes, type TextareaHTMLAttributes } from "react";
+import { type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
 
 type FieldProps = {
   label: string;
+  labelRight?: ReactNode;
   hint?: string;
   hintClassName?: string;
   error?: string;
 };
 
+function FieldLabel({
+  label,
+  labelRight,
+}: {
+  label: string;
+  labelRight?: ReactNode;
+}) {
+  if (!labelRight) {
+    return <span className="text-sm font-medium text-zinc-800">{label}</span>;
+  }
+  return (
+    <span className="flex items-center justify-between gap-3">
+      <span className="text-sm font-medium text-zinc-800">{label}</span>
+      <span className="shrink-0">{labelRight}</span>
+    </span>
+  );
+}
+
 export function Input({
   label,
+  labelRight,
   hint,
   hintClassName = "text-xs text-zinc-500",
   error,
@@ -19,7 +39,7 @@ export function Input({
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   return (
     <label htmlFor={inputId} className="block space-y-1.5">
-      <span className="text-sm font-medium text-zinc-800">{label}</span>
+      <FieldLabel label={label} labelRight={labelRight} />
       <input
         id={inputId}
         className={[
