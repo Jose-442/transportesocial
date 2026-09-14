@@ -19,9 +19,11 @@ function FieldLabel({
     return <span className="text-sm font-medium text-zinc-800">{label}</span>;
   }
   return (
-    <span className="flex items-center justify-between gap-3">
-      <span className="text-sm font-medium text-zinc-800">{label}</span>
-      <span className="shrink-0">{labelRight}</span>
+    <span className="flex items-start justify-between gap-3">
+      <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">
+        {label}
+      </span>
+      <span className="mt-0.5 shrink-0">{labelRight}</span>
     </span>
   );
 }

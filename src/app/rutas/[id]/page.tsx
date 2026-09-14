@@ -288,14 +288,12 @@ export default async function RutaDetallePage({
         !reservaPendienteId &&
         ruta.estado === "activa" &&
         (ofreceBulto || plazasAsientoLibres) && (
-        <Card className="bg-zinc-50">
-          <ReservarRutaForm
-            rutaId={ruta.id}
-            ofreceBulto={ofreceBulto}
-            precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
-            ofertas={ofertas}
-          />
-        </Card>
+        <ReservarRutaForm
+          rutaId={ruta.id}
+          ofreceBulto={ofreceBulto}
+          precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
+          ofertas={ofertas}
+        />
       )}
 
       {!esPropio &&

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { solicitarReservaViaje } from "@/actions/reservas";
@@ -80,13 +81,13 @@ export function ReservarRutaForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form onSubmit={onSubmit} className="space-y-4">
       <p className="text-sm text-zinc-600">
         La coordinación con el conductor será por el chat interno una vez hecha
         la reserva.
       </p>
       {ofreceBulto && (
-        <>
+        <Card className="space-y-3 bg-zinc-50">
           <Textarea
             label="Descripción del bulto"
             name="bulto_descripcion"
@@ -106,28 +107,30 @@ export function ReservarRutaForm({
               setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
             }
           />
-        </>
+        </Card>
       )}
       {plazasLibres > 0 && ofertaAsiento && (
-        <Input
-          label="Número de plazas"
-          labelRight={
-            <AsientosLibresDots
-              ofrecidas={ofertaAsiento.plazas_totales}
-              ocupadas={ofertaAsiento.plazas_ocupadas}
-            />
-          }
-          name="cantidad_ui"
-          type="number"
-          min={0}
-          max={plazasLibres}
-          placeholder="Elige 1, 2 o 3"
-          value={form.plazas}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, plazas: e.target.value }))
-          }
-          hint={`Plazas libres ahora: ${plazasLibres}. Déjalo vacío si no viajas de pasajero.`}
-        />
+        <Card className="bg-zinc-50">
+          <Input
+            label="Número de plazas para pasajeros en este viaje"
+            labelRight={
+              <AsientosLibresDots
+                ofrecidas={ofertaAsiento.plazas_totales}
+                ocupadas={ofertaAsiento.plazas_ocupadas}
+              />
+            }
+            name="cantidad_ui"
+            type="number"
+            min={0}
+            max={plazasLibres}
+            placeholder="Elige 1, 2 o 3"
+            value={form.plazas}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, plazas: e.target.value }))
+            }
+            hint={`Plazas libres ahora: ${plazasLibres}. Déjalo vacío si no viajas de pasajero.`}
+          />
+        </Card>
       )}
       {total > 0 && (
         <p className="text-sm font-semibold text-emerald-700">
@@ -136,7 +139,7 @@ export function ReservarRutaForm({
       )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button type="submit" fullWidth disabled={loading}>
-        {loading ? "Preparando pago…" : "Pagar y solicitar reserva"}
+        {loading ? "Preparando pago…" : "Pagar y reservar"}
       </Button>
     </form>
   );
