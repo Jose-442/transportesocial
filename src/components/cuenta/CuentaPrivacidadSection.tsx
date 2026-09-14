@@ -108,15 +108,6 @@ export function CuentaPrivacidadSection({
           </a>
         </div>
       </div>
-
-      <div className="border-t border-zinc-100 pt-4">
-        <Link
-          href="/cuenta/eliminar"
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700"
-        >
-          Eliminar mi cuenta
-        </Link>
-      </div>
     </div>
   );
 }

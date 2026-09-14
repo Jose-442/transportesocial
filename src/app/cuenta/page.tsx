@@ -270,6 +270,13 @@ export default async function CuentaPage({
           Cerrar sesión
         </Button>
       </form>
+
+      <Link
+        href="/cuenta/eliminar"
+        className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700"
+      >
+        Eliminar mi cuenta
+      </Link>
     </div>
   );
 }
