@@ -53,21 +53,21 @@ export function RutaCard({
 
   return (
     <CardLink href={href}>
-      {variant === "listado" && (
-        <div className="mb-2 flex justify-end">
-          <Badge
-            tone={reservadaConExtra ? "amber" : "green"}
-            className="px-3.5 py-1.5 text-sm"
-          >
-            {badgeOfertaRuta(ofertaInput)}
-          </Badge>
-        </div>
-      )}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-zinc-900">
-            {formatCiudad(ruta.origen)} → {formatCiudad(ruta.destino)}
-          </p>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <p className="min-w-0 font-semibold text-zinc-900">
+              {formatCiudad(ruta.origen)} → {formatCiudad(ruta.destino)}
+            </p>
+            {variant === "listado" && (
+              <Badge
+                tone={reservadaConExtra ? "amber" : "green"}
+                className="shrink-0 px-3.5 py-1.5 text-sm"
+              >
+                {badgeOfertaRuta(ofertaInput)}
+              </Badge>
+            )}
+          </div>
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
