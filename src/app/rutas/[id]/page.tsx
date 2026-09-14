@@ -241,9 +241,7 @@ export default async function RutaDetallePage({
             {formatEur(Number(ruta.precio_publicado))}
           </p>
           <p className="text-xs text-zinc-500">
-            {tieneAsientos
-              ? "Gastos de gestión incluidos. Las plazas tienen su precio aparte."
-              : "Gastos de gestión incluidos."}
+            Gastos de gestión incluidos.
           </p>
         </Card>
       )}
