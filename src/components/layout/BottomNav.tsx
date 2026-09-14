@@ -88,7 +88,7 @@ export function BottomNav() {
             href={item.href}
             label={item.label}
             active={isActive(pathname, item.href)}
-            className="min-h-[3.75rem] border-r border-zinc-100 px-2 py-1 text-base last:border-r-0 lg:min-h-16 lg:text-lg [&>span:first-child]:h-1.5 [&>span:first-child]:w-1.5"
+            className="min-h-[3.05rem] border-r border-zinc-100 px-2 pt-0 pb-1 text-base last:border-r-0 lg:min-h-[3.3rem] lg:text-lg [&>span:first-child]:h-1.5 [&>span:first-child]:w-1.5"
           />
         ))}
       </div>
