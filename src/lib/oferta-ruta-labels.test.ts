@@ -68,6 +68,13 @@ describe("lineasOfertaRuta", () => {
         asientoOfrecidas: 2,
         estado: "activa",
       })
-    ).toBe("Solo pasajeros");
+    ).toBe("Solo pasajeros 2 plazas");
+    expect(
+      badgeOfertaRuta({
+        espacio_disponible: "Sin espacio para bultos",
+        asientoOfrecidas: 1,
+        estado: "activa",
+      })
+    ).toBe("Solo pasajeros 1 plaza");
   });
 });

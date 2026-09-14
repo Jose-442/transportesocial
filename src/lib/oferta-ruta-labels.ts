@@ -52,7 +52,11 @@ export function badgeOfertaRuta(input: OfertaRutaInput): string {
 
   const plazas = input.asientoOfrecidas ?? 0;
   const conBulto = rutaOfreceBulto(input.espacio_disponible);
-  if (!conBulto) return "Solo pasajeros";
+  if (!conBulto) {
+    if (plazas === 1) return "Solo pasajeros 1 plaza";
+    if (plazas > 1) return `Solo pasajeros ${plazas} plazas`;
+    return "Solo pasajeros";
+  }
   if (plazas <= 0) return "Solo bulto";
   if (plazas === 1) return "Bulto + 1 plaza";
   return `Bulto + ${plazas} plazas`;
