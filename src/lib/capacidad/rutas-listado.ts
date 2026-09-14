@@ -11,6 +11,7 @@ export type RutaListadoItem = RutaConductor & {
   ofertasDisponibles?: number;
   asientoOfrecidas?: number;
   asientoOcupadas?: number;
+  precioPlazaPublicado?: number | null;
 };
 
 export async function listarRutasConCapacidad(
@@ -63,6 +64,7 @@ export async function listarRutasConCapacidad(
     const extraPostReserva =
       ruta.estado === "reservada" &&
       disponibles.some((o) => o.tipo === "bulto");
+    const asiento = ofertas.find((o) => o.tipo === "asiento");
 
     return {
       ...ruta,
@@ -70,6 +72,9 @@ export async function listarRutasConCapacidad(
       ofertasDisponibles: disponibles.length,
       asientoOfrecidas: ofrecidas,
       asientoOcupadas: ocupadas,
+      precioPlazaPublicado: asiento
+        ? Number(asiento.precio_publicado)
+        : null,
     };
   }
 

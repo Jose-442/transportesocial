@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { badgeOfertaRuta, lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
 import type { RutaConductor } from "@/types/database";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
@@ -33,6 +34,11 @@ export function RutaCard({
   const reservadaConExtra = item.tieneCapacidadExtra;
   const asientoOfrecidas = item.asientoOfrecidas ?? 0;
   const tieneAsientos = asientoOfrecidas > 0;
+  const conBulto = rutaOfreceBulto(ruta.espacio_disponible);
+  const precioBulto = conBulto ? Number(ruta.precio_publicado) : null;
+  const precioPlaza =
+    item.precioPlazaPublicado ??
+    (tieneAsientos && !conBulto ? Number(ruta.precio_publicado) : null);
 
   const ofertaInput = {
     espacio_disponible: ruta.espacio_disponible,
@@ -89,9 +95,36 @@ export function RutaCard({
           ) : reservadaConExtra ? (
             <p className="text-sm font-semibold text-amber-700">Más sitio</p>
           ) : (
-            <p className="text-lg font-bold text-emerald-700">
-              {formatEur(Number(ruta.precio_publicado))}
-            </p>
+            <div className="space-y-1">
+              {precioBulto != null && (
+                <p className="text-lg font-bold leading-tight text-emerald-700">
+                  {precioPlaza != null ? (
+                    <>
+                      <span className="block text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                        Bulto
+                      </span>
+                      {formatEur(precioBulto)}
+                    </>
+                  ) : (
+                    formatEur(precioBulto)
+                  )}
+                </p>
+              )}
+              {precioPlaza != null && (
+                <p className="text-lg font-bold leading-tight text-emerald-700">
+                  {precioBulto != null ? (
+                    <>
+                      <span className="block text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                        Plaza
+                      </span>
+                      {formatEur(precioPlaza)}
+                    </>
+                  ) : (
+                    formatEur(precioPlaza)
+                  )}
+                </p>
+              )}
+            </div>
           )}
           {variant === "listado" && (
             <Badge tone={reservadaConExtra ? "amber" : "green"}>
