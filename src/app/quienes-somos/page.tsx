@@ -124,7 +124,7 @@ export default function QuienesSomosPage() {
               <strong>
                 {AUTO_DELIVERED_AFTER_ARRIVAL_HOURS} horas
               </strong>{" "}
-              después de la hora teórica de llegada indicada en la reserva.
+              después de la hora de salida indicada en la reserva.
             </li>
           </ul>
         </section>
@@ -135,7 +135,8 @@ export default function QuienesSomosPage() {
           </h3>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              Desde la <strong>hora teórica de llegada</strong> del bulto, quien
+              Desde la <strong>hora de salida</strong> indicada en la reserva,
+              quien
               envía dispone de{" "}
               <strong>{DISPUTE_WINDOW_HOURS} horas</strong> para pulsar
               «Informar de un problema» en Mis viajes.

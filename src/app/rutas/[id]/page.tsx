@@ -97,11 +97,13 @@ export default async function RutaDetallePage({
     month: "long",
     year: "numeric",
   });
-  const llegada = new Date(ruta.fecha_llegada_prevista);
-  const horaLlegada = llegada.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const horaSalida = new Date(ruta.fecha_llegada_prevista).toLocaleTimeString(
+    "es-ES",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
   const badgeLabel =
     ruta.estado === "reservada" && tieneCapacidadExtra
@@ -177,7 +179,7 @@ export default async function RutaDetallePage({
             <p className="text-xs uppercase tracking-wide text-zinc-500">
               Hora de salida
             </p>
-            <p className="mt-1 text-sm text-zinc-800">{horaLlegada}</p>
+            <p className="mt-1 text-sm text-zinc-800">{horaSalida}</p>
           </div>
         </div>
         <div>

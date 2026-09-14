@@ -197,10 +197,11 @@ export default function TerminosPage() {
               Si no marca «Entregado», el sistema puede registrar la entrega
               automáticamente a las{" "}
               <strong>{AUTO_DELIVERED_AFTER_ARRIVAL_HOURS} horas</strong> de la
-              hora teórica de llegada indicada en la reserva.
+              hora de salida indicada en la reserva.
             </li>
             <li>
-              Desde la <strong>hora teórica de llegada</strong>, quien envía o
+              Desde la <strong>hora de salida</strong> indicada en la reserva,
+              quien envía o
               reserva dispone de{" "}
               <strong>{DISPUTE_WINDOW_HOURS} horas</strong> para pulsar
               «Informar de un problema» en Mis viajes.

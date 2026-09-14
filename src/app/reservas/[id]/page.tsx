@@ -207,8 +207,14 @@ export default async function ReservaDetallePage({
           </p>
         )}
         <p className="text-sm text-zinc-600">
-          Llegada prevista:{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleString("es-ES")}
+          Hora de salida:{" "}
+          {new Date(reserva.fecha_llegada_prevista).toLocaleString("es-ES", {
+            day: "numeric",
+            month: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </p>
       </Card>
 
