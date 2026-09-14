@@ -21,7 +21,7 @@ export function OfertaAcciones({ ofertaId }: { ofertaId: string }) {
       return;
     }
     if (result.checkoutUrl) {
-      window.location.href = result.checkoutUrl;
+      window.location.replace(result.checkoutUrl);
       return;
     }
 

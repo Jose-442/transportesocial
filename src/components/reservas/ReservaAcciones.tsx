@@ -38,11 +38,18 @@ export function ReservaAcciones({
       </div>
 
       {estado === "pendiente_pago" && esCliente && (
-        <form action={iniciarPagoReserva.bind(null, reserva.id)}>
-          <Button type="submit" fullWidth>
-            Completar pago
-          </Button>
-        </form>
+        <div className="space-y-2">
+          <form action={iniciarPagoReserva.bind(null, reserva.id)}>
+            <Button type="submit" fullWidth>
+              Completar pago
+            </Button>
+          </form>
+          <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
+            <Button type="submit" variant="secondary" fullWidth>
+              Cancelar (aún no he pagado)
+            </Button>
+          </form>
+        </div>
       )}
 
       {estado === "pendiente_aprobacion" && esConductor && (

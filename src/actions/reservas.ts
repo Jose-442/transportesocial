@@ -176,8 +176,22 @@ export async function cancelarReservaPendiente(reservaId: string): Promise<void>
   const ctx = await getReservaParticipante(reservaId);
   if (!ctx) return;
 
-  const { reserva, user } = ctx;
+  const { reserva, user, supabase } = ctx;
   if (reserva.cliente_id !== user.id) return;
+
+  if (reserva.estado === "pendiente_pago") {
+    await supabase
+      .from("reservas")
+      .update({ estado: "cancelado" })
+      .eq("id", reservaId);
+    revalidatePath(`/reservas/${reservaId}`);
+    revalidatePath("/cuenta/viajes");
+    if (reserva.ruta_conductor_id) {
+      revalidatePath(`/rutas/${reserva.ruta_conductor_id}`);
+    }
+    return;
+  }
+
   if (reserva.estado !== "pendiente_aprobacion") return;
 
   const admin = createAdminClient();

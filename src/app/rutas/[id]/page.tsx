@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -41,13 +41,31 @@ export default async function RutaDetallePage({
     data: { user },
   } = await supabase.auth.getUser();
 
+  let reservaPendienteId: string | null = null;
+  if (user) {
+    const { data: reservaPendiente } = await supabase
+      .from("reservas")
+      .select("id")
+      .eq("ruta_conductor_id", id)
+      .eq("cliente_id", user.id)
+      .eq("estado", "pendiente_pago")
+      .limit(1)
+      .maybeSingle();
+    reservaPendienteId = reservaPendiente?.id ?? null;
+  }
+
   const { data } = await supabase
     .from("rutas_conductores")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
-  if (!data) notFound();
+  if (!data) {
+    if (reservaPendienteId) {
+      redirect(`/reservas/${reservaPendienteId}?cancelado=1`);
+    }
+    notFound();
+  }
   const ruta = data as RutaConductor;
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
@@ -251,7 +269,27 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {!esPropio && user && ruta.estado === "activa" && ofreceBulto && (
+      {!esPropio && user && reservaPendienteId && (
+        <Card className="space-y-3 border-amber-200 bg-amber-50/80">
+          <p className="text-sm text-amber-950">
+            Ya empezaste a reservar este viaje y el pago no se ha completado.
+            No se ha cobrado nada. Puedes seguir con el pago o cancelar para
+            cambiar la descripción.
+          </p>
+          <Link
+            href={`/reservas/${reservaPendienteId}?cancelado=1`}
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
+          >
+            Ir a mi reserva
+          </Link>
+        </Card>
+      )}
+
+      {!esPropio &&
+        user &&
+        !reservaPendienteId &&
+        ruta.estado === "activa" &&
+        ofreceBulto && (
         <Card className="bg-zinc-50">
           <ReservarRutaForm rutaId={ruta.id} />
         </Card>
@@ -259,6 +297,7 @@ export default async function RutaDetallePage({
 
       {!esPropio &&
         user &&
+        !reservaPendienteId &&
         ruta.estado === "activa" &&
         plazasAsientoLibres && (
           <Card className="bg-zinc-50">
@@ -271,6 +310,7 @@ export default async function RutaDetallePage({
 
       {!esPropio &&
         user &&
+        !reservaPendienteId &&
         ruta.estado === "reservada" &&
         ofertasDisponibles.length > 0 && (
         <Card className="bg-zinc-50">

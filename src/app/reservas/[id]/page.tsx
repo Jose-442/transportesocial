@@ -48,6 +48,9 @@ export default async function ReservaDetallePage({
 
   if (!user) redirect(`/login?redirect=/reservas/${id}`);
 
+  const pagoCancelado =
+    query.cancelado === "1" || query.cancelado === "true";
+
   if (sessionId) {
     await completeTripCheckout(sessionId, id);
     redirect(`/reservas/${id}`);
@@ -120,6 +123,15 @@ export default async function ReservaDetallePage({
       >
         ← Mis viajes
       </Link>
+
+      {pagoCancelado && reserva.estado === "pendiente_pago" && (
+        <Card className="border-amber-200 bg-amber-50/80">
+          <p className="text-sm text-amber-950">
+            No se ha cobrado nada. Puedes completar el pago, o cancelar esta
+            reserva y volver al viaje para cambiar la descripción.
+          </p>
+        </Card>
+      )}
 
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>

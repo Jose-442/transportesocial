@@ -36,7 +36,7 @@ export function ReservarRutaForm({ rutaId }: { rutaId: string }) {
     clear();
 
     if (result.checkoutUrl) {
-      window.location.href = result.checkoutUrl;
+      window.location.replace(result.checkoutUrl);
       return;
     }
 
