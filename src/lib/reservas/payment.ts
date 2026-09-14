@@ -89,8 +89,9 @@ export async function confirmarPagoReservas(
   if (ids.length === 0) {
     return { error: "Reserva no encontrada." };
   }
-  if (ids.length === 1) {
-    return confirmarPagoReserva(admin, paymentIntentId, ids[0]);
+  const unica = ids[0];
+  if (ids.length === 1 && unica) {
+    return confirmarPagoReserva(admin, paymentIntentId, unica);
   }
 
   const stripe = getStripeServer();

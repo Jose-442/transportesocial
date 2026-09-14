@@ -224,10 +224,10 @@ export async function solicitarReservaViaje(formData: FormData) {
     plazaForm.set("oferta_id", ofertaId);
     plazaForm.set("cantidad", String(cantidadPlazas));
     const plaza = await solicitarReservaCapacidadSinCheckout(plazaForm);
-    if ("error" in plaza && plaza.error) {
+    if ("error" in plaza) {
       return { error: plaza.error, reservaId: reservaPrincipalId ?? undefined };
     }
-    if (!reservaPrincipalId && plaza.reservaId) {
+    if (!reservaPrincipalId) {
       reservaPrincipalId = plaza.reservaId;
     }
   }
