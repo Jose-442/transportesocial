@@ -8,10 +8,13 @@ import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { createClient } from "@/lib/supabase/server";
 import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
-import { chatPermitido } from "@/lib/reservas/labels";
+import {
+  chatPermitido,
+  esReservaDePlazas,
+  fraseQueHasReservado,
+} from "@/lib/reservas/labels";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import type {
   Disputa,
@@ -103,6 +106,32 @@ export default async function ReservaDetallePage({
 
   const disputa = (disputaData as Disputa | null) ?? null;
 
+  let relacionadas: Reserva[] = [reserva];
+  if (reserva.ruta_conductor_id) {
+    const { data: hermanas } = await supabase
+      .from("reservas")
+      .select("*")
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+      .eq("cliente_id", reserva.cliente_id)
+      .neq("estado", "cancelado");
+    if (hermanas && hermanas.length > 0) {
+      relacionadas = hermanas as Reserva[];
+    }
+  }
+  const frasesReserva = [
+    ...new Set(
+      relacionadas
+        .slice()
+        .sort(
+          (a, b) => Number(esReservaDePlazas(a)) - Number(esReservaDePlazas(b))
+        )
+        .map((item) => fraseQueHasReservado(item, { esCliente }))
+    ),
+  ];
+  const detalleBulto = relacionadas.find(
+    (item) => !esReservaDePlazas(item) && item.bulto_descripcion
+  );
+
   const estadoResenas =
     reserva.estado === "liberado" ? await getEstadoResenas(id) : null;
 
@@ -164,21 +193,17 @@ export default async function ReservaDetallePage({
         <p className="text-2xl font-bold text-emerald-700">
           {formatEur(Number(reserva.precio_total))}
         </p>
-        {reserva.bulto_descripcion && (
-          <p className="text-sm text-zinc-700">
-            <strong>
-              {reserva.tipo === "capacidad_extra" && (reserva.cantidad ?? 1) > 1
-                ? "Plazas"
-                : "Bulto"}
-              :
-            </strong>{" "}
-            {separarHoraOculta(reserva.bulto_descripcion).texto}
-            {reserva.bulto_medidas
-              ? ` (${formatEspacioDisponibleListado(separarHoraOculta(reserva.bulto_medidas).texto)})`
+        {frasesReserva.map((frase) => (
+          <p key={frase} className="text-sm text-zinc-700">
+            {frase}
+          </p>
+        ))}
+        {detalleBulto?.bulto_descripcion && (
+          <p className="text-sm text-zinc-600">
+            {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
+            {detalleBulto.bulto_medidas
+              ? ` (${separarHoraOculta(detalleBulto.bulto_medidas).texto})`
               : ""}
-            {reserva.tipo === "capacidad_extra" && (reserva.cantidad ?? 1) > 1 && (
-              <span className="text-zinc-500"> · ×{reserva.cantidad}</span>
-            )}
           </p>
         )}
         <p className="text-sm text-zinc-600">

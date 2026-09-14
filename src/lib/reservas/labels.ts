@@ -1,4 +1,4 @@
-import type { EstadoReserva, MotivoDisputa } from "@/types/database";
+import type { EstadoReserva, MotivoDisputa, Reserva } from "@/types/database";
 
 export const ESTADO_RESERVA_LABELS: Record<EstadoReserva, string> = {
   pendiente_pago: "Pendiente de pago",
@@ -35,6 +35,28 @@ export const MOTIVOS_DISPUTA_CONDUCTOR: MotivoDisputa[] = [
 
 export function chatPermitido(estado: EstadoReserva): boolean {
   return ["confirmada", "en_transito", "entregado", "disputa"].includes(estado);
+}
+
+type ReservaResumen = Pick<
+  Reserva,
+  "tipo" | "bulto_descripcion" | "cantidad"
+>;
+
+export function esReservaDePlazas(reserva: ReservaResumen): boolean {
+  if (reserva.tipo !== "capacidad_extra") return false;
+  return /^plazas?\b/i.test((reserva.bulto_descripcion ?? "").trim());
+}
+
+export function fraseQueHasReservado(
+  reserva: ReservaResumen,
+  opts?: { esCliente?: boolean }
+): string {
+  const sujeto = opts?.esCliente === false ? "Han reservado" : "Has reservado";
+  if (esReservaDePlazas(reserva)) {
+    const n = Math.max(1, Number(reserva.cantidad) || 1);
+    return n === 1 ? `${sujeto} una plaza` : `${sujeto} ${n} plazas`;
+  }
+  return `${sujeto} espacio para un bulto`;
 }
 
 export function puedeReclamar(
