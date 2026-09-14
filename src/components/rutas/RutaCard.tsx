@@ -53,6 +53,16 @@ export function RutaCard({
 
   return (
     <CardLink href={href}>
+      {variant === "listado" && (
+        <div className="mb-2 flex justify-end">
+          <Badge
+            tone={reservadaConExtra ? "amber" : "green"}
+            className="px-3.5 py-1.5 text-sm"
+          >
+            {badgeOfertaRuta(ofertaInput)}
+          </Badge>
+        </div>
+      )}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-zinc-900">
@@ -92,9 +102,7 @@ export function RutaCard({
             <p className="max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-emerald-800 sm:max-w-none sm:text-xs">
               {reservadaConExtra ? "Más sitio" : "Propuesta de viaje"}
             </p>
-          ) : reservadaConExtra ? (
-            <p className="text-sm font-semibold text-amber-700">Más sitio</p>
-          ) : (
+          ) : !reservadaConExtra ? (
             <div className="space-y-1">
               {precioBulto != null && (
                 <p className="text-lg font-bold leading-tight text-emerald-700">
@@ -125,12 +133,7 @@ export function RutaCard({
                 </p>
               )}
             </div>
-          )}
-          {variant === "listado" && (
-            <Badge tone={reservadaConExtra ? "amber" : "green"}>
-              {badgeOfertaRuta(ofertaInput)}
-            </Badge>
-          )}
+          ) : null}
         </div>
       </div>
     </CardLink>

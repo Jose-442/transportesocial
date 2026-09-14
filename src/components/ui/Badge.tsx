@@ -10,15 +10,18 @@ const tones = {
 export function Badge({
   children,
   tone = "zinc",
+  className = "",
 }: {
   children: ReactNode;
   tone?: keyof typeof tones;
+  className?: string;
 }) {
   return (
     <span
       className={[
         "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold",
         tones[tone],
+        className,
       ].join(" ")}
     >
       {children}
