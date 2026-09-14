@@ -1,4 +1,4 @@
-import { type SelectHTMLAttributes } from "react";
+import { type ReactNode, type SelectHTMLAttributes } from "react";
 
 export type SelectOption = {
   value: string;
@@ -7,6 +7,7 @@ export type SelectOption = {
 
 type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   label: string;
+  labelRight?: ReactNode;
   hint?: string;
   error?: string;
   options: SelectOption[];
@@ -15,6 +16,7 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
 
 export function Select({
   label,
+  labelRight,
   hint,
   error,
   options,
@@ -24,10 +26,20 @@ export function Select({
   ...props
 }: Props) {
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
+  const tieneVacio = options.some((opt) => opt.value === "");
 
   return (
     <label htmlFor={selectId} className="block space-y-1.5">
-      <span className="text-sm font-medium text-zinc-800">{label}</span>
+      {labelRight ? (
+        <span className="flex items-start justify-between gap-3">
+          <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">
+            {label}
+          </span>
+          <span className="mt-0.5 shrink-0">{labelRight}</span>
+        </span>
+      ) : (
+        <span className="text-sm font-medium text-zinc-800">{label}</span>
+      )}
       <select
         id={selectId}
         className={[
@@ -37,11 +49,13 @@ export function Select({
         ].join(" ")}
         {...props}
       >
-        <option value="" disabled hidden>
-          {placeholder}
-        </option>
+        {!tieneVacio && (
+          <option value="" disabled hidden>
+            {placeholder}
+          </option>
+        )}
         {options.map((opt) => (
-          <option key={opt.label} value={opt.value}>
+          <option key={opt.value || opt.label} value={opt.value}>
             {opt.label}
           </option>
         ))}

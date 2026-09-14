@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { solicitarReservaViaje } from "@/actions/reservas";
 import { DRAFT_KEYS } from "@/lib/form-draft";
@@ -111,7 +112,7 @@ export function ReservarRutaForm({
       )}
       {plazasLibres > 0 && ofertaAsiento && (
         <Card className="bg-zinc-50">
-          <Input
+          <Select
             label="Número de plazas para pasajeros en este viaje"
             labelRight={
               <AsientosLibresDots
@@ -120,15 +121,34 @@ export function ReservarRutaForm({
               />
             }
             name="cantidad_ui"
-            type="number"
-            min={0}
-            max={plazasLibres}
-            placeholder="Elige 1, 2 o 3"
-            value={form.plazas}
+            value={
+              Number.parseInt(form.plazas, 10) >= 1 &&
+              Number.parseInt(form.plazas, 10) <= plazasLibres
+                ? form.plazas
+                : ""
+            }
             onChange={(e) =>
               setForm((prev) => ({ ...prev, plazas: e.target.value }))
             }
-            hint={`Plazas libres ahora: ${plazasLibres}. Déjalo vacío si no viajas de pasajero.`}
+            options={[
+              {
+                value: "",
+                label:
+                  plazasLibres <= 1
+                    ? "Elige 1"
+                    : plazasLibres === 2
+                      ? "Elige 1 o 2"
+                      : "Elige 1, 2 o 3",
+              },
+              ...Array.from({ length: plazasLibres }, (_, i) => {
+                const n = i + 1;
+                return {
+                  value: String(n),
+                  label: n === 1 ? "1 plaza" : `${n} plazas`,
+                };
+              }),
+            ]}
+            hint={`Plazas libres ahora: ${plazasLibres}. Si no viajas de pasajero, no elijas plaza.`}
           />
         </Card>
       )}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatEur } from "@/lib/pricing";
@@ -115,8 +116,8 @@ export function OfertasCapacidadReserva({
       </label>
 
       {esAsiento && ofertaSel && maxCantidad >= 1 && (
-        <Input
-          label="Número de plazas"
+        <Select
+          label="Número de plazas para pasajeros en este viaje"
           labelRight={
             <AsientosLibresDots
               ofrecidas={ofertaSel.plazas_totales}
@@ -124,12 +125,31 @@ export function OfertasCapacidadReserva({
             />
           }
           name="cantidad_ui"
-          type="number"
-          min={0}
-          max={maxCantidad}
-          placeholder="Elige 1, 2 o 3"
-          value={cantidad}
+          value={
+            Number.parseInt(cantidad, 10) >= 1 &&
+            Number.parseInt(cantidad, 10) <= maxCantidad
+              ? cantidad
+              : ""
+          }
           onChange={(e) => setCantidad(e.target.value)}
+          options={[
+            {
+              value: "",
+              label:
+                maxCantidad <= 1
+                  ? "Elige 1"
+                  : maxCantidad === 2
+                    ? "Elige 1 o 2"
+                    : "Elige 1, 2 o 3",
+            },
+            ...Array.from({ length: maxCantidad }, (_, i) => {
+              const n = i + 1;
+              return {
+                value: String(n),
+                label: n === 1 ? "1 plaza" : `${n} plazas`,
+              };
+            }),
+          ]}
           hint={`Plazas libres ahora: ${maxCantidad}.`}
         />
       )}
