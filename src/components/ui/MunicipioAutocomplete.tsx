@@ -157,7 +157,7 @@ export function MunicipioAutocomplete({
             onBlur={onBlur}
             onKeyDown={onKeyDown}
             className={[
-              "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
+              "w-full min-h-11 rounded-xl border-2 border-sky-300 bg-sky-50 px-3 py-2 text-base text-zinc-900 placeholder:text-sky-700/40 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
               error ? "border-red-400 ring-2 ring-red-100" : "",
             ].join(" ")}
           />
@@ -166,7 +166,7 @@ export function MunicipioAutocomplete({
               id={listId}
               role="listbox"
               className={[
-                "absolute z-50 max-h-48 w-full overflow-y-auto overscroll-contain rounded-xl border border-zinc-200 bg-white py-1 shadow-lg",
+                "absolute z-50 max-h-48 w-full overflow-y-auto overscroll-contain rounded-xl border-2 border-sky-400 bg-sky-100 py-1 shadow-lg",
                 abreArriba ? "bottom-full mb-1" : "top-full mt-1",
               ].join(" ")}
             >
@@ -179,8 +179,10 @@ export function MunicipioAutocomplete({
                     role="option"
                     aria-selected={index === resaltado}
                     className={[
-                      "flex min-h-11 w-full items-center px-3 py-2 text-left text-sm text-zinc-800",
-                      index === resaltado ? "bg-emerald-50" : "hover:bg-zinc-50",
+                      "flex min-h-11 w-full items-center px-3 py-2 text-left text-sm text-sky-950",
+                      index === resaltado
+                        ? "bg-sky-300 font-semibold"
+                        : "bg-sky-100 hover:bg-sky-200",
                     ].join(" ")}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => seleccionar(municipio)}
