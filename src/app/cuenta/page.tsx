@@ -20,7 +20,7 @@ import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { loadMisPublicaciones } from "@/lib/cuenta/mis-publicaciones";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
-import { parseCuentaVolver } from "@/lib/cuenta-volver";
+import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
 
 export const metadata = { title: "Mi cuenta" };
 
@@ -179,7 +179,11 @@ export default async function CuentaPage({
           </div>
           <EditarVehiculoForm
             vehiculoInicial={profile}
-            volverTrasGuardar={volverTrasVehiculo}
+            volverTrasGuardar={
+              volverTrasVehiculo
+                ? hrefTrasGuardarVehiculo(volverTrasVehiculo)
+                : null
+            }
           />
         </Card>
       </div>

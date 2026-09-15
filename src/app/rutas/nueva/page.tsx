@@ -6,8 +6,15 @@ import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
 
 export const metadata = { title: "Conductor, publica tu ruta" };
 
-export default async function NuevaRutaPage() {
+export default async function NuevaRutaPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   await requirePublicationAccess("/rutas/nueva");
+
+  const params = await searchParams;
+  const desdeVehiculo = params.desde === "vehiculo";
 
   const supabase = await createClient();
   const {
@@ -22,6 +29,9 @@ export default async function NuevaRutaPage() {
   }
 
   return (
-    <NuevaRutaForm mostrarAvisoVehiculo={mostrarAvisoVehiculo} />
+    <NuevaRutaForm
+      mostrarAvisoVehiculo={mostrarAvisoVehiculo}
+      desdeVehiculo={desdeVehiculo}
+    />
   );
 }

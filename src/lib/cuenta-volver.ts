@@ -15,3 +15,8 @@ export function parseCuentaVolver(
 export function cuentaHrefConVolver(dest: CuentaVolverDest): string {
   return `/cuenta?volver=${encodeURIComponent(dest)}`;
 }
+
+/** Vuelves a publicar tras guardar el vehículo: el botón Publicar sale arriba. */
+export function hrefTrasGuardarVehiculo(dest: CuentaVolverDest): string {
+  return `${dest}?desde=vehiculo`;
+}

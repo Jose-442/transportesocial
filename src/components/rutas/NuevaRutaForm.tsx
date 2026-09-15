@@ -61,8 +61,10 @@ function botonClase(activo: boolean): string {
 
 export function NuevaRutaForm({
   mostrarAvisoVehiculo = false,
+  desdeVehiculo = false,
 }: {
   mostrarAvisoVehiculo?: boolean;
+  desdeVehiculo?: boolean;
 }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -239,12 +241,13 @@ export function NuevaRutaForm({
   useEffect(() => {
     if (!ready) return;
     if (
+      desdeVehiculo &&
       !mostrarAvisoVehiculo &&
       Object.keys(validateForm()).length === 0
     ) {
       setBotonArriba(true);
     }
-  }, [ready, mostrarAvisoVehiculo]);
+  }, [ready, mostrarAvisoVehiculo, desdeVehiculo]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
