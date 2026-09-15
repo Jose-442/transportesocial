@@ -157,7 +157,7 @@ export function OfertasCapacidadReserva({
       {!esAsiento && (
         <>
           <Textarea
-            label="Descripción del bulto que deseas transportar"
+            label="Descripción del bulto que deseas enviar"
             name="bulto_descripcion"
             required
             placeholder="Ej. caja mediana con ropa"
