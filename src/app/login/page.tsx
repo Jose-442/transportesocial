@@ -39,20 +39,27 @@ export default async function LoginPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">
-        Entrar (Solo si ya tienes cuenta)
-      </h1>
-      {contrasenaActualizada && (
-        <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-          Contraseña actualizada. Ya puedes entrar.
-        </p>
-      )}
+      <Link
+        href={registroHref}
+        className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
+      >
+        CREAR CUENTA
+      </Link>
       {esRedirectBulto && (
         <p className="text-base text-zinc-600">
           Casi listo. Inicia sesión o crea cuenta para enviar tu propuesta de
           precio. El solicitante solo verá tu oferta cuando estés registrado.
         </p>
       )}
+      {contrasenaActualizada && (
+        <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+          Contraseña actualizada. Ya puedes entrar.
+        </p>
+      )}
+      <p className="pt-2 text-center text-sm text-zinc-600">
+        ¿Ya tienes cuenta?
+      </p>
+      <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
       <Card>
         <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
           <LoginForm />
@@ -66,18 +73,6 @@ export default async function LoginPage({
           ¿Olvidaste tu contraseña?
         </Link>
       </p>
-      <div className="space-y-3 border-t border-zinc-200 pt-6">
-        <p className="text-center text-sm text-zinc-600">
-          ¿No tienes cuenta? No rellenes los recuadros de arriba: es otra
-          pantalla.
-        </p>
-        <Link
-          href={registroHref}
-          className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
-        >
-          CREAR CUENTA
-        </Link>
-      </div>
     </div>
   );
 }
