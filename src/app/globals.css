@@ -28,6 +28,7 @@ body {
   background: #e4e4e7;
   color: #27272a;
   font-weight: 600;
+  cursor: pointer;
 }
 
 /* PWA: solo monta en móvil vía JS (AddToHomeScreenBanner) */
