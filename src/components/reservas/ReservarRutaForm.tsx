@@ -96,7 +96,7 @@ export function ReservarRutaForm({
       {ofreceBulto && (
         <Card className="space-y-3 bg-zinc-50">
           <Textarea
-            label="Descripción del bulto"
+            label="Descripción del bulto que deseas transportar"
             name="bulto_descripcion"
             required={plazasLibres <= 0}
             placeholder="Ej. caja mediana con ropa, frágil"
