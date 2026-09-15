@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { createClient } from "@/lib/supabase/server";
@@ -72,9 +71,12 @@ export default async function LoginPage({
           ¿No tienes cuenta? No rellenes los recuadros de arriba: es otra
           pantalla.
         </p>
-        <ButtonLink href={registroHref} variant="secondary" fullWidth>
-          Crear cuenta
-        </ButtonLink>
+        <Link
+          href={registroHref}
+          className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
+        >
+          CREAR CUENTA
+        </Link>
       </div>
     </div>
   );
