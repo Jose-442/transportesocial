@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { apartadoReserva } from "@/lib/reservas/categorias";
 
 describe("apartadoReserva", () => {
-  it("las propuestas pendientes van a Propuestos", () => {
-    expect(apartadoReserva("pendiente_pago", false)).toBe("propuestos");
-    expect(apartadoReserva("pendiente_pago", true)).toBe("propuestos");
+  it("Propuestos no incluye reservas: solo lo que tú publicas", () => {
+    expect(apartadoReserva("pendiente_pago", true)).toBe("pagados");
+    expect(apartadoReserva("pendiente_pago", false)).toBeNull();
   });
 
-  it("si tú has pagado, va a Pagados por mí", () => {
+  it("si tú has pagado o tienes el pago a medias, va a Pagados por mí", () => {
     expect(apartadoReserva("pagado_escrow", true)).toBe("pagados");
     expect(apartadoReserva("confirmada", true)).toBe("pagados");
     expect(apartadoReserva("pendiente_aprobacion", true)).toBe("pagados");

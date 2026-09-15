@@ -1,7 +1,5 @@
 import type { EstadoReserva } from "@/types/database";
 
-export const ESTADOS_PROPUESTOS: EstadoReserva[] = ["pendiente_pago"];
-
 export const ESTADOS_ACEPTADOS: EstadoReserva[] = [
   "pendiente_aprobacion",
   "confirmada",
@@ -25,7 +23,9 @@ export function apartadoReserva(
   esCliente = false
 ): ApartadoViajes | null {
   if (ESTADOS_HISTORIAL.includes(estado)) return "historial";
-  if (ESTADOS_PROPUESTOS.includes(estado)) return "propuestos";
+  if (estado === "pendiente_pago") {
+    return esCliente ? "pagados" : null;
+  }
   if (ESTADOS_ACEPTADOS.includes(estado)) {
     return esCliente ? "pagados" : "aceptados";
   }
