@@ -43,7 +43,7 @@ export default async function LoginPage({
         href={registroHref}
         className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
       >
-        CREAR CUENTA
+        PULSA AQUÍ PARA CREAR CUENTA
       </Link>
       {esRedirectBulto && (
         <p className="text-base text-zinc-600">
@@ -56,9 +56,12 @@ export default async function LoginPage({
           Contraseña actualizada. Ya puedes entrar.
         </p>
       )}
-      <p className="pt-2 text-center text-sm text-zinc-600">
-        ¿Ya tienes cuenta?
-      </p>
+      <div className="space-y-1 pt-2">
+        <p className="text-center text-sm text-zinc-600">¿Ya tienes cuenta?</p>
+        <p className="text-center text-sm font-medium text-zinc-800">
+          Rellena este formulario para entrar.
+        </p>
+      </div>
       <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
       <Card>
         <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
