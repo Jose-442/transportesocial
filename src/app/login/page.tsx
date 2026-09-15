@@ -56,13 +56,12 @@ export default async function LoginPage({
           Contraseña actualizada. Ya puedes entrar.
         </p>
       )}
-      <div className="space-y-1 pt-2">
-        <p className="text-center text-sm text-zinc-600">¿Ya tienes cuenta?</p>
-        <p className="text-center text-sm font-medium text-zinc-800">
-          Rellena este formulario para entrar.
-        </p>
-      </div>
-      <h1 className="text-2xl font-bold text-zinc-900">Entrar</h1>
+      <p className="pt-2 text-center text-sm text-zinc-600">
+        ¿Ya tienes cuenta?
+      </p>
+      <h1 className="text-2xl font-bold text-zinc-900">
+        Rellena este formulario para entrar.
+      </h1>
       <Card>
         <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
           <LoginForm />
