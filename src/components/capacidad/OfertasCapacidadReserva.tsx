@@ -178,7 +178,7 @@ export function OfertasCapacidadReserva({
 
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button type="submit" fullWidth disabled={loading || !ofertaSel}>
-        {loading ? "Preparando pago…" : "Pagar y solicitar reserva"}
+        {loading ? "Preparando pago…" : "Pagar y reservar"}
       </Button>
     </form>
   );
