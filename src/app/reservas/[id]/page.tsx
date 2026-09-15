@@ -207,11 +207,13 @@ export default async function ReservaDetallePage({
           </p>
         )}
         <p className="text-sm text-zinc-600">
-          Hora de salida:{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleString("es-ES", {
+          Para el día:{" "}
+          {new Date(reserva.fecha_llegada_prevista).toLocaleDateString("es-ES", {
             day: "numeric",
             month: "numeric",
-            year: "numeric",
+          })}{" "}
+          a las{" "}
+          {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString("es-ES", {
             hour: "2-digit",
             minute: "2-digit",
           })}
