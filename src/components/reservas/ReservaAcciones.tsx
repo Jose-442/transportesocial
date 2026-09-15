@@ -55,10 +55,6 @@ export function ReservaAcciones({
               Cancelar (aún no he pagado)
             </Button>
           </form>
-          <p className="text-xs text-zinc-500">
-            Hasta que no pagues puedes editar bulto o plazas las veces que
-            haga falta. No se cobra nada.
-          </p>
         </div>
       )}
 
