@@ -11,6 +11,7 @@ import { crearBulto } from "@/actions/bultos";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import {
   incluyeBulto,
+  isTipoSolicitud,
   TIPO_SOLICITUD_OPTIONS,
   type TipoSolicitud,
 } from "@/lib/solicitud-viaje";
@@ -30,6 +31,7 @@ export function NuevoBultoForm() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
+    tipo_solicitud?: string;
     origen?: string;
     destino?: string;
     fecha_limite?: string;
@@ -49,8 +51,12 @@ export function NuevoBultoForm() {
       uidRef.current = uid;
       const draft = loadOwnedDraft<NuevoBultoDraft>(DRAFT_KEYS.nuevoBulto, uid);
       if (draft) {
+        const tipoMarcado =
+          draft.tipo_solicitud_marcada === true &&
+          isTipoSolicitud(draft.tipo_solicitud ?? "");
         setForm({
-          tipo_solicitud: draft.tipo_solicitud ?? "solo_bulto",
+          tipo_solicitud: tipoMarcado ? draft.tipo_solicitud : "",
+          tipo_solicitud_marcada: tipoMarcado,
           origen: draft.origen,
           destino: draft.destino,
           descripcion: draft.descripcion,
@@ -83,11 +89,17 @@ export function NuevoBultoForm() {
     field: K,
     value: NuevoBultoDraft[K]
   ) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (field === "origen" || field === "destino") {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+      ...(field === "tipo_solicitud"
+        ? { tipo_solicitud_marcada: Boolean(value) }
+        : {}),
+    }));
+    if (field === "origen" || field === "destino" || field === "tipo_solicitud") {
       setFieldErrors((prev) => {
         const next = { ...prev };
-        delete next[field as "origen" | "destino"];
+        delete next[field as "origen" | "destino" | "tipo_solicitud"];
         return next;
       });
     }
@@ -100,11 +112,15 @@ export function NuevoBultoForm() {
     setFieldErrors({});
 
     const errors: {
+      tipo_solicitud?: string;
       origen?: string;
       destino?: string;
       fecha_limite?: string;
       hora_limite?: string;
     } = {};
+    if (!isTipoSolicitud(form.tipo_solicitud)) {
+      errors.tipo_solicitud = "Elige cuántas plazas necesitas.";
+    }
     if (!form.origen.trim()) {
       errors.origen = "Indica la salida.";
     } else if (!resolverMunicipio(form.origen)) {
@@ -181,6 +197,9 @@ export function NuevoBultoForm() {
             </label>
           ))}
         </div>
+        {fieldErrors.tipo_solicitud && (
+          <p className="text-sm text-red-700">{fieldErrors.tipo_solicitud}</p>
+        )}
       </fieldset>
 
       <MunicipioAutocomplete
@@ -203,7 +222,7 @@ export function NuevoBultoForm() {
         incluirFrontera
       />
 
-      {necesitaBulto ? (
+      {form.tipo_solicitud && necesitaBulto ? (
         <>
           <Textarea
             name="descripcion"
@@ -222,7 +241,7 @@ export function NuevoBultoForm() {
             onChange={(e) => updateField("espacio_tamano", e.target.value)}
           />
         </>
-      ) : (
+      ) : form.tipo_solicitud ? (
         <Textarea
           name="descripcion"
           label="Comentarios (opcional)"
@@ -230,7 +249,7 @@ export function NuevoBultoForm() {
           value={form.descripcion}
           onChange={(e) => updateField("descripcion", e.target.value)}
         />
-      )}
+      ) : null}
 
       <DatePickerInput
         name="fecha_limite"

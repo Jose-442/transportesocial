@@ -16,6 +16,10 @@ describe("solicitud-viaje", () => {
     expect(numPasajeros("solo_2_pasajeros")).toBe(2);
   });
 
+  it("sin tipo elegido: no incluye bulto", () => {
+    expect(incluyeBulto("")).toBe(false);
+  });
+
   it("calcOfertaTotales suma bulto y plazas con comisión por partida", () => {
     const r = calcOfertaTotales("bulto_2_pasajeros", 10, 5);
     expect(r.precio_neto).toBe(20);

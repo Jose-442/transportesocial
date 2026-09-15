@@ -199,7 +199,8 @@ export type NuevaRutaDraft = {
 };
 
 export type NuevoBultoDraft = {
-  tipo_solicitud: import("@/lib/solicitud-viaje").TipoSolicitud;
+  tipo_solicitud: import("@/lib/solicitud-viaje").TipoSolicitud | "";
+  tipo_solicitud_marcada?: boolean;
   origen: string;
   destino: string;
   descripcion: string;
@@ -232,7 +233,8 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
 };
 
 export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
-  tipo_solicitud: "solo_bulto",
+  tipo_solicitud: "",
+  tipo_solicitud_marcada: false,
   origen: "",
   destino: "",
   descripcion: "",

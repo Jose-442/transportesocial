@@ -35,7 +35,8 @@ export function isTipoSolicitud(value: string): value is TipoSolicitud {
   return (TIPOS_SOLICITUD as readonly string[]).includes(value);
 }
 
-export function incluyeBulto(tipo: TipoSolicitud): boolean {
+export function incluyeBulto(tipo: TipoSolicitud | ""): boolean {
+  if (!tipo) return false;
   return tipo !== "solo_1_pasajero" && tipo !== "solo_2_pasajeros" && tipo !== "solo_3_pasajeros";
 }
 
