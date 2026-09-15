@@ -13,9 +13,28 @@ import {
 } from "@/lib/reservas/cron";
 import { reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { cookies } from "next/headers";
+import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
 import { createTripCheckoutSession } from "@/lib/stripe/trip-checkout";
 import { separarHoraOculta } from "@/lib/bulto-hora";
+import { esReservaDePlazas } from "@/lib/reservas/labels";
 import type { Reserva } from "@/types/database";
+
+async function pendientesDelMismoViaje(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  reserva: Reserva
+): Promise<Reserva[]> {
+  if (!reserva.ruta_conductor_id) return [reserva];
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", userId)
+    .eq("estado", "pendiente_pago");
+  const filas = (data as Reserva[] | null) ?? [];
+  return filas.length > 0 ? filas : [reserva];
+}
 
 async function getReservaParticipante(reservaId: string) {
   const supabase = await createClient();
@@ -299,6 +318,58 @@ export async function rechazarReserva(reservaId: string): Promise<void> {
   revalidatePath(`/reservas/${reservaId}`);
 }
 
+export async function editarReservaPendiente(reservaId: string): Promise<void> {
+  const ctx = await getReservaParticipante(reservaId);
+  if (!ctx) return;
+
+  const { reserva, user, supabase } = ctx;
+  if (reserva.cliente_id !== user.id) return;
+  if (reserva.estado !== "pendiente_pago") return;
+
+  const rutaId = reserva.ruta_conductor_id;
+  const filas = await pendientesDelMismoViaje(supabase, user.id, reserva);
+
+  let bulto_descripcion = "";
+  let bulto_medidas = "";
+  let plazas = "";
+  for (const fila of filas) {
+    if (esReservaDePlazas(fila)) {
+      plazas = String(fila.cantidad > 0 ? fila.cantidad : "");
+    } else {
+      bulto_descripcion = separarHoraOculta(fila.bulto_descripcion ?? "").texto;
+      bulto_medidas = fila.bulto_medidas ?? "";
+    }
+  }
+
+  await supabase
+    .from("reservas")
+    .update({ estado: "cancelado" })
+    .in(
+      "id",
+      filas.map((fila) => fila.id)
+    );
+
+  if (!rutaId) {
+    revalidatePath("/cuenta/viajes");
+    redirect("/cuenta/viajes");
+  }
+
+  const jar = await cookies();
+  jar.set(
+    EDITAR_RESERVA_COOKIE,
+    JSON.stringify({
+      rutaId,
+      bulto_descripcion,
+      bulto_medidas,
+      plazas,
+    }),
+    { httpOnly: true, maxAge: 600, path: "/", sameSite: "lax" }
+  );
+  revalidatePath(`/rutas/${rutaId}`);
+  revalidatePath("/cuenta/viajes");
+  redirect(`/rutas/${rutaId}`);
+}
+
 export async function cancelarReservaPendiente(reservaId: string): Promise<void> {
   const ctx = await getReservaParticipante(reservaId);
   if (!ctx) return;
@@ -307,10 +378,14 @@ export async function cancelarReservaPendiente(reservaId: string): Promise<void>
   if (reserva.cliente_id !== user.id) return;
 
   if (reserva.estado === "pendiente_pago") {
+    const filas = await pendientesDelMismoViaje(supabase, user.id, reserva);
     await supabase
       .from("reservas")
       .update({ estado: "cancelado" })
-      .eq("id", reservaId);
+      .in(
+        "id",
+        filas.map((fila) => fila.id)
+      );
     revalidatePath(`/reservas/${reservaId}`);
     revalidatePath("/cuenta/viajes");
     if (reserva.ruta_conductor_id) {

@@ -156,8 +156,8 @@ export default async function ReservaDetallePage({
       {pagoCancelado && reserva.estado === "pendiente_pago" && (
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
-            No se ha cobrado nada. Puedes completar el pago, o cancelar esta
-            reserva y volver al viaje para cambiar la descripción.
+            No se ha cobrado nada. Puedes completar el pago, editar la reserva
+            o cancelarla.
           </p>
         </Card>
       )}

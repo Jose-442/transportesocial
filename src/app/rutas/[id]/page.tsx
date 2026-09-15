@@ -7,6 +7,8 @@ import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm"
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
 import { formatEspacioDisponibleListado, rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
@@ -52,6 +54,30 @@ export default async function RutaDetallePage({
       .limit(1)
       .maybeSingle();
     reservaPendienteId = reservaPendiente?.id ?? null;
+  }
+
+  let formInicial:
+    | { bulto_descripcion: string; bulto_medidas: string; plazas: string }
+    | undefined;
+  const editarRaw = (await cookies()).get(EDITAR_RESERVA_COOKIE)?.value;
+  if (editarRaw) {
+    try {
+      const data = JSON.parse(editarRaw) as {
+        rutaId?: string;
+        bulto_descripcion?: string;
+        bulto_medidas?: string;
+        plazas?: string;
+      };
+      if (data.rutaId === id) {
+        formInicial = {
+          bulto_descripcion: data.bulto_descripcion ?? "",
+          bulto_medidas: data.bulto_medidas ?? "",
+          plazas: data.plazas ?? "",
+        };
+      }
+    } catch {
+      formInicial = undefined;
+    }
   }
 
   const { data } = await supabase
@@ -273,8 +299,8 @@ export default async function RutaDetallePage({
         <Card className="space-y-3 border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             Ya empezaste a reservar este viaje y el pago no se ha completado.
-            No se ha cobrado nada. Puedes seguir con el pago o cancelar para
-            cambiar la descripción.
+            No se ha cobrado nada. En tu reserva puedes pagar, editar o
+            cancelar.
           </p>
           <Link
             href={`/reservas/${reservaPendienteId}?cancelado=1`}
@@ -295,6 +321,7 @@ export default async function RutaDetallePage({
           ofreceBulto={ofreceBulto}
           precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
           ofertas={ofertas}
+          inicial={formInicial}
         />
       )}
 

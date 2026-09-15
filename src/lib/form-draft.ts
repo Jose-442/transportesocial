@@ -37,6 +37,7 @@ export function clearDraft(key: string) {
 
 const DRAFT_PREFIX = "transporte-social-";
 export const CUENTA_ID_KEY = "transporte-social-cuenta-id";
+export const EDITAR_RESERVA_COOKIE = "transporte-social-editar-reserva";
 
 /** Borra borradores del navegador (no se mezclan entre cuentas). */
 export function clearAllFormDrafts() {

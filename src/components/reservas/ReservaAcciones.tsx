@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import {
   aceptarReserva,
   cancelarReservaPendiente,
+  editarReservaPendiente,
   iniciarPagoReserva,
   marcarEnTransito,
   marcarEntregado,
@@ -44,11 +45,20 @@ export function ReservaAcciones({
               Completar pago
             </Button>
           </form>
-          <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
+          <form action={editarReservaPendiente.bind(null, reserva.id)}>
             <Button type="submit" variant="secondary" fullWidth>
+              Editar reserva
+            </Button>
+          </form>
+          <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
+            <Button type="submit" variant="ghost" fullWidth>
               Cancelar (aún no he pagado)
             </Button>
           </form>
+          <p className="text-xs text-zinc-500">
+            Hasta que no pagues puedes editar bulto o plazas las veces que
+            haga falta. No se cobra nada.
+          </p>
         </div>
       )}
 

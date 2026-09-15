@@ -19,11 +19,17 @@ export function ReservarRutaForm({
   ofreceBulto,
   precioBulto,
   ofertas,
+  inicial,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
   precioBulto: number | null;
   ofertas: OfertaCapacidad[];
+  inicial?: {
+    bulto_descripcion: string;
+    bulto_medidas: string;
+    plazas: string;
+  };
 }) {
   const router = useRouter();
   const ofertaAsiento = ofertas.find(
@@ -35,9 +41,9 @@ export function ReservarRutaForm({
     : null;
 
   const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
-    bulto_descripcion: "",
-    bulto_medidas: "",
-    plazas: "",
+    bulto_descripcion: inicial?.bulto_descripcion ?? "",
+    bulto_medidas: inicial?.bulto_medidas ?? "",
+    plazas: inicial?.plazas ?? "",
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
