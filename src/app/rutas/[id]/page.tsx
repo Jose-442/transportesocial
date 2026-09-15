@@ -209,12 +209,27 @@ export default async function RutaDetallePage({
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-zinc-500">Espacio</p>
+          <p className="text-xs uppercase tracking-wide text-zinc-500">
+            Espacio para el bulto
+          </p>
           <p className="mt-1 text-sm text-zinc-800">
             {ofreceBulto
               ? formatEspacioDisponibleListado(ruta.espacio_disponible)
               : "Este viaje no ofrece espacio para bultos."}
           </p>
+          {ruta.estado === "activa" && ofreceBulto && (
+            <div className="mt-3 space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                Precio por el porte del bulto
+              </p>
+              <p className="text-3xl font-bold text-emerald-700">
+                {formatEur(Number(ruta.precio_publicado))}
+              </p>
+              <p className="text-xs text-zinc-500">
+                Gastos de gestión incluidos.
+              </p>
+            </div>
+          )}
         </div>
       </Card>
 
@@ -252,25 +267,8 @@ export default async function RutaDetallePage({
                 <p className="text-3xl font-bold text-emerald-700">
                   {formatEur(Number(o.precio_publicado))}
                 </p>
-                <p className="text-xs text-zinc-500">
-                  Gastos de gestión incluidos.
-                </p>
               </div>
             ))}
-        </Card>
-      )}
-
-      {ruta.estado === "activa" && ofreceBulto && (
-        <Card className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-            Precio por el porte del bulto
-          </p>
-          <p className="text-3xl font-bold text-emerald-700">
-            {formatEur(Number(ruta.precio_publicado))}
-          </p>
-          <p className="text-xs text-zinc-500">
-            Gastos de gestión incluidos.
-          </p>
         </Card>
       )}
 
