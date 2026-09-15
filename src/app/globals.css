@@ -23,6 +23,13 @@ body {
   min-height: 3.5rem;
 }
 
+.ts-btn-cerrar-sesion {
+  border: 1px solid #d4d4d8;
+  background: #e4e4e7;
+  color: #27272a;
+  font-weight: 600;
+}
+
 /* PWA: solo monta en móvil vía JS (AddToHomeScreenBanner) */
 .ts-pwa-banner {
   position: fixed;

@@ -321,7 +321,7 @@ export function NuevaRutaForm({
         variant="ghost"
         fullWidth
         disabled={loading}
-        className="text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-800"
+        className="ts-btn-cerrar-sesion"
         onClick={() => {
           void cerrarSesion();
         }}
