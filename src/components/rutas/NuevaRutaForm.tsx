@@ -458,6 +458,8 @@ export function NuevaRutaForm({
                 min="0.01"
                 step="0.01"
                 required
+                inputMode="decimal"
+                className="[appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
                 value={form.precio_neto_plaza}
                 error={fieldErrors.precio_neto_plaza}
                 onChange={(e) =>
