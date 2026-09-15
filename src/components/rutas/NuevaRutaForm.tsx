@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { crearRuta } from "@/actions/rutas";
+import { cerrarSesion } from "@/actions/auth";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
@@ -303,9 +304,28 @@ export function NuevaRutaForm({
       Object.keys(fieldErrors).length > 0);
 
   const botonPublicar = (
-    <Button type="submit" fullWidth disabled={loading}>
-      {loading ? "Publicando…" : "Publicar ruta"}
-    </Button>
+    <div className="space-y-2">
+      <Button
+        type="submit"
+        fullWidth
+        disabled={loading}
+        className="ts-btn-publicar-ruta"
+      >
+        {loading ? "Publicando…" : "Publicar ruta"}
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        fullWidth
+        disabled={loading}
+        className="text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-800"
+        onClick={() => {
+          void cerrarSesion();
+        }}
+      >
+        Cerrar sesión
+      </Button>
+    </div>
   );
 
   return (

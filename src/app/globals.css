@@ -17,6 +17,12 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+.ts-btn-publicar-ruta {
+  font-size: 1.25rem;
+  font-weight: 700;
+  min-height: 3.5rem;
+}
+
 /* PWA: solo monta en móvil vía JS (AddToHomeScreenBanner) */
 .ts-pwa-banner {
   position: fixed;
