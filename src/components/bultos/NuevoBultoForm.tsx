@@ -50,13 +50,13 @@ export function NuevoBultoForm() {
       if (cancelled) return;
       uidRef.current = uid;
       const draft = loadOwnedDraft<NuevoBultoDraft>(DRAFT_KEYS.nuevoBulto, uid);
-      if (draft) {
-        const tipoMarcado =
-          draft.tipo_solicitud_marcada === true &&
-          isTipoSolicitud(draft.tipo_solicitud ?? "");
+      const tipoMarcado =
+        draft?.tipo_solicitud_marcada === true &&
+        isTipoSolicitud(draft.tipo_solicitud ?? "");
+      if (draft && tipoMarcado) {
         setForm({
-          tipo_solicitud: tipoMarcado ? draft.tipo_solicitud : "",
-          tipo_solicitud_marcada: tipoMarcado,
+          tipo_solicitud: draft.tipo_solicitud,
+          tipo_solicitud_marcada: true,
           origen: draft.origen,
           destino: draft.destino,
           descripcion: draft.descripcion,
@@ -68,6 +68,8 @@ export function NuevoBultoForm() {
             draft.hora_limite || extractTimeFromDatetime(draft.fecha_limite),
           foto: null,
         });
+      } else if (draft) {
+        clearDraft(DRAFT_KEYS.nuevoBulto);
       }
       setReady(true);
     });
