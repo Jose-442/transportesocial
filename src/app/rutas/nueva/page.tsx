@@ -1,4 +1,3 @@
-import { Card } from "@/components/ui/Card";
 import { NuevaRutaForm } from "@/components/rutas/NuevaRutaForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
 import { createClient } from "@/lib/supabase/server";
@@ -23,11 +22,6 @@ export default async function NuevaRutaPage() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">Conductor, publica tu ruta</h1>
-      <Card>
-        <NuevaRutaForm mostrarAvisoVehiculo={mostrarAvisoVehiculo} />
-      </Card>
-    </div>
+    <NuevaRutaForm mostrarAvisoVehiculo={mostrarAvisoVehiculo} />
   );
 }

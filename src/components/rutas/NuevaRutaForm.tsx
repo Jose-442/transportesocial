@@ -8,6 +8,7 @@ import { resolverMunicipio } from "@/lib/municipios-espana";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { crearRuta } from "@/actions/rutas";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
@@ -69,6 +70,7 @@ export function NuevaRutaForm({
   >({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
+  const [botonArriba, setBotonArriba] = useState(false);
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
 
@@ -81,7 +83,10 @@ export function NuevaRutaForm({
         DRAFT_KEYS.nuevaRuta,
         uid
       );
-      if (draft) setForm(normalizeNuevaRutaDraft(draft));
+      const loaded = draft
+        ? normalizeNuevaRutaDraft(draft)
+        : EMPTY_NUEVA_RUTA_DRAFT;
+      setForm(loaded);
       setReady(true);
     });
     return () => {
@@ -230,6 +235,16 @@ export function NuevaRutaForm({
     return errors;
   }
 
+  useEffect(() => {
+    if (!ready) return;
+    if (
+      !mostrarAvisoVehiculo &&
+      Object.keys(validateForm()).length === 0
+    ) {
+      setBotonArriba(true);
+    }
+  }, [ready, mostrarAvisoVehiculo]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
@@ -282,8 +297,33 @@ export function NuevaRutaForm({
     router.refresh();
   }
 
+  const mostrarError =
+    Boolean(error) &&
+    (error !== "Completa los campos marcados en rojo." ||
+      Object.keys(fieldErrors).length > 0);
+
+  const botonPublicar = (
+    <Button type="submit" fullWidth disabled={loading}>
+      {loading ? "Publicando…" : "Publicar ruta"}
+    </Button>
+  );
+
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
+      <h1 className="text-2xl font-bold text-zinc-900">
+        Conductor, publica tu ruta
+      </h1>
+      {botonArriba && (
+        <div className="space-y-3">
+          {mostrarError && (
+            <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+              {error}
+            </p>
+          )}
+          {botonPublicar}
+        </div>
+      )}
+      <Card className="space-y-4">
       <MunicipioAutocomplete
         name="origen"
         label="Salida"
@@ -435,9 +475,7 @@ export function NuevaRutaForm({
         </div>
       )}
 
-      {error &&
-        (error !== "Completa los campos marcados en rojo." ||
-          Object.keys(fieldErrors).length > 0) && (
+      {mostrarError && !botonArriba && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
         </p>
@@ -455,9 +493,8 @@ export function NuevaRutaForm({
           </p>
         </div>
       )}
-      <Button type="submit" fullWidth disabled={loading}>
-        {loading ? "Publicando…" : "Publicar ruta"}
-      </Button>
+      {!botonArriba && botonPublicar}
+      </Card>
     </form>
   );
 }
