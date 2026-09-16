@@ -17,6 +17,7 @@ export type ReservaViajeItem = {
   precioTotal: number;
   estado: EstadoReserva;
   esCliente: boolean;
+  queIncluye: string;
   fecha: string;
 };
 
@@ -59,7 +60,7 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
         <div>
           <p className="font-semibold text-zinc-900">{item.titulo}</p>
           <p className="text-xs text-zinc-500">
-            {item.esCliente ? "Como pasajero" : "Como conductor"} ·{" "}
+            {item.queIncluye} ·{" "}
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
         </div>

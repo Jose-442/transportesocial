@@ -7,6 +7,7 @@ import type {
 } from "@/components/cuenta/MisViajesTabs";
 import { apartadoReserva } from "@/lib/reservas/categorias";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
 import type { AnuncioBulto, OfertaPrecio, Reserva, RutaConductor } from "@/types/database";
 
 type DbClient = SupabaseClient;
@@ -173,6 +174,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         ? "pendiente_pago"
         : principal.estado,
       esCliente,
+      queIncluye: fraseQueIncluyeReservas(grupo),
       fecha: principal.created_at,
     };
 

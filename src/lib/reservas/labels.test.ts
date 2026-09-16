@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fraseQueHasReservado } from "@/lib/reservas/labels";
+import { fraseQueHasReservado, fraseQueIncluyeReservas } from "@/lib/reservas/labels";
 
 describe("fraseQueHasReservado", () => {
   it("una plaza no dice bulto", () => {
@@ -30,5 +30,24 @@ describe("fraseQueHasReservado", () => {
         cantidad: 1,
       })
     ).toBe("Has reservado espacio para un bulto");
+  });
+});
+
+describe("fraseQueIncluyeReservas", () => {
+  it("bulto y plaza juntos", () => {
+    expect(
+      fraseQueIncluyeReservas([
+        {
+          tipo: "ruta_directa",
+          bulto_descripcion: "lavadora",
+          cantidad: 1,
+        },
+        {
+          tipo: "capacidad_extra",
+          bulto_descripcion: "Plaza de acompañante (×1)",
+          cantidad: 1,
+        },
+      ])
+    ).toBe("Bulto y plaza");
   });
 });

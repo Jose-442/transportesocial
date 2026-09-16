@@ -47,6 +47,21 @@ export function esReservaDePlazas(reserva: ReservaResumen): boolean {
   return /^plazas?\b/i.test((reserva.bulto_descripcion ?? "").trim());
 }
 
+export function fraseQueIncluyeReservas(
+  reservas: ReservaResumen[]
+): string {
+  const hayPlaza = reservas.some(esReservaDePlazas);
+  const hayBulto = reservas.some((item) => !esReservaDePlazas(item));
+  if (hayBulto && hayPlaza) return "Bulto y plaza";
+  if (hayPlaza) {
+    const n = reservas
+      .filter(esReservaDePlazas)
+      .reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
+    return n === 1 ? "Una plaza" : `${n} plazas`;
+  }
+  return "Porte de bulto";
+}
+
 export function fraseQueHasReservado(
   reserva: ReservaResumen,
   opts?: { esCliente?: boolean }
