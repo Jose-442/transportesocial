@@ -31,6 +31,22 @@ body {
   cursor: pointer;
 }
 
+input[type="number"].ts-sin-flechas,
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"].ts-sin-flechas::-webkit-inner-spin-button,
+input[type="number"].ts-sin-flechas::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  display: none;
+}
+
 /* PWA: solo monta en móvil vía JS (AddToHomeScreenBanner) */
 .ts-pwa-banner {
   position: fixed;
