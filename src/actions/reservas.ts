@@ -276,6 +276,16 @@ async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise
   return { reservaId: result.reservaId };
 }
 
+export async function comprobarPagoReserva(reservaId: string): Promise<void> {
+  const recuperado = await recuperarPagoPendiente(reservaId, {
+    permitirListado: true,
+  });
+  if (recuperado.recovered) {
+    redirect(`/reservas/${reservaId}`);
+  }
+  redirect(`/reservas/${reservaId}?comprobar=1`);
+}
+
 export async function iniciarPagoReserva(reservaId: string): Promise<void> {
   const recuperado = await recuperarPagoPendiente(reservaId, {
     permitirListado: true,

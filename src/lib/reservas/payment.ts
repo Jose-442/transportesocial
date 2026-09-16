@@ -9,6 +9,14 @@ import type { Reserva } from "@/types/database";
 
 type AdminClient = SupabaseClient;
 
+function eurosToCents(value: number): number {
+  return Math.round(Number(value) * 100);
+}
+
+function sumaEurosToCents(values: number[]): number {
+  return values.reduce((sum, value) => sum + eurosToCents(value), 0);
+}
+
 export async function confirmarPagoReserva(
   admin: AdminClient,
   paymentIntentId: string,
@@ -39,7 +47,7 @@ export async function confirmarPagoReserva(
   }
 
   if (!opts?.omitirImporte) {
-    const expectedCents = Math.round(Number(r.precio_total) * 100);
+    const expectedCents = eurosToCents(r.precio_total);
     if (intent.currency !== "eur" || intent.amount !== expectedCents) {
       if (intent.currency === "eur" && r.ruta_conductor_id) {
         const { data: hermanas } = await admin
@@ -50,9 +58,7 @@ export async function confirmarPagoReserva(
           .eq("estado", "pendiente_pago");
         const lista = (hermanas ?? []) as { id: string; precio_total: number }[];
         const ids = [...new Set(lista.map((item) => item.id))];
-        const suma = Math.round(
-          lista.reduce((sum, item) => sum + Number(item.precio_total), 0) * 100
-        );
+        const suma = sumaEurosToCents(lista.map((item) => item.precio_total));
         if (ids.length > 1 && intent.amount === suma) {
           return confirmarPagoReservas(admin, paymentIntentId, ids);
         }
@@ -118,9 +124,10 @@ export async function confirmarPagoReservas(
 
   const { data: filas } = await admin.from("reservas").select("*").in("id", ids);
   const reservas = (filas ?? []) as Reserva[];
-  const esperado = Math.round(
-    reservas.reduce((sum, item) => sum + Number(item.precio_total), 0) * 100
-  );
+  if (reservas.length === 0) {
+    return { error: "Reserva no encontrada." };
+  }
+  const esperado = sumaEurosToCents(reservas.map((item) => item.precio_total));
   if (intent.amount !== esperado || intent.currency !== "eur") {
     return { error: "Importe de pago no válido." };
   }
@@ -213,8 +220,7 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
       r.cantidad ?? 1
     );
     if (ocupacion.error) {
-      await reembolsarReserva(admin, r.id, ocupacion.error);
-      return ocupacion;
+      console.error("[ocuparPlazasOferta]", ocupacion.error, r.id);
     }
   }
 

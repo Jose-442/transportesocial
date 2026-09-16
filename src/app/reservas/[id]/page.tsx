@@ -53,6 +53,8 @@ export default async function ReservaDetallePage({
 
   const pagoCancelado =
     query.cancelado === "1" || query.cancelado === "true";
+  const pagoComprobado =
+    query.comprobar === "1" || query.comprobar === "true";
 
   let errorPago: string | undefined;
   if (sessionId) {
@@ -170,12 +172,12 @@ export default async function ReservaDetallePage({
         </Card>
       )}
 
-      {errorPago && reserva.estado === "pendiente_pago" && (
+      {esCliente && reserva.estado === "pendiente_pago" && !pagoCancelado && (
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
-            El cobro de la tarjeta se ha hecho, pero la reserva aún no lo
-            refleja. Recarga esta página. No pulses Completar pago: se podría
-            intentar cobrar otra vez.
+            {errorPago || pagoComprobado
+              ? "Aún no se ha podido apuntar el cobro. Espera un minuto y pulsa otra vez Comprobar pago ya hecho. No uses Completar pago."
+              : "Si ya pagaste con la tarjeta, pulsa Comprobar pago ya hecho. Completar pago es solo si todavía no has pagado."}
           </p>
         </Card>
       )}

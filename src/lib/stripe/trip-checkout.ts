@@ -125,9 +125,6 @@ export async function completeTripCheckout(
   try {
     const { createAdminClient } = await import("@/lib/supabase/admin");
     const admin = createAdminClient();
-    if (!admin) {
-      return { error: "Servidor no configurado." };
-    }
 
     const stripe = getStripeServer();
     const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
@@ -159,8 +156,39 @@ export async function completeTripCheckout(
       return { error: "No se pudo verificar el pago." };
     }
 
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const db = user ? supabase : admin;
+    if (!db) {
+      return { error: "Servidor no configurado." };
+    }
+
+    if (user) {
+      const { data: reservaVista } = await supabase
+        .from("reservas")
+        .select("id, cliente_id, ruta_conductor_id, estado")
+        .eq("id", reservaId)
+        .maybeSingle();
+      if (
+        reservaVista?.ruta_conductor_id &&
+        reservaVista.cliente_id === user.id
+      ) {
+        const { data: hermanas } = await supabase
+          .from("reservas")
+          .select("id")
+          .eq("cliente_id", user.id)
+          .eq("ruta_conductor_id", reservaVista.ruta_conductor_id)
+          .eq("estado", "pendiente_pago");
+        if (hermanas && hermanas.length > 1) {
+          ids.splice(0, ids.length, ...hermanas.map((item) => item.id));
+        }
+      }
+    }
+
     const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-    const result = await confirmarPagoReservas(admin, paymentIntentId, ids);
+    const result = await confirmarPagoReservas(db, paymentIntentId, ids);
     if (result.error) {
       console.error("[completeTripCheckout]", result.error, {
         checkoutSessionId,

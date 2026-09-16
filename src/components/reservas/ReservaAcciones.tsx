@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import {
   aceptarReserva,
   cancelarReservaPendiente,
+  comprobarPagoReserva,
   editarReservaPendiente,
   iniciarPagoReserva,
   marcarEnTransito,
@@ -40,8 +41,13 @@ export function ReservaAcciones({
 
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">
-          <form action={iniciarPagoReserva.bind(null, reserva.id)}>
+          <form action={comprobarPagoReserva.bind(null, reserva.id)}>
             <Button type="submit" fullWidth>
+              Comprobar pago ya hecho
+            </Button>
+          </form>
+          <form action={iniciarPagoReserva.bind(null, reserva.id)}>
+            <Button type="submit" variant="secondary" fullWidth>
               Completar pago
             </Button>
           </form>
