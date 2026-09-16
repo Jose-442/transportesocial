@@ -59,8 +59,8 @@ export default async function LoginPage({
       <p className="pt-2 text-center text-sm text-zinc-600">
         ¿Ya tienes cuenta?
       </p>
-      <h1 className="text-2xl font-bold text-zinc-900">
-        Rellena este formulario para entrar.
+      <h1 className="text-2xl font-bold leading-snug text-zinc-900">
+        Solo si ya tienes cuenta, rellena este formulario para entrar
       </h1>
       <Card>
         <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
