@@ -277,13 +277,25 @@ async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise
 }
 
 export async function comprobarPagoReserva(reservaId: string): Promise<void> {
-  const recuperado = await recuperarPagoPendiente(reservaId, {
-    permitirListado: true,
-  });
-  if (recuperado.recovered) {
-    redirect(`/reservas/${reservaId}`);
+  try {
+    const recuperado = await recuperarPagoPendiente(reservaId, {
+      permitirListado: true,
+    });
+    if (recuperado.recovered) {
+      redirect(`/reservas/${reservaId}`);
+    }
+    redirect(`/reservas/${reservaId}?comprobar=1`);
+  } catch (error) {
+    const digest =
+      typeof error === "object" && error && "digest" in error
+        ? String((error as { digest?: string }).digest)
+        : "";
+    if (digest.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.error("[comprobarPagoReserva]", error);
+    redirect(`/reservas/${reservaId}?comprobar=1`);
   }
-  redirect(`/reservas/${reservaId}?comprobar=1`);
 }
 
 export async function iniciarPagoReserva(reservaId: string): Promise<void> {

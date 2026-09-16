@@ -114,6 +114,48 @@ function checkoutCubreReserva(
   return ids.includes(reservaId) || session.metadata?.reserva_id === reservaId;
 }
 
+async function aplicarCobroAReserva(
+  paymentIntentId: string,
+  reservaId: string
+): Promise<{ error?: string }> {
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const admin = createAdminClient();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const db = user ? supabase : admin;
+  if (!db) {
+    return { error: "Servidor no configurado." };
+  }
+
+  const ids: string[] = [reservaId];
+  if (user) {
+    const { data: reservaVista } = await supabase
+      .from("reservas")
+      .select("id, cliente_id, ruta_conductor_id, estado")
+      .eq("id", reservaId)
+      .maybeSingle();
+    if (
+      reservaVista?.ruta_conductor_id &&
+      reservaVista.cliente_id === user.id
+    ) {
+      const { data: hermanas } = await supabase
+        .from("reservas")
+        .select("id")
+        .eq("cliente_id", user.id)
+        .eq("ruta_conductor_id", reservaVista.ruta_conductor_id)
+        .eq("estado", "pendiente_pago");
+      if (hermanas && hermanas.length > 0) {
+        ids.splice(0, ids.length, ...hermanas.map((item) => item.id));
+      }
+    }
+  }
+
+  const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
+  return confirmarPagoReservas(db, paymentIntentId, ids);
+}
+
 export async function completeTripCheckout(
   checkoutSessionId: string,
   reservaId: string
@@ -123,9 +165,6 @@ export async function completeTripCheckout(
   }
 
   try {
-    const { createAdminClient } = await import("@/lib/supabase/admin");
-    const admin = createAdminClient();
-
     const stripe = getStripeServer();
     const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
       expand: ["payment_intent"],
@@ -135,15 +174,7 @@ export async function completeTripCheckout(
       return { error: "El pago no se ha completado." };
     }
 
-    const idsMeta =
-      session.metadata?.reserva_ids ||
-      session.metadata?.reserva_id ||
-      reservaId;
-    const ids = idsMeta
-      .split(",")
-      .map((id) => id.trim())
-      .filter(Boolean);
-    if (!ids.includes(reservaId) && session.metadata?.reserva_id !== reservaId) {
+    if (!checkoutCubreReserva(session, reservaId)) {
       return { error: "Reserva no válida." };
     }
 
@@ -156,44 +187,11 @@ export async function completeTripCheckout(
       return { error: "No se pudo verificar el pago." };
     }
 
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const db = user ? supabase : admin;
-    if (!db) {
-      return { error: "Servidor no configurado." };
-    }
-
-    if (user) {
-      const { data: reservaVista } = await supabase
-        .from("reservas")
-        .select("id, cliente_id, ruta_conductor_id, estado")
-        .eq("id", reservaId)
-        .maybeSingle();
-      if (
-        reservaVista?.ruta_conductor_id &&
-        reservaVista.cliente_id === user.id
-      ) {
-        const { data: hermanas } = await supabase
-          .from("reservas")
-          .select("id")
-          .eq("cliente_id", user.id)
-          .eq("ruta_conductor_id", reservaVista.ruta_conductor_id)
-          .eq("estado", "pendiente_pago");
-        if (hermanas && hermanas.length > 1) {
-          ids.splice(0, ids.length, ...hermanas.map((item) => item.id));
-        }
-      }
-    }
-
-    const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-    const result = await confirmarPagoReservas(db, paymentIntentId, ids);
+    const result = await aplicarCobroAReserva(paymentIntentId, reservaId);
     if (result.error) {
       console.error("[completeTripCheckout]", result.error, {
         checkoutSessionId,
         reservaId,
-        ids,
       });
     }
     return result;
@@ -213,15 +211,36 @@ export async function recuperarPagoPendiente(
 
   try {
     const stripe = getStripeServer();
-    const sessions = await stripe.checkout.sessions.list({ limit: 15 });
-    const sessionId = sessions.data.find(
-      (session) =>
-        session.payment_status === "paid" &&
-        checkoutCubreReserva(session, reservaId)
-    )?.id;
+    const desde = Math.floor(Date.now() / 1000) - 60 * 60 * 48;
 
-    if (!sessionId) return { recovered: false };
-    const result = await completeTripCheckout(sessionId, reservaId);
+    const intents = await stripe.paymentIntents.list({
+      limit: 50,
+      created: { gte: desde },
+    });
+    const intent = intents.data.find(
+      (item) =>
+        item.status === "succeeded" &&
+        item.currency === "eur" &&
+        checkoutCubreReserva(item, reservaId)
+    );
+    if (intent) {
+      const result = await aplicarCobroAReserva(intent.id, reservaId);
+      if (result.error) return { recovered: false, error: result.error };
+      return { recovered: true };
+    }
+
+    const sessions = await stripe.checkout.sessions.list({
+      limit: 50,
+      created: { gte: desde },
+    });
+    const session = sessions.data.find(
+      (item) =>
+        item.payment_status === "paid" && checkoutCubreReserva(item, reservaId)
+    );
+    if (!session) {
+      return { recovered: false, error: "No se encontró el cobro." };
+    }
+    const result = await completeTripCheckout(session.id, reservaId);
     if (result.error) return { recovered: false, error: result.error };
     return { recovered: true };
   } catch (err) {
