@@ -40,7 +40,23 @@ export async function confirmarPagoReserva(
 
   if (!opts?.omitirImporte) {
     const expectedCents = Math.round(Number(r.precio_total) * 100);
-    if (intent.amount !== expectedCents || intent.currency !== "eur") {
+    if (intent.currency !== "eur" || intent.amount !== expectedCents) {
+      if (intent.currency === "eur" && r.ruta_conductor_id) {
+        const { data: hermanas } = await admin
+          .from("reservas")
+          .select("id, precio_total")
+          .eq("cliente_id", r.cliente_id)
+          .eq("ruta_conductor_id", r.ruta_conductor_id)
+          .eq("estado", "pendiente_pago");
+        const lista = (hermanas ?? []) as { id: string; precio_total: number }[];
+        const ids = [...new Set(lista.map((item) => item.id))];
+        const suma = Math.round(
+          lista.reduce((sum, item) => sum + Number(item.precio_total), 0) * 100
+        );
+        if (ids.length > 1 && intent.amount === suma) {
+          return confirmarPagoReservas(admin, paymentIntentId, ids);
+        }
+      }
       return { error: "Importe de pago no válido." };
     }
   }

@@ -114,14 +114,19 @@ export async function completeTripCheckout(
   }
 
   const stripe = getStripeServer();
-  const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+  const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
+    expand: ["payment_intent"],
+  });
 
   if (session.payment_status !== "paid") {
     return { error: "El pago no se ha completado." };
   }
 
-  const idsMeta = session.metadata?.reserva_ids ?? session.metadata?.reserva_id;
-  const ids = (idsMeta ?? reservaId)
+  const idsMeta =
+    session.metadata?.reserva_ids ||
+    session.metadata?.reserva_id ||
+    reservaId;
+  const ids = idsMeta
     .split(",")
     .map((id) => id.trim())
     .filter(Boolean);
@@ -139,5 +144,44 @@ export async function completeTripCheckout(
   }
 
   const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-  return confirmarPagoReservas(admin, paymentIntentId, ids);
+  const result = await confirmarPagoReservas(admin, paymentIntentId, ids);
+  if (result.error) {
+    console.error("[completeTripCheckout]", result.error, {
+      checkoutSessionId,
+      reservaId,
+      ids,
+    });
+  }
+  return result;
+}
+
+/** Si el pago ya está hecho en Stripe y la reserva sigue pendiente, lo confirma. */
+export async function recuperarPagoPendiente(
+  reservaId: string
+): Promise<{ recovered?: boolean; error?: string }> {
+  if (!isStripeConfigured()) return { recovered: false };
+
+  try {
+    const stripe = getStripeServer();
+    const sessions = await stripe.checkout.sessions.list({ limit: 100 });
+    const match = sessions.data.find((session) => {
+      if (session.payment_status !== "paid") return false;
+      const ids = (
+        session.metadata?.reserva_ids ||
+        session.metadata?.reserva_id ||
+        ""
+      )
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean);
+      return ids.includes(reservaId) || session.metadata?.reserva_id === reservaId;
+    });
+    if (!match) return { recovered: false };
+    const result = await completeTripCheckout(match.id, reservaId);
+    if (result.error) return { recovered: false, error: result.error };
+    return { recovered: true };
+  } catch (err) {
+    console.error("[recuperarPagoPendiente]", err);
+    return { recovered: false, error: "No se pudo comprobar el pago ya hecho." };
+  }
 }

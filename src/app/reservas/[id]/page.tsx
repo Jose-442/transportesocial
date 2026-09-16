@@ -6,7 +6,7 @@ import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { createClient } from "@/lib/supabase/server";
-import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
+import { completeTripCheckout, recuperarPagoPendiente } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
 import {
   chatPermitido,
@@ -54,9 +54,13 @@ export default async function ReservaDetallePage({
   const pagoCancelado =
     query.cancelado === "1" || query.cancelado === "true";
 
+  let errorPago: string | undefined;
   if (sessionId) {
-    await completeTripCheckout(sessionId, id);
-    redirect(`/reservas/${id}`);
+    const result = await completeTripCheckout(sessionId, id);
+    if (!result.error) {
+      redirect(`/reservas/${id}`);
+    }
+    errorPago = result.error;
   }
 
   const { data: reservaData } = await supabase
@@ -73,6 +77,16 @@ export default async function ReservaDetallePage({
     reserva.transportista_id !== user.id
   ) {
     notFound();
+  }
+
+  if (!sessionId && reserva.estado === "pendiente_pago") {
+    const recuperado = await recuperarPagoPendiente(id);
+    if (recuperado.recovered) {
+      redirect(`/reservas/${id}`);
+    }
+    if (recuperado.error) {
+      errorPago = recuperado.error;
+    }
   }
 
   const esCliente = reserva.cliente_id === user.id;
@@ -131,6 +145,10 @@ export default async function ReservaDetallePage({
   const detalleBulto = relacionadas.find(
     (item) => !esReservaDePlazas(item) && item.bulto_descripcion
   );
+  const precioMostrar = relacionadas.reduce(
+    (sum, item) => sum + Number(item.precio_total),
+    0
+  );
 
   const estadoResenas =
     reserva.estado === "liberado" ? await getEstadoResenas(id) : null;
@@ -158,6 +176,16 @@ export default async function ReservaDetallePage({
           <p className="text-sm text-amber-950">
             No se ha cobrado nada. Puedes completar el pago, editar la reserva
             o cancelarla.
+          </p>
+        </Card>
+      )}
+
+      {errorPago && reserva.estado === "pendiente_pago" && (
+        <Card className="border-amber-200 bg-amber-50/80">
+          <p className="text-sm text-amber-950">
+            El cobro de la tarjeta se ha hecho, pero la reserva aún no lo
+            refleja. Recarga esta página. No pulses Completar pago: se podría
+            intentar cobrar otra vez.
           </p>
         </Card>
       )}
@@ -191,7 +219,7 @@ export default async function ReservaDetallePage({
       <Card className="space-y-2">
         <p className="text-xs uppercase tracking-wide text-zinc-500">Precio</p>
         <p className="text-2xl font-bold text-emerald-700">
-          {formatEur(Number(reserva.precio_total))}
+          {formatEur(precioMostrar)}
         </p>
         {frasesReserva.map((frase) => (
           <p key={frase} className="text-sm text-zinc-700">

@@ -15,7 +15,10 @@ import { reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
-import { createTripCheckoutSession } from "@/lib/stripe/trip-checkout";
+import {
+  createTripCheckoutSession,
+  recuperarPagoPendiente,
+} from "@/lib/stripe/trip-checkout";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import type { Reserva } from "@/types/database";
@@ -274,6 +277,10 @@ async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise
 }
 
 export async function iniciarPagoReserva(reservaId: string): Promise<void> {
+  const recuperado = await recuperarPagoPendiente(reservaId);
+  if (recuperado.recovered) {
+    redirect(`/reservas/${reservaId}`);
+  }
   const checkout = await createTripCheckoutSession(reservaId);
   if (checkout.ok) {
     redirect(checkout.url);

@@ -66,7 +66,7 @@ export async function POST(request: Request) {
             : session.payment_intent?.id;
 
         if (reservaId && paymentIntentId) {
-          const ids = (session.metadata?.reserva_ids ?? reservaId)
+          const ids = (session.metadata?.reserva_ids || session.metadata?.reserva_id || reservaId)
             .split(",")
             .map((id) => id.trim())
             .filter(Boolean);
