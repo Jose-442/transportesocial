@@ -89,9 +89,8 @@ export function ReservarRutaForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <p className="text-sm text-zinc-600">
-        La coordinación con el conductor será por el chat interno una vez hecha
-        la reserva.
+      <p className="text-base font-semibold uppercase text-zinc-800">
+        Rellena lo que necesites de este viaje
       </p>
       {ofreceBulto && (
         <Card className="space-y-3 bg-zinc-50">
@@ -164,6 +163,10 @@ export function ReservarRutaForm({
         </p>
       )}
       {error && <p className="text-sm text-red-600">{error}</p>}
+      <p className="text-sm text-zinc-600">
+        La coordinación con el conductor será por el chat interno una vez hecha
+        la reserva.
+      </p>
       <Button type="submit" fullWidth disabled={loading}>
         {loading ? "Preparando pago…" : "Pagar y reservar"}
       </Button>
