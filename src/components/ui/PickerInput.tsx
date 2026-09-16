@@ -71,7 +71,7 @@ function GridSelectField({
   listLabel: string;
   placeholder: string;
   disabledPlaceholder?: string;
-  columns?: 4 | 6 | 7;
+  columns?: 3 | 4 | 6 | 7;
 }) {
   const [open, setOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -145,7 +145,11 @@ function GridSelectField({
           <div
             role="listbox"
             aria-label={listLabel}
-            className="absolute bottom-full right-0 z-[60] mb-1 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
+            className={
+              columns === 3
+                ? "absolute bottom-full left-0 z-[60] mb-1 w-[24rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
+                : "absolute bottom-full right-0 z-[60] mb-1 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
+            }
           >
             <div
               className={
@@ -153,7 +157,9 @@ function GridSelectField({
                   ? "grid grid-cols-7 gap-0.5"
                   : columns === 6
                     ? "grid grid-cols-6 gap-1"
-                    : "grid grid-cols-4 gap-1"
+                    : columns === 3
+                      ? "grid grid-cols-3 gap-1"
+                      : "grid grid-cols-4 gap-1"
               }
             >
               {options.map((opt) => {
@@ -165,7 +171,7 @@ function GridSelectField({
                     role="option"
                     aria-selected={elegido}
                     className={[
-                      "min-h-8 cursor-pointer rounded-md text-sm font-medium",
+                      "min-h-8 cursor-pointer rounded-md px-1 text-sm font-medium",
                       elegido
                         ? "bg-emerald-600 text-white"
                         : "text-zinc-800 hover:bg-emerald-50",
@@ -262,22 +268,16 @@ export function DatePickerInput({
       <div className="grid grid-cols-2 gap-2 sm:gap-3">
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Mes</span>
-          <select
-            aria-label="Mes"
-            className={selectClasses(!!error)}
+          <GridSelectField
+            error={!!error}
             value={parts.month}
-            required={required}
-            onChange={(e) => update("month", e.target.value)}
-          >
-            <option value="" disabled hidden>
-              Mes
-            </option>
-            {MONTH_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            options={MONTH_OPTIONS}
+            onChange={(next) => update("month", next)}
+            ariaLabel="Mes"
+            listLabel="Mes"
+            placeholder="Mes"
+            columns={3}
+          />
         </label>
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Día</span>
