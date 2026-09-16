@@ -145,7 +145,7 @@ function GridSelectField({
             aria-label={listLabel}
             className="absolute z-50 mt-1 w-full rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
           >
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-4 gap-1">
               {options.map((opt) => {
                 const elegido = opt.value === value;
                 return (
