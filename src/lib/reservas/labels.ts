@@ -52,7 +52,13 @@ export function fraseQueIncluyeReservas(
 ): string {
   const hayPlaza = reservas.some(esReservaDePlazas);
   const hayBulto = reservas.some((item) => !esReservaDePlazas(item));
-  if (hayBulto && hayPlaza) return "Bulto y plaza";
+  if (hayBulto && hayPlaza) {
+    const plazas = reservas
+      .filter(esReservaDePlazas)
+      .reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
+    const bultos = reservas.filter((item) => !esReservaDePlazas(item)).length;
+    return `Reserva para ${bultos} bulto${bultos === 1 ? "" : "s"} y ${plazas} plaza${plazas === 1 ? "" : "s"}`;
+  }
   if (hayPlaza) {
     const n = reservas
       .filter(esReservaDePlazas)

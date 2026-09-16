@@ -48,6 +48,6 @@ describe("fraseQueIncluyeReservas", () => {
           cantidad: 1,
         },
       ])
-    ).toBe("Bulto y plaza");
+    ).toBe("Reserva para 1 bulto y 1 plaza");
   });
 });

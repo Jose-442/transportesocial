@@ -276,7 +276,14 @@ async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise
   return { reservaId: result.reservaId };
 }
 
-export async function comprobarPagoReserva(reservaId: string): Promise<void> {
+export async function comprobarPagoReserva(
+  _prev: { error?: string } | null,
+  formData: FormData
+): Promise<{ error?: string }> {
+  const reservaId = String(formData.get("reserva_id") ?? "").trim();
+  if (!reservaId) {
+    return { error: "No se ha podido comprobar el pago." };
+  }
   try {
     const recuperado = await recuperarPagoPendiente(reservaId, {
       permitirListado: true,
@@ -284,10 +291,11 @@ export async function comprobarPagoReserva(reservaId: string): Promise<void> {
     if (recuperado.recovered) {
       redirect(`/reservas/${reservaId}`);
     }
-    const motivo = encodeURIComponent(
-      (recuperado.error ?? "No se encontró el cobro.").slice(0, 120)
-    );
-    redirect(`/reservas/${reservaId}?comprobar=1&err=${motivo}`);
+    return {
+      error:
+        recuperado.error ??
+        "No se encontró el cobro ya hecho. No uses Completar pago.",
+    };
   } catch (error) {
     const digest =
       typeof error === "object" && error && "digest" in error
@@ -297,7 +305,7 @@ export async function comprobarPagoReserva(reservaId: string): Promise<void> {
       throw error;
     }
     console.error("[comprobarPagoReserva]", error);
-    redirect(`/reservas/${reservaId}?comprobar=1`);
+    return { error: "No se ha podido comprobar el pago. Prueba otra vez." };
   }
 }
 
