@@ -48,8 +48,8 @@ export default async function RutasPage({
       {!busquedaCompleta ? (
         <p className="text-sm text-zinc-500">
           {hayFiltros
-            ? "Completa ciudad de salida, ciudad de llegada y día para ver los viajes."
-            : "Rellena los tres campos y pulsa Buscar."}
+            ? "Completa salida, llegada, mes y día para ver los viajes."
+            : "Rellena los cuatro campos y pulsa Buscar."}
         </p>
       ) : rutas.length === 0 ? (
         <p className="text-sm text-zinc-500">

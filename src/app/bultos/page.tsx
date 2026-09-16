@@ -61,8 +61,8 @@ export default async function BultosPage({
       {!busquedaCompleta ? (
         <p className="text-sm text-zinc-500">
           {hayFiltros
-            ? "Completa ciudad de salida, ciudad de llegada y día para ver los bultos."
-            : "Rellena los tres campos y pulsa Buscar."}
+            ? "Completa salida, llegada, mes y día para ver los bultos."
+            : "Rellena los cuatro campos y pulsa Buscar."}
         </p>
       ) : bultos.length === 0 ? (
         <p className="text-sm text-zinc-500">
