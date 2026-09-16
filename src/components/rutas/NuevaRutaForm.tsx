@@ -240,7 +240,10 @@ export function NuevaRutaForm({
     return errors;
   }
 
-  const botonArriba = volviendoDelVehiculo;
+  const botonArriba =
+    ready &&
+    volviendoDelVehiculo &&
+    Object.keys(validateForm(form)).length === 0;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
