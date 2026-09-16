@@ -33,12 +33,19 @@ export default async function LoginPage({
     : "/registro";
   const esRedirectBulto =
     typeof rawRedirect === "string" && rawRedirect.startsWith("/bultos/");
+  const esRedirectPublicarViaje =
+    typeof rawRedirect === "string" && rawRedirect.startsWith("/rutas/nueva");
   const contrasenaActualizada =
     params.ok === "contrasena" ||
     (Array.isArray(params.ok) && params.ok[0] === "contrasena");
 
   return (
     <div className="space-y-4">
+      {esRedirectPublicarViaje && (
+        <p className="text-2xl font-bold leading-snug text-zinc-900">
+          Para publicar un viaje necesitas crear una cuenta
+        </p>
+      )}
       <Link
         href={registroHref}
         className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
