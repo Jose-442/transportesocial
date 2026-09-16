@@ -210,12 +210,49 @@ export async function recuperarPagoPendiente(
   if (!opts?.permitirListado) return { recovered: false };
 
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const idsBuscar = new Set<string>([reservaId]);
+    let importeCents: number | null = null;
+    if (user) {
+      const { data: vista } = await supabase
+        .from("reservas")
+        .select("id, cliente_id, ruta_conductor_id, precio_total")
+        .eq("id", reservaId)
+        .maybeSingle();
+      if (vista?.ruta_conductor_id && vista.cliente_id === user.id) {
+        const { data: hermanas } = await supabase
+          .from("reservas")
+          .select("id, precio_total")
+          .eq("cliente_id", user.id)
+          .eq("ruta_conductor_id", vista.ruta_conductor_id)
+          .eq("estado", "pendiente_pago");
+        if (hermanas && hermanas.length > 0) {
+          for (const item of hermanas) idsBuscar.add(item.id);
+          importeCents = hermanas.reduce(
+            (sum, item) => sum + Math.round(Number(item.precio_total) * 100),
+            0
+          );
+        }
+      }
+    }
+
     const stripe = getStripeServer();
-    const sessions = await stripe.checkout.sessions.list({ limit: 20 });
-    const session = sessions.data.find(
-      (item) =>
-        item.payment_status === "paid" && checkoutCubreReserva(item, reservaId)
-    );
+    const sessions = await stripe.checkout.sessions.list({ limit: 100 });
+    const session = sessions.data.find((item) => {
+      if (item.payment_status !== "paid") return false;
+      if ([...idsBuscar].some((id) => checkoutCubreReserva(item, id))) {
+        return true;
+      }
+      return (
+        importeCents !== null &&
+        item.amount_total === importeCents &&
+        item.currency === "eur"
+      );
+    });
     if (!session) {
       return { recovered: false, error: "No se encontró el cobro." };
     }

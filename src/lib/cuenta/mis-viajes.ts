@@ -142,19 +142,38 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     });
   }
 
+  const grupos = new Map<string, Reserva[]>();
   for (const r of lista) {
     const esCliente = r.cliente_id === userId;
     const apartado = apartadoReserva(r.estado, esCliente);
     if (!apartado) continue;
+    const clave =
+      r.ruta_conductor_id && r.estado !== "cancelado"
+        ? `${apartado}:${r.cliente_id}:${r.ruta_conductor_id}`
+        : r.id;
+    const grupo = grupos.get(clave) ?? [];
+    grupo.push(r);
+    grupos.set(clave, grupo);
+  }
+
+  for (const grupo of grupos.values()) {
+    const principal =
+      grupo.find((item) => item.tipo === "ruta_directa") ?? grupo[0];
+    if (!principal) continue;
+    const esCliente = principal.cliente_id === userId;
+    const apartado = apartadoReserva(principal.estado, esCliente);
+    if (!apartado) continue;
 
     const item: ReservaViajeItem = {
       kind: "reserva",
-      id: r.id,
-      titulo: tituloReserva(r, rutasMap),
-      precioTotal: Number(r.precio_total),
-      estado: r.estado,
+      id: principal.id,
+      titulo: tituloReserva(principal, rutasMap),
+      precioTotal: grupo.reduce((sum, item) => sum + Number(item.precio_total), 0),
+      estado: grupo.some((item) => item.estado === "pendiente_pago")
+        ? "pendiente_pago"
+        : principal.estado,
       esCliente,
-      fecha: r.created_at,
+      fecha: principal.created_at,
     };
 
     if (apartado === "propuestos") propuestos.push(item);

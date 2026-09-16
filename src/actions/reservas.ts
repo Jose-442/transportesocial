@@ -284,7 +284,10 @@ export async function comprobarPagoReserva(reservaId: string): Promise<void> {
     if (recuperado.recovered) {
       redirect(`/reservas/${reservaId}`);
     }
-    redirect(`/reservas/${reservaId}?comprobar=1`);
+    const motivo = encodeURIComponent(
+      (recuperado.error ?? "No se encontró el cobro.").slice(0, 120)
+    );
+    redirect(`/reservas/${reservaId}?comprobar=1&err=${motivo}`);
   } catch (error) {
     const digest =
       typeof error === "object" && error && "digest" in error

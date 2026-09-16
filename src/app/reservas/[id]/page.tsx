@@ -55,6 +55,10 @@ export default async function ReservaDetallePage({
     query.cancelado === "1" || query.cancelado === "true";
   const pagoComprobado =
     query.comprobar === "1" || query.comprobar === "true";
+  const motivoPago =
+    typeof query.err === "string" && query.err.trim()
+      ? query.err.trim()
+      : undefined;
 
   let errorPago: string | undefined;
   if (sessionId) {
@@ -176,7 +180,7 @@ export default async function ReservaDetallePage({
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             {errorPago || pagoComprobado
-              ? "Aún no se ha podido apuntar el cobro. Espera un minuto y pulsa otra vez Comprobar pago ya hecho. No uses Completar pago."
+              ? `Aún no se ha podido apuntar el cobro${motivoPago ? `: ${motivoPago}` : "."} Pulsa otra vez Comprobar pago ya hecho. No uses Completar pago.`
               : "Si ya pagaste con la tarjeta, pulsa Comprobar pago ya hecho. Completar pago es solo si todavía no has pagado."}
           </p>
         </Card>
