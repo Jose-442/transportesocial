@@ -60,6 +60,7 @@ export function EditarVehiculoForm({
 
     if (volverTrasGuardar) {
       router.push(volverTrasGuardar);
+      router.refresh();
       return;
     }
 

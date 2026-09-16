@@ -120,6 +120,7 @@ export async function actualizarVehiculo(input: {
   revalidatePath(`/perfil/${user.id}`);
   revalidatePath("/bultos", "layout");
   revalidatePath("/rutas", "layout");
+  revalidatePath("/rutas/nueva");
   return { ok: true };
 }
 

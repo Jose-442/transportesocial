@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
 import { resolverMunicipio } from "@/lib/municipios-espana";
@@ -67,13 +67,15 @@ export function NuevaRutaForm({
   desdeVehiculo?: boolean;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const volviendoDelVehiculo =
+    desdeVehiculo || searchParams.get("desde") === "vehiculo";
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<RutaFieldKey, string>>
   >({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
-  const [botonArriba, setBotonArriba] = useState(false);
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
 
@@ -238,16 +240,7 @@ export function NuevaRutaForm({
     return errors;
   }
 
-  useEffect(() => {
-    if (!ready) return;
-    if (
-      desdeVehiculo &&
-      !mostrarAvisoVehiculo &&
-      Object.keys(validateForm()).length === 0
-    ) {
-      setBotonArriba(true);
-    }
-  }, [ready, mostrarAvisoVehiculo, desdeVehiculo]);
+  const botonArriba = volviendoDelVehiculo;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -503,7 +496,7 @@ export function NuevaRutaForm({
           {error}
         </p>
       )}
-      {mostrarAvisoVehiculo && (
+      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p className="uppercase">
             Para publicar una ruta necesitas indicar los datos de tu vehículo

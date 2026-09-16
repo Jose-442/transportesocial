@@ -1,9 +1,11 @@
+import { Suspense } from "react";
 import { NuevaRutaForm } from "@/components/rutas/NuevaRutaForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
 import { createClient } from "@/lib/supabase/server";
 import { getOrCreateProfile } from "@/lib/profile";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Conductor, publica tu ruta" };
 
 export default async function NuevaRutaPage({
@@ -14,7 +16,8 @@ export default async function NuevaRutaPage({
   await requirePublicationAccess("/rutas/nueva");
 
   const params = await searchParams;
-  const desdeVehiculo = params.desde === "vehiculo";
+  const desdeParam = Array.isArray(params.desde) ? params.desde[0] : params.desde;
+  const desdeVehiculo = desdeParam === "vehiculo";
 
   const supabase = await createClient();
   const {
@@ -29,9 +32,11 @@ export default async function NuevaRutaPage({
   }
 
   return (
-    <NuevaRutaForm
-      mostrarAvisoVehiculo={mostrarAvisoVehiculo}
-      desdeVehiculo={desdeVehiculo}
-    />
+    <Suspense fallback={<p className="text-sm text-zinc-500">Cargando…</p>}>
+      <NuevaRutaForm
+        mostrarAvisoVehiculo={mostrarAvisoVehiculo}
+        desdeVehiculo={desdeVehiculo}
+      />
+    </Suspense>
   );
 }
