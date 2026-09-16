@@ -6,7 +6,7 @@ import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { createClient } from "@/lib/supabase/server";
-import { completeTripCheckout, recuperarPagoPendiente } from "@/lib/stripe/trip-checkout";
+import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
 import {
   chatPermitido,
@@ -77,16 +77,6 @@ export default async function ReservaDetallePage({
     reserva.transportista_id !== user.id
   ) {
     notFound();
-  }
-
-  if (!sessionId && reserva.estado === "pendiente_pago") {
-    const recuperado = await recuperarPagoPendiente(id);
-    if (recuperado.recovered) {
-      redirect(`/reservas/${id}`);
-    }
-    if (recuperado.error) {
-      errorPago = recuperado.error;
-    }
   }
 
   const esCliente = reserva.cliente_id === user.id;

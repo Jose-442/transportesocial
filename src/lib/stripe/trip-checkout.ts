@@ -99,6 +99,21 @@ export async function createTripCheckoutSession(
   return { ok: true, url: session.url };
 }
 
+function checkoutCubreReserva(
+  session: { metadata?: Record<string, string> | null },
+  reservaId: string
+): boolean {
+  const ids = (
+    session.metadata?.reserva_ids ||
+    session.metadata?.reserva_id ||
+    ""
+  )
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+  return ids.includes(reservaId) || session.metadata?.reserva_id === reservaId;
+}
+
 export async function completeTripCheckout(
   checkoutSessionId: string,
   reservaId: string
@@ -107,77 +122,95 @@ export async function completeTripCheckout(
     return { error: "Stripe no configurado." };
   }
 
-  const { createAdminClient } = await import("@/lib/supabase/admin");
-  const admin = createAdminClient();
-  if (!admin) {
-    return { error: "Servidor no configurado." };
-  }
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    if (!admin) {
+      return { error: "Servidor no configurado." };
+    }
 
-  const stripe = getStripeServer();
-  const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
-    expand: ["payment_intent"],
-  });
+    const stripe = getStripeServer();
+    const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
+      expand: ["payment_intent"],
+    });
 
-  if (session.payment_status !== "paid") {
-    return { error: "El pago no se ha completado." };
-  }
+    if (session.payment_status !== "paid") {
+      return { error: "El pago no se ha completado." };
+    }
 
-  const idsMeta =
-    session.metadata?.reserva_ids ||
-    session.metadata?.reserva_id ||
-    reservaId;
-  const ids = idsMeta
-    .split(",")
-    .map((id) => id.trim())
-    .filter(Boolean);
-  if (!ids.includes(reservaId) && session.metadata?.reserva_id !== reservaId) {
-    return { error: "Reserva no válida." };
-  }
+    const idsMeta =
+      session.metadata?.reserva_ids ||
+      session.metadata?.reserva_id ||
+      reservaId;
+    const ids = idsMeta
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+    if (!ids.includes(reservaId) && session.metadata?.reserva_id !== reservaId) {
+      return { error: "Reserva no válida." };
+    }
 
-  const paymentIntentId =
-    typeof session.payment_intent === "string"
-      ? session.payment_intent
-      : session.payment_intent?.id;
+    const paymentIntentId =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id;
 
-  if (!paymentIntentId) {
+    if (!paymentIntentId) {
+      return { error: "No se pudo verificar el pago." };
+    }
+
+    const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
+    const result = await confirmarPagoReservas(admin, paymentIntentId, ids);
+    if (result.error) {
+      console.error("[completeTripCheckout]", result.error, {
+        checkoutSessionId,
+        reservaId,
+        ids,
+      });
+    }
+    return result;
+  } catch (err) {
+    console.error("[completeTripCheckout]", err);
     return { error: "No se pudo verificar el pago." };
   }
-
-  const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-  const result = await confirmarPagoReservas(admin, paymentIntentId, ids);
-  if (result.error) {
-    console.error("[completeTripCheckout]", result.error, {
-      checkoutSessionId,
-      reservaId,
-      ids,
-    });
-  }
-  return result;
 }
 
-/** Si el pago ya está hecho en Stripe y la reserva sigue pendiente, lo confirma. */
+/** Busca un cobro ya hecho de esta reserva y lo confirma. No lista cientos de pagos. */
 export async function recuperarPagoPendiente(
-  reservaId: string
+  reservaId: string,
+  opts?: { permitirListado?: boolean }
 ): Promise<{ recovered?: boolean; error?: string }> {
   if (!isStripeConfigured()) return { recovered: false };
 
   try {
     const stripe = getStripeServer();
-    const sessions = await stripe.checkout.sessions.list({ limit: 100 });
-    const match = sessions.data.find((session) => {
-      if (session.payment_status !== "paid") return false;
-      const ids = (
-        session.metadata?.reserva_ids ||
-        session.metadata?.reserva_id ||
-        ""
-      )
-        .split(",")
-        .map((id) => id.trim())
-        .filter(Boolean);
-      return ids.includes(reservaId) || session.metadata?.reserva_id === reservaId;
-    });
-    if (!match) return { recovered: false };
-    const result = await completeTripCheckout(match.id, reservaId);
+    let sessionId: string | undefined;
+
+    try {
+      const found = await stripe.checkout.sessions.search({
+        query: `metadata["reserva_id"]:"${reservaId}"`,
+        limit: 5,
+      });
+      sessionId = found.data.find(
+        (session) =>
+          session.payment_status === "paid" &&
+          checkoutCubreReserva(session, reservaId)
+      )?.id;
+    } catch (err) {
+      console.error("[recuperarPagoPendiente] search", err);
+    }
+
+    if (!sessionId && opts?.permitirListado) {
+      const sessions = await stripe.checkout.sessions.list({ limit: 15 });
+      sessionId = sessions.data.find(
+        (session) =>
+          session.payment_status === "paid" &&
+          checkoutCubreReserva(session, reservaId)
+      )?.id;
+    }
+
+    if (!sessionId) return { recovered: false };
+    const result = await completeTripCheckout(sessionId, reservaId);
     if (result.error) return { recovered: false, error: result.error };
     return { recovered: true };
   } catch (err) {

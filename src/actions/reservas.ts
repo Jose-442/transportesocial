@@ -277,8 +277,13 @@ async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise
 }
 
 export async function iniciarPagoReserva(reservaId: string): Promise<void> {
-  const recuperado = await recuperarPagoPendiente(reservaId);
+  const recuperado = await recuperarPagoPendiente(reservaId, {
+    permitirListado: true,
+  });
   if (recuperado.recovered) {
+    redirect(`/reservas/${reservaId}`);
+  }
+  if (recuperado.error) {
     redirect(`/reservas/${reservaId}`);
   }
   const checkout = await createTripCheckoutSession(reservaId);
