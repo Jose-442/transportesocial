@@ -13,6 +13,12 @@ export function parseSafeInternalRedirect(
   return trimmed;
 }
 
+export function hrefLoginConVuelta(destino: string): string {
+  const seguro = parseSafeInternalRedirect(destino);
+  if (!seguro) return "/login";
+  return `/login?redirect=${encodeURIComponent(seguro)}`;
+}
+
 export function etiquetaRedirectVehiculo(redirect: string): string | null {
   const path = redirect.split("?")[0] ?? redirect;
   if (/^\/bultos\/[^/]+$/.test(path)) return "Volver a la propuesta";

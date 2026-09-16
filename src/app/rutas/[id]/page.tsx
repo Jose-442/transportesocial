@@ -13,7 +13,8 @@ import { formatEspacioDisponibleListado, rutaOfreceBulto } from "@/lib/espacio-o
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
-import { hrefVolverListado } from "@/lib/listado-filters";
+import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
+import { hrefLoginConVuelta } from "@/lib/safe-redirect";
 import { loadPerfilPublico } from "@/lib/profile";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
@@ -38,6 +39,10 @@ export default async function RutaDetallePage({
   const { id } = await params;
   const resolvedSearchParams = await searchParams;
   const volverHref = hrefVolverListado("/rutas", resolvedSearchParams);
+  const listadoQs = filtrosToSearchQuery(parseFiltros(resolvedSearchParams));
+  const loginHref = hrefLoginConVuelta(
+    listadoQs ? `/rutas/${id}?${listadoQs}` : `/rutas/${id}`
+  );
   const supabase = await createClient();
   const {
     data: { user },
@@ -370,9 +375,9 @@ export default async function RutaDetallePage({
         !user &&
         (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
         <p className="text-center text-sm text-zinc-600">
-          <a href="/login" className="font-semibold text-emerald-700">
+          <Link href={loginHref} className="font-semibold text-emerald-700">
             Inicia sesión
-          </a>{" "}
+          </Link>{" "}
           para reservar este viaje.
         </p>
       )}

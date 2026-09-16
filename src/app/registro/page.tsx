@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { createClient } from "@/lib/supabase/server";
+import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 import {
-  destinoTrasRegistroPublicacion,
   mensajeRegistroRedirect,
   parseRegistroRedirect,
 } from "@/lib/registro-redirect";
@@ -16,7 +16,10 @@ export async function generateMetadata({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const params = await searchParams;
-  const redirectTo = parseRegistroRedirect(params.redirect);
+  const rawRedirect = Array.isArray(params.redirect)
+    ? params.redirect[0]
+    : params.redirect;
+  const redirectTo = parseRegistroRedirect(rawRedirect);
   return { title: redirectTo ? "Crear cuenta para publicar" : "Crear cuenta" };
 }
 
@@ -26,8 +29,12 @@ export default async function RegistroPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = await searchParams;
-  const redirectTo = parseRegistroRedirect(params.redirect);
-  const mensaje = mensajeRegistroRedirect(redirectTo);
+  const rawRedirect = Array.isArray(params.redirect)
+    ? params.redirect[0]
+    : params.redirect;
+  const redirectTo = parseSafeInternalRedirect(rawRedirect);
+  const redirectPublicacion = parseRegistroRedirect(rawRedirect);
+  const mensaje = mensajeRegistroRedirect(redirectPublicacion);
 
   const supabase = await createClient();
   const {
@@ -35,7 +42,7 @@ export default async function RegistroPage({
   } = await supabase.auth.getUser();
 
   if (user && redirectTo) {
-    redirect(destinoTrasRegistroPublicacion(redirectTo));
+    redirect(redirectTo);
   }
 
   const loginHref = redirectTo

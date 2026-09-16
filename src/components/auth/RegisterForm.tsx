@@ -12,10 +12,7 @@ import {
 } from "@/lib/register-draft";
 import { uploadAvatar } from "@/lib/upload-avatar";
 import { registrarUsuario } from "@/actions/registro";
-import {
-  destinoTrasRegistroPublicacion,
-  type RegistroRedirect,
-} from "@/lib/registro-redirect";
+import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 import { saveRegistroVolverUrl } from "@/lib/terminos-volver-registro";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
@@ -75,9 +72,7 @@ export function RegisterForm({
   }, [foto]);
 
   function irTrasRegistro() {
-    const destino = redirectAfter
-      ? destinoTrasRegistroPublicacion(redirectAfter as RegistroRedirect)
-      : "/cuenta";
+    const destino = parseSafeInternalRedirect(redirectAfter) ?? "/cuenta";
     router.push(destino);
     router.refresh();
   }
