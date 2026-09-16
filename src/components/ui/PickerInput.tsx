@@ -60,6 +60,7 @@ function GridSelectField({
   listLabel,
   placeholder,
   disabledPlaceholder,
+  columns = 4,
 }: {
   error?: boolean;
   disabled?: boolean;
@@ -70,6 +71,7 @@ function GridSelectField({
   listLabel: string;
   placeholder: string;
   disabledPlaceholder?: string;
+  columns?: 4 | 6 | 7;
 }) {
   const [open, setOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -143,9 +145,17 @@ function GridSelectField({
           <div
             role="listbox"
             aria-label={listLabel}
-            className="absolute z-50 mt-1 w-full rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
+            className="absolute bottom-full right-0 z-[60] mb-1 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
           >
-            <div className="grid grid-cols-4 gap-1">
+            <div
+              className={
+                columns === 7
+                  ? "grid grid-cols-7 gap-0.5"
+                  : columns === 6
+                    ? "grid grid-cols-6 gap-1"
+                    : "grid grid-cols-4 gap-1"
+              }
+            >
               {options.map((opt) => {
                 const elegido = opt.value === value;
                 return (
@@ -155,7 +165,7 @@ function GridSelectField({
                     role="option"
                     aria-selected={elegido}
                     className={[
-                      "min-h-9 cursor-pointer rounded-lg text-sm font-medium",
+                      "min-h-8 cursor-pointer rounded-md text-sm font-medium",
                       elegido
                         ? "bg-emerald-600 text-white"
                         : "text-zinc-800 hover:bg-emerald-50",
@@ -281,6 +291,7 @@ export function DatePickerInput({
             listLabel="Día del mes"
             placeholder="Día"
             disabledPlaceholder="Elige mes primero"
+            columns={7}
           />
         </label>
       </div>
@@ -333,6 +344,7 @@ export function TimePickerInput({
             ariaLabel="Hora"
             listLabel="Hora"
             placeholder="Elige hora"
+            columns={6}
           />
         </label>
         <label className="block space-y-1">
