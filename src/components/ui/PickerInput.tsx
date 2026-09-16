@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   daysInMonth,
   formatDateFromMonthDay,
@@ -48,6 +48,133 @@ function selectClasses(hasError?: boolean) {
   return hasError
     ? `${selectClassName} border-red-400 ring-2 ring-red-100 focus:border-red-500 focus:ring-red-200`
     : selectClassName;
+}
+
+function GridSelectField({
+  error,
+  disabled,
+  value,
+  options,
+  onChange,
+  ariaLabel,
+  listLabel,
+  placeholder,
+  disabledPlaceholder,
+}: {
+  error?: boolean;
+  disabled?: boolean;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (value: string) => void;
+  ariaLabel: string;
+  listLabel: string;
+  placeholder: string;
+  disabledPlaceholder?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const texto = disabled
+    ? disabledPlaceholder ?? placeholder
+    : value
+      ? options.find((opt) => opt.value === value)?.label ?? value
+      : placeholder;
+
+  useEffect(() => {
+    if (!open) return;
+    function onDoc(e: MouseEvent) {
+      if (!boxRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
+
+  return (
+    <>
+      <select
+        aria-label={ariaLabel}
+        className={`${selectClasses(error)} md:hidden`}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {disabled ? (
+          <option value="">{disabledPlaceholder ?? placeholder}</option>
+        ) : (
+          <>
+            <option value="" disabled hidden>
+              {placeholder}
+            </option>
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </>
+        )}
+      </select>
+      <div ref={boxRef} className="relative hidden md:block">
+        <button
+          type="button"
+          aria-label={ariaLabel}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          disabled={disabled}
+          className={`${selectClasses(error)} text-left`}
+          onClick={() => {
+            if (!disabled) setOpen((prev) => !prev);
+          }}
+        >
+          {texto}
+        </button>
+        {open && !disabled && (
+          <div
+            role="listbox"
+            aria-label={listLabel}
+            className="absolute z-50 mt-1 w-full rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
+          >
+            <div className="grid grid-cols-3 gap-1">
+              {options.map((opt) => {
+                const elegido = opt.value === value;
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    role="option"
+                    aria-selected={elegido}
+                    className={[
+                      "min-h-9 cursor-pointer rounded-lg text-sm font-medium",
+                      elegido
+                        ? "bg-emerald-600 text-white"
+                        : "text-zinc-800 hover:bg-emerald-50",
+                    ].join(" ")}
+                    onClick={() => {
+                      onChange(opt.value);
+                      setOpen(false);
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
 
 type MonthDayParts = { month: string; day: string };
@@ -144,29 +271,17 @@ export function DatePickerInput({
         </label>
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Día</span>
-          <select
-            aria-label="Día"
-            className={selectClasses(!!error)}
-            value={parts.day}
-            required={required}
+          <GridSelectField
+            error={!!error}
             disabled={!parts.month}
-            onChange={(e) => update("day", e.target.value)}
-          >
-            {!parts.month ? (
-              <option value="">Elige mes primero</option>
-            ) : (
-              <>
-                <option value="" disabled hidden>
-                  Día
-                </option>
-                {dayOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </>
-            )}
-          </select>
+            value={parts.day}
+            options={dayOptions}
+            onChange={(next) => update("day", next)}
+            ariaLabel="Día"
+            listLabel="Día del mes"
+            placeholder="Día"
+            disabledPlaceholder="Elige mes primero"
+          />
         </label>
       </div>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
@@ -210,22 +325,15 @@ export function TimePickerInput({
       <div className="grid grid-cols-2 gap-3">
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Hora</span>
-          <select
-            aria-label="Hora"
-            className={selectClasses(!!error)}
+          <GridSelectField
+            error={!!error}
             value={hour}
-            required={required}
-            onChange={(e) => updateHour(e.target.value)}
-          >
-            <option value="" disabled hidden>
-              Elige hora
-            </option>
-            {HOUR_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+            options={HOUR_OPTIONS}
+            onChange={updateHour}
+            ariaLabel="Hora"
+            listLabel="Hora"
+            placeholder="Elige hora"
+          />
         </label>
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Minutos</span>
