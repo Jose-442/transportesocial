@@ -23,13 +23,6 @@ export async function confirmarPagoReserva(
   reservaId: string,
   opts?: { omitirImporte?: boolean }
 ): Promise<{ error?: string }> {
-  const stripe = getStripeServer();
-  const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
-
-  if (intent.status !== "succeeded") {
-    return { error: "El pago no se ha completado." };
-  }
-
   const { data: reserva, error: reservaError } = await admin
     .from("reservas")
     .select("*")
@@ -47,6 +40,11 @@ export async function confirmarPagoReserva(
   }
 
   if (!opts?.omitirImporte) {
+    const stripe = getStripeServer();
+    const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (intent.status !== "succeeded") {
+      return { error: "El pago no se ha completado." };
+    }
     const expectedCents = eurosToCents(r.precio_total);
     if (intent.currency !== "eur" || intent.amount !== expectedCents) {
       if (intent.currency === "eur" && r.ruta_conductor_id) {
@@ -299,13 +297,18 @@ async function confirmarReservaRuta(admin: AdminClient, r: Reserva) {
   const auto = Boolean(conductor?.aceptacion_automatica);
 
   if (auto) {
-    await admin
+    const { data: guardada } = await admin
       .from("reservas")
       .update({
         estado: "confirmada",
         aceptada_en: new Date().toISOString(),
       })
-      .eq("id", r.id);
+      .eq("id", r.id)
+      .select("estado")
+      .maybeSingle();
+    if (guardada?.estado !== "confirmada") {
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
 
     if (r.ruta_conductor_id) {
       await admin
@@ -334,13 +337,18 @@ async function confirmarReservaRuta(admin: AdminClient, r: Reserva) {
   } else {
     const expira = plazoAprobacionConductor().toISOString();
 
-    await admin
+    const { data: guardada } = await admin
       .from("reservas")
       .update({
         estado: "pendiente_aprobacion",
         expira_aprobacion_en: expira,
       })
-      .eq("id", r.id);
+      .eq("id", r.id)
+      .select("estado")
+      .maybeSingle();
+    if (guardada?.estado !== "pendiente_aprobacion") {
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
 
     await crearNotificacion(admin, {
       user_id: r.transportista_id,

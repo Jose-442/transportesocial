@@ -211,28 +211,7 @@ export async function recuperarPagoPendiente(
 
   try {
     const stripe = getStripeServer();
-    const desde = Math.floor(Date.now() / 1000) - 60 * 60 * 48;
-
-    const intents = await stripe.paymentIntents.list({
-      limit: 50,
-      created: { gte: desde },
-    });
-    const intent = intents.data.find(
-      (item) =>
-        item.status === "succeeded" &&
-        item.currency === "eur" &&
-        checkoutCubreReserva(item, reservaId)
-    );
-    if (intent) {
-      const result = await aplicarCobroAReserva(intent.id, reservaId);
-      if (result.error) return { recovered: false, error: result.error };
-      return { recovered: true };
-    }
-
-    const sessions = await stripe.checkout.sessions.list({
-      limit: 50,
-      created: { gte: desde },
-    });
+    const sessions = await stripe.checkout.sessions.list({ limit: 20 });
     const session = sessions.data.find(
       (item) =>
         item.payment_status === "paid" && checkoutCubreReserva(item, reservaId)
