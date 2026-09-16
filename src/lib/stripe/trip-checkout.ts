@@ -203,39 +203,22 @@ export async function completeTripCheckout(
   }
 }
 
-/** Busca un cobro ya hecho de esta reserva y lo confirma. No lista cientos de pagos. */
+/** Busca un cobro ya hecho de esta reserva y lo confirma. */
 export async function recuperarPagoPendiente(
   reservaId: string,
   opts?: { permitirListado?: boolean }
 ): Promise<{ recovered?: boolean; error?: string }> {
   if (!isStripeConfigured()) return { recovered: false };
+  if (!opts?.permitirListado) return { recovered: false };
 
   try {
     const stripe = getStripeServer();
-    let sessionId: string | undefined;
-
-    try {
-      const found = await stripe.checkout.sessions.search({
-        query: `metadata["reserva_id"]:"${reservaId}"`,
-        limit: 5,
-      });
-      sessionId = found.data.find(
-        (session) =>
-          session.payment_status === "paid" &&
-          checkoutCubreReserva(session, reservaId)
-      )?.id;
-    } catch (err) {
-      console.error("[recuperarPagoPendiente] search", err);
-    }
-
-    if (!sessionId && opts?.permitirListado) {
-      const sessions = await stripe.checkout.sessions.list({ limit: 15 });
-      sessionId = sessions.data.find(
-        (session) =>
-          session.payment_status === "paid" &&
-          checkoutCubreReserva(session, reservaId)
-      )?.id;
-    }
+    const sessions = await stripe.checkout.sessions.list({ limit: 15 });
+    const sessionId = sessions.data.find(
+      (session) =>
+        session.payment_status === "paid" &&
+        checkoutCubreReserva(session, reservaId)
+    )?.id;
 
     if (!sessionId) return { recovered: false };
     const result = await completeTripCheckout(sessionId, reservaId);
