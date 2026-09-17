@@ -1,4 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { crearNotificacion } from "@/lib/reservas/notify";
@@ -139,6 +142,185 @@ export async function confirmarPagoReservas(
   return {};
 }
 
+export async function confirmarPagoViajeDesdeIntent(
+  paymentIntentId: string,
+  reservaId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "Debes iniciar sesión." };
+  }
+
+  const stripe = getStripeServer();
+  const intent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  if (intent.status !== "succeeded" || intent.currency !== "eur") {
+    return { error: "El pago no se ha completado." };
+  }
+
+  const { data: vista, error: vistaError } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("id", reservaId)
+    .single();
+  if (vistaError || !vista) {
+    return { error: "Reserva no encontrada." };
+  }
+  const principal = vista as Reserva;
+  if (principal.cliente_id !== user.id) {
+    return { error: "No autorizado." };
+  }
+
+  let cobros: Reserva[] = [principal];
+  if (principal.ruta_conductor_id) {
+    const { data: hermanas } = await supabase
+      .from("reservas")
+      .select("*")
+      .eq("cliente_id", user.id)
+      .eq("ruta_conductor_id", principal.ruta_conductor_id)
+      .neq("estado", "cancelado");
+    if (hermanas && hermanas.length > 0) {
+      cobros = hermanas as Reserva[];
+    }
+  }
+
+  const pendientes = cobros.filter((item) => item.estado === "pendiente_pago");
+  if (pendientes.length === 0) {
+    return {};
+  }
+
+  const sumaPendientes = sumaEurosToCents(
+    pendientes.map((item) => item.precio_total)
+  );
+  const sumaGrupo = sumaEurosToCents(cobros.map((item) => item.precio_total));
+  if (intent.amount !== sumaPendientes && intent.amount !== sumaGrupo) {
+    return { error: "Importe de pago no válido." };
+  }
+
+  const { data: conductor } = await supabase
+    .from("profiles")
+    .select("aceptacion_automatica")
+    .eq("id", principal.transportista_id)
+    .maybeSingle();
+  const auto = Boolean(conductor?.aceptacion_automatica);
+  const nuevoEstado = auto ? "confirmada" : "pendiente_aprobacion";
+  const extra = auto
+    ? { aceptada_en: new Date().toISOString() }
+    : { expira_aprobacion_en: plazoAprobacionConductor().toISOString() };
+
+  for (const r of pendientes) {
+    const { data: actualizada, error: updateError } = await supabase
+      .from("reservas")
+      .update({
+        estado: nuevoEstado,
+        ...extra,
+      })
+      .eq("id", r.id)
+      .eq("cliente_id", user.id)
+      .eq("estado", "pendiente_pago")
+      .select("estado")
+      .maybeSingle();
+
+    if (updateError) {
+      console.error("[confirmarPagoViajeDesdeIntent] update", updateError, r.id);
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
+
+    let estadoGuardado = actualizada?.estado;
+    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
+      const { data: comprobada } = await supabase
+        .from("reservas")
+        .select("estado")
+        .eq("id", r.id)
+        .maybeSingle();
+      estadoGuardado = comprobada?.estado;
+    }
+    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
+
+    const { data: existingTx } = await supabase
+      .from("transacciones")
+      .select("id")
+      .eq("stripe_payment_intent_id", paymentIntentId)
+      .eq("reserva_id", r.id)
+      .maybeSingle();
+    if (!existingTx) {
+      await supabase.from("transacciones").insert({
+        reserva_id: r.id,
+        user_id: user.id,
+        stripe_payment_intent_id: paymentIntentId,
+        tipo: "cobro_viaje",
+        monto: r.precio_total,
+        estado_escrow: "retenido",
+        metadata: { reserva_id: r.id, tipo: "cobro_viaje" },
+      });
+    }
+  }
+
+  const admin = createAdminClient();
+  const dbAvisos = admin ?? supabase;
+  for (const r of pendientes) {
+    const dbOcupacion = admin ?? supabase;
+    if (r.oferta_capacidad_id) {
+      const ocupacion = await ocuparPlazasOferta(
+        dbOcupacion,
+        r.oferta_capacidad_id,
+        r.cantidad ?? 1
+      );
+      if (ocupacion.error) {
+        console.error("[ocuparPlazasOferta]", ocupacion.error, r.id);
+      }
+    }
+    if (r.tipo === "ruta_directa" && r.ruta_conductor_id && auto) {
+      await dbOcupacion
+        .from("rutas_conductores")
+        .update({ estado: "reservada" })
+        .eq("id", r.ruta_conductor_id);
+    }
+    await abrirChatReserva(dbOcupacion, r.id);
+  }
+
+  const enlace = `/reservas/${principal.id}`;
+  if (auto) {
+    await crearNotificacion(dbAvisos, {
+      user_id: principal.transportista_id,
+      tipo: "reserva_confirmada",
+      titulo: "Nueva reserva confirmada",
+      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
+      enlace,
+    });
+    await crearNotificacion(dbAvisos, {
+      user_id: principal.cliente_id,
+      tipo: "reserva_confirmada",
+      titulo: "Reserva confirmada",
+      mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
+      enlace,
+    });
+  } else {
+    await crearNotificacion(dbAvisos, {
+      user_id: principal.transportista_id,
+      tipo: "reserva_pendiente_aprobacion",
+      titulo: "Nueva solicitud de reserva",
+      mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+      enlace,
+    });
+    await crearNotificacion(dbAvisos, {
+      user_id: principal.cliente_id,
+      tipo: "nueva_reserva",
+      titulo: "Reserva enviada",
+      mensaje: "Pago recibido. Esperando confirmación del conductor.",
+      enlace,
+    });
+  }
+
+  revalidatePath(`/reservas/${principal.id}`);
+  revalidatePath("/cuenta/viajes");
+  return {};
+}
+
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
   await admin
     .from("reservas")
@@ -231,13 +413,18 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
   const auto = Boolean(conductor?.aceptacion_automatica);
 
   if (auto) {
-    await admin
+    const { data: guardada } = await admin
       .from("reservas")
       .update({
         estado: "confirmada",
         aceptada_en: new Date().toISOString(),
       })
-      .eq("id", r.id);
+      .eq("id", r.id)
+      .select("estado")
+      .maybeSingle();
+    if (guardada?.estado !== "confirmada") {
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
 
     await abrirChatReserva(admin, r.id);
 
@@ -259,13 +446,18 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
   } else {
     const expira = plazoAprobacionConductor().toISOString();
 
-    await admin
+    const { data: guardada } = await admin
       .from("reservas")
       .update({
         estado: "pendiente_aprobacion",
         expira_aprobacion_en: expira,
       })
-      .eq("id", r.id);
+      .eq("id", r.id)
+      .select("estado")
+      .maybeSingle();
+    if (guardada?.estado !== "pendiente_aprobacion") {
+      return { error: "No se pudo guardar el pago en la reserva." };
+    }
 
     await crearNotificacion(admin, {
       user_id: r.transportista_id,

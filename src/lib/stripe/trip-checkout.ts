@@ -118,42 +118,10 @@ async function aplicarCobroAReserva(
   paymentIntentId: string,
   reservaId: string
 ): Promise<{ error?: string }> {
-  const { createAdminClient } = await import("@/lib/supabase/admin");
-  const admin = createAdminClient();
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const db = user ? supabase : admin;
-  if (!db) {
-    return { error: "Servidor no configurado." };
-  }
-
-  const ids: string[] = [reservaId];
-  if (user) {
-    const { data: reservaVista } = await supabase
-      .from("reservas")
-      .select("id, cliente_id, ruta_conductor_id, estado")
-      .eq("id", reservaId)
-      .maybeSingle();
-    if (
-      reservaVista?.ruta_conductor_id &&
-      reservaVista.cliente_id === user.id
-    ) {
-      const { data: hermanas } = await supabase
-        .from("reservas")
-        .select("id")
-        .eq("cliente_id", user.id)
-        .eq("ruta_conductor_id", reservaVista.ruta_conductor_id)
-        .eq("estado", "pendiente_pago");
-      if (hermanas && hermanas.length > 0) {
-        ids.splice(0, ids.length, ...hermanas.map((item) => item.id));
-      }
-    }
-  }
-
-  const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-  return confirmarPagoReservas(db, paymentIntentId, ids);
+  const { confirmarPagoViajeDesdeIntent } = await import(
+    "@/lib/reservas/payment"
+  );
+  return confirmarPagoViajeDesdeIntent(paymentIntentId, reservaId);
 }
 
 export async function completeTripCheckout(
@@ -174,7 +142,15 @@ export async function completeTripCheckout(
       return { error: "El pago no se ha completado." };
     }
 
-    if (!checkoutCubreReserva(session, reservaId)) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const cubre = checkoutCubreReserva(session, reservaId);
+    const esDelUsuario = Boolean(
+      user && session.metadata?.user_id === user.id
+    );
+    if (!cubre && !esDelUsuario) {
       return { error: "Reserva no válida." };
     }
 
@@ -241,22 +217,40 @@ export async function recuperarPagoPendiente(
     }
 
     const stripe = getStripeServer();
-    const sessions = await stripe.checkout.sessions.list({ limit: 100 });
-    const session = sessions.data.find((item) => {
-      if (item.payment_status !== "paid") return false;
-      if ([...idsBuscar].some((id) => checkoutCubreReserva(item, id))) {
-        return true;
-      }
-      return (
-        importeCents !== null &&
-        item.amount_total === importeCents &&
-        item.currency === "eur"
+    const ids = [...idsBuscar];
+    const intents = await stripe.paymentIntents.list({ limit: 40 });
+    const cubreIntent = (metadata: Record<string, string> | null) => {
+      const listed = (
+        metadata?.reserva_ids ||
+        metadata?.reserva_id ||
+        ""
+      )
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean);
+      return ids.some(
+        (id) => listed.includes(id) || metadata?.reserva_id === id
       );
-    });
-    if (!session) {
+    };
+    const cobrados = intents.data.filter(
+      (item) => item.status === "succeeded" && item.currency === "eur"
+    );
+    const intent =
+      (importeCents !== null
+        ? cobrados.find(
+            (item) =>
+              item.amount === importeCents &&
+              (cubreIntent(item.metadata) ||
+                item.metadata?.user_id === user?.id)
+          )
+        : undefined) ?? cobrados.find((item) => cubreIntent(item.metadata));
+    if (!intent) {
       return { recovered: false, error: "No se encontró el cobro." };
     }
-    const result = await completeTripCheckout(session.id, reservaId);
+    const { confirmarPagoViajeDesdeIntent } = await import(
+      "@/lib/reservas/payment"
+    );
+    const result = await confirmarPagoViajeDesdeIntent(intent.id, reservaId);
     if (result.error) return { recovered: false, error: result.error };
     return { recovered: true };
   } catch (err) {

@@ -49,7 +49,12 @@ export default async function ReservaDetallePage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/login?redirect=/reservas/${id}`);
+  if (!user) {
+    const vuelta = sessionId
+      ? `/reservas/${id}?session_id=${encodeURIComponent(sessionId)}`
+      : `/reservas/${id}`;
+    redirect(`/login?redirect=${encodeURIComponent(vuelta)}`);
+  }
 
   const pagoCancelado =
     query.cancelado === "1" || query.cancelado === "true";
@@ -145,6 +150,12 @@ export default async function ReservaDetallePage({
     (sum, item) => sum + Number(item.precio_total),
     0
   );
+  const estadoMostrar = relacionadas.some(
+    (item) => item.estado === "pendiente_pago"
+  )
+    ? "pendiente_pago"
+    : reserva.estado;
+  const reservaVista = { ...reserva, estado: estadoMostrar };
 
   const estadoResenas =
     reserva.estado === "liberado" ? await getEstadoResenas(id) : null;
@@ -167,7 +178,7 @@ export default async function ReservaDetallePage({
         ← Mis viajes
       </Link>
 
-      {pagoCancelado && reserva.estado === "pendiente_pago" && (
+      {pagoCancelado && estadoMostrar === "pendiente_pago" && (
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             No se ha cobrado nada. Puedes completar el pago, editar la reserva
@@ -176,7 +187,7 @@ export default async function ReservaDetallePage({
         </Card>
       )}
 
-      {esCliente && reserva.estado === "pendiente_pago" && !pagoCancelado && (
+      {esCliente && estadoMostrar === "pendiente_pago" && !pagoCancelado && (
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             {errorPago || pagoComprobado
@@ -206,7 +217,7 @@ export default async function ReservaDetallePage({
       </div>
 
       <ReservaAcciones
-        reserva={reserva}
+        reserva={reservaVista}
         esCliente={esCliente}
         esConductor={esConductor}
         disputa={disputa}
@@ -244,7 +255,7 @@ export default async function ReservaDetallePage({
         </p>
       </Card>
 
-      {chatPermitido(reserva.estado) && (
+      {chatPermitido(estadoMostrar) && (
         <Card>
           <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
             Abrir chat
