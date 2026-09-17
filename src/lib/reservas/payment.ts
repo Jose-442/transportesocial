@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, patchReservaEstadoConServicio } from "@/lib/supabase/admin";
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { crearNotificacion } from "@/lib/reservas/notify";
@@ -211,24 +211,30 @@ export async function confirmarPagoViajeDesdeIntent(
     : { expira_aprobacion_en: plazoAprobacionConductor().toISOString() };
 
   for (const r of pendientes) {
+    const payload = {
+      estado: nuevoEstado,
+      ...extra,
+    };
+
     const { data: actualizada, error: updateError } = await supabase
       .from("reservas")
-      .update({
-        estado: nuevoEstado,
-        ...extra,
-      })
+      .update(payload)
       .eq("id", r.id)
       .eq("cliente_id", user.id)
-      .eq("estado", "pendiente_pago")
       .select("estado")
       .maybeSingle();
 
-    if (updateError) {
+    if (updateError && updateError.code !== "PGRST116") {
       console.error("[confirmarPagoViajeDesdeIntent] update", updateError, r.id);
-      return { error: "No se pudo guardar el pago en la reserva." };
     }
 
     let estadoGuardado = actualizada?.estado;
+    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
+      const porServicio = await patchReservaEstadoConServicio(r.id, payload);
+      if (porServicio.estado) {
+        estadoGuardado = porServicio.estado;
+      }
+    }
     if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
       const { data: comprobada } = await supabase
         .from("reservas")
@@ -284,36 +290,56 @@ export async function confirmarPagoViajeDesdeIntent(
   }
 
   const enlace = `/reservas/${principal.id}`;
-  if (auto) {
-    await crearNotificacion(dbAvisos, {
-      user_id: principal.transportista_id,
-      tipo: "reserva_confirmada",
-      titulo: "Nueva reserva confirmada",
-      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace,
-    });
-    await crearNotificacion(dbAvisos, {
-      user_id: principal.cliente_id,
-      tipo: "reserva_confirmada",
-      titulo: "Reserva confirmada",
-      mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-      enlace,
-    });
-  } else {
-    await crearNotificacion(dbAvisos, {
-      user_id: principal.transportista_id,
-      tipo: "reserva_pendiente_aprobacion",
-      titulo: "Nueva solicitud de reserva",
-      mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
-      enlace,
-    });
-    await crearNotificacion(dbAvisos, {
-      user_id: principal.cliente_id,
-      tipo: "nueva_reserva",
-      titulo: "Reserva enviada",
-      mensaje: "Pago recibido. Esperando confirmación del conductor.",
-      enlace,
-    });
+  const enlacesViaje = [
+    ...new Set(cobros.map((item) => `/reservas/${item.id}`)),
+  ];
+  await supabase
+    .from("notificaciones")
+    .update({ leida: true })
+    .eq("user_id", user.id)
+    .in("enlace", enlacesViaje)
+    .eq("leida", false);
+
+  const { data: avisoPrevio } = await supabase
+    .from("notificaciones")
+    .select("id")
+    .eq("user_id", user.id)
+    .in("enlace", enlacesViaje)
+    .limit(1)
+    .maybeSingle();
+
+  if (!avisoPrevio) {
+    if (auto) {
+      await crearNotificacion(dbAvisos, {
+        user_id: principal.transportista_id,
+        tipo: "reserva_confirmada",
+        titulo: "Nueva reserva confirmada",
+        mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
+        enlace,
+      });
+      await crearNotificacion(dbAvisos, {
+        user_id: principal.cliente_id,
+        tipo: "reserva_confirmada",
+        titulo: "Reserva confirmada",
+        mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
+        enlace,
+      });
+    } else {
+      await crearNotificacion(dbAvisos, {
+        user_id: principal.transportista_id,
+        tipo: "reserva_pendiente_aprobacion",
+        titulo: "Nueva solicitud de reserva",
+        mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+        enlace,
+      });
+      await crearNotificacion(dbAvisos, {
+        user_id: principal.cliente_id,
+        tipo: "nueva_reserva",
+        titulo: "Reserva enviada",
+        mensaje: "Pago recibido. Esperando confirmación del conductor.",
+        enlace,
+      });
+    }
   }
 
   revalidatePath(`/reservas/${principal.id}`);

@@ -140,3 +140,60 @@ export function createAdminClient(): SupabaseClient | null {
     global: { fetch: createAdminFetch(serviceRole) },
   });
 }
+
+/** PATCH de reserva con la clave de servidor, probando cabeceras que este proyecto acepta. */
+export async function patchReservaEstadoConServicio(
+  reservaId: string,
+  payload: Record<string, unknown>
+): Promise<{ estado?: string; error?: string }> {
+  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const supabaseUrl = getSupabaseServerUrl();
+  if (!serviceRole || !supabaseUrl) {
+    return { error: "Servidor no configurado." };
+  }
+
+  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/reservas?id=eq.${encodeURIComponent(reservaId)}`;
+  const cuerpos = JSON.stringify(payload);
+  const intentos: Record<string, string>[] = [
+    {
+      apikey: serviceRole,
+      Authorization: `Bearer ${serviceRole}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/json",
+    },
+    {
+      apikey: serviceRole,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/json",
+    },
+  ];
+
+  for (const headers of intentos) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "PATCH",
+        headers,
+        body: cuerpos,
+      });
+      const text = (await res.text()).trim();
+      if (!res.ok) {
+        console.error("[pago] patch servicio", res.status, text.slice(0, 180));
+        continue;
+      }
+      if (!text) continue;
+      const parsed = JSON.parse(text) as
+        | { estado?: string }
+        | { estado?: string }[];
+      const fila = Array.isArray(parsed) ? parsed[0] : parsed;
+      if (fila?.estado && fila.estado !== "pendiente_pago") {
+        return { estado: fila.estado };
+      }
+    } catch (err) {
+      console.error("[pago] patch servicio", err);
+    }
+  }
+
+  return { error: "No se pudo guardar el pago en la reserva." };
+}

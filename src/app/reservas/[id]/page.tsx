@@ -170,7 +170,9 @@ export default async function ReservaDetallePage({
 
   return (
     <div className="space-y-4">
-      <MarcarNotificacionesEnlaceLeida enlace={`/reservas/${id}`} />
+      <MarcarNotificacionesEnlaceLeida
+        enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
+      />
       <Link
         href="/cuenta/viajes"
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
