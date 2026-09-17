@@ -20,6 +20,77 @@ function sumaEurosToCents(values: number[]): number {
   return values.reduce((sum, value) => sum + eurosToCents(value), 0);
 }
 
+async function guardarEstadoTrasPago(opts: {
+  supabase: SupabaseClient;
+  userId: string;
+  reservaId: string;
+  nuevoEstado: string;
+  extra: { aceptada_en?: string; expira_aprobacion_en?: string };
+}): Promise<{ estado?: string; error?: string }> {
+  const { supabase, userId, reservaId, nuevoEstado, extra } = opts;
+  const payloads: Record<string, unknown>[] = [
+    {
+      estado: nuevoEstado,
+      ...(extra.aceptada_en ? { aceptada_en: extra.aceptada_en } : {}),
+      ...(extra.expira_aprobacion_en
+        ? { expira_aprobacion_en: extra.expira_aprobacion_en }
+        : {}),
+    },
+    { estado: nuevoEstado },
+    { estado: "pagado_escrow" },
+  ];
+
+  const { data: rpcFilas, error: rpcError } = await supabase.rpc(
+    "marcar_pago_reservas",
+    {
+      p_ids: [reservaId],
+      p_nuevo_estado: nuevoEstado,
+      p_aceptada_en: extra.aceptada_en ?? null,
+      p_expira_aprobacion_en: extra.expira_aprobacion_en ?? null,
+    }
+  );
+  if (rpcError) {
+    console.error("[pago] rpc marcar_pago_reservas", rpcError.message);
+  } else {
+    const fila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
+    if (fila?.estado && fila.estado !== "pendiente_pago") {
+      return { estado: fila.estado };
+    }
+  }
+
+  for (const payload of payloads) {
+    const { data, error } = await supabase
+      .from("reservas")
+      .update(payload)
+      .eq("id", reservaId)
+      .eq("cliente_id", userId)
+      .select("estado")
+      .maybeSingle();
+    if (error && error.code !== "PGRST116") {
+      console.error("[pago] update usuario", error.message, reservaId);
+    }
+    if (data?.estado && data.estado !== "pendiente_pago") {
+      return { estado: data.estado };
+    }
+
+    const porServicio = await patchReservaEstadoConServicio(reservaId, payload);
+    if (porServicio.estado && porServicio.estado !== "pendiente_pago") {
+      return { estado: porServicio.estado };
+    }
+  }
+
+  const { data: comprobada } = await supabase
+    .from("reservas")
+    .select("estado")
+    .eq("id", reservaId)
+    .maybeSingle();
+  if (comprobada?.estado && comprobada.estado !== "pendiente_pago") {
+    return { estado: comprobada.estado };
+  }
+
+  return { error: "No se pudo guardar el pago en la reserva." };
+}
+
 export async function confirmarPagoReserva(
   admin: AdminClient,
   paymentIntentId: string,
@@ -211,40 +282,15 @@ export async function confirmarPagoViajeDesdeIntent(
     : { expira_aprobacion_en: plazoAprobacionConductor().toISOString() };
 
   for (const r of pendientes) {
-    const payload = {
-      estado: nuevoEstado,
-      ...extra,
-    };
-
-    const { data: actualizada, error: updateError } = await supabase
-      .from("reservas")
-      .update(payload)
-      .eq("id", r.id)
-      .eq("cliente_id", user.id)
-      .select("estado")
-      .maybeSingle();
-
-    if (updateError && updateError.code !== "PGRST116") {
-      console.error("[confirmarPagoViajeDesdeIntent] update", updateError, r.id);
-    }
-
-    let estadoGuardado = actualizada?.estado;
-    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
-      const porServicio = await patchReservaEstadoConServicio(r.id, payload);
-      if (porServicio.estado) {
-        estadoGuardado = porServicio.estado;
-      }
-    }
-    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
-      const { data: comprobada } = await supabase
-        .from("reservas")
-        .select("estado")
-        .eq("id", r.id)
-        .maybeSingle();
-      estadoGuardado = comprobada?.estado;
-    }
-    if (!estadoGuardado || estadoGuardado === "pendiente_pago") {
-      return { error: "No se pudo guardar el pago en la reserva." };
+    const guardado = await guardarEstadoTrasPago({
+      supabase,
+      userId: user.id,
+      reservaId: r.id,
+      nuevoEstado,
+      extra,
+    });
+    if (!guardado.estado || guardado.estado === "pendiente_pago") {
+      return { error: guardado.error ?? "No se pudo guardar el pago en la reserva." };
     }
 
     const { data: existingTx } = await supabase

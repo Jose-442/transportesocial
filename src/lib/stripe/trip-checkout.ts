@@ -193,12 +193,14 @@ export async function recuperarPagoPendiente(
 
     const idsBuscar = new Set<string>([reservaId]);
     let importeCents: number | null = null;
+    let createdAt: string | null = null;
     if (user) {
       const { data: vista } = await supabase
         .from("reservas")
-        .select("id, cliente_id, ruta_conductor_id, precio_total")
+        .select("id, cliente_id, ruta_conductor_id, precio_total, created_at")
         .eq("id", reservaId)
         .maybeSingle();
+      createdAt = vista?.created_at ?? null;
       if (vista?.ruta_conductor_id && vista.cliente_id === user.id) {
         const { data: hermanas } = await supabase
           .from("reservas")
@@ -218,7 +220,13 @@ export async function recuperarPagoPendiente(
 
     const stripe = getStripeServer();
     const ids = [...idsBuscar];
-    const intents = await stripe.paymentIntents.list({ limit: 40 });
+    const createdGte = createdAt
+      ? Math.floor(new Date(createdAt).getTime() / 1000)
+      : Math.floor(Date.now() / 1000) - 14 * 24 * 60 * 60;
+    const intents = await stripe.paymentIntents.list({
+      limit: 40,
+      created: { gte: createdGte },
+    });
     const cubreIntent = (metadata: Record<string, string> | null) => {
       const listed = (
         metadata?.reserva_ids ||
