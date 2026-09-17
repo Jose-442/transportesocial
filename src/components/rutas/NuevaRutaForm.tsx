@@ -69,7 +69,10 @@ export function NuevaRutaForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const volviendoDelVehiculo =
-    desdeVehiculo || searchParams.get("desde") === "vehiculo";
+    desdeVehiculo ||
+    searchParams.get("desde") === "vehiculo" ||
+    (typeof window !== "undefined" &&
+      sessionStorage.getItem("transporte-social-desde-vehiculo") === "1");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<RutaFieldKey, string>>
@@ -240,10 +243,12 @@ export function NuevaRutaForm({
     return errors;
   }
 
-  const botonArriba =
-    ready &&
-    volviendoDelVehiculo &&
-    Object.keys(validateForm(form)).length === 0;
+  const botonArriba = ready && volviendoDelVehiculo;
+
+  useEffect(() => {
+    if (!botonArriba) return;
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [botonArriba]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -293,6 +298,7 @@ export function NuevaRutaForm({
     }
 
     clearDraft(DRAFT_KEYS.nuevaRuta);
+    sessionStorage.removeItem("transporte-social-desde-vehiculo");
     router.push(`/rutas/${result.id}`);
     router.refresh();
   }
@@ -504,7 +510,13 @@ export function NuevaRutaForm({
           <p className="uppercase">
             Para publicar una ruta necesitas indicar los datos de tu vehículo
           </p>
-          <ButtonLink href={cuentaHrefConVolver("/rutas/nueva")} className="mt-2">
+          <ButtonLink
+            href={cuentaHrefConVolver("/rutas/nueva")}
+            className="mt-2"
+            onClick={() => {
+              sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
+            }}
+          >
             Datos de mi vehículo
           </ButtonLink>
           <p className="mt-2 uppercase">

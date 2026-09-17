@@ -46,16 +46,19 @@ export function ButtonLink({
   fullWidth,
   className = "",
   children,
+  onClick,
 }: {
   href: string;
   variant?: Variant;
   fullWidth?: boolean;
   className?: string;
   children: ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={[
         "inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl px-4 py-2.5 text-center text-sm font-semibold leading-snug whitespace-normal transition-colors",
         variants[variant],

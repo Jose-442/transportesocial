@@ -59,6 +59,7 @@ export function EditarVehiculoForm({
     }
 
     if (volverTrasGuardar) {
+      sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
       router.push(volverTrasGuardar);
       router.refresh();
       return;
