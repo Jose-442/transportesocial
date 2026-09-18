@@ -54,6 +54,25 @@ describe("lineasOfertaRuta", () => {
     ]);
   });
 
+  it("si el bulto ya está reservado, solo enseña las plazas que quedan", () => {
+    expect(
+      badgeOfertaRuta({
+        espacio_disponible: "Pequeño (Maleta)",
+        asientoOfrecidas: 1,
+        bultoDisponible: false,
+        estado: "activa",
+      })
+    ).toBe("Solo pasajeros 1 plaza");
+    expect(
+      lineasOfertaRuta({
+        espacio_disponible: "Pequeño (Maleta)",
+        asientoOfrecidas: 1,
+        bultoDisponible: false,
+        estado: "activa",
+      })
+    ).toEqual(["1 acompañante"]);
+  });
+
   it("solo pasajeros si no hay espacio para bulto", () => {
     expect(
       lineasOfertaRuta({

@@ -12,6 +12,10 @@ import { formatEspacioDisponibleListado, rutaOfreceBulto } from "@/lib/espacio-o
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
+import {
+  aplicarOcupacionAOfertas,
+  cargarOcupacionRuta,
+} from "@/lib/capacidad/ocupacion";
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
 import { loadPerfilPublico } from "@/lib/profile";
@@ -107,13 +111,18 @@ export default async function RutaDetallePage({
     .eq("ruta_conductor_id", id)
     .order("created_at", { ascending: true });
 
-  const ofertas = (ofertasRaw as OfertaCapacidad[]) ?? [];
+  const ocupacion = await cargarOcupacionRuta(id);
+  const ofertas = aplicarOcupacionAOfertas(
+    (ofertasRaw as OfertaCapacidad[]) ?? [],
+    ocupacion
+  );
   const ofertasDisponibles = ofertas.filter(ofertaDisponible);
   const tieneCapacidadExtra = ofertasDisponibles.some((o) => o.tipo === "bulto");
   const { ofrecidas: asientoOfrecidas, ocupadas: asientoOcupadas } =
     resumenAsientosRuta(ofertas);
   const tieneAsientos = asientoOfrecidas > 0;
-  const ofreceBulto = rutaOfreceBulto(ruta.espacio_disponible);
+  const ofreceBulto =
+    rutaOfreceBulto(ruta.espacio_disponible) && !ocupacion.bultoOcupado;
   const plazasAsientoLibres = ofertasDisponibles
     .filter((o) => o.tipo === "asiento")
     .some(ofertaDisponible);
@@ -238,9 +247,11 @@ export default async function RutaDetallePage({
             Espacio para el bulto
           </p>
           <p className="mt-1 text-sm text-zinc-800">
-            {ofreceBulto
-              ? formatEspacioDisponibleListado(ruta.espacio_disponible)
-              : "Este viaje no ofrece espacio para bultos."}
+            {ocupacion.bultoOcupado
+              ? "El espacio para bulto de este viaje ya está reservado."
+              : ofreceBulto
+                ? formatEspacioDisponibleListado(ruta.espacio_disponible)
+                : "Este viaje no ofrece espacio para bultos."}
           </p>
           {ruta.estado === "activa" && ofreceBulto && (
             <div className="mt-3 space-y-1">
@@ -266,8 +277,11 @@ export default async function RutaDetallePage({
                 Nº de acompañantes
               </p>
               <p className="mt-1 text-sm font-medium text-zinc-900">
-                {asientoOfrecidas}{" "}
-                {asientoOfrecidas === 1 ? "plaza" : "plazas"} en este viaje
+                {Math.max(0, asientoOfrecidas - asientoOcupadas)}{" "}
+                {Math.max(0, asientoOfrecidas - asientoOcupadas) === 1
+                  ? "plaza libre"
+                  : "plazas libres"}{" "}
+                de {asientoOfrecidas}
               </p>
             </div>
             <div className="text-right">

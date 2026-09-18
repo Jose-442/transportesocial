@@ -21,6 +21,8 @@ import {
 } from "@/lib/stripe/trip-checkout";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
+import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Reserva } from "@/types/database";
 
 async function pendientesDelMismoViaje(
@@ -642,7 +644,20 @@ export async function solicitarReservaCapacidad(
     return { error: "No puedes reservar tu propio viaje." };
   }
 
-  const plazasLibres = oferta.plazas_totales - oferta.plazas_ocupadas;
+  const lector = createAdminClient() ?? supabase;
+  const { data: ocupandoPlazas } = await lector
+    .from("reservas")
+    .select("cantidad, estado, tipo, bulto_descripcion")
+    .eq("oferta_capacidad_id", ofertaId)
+    .in("estado", ESTADOS_RESERVA_OCUPAN);
+  const plazasDeReservas = ((ocupandoPlazas as { cantidad?: number }[]) ?? []).reduce(
+    (sum, item) => sum + Math.max(1, Number(item.cantidad) || 1),
+    0
+  );
+  const plazasLibres = Math.max(
+    0,
+    oferta.plazas_totales - Math.max(oferta.plazas_ocupadas, plazasDeReservas)
+  );
   if (oferta.tipo === "asiento" && cantidad < 1) {
     return { error: "Elige cuántas plazas quieres." };
   }

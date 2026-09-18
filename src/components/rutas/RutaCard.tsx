@@ -33,8 +33,11 @@ export function RutaCard({
   const item = ruta as RutaListadoItem;
   const reservadaConExtra = item.tieneCapacidadExtra;
   const asientoOfrecidas = item.asientoOfrecidas ?? 0;
+  const asientoOcupadas = item.asientoOcupadas ?? 0;
+  const asientoLibres = Math.max(0, asientoOfrecidas - asientoOcupadas);
   const tieneAsientos = asientoOfrecidas > 0;
-  const conBulto = rutaOfreceBulto(ruta.espacio_disponible);
+  const conBulto =
+    item.bultoDisponible ?? rutaOfreceBulto(ruta.espacio_disponible);
   const precioBulto = conBulto ? Number(ruta.precio_publicado) : null;
   const precioPlaza =
     item.precioPlazaPublicado ??
@@ -42,7 +45,8 @@ export function RutaCard({
 
   const ofertaInput = {
     espacio_disponible: ruta.espacio_disponible,
-    asientoOfrecidas,
+    asientoOfrecidas: asientoLibres,
+    bultoDisponible: conBulto,
     tieneCapacidadExtra: reservadaConExtra,
     estado: ruta.estado,
   };
@@ -81,14 +85,14 @@ export function RutaCard({
               <p key={linea}>{linea}</p>
             ))}
           </div>
-          {tieneAsientos && (
+          {asientoLibres > 0 && (
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Asientos libres
               </span>
               <AsientosLibresDots
                 ofrecidas={asientoOfrecidas}
-                ocupadas={item.asientoOcupadas ?? 0}
+                ocupadas={asientoOcupadas}
                 size="sm"
               />
             </div>
@@ -118,7 +122,7 @@ export function RutaCard({
                   )}
                 </p>
               )}
-              {precioPlaza != null && (
+              {precioPlaza != null && asientoLibres > 0 && (
                 <p className="text-lg font-bold leading-tight text-emerald-700">
                   {precioBulto != null ? (
                     <>

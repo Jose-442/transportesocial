@@ -8,7 +8,11 @@ import { crearNotificacion } from "@/lib/reservas/notify";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { plazoAprobacionConductor } from "@/lib/reservas/timing";
 import { getStripeServer } from "@/lib/stripe/server";
-import type { Reserva } from "@/types/database";
+import {
+  aplicarOcupacionAOfertas,
+  cargarOcupacionRuta,
+} from "@/lib/capacidad/ocupacion";
+import type { OfertaCapacidad, Reserva } from "@/types/database";
 
 type AdminClient = SupabaseClient;
 
@@ -259,6 +263,9 @@ export async function confirmarPagoViajeDesdeIntent(
 
   const pendientes = cobros.filter((item) => item.estado === "pendiente_pago");
   if (pendientes.length === 0) {
+    if (principal.ruta_conductor_id) {
+      await sincronizarOcupacionRuta(principal.ruta_conductor_id);
+    }
     return {};
   }
 
@@ -315,24 +322,10 @@ export async function confirmarPagoViajeDesdeIntent(
   const admin = createAdminClient();
   const dbAvisos = admin ?? supabase;
   for (const r of pendientes) {
-    const dbOcupacion = admin ?? supabase;
-    if (r.oferta_capacidad_id) {
-      const ocupacion = await ocuparPlazasOferta(
-        dbOcupacion,
-        r.oferta_capacidad_id,
-        r.cantidad ?? 1
-      );
-      if (ocupacion.error) {
-        console.error("[ocuparPlazasOferta]", ocupacion.error, r.id);
-      }
-    }
-    if (r.tipo === "ruta_directa" && r.ruta_conductor_id && auto) {
-      await dbOcupacion
-        .from("rutas_conductores")
-        .update({ estado: "reservada" })
-        .eq("id", r.ruta_conductor_id);
-    }
-    await abrirChatReserva(dbOcupacion, r.id);
+    await abrirChatReserva(admin ?? supabase, r.id);
+  }
+  if (principal.ruta_conductor_id) {
+    await sincronizarOcupacionRuta(principal.ruta_conductor_id);
   }
 
   const enlace = `/reservas/${principal.id}`;
@@ -390,7 +383,40 @@ export async function confirmarPagoViajeDesdeIntent(
 
   revalidatePath(`/reservas/${principal.id}`);
   revalidatePath("/cuenta/viajes");
+  if (principal.ruta_conductor_id) {
+    revalidatePath(`/rutas/${principal.ruta_conductor_id}`);
+  }
+  revalidatePath("/rutas");
   return {};
+}
+
+export async function sincronizarOcupacionRuta(rutaId: string): Promise<void> {
+  const admin = createAdminClient();
+  if (!admin) return;
+  const ocupacion = await cargarOcupacionRuta(rutaId);
+  const { data: ofertasRaw } = await admin
+    .from("ofertas_capacidad")
+    .select("*")
+    .eq("ruta_conductor_id", rutaId)
+    .eq("tipo", "asiento");
+  const actualizadas = aplicarOcupacionAOfertas(
+    (ofertasRaw as OfertaCapacidad[]) ?? [],
+    ocupacion
+  );
+  for (const oferta of actualizadas) {
+    const { error } = await admin
+      .from("ofertas_capacidad")
+      .update({
+        plazas_ocupadas: oferta.plazas_ocupadas,
+        estado: oferta.estado,
+      })
+      .eq("id", oferta.id);
+    if (error) {
+      console.error("[sincronizarOcupacionRuta]", error.message, oferta.id);
+    }
+  }
+  revalidatePath(`/rutas/${rutaId}`);
+  revalidatePath("/rutas");
 }
 
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {

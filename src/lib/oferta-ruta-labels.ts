@@ -7,6 +7,7 @@ import type { RutaConductor } from "@/types/database";
 export type OfertaRutaInput = {
   espacio_disponible: string;
   asientoOfrecidas?: number;
+  bultoDisponible?: boolean;
   tieneCapacidadExtra?: boolean;
   estado: RutaConductor["estado"];
 };
@@ -26,10 +27,15 @@ function lineaAcompanantes(
   return conBulto ? `+ ${texto}` : texto;
 }
 
+function ofreceBultoEnListado(input: OfertaRutaInput): boolean {
+  if (input.bultoDisponible === false) return false;
+  return rutaOfreceBulto(input.espacio_disponible);
+}
+
 export function lineasOfertaRuta(input: OfertaRutaInput): string[] {
   const { espacio_disponible, asientoOfrecidas = 0, tieneCapacidadExtra, estado } =
     input;
-  const conBulto = rutaOfreceBulto(espacio_disponible);
+  const conBulto = ofreceBultoEnListado(input);
   const lineas: string[] = [];
   if (conBulto) {
     lineas.push(lineaBulto(espacio_disponible));
@@ -51,7 +57,7 @@ export function badgeOfertaRuta(input: OfertaRutaInput): string {
   }
 
   const plazas = input.asientoOfrecidas ?? 0;
-  const conBulto = rutaOfreceBulto(input.espacio_disponible);
+  const conBulto = ofreceBultoEnListado(input);
   if (!conBulto) {
     if (plazas === 1) return "Solo pasajeros 1 plaza";
     if (plazas > 1) return `Solo pasajeros ${plazas} plazas`;
