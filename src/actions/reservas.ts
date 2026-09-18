@@ -309,20 +309,26 @@ export async function comprobarPagoReserva(
   }
 }
 
-export async function iniciarPagoReserva(reservaId: string): Promise<void> {
-  const recuperado = await recuperarPagoPendiente(reservaId, {
-    permitirListado: true,
-  });
-  if (recuperado.recovered) {
-    redirect(`/reservas/${reservaId}`);
+export async function iniciarPagoReserva(formData: FormData): Promise<void> {
+  const reservaId = String(formData.get("reserva_id") ?? "").trim();
+  if (!reservaId) return;
+
+  let checkout: Awaited<ReturnType<typeof createTripCheckoutSession>>;
+  try {
+    checkout = await createTripCheckoutSession(reservaId);
+  } catch (error) {
+    console.error("[iniciarPagoReserva]", error);
+    redirect(
+      `/reservas/${reservaId}?err=${encodeURIComponent("No se pudo abrir el pago. Prueba otra vez.")}`
+    );
   }
-  if (recuperado.error) {
-    redirect(`/reservas/${reservaId}`);
-  }
-  const checkout = await createTripCheckoutSession(reservaId);
+
   if (checkout.ok) {
     redirect(checkout.url);
   }
+  redirect(
+    `/reservas/${reservaId}?err=${encodeURIComponent(checkout.error)}`
+  );
 }
 
 export async function aceptarReserva(reservaId: string): Promise<void> {

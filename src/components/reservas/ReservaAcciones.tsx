@@ -1,12 +1,12 @@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { ComprobarPagoBoton } from "@/components/reservas/ComprobarPagoBoton";
 import {
   aceptarReserva,
   cancelarReservaPendiente,
   editarReservaPendiente,
-  iniciarPagoReserva,
   marcarEnTransito,
   marcarEntregado,
   rechazarReserva,
@@ -42,11 +42,7 @@ export function ReservaAcciones({
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">
           <ComprobarPagoBoton reservaId={reserva.id} />
-          <form action={iniciarPagoReserva.bind(null, reserva.id)}>
-            <Button type="submit" variant="secondary" fullWidth>
-              Completar pago
-            </Button>
-          </form>
+          <CompletarPagoBoton reservaId={reserva.id} />
           <form action={editarReservaPendiente.bind(null, reserva.id)}>
             <Button type="submit" variant="secondary" fullWidth>
               Editar reserva
