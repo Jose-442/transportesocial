@@ -14,7 +14,7 @@ export function ComprobarPagoBoton({ reservaId }: { reservaId: string }) {
     <form action={action} className="space-y-2">
       <input type="hidden" name="reserva_id" value={reservaId} />
       <Button type="submit" fullWidth disabled={pending}>
-        {pending ? "Comprobando…" : "Comprobar pago ya hecho"}
+        {pending ? "Comprobando…" : "Comprobar el pago"}
       </Button>
       {estado?.error ? (
         <p className="text-sm text-amber-900">{estado.error}</p>
