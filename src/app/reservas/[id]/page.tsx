@@ -133,16 +133,7 @@ export default async function ReservaDetallePage({
       relacionadas = hermanas as Reserva[];
     }
   }
-  const frasesReserva = [
-    ...new Set(
-      relacionadas
-        .slice()
-        .sort(
-          (a, b) => Number(esReservaDePlazas(a)) - Number(esReservaDePlazas(b))
-        )
-        .map((item) => fraseQueHasReservado(item, { esCliente }))
-    ),
-  ];
+  const fraseReserva = fraseQueHasReservado(relacionadas, { esCliente });
   const detalleBulto = relacionadas.find(
     (item) => !esReservaDePlazas(item) && item.bulto_descripcion
   );
@@ -230,11 +221,7 @@ export default async function ReservaDetallePage({
         <p className="text-2xl font-bold text-emerald-700">
           {formatEur(precioMostrar)}
         </p>
-        {frasesReserva.map((frase) => (
-          <p key={frase} className="text-sm text-zinc-700">
-            {frase}
-          </p>
-        ))}
+        <p className="text-sm text-zinc-700">{fraseReserva}</p>
         {detalleBulto?.bulto_descripcion && (
           <p className="text-sm text-zinc-600">
             {separarHoraOculta(detalleBulto.bulto_descripcion).texto}

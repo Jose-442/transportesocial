@@ -69,15 +69,26 @@ export function fraseQueIncluyeReservas(
 }
 
 export function fraseQueHasReservado(
-  reserva: ReservaResumen,
+  reservas: ReservaResumen | ReservaResumen[],
   opts?: { esCliente?: boolean }
 ): string {
+  const lista = Array.isArray(reservas) ? reservas : [reservas];
   const sujeto = opts?.esCliente === false ? "Han reservado" : "Has reservado";
-  if (esReservaDePlazas(reserva)) {
-    const n = Math.max(1, Number(reserva.cantidad) || 1);
-    return n === 1 ? `${sujeto} una plaza` : `${sujeto} ${n} plazas`;
+  const plazas = lista
+    .filter(esReservaDePlazas)
+    .reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
+  const bultos = lista.filter((item) => !esReservaDePlazas(item)).length;
+  const partes: string[] = [];
+  if (bultos > 0) {
+    partes.push(`${bultos} bulto${bultos === 1 ? "" : "s"}`);
   }
-  return `${sujeto} espacio para un bulto`;
+  if (plazas > 0) {
+    partes.push(`${plazas} plaza${plazas === 1 ? "" : "s"}`);
+  }
+  if (partes.length === 0) {
+    return sujeto;
+  }
+  return `${sujeto} espacio para ${partes.join(" y ")}`;
 }
 
 export function puedeReclamar(
