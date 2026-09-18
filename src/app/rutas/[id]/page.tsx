@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
@@ -139,7 +138,19 @@ export default async function RutaDetallePage({
   const badgeLabel =
     ruta.estado === "reservada" && tieneCapacidadExtra
       ? "Viaje reservado · Dispone de más sitio"
-      : ruta.estado;
+      : ruta.estado === "activa"
+        ? "ACTIVO"
+        : ruta.estado === "reservada"
+          ? "RESERVADO"
+          : ruta.estado === "completada"
+            ? "COMPLETADO"
+            : "CANCELADO";
+  const badgeTone =
+    ruta.estado === "activa"
+      ? "green"
+      : ruta.estado === "reservada"
+        ? "amber"
+        : "zinc";
 
   return (
     <div className="space-y-4">
@@ -150,22 +161,31 @@ export default async function RutaDetallePage({
         ← Volver a buscar viajes
       </Link>
 
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900">
-            {origen} → {destino}
-          </h1>
-          <p className="mt-1 text-sm text-zinc-600">{dia}</p>
-        </div>
-        <Badge tone={tieneCapacidadExtra ? "amber" : "green"}>
-          {badgeLabel}
-        </Badge>
+      <div>
+        <h1 className="text-2xl font-bold text-zinc-900">
+          {origen} → {destino}
+        </h1>
+        <p className="mt-1 text-sm text-zinc-600">{dia}</p>
       </div>
 
       <Card className="space-y-4">
-        <p className="text-sm font-semibold text-zinc-800">
-          Detalle del trayecto
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-sm font-semibold text-zinc-800">
+            Detalle del trayecto
+          </p>
+          <span
+            className={[
+              "inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-sm font-bold",
+              badgeTone === "green"
+                ? "bg-emerald-100 text-emerald-800"
+                : badgeTone === "amber"
+                  ? "bg-amber-100 text-amber-800"
+                  : "bg-zinc-100 text-zinc-700",
+            ].join(" ")}
+          >
+            {badgeLabel}
+          </span>
+        </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-zinc-500">
             Propuesto por
