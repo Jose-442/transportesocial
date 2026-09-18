@@ -374,7 +374,7 @@ export default async function RutaDetallePage({
       {!esPropio &&
         !user &&
         (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
-        <p className="text-center text-2xl font-bold leading-snug text-zinc-800">
+        <p className="mb-4 text-center text-2xl font-bold leading-snug text-zinc-800">
           <Link href={loginHref} className="text-emerald-700 hover:text-emerald-800">
             Inicia sesión
           </Link>{" "}

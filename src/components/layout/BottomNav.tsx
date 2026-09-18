@@ -49,14 +49,14 @@ function NavLink({
       href={href}
       className={[
         "flex w-full flex-col items-center justify-center gap-0.5 text-center font-semibold leading-tight",
-        active ? "text-emerald-700" : "text-zinc-500",
+        active ? "text-emerald-200" : "text-white",
         className,
       ].join(" ")}
     >
       <span
         className={[
           "rounded-full",
-          active ? "bg-emerald-600" : "bg-transparent",
+          active ? "bg-emerald-300" : "bg-transparent",
         ].join(" ")}
       />
       {label}
@@ -68,7 +68,7 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-200 bg-white pb-[env(safe-area-inset-bottom)] md:pb-0">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-emerald-800 bg-emerald-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(0,0,0,0.25)] md:pb-0">
       <div className="mx-auto grid max-w-lg grid-cols-2 gap-1 py-2 md:hidden">
         {mobileItems.map((item) => (
           <NavLink
@@ -88,7 +88,7 @@ export function BottomNav() {
             href={item.href}
             label={item.label}
             active={isActive(pathname, item.href)}
-            className="relative min-h-0 border-r border-zinc-100 px-2 pt-2 pb-0.5 text-base last:border-r-0 [&>span:first-child]:absolute [&>span:first-child]:left-1/2 [&>span:first-child]:top-1 [&>span:first-child]:h-1.5 [&>span:first-child]:w-1.5 [&>span:first-child]:-translate-x-1/2"
+            className="relative min-h-0 border-r border-emerald-800 px-2 pt-2 pb-0.5 text-base last:border-r-0 [&>span:first-child]:absolute [&>span:first-child]:left-1/2 [&>span:first-child]:top-1 [&>span:first-child]:h-1.5 [&>span:first-child]:w-1.5 [&>span:first-child]:-translate-x-1/2"
           />
         ))}
       </div>
