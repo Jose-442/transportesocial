@@ -4,9 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
+import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
-import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
@@ -49,8 +48,11 @@ export function OfertasCapacidadReserva({
 
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
-  const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const esAsiento = ofertaSel?.tipo === "asiento";
+  const plazasElegidas =
+    esAsiento && maxCantidad === 1
+      ? 1
+      : Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const total =
     ofertaSel && plazasElegidas > 0
       ? Number(ofertaSel.precio_publicado) * plazasElegidas
@@ -116,40 +118,12 @@ export function OfertasCapacidadReserva({
       </label>
 
       {esAsiento && ofertaSel && maxCantidad >= 1 && (
-        <Select
-          label="Número de plazas para pasajeros en este viaje"
-          labelRight={
-            <AsientosLibresDots
-              ofrecidas={ofertaSel.plazas_totales}
-              ocupadas={ofertaSel.plazas_ocupadas}
-            />
-          }
-          name="cantidad_ui"
-          value={
-            Number.parseInt(cantidad, 10) >= 1 &&
-            Number.parseInt(cantidad, 10) <= maxCantidad
-              ? cantidad
-              : ""
-          }
-          onChange={(e) => setCantidad(e.target.value)}
-          options={[
-            {
-              value: "",
-              label:
-                maxCantidad <= 1
-                  ? "Elige 1"
-                  : maxCantidad === 2
-                    ? "Elige 1 o 2"
-                    : "Elige 1, 2 o 3",
-            },
-            ...Array.from({ length: maxCantidad }, (_, i) => {
-              const n = i + 1;
-              return {
-                value: String(n),
-                label: n === 1 ? "1 plaza" : `${n} plazas`,
-              };
-            }),
-          ]}
+        <CampoNumeroPlazas
+          plazasLibres={maxCantidad}
+          plazasTotales={ofertaSel.plazas_totales}
+          plazasOcupadas={ofertaSel.plazas_ocupadas}
+          value={cantidad}
+          onChange={setCantidad}
           hint={`Plazas libres ahora: ${maxCantidad}.`}
         />
       )}

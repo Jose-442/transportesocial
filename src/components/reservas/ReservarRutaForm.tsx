@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
-import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
+import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaViaje } from "@/actions/reservas";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -48,10 +47,13 @@ export function ReservarRutaForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const cantidad = Math.min(
-    plazasLibres,
-    Math.max(0, Number.parseInt(form.plazas, 10) || 0)
-  );
+  const cantidad =
+    plazasLibres === 1
+      ? 1
+      : Math.min(
+          plazasLibres,
+          Math.max(0, Number.parseInt(form.plazas, 10) || 0)
+        );
   const llevaBulto = ofreceBulto && form.bulto_descripcion.trim().length > 0;
   const total =
     (llevaBulto && precioBulto != null ? precioBulto : 0) +
@@ -117,42 +119,12 @@ export function ReservarRutaForm({
       )}
       {plazasLibres > 0 && ofertaAsiento && (
         <Card className="bg-zinc-50">
-          <Select
-            label="Número de plazas para pasajeros en este viaje"
-            labelRight={
-              <AsientosLibresDots
-                ofrecidas={ofertaAsiento.plazas_totales}
-                ocupadas={ofertaAsiento.plazas_ocupadas}
-              />
-            }
-            name="cantidad_ui"
-            value={
-              Number.parseInt(form.plazas, 10) >= 1 &&
-              Number.parseInt(form.plazas, 10) <= plazasLibres
-                ? form.plazas
-                : ""
-            }
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, plazas: e.target.value }))
-            }
-            options={[
-              {
-                value: "",
-                label:
-                  plazasLibres <= 1
-                    ? "Elige 1"
-                    : plazasLibres === 2
-                      ? "Elige 1 o 2"
-                      : "Elige 1, 2 o 3",
-              },
-              ...Array.from({ length: plazasLibres }, (_, i) => {
-                const n = i + 1;
-                return {
-                  value: String(n),
-                  label: n === 1 ? "1 plaza" : `${n} plazas`,
-                };
-              }),
-            ]}
+          <CampoNumeroPlazas
+            plazasLibres={plazasLibres}
+            plazasTotales={ofertaAsiento.plazas_totales}
+            plazasOcupadas={ofertaAsiento.plazas_ocupadas}
+            value={form.plazas}
+            onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
             hint={`Plazas libres ahora: ${plazasLibres}. Si no viajas de pasajero, no elijas plaza.`}
           />
         </Card>
