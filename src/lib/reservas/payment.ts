@@ -217,6 +217,55 @@ export async function confirmarPagoReservas(
   return {};
 }
 
+async function avisarPagoViaje(
+  db: SupabaseClient,
+  principal: Reserva,
+  auto: boolean
+) {
+  const enlace = `/reservas/${principal.id}`;
+  const { data: avisoCliente } = await db
+    .from("notificaciones")
+    .select("id")
+    .eq("user_id", principal.cliente_id)
+    .eq("enlace", enlace)
+    .limit(1)
+    .maybeSingle();
+  if (avisoCliente) return;
+
+  if (auto) {
+    await crearNotificacion(db, {
+      user_id: principal.transportista_id,
+      tipo: "reserva_confirmada",
+      titulo: "Nueva reserva confirmada",
+      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
+      enlace,
+    });
+    await crearNotificacion(db, {
+      user_id: principal.cliente_id,
+      tipo: "reserva_confirmada",
+      titulo: "Reserva confirmada",
+      mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
+      enlace,
+    });
+    return;
+  }
+
+  await crearNotificacion(db, {
+    user_id: principal.transportista_id,
+    tipo: "reserva_pendiente_aprobacion",
+    titulo: "Nueva solicitud de reserva",
+    mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+    enlace,
+  });
+  await crearNotificacion(db, {
+    user_id: principal.cliente_id,
+    tipo: "nueva_reserva",
+    titulo: "Reserva enviada",
+    mensaje: "Pago recibido. Esperando confirmación del conductor.",
+    enlace,
+  });
+}
+
 export async function confirmarPagoViajeDesdeIntent(
   paymentIntentId: string,
   reservaId: string
@@ -261,11 +310,20 @@ export async function confirmarPagoViajeDesdeIntent(
     }
   }
 
+  const { data: conductor } = await supabase
+    .from("profiles")
+    .select("aceptacion_automatica")
+    .eq("id", principal.transportista_id)
+    .maybeSingle();
+  const auto = Boolean(conductor?.aceptacion_automatica);
+  const dbAvisos = supabase;
+
   const pendientes = cobros.filter((item) => item.estado === "pendiente_pago");
   if (pendientes.length === 0) {
     if (principal.ruta_conductor_id) {
       await sincronizarOcupacionRuta(principal.ruta_conductor_id);
     }
+    await avisarPagoViaje(dbAvisos, principal, auto);
     return {};
   }
 
@@ -277,12 +335,6 @@ export async function confirmarPagoViajeDesdeIntent(
     return { error: "Importe de pago no válido." };
   }
 
-  const { data: conductor } = await supabase
-    .from("profiles")
-    .select("aceptacion_automatica")
-    .eq("id", principal.transportista_id)
-    .maybeSingle();
-  const auto = Boolean(conductor?.aceptacion_automatica);
   const nuevoEstado = auto ? "confirmada" : "pendiente_aprobacion";
   const extra = auto
     ? { aceptada_en: new Date().toISOString() }
@@ -320,7 +372,6 @@ export async function confirmarPagoViajeDesdeIntent(
   }
 
   const admin = createAdminClient();
-  const dbAvisos = admin ?? supabase;
   for (const r of pendientes) {
     await abrirChatReserva(admin ?? supabase, r.id);
   }
@@ -329,57 +380,14 @@ export async function confirmarPagoViajeDesdeIntent(
   }
 
   const enlace = `/reservas/${principal.id}`;
-  const enlacesViaje = [
-    ...new Set(cobros.map((item) => `/reservas/${item.id}`)),
-  ];
   await supabase
     .from("notificaciones")
     .update({ leida: true })
     .eq("user_id", user.id)
-    .in("enlace", enlacesViaje)
+    .eq("enlace", enlace)
     .eq("leida", false);
 
-  const { data: avisoPrevio } = await supabase
-    .from("notificaciones")
-    .select("id")
-    .eq("user_id", user.id)
-    .in("enlace", enlacesViaje)
-    .limit(1)
-    .maybeSingle();
-
-  if (!avisoPrevio) {
-    if (auto) {
-      await crearNotificacion(dbAvisos, {
-        user_id: principal.transportista_id,
-        tipo: "reserva_confirmada",
-        titulo: "Nueva reserva confirmada",
-        mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-        enlace,
-      });
-      await crearNotificacion(dbAvisos, {
-        user_id: principal.cliente_id,
-        tipo: "reserva_confirmada",
-        titulo: "Reserva confirmada",
-        mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-        enlace,
-      });
-    } else {
-      await crearNotificacion(dbAvisos, {
-        user_id: principal.transportista_id,
-        tipo: "reserva_pendiente_aprobacion",
-        titulo: "Nueva solicitud de reserva",
-        mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
-        enlace,
-      });
-      await crearNotificacion(dbAvisos, {
-        user_id: principal.cliente_id,
-        tipo: "nueva_reserva",
-        titulo: "Reserva enviada",
-        mensaje: "Pago recibido. Esperando confirmación del conductor.",
-        enlace,
-      });
-    }
-  }
+  await avisarPagoViaje(dbAvisos, principal, auto);
 
   revalidatePath(`/reservas/${principal.id}`);
   revalidatePath("/cuenta/viajes");

@@ -14,6 +14,7 @@ import {
   ofertaOriginalRuta,
 } from "@/lib/oferta-ruta-labels";
 import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
+import { asegurarAvisosConductor } from "@/lib/reservas/notify";
 import type {
   AnuncioBulto,
   OfertaCapacidad,
@@ -76,6 +77,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     ]);
 
   const lista = (reservas ?? []) as Reserva[];
+  await asegurarAvisosConductor(supabase, userId, lista);
   const bultos = (misBultos ?? []) as Pick<
     AnuncioBulto,
     "id" | "origen" | "destino" | "created_at" | "estado"
