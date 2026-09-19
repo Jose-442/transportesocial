@@ -56,3 +56,13 @@ export function reservaIdDesdeEnlace(enlace: string | null): string | null {
   const id = enlace.slice("/reservas/".length).split("/")[0];
   return id || null;
 }
+
+/** Un pago de bulto + plaza: el aviso lo lanza el bulto, no la plaza. */
+export function omitirAvisoPlazaEnLote(
+  reservas: Pick<Reserva, "tipo">[],
+  tipoDeEsta: Reserva["tipo"]
+): boolean {
+  const hayBulto = reservas.some((r) => r.tipo === "ruta_directa");
+  const hayPlaza = reservas.some((r) => r.tipo === "capacidad_extra");
+  return hayBulto && hayPlaza && tipoDeEsta === "capacidad_extra";
+}

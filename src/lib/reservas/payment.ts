@@ -5,7 +5,7 @@ import { createAdminClient, patchReservaEstadoConServicio } from "@/lib/supabase
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { crearNotificacion } from "@/lib/reservas/notify";
-import { mismoCobroViaje } from "@/lib/reservas/aviso-viaje";
+import { mismoCobroViaje, omitirAvisoPlazaEnLote } from "@/lib/reservas/aviso-viaje";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { plazoAprobacionConductor } from "@/lib/reservas/timing";
 import { getStripeServer } from "@/lib/stripe/server";
@@ -100,7 +100,7 @@ export async function confirmarPagoReserva(
   admin: AdminClient,
   paymentIntentId: string,
   reservaId: string,
-  opts?: { omitirImporte?: boolean }
+  opts?: { omitirImporte?: boolean; omitirAvisos?: boolean }
 ): Promise<{ error?: string }> {
   const { data: reserva, error: reservaError } = await admin
     .from("reservas")
@@ -173,7 +173,9 @@ export async function confirmarPagoReserva(
   }
 
   if (r.tipo === "capacidad_extra") {
-    return confirmarReservaCapacidad(admin, r);
+    return confirmarReservaCapacidad(admin, r, {
+      omitirAvisos: opts?.omitirAvisos,
+    });
   }
 
   return confirmarReservaRuta(admin, r);
@@ -212,6 +214,7 @@ export async function confirmarPagoReservas(
   for (const item of reservas) {
     const result = await confirmarPagoReserva(admin, paymentIntentId, item.id, {
       omitirImporte: true,
+      omitirAvisos: omitirAvisoPlazaEnLote(reservas, item.tipo),
     });
     if (result.error) return result;
   }
@@ -526,7 +529,11 @@ async function plazaVaConBultoDelMismoPago(
   );
 }
 
-async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
+async function confirmarReservaCapacidad(
+  admin: AdminClient,
+  r: Reserva,
+  opts?: { omitirAvisos?: boolean }
+) {
   if (r.oferta_capacidad_id) {
     const ocupacion = await ocuparPlazasOferta(
       admin,
@@ -562,7 +569,8 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
 
     await abrirChatReserva(admin, r.id);
 
-    const yaAvisadoConElBulto = await plazaVaConBultoDelMismoPago(admin, r);
+    const yaAvisadoConElBulto =
+      opts?.omitirAvisos || (await plazaVaConBultoDelMismoPago(admin, r));
     if (!yaAvisadoConElBulto) {
       await crearNotificacion(admin, {
         user_id: r.transportista_id,
@@ -596,7 +604,8 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
       return { error: "No se pudo guardar el pago en la reserva." };
     }
 
-    const yaAvisadoConElBulto = await plazaVaConBultoDelMismoPago(admin, r);
+    const yaAvisadoConElBulto =
+      opts?.omitirAvisos || (await plazaVaConBultoDelMismoPago(admin, r));
     if (!yaAvisadoConElBulto) {
       await crearNotificacion(admin, {
         user_id: r.transportista_id,

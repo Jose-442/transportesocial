@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   agruparReservasMismoCobro,
   idReservaDelAviso,
+  omitirAvisoPlazaEnLote,
 } from "@/lib/reservas/aviso-viaje";
 
 const base = {
@@ -33,5 +34,28 @@ describe("agruparReservasMismoCobro", () => {
     expect(grupos).toHaveLength(2);
     expect(idReservaDelAviso(grupos[0]!)).toBe("bulto");
     expect(grupos[1]!.map((r) => r.id)).toEqual(["plaza2"]);
+  });
+});
+
+describe("omitirAvisoPlazaEnLote", () => {
+  it("en un pago de bulto y plaza no avisa otra vez por la plaza", () => {
+    expect(
+      omitirAvisoPlazaEnLote(
+        [{ tipo: "ruta_directa" }, { tipo: "capacidad_extra" }],
+        "capacidad_extra"
+      )
+    ).toBe(true);
+    expect(
+      omitirAvisoPlazaEnLote(
+        [{ tipo: "ruta_directa" }, { tipo: "capacidad_extra" }],
+        "ruta_directa"
+      )
+    ).toBe(false);
+  });
+
+  it("si solo se paga una plaza suelta sí avisa", () => {
+    expect(
+      omitirAvisoPlazaEnLote([{ tipo: "capacidad_extra" }], "capacidad_extra")
+    ).toBe(false);
   });
 });
