@@ -22,7 +22,6 @@ import {
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
-import { createAdminClient } from "@/lib/supabase/admin";
 import type { Reserva } from "@/types/database";
 
 async function pendientesDelMismoViaje(
