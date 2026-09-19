@@ -190,9 +190,11 @@ export default async function CuentaPage({
 
       <Card className="space-y-4">
         <div>
-          <h2 className="font-semibold text-zinc-900">Mis publicaciones</h2>
+          <h2 className="font-semibold text-zinc-900">
+            El estado de tu propuesta de viaje ahora
+          </h2>
           <p className="mt-1 text-base text-zinc-600">
-            Lo que aún queda libre ahora. El viaje tal como lo publicaste está
+            El sitio que aún queda libre. El viaje tal como lo publicaste está
             en Mis viajes → Propuestos.
           </p>
         </div>
