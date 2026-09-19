@@ -253,7 +253,7 @@ export function MisViajesTabs({
       "Aquí saldrán los viajes que tú hayas pagado o tengas pendientes de pago.",
     para_mi:
       "Aquí saldrán los viajes propuestos por ti y que algún conductor haya puesto precio.",
-    historial: "Aún no hay viajes completados o cancelados.",
+    historial: "Aún no hay viajes realizados o cancelados.",
   };
 
   return (
