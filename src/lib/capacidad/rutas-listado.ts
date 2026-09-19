@@ -6,13 +6,10 @@ import {
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
 import {
   aplicarOcupacionAOfertas,
-  ESTADOS_RESERVA_OCUPAN,
-  ocupacionDesdeReservas,
+  cargarOcupacionesPorRutas,
   type OcupacionRuta,
-  type ReservaOcupacion,
 } from "@/lib/capacidad/ocupacion";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
-import { createAdminClient } from "@/lib/supabase/admin";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
 export type RutaListadoItem = RutaConductor & {
@@ -67,24 +64,9 @@ export async function listarRutasConCapacidad(
       ofertasPorRuta.set(o.ruta_conductor_id, lista);
     }
 
-    const lector = createAdminClient() ?? supabase;
-    const { data: reservasRaw } = await lector
-      .from("reservas")
-      .select(
-        "tipo, estado, cantidad, bulto_descripcion, oferta_capacidad_id, ruta_conductor_id"
-      )
-      .in("ruta_conductor_id", todosLosIds)
-      .in("estado", ESTADOS_RESERVA_OCUPAN);
-
-    const porRuta = new Map<string, ReservaOcupacion[]>();
-    for (const reserva of (reservasRaw as ReservaOcupacion[]) ?? []) {
-      if (!reserva.ruta_conductor_id) continue;
-      const lista = porRuta.get(reserva.ruta_conductor_id) ?? [];
-      lista.push(reserva);
-      porRuta.set(reserva.ruta_conductor_id, lista);
-    }
-    for (const [rutaId, reservas] of porRuta) {
-      ocupacionPorRuta.set(rutaId, ocupacionDesdeReservas(reservas));
+    const ocupaciones = await cargarOcupacionesPorRutas(todosLosIds, supabase);
+    for (const [rutaId, ocupacion] of ocupaciones) {
+      ocupacionPorRuta.set(rutaId, ocupacion);
     }
   }
 

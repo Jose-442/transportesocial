@@ -391,30 +391,40 @@ export async function confirmarPagoViajeDesdeIntent(
 }
 
 export async function sincronizarOcupacionRuta(rutaId: string): Promise<void> {
+  const supabase = await createClient();
+  const { error: rpcError } = await supabase.rpc("sincronizar_ocupacion_ruta", {
+    p_ruta_id: rutaId,
+  });
+  if (rpcError) {
+    console.error("[sincronizarOcupacionRuta] rpc", rpcError.message);
+  }
+
   const admin = createAdminClient();
-  if (!admin) return;
-  const ocupacion = await cargarOcupacionRuta(rutaId);
-  const { data: ofertasRaw } = await admin
-    .from("ofertas_capacidad")
-    .select("*")
-    .eq("ruta_conductor_id", rutaId)
-    .eq("tipo", "asiento");
-  const actualizadas = aplicarOcupacionAOfertas(
-    (ofertasRaw as OfertaCapacidad[]) ?? [],
-    ocupacion
-  );
-  for (const oferta of actualizadas) {
-    const { error } = await admin
+  if (admin) {
+    const ocupacion = await cargarOcupacionRuta(rutaId);
+    const { data: ofertasRaw } = await admin
       .from("ofertas_capacidad")
-      .update({
-        plazas_ocupadas: oferta.plazas_ocupadas,
-        estado: oferta.estado,
-      })
-      .eq("id", oferta.id);
-    if (error) {
-      console.error("[sincronizarOcupacionRuta]", error.message, oferta.id);
+      .select("*")
+      .eq("ruta_conductor_id", rutaId)
+      .eq("tipo", "asiento");
+    const actualizadas = aplicarOcupacionAOfertas(
+      (ofertasRaw as OfertaCapacidad[]) ?? [],
+      ocupacion
+    );
+    for (const oferta of actualizadas) {
+      const { error } = await admin
+        .from("ofertas_capacidad")
+        .update({
+          plazas_ocupadas: oferta.plazas_ocupadas,
+          estado: oferta.estado,
+        })
+        .eq("id", oferta.id);
+      if (error) {
+        console.error("[sincronizarOcupacionRuta]", error.message, oferta.id);
+      }
     }
   }
+
   revalidatePath(`/rutas/${rutaId}`);
   revalidatePath("/rutas");
 }

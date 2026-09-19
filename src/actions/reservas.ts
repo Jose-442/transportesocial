@@ -643,16 +643,23 @@ export async function solicitarReservaCapacidad(
     return { error: "No puedes reservar tu propio viaje." };
   }
 
-  const lector = createAdminClient() ?? supabase;
-  const { data: ocupandoPlazas } = await lector
+  const { data: ocupandoUsuario } = await supabase
     .from("reservas")
-    .select("cantidad, estado, tipo, bulto_descripcion")
+    .select("cantidad")
     .eq("oferta_capacidad_id", ofertaId)
     .in("estado", ESTADOS_RESERVA_OCUPAN);
-  const plazasDeReservas = ((ocupandoPlazas as { cantidad?: number }[]) ?? []).reduce(
-    (sum, item) => sum + Math.max(1, Number(item.cantidad) || 1),
-    0
-  );
+  const adminOcupacion = createAdminClient();
+  const { data: ocupandoAdmin } = adminOcupacion
+    ? await adminOcupacion
+        .from("reservas")
+        .select("cantidad")
+        .eq("oferta_capacidad_id", ofertaId)
+        .in("estado", ESTADOS_RESERVA_OCUPAN)
+    : { data: [] };
+  const plazasDeReservas = [
+    ...((ocupandoUsuario as { cantidad?: number }[]) ?? []),
+    ...((ocupandoAdmin as { cantidad?: number }[]) ?? []),
+  ].reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
   const plazasLibres = Math.max(
     0,
     oferta.plazas_totales - Math.max(oferta.plazas_ocupadas, plazasDeReservas)
