@@ -177,9 +177,9 @@ export default async function CuentaPage({
               reciba tu propuesta.
             </p>
             <p className="mt-2 text-base text-zinc-600">
-              En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de 7
-              o 9 plazas, publica más de un viaje el mismo día, aunque sea la
-              misma ruta.
+              En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
+              más plazas, publica más de un viaje con el mismo día, la misma
+              hora y la misma ruta.
             </p>
           </div>
           <EditarVehiculoForm
