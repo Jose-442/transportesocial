@@ -6,6 +6,7 @@ import { BultoCard } from "@/components/bultos/BultoCard";
 import { RutaCard } from "@/components/rutas/RutaCard";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import type { AnuncioBulto, RutaConductor } from "@/types/database";
+import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
 
 const ESTADO_BULTO_LABELS: Record<AnuncioBulto["estado"], string> = {
   activo: "Activo",
@@ -42,14 +43,16 @@ export function MisPublicaciones({
   rutas,
 }: {
   bultos: AnuncioBulto[];
-  rutas: RutaConductor[];
+  rutas: RutaListadoItem[];
 }) {
   const vacio = bultos.length === 0 && rutas.length === 0;
 
   if (vacio) {
     return (
       <Card className="space-y-3">
-        <p className="text-sm text-zinc-600">Aún no has publicado nada.</p>
+        <p className="text-sm text-zinc-600">
+          Ahora mismo no tienes anuncios con sitio libre.
+        </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
           <ButtonLink
             href="/bultos/nuevo"
@@ -98,7 +101,7 @@ export function MisPublicaciones({
               {ESTADO_RUTA_LABELS[ruta.estado]}
             </Badge>
           )}
-          <RutaCard ruta={ruta} variant="cuenta" />
+          <RutaCard ruta={ruta} variant="listado" />
           {ruta.estado === "activa" && (
             <CancelarPublicacionButton id={ruta.id} tipo="ruta" />
           )}

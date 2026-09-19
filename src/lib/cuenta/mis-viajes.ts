@@ -7,8 +7,20 @@ import type {
 } from "@/components/cuenta/MisViajesTabs";
 import { apartadoReserva } from "@/lib/reservas/categorias";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { rutaOfreceBulto } from "@/lib/espacio-opciones";
+import {
+  badgeOfertaRuta,
+  lineasOfertaRuta,
+  ofertaOriginalRuta,
+} from "@/lib/oferta-ruta-labels";
 import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
-import type { AnuncioBulto, OfertaPrecio, Reserva, RutaConductor } from "@/types/database";
+import type {
+  AnuncioBulto,
+  OfertaCapacidad,
+  OfertaPrecio,
+  Reserva,
+  RutaConductor,
+} from "@/types/database";
 
 type DbClient = SupabaseClient;
 
@@ -57,7 +69,9 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         .eq("user_id", userId),
       supabase
         .from("rutas_conductores")
-        .select("id, origen, destino, created_at, estado")
+        .select(
+          "id, origen, destino, created_at, estado, espacio_disponible, precio_publicado"
+        )
         .eq("user_id", userId),
     ]);
 
@@ -68,9 +82,29 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   >[];
   const rutas = (misRutas ?? []) as Pick<
     RutaConductor,
-    "id" | "origen" | "destino" | "created_at" | "estado"
+    | "id"
+    | "origen"
+    | "destino"
+    | "created_at"
+    | "estado"
+    | "espacio_disponible"
+    | "precio_publicado"
   >[];
   const bultoIds = bultos.map((b) => b.id);
+  const misRutaIds = rutas.map((r) => r.id);
+
+  const ofertasPorRuta = new Map<string, OfertaCapacidad[]>();
+  if (misRutaIds.length > 0) {
+    const { data: ofertasRuta } = await supabase
+      .from("ofertas_capacidad")
+      .select("ruta_conductor_id, tipo, plazas_totales, precio_publicado")
+      .in("ruta_conductor_id", misRutaIds);
+    for (const o of (ofertasRuta as OfertaCapacidad[] | null) ?? []) {
+      const listaOfertas = ofertasPorRuta.get(o.ruta_conductor_id) ?? [];
+      listaOfertas.push(o);
+      ofertasPorRuta.set(o.ruta_conductor_id, listaOfertas);
+    }
+  }
 
   const rutaIds = lista
     .map((r) => r.ruta_conductor_id)
@@ -94,7 +128,16 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   const historial: ViajeListItem[] = [];
 
   for (const ruta of rutas) {
-    if (ruta.estado !== "activa") continue;
+    if (ruta.estado !== "activa" && ruta.estado !== "reservada") continue;
+    const ofertas = ofertasPorRuta.get(ruta.id) ?? [];
+    const asiento = ofertas.find((o) => o.tipo === "asiento");
+    const plazasTotales = ofertas
+      .filter((o) => o.tipo === "asiento")
+      .reduce((sum, o) => sum + o.plazas_totales, 0);
+    const original = ofertaOriginalRuta({
+      espacio_disponible: ruta.espacio_disponible,
+      plazasTotales,
+    });
     const item: PublicacionViajeItem = {
       kind: "publicacion",
       id: ruta.id,
@@ -102,6 +145,12 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.created_at,
       estado: "publicado",
+      badge: badgeOfertaRuta(original),
+      lineas: lineasOfertaRuta(original),
+      precioBulto: rutaOfreceBulto(ruta.espacio_disponible)
+        ? Number(ruta.precio_publicado)
+        : null,
+      precioPlaza: asiento ? Number(asiento.precio_publicado) : null,
     };
     propuestos.push(item);
   }

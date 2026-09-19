@@ -38,6 +38,10 @@ export type PublicacionViajeItem = {
   titulo: string;
   fecha: string;
   estado: "publicado" | "cancelado";
+  badge?: string;
+  lineas?: string[];
+  precioBulto?: number | null;
+  precioPlaza?: number | null;
 };
 
 export type ViajeListItem =
@@ -112,6 +116,9 @@ function OfertaCard({ item }: { item: OfertaViajeItem }) {
 
 function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
   const href = item.tipo === "ruta" ? `/rutas/${item.id}` : `/bultos/${item.id}`;
+  const tienePrecios =
+    (item.precioBulto != null && item.precioBulto > 0) ||
+    (item.precioPlaza != null && item.precioPlaza > 0);
   return (
     <Card className="space-y-2">
       <div className="flex items-start justify-between gap-2">
@@ -123,9 +130,50 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
           </p>
         </div>
         <Badge tone={item.estado === "cancelado" ? "zinc" : "green"}>
-          {item.estado === "cancelado" ? "Cancelado" : "Publicado"}
+          {item.estado === "cancelado"
+            ? "Cancelado"
+            : item.badge ?? "Publicado"}
         </Badge>
       </div>
+      {item.lineas && item.lineas.length > 0 && (
+        <div className="space-y-0.5 text-sm font-medium text-emerald-800">
+          {item.lineas.map((linea) => (
+            <p key={linea}>{linea}</p>
+          ))}
+        </div>
+      )}
+      {tienePrecios && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-emerald-700">
+          {item.precioBulto != null && item.precioBulto > 0 && (
+            <p>
+              {item.precioPlaza != null && item.precioPlaza > 0 ? (
+                <>
+                  <span className="block text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                    Bulto
+                  </span>
+                  {formatEur(item.precioBulto)}
+                </>
+              ) : (
+                formatEur(item.precioBulto)
+              )}
+            </p>
+          )}
+          {item.precioPlaza != null && item.precioPlaza > 0 && (
+            <p>
+              {item.precioBulto != null && item.precioBulto > 0 ? (
+                <>
+                  <span className="block text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                    Plaza
+                  </span>
+                  {formatEur(item.precioPlaza)}
+                </>
+              ) : (
+                formatEur(item.precioPlaza)
+              )}
+            </p>
+          )}
+        </div>
+      )}
       <ButtonLink
         href={href}
         fullWidth

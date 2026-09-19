@@ -51,6 +51,19 @@ export function lineasOfertaRuta(input: OfertaRutaInput): string[] {
   return lineas;
 }
 
+/** Composición original del anuncio, sin restar lo ya reservado. */
+export function ofertaOriginalRuta(input: {
+  espacio_disponible: string;
+  plazasTotales: number;
+}): OfertaRutaInput {
+  return {
+    espacio_disponible: input.espacio_disponible,
+    asientoOfrecidas: input.plazasTotales,
+    bultoDisponible: rutaOfreceBulto(input.espacio_disponible),
+    estado: "activa",
+  };
+}
+
 export function badgeOfertaRuta(input: OfertaRutaInput): string {
   if (input.estado === "reservada" && input.tieneCapacidadExtra) {
     return "Más sitio";

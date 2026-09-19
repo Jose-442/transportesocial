@@ -1,4 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  enriquecerRutasConDisponibilidad,
+  quedaSitioEnRuta,
+  type RutaListadoItem,
+} from "@/lib/capacidad/rutas-listado";
 import type { AnuncioBulto, RutaConductor } from "@/types/database";
 
 const ORDEN_BULTO: Record<AnuncioBulto["estado"], number> = {
@@ -23,7 +28,7 @@ function ordenarBultos(items: AnuncioBulto[]): AnuncioBulto[] {
   });
 }
 
-function ordenarRutas(items: RutaConductor[]): RutaConductor[] {
+function ordenarRutas<T extends RutaConductor>(items: T[]): T[] {
   return [...items].sort((a, b) => {
     const porEstado = ORDEN_RUTA[a.estado] - ORDEN_RUTA[b.estado];
     if (porEstado !== 0) return porEstado;
@@ -34,7 +39,7 @@ function ordenarRutas(items: RutaConductor[]): RutaConductor[] {
 export async function loadMisPublicaciones(
   supabase: SupabaseClient,
   userId: string
-): Promise<{ bultos: AnuncioBulto[]; rutas: RutaConductor[] }> {
+): Promise<{ bultos: AnuncioBulto[]; rutas: RutaListadoItem[] }> {
   const [{ data: bultosRaw }, { data: rutasRaw }] = await Promise.all([
     supabase
       .from("anuncios_bultos")
@@ -51,12 +56,15 @@ export async function loadMisPublicaciones(
   const bultos = ((bultosRaw as AnuncioBulto[]) ?? []).filter(
     (b) => b.estado !== "cancelado"
   );
-  const rutas = ((rutasRaw as RutaConductor[]) ?? []).filter(
-    (r) => r.estado !== "cancelada"
+  const rutasVivas = ((rutasRaw as RutaConductor[]) ?? []).filter(
+    (r) => r.estado === "activa" || r.estado === "reservada"
   );
+  const rutasConSitio = (
+    await enriquecerRutasConDisponibilidad(supabase, rutasVivas)
+  ).filter(quedaSitioEnRuta);
 
   return {
     bultos: ordenarBultos(bultos),
-    rutas: ordenarRutas(rutas),
+    rutas: ordenarRutas(rutasConSitio),
   };
 }

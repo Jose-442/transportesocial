@@ -192,7 +192,8 @@ export default async function CuentaPage({
         <div>
           <h2 className="font-semibold text-zinc-900">Mis publicaciones</h2>
           <p className="mt-1 text-base text-zinc-600">
-            Tus anuncios activos. También los verás en Mis viajes → Propuestos.
+            Lo que aún queda libre ahora. El viaje tal como lo publicaste está
+            en Mis viajes → Propuestos.
           </p>
         </div>
         <MisPublicaciones
