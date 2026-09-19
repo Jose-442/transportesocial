@@ -12,11 +12,13 @@ type Aviso = Pick<
 >;
 
 const ESTADOS_AVISO_CONDUCTOR: Reserva["estado"][] = [
+  "pendiente_pago",
   "pendiente_aprobacion",
   "confirmada",
   "pagado_escrow",
   "en_transito",
   "entregado",
+  "disputa",
 ];
 
 async function insertarNotificacionConServicio(
@@ -74,9 +76,28 @@ export async function crearNotificacion(db: DbClient, data: Aviso) {
     if (repetida) return {};
   }
 
+  const { error: rpcError } = await db.rpc("crear_notificacion", {
+    p_user_id: data.user_id,
+    p_tipo: data.tipo,
+    p_titulo: data.titulo,
+    p_mensaje: data.mensaje,
+    p_enlace: data.enlace,
+  });
+  if (!rpcError) {
+    void enviarPushNotificacion({
+      userId: data.user_id,
+      titulo: data.titulo,
+      mensaje: data.mensaje,
+      enlace: data.enlace,
+    }).catch((err) => {
+      console.error("[push] notificación", err);
+    });
+    return {};
+  }
+
   const { error } = await db.from("notificaciones").insert(data);
   if (error) {
-    console.error("[notificacion] insert", error.message);
+    console.error("[notificacion] insert", error.message, rpcError.message);
     const fallback = await insertarNotificacionConServicio(data);
     if (fallback.error) {
       console.error("[notificacion] insert fallback", fallback.error);

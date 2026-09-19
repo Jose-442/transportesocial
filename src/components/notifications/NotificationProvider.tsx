@@ -118,8 +118,23 @@ export function NotificationProvider({
   );
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (!userId) {
+      setNotifications([]);
+      return;
+    }
+    let cancelado = false;
+    (async () => {
+      try {
+        await fetch("/api/avisos/sync", { method: "POST" });
+      } catch {
+        // Si falla el relleno, igual se leen los avisos que ya haya.
+      }
+      if (!cancelado) await refresh();
+    })();
+    return () => {
+      cancelado = true;
+    };
+  }, [userId, refresh]);
 
   useEffect(() => {
     if (!userId) return;
