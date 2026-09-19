@@ -1,0 +1,37 @@
+import { describe, expect, it } from "vitest";
+import {
+  agruparReservasMismoCobro,
+  idReservaDelAviso,
+} from "@/lib/reservas/aviso-viaje";
+
+const base = {
+  cliente_id: "cli",
+  ruta_conductor_id: "ruta",
+};
+
+describe("agruparReservasMismoCobro", () => {
+  it("junta bulto y plaza del mismo pago y deja aparte una plaza posterior", () => {
+    const bulto = {
+      ...base,
+      id: "bulto",
+      tipo: "ruta_directa" as const,
+      created_at: "2026-09-19T10:00:00.000Z",
+    };
+    const plaza1 = {
+      ...base,
+      id: "plaza1",
+      tipo: "capacidad_extra" as const,
+      created_at: "2026-09-19T10:00:02.000Z",
+    };
+    const plaza2 = {
+      ...base,
+      id: "plaza2",
+      tipo: "capacidad_extra" as const,
+      created_at: "2026-09-19T18:00:00.000Z",
+    };
+    const grupos = agruparReservasMismoCobro([bulto, plaza1, plaza2]);
+    expect(grupos).toHaveLength(2);
+    expect(idReservaDelAviso(grupos[0]!)).toBe("bulto");
+    expect(grupos[1]!.map((r) => r.id)).toEqual(["plaza2"]);
+  });
+});

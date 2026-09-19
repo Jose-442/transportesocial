@@ -3,6 +3,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Notificacion, Reserva } from "@/types/database";
 import { enviarPushNotificacion } from "@/lib/push/send";
 import { getSupabaseServerUrl } from "@/lib/supabase/env";
+import {
+  agruparReservasMismoCobro,
+  idReservaDelAviso,
+} from "@/lib/reservas/aviso-viaje";
 
 type DbClient = SupabaseClient;
 
@@ -127,17 +131,26 @@ export async function asegurarAvisosConductor(
   );
   if (mias.length === 0) return;
 
-  const enlaces = [...new Set(mias.map((r) => `/reservas/${r.id}`))];
+  const grupos = agruparReservasMismoCobro(mias);
+  const enlaces = [
+    ...new Set(grupos.map((grupo) => `/reservas/${idReservaDelAviso(grupo)}`)),
+  ];
   const { data: ya } = await db
     .from("notificaciones")
     .select("enlace")
     .eq("user_id", userId)
-    .in("enlace", enlaces);
+    .in("enlace", [
+      ...enlaces,
+      ...mias.map((r) => `/reservas/${r.id}`),
+    ]);
   const vistos = new Set((ya ?? []).map((n) => n.enlace).filter(Boolean));
 
-  for (const r of mias) {
-    const enlace = `/reservas/${r.id}`;
-    if (vistos.has(enlace)) continue;
+  for (const grupo of grupos) {
+    const idAviso = idReservaDelAviso(grupo);
+    if (grupo.some((r) => vistos.has(`/reservas/${r.id}`))) continue;
+    const r = grupo.find((item) => item.id === idAviso) ?? grupo[0];
+    if (!r) continue;
+    const enlace = `/reservas/${idAviso}`;
     const pendiente = r.estado === "pendiente_aprobacion";
     await crearNotificacion(db, {
       user_id: userId,
@@ -150,6 +163,6 @@ export async function asegurarAvisosConductor(
         : "Un usuario ha reservado tu viaje. Revisa el chat.",
       enlace,
     });
-    vistos.add(enlace);
+    for (const item of grupo) vistos.add(`/reservas/${item.id}`);
   }
 }

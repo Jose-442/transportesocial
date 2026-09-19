@@ -5,6 +5,7 @@ import { createAdminClient, patchReservaEstadoConServicio } from "@/lib/supabase
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { mismoCobroViaje } from "@/lib/reservas/aviso-viaje";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { plazoAprobacionConductor } from "@/lib/reservas/timing";
 import { getStripeServer } from "@/lib/stripe/server";
@@ -508,6 +509,23 @@ async function ocuparPlazasOferta(
   return {};
 }
 
+async function plazaVaConBultoDelMismoPago(
+  admin: AdminClient,
+  r: Reserva
+): Promise<boolean> {
+  if (!r.ruta_conductor_id) return false;
+  const { data } = await admin
+    .from("reservas")
+    .select("id, tipo, cliente_id, ruta_conductor_id, created_at")
+    .eq("ruta_conductor_id", r.ruta_conductor_id)
+    .eq("cliente_id", r.cliente_id)
+    .eq("tipo", "ruta_directa")
+    .neq("id", r.id);
+  return ((data as Reserva[]) ?? []).some((bulto) =>
+    mismoCobroViaje(bulto, r)
+  );
+}
+
 async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
   if (r.oferta_capacidad_id) {
     const ocupacion = await ocuparPlazasOferta(
@@ -544,21 +562,24 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
 
     await abrirChatReserva(admin, r.id);
 
-    await crearNotificacion(admin, {
-      user_id: r.transportista_id,
-      tipo: "reserva_confirmada",
-      titulo: "Nueva reserva de capacidad extra",
-      mensaje: "Un usuario ha reservado espacio adicional en tu viaje.",
-      enlace: `/reservas/${r.id}`,
-    });
+    const yaAvisadoConElBulto = await plazaVaConBultoDelMismoPago(admin, r);
+    if (!yaAvisadoConElBulto) {
+      await crearNotificacion(admin, {
+        user_id: r.transportista_id,
+        tipo: "reserva_confirmada",
+        titulo: "Nueva reserva de capacidad extra",
+        mensaje: "Un usuario ha reservado espacio adicional en tu viaje.",
+        enlace: `/reservas/${r.id}`,
+      });
 
-    await crearNotificacion(admin, {
-      user_id: r.cliente_id,
-      tipo: "reserva_confirmada",
-      titulo: "Reserva confirmada",
-      mensaje: "Tu reserva extra está confirmada. Coordina por el chat.",
-      enlace: `/reservas/${r.id}`,
-    });
+      await crearNotificacion(admin, {
+        user_id: r.cliente_id,
+        tipo: "reserva_confirmada",
+        titulo: "Reserva confirmada",
+        mensaje: "Tu reserva extra está confirmada. Coordina por el chat.",
+        enlace: `/reservas/${r.id}`,
+      });
+    }
   } else {
     const expira = plazoAprobacionConductor().toISOString();
 
@@ -575,21 +596,24 @@ async function confirmarReservaCapacidad(admin: AdminClient, r: Reserva) {
       return { error: "No se pudo guardar el pago en la reserva." };
     }
 
-    await crearNotificacion(admin, {
-      user_id: r.transportista_id,
-      tipo: "reserva_pendiente_aprobacion",
-      titulo: "Solicitud de capacidad extra",
-      mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
-      enlace: `/reservas/${r.id}`,
-    });
+    const yaAvisadoConElBulto = await plazaVaConBultoDelMismoPago(admin, r);
+    if (!yaAvisadoConElBulto) {
+      await crearNotificacion(admin, {
+        user_id: r.transportista_id,
+        tipo: "reserva_pendiente_aprobacion",
+        titulo: "Solicitud de capacidad extra",
+        mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+        enlace: `/reservas/${r.id}`,
+      });
 
-    await crearNotificacion(admin, {
-      user_id: r.cliente_id,
-      tipo: "nueva_reserva",
-      titulo: "Reserva enviada",
-      mensaje: "Pago recibido. Esperando confirmación del conductor.",
-      enlace: `/reservas/${r.id}`,
-    });
+      await crearNotificacion(admin, {
+        user_id: r.cliente_id,
+        tipo: "nueva_reserva",
+        titulo: "Reserva enviada",
+        mensaje: "Pago recibido. Esperando confirmación del conductor.",
+        enlace: `/reservas/${r.id}`,
+      });
+    }
   }
 
   return {};
