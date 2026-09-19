@@ -176,6 +176,10 @@ export default async function CuentaPage({
               Obligatorio para proponer precio o publicar una ruta. Lo verá quien
               reciba tu propuesta.
             </p>
+            <p className="mt-2 text-base text-zinc-600">
+              Si tu vehículo está homologado con más de 3 plazas, publica varios
+              viajes aún siendo el mismo.
+            </p>
           </div>
           <EditarVehiculoForm
             vehiculoInicial={profile}
