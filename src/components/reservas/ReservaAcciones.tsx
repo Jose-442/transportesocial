@@ -3,13 +3,12 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { ComprobarPagoBoton } from "@/components/reservas/ComprobarPagoBoton";
+import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBotones";
 import {
-  aceptarReserva,
   cancelarReservaPendiente,
   editarReservaPendiente,
   marcarEnTransito,
   marcarEntregado,
-  rechazarReserva,
 } from "@/actions/reservas";
 import {
   chatPermitido,
@@ -57,20 +56,7 @@ export function ReservaAcciones({
       )}
 
       {estado === "pendiente_aprobacion" && esConductor && (
-        <div className="flex gap-2">
-          <form action={aceptarReserva} className="flex-1">
-            <input type="hidden" name="reserva_id" value={reserva.id} />
-            <Button type="submit" fullWidth>
-              Aceptar reserva
-            </Button>
-          </form>
-          <form action={rechazarReserva} className="flex-1">
-            <input type="hidden" name="reserva_id" value={reserva.id} />
-            <Button type="submit" variant="secondary" fullWidth>
-              Rechazar
-            </Button>
-          </form>
-        </div>
+        <AceptarRechazarBotones reservaId={reserva.id} />
       )}
 
       {estado === "pendiente_aprobacion" && esCliente && (

@@ -112,32 +112,53 @@ export async function marcarEntregadoManual(
     .eq("id", reserva.id);
 }
 
+async function estadoDeReserva(
+  db: AdminClient,
+  reservaId: string
+): Promise<string | null> {
+  const { data } = await db
+    .from("reservas")
+    .select("estado")
+    .eq("id", reservaId)
+    .maybeSingle();
+  return data?.estado ?? null;
+}
+
 export async function persistirAceptacionReserva(
   db: AdminClient,
   reserva: Pick<Reserva, "id">
 ): Promise<boolean> {
+  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
+
   const payload = {
     estado: "confirmada",
     aceptada_en: new Date().toISOString(),
   };
 
-  const { data: rpcFilas } = await db.rpc("aceptar_reservas_conductor", {
-    p_ids: [reserva.id],
-  });
+  const { data: rpcFilas, error: rpcError } = await db.rpc(
+    "aceptar_reservas_conductor",
+    { p_ids: [reserva.id] }
+  );
+  if (rpcError) {
+    console.error("[aceptar] rpc", rpcError.message);
+  }
   const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
   if (rpcFila?.estado === "confirmada") return true;
+  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
-  const { data } = await db
+  const { error } = await db
     .from("reservas")
     .update(payload)
     .eq("id", reserva.id)
-    .eq("estado", "pendiente_aprobacion")
-    .select("estado")
-    .maybeSingle();
-  if (data?.estado === "confirmada") return true;
+    .eq("estado", "pendiente_aprobacion");
+  if (error) {
+    console.error("[aceptar] update", error.message);
+  }
+  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
   const parche = await patchReservaEstadoConServicio(reserva.id, payload);
-  return parche.estado === "confirmada";
+  if (parche.estado === "confirmada") return true;
+  return (await estadoDeReserva(db, reserva.id)) === "confirmada";
 }
 
 export async function persistirRechazoReserva(
@@ -145,30 +166,41 @@ export async function persistirRechazoReserva(
   reserva: Pick<Reserva, "id">,
   motivo: string
 ): Promise<boolean> {
+  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
+
   const payload = {
     estado: "cancelado",
     cancelada_en: new Date().toISOString(),
     motivo_cancelacion: motivo,
   };
 
-  const { data: rpcFilas } = await db.rpc("rechazar_reservas_conductor", {
-    p_ids: [reserva.id],
-    p_motivo: motivo,
-  });
+  const { data: rpcFilas, error: rpcError } = await db.rpc(
+    "rechazar_reservas_conductor",
+    {
+      p_ids: [reserva.id],
+      p_motivo: motivo,
+    }
+  );
+  if (rpcError) {
+    console.error("[rechazar] rpc", rpcError.message);
+  }
   const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
   if (rpcFila?.estado === "cancelado") return true;
+  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
-  const { data } = await db
+  const { error } = await db
     .from("reservas")
     .update(payload)
     .eq("id", reserva.id)
-    .eq("estado", "pendiente_aprobacion")
-    .select("estado")
-    .maybeSingle();
-  if (data?.estado === "cancelado") return true;
+    .eq("estado", "pendiente_aprobacion");
+  if (error) {
+    console.error("[rechazar] update", error.message);
+  }
+  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
   const parche = await patchReservaEstadoConServicio(reserva.id, payload);
-  return parche.estado === "cancelado";
+  if (parche.estado === "cancelado") return true;
+  return (await estadoDeReserva(db, reserva.id)) === "cancelado";
 }
 
 export async function avisarReservaAceptada(
