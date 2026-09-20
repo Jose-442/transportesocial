@@ -140,6 +140,37 @@ export async function persistirAceptacionReserva(
   return parche.estado === "confirmada";
 }
 
+export async function persistirRechazoReserva(
+  db: AdminClient,
+  reserva: Pick<Reserva, "id">,
+  motivo: string
+): Promise<boolean> {
+  const payload = {
+    estado: "cancelado",
+    cancelada_en: new Date().toISOString(),
+    motivo_cancelacion: motivo,
+  };
+
+  const { data: rpcFilas } = await db.rpc("rechazar_reservas_conductor", {
+    p_ids: [reserva.id],
+    p_motivo: motivo,
+  });
+  const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
+  if (rpcFila?.estado === "cancelado") return true;
+
+  const { data } = await db
+    .from("reservas")
+    .update(payload)
+    .eq("id", reserva.id)
+    .eq("estado", "pendiente_aprobacion")
+    .select("estado")
+    .maybeSingle();
+  if (data?.estado === "cancelado") return true;
+
+  const parche = await patchReservaEstadoConServicio(reserva.id, payload);
+  return parche.estado === "cancelado";
+}
+
 export async function avisarReservaAceptada(
   db: AdminClient,
   reserva: Reserva,

@@ -64,7 +64,8 @@ export function ReservaAcciones({
               Aceptar reserva
             </Button>
           </form>
-          <form action={rechazarReserva.bind(null, reserva.id)} className="flex-1">
+          <form action={rechazarReserva} className="flex-1">
+            <input type="hidden" name="reserva_id" value={reserva.id} />
             <Button type="submit" variant="secondary" fullWidth>
               Rechazar
             </Button>

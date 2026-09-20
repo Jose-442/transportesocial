@@ -10,6 +10,7 @@ import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
   avisarReservaAceptada,
   persistirAceptacionReserva,
+  persistirRechazoReserva,
   marcarEntregadoManual,
 } from "@/lib/reservas/cron";
 import { reembolsarReserva } from "@/lib/reservas/payment";
@@ -414,27 +415,94 @@ export async function aceptarReserva(formData: FormData): Promise<void> {
   redirect(`/reservas/${principal.id}`);
 }
 
-export async function rechazarReserva(reservaId: string): Promise<void> {
+export async function rechazarReserva(formData: FormData): Promise<void> {
+  const reservaId = String(formData.get("reserva_id") ?? "").trim();
+  if (!reservaId) return;
+
   const ctx = await getReservaParticipante(reservaId);
-  if (!ctx) return;
+  if (!ctx) {
+    volverReservaConError(
+      reservaId,
+      "No se ha podido rechazar. Recarga e inténtalo otra vez."
+    );
+  }
 
-  const { reserva, user } = ctx;
-  if (reserva.transportista_id !== user.id) return;
-  if (reserva.estado !== "pendiente_aprobacion") return;
+  const { reserva, user, supabase } = ctx;
+  if (reserva.transportista_id !== user.id) {
+    volverReservaConError(
+      reservaId,
+      "Solo el conductor puede rechazar esta reserva."
+    );
+  }
+  if (reserva.estado !== "pendiente_aprobacion") {
+    volverReservaConError(
+      reservaId,
+      "Esta reserva ya no está esperando tu respuesta."
+    );
+  }
 
-  const admin = createAdminClient();
-  if (!admin) return;
+  const motivo = "Rechazada por el conductor.";
+  const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
+  const ids = filas.map((fila) => fila.id);
+  const { data: rpcFilas } = await supabase.rpc("rechazar_reservas_conductor", {
+    p_ids: ids,
+    p_motivo: motivo,
+  });
+  const rpcLista = Array.isArray(rpcFilas) ? rpcFilas : [];
+  const ya = new Set(
+    rpcLista.map((fila: { id?: string }) => fila.id).filter(Boolean)
+  );
+  let rechazadas = 0;
+  for (const fila of filas) {
+    if (ya.has(fila.id)) {
+      rechazadas += 1;
+      continue;
+    }
+    const ok = await persistirRechazoReserva(supabase, fila, motivo);
+    if (ok) rechazadas += 1;
+  }
+  if (rechazadas === 0) {
+    volverReservaConError(
+      reservaId,
+      "No se ha podido guardar el rechazo. Prueba otra vez."
+    );
+  }
 
-  await reembolsarReserva(admin, reservaId, "Rechazada por el conductor.");
-  await crearNotificacion(admin, {
+  const intents = [
+    ...new Set(
+      rpcLista
+        .map((fila: { stripe_payment_intent_id?: string | null }) =>
+          fila.stripe_payment_intent_id?.trim()
+        )
+        .filter((id): id is string => Boolean(id))
+    ),
+  ];
+  for (const intent of intents) {
+    try {
+      const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
+      await reembolsarPaymentIntent(intent);
+      await supabase.rpc("marcar_cobro_reembolsado", { p_intent: intent });
+    } catch (err) {
+      console.error("[rechazar] reembolso", err);
+    }
+  }
+
+  const principal =
+    filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+  await crearNotificacion(supabase, {
     user_id: reserva.cliente_id,
     tipo: "reserva_rechazada",
     titulo: "Reserva rechazada",
-    mensaje: "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
-    enlace: `/reservas/${reservaId}`,
+    mensaje:
+      "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
+    enlace: `/reservas/${principal.id}`,
   });
 
-  revalidatePath(`/reservas/${reservaId}`);
+  for (const fila of filas) {
+    revalidatePath(`/reservas/${fila.id}`);
+  }
+  revalidatePath("/cuenta/viajes");
+  redirect(`/reservas/${principal.id}`);
 }
 
 export async function editarReservaPendiente(reservaId: string): Promise<void> {
