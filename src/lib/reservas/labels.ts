@@ -68,12 +68,10 @@ export function fraseQueIncluyeReservas(
   return "Porte de bulto";
 }
 
-export function fraseQueHasReservado(
-  reservas: ReservaResumen | ReservaResumen[],
-  opts?: { esCliente?: boolean }
+function espacioReservado(
+  reservas: ReservaResumen | ReservaResumen[]
 ): string {
   const lista = Array.isArray(reservas) ? reservas : [reservas];
-  const sujeto = opts?.esCliente === false ? "Han reservado" : "Has reservado";
   const plazas = lista
     .filter(esReservaDePlazas)
     .reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
@@ -85,10 +83,36 @@ export function fraseQueHasReservado(
   if (plazas > 0) {
     partes.push(`${plazas} plaza${plazas === 1 ? "" : "s"}`);
   }
-  if (partes.length === 0) {
-    return sujeto;
+  if (partes.length === 0) return "";
+  return `espacio para ${partes.join(" y ")}`;
+}
+
+function frasePlazasQueQuedan(n: number): string {
+  return `te queda libre ${n} plaza${n === 1 ? "" : "s"}`;
+}
+
+export function fraseQueHasReservado(
+  reservas: ReservaResumen | ReservaResumen[],
+  opts?: {
+    esCliente?: boolean;
+    nombreCliente?: string;
+    plazasLibres?: number;
   }
-  return `${sujeto} espacio para ${partes.join(" y ")}`;
+): string {
+  const espacio = espacioReservado(reservas);
+
+  if (opts?.esCliente === false) {
+    const nombre = (opts.nombreCliente ?? "").trim() || "Alguien";
+    const resto =
+      typeof opts.plazasLibres === "number"
+        ? `, ${frasePlazasQueQuedan(Math.max(0, opts.plazasLibres))}`
+        : "";
+    if (!espacio) return `${nombre} ha reservado${resto}`;
+    return `${nombre} ha reservado ${espacio}${resto}`;
+  }
+
+  if (!espacio) return "Has reservado";
+  return `Has reservado ${espacio}`;
 }
 
 export function puedeReclamar(

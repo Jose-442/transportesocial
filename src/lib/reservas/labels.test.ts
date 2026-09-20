@@ -50,6 +50,41 @@ describe("fraseQueHasReservado", () => {
       )
     ).toBe("Has reservado espacio para 1 bulto y 1 plaza");
   });
+
+  it("el conductor ve el nombre, lo reservado y las plazas que le quedan", () => {
+    expect(
+      fraseQueHasReservado(
+        [
+          {
+            tipo: "ruta_directa",
+            bulto_descripcion: "maleta",
+            cantidad: 1,
+          },
+          {
+            tipo: "capacidad_extra",
+            bulto_descripcion: "Plaza de acompañante (×1)",
+            cantidad: 1,
+          },
+        ],
+        { esCliente: false, nombreCliente: "Oto", plazasLibres: 2 }
+      )
+    ).toBe(
+      "Oto ha reservado espacio para 1 bulto y 1 plaza, te queda libre 2 plazas"
+    );
+  });
+
+  it("una plaza libre va en singular", () => {
+    expect(
+      fraseQueHasReservado(
+        {
+          tipo: "capacidad_extra",
+          bulto_descripcion: "Plazas de acompañante (×2)",
+          cantidad: 2,
+        },
+        { esCliente: false, nombreCliente: "Oto", plazasLibres: 1 }
+      )
+    ).toBe("Oto ha reservado espacio para 2 plazas, te queda libre 1 plaza");
+  });
 });
 
 describe("fraseQueIncluyeReservas", () => {

@@ -16,8 +16,14 @@ import {
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { separarHoraOculta } from "@/lib/bulto-hora";
+import { resumenAsientosRuta } from "@/lib/capacidad/asientos";
+import {
+  aplicarOcupacionAOfertas,
+  cargarOcupacionRuta,
+} from "@/lib/capacidad/ocupacion";
 import type {
   Disputa,
+  OfertaCapacidad,
   PerfilPublico,
   Reserva,
   RutaConductor,
@@ -133,7 +139,27 @@ export default async function ReservaDetallePage({
       relacionadas = hermanas as Reserva[];
     }
   }
-  const fraseReserva = fraseQueHasReservado(relacionadas, { esCliente });
+  let plazasLibres: number | undefined;
+  if (!esCliente && reserva.ruta_conductor_id) {
+    const ocupacion = await cargarOcupacionRuta(reserva.ruta_conductor_id);
+    const { data: ofertasData } = await supabase
+      .from("ofertas_capacidad")
+      .select("*")
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id);
+    const ofertas = aplicarOcupacionAOfertas(
+      (ofertasData as OfertaCapacidad[]) ?? [],
+      ocupacion
+    );
+    const { ofrecidas, ocupadas } = resumenAsientosRuta(ofertas);
+    if (ofrecidas > 0) {
+      plazasLibres = Math.max(0, ofrecidas - ocupadas);
+    }
+  }
+  const fraseReserva = fraseQueHasReservado(relacionadas, {
+    esCliente,
+    nombreCliente: perfiles[reserva.cliente_id]?.display_name,
+    plazasLibres,
+  });
   const detalleBulto = relacionadas.find(
     (item) => !esReservaDePlazas(item) && item.bulto_descripcion
   );
