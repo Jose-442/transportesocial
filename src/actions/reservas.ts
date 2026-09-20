@@ -39,7 +39,9 @@ async function pendientesAprobacionMismoViaje(
     .eq("transportista_id", reserva.transportista_id)
     .eq("estado", "pendiente_aprobacion");
   const filas = (data as Reserva[] | null) ?? [];
-  if (filas.length === 0) return [reserva];
+  if (filas.length === 0) {
+    return reserva.estado === "pendiente_aprobacion" ? [reserva] : [];
+  }
   if (filas.some((item) => item.id === reserva.id)) return filas;
   return [reserva, ...filas];
 }
@@ -352,157 +354,101 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
   );
 }
 
-export async function aceptarReserva(
+export async function decidirReservaConductor(
   _prev: { error?: string; ok?: boolean } | null,
   formData: FormData
 ): Promise<{ error?: string; ok?: boolean }> {
   const reservaId = String(formData.get("reserva_id") ?? "").trim();
-  if (!reservaId) {
-    return { error: "No se ha podido aceptar. Recarga e inténtalo otra vez." };
+  const decision = String(formData.get("decision") ?? "").trim();
+  const aceptar = decision === "aceptar";
+  const rechazar = decision === "rechazar";
+  if (!reservaId || (!aceptar && !rechazar)) {
+    return { error: "No se ha podido guardar. Recarga e inténtalo otra vez." };
   }
 
   try {
     const ctx = await getReservaParticipante(reservaId);
     if (!ctx) {
-      return { error: "No se ha podido aceptar. Recarga e inténtalo otra vez." };
+      return { error: "No se ha podido guardar. Recarga e inténtalo otra vez." };
     }
 
     const { reserva, user, supabase } = ctx;
     if (reserva.transportista_id !== user.id) {
-      return { error: "Solo el conductor puede aceptar esta reserva." };
-    }
-    if (reserva.estado !== "pendiente_aprobacion") {
-      return { error: "Esta reserva ya no está esperando tu respuesta." };
+      return { error: "Solo el conductor puede responder a esta reserva." };
     }
 
     const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
-    const rpcLote = await Promise.race([
-      Promise.resolve(
-        supabase.rpc("aceptar_reservas_conductor", {
-          p_ids: filas.map((fila) => fila.id),
-        })
-      ),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
-    ]);
-    if (rpcLote && "error" in rpcLote && rpcLote.error) {
-      console.error("[aceptar] rpc lote", rpcLote.error.message);
-    }
-    const rpcFilas = rpcLote && "data" in rpcLote ? rpcLote.data : null;
-    const ya = new Set(
-      (Array.isArray(rpcFilas) ? rpcFilas : []).map(
-        (fila: { id?: string }) => fila.id
-      )
-    );
-    let aceptadas = 0;
-    for (const fila of filas) {
-      if (ya.has(fila.id)) {
-        aceptadas += 1;
-        continue;
-      }
-      const ok = await persistirAceptacionReserva(supabase, fila);
-      if (ok) aceptadas += 1;
-    }
-    if (aceptadas === 0) {
-      return { error: "No se ha podido guardar la aceptación. Prueba otra vez." };
-    }
-
-    const principal =
-      filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-    void avisarReservaAceptada(supabase, principal).catch((err) =>
-      console.error("[aceptar] aviso", err)
-    );
-
-    for (const fila of filas) {
-      revalidatePath(`/reservas/${fila.id}`);
-    }
-    revalidatePath("/cuenta/viajes");
-    return { ok: true };
-  } catch (error) {
-    console.error("[aceptarReserva]", error);
-    return { error: "No se ha podido aceptar. Prueba otra vez." };
-  }
-}
-
-export async function rechazarReserva(
-  _prev: { error?: string; ok?: boolean } | null,
-  formData: FormData
-): Promise<{ error?: string; ok?: boolean }> {
-  const reservaId = String(formData.get("reserva_id") ?? "").trim();
-  if (!reservaId) {
-    return { error: "No se ha podido rechazar. Recarga e inténtalo otra vez." };
-  }
-
-  try {
-    const ctx = await getReservaParticipante(reservaId);
-    if (!ctx) {
-      return { error: "No se ha podido rechazar. Recarga e inténtalo otra vez." };
-    }
-
-    const { reserva, user, supabase } = ctx;
-    if (reserva.transportista_id !== user.id) {
-      return { error: "Solo el conductor puede rechazar esta reserva." };
-    }
-    if (reserva.estado !== "pendiente_aprobacion") {
+    if (filas.length === 0) {
+      if (aceptar && reserva.estado === "confirmada") return { ok: true };
+      if (rechazar && reserva.estado === "cancelado") return { ok: true };
       return { error: "Esta reserva ya no está esperando tu respuesta." };
     }
 
-    const motivo = "Rechazada por el conductor.";
-    const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
-    const ids = filas.map((fila) => fila.id);
-    const rpcLote = await Promise.race([
-      Promise.resolve(
-        supabase.rpc("rechazar_reservas_conductor", {
-          p_ids: ids,
-          p_motivo: motivo,
-        })
-      ),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
-    ]);
-    if (rpcLote && "error" in rpcLote && rpcLote.error) {
-      console.error("[rechazar] rpc lote", rpcLote.error.message);
-    }
-    const rpcLista = Array.isArray(rpcLote && "data" in rpcLote ? rpcLote.data : null)
-      ? (rpcLote as { data: { id?: string; stripe_payment_intent_id?: string | null }[] }).data
-      : [];
-    const ya = new Set(
-      rpcLista.map((fila: { id?: string }) => fila.id).filter(Boolean)
-    );
-    let rechazadas = 0;
-    for (const fila of filas) {
-      if (ya.has(fila.id)) {
-        rechazadas += 1;
-        continue;
-      }
-      const ok = await persistirRechazoReserva(supabase, fila, motivo);
-      if (ok) rechazadas += 1;
-    }
-    if (rechazadas === 0) {
-      return { error: "No se ha podido guardar el rechazo. Prueba otra vez." };
-    }
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData.session?.access_token;
 
-    const intents = [
-      ...new Set(
-        rpcLista
-          .map((fila: { stripe_payment_intent_id?: string | null }) =>
-            fila.stripe_payment_intent_id?.trim()
+    if (aceptar) {
+      const rpc = await Promise.race([
+        Promise.resolve(
+          supabase.rpc("aceptar_reserva_conductor", { p_id: reservaId })
+        ),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+      ]);
+      if (rpc && "error" in rpc && rpc.error) {
+        console.error("[aceptar] rpc id", rpc.error.message);
+      }
+      const rpcOk = Boolean(
+        rpc && "data" in rpc && rpc.data === "confirmada"
+      );
+      let yaOk = rpcOk;
+      if (!yaOk) {
+        const guardados = await Promise.all(
+          filas.map((fila) =>
+            persistirAceptacionReserva(supabase, fila, accessToken)
           )
-          .filter((id): id is string => Boolean(id))
-      ),
-    ];
-    const principal =
-      filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-
-    void (async () => {
-      for (const intent of intents) {
-        try {
-          const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
-          await reembolsarPaymentIntent(intent);
-          await supabase.rpc("marcar_cobro_reembolsado", { p_intent: intent });
-        } catch (err) {
-          console.error("[rechazar] reembolso", err);
-        }
+        );
+        yaOk = guardados.every(Boolean);
       }
-      await crearNotificacion(supabase, {
+      if (!yaOk) {
+        return { error: "No se ha podido guardar la aceptación. Prueba otra vez." };
+      }
+      const principal =
+        filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+      void avisarReservaAceptada(supabase, principal).catch((err) =>
+        console.error("[aceptar] aviso", err)
+      );
+    } else {
+      const motivo = "Rechazada por el conductor.";
+      const rpc = await Promise.race([
+        Promise.resolve(
+          supabase.rpc("rechazar_reserva_conductor", {
+            p_id: reservaId,
+            p_motivo: motivo,
+          })
+        ),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+      ]);
+      if (rpc && "error" in rpc && rpc.error) {
+        console.error("[rechazar] rpc id", rpc.error.message);
+      }
+      const rpcOk = Boolean(
+        rpc && "data" in rpc && rpc.data === "cancelado"
+      );
+      let yaOk = rpcOk;
+      if (!yaOk) {
+        const guardados = await Promise.all(
+          filas.map((fila) =>
+            persistirRechazoReserva(supabase, fila, motivo, accessToken)
+          )
+        );
+        yaOk = guardados.every(Boolean);
+      }
+      if (!yaOk) {
+        return { error: "No se ha podido guardar el rechazo. Prueba otra vez." };
+      }
+      const principal =
+        filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+      void crearNotificacion(supabase, {
         user_id: reserva.cliente_id,
         tipo: "reserva_rechazada",
         titulo: "Reserva rechazada",
@@ -510,16 +456,17 @@ export async function rechazarReserva(
           "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
         enlace: `/reservas/${principal.id}`,
       }).catch((err) => console.error("[rechazar] aviso", err));
-    })();
+    }
 
     for (const fila of filas) {
       revalidatePath(`/reservas/${fila.id}`);
     }
+    revalidatePath(`/reservas/${reservaId}`);
     revalidatePath("/cuenta/viajes");
     return { ok: true };
   } catch (error) {
-    console.error("[rechazarReserva]", error);
-    return { error: "No se ha podido rechazar. Prueba otra vez." };
+    console.error("[decidirReservaConductor]", error);
+    return { error: "No se ha podido guardar. Prueba otra vez." };
   }
 }
 

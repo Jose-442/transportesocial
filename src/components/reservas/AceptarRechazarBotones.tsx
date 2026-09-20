@@ -3,43 +3,47 @@
 import { useEffect } from "react";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
-import { aceptarReserva, rechazarReserva } from "@/actions/reservas";
+import { decidirReservaConductor } from "@/actions/reservas";
 
 export function AceptarRechazarBotones({ reservaId }: { reservaId: string }) {
-  const [aceptarEstado, aceptarAction, aceptando] = useActionState(
-    aceptarReserva,
+  const [estado, action, pendiente] = useActionState(
+    decidirReservaConductor,
     null as { error?: string; ok?: boolean } | null
   );
-  const [rechazarEstado, rechazarAction, rechazando] = useActionState(
-    rechazarReserva,
-    null as { error?: string; ok?: boolean } | null
-  );
-  const ocupado = aceptando || rechazando;
-  const aviso = aceptarEstado?.error || rechazarEstado?.error;
 
   useEffect(() => {
-    if (aceptarEstado?.ok || rechazarEstado?.ok) {
+    if (estado?.ok) {
       window.location.reload();
     }
-  }, [aceptarEstado, rechazarEstado]);
+  }, [estado]);
 
   return (
-    <div className="space-y-2">
+    <form action={action} className="space-y-2">
+      <input type="hidden" name="reserva_id" value={reservaId} />
       <div className="flex gap-2">
-        <form action={aceptarAction} className="flex-1">
-          <input type="hidden" name="reserva_id" value={reservaId} />
-          <Button type="submit" fullWidth disabled={ocupado}>
-            {aceptando ? "Guardando…" : "Aceptar reserva"}
-          </Button>
-        </form>
-        <form action={rechazarAction} className="flex-1">
-          <input type="hidden" name="reserva_id" value={reservaId} />
-          <Button type="submit" variant="secondary" fullWidth disabled={ocupado}>
-            {rechazando ? "Rechazando…" : "Rechazar"}
-          </Button>
-        </form>
+        <Button
+          type="submit"
+          name="decision"
+          value="aceptar"
+          fullWidth
+          disabled={pendiente}
+        >
+          {pendiente ? "Guardando…" : "Aceptar reserva"}
+        </Button>
+        <Button
+          type="submit"
+          name="decision"
+          value="rechazar"
+          variant="secondary"
+          fullWidth
+          disabled={pendiente}
+        >
+          {pendiente ? "Guardando…" : "Rechazar"}
+        </Button>
       </div>
-      {aviso ? <p className="text-sm text-amber-900">{aviso}</p> : null}
-    </div>
+      {estado?.error ? (
+        <p className="text-sm text-amber-900">{estado.error}</p>
+      ) : null}
+    </form>
   );
 }

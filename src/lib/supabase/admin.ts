@@ -197,3 +197,50 @@ export async function patchReservaEstadoConServicio(
 
   return { error: "No se pudo guardar el pago en la reserva." };
 }
+
+export async function patchReservaConUsuario(
+  accessToken: string,
+  reservaId: string,
+  payload: Record<string, unknown>
+): Promise<{ estado?: string; error?: string }> {
+  const supabaseUrl = getSupabaseServerUrl();
+  const anon = (
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    ""
+  ).trim();
+  if (!supabaseUrl || !anon || !accessToken.trim()) {
+    return { error: "Sesión no disponible." };
+  }
+
+  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/reservas?id=eq.${encodeURIComponent(reservaId)}`;
+  try {
+    const res = await fetch(endpoint, {
+      method: "PATCH",
+      headers: {
+        apikey: anon,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    const text = (await res.text()).trim();
+    if (!res.ok) {
+      console.error("[reserva] patch usuario", res.status, text.slice(0, 180));
+      return { error: text.slice(0, 180) || "No se pudo guardar." };
+    }
+    if (!text) {
+      return { error: "Sin respuesta al guardar." };
+    }
+    const parsed = JSON.parse(text) as
+      | { estado?: string }
+      | { estado?: string }[];
+    const fila = Array.isArray(parsed) ? parsed[0] : parsed;
+    if (fila?.estado) return { estado: fila.estado };
+  } catch (err) {
+    console.error("[reserva] patch usuario", err);
+  }
+  return { error: "No se pudo guardar la reserva." };
+}

@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirChatReserva } from "@/lib/reservas/chat";
-import { patchReservaEstadoConServicio } from "@/lib/supabase/admin";
+import { patchReservaEstadoConServicio, patchReservaConUsuario } from "@/lib/supabase/admin";
 import { liberarPagoConductor, reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import {
@@ -137,11 +137,27 @@ async function esperarTope<T>(
   ]);
 }
 
-type RpcFila = { data?: { estado?: string } | { estado?: string }[] | null; error?: { message: string } | null };
+type RpcFila = {
+  data?: unknown;
+  error?: { message: string } | null;
+};
+
+function textoRpc(rpc: RpcFila | null): string {
+  const data = rpc?.data;
+  if (typeof data === "string") return data;
+  if (Array.isArray(data) && data[0] && typeof data[0] === "object") {
+    return String((data[0] as { estado?: string }).estado ?? "");
+  }
+  if (data && typeof data === "object" && data !== null && "estado" in data) {
+    return String((data as { estado?: string }).estado ?? "");
+  }
+  return "";
+}
 
 export async function persistirAceptacionReserva(
   db: AdminClient,
-  reserva: Pick<Reserva, "id">
+  reserva: Pick<Reserva, "id">,
+  accessToken?: string
 ): Promise<boolean> {
   if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
@@ -150,16 +166,14 @@ export async function persistirAceptacionReserva(
     aceptada_en: new Date().toISOString(),
   };
 
-  const rpc = (await esperarTope(
-    db.rpc("aceptar_reservas_conductor", { p_ids: [reserva.id] }),
+  const rpcUno = (await esperarTope(
+    db.rpc("aceptar_reserva_conductor", { p_id: reserva.id }),
     8000
   )) as RpcFila | null;
-  const rpcFilas = rpc?.data ?? null;
-  if (rpc?.error) {
-    console.error("[aceptar] rpc", rpc.error.message);
+  if (rpcUno?.error) {
+    console.error("[aceptar] rpc uno", rpcUno.error.message);
   }
-  const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
-  if (rpcFila?.estado === "confirmada") return true;
+  if (textoRpc(rpcUno) === "confirmada") return true;
   if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
   const { error } = await db
@@ -172,6 +186,16 @@ export async function persistirAceptacionReserva(
   }
   if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
+  if (accessToken) {
+    const conUsuario = await patchReservaConUsuario(
+      accessToken,
+      reserva.id,
+      payload
+    );
+    if (conUsuario.estado === "confirmada") return true;
+  }
+  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
+
   const parche = await patchReservaEstadoConServicio(reserva.id, payload);
   if (parche.estado === "confirmada") return true;
   return (await estadoDeReserva(db, reserva.id)) === "confirmada";
@@ -180,7 +204,8 @@ export async function persistirAceptacionReserva(
 export async function persistirRechazoReserva(
   db: AdminClient,
   reserva: Pick<Reserva, "id">,
-  motivo: string
+  motivo: string,
+  accessToken?: string
 ): Promise<boolean> {
   if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
@@ -190,19 +215,17 @@ export async function persistirRechazoReserva(
     motivo_cancelacion: motivo,
   };
 
-  const rpc = (await esperarTope(
-    db.rpc("rechazar_reservas_conductor", {
-      p_ids: [reserva.id],
+  const rpcUno = (await esperarTope(
+    db.rpc("rechazar_reserva_conductor", {
+      p_id: reserva.id,
       p_motivo: motivo,
     }),
     8000
   )) as RpcFila | null;
-  const rpcFilas = rpc?.data ?? null;
-  if (rpc?.error) {
-    console.error("[rechazar] rpc", rpc.error.message);
+  if (rpcUno?.error) {
+    console.error("[rechazar] rpc uno", rpcUno.error.message);
   }
-  const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
-  if (rpcFila?.estado === "cancelado") return true;
+  if (textoRpc(rpcUno) === "cancelado") return true;
   if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
   const { error } = await db
@@ -212,6 +235,16 @@ export async function persistirRechazoReserva(
     .eq("estado", "pendiente_aprobacion");
   if (error) {
     console.error("[rechazar] update", error.message);
+  }
+  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
+
+  if (accessToken) {
+    const conUsuario = await patchReservaConUsuario(
+      accessToken,
+      reserva.id,
+      payload
+    );
+    if (conUsuario.estado === "cancelado") return true;
   }
   if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
