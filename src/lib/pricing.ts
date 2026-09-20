@@ -19,7 +19,7 @@ export function formatEur(amount: number): string {
   }).format(amount);
 }
 
-/** Publicar es gratis; solo se cobra el 17 % al pagar el viaje. */
+/** Publicar es gratis; solo se cobra el 18 % al pagar el viaje. */
 export function requiresPublicationFee(): boolean {
   return false;
 }

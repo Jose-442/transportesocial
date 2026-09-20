@@ -1,6 +1,6 @@
 /** Comisión de la plataforma sobre el precio del conductor, solo en viajes cobrados. */
-export const COMMISSION_RATE = 0.17;
-export const COMMISSION_PERCENT_LABEL = "17 %";
+export const COMMISSION_RATE = 0.18;
+export const COMMISSION_PERCENT_LABEL = "18 %";
 /** Ya no se cobra suscripción; se mantiene por datos antiguos en Stripe. */
 export const SUBSCRIPTION_MONTHLY_EUR = 0.95;
 export const PUBLICATION_FEE_EUR = 0.9;
