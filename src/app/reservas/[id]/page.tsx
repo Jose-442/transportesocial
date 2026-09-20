@@ -171,7 +171,9 @@ export default async function ReservaDetallePage({
     (item) => item.estado === "pendiente_pago"
   )
     ? "pendiente_pago"
-    : reserva.estado;
+    : relacionadas.some((item) => item.estado === "pendiente_aprobacion")
+      ? "pendiente_aprobacion"
+      : reserva.estado;
   const reservaVista = { ...reserva, estado: estadoMostrar };
 
   const estadoResenas =
@@ -203,6 +205,12 @@ export default async function ReservaDetallePage({
             No se ha cobrado nada. Puedes completar el pago, editar la reserva
             o cancelarla.
           </p>
+        </Card>
+      )}
+
+      {motivoPago && !(esCliente && estadoMostrar === "pendiente_pago") && (
+        <Card className="border-amber-200 bg-amber-50/80">
+          <p className="text-sm text-amber-950">{motivoPago}</p>
         </Card>
       )}
 

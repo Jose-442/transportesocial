@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirChatReserva } from "@/lib/reservas/chat";
+import { patchReservaEstadoConServicio } from "@/lib/supabase/admin";
 import { liberarPagoConductor, reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import {
@@ -111,32 +112,67 @@ export async function marcarEntregadoManual(
     .eq("id", reserva.id);
 }
 
-export async function aceptarReservaInterno(
-  admin: AdminClient,
-  reserva: Reserva
-) {
-  await admin
-    .from("reservas")
-    .update({
-      estado: "confirmada",
-      aceptada_en: new Date().toISOString(),
-    })
-    .eq("id", reserva.id);
+export async function persistirAceptacionReserva(
+  db: AdminClient,
+  reserva: Pick<Reserva, "id">
+): Promise<boolean> {
+  const payload = {
+    estado: "confirmada",
+    aceptada_en: new Date().toISOString(),
+  };
 
+  const { data: rpcFilas } = await db.rpc("aceptar_reservas_conductor", {
+    p_ids: [reserva.id],
+  });
+  const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
+  if (rpcFila?.estado === "confirmada") return true;
+
+  const { data } = await db
+    .from("reservas")
+    .update(payload)
+    .eq("id", reserva.id)
+    .eq("estado", "pendiente_aprobacion")
+    .select("estado")
+    .maybeSingle();
+  if (data?.estado === "confirmada") return true;
+
+  const parche = await patchReservaEstadoConServicio(reserva.id, payload);
+  return parche.estado === "confirmada";
+}
+
+export async function avisarReservaAceptada(
+  db: AdminClient,
+  reserva: Reserva,
+  opts?: { omitirAvisos?: boolean }
+) {
   if (reserva.ruta_conductor_id) {
-    await admin
+    await db
       .from("rutas_conductores")
       .update({ estado: "reservada" })
       .eq("id", reserva.ruta_conductor_id);
   }
 
-  await abrirChatReserva(admin, reserva.id);
+  await abrirChatReserva(db, reserva.id);
 
-  await crearNotificacion(admin, {
-    user_id: reserva.cliente_id,
-    tipo: "reserva_confirmada",
-    titulo: "Reserva aceptada",
-    mensaje: "El conductor ha aceptado tu reserva. Usa el chat para coordinar.",
-    enlace: `/reservas/${reserva.id}`,
-  });
+  if (!opts?.omitirAvisos) {
+    await crearNotificacion(db, {
+      user_id: reserva.cliente_id,
+      tipo: "reserva_confirmada",
+      titulo: "Reserva aceptada",
+      mensaje:
+        "El conductor ha aceptado tu reserva. Usa el chat para coordinar.",
+      enlace: `/reservas/${reserva.id}`,
+    });
+  }
+}
+
+export async function aceptarReservaInterno(
+  db: AdminClient,
+  reserva: Reserva,
+  opts?: { omitirAvisos?: boolean }
+): Promise<{ error?: string }> {
+  const ok = await persistirAceptacionReserva(db, reserva);
+  if (!ok) return { error: "No se ha podido aceptar la reserva." };
+  await avisarReservaAceptada(db, reserva, opts);
+  return {};
 }

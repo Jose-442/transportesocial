@@ -8,7 +8,8 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcComision } from "@/lib/pricing";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
-  aceptarReservaInterno,
+  avisarReservaAceptada,
+  persistirAceptacionReserva,
   marcarEntregadoManual,
 } from "@/lib/reservas/cron";
 import { reembolsarReserva } from "@/lib/reservas/payment";
@@ -23,6 +24,24 @@ import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
 import type { Reserva } from "@/types/database";
+
+async function pendientesAprobacionMismoViaje(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reserva: Reserva
+): Promise<Reserva[]> {
+  if (!reserva.ruta_conductor_id) return [reserva];
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id)
+    .eq("estado", "pendiente_aprobacion");
+  const filas = (data as Reserva[] | null) ?? [];
+  if (filas.length === 0) return [reserva];
+  if (filas.some((item) => item.id === reserva.id)) return filas;
+  return [reserva, ...filas];
+}
 
 async function pendientesDelMismoViaje(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -332,19 +351,67 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
   );
 }
 
-export async function aceptarReserva(reservaId: string): Promise<void> {
+function volverReservaConError(reservaId: string, mensaje: string): never {
+  redirect(
+    `/reservas/${reservaId}?err=${encodeURIComponent(mensaje)}`
+  );
+}
+
+export async function aceptarReserva(formData: FormData): Promise<void> {
+  const reservaId = String(formData.get("reserva_id") ?? "").trim();
+  if (!reservaId) return;
+
   const ctx = await getReservaParticipante(reservaId);
-  if (!ctx) return;
+  if (!ctx) {
+    volverReservaConError(reservaId, "No se ha podido aceptar. Recarga e inténtalo otra vez.");
+  }
 
-  const { reserva, user } = ctx;
-  if (reserva.transportista_id !== user.id) return;
-  if (reserva.estado !== "pendiente_aprobacion") return;
+  const { reserva, user, supabase } = ctx;
+  if (reserva.transportista_id !== user.id) {
+    volverReservaConError(reservaId, "Solo el conductor puede aceptar esta reserva.");
+  }
+  if (reserva.estado !== "pendiente_aprobacion") {
+    volverReservaConError(reservaId, "Esta reserva ya no está esperando tu respuesta.");
+  }
 
-  const admin = createAdminClient();
-  if (!admin) return;
+  const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
+  const { data: rpcFilas } = await supabase.rpc("aceptar_reservas_conductor", {
+    p_ids: filas.map((fila) => fila.id),
+  });
+  const ya = new Set(
+    (Array.isArray(rpcFilas) ? rpcFilas : []).map(
+      (fila: { id?: string }) => fila.id
+    )
+  );
+  let aceptadas = 0;
+  for (const fila of filas) {
+    if (ya.has(fila.id)) {
+      aceptadas += 1;
+      continue;
+    }
+    const ok = await persistirAceptacionReserva(supabase, fila);
+    if (ok) aceptadas += 1;
+  }
+  if (aceptadas === 0) {
+    volverReservaConError(
+      reservaId,
+      "No se ha podido guardar la aceptación. Prueba otra vez."
+    );
+  }
 
-  await aceptarReservaInterno(admin, reserva);
-  revalidatePath(`/reservas/${reservaId}`);
+  const principal =
+    filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+  await avisarReservaAceptada(supabase, principal);
+  for (const fila of filas) {
+    if (fila.id === principal.id) continue;
+    await avisarReservaAceptada(supabase, fila, { omitirAvisos: true });
+  }
+
+  for (const fila of filas) {
+    revalidatePath(`/reservas/${fila.id}`);
+  }
+  revalidatePath("/cuenta/viajes");
+  redirect(`/reservas/${principal.id}`);
 }
 
 export async function rechazarReserva(reservaId: string): Promise<void> {

@@ -58,7 +58,8 @@ export function ReservaAcciones({
 
       {estado === "pendiente_aprobacion" && esConductor && (
         <div className="flex gap-2">
-          <form action={aceptarReserva.bind(null, reserva.id)} className="flex-1">
+          <form action={aceptarReserva} className="flex-1">
+            <input type="hidden" name="reserva_id" value={reserva.id} />
             <Button type="submit" fullWidth>
               Aceptar reserva
             </Button>
