@@ -67,7 +67,10 @@ async function insertarNotificacionConServicio(
   return { error: "No se pudo guardar el aviso." };
 }
 
-export async function crearNotificacion(db: DbClient, data: Aviso) {
+export async function crearNotificacion(
+  db: DbClient,
+  data: Aviso
+): Promise<{ error?: string }> {
   if (data.enlace) {
     const { data: repetida } = await db
       .from("notificaciones")

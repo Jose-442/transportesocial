@@ -232,7 +232,7 @@ export async function rechazarOferta(
 
   if (notifError) {
     console.error("[rechazar-oferta] notificación", notifError);
-    return { error: supabaseErrorMessage(notifError) };
+    return { error: notifError };
   }
 
   revalidatePath(`/bultos/${oferta.anuncio_bulto_id}`);
