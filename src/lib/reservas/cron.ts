@@ -124,6 +124,21 @@ async function estadoDeReserva(
   return data?.estado ?? null;
 }
 
+async function esperarTope<T>(
+  trabajo: PromiseLike<T>,
+  ms: number
+): Promise<T | null> {
+  return Promise.race([
+    Promise.resolve(trabajo).catch((err) => {
+      console.error(err);
+      return null;
+    }),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
+  ]);
+}
+
+type RpcFila = { data?: { estado?: string } | { estado?: string }[] | null; error?: { message: string } | null };
+
 export async function persistirAceptacionReserva(
   db: AdminClient,
   reserva: Pick<Reserva, "id">
@@ -135,12 +150,13 @@ export async function persistirAceptacionReserva(
     aceptada_en: new Date().toISOString(),
   };
 
-  const { data: rpcFilas, error: rpcError } = await db.rpc(
-    "aceptar_reservas_conductor",
-    { p_ids: [reserva.id] }
-  );
-  if (rpcError) {
-    console.error("[aceptar] rpc", rpcError.message);
+  const rpc = (await esperarTope(
+    db.rpc("aceptar_reservas_conductor", { p_ids: [reserva.id] }),
+    8000
+  )) as RpcFila | null;
+  const rpcFilas = rpc?.data ?? null;
+  if (rpc?.error) {
+    console.error("[aceptar] rpc", rpc.error.message);
   }
   const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
   if (rpcFila?.estado === "confirmada") return true;
@@ -174,15 +190,16 @@ export async function persistirRechazoReserva(
     motivo_cancelacion: motivo,
   };
 
-  const { data: rpcFilas, error: rpcError } = await db.rpc(
-    "rechazar_reservas_conductor",
-    {
+  const rpc = (await esperarTope(
+    db.rpc("rechazar_reservas_conductor", {
       p_ids: [reserva.id],
       p_motivo: motivo,
-    }
-  );
-  if (rpcError) {
-    console.error("[rechazar] rpc", rpcError.message);
+    }),
+    8000
+  )) as RpcFila | null;
+  const rpcFilas = rpc?.data ?? null;
+  if (rpc?.error) {
+    console.error("[rechazar] rpc", rpc.error.message);
   }
   const rpcFila = Array.isArray(rpcFilas) ? rpcFilas[0] : rpcFilas;
   if (rpcFila?.estado === "cancelado") return true;

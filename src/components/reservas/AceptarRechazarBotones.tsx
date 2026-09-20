@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { aceptarReserva, rechazarReserva } from "@/actions/reservas";
@@ -7,14 +8,20 @@ import { aceptarReserva, rechazarReserva } from "@/actions/reservas";
 export function AceptarRechazarBotones({ reservaId }: { reservaId: string }) {
   const [aceptarEstado, aceptarAction, aceptando] = useActionState(
     aceptarReserva,
-    null as { error?: string } | null
+    null as { error?: string; ok?: boolean } | null
   );
   const [rechazarEstado, rechazarAction, rechazando] = useActionState(
     rechazarReserva,
-    null as { error?: string } | null
+    null as { error?: string; ok?: boolean } | null
   );
   const ocupado = aceptando || rechazando;
   const aviso = aceptarEstado?.error || rechazarEstado?.error;
+
+  useEffect(() => {
+    if (aceptarEstado?.ok || rechazarEstado?.ok) {
+      window.location.reload();
+    }
+  }, [aceptarEstado, rechazarEstado]);
 
   return (
     <div className="space-y-2">

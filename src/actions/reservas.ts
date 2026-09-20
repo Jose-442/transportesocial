@@ -353,9 +353,9 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
 }
 
 export async function aceptarReserva(
-  _prev: { error?: string } | null,
+  _prev: { error?: string; ok?: boolean } | null,
   formData: FormData
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; ok?: boolean }> {
   const reservaId = String(formData.get("reserva_id") ?? "").trim();
   if (!reservaId) {
     return { error: "No se ha podido aceptar. Recarga e inténtalo otra vez." };
@@ -376,13 +376,18 @@ export async function aceptarReserva(
     }
 
     const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
-    const { data: rpcFilas, error: rpcError } = await supabase.rpc(
-      "aceptar_reservas_conductor",
-      { p_ids: filas.map((fila) => fila.id) }
-    );
-    if (rpcError) {
-      console.error("[aceptar] rpc lote", rpcError.message);
+    const rpcLote = await Promise.race([
+      Promise.resolve(
+        supabase.rpc("aceptar_reservas_conductor", {
+          p_ids: filas.map((fila) => fila.id),
+        })
+      ),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+    ]);
+    if (rpcLote && "error" in rpcLote && rpcLote.error) {
+      console.error("[aceptar] rpc lote", rpcLote.error.message);
     }
+    const rpcFilas = rpcLote && "data" in rpcLote ? rpcLote.data : null;
     const ya = new Set(
       (Array.isArray(rpcFilas) ? rpcFilas : []).map(
         (fila: { id?: string }) => fila.id
@@ -403,38 +408,25 @@ export async function aceptarReserva(
 
     const principal =
       filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-    try {
-      await avisarReservaAceptada(supabase, principal);
-      for (const fila of filas) {
-        if (fila.id === principal.id) continue;
-        await avisarReservaAceptada(supabase, fila, { omitirAvisos: true });
-      }
-    } catch (err) {
-      console.error("[aceptar] aviso", err);
-    }
+    void avisarReservaAceptada(supabase, principal).catch((err) =>
+      console.error("[aceptar] aviso", err)
+    );
 
     for (const fila of filas) {
       revalidatePath(`/reservas/${fila.id}`);
     }
     revalidatePath("/cuenta/viajes");
-    redirect(`/reservas/${principal.id}`);
+    return { ok: true };
   } catch (error) {
-    const digest =
-      typeof error === "object" && error && "digest" in error
-        ? String((error as { digest?: string }).digest)
-        : "";
-    if (digest.startsWith("NEXT_REDIRECT")) {
-      throw error;
-    }
     console.error("[aceptarReserva]", error);
     return { error: "No se ha podido aceptar. Prueba otra vez." };
   }
 }
 
 export async function rechazarReserva(
-  _prev: { error?: string } | null,
+  _prev: { error?: string; ok?: boolean } | null,
   formData: FormData
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; ok?: boolean }> {
   const reservaId = String(formData.get("reserva_id") ?? "").trim();
   if (!reservaId) {
     return { error: "No se ha podido rechazar. Recarga e inténtalo otra vez." };
@@ -457,17 +449,21 @@ export async function rechazarReserva(
     const motivo = "Rechazada por el conductor.";
     const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
     const ids = filas.map((fila) => fila.id);
-    const { data: rpcFilas, error: rpcError } = await supabase.rpc(
-      "rechazar_reservas_conductor",
-      {
-        p_ids: ids,
-        p_motivo: motivo,
-      }
-    );
-    if (rpcError) {
-      console.error("[rechazar] rpc lote", rpcError.message);
+    const rpcLote = await Promise.race([
+      Promise.resolve(
+        supabase.rpc("rechazar_reservas_conductor", {
+          p_ids: ids,
+          p_motivo: motivo,
+        })
+      ),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+    ]);
+    if (rpcLote && "error" in rpcLote && rpcLote.error) {
+      console.error("[rechazar] rpc lote", rpcLote.error.message);
     }
-    const rpcLista = Array.isArray(rpcFilas) ? rpcFilas : [];
+    const rpcLista = Array.isArray(rpcLote && "data" in rpcLote ? rpcLote.data : null)
+      ? (rpcLote as { data: { id?: string; stripe_payment_intent_id?: string | null }[] }).data
+      : [];
     const ya = new Set(
       rpcLista.map((fila: { id?: string }) => fila.id).filter(Boolean)
     );
@@ -493,19 +489,19 @@ export async function rechazarReserva(
           .filter((id): id is string => Boolean(id))
       ),
     ];
-    for (const intent of intents) {
-      try {
-        const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
-        await reembolsarPaymentIntent(intent);
-        await supabase.rpc("marcar_cobro_reembolsado", { p_intent: intent });
-      } catch (err) {
-        console.error("[rechazar] reembolso", err);
-      }
-    }
-
     const principal =
       filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-    try {
+
+    void (async () => {
+      for (const intent of intents) {
+        try {
+          const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
+          await reembolsarPaymentIntent(intent);
+          await supabase.rpc("marcar_cobro_reembolsado", { p_intent: intent });
+        } catch (err) {
+          console.error("[rechazar] reembolso", err);
+        }
+      }
       await crearNotificacion(supabase, {
         user_id: reserva.cliente_id,
         tipo: "reserva_rechazada",
@@ -513,24 +509,15 @@ export async function rechazarReserva(
         mensaje:
           "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
         enlace: `/reservas/${principal.id}`,
-      });
-    } catch (err) {
-      console.error("[rechazar] aviso", err);
-    }
+      }).catch((err) => console.error("[rechazar] aviso", err));
+    })();
 
     for (const fila of filas) {
       revalidatePath(`/reservas/${fila.id}`);
     }
     revalidatePath("/cuenta/viajes");
-    redirect(`/reservas/${principal.id}`);
+    return { ok: true };
   } catch (error) {
-    const digest =
-      typeof error === "object" && error && "digest" in error
-        ? String((error as { digest?: string }).digest)
-        : "";
-    if (digest.startsWith("NEXT_REDIRECT")) {
-      throw error;
-    }
     console.error("[rechazarReserva]", error);
     return { error: "No se ha podido rechazar. Prueba otra vez." };
   }
