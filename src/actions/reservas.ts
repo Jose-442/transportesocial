@@ -7,14 +7,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcComision } from "@/lib/pricing";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
-import {
-  avisarReservaAceptada,
-  persistirAceptacionReserva,
-  persistirRechazoReserva,
-  marcarEntregadoManual,
-} from "@/lib/reservas/cron";
+import { marcarEntregadoManual } from "@/lib/reservas/cron";
+import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
 import { reembolsarReserva } from "@/lib/reservas/payment";
-import { crearNotificacion } from "@/lib/reservas/notify";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
 import {
@@ -25,26 +20,6 @@ import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
 import type { Reserva } from "@/types/database";
-
-async function pendientesAprobacionMismoViaje(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  reserva: Reserva
-): Promise<Reserva[]> {
-  if (!reserva.ruta_conductor_id) return [reserva];
-  const { data } = await supabase
-    .from("reservas")
-    .select("*")
-    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
-    .eq("cliente_id", reserva.cliente_id)
-    .eq("transportista_id", reserva.transportista_id)
-    .eq("estado", "pendiente_aprobacion");
-  const filas = (data as Reserva[] | null) ?? [];
-  if (filas.length === 0) {
-    return reserva.estado === "pendiente_aprobacion" ? [reserva] : [];
-  }
-  if (filas.some((item) => item.id === reserva.id)) return filas;
-  return [reserva, ...filas];
-}
 
 async function pendientesDelMismoViaje(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -360,114 +335,10 @@ export async function decidirReservaConductor(
 ): Promise<{ error?: string; ok?: boolean }> {
   const reservaId = String(formData.get("reserva_id") ?? "").trim();
   const decision = String(formData.get("decision") ?? "").trim();
-  const aceptar = decision === "aceptar";
-  const rechazar = decision === "rechazar";
-  if (!reservaId || (!aceptar && !rechazar)) {
+  if (decision !== "aceptar" && decision !== "rechazar") {
     return { error: "No se ha podido guardar. Recarga e inténtalo otra vez." };
   }
-
-  try {
-    const ctx = await getReservaParticipante(reservaId);
-    if (!ctx) {
-      return { error: "No se ha podido guardar. Recarga e inténtalo otra vez." };
-    }
-
-    const { reserva, user, supabase } = ctx;
-    if (reserva.transportista_id !== user.id) {
-      return { error: "Solo el conductor puede responder a esta reserva." };
-    }
-
-    const filas = await pendientesAprobacionMismoViaje(supabase, reserva);
-    if (filas.length === 0) {
-      if (aceptar && reserva.estado === "confirmada") return { ok: true };
-      if (rechazar && reserva.estado === "cancelado") return { ok: true };
-      return { error: "Esta reserva ya no está esperando tu respuesta." };
-    }
-
-    const { data: sessionData } = await supabase.auth.getSession();
-    const accessToken = sessionData.session?.access_token;
-
-    if (aceptar) {
-      const rpc = await Promise.race([
-        Promise.resolve(
-          supabase.rpc("aceptar_reserva_conductor", { p_id: reservaId })
-        ),
-        new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
-      ]);
-      if (rpc && "error" in rpc && rpc.error) {
-        console.error("[aceptar] rpc id", rpc.error.message);
-      }
-      const rpcOk = Boolean(
-        rpc && "data" in rpc && rpc.data === "confirmada"
-      );
-      let yaOk = rpcOk;
-      if (!yaOk) {
-        const guardados = await Promise.all(
-          filas.map((fila) =>
-            persistirAceptacionReserva(supabase, fila, accessToken)
-          )
-        );
-        yaOk = guardados.every(Boolean);
-      }
-      if (!yaOk) {
-        return { error: "No se ha podido guardar la aceptación. Prueba otra vez." };
-      }
-      const principal =
-        filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-      void avisarReservaAceptada(supabase, principal).catch((err) =>
-        console.error("[aceptar] aviso", err)
-      );
-    } else {
-      const motivo = "Rechazada por el conductor.";
-      const rpc = await Promise.race([
-        Promise.resolve(
-          supabase.rpc("rechazar_reserva_conductor", {
-            p_id: reservaId,
-            p_motivo: motivo,
-          })
-        ),
-        new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
-      ]);
-      if (rpc && "error" in rpc && rpc.error) {
-        console.error("[rechazar] rpc id", rpc.error.message);
-      }
-      const rpcOk = Boolean(
-        rpc && "data" in rpc && rpc.data === "cancelado"
-      );
-      let yaOk = rpcOk;
-      if (!yaOk) {
-        const guardados = await Promise.all(
-          filas.map((fila) =>
-            persistirRechazoReserva(supabase, fila, motivo, accessToken)
-          )
-        );
-        yaOk = guardados.every(Boolean);
-      }
-      if (!yaOk) {
-        return { error: "No se ha podido guardar el rechazo. Prueba otra vez." };
-      }
-      const principal =
-        filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
-      void crearNotificacion(supabase, {
-        user_id: reserva.cliente_id,
-        tipo: "reserva_rechazada",
-        titulo: "Reserva rechazada",
-        mensaje:
-          "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
-        enlace: `/reservas/${principal.id}`,
-      }).catch((err) => console.error("[rechazar] aviso", err));
-    }
-
-    for (const fila of filas) {
-      revalidatePath(`/reservas/${fila.id}`);
-    }
-    revalidatePath(`/reservas/${reservaId}`);
-    revalidatePath("/cuenta/viajes");
-    return { ok: true };
-  } catch (error) {
-    console.error("[decidirReservaConductor]", error);
-    return { error: "No se ha podido guardar. Prueba otra vez." };
-  }
+  return ejecutarDecisionConductor({ reservaId, decision });
 }
 
 export async function editarReservaPendiente(reservaId: string): Promise<void> {

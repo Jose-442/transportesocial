@@ -1,49 +1,64 @@
 "use client";
 
-import { useEffect } from "react";
-import { useActionState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { decidirReservaConductor } from "@/actions/reservas";
 
 export function AceptarRechazarBotones({ reservaId }: { reservaId: string }) {
-  const [estado, action, pendiente] = useActionState(
-    decidirReservaConductor,
-    null as { error?: string; ok?: boolean } | null
+  const [pendiente, setPendiente] = useState<"aceptar" | "rechazar" | null>(
+    null
   );
+  const [aviso, setAviso] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (estado?.ok) {
+  async function decidir(decision: "aceptar" | "rechazar") {
+    setAviso(null);
+    setPendiente(decision);
+    try {
+      const res = await fetch("/api/reservas/decidir", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(45000),
+        body: JSON.stringify({ reservaId, decision }),
+      });
+      const json = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok || json.error) {
+        setAviso(json.error || "No se ha podido guardar. Prueba otra vez.");
+        setPendiente(null);
+        return;
+      }
       window.location.reload();
+    } catch {
+      setAviso("No se ha podido guardar. Prueba otra vez.");
+      setPendiente(null);
     }
-  }, [estado]);
+  }
 
   return (
-    <form action={action} className="space-y-2">
-      <input type="hidden" name="reserva_id" value={reservaId} />
+    <div className="space-y-2">
       <div className="flex gap-2">
         <Button
-          type="submit"
-          name="decision"
-          value="aceptar"
+          type="button"
           fullWidth
-          disabled={pendiente}
+          disabled={pendiente !== null}
+          onClick={() => void decidir("aceptar")}
         >
-          {pendiente ? "Guardando…" : "Aceptar reserva"}
+          {pendiente === "aceptar" ? "Guardando…" : "Aceptar reserva"}
         </Button>
         <Button
-          type="submit"
-          name="decision"
-          value="rechazar"
+          type="button"
           variant="secondary"
           fullWidth
-          disabled={pendiente}
+          disabled={pendiente !== null}
+          onClick={() => void decidir("rechazar")}
         >
-          {pendiente ? "Guardando…" : "Rechazar"}
+          {pendiente === "rechazar" ? "Guardando…" : "Rechazar"}
         </Button>
       </div>
-      {estado?.error ? (
-        <p className="text-sm text-amber-900">{estado.error}</p>
+      {aviso ? (
+        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          {aviso}
+        </p>
       ) : null}
-    </form>
+    </div>
   );
 }
