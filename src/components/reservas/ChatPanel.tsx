@@ -46,6 +46,7 @@ export function ChatPanel({
     cuerpo: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [avisoOculto, setAvisoOculto] = useState(false);
   const [loading, setLoading] = useState(false);
   const [accionId, setAccionId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -103,6 +104,7 @@ export function ChatPanel({
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setAvisoOculto(false);
     setLoading(true);
     const cuerpo = form.cuerpo;
     const result = await enviarMensajeChat(reservaId, cuerpo);
@@ -111,6 +113,7 @@ export function ChatPanel({
       setError(result.error);
       return;
     }
+    if (result.oculto) setAvisoOculto(true);
     clear();
     setForm({ cuerpo: "" });
   }
@@ -119,6 +122,7 @@ export function ChatPanel({
     const nuevo = window.prompt("Editar mensaje:", m.cuerpo);
     if (nuevo === null) return;
     setError(null);
+    setAvisoOculto(false);
     setAccionId(m.id);
     const result = await editarUltimoMensajeChat(reservaId, nuevo);
     setAccionId(null);
@@ -126,6 +130,7 @@ export function ChatPanel({
       setError(result.error);
       return;
     }
+    if (result.oculto) setAvisoOculto(true);
     setMensajes((prev) =>
       prev.map((msg) =>
         msg.id === m.id
@@ -159,8 +164,15 @@ export function ChatPanel({
   return (
     <div className="flex flex-col gap-3">
       <p className="text-xs text-zinc-500">
-        Coordina aquí el punto y la hora exactos. No compartas teléfono ni email.
+        Usad el chat interno para coordinaros. No está permitido compartir ni
+        teléfonos ni correos; el chat es solo para eso.
       </p>
+      {avisoOculto ? (
+        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          Hemos ocultado teléfono, correo, enlaces o formas de pago fuera de la
+          web. El viaje se paga aquí.
+        </p>
+      ) : null}
       <div className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3">
         {mensajes.length === 0 && (
           <p className="text-sm text-zinc-500">Aún no hay mensajes.</p>

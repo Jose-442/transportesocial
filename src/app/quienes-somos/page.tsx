@@ -109,6 +109,12 @@ export default function QuienesSomosPage() {
               <strong>confirmada y pagada</strong>. Antes de eso no hay contacto
               directo entre las partes.
             </li>
+            <li>
+              El chat oculta teléfonos, correos, enlaces y formas de pago fuera
+              de la web (por ejemplo WhatsApp o Bizum). El viaje se paga solo
+              aquí. Si se intenta cobrar o pagar por otro sitio, el equipo puede
+              cerrar la cuenta.
+            </li>
           </ul>
         </section>
 

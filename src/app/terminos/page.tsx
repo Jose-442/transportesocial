@@ -15,7 +15,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "31 de agosto de 2026";
+  const fechaActualizacion = "21 de septiembre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -190,7 +190,15 @@ export default function TerminosPage() {
             </li>
             <li>
               El <strong>chat interno</strong> solo se habilita cuando la
-              reserva está confirmada y pagada.
+              reserva está confirmada y pagada. El chat oculta de forma
+              automática teléfonos, correos, enlaces y formas de pago ajenas a
+              la Plataforma (por ejemplo WhatsApp o Bizum).
+            </li>
+            <li>
+              El pago del viaje o porte se realiza <strong>solo a través de
+              la Plataforma</strong>. Queda prohibido concertar el pago fuera
+              (efectivo, Bizum u otros). El incumplimiento puede dar lugar a
+              la suspensión o baja de la cuenta, previa revisión del equipo.
             </li>
             <li>
               El Conductor puede marcar el envío como «En camino» y «Entregado».

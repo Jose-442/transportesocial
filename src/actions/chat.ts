@@ -74,12 +74,17 @@ async function obtenerUltimoMensajeCanal(
   return data;
 }
 
-function validarCuerpo(cuerpo: string): { texto?: string; error?: string } {
-  const texto = filtrarContactoEnMensaje(cuerpo.trim());
+function validarCuerpo(cuerpo: string): {
+  texto?: string;
+  oculto?: boolean;
+  error?: string;
+} {
+  const original = cuerpo.trim();
+  const texto = filtrarContactoEnMensaje(original);
   if (!texto || texto.length > 2000) {
     return { error: "Mensaje no válido." };
   }
-  return { texto };
+  return { texto, oculto: texto !== original };
 }
 
 export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
@@ -117,7 +122,7 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
-  return { ok: true };
+  return { ok: true, oculto: Boolean(validado.oculto) };
 }
 
 export async function editarUltimoMensajeChat(
@@ -148,7 +153,7 @@ export async function editarUltimoMensajeChat(
   if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath(`/reservas/${reservaId}/chat`);
-  return { ok: true };
+  return { ok: true, oculto: Boolean(validado.oculto) };
 }
 
 export async function eliminarUltimoMensajeChat(reservaId: string) {
