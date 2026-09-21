@@ -7,9 +7,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcComision } from "@/lib/pricing";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
-import { marcarEntregadoManual } from "@/lib/reservas/cron";
 import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
+import { crearNotificacion } from "@/lib/reservas/notify";
 import { reembolsarReserva } from "@/lib/reservas/payment";
+import { plazoReclamacionDesdeLlegada } from "@/lib/reservas/timing";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
 import {
@@ -33,6 +34,22 @@ async function pendientesDelMismoViaje(
     .eq("ruta_conductor_id", reserva.ruta_conductor_id)
     .eq("cliente_id", userId)
     .eq("estado", "pendiente_pago");
+  const filas = (data as Reserva[] | null) ?? [];
+  return filas.length > 0 ? filas : [reserva];
+}
+
+async function reservasMismoViaje(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reserva: Reserva
+): Promise<Reserva[]> {
+  if (!reserva.ruta_conductor_id) return [reserva];
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id)
+    .neq("estado", "cancelado");
   const filas = (data as Reserva[] | null) ?? [];
   return filas.length > 0 ? filas : [reserva];
 }
@@ -432,7 +449,12 @@ export async function marcarEnTransito(reservaId: string): Promise<void> {
 
   const { reserva, user, supabase } = ctx;
   if (reserva.transportista_id !== user.id) return;
-  if (reserva.estado !== "confirmada") return;
+
+  const filas = await reservasMismoViaje(supabase, reserva);
+  const ids = filas
+    .filter((fila) => fila.estado === "confirmada")
+    .map((fila) => fila.id);
+  if (ids.length === 0) return;
 
   await supabase
     .from("reservas")
@@ -440,24 +462,66 @@ export async function marcarEnTransito(reservaId: string): Promise<void> {
       estado: "en_transito",
       en_transito_en: new Date().toISOString(),
     })
-    .eq("id", reservaId);
+    .in("id", ids)
+    .eq("transportista_id", user.id);
 
-  revalidatePath(`/reservas/${reservaId}`);
+  const principal =
+    filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+  await crearNotificacion(supabase, {
+    user_id: reserva.cliente_id,
+    tipo: "reserva_actualizada",
+    titulo: "El conductor ya ha salido",
+    mensaje:
+      "Ha marcado que ya va de camino. Entra en la reserva para verlo.",
+    enlace: `/reservas/${principal.id}`,
+  });
+
+  for (const id of ids) {
+    revalidatePath(`/reservas/${id}`);
+  }
+  revalidatePath("/cuenta/viajes");
 }
 
 export async function marcarEntregado(reservaId: string): Promise<void> {
   const ctx = await getReservaParticipante(reservaId);
   if (!ctx) return;
 
-  const { reserva, user } = ctx;
+  const { reserva, user, supabase } = ctx;
   if (reserva.transportista_id !== user.id) return;
-  if (!["confirmada", "en_transito"].includes(reserva.estado)) return;
 
-  const admin = createAdminClient();
-  if (!admin) return;
+  const filas = await reservasMismoViaje(supabase, reserva);
+  const ids = filas
+    .filter((fila) => ["confirmada", "en_transito"].includes(fila.estado))
+    .map((fila) => fila.id);
+  if (ids.length === 0) return;
 
-  await marcarEntregadoManual(admin, reserva);
-  revalidatePath(`/reservas/${reservaId}`);
+  const plazo = plazoReclamacionDesdeLlegada(reserva.fecha_llegada_prevista);
+  await supabase
+    .from("reservas")
+    .update({
+      estado: "entregado",
+      entregada_en: new Date().toISOString(),
+      entregada_auto: false,
+      plazo_reclamacion_hasta: plazo.toISOString(),
+    })
+    .in("id", ids)
+    .eq("transportista_id", user.id);
+
+  const principal =
+    filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
+  await crearNotificacion(supabase, {
+    user_id: reserva.cliente_id,
+    tipo: "reserva_actualizada",
+    titulo: "El conductor ha entregado",
+    mensaje:
+      "Ha marcado que ya ha llegado y entregado. Entra en la reserva para verlo.",
+    enlace: `/reservas/${principal.id}`,
+  });
+
+  for (const id of ids) {
+    revalidatePath(`/reservas/${id}`);
+  }
+  revalidatePath("/cuenta/viajes");
 }
 
 export async function toggleAceptacionAutomatica(activa: boolean) {

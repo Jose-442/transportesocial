@@ -69,18 +69,35 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && (
         <form action={marcarEnTransito.bind(null, reserva.id)}>
-          <Button type="submit" fullWidth>
-            Marcar en camino
+          <Button
+            type="submit"
+            fullWidth
+            className="whitespace-normal leading-snug"
+          >
+            Avisar de que ya he salido
           </Button>
         </form>
       )}
 
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
         <form action={marcarEntregado.bind(null, reserva.id)}>
-          <Button type="submit" fullWidth>
-            Marcar entregado
+          <Button
+            type="submit"
+            variant={estado === "confirmada" ? "secondary" : "primary"}
+            fullWidth
+            className="whitespace-normal leading-snug"
+          >
+            Avisar de que ya he entregado
           </Button>
         </form>
+      )}
+
+      {["confirmada", "en_transito"].includes(estado) && esConductor && (
+        <p className="text-sm text-zinc-600">
+          Quien reservó recibe el aviso en la campana y en el móvil, si tiene
+          avisos activados. Úsalos el día del viaje: el de salir cuando
+          arranques, el de entregar cuando hayas llegado.
+        </p>
       )}
 
       {chatPermitido(estado) && (
