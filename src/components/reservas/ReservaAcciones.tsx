@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { ComprobarPagoBoton } from "@/components/reservas/ComprobarPagoBoton";
@@ -33,18 +34,18 @@ export function ReservaAcciones({
 
   return (
     <Card className="space-y-3">
-      <p className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm text-zinc-700">
-        <span>
-          <span className="font-semibold text-zinc-900">Estado:</span>{" "}
-          {etiquetaEstado}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span className="inline-flex flex-wrap items-center gap-2 text-sm text-zinc-900">
+          <span className="font-semibold">Estado del viaje:</span>
+          <Badge tone="green">{etiquetaEstado}</Badge>
         </span>
         {chatPermitido(estado) ? (
-          <span className="text-zinc-600">
+          <span className="text-sm text-zinc-600">
             Usa el chat interno para coordinar. No se comparte teléfono ni
             email.
           </span>
         ) : null}
-      </p>
+      </div>
 
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">

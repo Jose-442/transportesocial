@@ -188,7 +188,7 @@ export default async function ReservaDetallePage({
     : perfiles[reserva.cliente_id];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <MarcarNotificacionesEnlaceLeida
         enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
       />
@@ -227,7 +227,7 @@ export default async function ReservaDetallePage({
       )}
 
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>
+        <h1 className="text-xl font-bold text-zinc-900 md:text-2xl">{titulo}</h1>
         <p className="mt-1 text-sm text-zinc-600">
           {esCliente ? "Conductor" : "Cliente"}:{" "}
           <Link
@@ -245,48 +245,57 @@ export default async function ReservaDetallePage({
         </p>
       </div>
 
-      <ReservaAcciones
-        reserva={reservaVista}
-        esCliente={esCliente}
-        esConductor={esConductor}
-        disputa={disputa}
-      />
+      <div className="grid gap-3 lg:grid-cols-2 lg:items-start">
+        <ReservaAcciones
+          reserva={reservaVista}
+          esCliente={esCliente}
+          esConductor={esConductor}
+          disputa={disputa}
+        />
 
-      <Card className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-zinc-500">Precio</p>
-        <p className="text-2xl font-bold text-emerald-700">
-          {formatEur(precioMostrar)}
-        </p>
-        <p className="text-sm text-zinc-700">{fraseReserva}</p>
-        {detalleBulto?.bulto_descripcion && (
-          <p className="text-sm text-zinc-600">
-            {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
-            {detalleBulto.bulto_medidas
-              ? ` (${separarHoraOculta(detalleBulto.bulto_medidas).texto})`
-              : ""}
-          </p>
-        )}
-        <p className="text-sm text-zinc-600">
-          Para el día:{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleDateString("es-ES", {
-            day: "numeric",
-            month: "numeric",
-          })}{" "}
-          a las{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
-      </Card>
-
-      {chatPermitido(estadoMostrar) && (
-        <Card>
-          <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
-            Abrir chat
-          </ButtonLink>
-        </Card>
-      )}
+        <div className="space-y-3">
+          <Card className="space-y-1.5">
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              Precio
+            </p>
+            <p className="text-xl font-bold text-emerald-700 md:text-2xl">
+              {formatEur(precioMostrar)}
+            </p>
+            <p className="text-sm text-zinc-700">{fraseReserva}</p>
+            {detalleBulto?.bulto_descripcion && (
+              <p className="text-sm text-zinc-600">
+                {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
+                {detalleBulto.bulto_medidas
+                  ? ` (${separarHoraOculta(detalleBulto.bulto_medidas).texto})`
+                  : ""}
+              </p>
+            )}
+            <p className="text-sm text-zinc-600">
+              Para el día:{" "}
+              {new Date(reserva.fecha_llegada_prevista).toLocaleDateString(
+                "es-ES",
+                {
+                  day: "numeric",
+                  month: "numeric",
+                }
+              )}{" "}
+              a las{" "}
+              {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString(
+                "es-ES",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }
+              )}
+            </p>
+          </Card>
+          {chatPermitido(estadoMostrar) && (
+            <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
+              Abrir chat
+            </ButtonLink>
+          )}
+        </div>
+      </div>
 
       {estadoResenas && (
         <Card>
