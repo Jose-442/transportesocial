@@ -512,9 +512,8 @@ export async function marcarEntregado(reservaId: string): Promise<void> {
   await crearNotificacion(supabase, {
     user_id: reserva.cliente_id,
     tipo: "reserva_actualizada",
-    titulo: "El conductor ha entregado",
-    mensaje:
-      "Ha marcado que ya ha llegado y entregado. Entra en la reserva para verlo.",
+    titulo: "Porte entregado",
+    mensaje: "El conductor ha marcado el porte como entregado.",
     enlace: `/reservas/${principal.id}`,
   });
 

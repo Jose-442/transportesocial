@@ -7,7 +7,6 @@ import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBot
 import {
   cancelarReservaPendiente,
   editarReservaPendiente,
-  marcarEnTransito,
   marcarEntregado,
 } from "@/actions/reservas";
 import {
@@ -67,37 +66,18 @@ export function ReservaAcciones({
         </form>
       )}
 
-      {estado === "confirmada" && esConductor && (
-        <form action={marcarEnTransito.bind(null, reserva.id)}>
-          <Button
-            type="submit"
-            fullWidth
-            className="whitespace-normal leading-snug"
-          >
-            Avisar de que ya he salido
-          </Button>
-        </form>
-      )}
-
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
-        <form action={marcarEntregado.bind(null, reserva.id)}>
-          <Button
-            type="submit"
-            variant={estado === "confirmada" ? "secondary" : "primary"}
-            fullWidth
-            className="whitespace-normal leading-snug"
-          >
-            Avisar de que ya he entregado
-          </Button>
-        </form>
-      )}
-
-      {["confirmada", "en_transito"].includes(estado) && esConductor && (
-        <p className="text-sm text-zinc-600">
-          Quien reservó recibe el aviso en la campana y en el móvil, si tiene
-          avisos activados. Úsalos el día del viaje: el de salir cuando
-          arranques, el de entregar cuando hayas llegado.
-        </p>
+        <div className="space-y-2">
+          <form action={marcarEntregado.bind(null, reserva.id)}>
+            <Button type="submit" fullWidth>
+              Porte entregado
+            </Button>
+          </form>
+          <p className="text-sm text-zinc-600">
+            Púlsalo cuando hayas entregado el bulto. Quien reservó recibe un
+            aviso en la campana y en el móvil, si los tiene activados.
+          </p>
+        </div>
       )}
 
       {chatPermitido(estado) && (
