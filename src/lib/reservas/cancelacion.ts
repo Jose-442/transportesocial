@@ -106,7 +106,7 @@ export function fraseAyudaCancelacionCliente(
     return `Te devolvemos el 100 % (${reembolsoEur}).`;
   }
   if (tipo === "viaje_sin_gastos") {
-    return `Te devolvemos el viaje (${reembolsoEur}). El ${COMMISSION_PERCENT_LABEL} de gastos de gestión no se devuelve. El conductor no cobra.`;
+    return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;
   }
   return `Faltan menos de ${CANCELACION_ANTICIPADA_HORAS} horas. Te devolvemos la mitad del viaje (${reembolsoEur}). El conductor se queda la otra mitad. El ${COMMISSION_PERCENT_LABEL} de gastos de gestión no se devuelve.`;
 }
