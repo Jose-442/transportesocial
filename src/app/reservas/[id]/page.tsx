@@ -247,6 +247,8 @@ export default async function ReservaDetallePage({
 
       <ReservaAcciones
         reserva={reservaVista}
+        relacionadas={relacionadas}
+        fechaSalida={ruta?.fecha_salida ?? reserva.fecha_llegada_prevista}
         esCliente={esCliente}
         esConductor={esConductor}
         disputa={disputa}

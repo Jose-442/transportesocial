@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   APP_NAME,
   AUTO_DELIVERED_AFTER_ARRIVAL_HOURS,
+  CANCELACION_ANTICIPADA_HORAS,
   CONDUCTOR_APPROVAL_HOURS,
   DISPUTE_WINDOW_HOURS,
   COMMISSION_PERCENT_LABEL,
@@ -187,6 +188,21 @@ export default function TerminosPage() {
               <strong>cancelar en cualquier momento</strong> con reembolso del{" "}
               <strong>100 %</strong>. Si el Conductor rechaza o no responde en{" "}
               {CONDUCTOR_APPROVAL_HOURS} horas, también se reembolsa el 100 %.
+            </li>
+            <li>
+              Cuando la reserva ya está confirmada, las mismas reglas de
+              cancelación valen para todos, según el reloj de la hora de
+              salida: si cancela quien reservó con más de{" "}
+              <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
+              antelación, se le devuelve el viaje y la Plataforma se queda los
+              gastos de gestión del {COMMISSION_PERCENT_LABEL}; el Conductor no
+              cobra. Si cancela a menos de{" "}
+              <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de la
+              salida, se le devuelve la mitad del viaje, el Conductor se queda
+              la otra mitad y la Plataforma se queda los gastos de gestión. A
+              partir de la hora de salida, quien reservó ya no puede cancelar.
+              Si cancela el Conductor después de aceptar, se reembolsa el{" "}
+              <strong>100 %</strong>, incluidos los gastos de gestión.
             </li>
             <li>
               El <strong>chat interno</strong> solo se habilita cuando la

@@ -9,21 +9,36 @@ import {
   editarReservaPendiente,
 } from "@/actions/reservas";
 import { PorteEntregadoBoton } from "@/components/reservas/PorteEntregadoBoton";
+import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import {
   chatPermitido,
   ESTADO_RESERVA_LABELS,
   puedeReclamar,
 } from "@/lib/reservas/labels";
+import {
+  centimosAEuros,
+  fraseAyudaCancelacionCliente,
+  fraseAyudaCancelacionConductor,
+  politicaCancelacionCliente,
+  politicaCancelacionConductor,
+  repartoCancelacion,
+  textoBotonCancelacion,
+} from "@/lib/reservas/cancelacion";
+import { formatEur } from "@/lib/pricing";
 import { DisputaForm } from "@/components/reservas/DisputaForm";
 import type { Disputa, Reserva } from "@/types/database";
 
 export function ReservaAcciones({
   reserva,
+  relacionadas,
+  fechaSalida,
   esCliente,
   esConductor,
   disputa,
 }: {
   reserva: Reserva;
+  relacionadas: Reserva[];
+  fechaSalida: string;
   esCliente: boolean;
   esConductor: boolean;
   disputa: Disputa | null;
@@ -31,6 +46,25 @@ export function ReservaAcciones({
   const estado = reserva.estado;
   const etiquetaEstado =
     estado === "confirmada" ? "Confirmado" : ESTADO_RESERVA_LABELS[estado];
+  const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];
+  const politica = esCliente
+    ? politicaCancelacionCliente(estado, fechaSalida)
+    : politicaCancelacionConductor(estado);
+  const reparto =
+    politica.puede && politica.tipo
+      ? repartoCancelacion(filasPrecio, politica.tipo)
+      : null;
+  const textoAyudaCancelar =
+    politica.tipo && reparto
+      ? esCliente
+        ? fraseAyudaCancelacionCliente(
+            politica.tipo,
+            formatEur(centimosAEuros(reparto.reembolsoCents))
+          )
+        : fraseAyudaCancelacionConductor(
+            formatEur(centimosAEuros(reparto.reembolsoCents))
+          )
+      : "";
 
   return (
     <Card className="space-y-2 p-3">
@@ -68,14 +102,6 @@ export function ReservaAcciones({
         <AceptarRechazarBotones reservaId={reserva.id} />
       )}
 
-      {estado === "pendiente_aprobacion" && esCliente && (
-        <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
-          <Button type="submit" variant="secondary" fullWidth>
-            Cancelar y solicitar reembolso
-          </Button>
-        </form>
-      )}
-
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
         <div className="space-y-2">
           <PorteEntregadoBoton reservaId={reserva.id} />
@@ -85,6 +111,31 @@ export function ReservaAcciones({
           </p>
         </div>
       )}
+
+      {esCliente &&
+        !disputa &&
+        politica.puede &&
+        politica.tipo &&
+        textoAyudaCancelar && (
+          <CancelarReservaBoton
+            reservaId={reserva.id}
+            textoBoton={textoBotonCancelacion(politica.tipo)}
+            textoAyuda={textoAyudaCancelar}
+          />
+        )}
+
+      {esConductor &&
+        !disputa &&
+        estado === "confirmada" &&
+        politica.puede &&
+        politica.tipo &&
+        textoAyudaCancelar && (
+          <CancelarReservaBoton
+            reservaId={reserva.id}
+            textoBoton="Cancelar reserva"
+            textoAyuda={textoAyudaCancelar}
+          />
+        )}
 
       {estado === "entregado" &&
         esCliente &&

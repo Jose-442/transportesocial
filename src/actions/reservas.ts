@@ -9,7 +9,6 @@ import { calcComision } from "@/lib/pricing";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
 import { crearNotificacion } from "@/lib/reservas/notify";
-import { reembolsarReserva } from "@/lib/reservas/payment";
 import { plazoReclamacionDesdeLlegada } from "@/lib/reservas/timing";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
@@ -433,14 +432,6 @@ export async function cancelarReservaPendiente(reservaId: string): Promise<void>
     }
     return;
   }
-
-  if (reserva.estado !== "pendiente_aprobacion") return;
-
-  const admin = createAdminClient();
-  if (!admin) return;
-
-  await reembolsarReserva(admin, reservaId, "Cancelada por el cliente.");
-  revalidatePath(`/reservas/${reservaId}`);
 }
 
 export async function marcarEnTransito(reservaId: string): Promise<void> {

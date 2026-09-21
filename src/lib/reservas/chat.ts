@@ -26,3 +26,17 @@ export async function abrirChatReserva(admin: DbClient, reservaId: string) {
   if (error || !data) return null;
   return data.id as string;
 }
+
+export async function cerrarChatsReservas(
+  admin: DbClient,
+  reservaIds: string[]
+) {
+  if (reservaIds.length === 0) return;
+  await admin
+    .from("chat_canales")
+    .update({
+      abierto: false,
+      cerrado_en: new Date().toISOString(),
+    })
+    .in("reserva_id", reservaIds);
+}

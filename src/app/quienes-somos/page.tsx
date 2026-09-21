@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import {
   AUTO_DELIVERED_AFTER_ARRIVAL_HOURS,
+  CANCELACION_ANTICIPADA_HORAS,
   COMMISSION_PERCENT_LABEL,
   CONDUCTOR_APPROVAL_HOURS,
   DISPUTE_WINDOW_HOURS,
@@ -95,6 +96,20 @@ export default function QuienesSomosPage() {
               <strong>cancelar en cualquier momento</strong> con reembolso del
               100 %. Si el conductor rechaza o no responde en plazo, también se
               reembolsa el 100 %.
+            </li>
+            <li>
+              Cuando ya está confirmada, las reglas son las mismas para todos:
+              si cancelas con más de{" "}
+              <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
+              antelación, te devolvemos el viaje y nos quedamos el{" "}
+              {COMMISSION_PERCENT_LABEL} de gastos de gestión; el conductor no
+              cobra. Si cancelas a menos de{" "}
+              <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de la
+              salida, te devolvemos la mitad del viaje, el conductor se queda
+              la otra mitad y nos quedamos el {COMMISSION_PERCENT_LABEL}. A
+              partir de la hora de salida ya no se puede cancelar. Si cancela
+              el conductor, te devolvemos el 100 %, también los gastos de
+              gestión.
             </li>
           </ul>
         </section>

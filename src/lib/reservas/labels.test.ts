@@ -107,7 +107,7 @@ describe("fraseQueIncluyeReservas", () => {
 });
 
 describe("chatPermitido", () => {
-  it("el chat solo se abre cuando ya no se puede cancelar", () => {
+  it("el chat se abre cuando la reserva está confirmada", () => {
     expect(chatPermitido("pendiente_pago")).toBe(false);
     expect(chatPermitido("pendiente_aprobacion")).toBe(false);
     expect(chatPermitido("cancelado")).toBe(false);
