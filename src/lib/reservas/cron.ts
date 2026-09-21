@@ -273,7 +273,7 @@ export async function avisarReservaAceptada(
       tipo: "reserva_confirmada",
       titulo: "Reserva aceptada",
       mensaje:
-        "El conductor ha aceptado tu reserva. Usa el chat para coordinar.",
+        "El conductor ha aceptado tu reserva. Usa el chat para coordinaros",
       enlace: `/reservas/${reserva.id}`,
     });
   }

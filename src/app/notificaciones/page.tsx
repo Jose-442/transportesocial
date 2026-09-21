@@ -5,6 +5,7 @@ import { NotificacionesLista } from "@/components/notifications/NotificacionesLi
 import { NotificacionesMarcarTodasLeidas } from "@/components/notifications/NotificacionesMarcarTodasLeidas";
 import {
   agruparReservasMismoCobro,
+  avisosSinAceptarYRechazarALaVez,
   idReservaDelAviso,
   reservaIdDesdeEnlace,
 } from "@/lib/reservas/aviso-viaje";
@@ -82,7 +83,10 @@ export default async function NotificacionesPage() {
       <NotificacionesMarcarTodasLeidas />
       <h1 className="text-2xl font-bold text-zinc-900">Notificaciones</h1>
       <NotificacionesLista
-        notificaciones={unAvisoPorCobro(notificaciones, reservas)}
+        notificaciones={avisosSinAceptarYRechazarALaVez(
+          unAvisoPorCobro(notificaciones, reservas),
+          reservas
+        )}
       />
     </div>
   );

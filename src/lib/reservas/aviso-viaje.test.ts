@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   agruparReservasMismoCobro,
+  avisosSinAceptarYRechazarALaVez,
   idReservaDelAviso,
   omitirAvisoPlazaEnLote,
 } from "@/lib/reservas/aviso-viaje";
@@ -57,5 +58,41 @@ describe("omitirAvisoPlazaEnLote", () => {
     expect(
       omitirAvisoPlazaEnLote([{ tipo: "capacidad_extra" }], "capacidad_extra")
     ).toBe(false);
+  });
+});
+
+describe("avisosSinAceptarYRechazarALaVez", () => {
+  it("si el mismo viaje está aceptado y rechazado, se queda el aviso más nuevo", () => {
+    const reservas = [
+      { id: "nueva", cliente_id: "cli", ruta_conductor_id: "ruta" },
+      { id: "vieja", cliente_id: "cli", ruta_conductor_id: "ruta" },
+    ];
+    const avisos = [
+      {
+        id: "1",
+        tipo: "reserva_confirmada",
+        enlace: "/reservas/nueva",
+      },
+      {
+        id: "2",
+        tipo: "reserva_rechazada",
+        enlace: "/reservas/vieja",
+      },
+    ];
+    const out = avisosSinAceptarYRechazarALaVez(avisos, reservas);
+    expect(out.map((n) => n.id)).toEqual(["1"]);
+  });
+
+  it("deja avisos de otros viajes", () => {
+    const reservas = [
+      { id: "a", cliente_id: "cli", ruta_conductor_id: "ruta1" },
+      { id: "b", cliente_id: "cli", ruta_conductor_id: "ruta2" },
+    ];
+    const avisos = [
+      { id: "1", tipo: "reserva_confirmada", enlace: "/reservas/a" },
+      { id: "2", tipo: "reserva_rechazada", enlace: "/reservas/b" },
+    ];
+    const out = avisosSinAceptarYRechazarALaVez(avisos, reservas);
+    expect(out.map((n) => n.id)).toEqual(["1", "2"]);
   });
 });
