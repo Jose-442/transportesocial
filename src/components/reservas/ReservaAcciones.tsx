@@ -80,9 +80,8 @@ export function ReservaAcciones({
         <div className="space-y-2">
           <PorteEntregadoBoton reservaId={reserva.id} />
           <p className="text-sm leading-snug text-zinc-600">
-            Púlsalo cuando hayas entregado el bulto. Te lo pide dos veces, para
-            no marcarlo por error. Quien reservó recibe un aviso en la campana y
-            en el móvil, si los tiene activados.
+            Púlsalo cuando hayas entregado el bulto. Quien reservó recibe un
+            aviso en la campana y en el móvil, si los tiene activados.
           </p>
         </div>
       )}
