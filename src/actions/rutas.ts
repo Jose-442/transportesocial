@@ -227,5 +227,6 @@ export async function cancelarRutaPublicacion(
 
   revalidatePath("/cuenta");
   revalidatePath("/rutas");
+  revalidatePath(`/rutas/${rutaId}`);
   return { ok: true };
 }

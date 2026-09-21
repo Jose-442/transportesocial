@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
@@ -400,9 +401,12 @@ export default async function RutaDetallePage({
       )}
 
       {esPropio && ruta.estado === "activa" && (
-        <p className="text-center text-sm text-zinc-600">
-          Este viaje lo has publicado tú.
-        </p>
+        <div className="space-y-2">
+          <p className="text-center text-sm text-zinc-600">
+            Este viaje lo has publicado tú.
+          </p>
+          <CancelarPublicacionButton id={ruta.id} tipo="ruta" />
+        </div>
       )}
 
       {!esPropio &&
