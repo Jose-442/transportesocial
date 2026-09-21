@@ -376,8 +376,10 @@ export async function confirmarPagoViajeDesdeIntent(
   }
 
   const admin = createAdminClient();
-  for (const r of pendientes) {
-    await abrirChatReserva(admin ?? supabase, r.id);
+  if (auto) {
+    for (const r of pendientes) {
+      await abrirChatReserva(admin ?? supabase, r.id);
+    }
   }
   if (principal.ruta_conductor_id) {
     await sincronizarOcupacionRuta(principal.ruta_conductor_id);

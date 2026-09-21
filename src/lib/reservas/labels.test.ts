@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fraseQueHasReservado, fraseQueIncluyeReservas } from "@/lib/reservas/labels";
+import { chatPermitido, fraseQueHasReservado, fraseQueIncluyeReservas } from "@/lib/reservas/labels";
 
 describe("fraseQueHasReservado", () => {
   it("una plaza no dice bulto", () => {
@@ -103,5 +103,17 @@ describe("fraseQueIncluyeReservas", () => {
         },
       ])
     ).toBe("Reserva para 1 bulto y 1 plaza");
+  });
+});
+
+describe("chatPermitido", () => {
+  it("el chat solo se abre cuando ya no se puede cancelar", () => {
+    expect(chatPermitido("pendiente_pago")).toBe(false);
+    expect(chatPermitido("pendiente_aprobacion")).toBe(false);
+    expect(chatPermitido("cancelado")).toBe(false);
+    expect(chatPermitido("confirmada")).toBe(true);
+    expect(chatPermitido("en_transito")).toBe(true);
+    expect(chatPermitido("entregado")).toBe(true);
+    expect(chatPermitido("disputa")).toBe(true);
   });
 });
