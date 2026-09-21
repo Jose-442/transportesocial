@@ -41,7 +41,7 @@ export function ReservaAcciones({
         </span>
         {chatPermitido(estado) ? (
           <span className="text-sm text-zinc-600">
-            Usa el chat interno para coordinar. No se comparte teléfono ni
+            Usad el chat interno para coordinaros. No se comparte teléfono ni
             email.
           </span>
         ) : null}
