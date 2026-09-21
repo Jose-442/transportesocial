@@ -188,7 +188,7 @@ export default async function ReservaDetallePage({
     : perfiles[reserva.cliente_id];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <MarcarNotificacionesEnlaceLeida
         enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
       />
@@ -228,7 +228,7 @@ export default async function ReservaDetallePage({
 
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>
-        <p className="mt-1 text-sm text-zinc-600">
+        <p className="mt-0.5 text-sm text-zinc-600">
           {esCliente ? "Conductor" : "Usuario"}:{" "}
           <Link
             href={`/perfil/${otroPerfil?.id ?? (esCliente ? reserva.transportista_id : reserva.cliente_id)}`}
@@ -252,7 +252,7 @@ export default async function ReservaDetallePage({
         disputa={disputa}
       />
 
-      <Card className="space-y-2">
+      <Card className="space-y-1.5 p-3">
         <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
           <span className="text-sm font-semibold text-zinc-900">Precio:</span>
           <span className="text-2xl font-bold text-emerald-700">
@@ -283,7 +283,7 @@ export default async function ReservaDetallePage({
       </Card>
 
       {chatPermitido(estadoMostrar) && (
-        <Card>
+        <Card className="p-3">
           <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
             Abrir chat
           </ButtonLink>

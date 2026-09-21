@@ -33,8 +33,8 @@ export function ReservaAcciones({
     estado === "confirmada" ? "Confirmado" : ESTADO_RESERVA_LABELS[estado];
 
   return (
-    <Card className="space-y-3">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <Card className="space-y-2 p-3">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
         <span className="inline-flex flex-wrap items-center gap-2 text-sm text-zinc-900">
           <span className="font-semibold">Estado del viaje:</span>
           <Badge tone="green">{etiquetaEstado}</Badge>
@@ -79,7 +79,7 @@ export function ReservaAcciones({
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
         <div className="space-y-2">
           <PorteEntregadoBoton reservaId={reserva.id} />
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm leading-snug text-zinc-600">
             Púlsalo cuando hayas entregado el bulto. Te lo pide dos veces, para
             no marcarlo por error. Quien reservó recibe un aviso en la campana y
             en el móvil, si los tiene activados.

@@ -8,10 +8,12 @@ export function Card({
   children: ReactNode;
   className?: string;
 }) {
+  const paddingPropio = /(^|\s)(p|px|py|pt|pb|ps|pe)-/.test(className);
   return (
     <div
       className={[
-        "rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm",
+        "rounded-2xl border border-zinc-200 bg-white shadow-sm",
+        paddingPropio ? "" : "p-4",
         className,
       ].join(" ")}
     >
