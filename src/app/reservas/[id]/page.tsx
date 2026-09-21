@@ -229,7 +229,7 @@ export default async function ReservaDetallePage({
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>
         <p className="mt-1 text-sm text-zinc-600">
-          {esCliente ? "Conductor" : "Cliente"}:{" "}
+          {esCliente ? "Conductor" : "Usuario"}:{" "}
           <Link
             href={`/perfil/${otroPerfil?.id ?? (esCliente ? reserva.transportista_id : reserva.cliente_id)}`}
             className="font-semibold text-emerald-700 hover:text-emerald-800"
@@ -253,9 +253,11 @@ export default async function ReservaDetallePage({
       />
 
       <Card className="space-y-2">
-        <p className="text-xs uppercase tracking-wide text-zinc-500">Precio</p>
-        <p className="text-2xl font-bold text-emerald-700">
-          {formatEur(precioMostrar)}
+        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
+          <span className="text-sm font-semibold text-zinc-900">Precio:</span>
+          <span className="text-2xl font-bold text-emerald-700">
+            {formatEur(precioMostrar)}
+          </span>
         </p>
         <p className="text-sm text-zinc-700">{fraseReserva}</p>
         {detalleBulto?.bulto_descripcion && (
