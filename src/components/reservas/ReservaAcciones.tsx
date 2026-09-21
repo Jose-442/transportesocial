@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
@@ -29,13 +28,23 @@ export function ReservaAcciones({
   disputa: Disputa | null;
 }) {
   const estado = reserva.estado;
+  const etiquetaEstado =
+    estado === "confirmada" ? "Confirmado" : ESTADO_RESERVA_LABELS[estado];
 
   return (
     <Card className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="font-semibold text-zinc-900">Estado</h2>
-        <Badge tone="green">{ESTADO_RESERVA_LABELS[estado]}</Badge>
-      </div>
+      <p className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm text-zinc-700">
+        <span>
+          <span className="font-semibold text-zinc-900">Estado:</span>{" "}
+          {etiquetaEstado}
+        </span>
+        {chatPermitido(estado) ? (
+          <span className="text-zinc-600">
+            Usa el chat interno para coordinar. No se comparte teléfono ni
+            email.
+          </span>
+        ) : null}
+      </p>
 
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">
@@ -75,12 +84,6 @@ export function ReservaAcciones({
             en el móvil, si los tiene activados.
           </p>
         </div>
-      )}
-
-      {chatPermitido(estado) && (
-        <p className="text-sm text-zinc-600">
-          Usa el chat interno para coordinar. No se comparte teléfono ni email.
-        </p>
       )}
 
       {estado === "entregado" &&
