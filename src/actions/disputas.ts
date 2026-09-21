@@ -16,7 +16,7 @@ export async function abrirDisputa(formData: FormData) {
   if (!user) return { error: "Debes iniciar sesión." };
 
   const reservaId = String(formData.get("reserva_id"));
-  const motivo = String(formData.get("motivo")) as MotivoDisputa;
+  const motivo: MotivoDisputa = "otro";
   const descripcion = String(formData.get("descripcion") ?? "").trim();
 
   if (!descripcion || descripcion.length < 10) {
