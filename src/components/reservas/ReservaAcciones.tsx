@@ -7,8 +7,8 @@ import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBot
 import {
   cancelarReservaPendiente,
   editarReservaPendiente,
-  marcarEntregado,
 } from "@/actions/reservas";
+import { PorteEntregadoBoton } from "@/components/reservas/PorteEntregadoBoton";
 import {
   chatPermitido,
   ESTADO_RESERVA_LABELS,
@@ -68,14 +68,11 @@ export function ReservaAcciones({
 
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
         <div className="space-y-2">
-          <form action={marcarEntregado.bind(null, reserva.id)}>
-            <Button type="submit" fullWidth>
-              Porte entregado
-            </Button>
-          </form>
+          <PorteEntregadoBoton reservaId={reserva.id} />
           <p className="text-sm text-zinc-600">
-            Púlsalo cuando hayas entregado el bulto. Quien reservó recibe un
-            aviso en la campana y en el móvil, si los tiene activados.
+            Púlsalo cuando hayas entregado el bulto. Te lo pide dos veces, para
+            no marcarlo por error. Quien reservó recibe un aviso en la campana y
+            en el móvil, si los tiene activados.
           </p>
         </div>
       )}
