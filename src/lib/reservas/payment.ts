@@ -399,7 +399,13 @@ export async function confirmarPagoViajeDesdeIntent(
   const admin = createAdminClient();
   if (auto) {
     for (const r of pendientes) {
-      await abrirChatReserva(admin ?? supabase, r.id);
+      const { error } = await supabase.rpc("abrir_chat_reserva", {
+        p_reserva_id: r.id,
+      });
+      if (error) {
+        await abrirChatReserva(admin ?? supabase, r.id);
+      }
+      revalidatePath(`/reservas/${r.id}/chat`);
     }
   }
   if (principal.ruta_conductor_id) {
@@ -656,7 +662,7 @@ async function confirmarReservaRuta(admin: AdminClient, r: Reserva) {
       tipo: "reserva_confirmada",
       titulo: "Reserva confirmada",
       mensaje: "Tu reserva está confirmada. Coordina por el chat interno.",
-      enlace: `/reservas/${r.id}`,
+      enlace: `/reservas/${r.id}/chat`,
     });
   } else {
     const expira = plazoAprobacionConductor().toISOString();

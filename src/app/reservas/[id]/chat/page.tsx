@@ -4,8 +4,35 @@ import { Card } from "@/components/ui/Card";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
+import { abrirChatReserva } from "@/lib/reservas/chat";
 import { chatPermitido } from "@/lib/reservas/labels";
 import type { ChatMensaje, PerfilPublico, Reserva } from "@/types/database";
+
+async function asegurarCanalAbierto(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reservaId: string
+): Promise<{ id: string; abierto: boolean } | null> {
+  const { data: rpcId, error: rpcError } = await supabase.rpc(
+    "abrir_chat_reserva",
+    { p_reserva_id: reservaId }
+  );
+  if (rpcError) {
+    console.error("[abrir_chat_reserva]", rpcError.message);
+    await abrirChatReserva(supabase, reservaId);
+  }
+
+  const { data: canal } = await supabase
+    .from("chat_canales")
+    .select("id, abierto")
+    .eq("reserva_id", reservaId)
+    .maybeSingle();
+
+  if (canal?.abierto) return canal;
+  if (typeof rpcId === "string" && rpcId) {
+    return { id: rpcId, abierto: true };
+  }
+  return canal?.id ? { id: canal.id, abierto: Boolean(canal.abierto) } : null;
+}
 
 export async function generateMetadata({
   params,
@@ -49,11 +76,7 @@ export default async function ReservaChatPage({
     redirect(`/reservas/${id}`);
   }
 
-  const { data: canal } = await supabase
-    .from("chat_canales")
-    .select("id, abierto")
-    .eq("reserva_id", id)
-    .single();
+  const canal = await asegurarCanalAbierto(supabase, id);
 
   if (!canal?.abierto) {
     return (
