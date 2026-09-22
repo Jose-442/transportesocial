@@ -1,5 +1,10 @@
 import { LEGAL_TITULAR } from "@/lib/legal-info";
 
+const ADMIN_EMAILS = new Set([
+  LEGAL_TITULAR.email.toLowerCase(),
+  "randyroad@hotmail.es",
+]);
+
 export function isAdminUser(user: {
   id: string;
   email?: string | null;
@@ -10,7 +15,6 @@ export function isAdminUser(user: {
   if (configured?.length && configured.includes(user.id)) {
     return true;
   }
-  return (
-    user.email?.toLowerCase() === LEGAL_TITULAR.email.toLowerCase()
-  );
+  const email = user.email?.trim().toLowerCase();
+  return Boolean(email && ADMIN_EMAILS.has(email));
 }

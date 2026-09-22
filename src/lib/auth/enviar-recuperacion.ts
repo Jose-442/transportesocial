@@ -42,7 +42,8 @@ export async function enviarEnlaceRecuperarContrasena(
     return { ok: true };
   }
 
-  const token = data.properties?.hashed_token?.trim();
+  const props = data.properties ?? data;
+  const token = String(props?.hashed_token ?? "").trim();
   if (!token) {
     return { ok: true };
   }
