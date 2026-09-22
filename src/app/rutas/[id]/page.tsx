@@ -6,7 +6,7 @@ import { EquisCancelado } from "@/components/rutas/EquisCancelado";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
-import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
+import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
@@ -18,6 +18,7 @@ import {
   aplicarOcupacionAOfertas,
   cargarOcupacionRuta,
   ESTADOS_RESERVA_OCUPAN,
+  sincronizarOcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
@@ -112,6 +113,8 @@ export default async function RutaDetallePage({
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
 
+  await sincronizarOcupacionRuta(supabase, id);
+
   const { data: ofertasRaw } = await supabase
     .from("ofertas_capacidad")
     .select("*")
@@ -133,6 +136,10 @@ export default async function RutaDetallePage({
   const plazasAsientoLibres = ofertasDisponibles
     .filter((o) => o.tipo === "asiento")
     .some(ofertaDisponible);
+  const mostrarFormulario =
+    Boolean(!esPropio && user && !reservaMiaId) &&
+    ruta.estado === "activa" &&
+    (ofreceBulto || plazasAsientoLibres);
 
   const origen = formatCiudad(ruta.origen);
   const destino = formatCiudad(ruta.destino);
@@ -277,46 +284,12 @@ export default async function RutaDetallePage({
         </div>
       </Card>
 
-      {tieneAsientos && (
-        <Card className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Nº de acompañantes
-              </p>
-              <p className="mt-1 text-sm font-medium text-zinc-900">
-                {Math.max(0, asientoOfrecidas - asientoOcupadas)}{" "}
-                {Math.max(0, asientoOfrecidas - asientoOcupadas) === 1
-                  ? "plaza libre"
-                  : "plazas libres"}{" "}
-                de {asientoOfrecidas}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Asientos libres
-              </p>
-              <div className="mt-1 flex justify-end">
-                <AsientosLibresDots
-                  ofrecidas={asientoOfrecidas}
-                  ocupadas={asientoOcupadas}
-                />
-              </div>
-            </div>
-          </div>
-          {ofertas
-            .filter((o) => o.tipo === "asiento")
-            .map((o) => (
-              <div key={o.id} className="space-y-1">
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                  Precio por plaza
-                </p>
-                <p className="text-3xl font-bold text-emerald-700">
-                  {formatEur(Number(o.precio_publicado))}
-                </p>
-              </div>
-            ))}
-        </Card>
+      {tieneAsientos && !mostrarFormulario && (
+        <ResumenAsientosViaje
+          ofrecidas={asientoOfrecidas}
+          ocupadas={asientoOcupadas}
+          ofertas={ofertas}
+        />
       )}
       {ruta.estado === "cancelada" ? <EquisCancelado /> : null}
       </div>
@@ -372,17 +345,18 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {!esPropio &&
-        user &&
-        !reservaMiaId &&
-        ruta.estado === "activa" &&
-        (ofreceBulto || plazasAsientoLibres) && (
+      {mostrarFormulario && (
         <ReservarRutaForm
           rutaId={ruta.id}
           ofreceBulto={ofreceBulto}
           precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
           ofertas={ofertas}
           inicial={formInicial}
+          resumenAsientos={
+            tieneAsientos
+              ? { ofrecidas: asientoOfrecidas, ocupadas: asientoOcupadas }
+              : undefined
+          }
         />
       )}
 

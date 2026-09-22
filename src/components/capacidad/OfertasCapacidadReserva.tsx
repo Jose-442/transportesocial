@@ -124,7 +124,6 @@ export function OfertasCapacidadReserva({
           plazasOcupadas={ofertaSel.plazas_ocupadas}
           value={cantidad}
           onChange={setCantidad}
-          hint={`Plazas libres ahora: ${maxCantidad}.`}
         />
       )}
 

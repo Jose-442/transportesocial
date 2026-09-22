@@ -1,6 +1,6 @@
--- Cuenta el sitio ya reservado de cada viaje, para el listado público.
--- Supabase → SQL Editor → pega TODO este archivo → Run.
--- Si ya lo pegaste, pega también 034_ocupacion_plazas_robusta.sql (es el recuento bueno).
+-- Cuenta bien las plazas ocupadas (3 plazas − 1 reserva = 2).
+-- Supabase → SQL Editor → New query → pega TODO este archivo → Run.
+-- Luego recarga la ficha del viaje (Ctrl+F5).
 
 CREATE OR REPLACE FUNCTION public.ocupacion_de_rutas(p_ids uuid[])
 RETURNS TABLE(
@@ -98,3 +98,18 @@ $$;
 REVOKE ALL ON FUNCTION public.sincronizar_ocupacion_ruta(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.sincronizar_ocupacion_ruta(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.sincronizar_ocupacion_ruta(uuid) TO service_role;
+
+DO $$
+DECLARE
+  v_ruta uuid;
+BEGIN
+  FOR v_ruta IN
+    SELECT DISTINCT ruta_conductor_id
+    FROM public.ofertas_capacidad
+    WHERE tipo = 'asiento'
+  LOOP
+    PERFORM public.sincronizar_ocupacion_ruta(v_ruta);
+  END LOOP;
+END $$;
+
+NOTIFY pgrst, 'reload schema';

@@ -9,12 +9,8 @@ import { mismoCobroViaje, omitirAvisoPlazaEnLote } from "@/lib/reservas/aviso-vi
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { plazoAprobacionConductor } from "@/lib/reservas/timing";
 import { getStripeServer } from "@/lib/stripe/server";
-import {
-  aplicarOcupacionAOfertas,
-  cargarOcupacionRuta,
-  sincronizarOcupacionRuta,
-} from "@/lib/capacidad/ocupacion";
-import type { OfertaCapacidad, Reserva } from "@/types/database";
+import { sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
+import type { Reserva } from "@/types/database";
 
 type AdminClient = SupabaseClient;
 
@@ -326,7 +322,7 @@ export async function confirmarPagoViajeDesdeIntent(
   const pendientes = cobros.filter((item) => item.estado === "pendiente_pago");
   if (pendientes.length === 0) {
     if (principal.ruta_conductor_id) {
-      await sincronizarOcupacionRuta(principal.ruta_conductor_id);
+      await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
     }
     await avisarPagoViaje(dbAvisos, principal, auto);
     return {};
@@ -383,7 +379,7 @@ export async function confirmarPagoViajeDesdeIntent(
     }
   }
   if (principal.ruta_conductor_id) {
-    await sincronizarOcupacionRuta(principal.ruta_conductor_id);
+    await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
   }
 
   const enlace = `/reservas/${principal.id}`;
@@ -403,45 +399,6 @@ export async function confirmarPagoViajeDesdeIntent(
   }
   revalidatePath("/rutas");
   return {};
-}
-
-export async function sincronizarOcupacionRuta(rutaId: string): Promise<void> {
-  const supabase = await createClient();
-  const { error: rpcError } = await supabase.rpc("sincronizar_ocupacion_ruta", {
-    p_ruta_id: rutaId,
-  });
-  if (rpcError) {
-    console.error("[sincronizarOcupacionRuta] rpc", rpcError.message);
-  }
-
-  const admin = createAdminClient();
-  if (admin) {
-    const ocupacion = await cargarOcupacionRuta(rutaId);
-    const { data: ofertasRaw } = await admin
-      .from("ofertas_capacidad")
-      .select("*")
-      .eq("ruta_conductor_id", rutaId)
-      .eq("tipo", "asiento");
-    const actualizadas = aplicarOcupacionAOfertas(
-      (ofertasRaw as OfertaCapacidad[]) ?? [],
-      ocupacion
-    );
-    for (const oferta of actualizadas) {
-      const { error } = await admin
-        .from("ofertas_capacidad")
-        .update({
-          plazas_ocupadas: oferta.plazas_ocupadas,
-          estado: oferta.estado,
-        })
-        .eq("id", oferta.id);
-      if (error) {
-        console.error("[sincronizarOcupacionRuta]", error.message, oferta.id);
-      }
-    }
-  }
-
-  revalidatePath(`/rutas/${rutaId}`);
-  revalidatePath("/rutas");
 }
 
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {

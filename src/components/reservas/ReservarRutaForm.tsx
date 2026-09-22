@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
+import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -19,6 +20,7 @@ export function ReservarRutaForm({
   precioBulto,
   ofertas,
   inicial,
+  resumenAsientos,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
@@ -29,6 +31,7 @@ export function ReservarRutaForm({
     bulto_medidas: string;
     plazas: string;
   };
+  resumenAsientos?: { ofrecidas: number; ocupadas: number };
 }) {
   const router = useRouter();
   const ofertaAsiento = ofertas.find(
@@ -91,6 +94,13 @@ export function ReservarRutaForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
+      {resumenAsientos && (
+        <ResumenAsientosViaje
+          ofrecidas={resumenAsientos.ofrecidas}
+          ocupadas={resumenAsientos.ocupadas + cantidad}
+          ofertas={ofertas}
+        />
+      )}
       <p className="text-base font-semibold uppercase text-zinc-800">
         Rellena lo que necesites de este viaje
       </p>
@@ -125,7 +135,7 @@ export function ReservarRutaForm({
             plazasOcupadas={ofertaAsiento.plazas_ocupadas}
             value={form.plazas}
             onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
-            hint={`Plazas libres ahora: ${plazasLibres}. Si no viajas de pasajero, no elijas plaza.`}
+            hintSuffix="Si no viajas de pasajero, no elijas plaza."
           />
         </Card>
       )}

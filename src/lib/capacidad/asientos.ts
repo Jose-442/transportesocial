@@ -5,6 +5,18 @@ export function plazasLibresOferta(oferta: OfertaCapacidad): number {
   return Math.max(0, oferta.plazas_totales - oferta.plazas_ocupadas);
 }
 
+/** Plazas que marca el desplegable; se restan de las libres en esa misma pantalla. */
+export function plazasElegidasDesplegable(
+  value: string,
+  plazasLibres: number
+): number {
+  if (plazasLibres <= 0) return 0;
+  if (plazasLibres === 1) return 1;
+  const n = Number.parseInt(value, 10);
+  if (!Number.isInteger(n) || n < 1) return 0;
+  return Math.min(n, plazasLibres);
+}
+
 export function ofertaDisponible(oferta: OfertaCapacidad): boolean {
   return oferta.estado === "disponible" && plazasLibresOferta(oferta) > 0;
 }

@@ -150,10 +150,20 @@ export async function cargarOcupacionesPorRutas(
   }
 
   const admin = createAdminClient();
-  const [deUsuario, deAdmin] = await Promise.all([
+  const [{ data: asientos }, deUsuario, deAdmin] = await Promise.all([
+    usuario
+      .from("ofertas_capacidad")
+      .select("id")
+      .in("ruta_conductor_id", rutaIds)
+      .eq("tipo", "asiento"),
     leerReservasOcupacion(usuario, rutaIds),
     admin ? leerReservasOcupacion(admin, rutaIds) : Promise.resolve([]),
   ]);
+  const asientoIds = new Set(
+    ((asientos as { id?: string }[]) ?? [])
+      .map((fila) => fila.id)
+      .filter((id): id is string => Boolean(id))
+  );
   const porRuta = new Map<string, ReservaOcupacion[]>();
   for (const reserva of [...deUsuario, ...deAdmin]) {
     if (!reserva.ruta_conductor_id) continue;
@@ -162,7 +172,7 @@ export async function cargarOcupacionesPorRutas(
     porRuta.set(reserva.ruta_conductor_id, lista);
   }
   for (const [rutaId, reservas] of porRuta) {
-    const desdeReservas = ocupacionDesdeReservas(reservas);
+    const desdeReservas = ocupacionDesdeReservas(reservas, asientoIds);
     const previa = mapa.get(rutaId) ?? vaciaOcupacion();
     mapa.set(rutaId, mezclarOcupacion(previa, desdeReservas));
   }
@@ -181,7 +191,7 @@ export async function sincronizarOcupacionRuta(
   db: SupabaseClient,
   rutaId: string
 ): Promise<void> {
-  if (!rutaId) return;
+  if (!rutaId || typeof rutaId !== "string") return;
   const { error } = await db.rpc("sincronizar_ocupacion_ruta", {
     p_ruta_id: rutaId,
   });
