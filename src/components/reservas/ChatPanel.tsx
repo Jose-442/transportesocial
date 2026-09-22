@@ -101,10 +101,8 @@ export function ChatPanel({
         Usad el chat interno para coordinaros. Por seguridad no está permitido
         compartir ni teléfonos ni correos; el chat es solo para eso.
       </p>
+      {mensajes.length > 0 ? (
       <div className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3">
-        {mensajes.length === 0 && (
-          <p className="text-sm text-zinc-500">Aún no hay mensajes.</p>
-        )}
         {mensajes.map((m) => {
           const propio = m.remitente_id === userId;
           const nombre =
@@ -136,6 +134,7 @@ export function ChatPanel({
         })}
         <div ref={bottomRef} />
       </div>
+      ) : null}
       <form onSubmit={onSubmit} className="space-y-2">
         <Textarea
           label="Mensaje"
