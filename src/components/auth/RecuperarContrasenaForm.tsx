@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { traducirErrorAuth } from "@/lib/auth-errors";
+import { solicitarEnlaceRecuperarContrasena } from "@/actions/recuperar-contrasena";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { PasswordRecoveryEmailSent } from "@/components/auth/PasswordRecoveryEmailSent";
@@ -21,18 +20,11 @@ export function RecuperarContrasenaForm() {
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
-    const origin = window.location.origin;
-    const { error: authError } = await supabase.auth.resetPasswordForEmail(
-      email.trim(),
-      {
-        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent("/nueva-contrasena")}`,
-      }
-    );
+    const res = await solicitarEnlaceRecuperarContrasena(email);
 
     setLoading(false);
-    if (authError) {
-      setError(traducirErrorAuth(authError.message));
+    if (res.error) {
+      setError(res.error);
       return;
     }
 
@@ -47,8 +39,8 @@ export function RecuperarContrasenaForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <p className="text-sm text-zinc-600">
         Escribe el <strong>mismo email</strong> con el que te registraste. Te
-        enviaremos un enlace para elegir una contraseña nueva (el correo lo envía
-        el sistema de acceso, no el de avisos de la app).
+        mandamos un enlace de Transporte Social para elegir una contraseña
+        nueva.
       </p>
       <Input
         label="Email"

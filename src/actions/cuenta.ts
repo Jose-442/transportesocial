@@ -6,10 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { obtenerBloqueosEliminacion } from "@/lib/cuenta/eliminacion";
 import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-usuario";
-import { getRequestOrigin } from "@/lib/stripe/origin";
+import { enviarEnlaceRecuperarContrasena } from "@/lib/auth/enviar-recuperacion";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
 import { isDistintivoAmbiental } from "@/lib/vehiculo";
-import { traducirErrorAuth } from "@/lib/auth-errors";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 export async function actualizarNombreMostrar(
@@ -134,13 +133,7 @@ export async function solicitarCambioContrasena(): Promise<{
   } = await supabase.auth.getUser();
   if (!user?.email) return { error: "No autenticado." };
 
-  const origin = await getRequestOrigin();
-  const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: `${origin}/auth/callback?next=${encodeURIComponent("/nueva-contrasena")}`,
-  });
-
-  if (error) return { error: traducirErrorAuth(error.message) };
-  return { ok: true };
+  return enviarEnlaceRecuperarContrasena(user.email);
 }
 
 export async function abrirPortalSuscripcion(): Promise<void> {

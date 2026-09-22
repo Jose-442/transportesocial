@@ -16,14 +16,13 @@ export function PasswordRecoveryEmailSent({
       <ul className="list-disc space-y-2 pl-5">
         <li>
           Revisa la <strong>bandeja de entrada</strong>, <strong>Spam</strong> y{" "}
-          <strong>Promociones</strong>. El remitente suele ser{" "}
-          <span className="text-zinc-600">noreply@mail.app.supabase.io</span>.
+          <strong>Promociones</strong>. El remitente es{" "}
+          <span className="text-zinc-600">Transporte Social</span> (
+          noreply@transportesocial.es).
         </li>
         <li>Puede tardar unos minutos en llegar.</li>
         <li>
-          Por seguridad, solo puedes pedir un enlace <strong>cada 60 segundos</strong>.
-          Si has pulsado varias veces, espera <strong>1 hora</strong> antes de
-          volver a intentarlo.
+          Si has pulsado varias veces, espera un minuto y pruébalo otra vez.
         </li>
         <li>
           Al abrir el enlace, te pediremos la <strong>nueva contraseña</strong> en
