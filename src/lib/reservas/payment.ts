@@ -1,7 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient, patchReservaEstadoConServicio } from "@/lib/supabase/admin";
+import {
+  createAdminClient,
+  patchReservaConUsuario,
+  patchReservaEstadoConServicio,
+} from "@/lib/supabase/admin";
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { crearNotificacion } from "@/lib/reservas/notify";
@@ -31,6 +35,8 @@ async function guardarEstadoTrasPago(opts: {
 }): Promise<{ estado?: string; error?: string }> {
   const { supabase, userId, reservaId, nuevoEstado, extra } = opts;
   const payloads: Record<string, unknown>[] = [
+    { estado: nuevoEstado },
+    { estado: "pagado_escrow" },
     {
       estado: nuevoEstado,
       ...(extra.aceptada_en ? { aceptada_en: extra.aceptada_en } : {}),
@@ -38,8 +44,6 @@ async function guardarEstadoTrasPago(opts: {
         ? { expira_aprobacion_en: extra.expira_aprobacion_en }
         : {}),
     },
-    { estado: nuevoEstado },
-    { estado: "pagado_escrow" },
   ];
 
   const { data: rpcFilas, error: rpcError } = await supabase.rpc(
@@ -60,6 +64,9 @@ async function guardarEstadoTrasPago(opts: {
     }
   }
 
+  const { data: sesion } = await supabase.auth.getSession();
+  const accessToken = sesion.session?.access_token?.trim() ?? "";
+
   for (const payload of payloads) {
     const { data, error } = await supabase
       .from("reservas")
@@ -73,6 +80,17 @@ async function guardarEstadoTrasPago(opts: {
     }
     if (data?.estado && data.estado !== "pendiente_pago") {
       return { estado: data.estado };
+    }
+
+    if (accessToken) {
+      const porToken = await patchReservaConUsuario(
+        accessToken,
+        reservaId,
+        payload
+      );
+      if (porToken.estado && porToken.estado !== "pendiente_pago") {
+        return { estado: porToken.estado };
+      }
     }
 
     const porServicio = await patchReservaEstadoConServicio(reservaId, payload);
@@ -269,7 +287,8 @@ async function avisarPagoViaje(
 
 export async function confirmarPagoViajeDesdeIntent(
   paymentIntentId: string,
-  reservaId: string
+  reservaId: string,
+  opts?: { saltarImporte?: boolean }
 ): Promise<{ error?: string }> {
   const supabase = await createClient();
   const {
@@ -328,12 +347,17 @@ export async function confirmarPagoViajeDesdeIntent(
     return {};
   }
 
-  const sumaPendientes = sumaEurosToCents(
-    pendientes.map((item) => item.precio_total)
-  );
-  const sumaGrupo = sumaEurosToCents(cobros.map((item) => item.precio_total));
-  if (intent.amount !== sumaPendientes && intent.amount !== sumaGrupo) {
-    return { error: "Importe de pago no válido." };
+  if (!opts?.saltarImporte) {
+    const sumaPendientes = sumaEurosToCents(
+      pendientes.map((item) => item.precio_total)
+    );
+    const sumaGrupo = sumaEurosToCents(cobros.map((item) => item.precio_total));
+    const cubreImporte =
+      Math.abs(intent.amount - sumaPendientes) <= 2 ||
+      Math.abs(intent.amount - sumaGrupo) <= 2;
+    if (!cubreImporte) {
+      return { error: "Importe de pago no válido." };
+    }
   }
 
   const nuevoEstado = auto ? "confirmada" : "pendiente_aprobacion";

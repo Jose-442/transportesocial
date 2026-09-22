@@ -15,8 +15,9 @@ function createAdminFetch(serviceRole: string): typeof fetch {
           : input.url;
     const headers = new Headers(init?.headers);
     headers.set("apikey", serviceRole);
-    const esRest = /\/rest\/v1(?:\/|\?|$)/.test(url);
-    if (esRest) {
+    const esRpc = /\/rest\/v1\/rpc(?:\/|\?|$)/.test(url);
+    const esRestTabla = /\/rest\/v1(?:\/|\?|$)/.test(url) && !esRpc;
+    if (esRestTabla) {
       headers.delete("Authorization");
     } else {
       headers.set("Authorization", `Bearer ${serviceRole}`);

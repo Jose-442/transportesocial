@@ -163,7 +163,12 @@ export async function completeTripCheckout(
       return { error: "No se pudo verificar el pago." };
     }
 
-    const result = await aplicarCobroAReserva(paymentIntentId, reservaId);
+    const { confirmarPagoViajeDesdeIntent } = await import(
+      "@/lib/reservas/payment"
+    );
+    const result = await confirmarPagoViajeDesdeIntent(paymentIntentId, reservaId, {
+      saltarImporte: true,
+    });
     if (result.error) {
       console.error("[completeTripCheckout]", result.error, {
         checkoutSessionId,
@@ -223,6 +228,37 @@ export async function recuperarPagoPendiente(
     const createdGte = createdAt
       ? Math.floor(new Date(createdAt).getTime() / 1000)
       : Math.floor(Date.now() / 1000) - 14 * 24 * 60 * 60;
+    const sesiones = await stripe.checkout.sessions.list({
+      limit: 30,
+      created: { gte: createdGte },
+    });
+    const sesionCobrada = sesiones.data.find(
+      (item) =>
+        item.payment_status === "paid" &&
+        item.mode === "payment" &&
+        checkoutCubreReserva(item, reservaId)
+    );
+    if (sesionCobrada) {
+      const paymentIntentId =
+        typeof sesionCobrada.payment_intent === "string"
+          ? sesionCobrada.payment_intent
+          : sesionCobrada.payment_intent?.id;
+      if (paymentIntentId) {
+        const { confirmarPagoViajeDesdeIntent } = await import(
+          "@/lib/reservas/payment"
+        );
+        const result = await confirmarPagoViajeDesdeIntent(
+          paymentIntentId,
+          reservaId,
+          { saltarImporte: true }
+        );
+        if (!result.error) return { recovered: true };
+        if (result.error) {
+          return { recovered: false, error: result.error };
+        }
+      }
+    }
+
     const intents = await stripe.paymentIntents.list({
       limit: 40,
       created: { gte: createdGte },
@@ -258,7 +294,9 @@ export async function recuperarPagoPendiente(
     const { confirmarPagoViajeDesdeIntent } = await import(
       "@/lib/reservas/payment"
     );
-    const result = await confirmarPagoViajeDesdeIntent(intent.id, reservaId);
+    const result = await confirmarPagoViajeDesdeIntent(intent.id, reservaId, {
+      saltarImporte: true,
+    });
     if (result.error) return { recovered: false, error: result.error };
     return { recovered: true };
   } catch (err) {

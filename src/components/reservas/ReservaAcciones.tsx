@@ -35,6 +35,7 @@ export function ReservaAcciones({
   esCliente,
   esConductor,
   disputa,
+  yaPagadoEnStripe = false,
 }: {
   reserva: Reserva;
   relacionadas: Reserva[];
@@ -42,6 +43,7 @@ export function ReservaAcciones({
   esCliente: boolean;
   esConductor: boolean;
   disputa: Disputa | null;
+  yaPagadoEnStripe?: boolean;
 }) {
   const estado = reserva.estado;
   const etiquetaEstado =
@@ -84,17 +86,21 @@ export function ReservaAcciones({
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">
           <ComprobarPagoBoton reservaId={reserva.id} />
-          <CompletarPagoBoton reservaId={reserva.id} />
-          <form action={editarReservaPendiente.bind(null, reserva.id)}>
-            <Button type="submit" variant="secondary" fullWidth>
-              Editar reserva
-            </Button>
-          </form>
-          <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
-            <Button type="submit" variant="ghost" fullWidth>
-              Cancelar (aún no he pagado)
-            </Button>
-          </form>
+          {!yaPagadoEnStripe && <CompletarPagoBoton reservaId={reserva.id} />}
+          {!yaPagadoEnStripe && (
+            <form action={editarReservaPendiente.bind(null, reserva.id)}>
+              <Button type="submit" variant="secondary" fullWidth>
+                Editar reserva
+              </Button>
+            </form>
+          )}
+          {!yaPagadoEnStripe && (
+            <form action={cancelarReservaPendiente.bind(null, reserva.id)}>
+              <Button type="submit" variant="ghost" fullWidth>
+                Cancelar (aún no he pagado)
+              </Button>
+            </form>
+          )}
         </div>
       )}
 

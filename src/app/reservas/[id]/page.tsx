@@ -218,7 +218,11 @@ export default async function ReservaDetallePage({
         <Card className="border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             {errorPago || pagoComprobado
-              ? `Aún no se ha podido apuntar el cobro${motivoPago ? `: ${motivoPago}` : "."} Pulsa otra vez Comprobar el pago. No uses Completar pago.`
+              ? `El cobro de la tarjeta ya puede estar hecho. Pulsa Comprobar el pago. No pulses Completar pago.${
+                  errorPago || motivoPago
+                    ? ` (${errorPago ?? motivoPago})`
+                    : ""
+                }`
               : motivoPago
                 ? motivoPago
                 : "Si ya pagaste con la tarjeta, pulsa Comprobar el pago. Completar pago es solo si todavía no has pagado."}
@@ -252,6 +256,7 @@ export default async function ReservaDetallePage({
         esCliente={esCliente}
         esConductor={esConductor}
         disputa={disputa}
+        yaPagadoEnStripe={Boolean(sessionId || errorPago || pagoComprobado)}
       />
 
       <Card className="space-y-1.5 p-3">
