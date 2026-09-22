@@ -136,7 +136,7 @@ export function DisputasAdminPanel({
                     Ver reserva
                   </Link>
                   <Link
-                    href={`/reservas/${d.reserva_id}/chat`}
+                    href={`/admin/reservas/${d.reserva_id}/chat`}
                     className="text-sm font-semibold text-zinc-600"
                   >
                     Ver chat

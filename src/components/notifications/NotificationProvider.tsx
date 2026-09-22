@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { esAvisoChatAdmin } from "@/lib/reservas/segunda-cancelacion";
 import type { Notificacion } from "@/types/database";
 import { NotificationToast } from "./NotificationToast";
 
@@ -153,8 +154,14 @@ export function NotificationProvider({
         (payload) => {
           const notif = payload.new as Notificacion;
           setNotifications((prev) => [notif, ...prev]);
-          setToast(notif);
           playNotificationSound();
+          if (esAvisoChatAdmin(notif) && notif.enlace) {
+            if (window.location.pathname !== notif.enlace) {
+              window.location.assign(notif.enlace);
+            }
+            return;
+          }
+          setToast(notif);
         }
       )
       .subscribe();

@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { loadAlertasSegundaCancelacion } from "@/actions/admin-chat";
 import { loadAdminDashboardStats } from "@/actions/admin-dashboard";
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
 
 export default async function AdminHomePage() {
-  const { stats, avisoServidor } = await loadAdminDashboardStats();
+  const [{ stats, avisoServidor }, alertasCancelacion] = await Promise.all([
+    loadAdminDashboardStats(),
+    loadAlertasSegundaCancelacion(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -20,6 +24,26 @@ export default async function AdminHomePage() {
           detalle.
         </p>
       </div>
+
+      {alertasCancelacion.length > 0 ? (
+        <Card className="space-y-3 border-amber-300 bg-amber-50">
+          <h2 className="font-semibold text-amber-950">
+            Segunda cancelación — revisa el chat
+          </h2>
+          {alertasCancelacion.map((a) => (
+            <Link
+              key={a.id}
+              href={a.enlace}
+              className="block rounded-xl bg-white px-3 py-2 text-sm text-zinc-800"
+            >
+              <p className="font-semibold">{a.mensaje}</p>
+              <p className="mt-1 text-xs text-zinc-500">
+                {new Date(a.created_at).toLocaleString("es-ES")}
+              </p>
+            </Link>
+          ))}
+        </Card>
+      ) : null}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <AdminStatCard

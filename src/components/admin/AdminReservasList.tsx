@@ -117,12 +117,20 @@ export function AdminReservasList({
                   </p>
                   <p className="text-xs text-zinc-500">ID: {r.id}</p>
                 </div>
+                <div className="flex shrink-0 flex-col items-end gap-1">
                 <Link
                   href={`/reservas/${r.id}`}
                   className="text-sm font-semibold text-emerald-700"
                 >
                   Ver reserva
                 </Link>
+                <Link
+                  href={`/admin/reservas/${r.id}/chat`}
+                  className="text-sm font-semibold text-zinc-600"
+                >
+                  Ver chat
+                </Link>
+                </div>
               </div>
             </Card>
           ))}

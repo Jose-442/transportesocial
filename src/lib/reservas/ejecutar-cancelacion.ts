@@ -7,6 +7,7 @@ import {
   politicaCancelacionCliente,
   politicaCancelacionConductor,
 } from "@/lib/reservas/cancelacion";
+import { avisarAdminSiSegundaCancelacion } from "@/lib/reservas/avisar-segunda-cancelacion";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import type { Reserva } from "@/types/database";
 
@@ -149,6 +150,16 @@ export async function ejecutarCancelacionReserva(opts: {
         mensaje: "Se ha devuelto el 100 % a quien reservó.",
         enlace,
       });
+    }
+
+    try {
+      await avisarAdminSiSegundaCancelacion(admin, {
+        userId: user.id,
+        reservaId: principal.id,
+        esCliente,
+      });
+    } catch (err) {
+      console.error("[cancelar-reserva] aviso segunda cancelación", err);
     }
 
     for (const fila of filas) {

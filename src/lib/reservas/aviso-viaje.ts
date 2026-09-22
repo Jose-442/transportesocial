@@ -52,9 +52,11 @@ export function idReservaDelAviso<T extends ReservaAvisoGrupo>(grupo: T[]): stri
 }
 
 export function reservaIdDesdeEnlace(enlace: string | null): string | null {
-  if (!enlace?.startsWith("/reservas/")) return null;
-  const id = enlace.slice("/reservas/".length).split("/")[0];
-  return id || null;
+  if (!enlace) return null;
+  const trozo = enlace.match(/\/reservas\/([^/?#]+)/i);
+  const id = trozo?.[1];
+  if (!id || id === "chat") return null;
+  return id;
 }
 
 /** Un pago de bulto + plaza: el aviso lo lanza el bulto, no la plaza. */
