@@ -12,14 +12,10 @@ async function asegurarCanalAbierto(
   supabase: Awaited<ReturnType<typeof createClient>>,
   reservaId: string
 ): Promise<{ id: string; abierto: boolean } | null> {
-  const { data: rpcId, error: rpcError } = await supabase.rpc(
-    "abrir_chat_reserva",
-    { p_reserva_id: reservaId }
-  );
-  if (rpcError) {
-    console.error("[abrir_chat_reserva]", rpcError.message);
-    await abrirChatReserva(supabase, reservaId);
-  }
+  await abrirChatReserva(supabase, reservaId);
+  const { data: rpcId } = await supabase.rpc("abrir_chat_reserva", {
+    p_reserva_id: reservaId,
+  });
 
   const { data: canal } = await supabase
     .from("chat_canales")
