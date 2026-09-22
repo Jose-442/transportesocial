@@ -14,8 +14,10 @@ export function rutaOfreceBulto(espacio: string | null | undefined): boolean {
 
 export type EspacioOpcion = (typeof ESPACIO_OPCIONES)[number];
 
+const ETIQUETA_MAS_GRANDE = "Más grande que un frigorífico estándar";
+
 const ESPACIO_ETIQUETA: Partial<Record<EspacioOpcion, string>> = {
-  "Más grande": "Más grande (referencia: frigorífico estándar)",
+  "Más grande": ETIQUETA_MAS_GRANDE,
 };
 
 export const ESPACIO_SELECT_OPTIONS = ESPACIO_OPCIONES.map((value) => ({
@@ -34,16 +36,16 @@ export function combinarEspacio(tamano: string, detalle?: string): string {
 export function formatEspacioDisponibleListado(espacio: string): string {
   const valor = espacio.trim();
   if (!valor) return "Sin especificar";
-  if (/^Más grande(\.|$)/.test(valor) && !/frigorífico|referencia/i.test(valor)) {
-    return valor.replace(
-      /^Más grande/,
-      "Más grande (referencia: frigorífico estándar)"
-    );
+  if (
+    /^Más grande(\.|$)/.test(valor) &&
+    !/frigorífico|referencia/i.test(valor)
+  ) {
+    return valor.replace(/^Más grande/, ETIQUETA_MAS_GRANDE);
   }
-  if (/^Más grande que un frigorífico estándar/.test(valor)) {
+  if (/^Más grande \(referencia: frigorífico estándar\)/.test(valor)) {
     return valor.replace(
-      /^Más grande que un frigorífico estándar/,
-      "Más grande (referencia: frigorífico estándar)"
+      /^Más grande \(referencia: frigorífico estándar\)/,
+      ETIQUETA_MAS_GRANDE
     );
   }
   return valor;
