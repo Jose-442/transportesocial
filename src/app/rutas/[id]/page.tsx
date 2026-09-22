@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
+import { EquisCancelado } from "@/components/rutas/EquisCancelado";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
@@ -178,6 +179,7 @@ export default async function RutaDetallePage({
         <p className="mt-1 text-sm text-zinc-600">{dia}</p>
       </div>
 
+      <div className="relative space-y-4">
       <Card className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <p className="text-sm font-semibold text-zinc-800">
@@ -311,6 +313,8 @@ export default async function RutaDetallePage({
             ))}
         </Card>
       )}
+      {ruta.estado === "cancelada" ? <EquisCancelado /> : null}
+      </div>
 
       {ruta.estado === "reservada" && tieneCapacidadExtra && (
         <Card className="space-y-2 border-amber-200 bg-amber-50/50">
