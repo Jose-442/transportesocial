@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardLink } from "@/components/ui/Card";
 import type { Notificacion } from "@/types/database";
 import { useNotifications } from "./NotificationProvider";
