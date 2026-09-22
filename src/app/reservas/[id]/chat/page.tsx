@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
+import { ButtonLink } from "@/components/ui/Button";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
@@ -160,28 +161,36 @@ export default async function ReservaChatPage({
       >
         ← Volver a la reserva
       </Link>
-      <div className="flex items-center gap-3">
-        <Link href={`/perfil/${otroId}`} className="shrink-0">
-          <UserAvatar
-            name={otroNombre}
-            avatarUrl={otro?.avatar_url}
-            size={48}
-          />
-        </Link>
-        <div>
-          <Link
-            href={`/perfil/${otroId}`}
-            className="text-xl font-bold text-zinc-900 hover:text-emerald-800"
-          >
-            {otroNombre}
-          </Link>
-          <Link
-            href={`/reservas/${id}`}
-            className="mt-0.5 block text-sm font-semibold text-emerald-700 hover:text-emerald-800"
-          >
+      <div className="space-y-2">
+        <ButtonLink
+          href={`/perfil/${otroId}`}
+          variant="secondary"
+          fullWidth
+          className="justify-between gap-3 px-3"
+        >
+          <span className="flex min-w-0 items-center gap-3 text-left">
+            <UserAvatar
+              name={otroNombre}
+              avatarUrl={otro?.avatar_url}
+              size={40}
+            />
+            <span className="truncate text-base font-bold text-zinc-900">
+              {otroNombre}
+            </span>
+          </span>
+          <span>Ver</span>
+        </ButtonLink>
+        <ButtonLink
+          href={`/reservas/${id}`}
+          variant="secondary"
+          fullWidth
+          className="justify-between gap-3 px-3"
+        >
+          <span className="min-w-0 text-left text-sm font-semibold text-zinc-800">
             {tituloViaje}
-          </Link>
-        </div>
+          </span>
+          <span className="shrink-0">Ver</span>
+        </ButtonLink>
       </div>
       <Card>
         <ChatPanel
