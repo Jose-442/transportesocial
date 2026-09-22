@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { abrirChatReserva } from "@/lib/reservas/chat";
@@ -99,6 +100,12 @@ export default async function ReservaChatPage({
   const perfiles = Object.fromEntries(
     (perfilesData ?? []).map((p) => [p.id, p as PerfilPublico])
   );
+  const otroId =
+    reserva.cliente_id === user.id
+      ? reserva.transportista_id
+      : reserva.cliente_id;
+  const otro = perfiles[otroId];
+  const otroNombre = otro?.display_name?.trim() || "Usuario";
 
   return (
     <div className="space-y-4">
@@ -111,7 +118,20 @@ export default async function ReservaChatPage({
       >
         ← Volver a la reserva
       </Link>
-      <h1 className="text-xl font-bold text-zinc-900">Chat del viaje</h1>
+      <Link
+        href={`/perfil/${otroId}`}
+        className="flex items-center gap-3"
+      >
+        <UserAvatar
+          name={otroNombre}
+          avatarUrl={otro?.avatar_url}
+          size={48}
+        />
+        <div>
+          <h1 className="text-xl font-bold text-zinc-900">{otroNombre}</h1>
+          <p className="text-sm text-zinc-500">Chat del viaje</p>
+        </div>
+      </Link>
       <Card>
         <ChatPanel
           reservaId={id}
