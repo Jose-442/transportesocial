@@ -12,6 +12,7 @@ import { getStripeServer } from "@/lib/stripe/server";
 import {
   aplicarOcupacionAOfertas,
   cargarOcupacionRuta,
+  sincronizarOcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
 import type { OfertaCapacidad, Reserva } from "@/types/database";
 
@@ -483,11 +484,11 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
 async function ocuparPlazasOferta(
   admin: AdminClient,
   ofertaId: string,
-  cantidad: number
+  _cantidad: number
 ): Promise<{ error?: string }> {
   const { data: oferta } = await admin
     .from("ofertas_capacidad")
-    .select("*")
+    .select("ruta_conductor_id, plazas_totales, plazas_ocupadas")
     .eq("id", ofertaId)
     .single();
 
@@ -495,21 +496,20 @@ async function ocuparPlazasOferta(
     return { error: "Oferta no encontrada." };
   }
 
-  const libres = oferta.plazas_totales - oferta.plazas_ocupadas;
-  if (libres < cantidad) {
-    return { error: "Ya no hay plazas disponibles en esta oferta." };
+  if (oferta.ruta_conductor_id) {
+    await sincronizarOcupacionRuta(admin, oferta.ruta_conductor_id);
   }
 
-  const nuevasOcupadas = oferta.plazas_ocupadas + cantidad;
-  const agotado = nuevasOcupadas >= oferta.plazas_totales;
-
-  await admin
+  const { data: despues } = await admin
     .from("ofertas_capacidad")
-    .update({
-      plazas_ocupadas: nuevasOcupadas,
-      estado: agotado ? "agotado" : "disponible",
-    })
-    .eq("id", ofertaId);
+    .select("plazas_totales, plazas_ocupadas")
+    .eq("id", ofertaId)
+    .single();
+  const ocupadas = Number(despues?.plazas_ocupadas ?? oferta.plazas_ocupadas);
+  const totales = Number(despues?.plazas_totales ?? oferta.plazas_totales);
+  if (ocupadas > totales) {
+    return { error: "Ya no hay plazas disponibles en esta oferta." };
+  }
 
   return {};
 }

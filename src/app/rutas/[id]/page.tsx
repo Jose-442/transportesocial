@@ -17,6 +17,7 @@ import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos"
 import {
   aplicarOcupacionAOfertas,
   cargarOcupacionRuta,
+  ESTADOS_RESERVA_OCUPAN,
 } from "@/lib/capacidad/ocupacion";
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
@@ -54,16 +55,20 @@ export default async function RutaDetallePage({
   } = await supabase.auth.getUser();
 
   let reservaPendienteId: string | null = null;
+  let reservaMiaId: string | null = null;
   if (user) {
-    const { data: reservaPendiente } = await supabase
+    const { data: reservaMia } = await supabase
       .from("reservas")
-      .select("id")
+      .select("id, estado")
       .eq("ruta_conductor_id", id)
       .eq("cliente_id", user.id)
-      .eq("estado", "pendiente_pago")
+      .in("estado", ESTADOS_RESERVA_OCUPAN)
+      .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    reservaPendienteId = reservaPendiente?.id ?? null;
+    reservaMiaId = reservaMia?.id ?? null;
+    reservaPendienteId =
+      reservaMia?.estado === "pendiente_pago" ? reservaMia.id : null;
   }
 
   let formInicial:
@@ -353,9 +358,23 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
+      {!esPropio && user && reservaMiaId && !reservaPendienteId && (
+        <Card className="space-y-3">
+          <p className="text-center text-sm text-zinc-600">
+            Ya tienes una reserva en este viaje.
+          </p>
+          <Link
+            href={`/reservas/${reservaMiaId}`}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
+          >
+            Ver mi reserva
+          </Link>
+        </Card>
+      )}
+
       {!esPropio &&
         user &&
-        !reservaPendienteId &&
+        !reservaMiaId &&
         ruta.estado === "activa" &&
         (ofreceBulto || plazasAsientoLibres) && (
         <ReservarRutaForm
@@ -369,7 +388,7 @@ export default async function RutaDetallePage({
 
       {!esPropio &&
         user &&
-        !reservaPendienteId &&
+        !reservaMiaId &&
         ruta.estado === "reservada" &&
         ofertasDisponibles.length > 0 && (
         <Card className="bg-zinc-50">

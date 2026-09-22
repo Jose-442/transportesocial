@@ -6,7 +6,7 @@ import {
   repartoCancelacion,
   type TipoRepartoCancelacion,
 } from "@/lib/reservas/cancelacion";
-import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
+import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import type { Reserva } from "@/types/database";
 
 type AdminClient = SupabaseClient;
@@ -208,6 +208,12 @@ export async function aplicarCancelacionPagada(
 
   for (const fila of filas) {
     await liberarPlazasOferta(admin, fila);
+  }
+  const rutaIds = [
+    ...new Set(filas.map((fila) => fila.ruta_conductor_id).filter(Boolean)),
+  ] as string[];
+  for (const rutaId of rutaIds) {
+    await sincronizarOcupacionRuta(admin, rutaId);
   }
   await reabrirSiQuedaLibre(admin, filas);
   await cerrarChatsReservas(admin, ids);

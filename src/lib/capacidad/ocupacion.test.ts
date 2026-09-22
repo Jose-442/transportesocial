@@ -65,4 +65,29 @@ describe("aplicarOcupacionAOfertas", () => {
       estado: "disponible",
     });
   });
+
+  it("resta plazas aunque solo venga el total del viaje, sin mapa por oferta", () => {
+    const ofertas = [
+      {
+        id: "asiento-1",
+        ruta_conductor_id: "ruta-1",
+        tipo: "asiento",
+        espacio_tamano: null,
+        espacio_detalle: null,
+        plazas_totales: 3,
+        plazas_ocupadas: 0,
+        precio_neto: 40,
+        precio_publicado: 47.2,
+        estado: "disponible",
+        created_at: "",
+      },
+    ] as OfertaCapacidad[];
+    expect(
+      aplicarOcupacionAOfertas(ofertas, {
+        bultoOcupado: false,
+        plazasOcupadas: 1,
+        plazasPorOferta: new Map(),
+      })[0]
+    ).toMatchObject({ plazas_ocupadas: 1 });
+  });
 });

@@ -18,7 +18,7 @@ import {
 } from "@/lib/stripe/trip-checkout";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
-import { ESTADOS_RESERVA_OCUPAN } from "@/lib/capacidad/ocupacion";
+import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import type { Reserva } from "@/types/database";
 
 async function pendientesDelMismoViaje(
@@ -428,6 +428,7 @@ export async function cancelarReservaPendiente(reservaId: string): Promise<void>
     revalidatePath(`/reservas/${reservaId}`);
     revalidatePath("/cuenta/viajes");
     if (reserva.ruta_conductor_id) {
+      await sincronizarOcupacionRuta(supabase, reserva.ruta_conductor_id);
       revalidatePath(`/rutas/${reserva.ruta_conductor_id}`);
     }
     return;
@@ -756,6 +757,8 @@ export async function solicitarReservaCapacidad(
   if (error || !reserva) {
     return { error: supabaseErrorMessage(error) };
   }
+
+  await sincronizarOcupacionRuta(supabase, ruta.id);
 
   if (opts?.conPago === false) {
     revalidatePath(`/rutas/${ruta.id}`);

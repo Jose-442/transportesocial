@@ -74,9 +74,12 @@ export function aplicarOcupacionAOfertas(
 ): OfertaCapacidad[] {
   return ofertas.map((oferta) => {
     if (oferta.tipo !== "asiento") return oferta;
-    const deReservas =
-      ocupacion.plazasPorOferta.get(oferta.id) ?? ocupacion.plazasOcupadas;
-    const ocupadas = Math.max(oferta.plazas_ocupadas, deReservas);
+    const deEstaOferta = ocupacion.plazasPorOferta.get(oferta.id) ?? 0;
+    const ocupadas = Math.max(
+      oferta.plazas_ocupadas,
+      deEstaOferta,
+      ocupacion.plazasOcupadas
+    );
     return {
       ...oferta,
       plazas_ocupadas: ocupadas,
@@ -172,4 +175,17 @@ export async function cargarOcupacionRuta(
 ): Promise<OcupacionRuta> {
   const mapa = await cargarOcupacionesPorRutas([rutaId]);
   return mapa.get(rutaId) ?? vaciaOcupacion();
+}
+
+export async function sincronizarOcupacionRuta(
+  db: SupabaseClient,
+  rutaId: string
+): Promise<void> {
+  if (!rutaId) return;
+  const { error } = await db.rpc("sincronizar_ocupacion_ruta", {
+    p_ruta_id: rutaId,
+  });
+  if (error) {
+    console.error("[sincronizar_ocupacion_ruta]", error.message);
+  }
 }
