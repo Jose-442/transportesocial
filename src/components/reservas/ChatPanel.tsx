@@ -169,8 +169,7 @@ export function ChatPanel({
       </p>
       {avisoOculto ? (
         <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
-          Hemos ocultado teléfono, correo, enlaces o formas de pago fuera de la
-          web. El viaje se paga aquí.
+          Por seguridad se ocultan telefonos, correos y enlaces
         </p>
       ) : null}
       <div className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3">
