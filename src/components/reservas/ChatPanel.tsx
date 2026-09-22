@@ -1,26 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
-import {
-  editarUltimoMensajeChat,
-  eliminarUltimoMensajeChat,
-  enviarMensajeChat,
-} from "@/actions/chat";
-import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
+import { enviarMensajeChat } from "@/actions/chat";
 import { createClient } from "@/lib/supabase/client";
 import type { ChatMensaje, PerfilPublico } from "@/types/database";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
-
-function ultimoMensajeActivoId(mensajes: ChatMensaje[]): string | null {
-  const activos = mensajes.filter((m) => !m.eliminado);
-  if (activos.length === 0) return null;
-  return activos.reduce((a, b) =>
-    new Date(a.created_at) > new Date(b.created_at) ? a : b
-  ).id;
-}
 
 export function ChatPanel({
   reservaId,
@@ -46,15 +33,8 @@ export function ChatPanel({
     cuerpo: "",
   });
   const [error, setError] = useState<string | null>(null);
-  const [avisoOculto, setAvisoOculto] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [accionId, setAccionId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  const ultimoActivoId = useMemo(
-    () => ultimoMensajeActivoId(mensajes),
-    [mensajes]
-  );
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -104,74 +84,23 @@ export function ChatPanel({
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-    setAvisoOculto(false);
     setLoading(true);
-    const cuerpo = form.cuerpo;
-    const result = await enviarMensajeChat(reservaId, cuerpo);
+    const result = await enviarMensajeChat(reservaId, form.cuerpo);
     setLoading(false);
     if (result.error) {
       setError(result.error);
       return;
     }
-    if (result.oculto) setAvisoOculto(true);
     clear();
     setForm({ cuerpo: "" });
-  }
-
-  async function onEditar(m: ChatMensaje) {
-    const nuevo = window.prompt("Editar mensaje:", m.cuerpo);
-    if (nuevo === null) return;
-    setError(null);
-    setAvisoOculto(false);
-    setAccionId(m.id);
-    const result = await editarUltimoMensajeChat(reservaId, nuevo);
-    setAccionId(null);
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    if (result.oculto) setAvisoOculto(true);
-    setMensajes((prev) =>
-      prev.map((msg) =>
-        msg.id === m.id
-          ? {
-              ...msg,
-              cuerpo: filtrarContactoEnMensaje(nuevo.trim()),
-              editado_en: new Date().toISOString(),
-            }
-          : msg
-      )
-    );
-  }
-
-  async function onEliminar(m: ChatMensaje) {
-    if (!window.confirm("¿Eliminar este mensaje?")) return;
-    setError(null);
-    setAccionId(m.id);
-    const result = await eliminarUltimoMensajeChat(reservaId);
-    setAccionId(null);
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    setMensajes((prev) =>
-      prev.map((msg) =>
-        msg.id === m.id ? { ...msg, eliminado: true, cuerpo: "" } : msg
-      )
-    );
   }
 
   return (
     <div className="flex flex-col gap-3">
       <p className="text-xs text-zinc-500">
-        Usad el chat interno para coordinaros. No está permitido compartir ni
-        teléfonos ni correos; el chat es solo para eso.
+        Usad el chat interno para coordinaros. Por seguridad no está permitido
+        compartir ni teléfonos ni correos; el chat es solo para eso.
       </p>
-      {avisoOculto ? (
-        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
-          Por seguridad se ocultan telefonos, correos y enlaces
-        </p>
-      ) : null}
       <div className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3">
         {mensajes.length === 0 && (
           <p className="text-sm text-zinc-500">Aún no hay mensajes.</p>
@@ -180,8 +109,6 @@ export function ChatPanel({
           const propio = m.remitente_id === userId;
           const nombre =
             perfiles[m.remitente_id]?.display_name ?? "Usuario";
-          const esUltimoPropio =
-            propio && !m.eliminado && m.id === ultimoActivoId;
 
           return (
             <div
@@ -203,36 +130,6 @@ export function ChatPanel({
                 <p className="italic opacity-80">Mensaje eliminado</p>
               ) : (
                 <p className="whitespace-pre-wrap">{m.cuerpo}</p>
-              )}
-              {m.editado_en && !m.eliminado && (
-                <p
-                  className={[
-                    "mt-1 text-[10px]",
-                    propio ? "text-emerald-100" : "text-zinc-400",
-                  ].join(" ")}
-                >
-                  editado
-                </p>
-              )}
-              {esUltimoPropio && (
-                <div className="mt-2 flex gap-2">
-                  <button
-                    type="button"
-                    disabled={accionId === m.id}
-                    onClick={() => onEditar(m)}
-                    className="text-xs font-semibold underline opacity-90 hover:opacity-100"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    type="button"
-                    disabled={accionId === m.id}
-                    onClick={() => onEliminar(m)}
-                    className="text-xs font-semibold underline opacity-90 hover:opacity-100"
-                  >
-                    Eliminar
-                  </button>
-                </div>
               )}
             </div>
           );

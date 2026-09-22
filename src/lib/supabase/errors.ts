@@ -43,8 +43,12 @@ export function supabaseErrorMessage(error: { message: string }): string {
     return "Falta una tabla en la base de datos. Revisa las migraciones en Supabase.";
   }
 
+  if (/infinite recursion/i.test(msg) && /chat_mensajes/i.test(msg)) {
+    return "No se ha podido enviar el mensaje. Prueba otra vez.";
+  }
+
   if (
-    /\b(the|and|missing|invalid|denied|failed|unable|please|required|not found|already exists|violates|duplicate|bucket|jwt|row-level|payload|mime)\b/i.test(
+    /\b(the|and|missing|invalid|denied|failed|unable|please|required|not found|already exists|violates|duplicate|bucket|jwt|row-level|payload|mime|infinite|recursion|policy|relation)\b/i.test(
       msg
     )
   ) {
