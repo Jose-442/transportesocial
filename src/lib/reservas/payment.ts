@@ -257,14 +257,14 @@ async function avisarPagoViaje(
       tipo: "reserva_confirmada",
       titulo: "Nueva reserva confirmada",
       mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace,
+      enlace: `/reservas/${principal.id}/chat`,
     });
     await crearNotificacion(db, {
       user_id: principal.cliente_id,
       tipo: "reserva_confirmada",
       titulo: "Reserva confirmada",
       mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-      enlace,
+      enlace: `/reservas/${principal.id}/chat`,
     });
     return;
   }
@@ -448,7 +448,7 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
     tipo: "reserva_confirmada",
     titulo: "Reserva confirmada",
     mensaje: "El dueño del bulto ha pagado. Ya puedes coordinar por el chat.",
-    enlace: `/reservas/${r.id}`,
+    enlace: `/reservas/${r.id}/chat`,
   });
 
   await crearNotificacion(admin, {
@@ -456,7 +456,7 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
     tipo: "reserva_confirmada",
     titulo: "Reserva confirmada",
     mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-    enlace: `/reservas/${r.id}`,
+    enlace: `/reservas/${r.id}/chat`,
   });
 
   return {};
@@ -648,7 +648,7 @@ async function confirmarReservaRuta(admin: AdminClient, r: Reserva) {
       tipo: "reserva_confirmada",
       titulo: "Nueva reserva confirmada",
       mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace: `/reservas/${r.id}`,
+      enlace: `/reservas/${r.id}/chat`,
     });
 
     await crearNotificacion(admin, {

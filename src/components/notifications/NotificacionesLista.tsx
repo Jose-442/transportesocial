@@ -1,8 +1,19 @@
-"use client";
-
 import { Card, CardLink } from "@/components/ui/Card";
 import type { Notificacion } from "@/types/database";
 import { useNotifications } from "./NotificationProvider";
+
+function hrefDelAviso(n: Notificacion): string {
+  const href = (n.enlace ?? "").trim();
+  if (!href) return "";
+  const soloReserva = href.match(/^\/reservas\/([^/]+)$/);
+  if (
+    soloReserva &&
+    /chat/i.test(`${n.titulo ?? ""} ${n.mensaje ?? ""}`)
+  ) {
+    return `/reservas/${soloReserva[1]}/chat`;
+  }
+  return href;
+}
 
 export function NotificacionesLista({
   notificaciones,
@@ -23,6 +34,7 @@ export function NotificacionesLista({
   return (
     <div className="space-y-3">
       {notificaciones.map((n) => {
+        const href = hrefDelAviso(n);
         const cuerpo = (
           <>
             <p className="font-semibold text-zinc-900">{n.titulo}</p>
@@ -30,7 +42,7 @@ export function NotificacionesLista({
             <p className="mt-2 text-xs text-zinc-400">
               {new Date(n.created_at).toLocaleString("es-ES")}
             </p>
-            {n.enlace && (
+            {href && (
               <p className="mt-3 text-sm font-semibold text-emerald-700">
                 Abrir
               </p>
@@ -41,11 +53,11 @@ export function NotificacionesLista({
           ? "opacity-70"
           : "border-emerald-200 bg-emerald-50/30";
 
-        if (n.enlace) {
+        if (href) {
           return (
             <CardLink
               key={n.id}
-              href={n.enlace}
+              href={href}
               onClick={() => void markAsRead(n.id)}
               className={tono}
             >
@@ -63,3 +75,4 @@ export function NotificacionesLista({
     </div>
   );
 }
+

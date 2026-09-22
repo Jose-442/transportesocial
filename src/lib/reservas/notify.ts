@@ -164,7 +164,7 @@ export async function asegurarAvisosConductor(
       mensaje: pendiente
         ? "Tienes 8 horas para aceptar o rechazar esta reserva."
         : "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace,
+      enlace: pendiente ? enlace : `/reservas/${idAviso}/chat`,
     });
     for (const item of grupo) vistos.add(`/reservas/${item.id}`);
   }

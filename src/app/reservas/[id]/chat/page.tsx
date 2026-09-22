@@ -83,7 +83,9 @@ export default async function ReservaChatPage({
 
   return (
     <div className="space-y-4">
-      <MarcarNotificacionesEnlaceLeida enlace={`/reservas/${id}/chat`} />
+      <MarcarNotificacionesEnlaceLeida
+        enlaces={[`/reservas/${id}`, `/reservas/${id}/chat`]}
+      />
       <Link
         href={`/reservas/${id}`}
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
