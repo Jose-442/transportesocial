@@ -87,6 +87,30 @@ function espacioReservado(
   return `espacio para ${partes.join(" y ")}`;
 }
 
+export function resumenChatViaje(
+  reservas: ReservaResumen | ReservaResumen[],
+  opts?: { origen?: string | null; destino?: string | null }
+): string {
+  const lista = Array.isArray(reservas) ? reservas : [reservas];
+  const plazas = lista
+    .filter(esReservaDePlazas)
+    .reduce((sum, item) => sum + Math.max(1, Number(item.cantidad) || 1), 0);
+  const bultos = lista.filter((item) => !esReservaDePlazas(item)).length;
+  const partes: string[] = [];
+  if (bultos > 0) {
+    partes.push(`${bultos} bulto${bultos === 1 ? "" : "s"}`);
+  }
+  if (plazas > 0) {
+    partes.push(`${plazas} plaza${plazas === 1 ? "" : "s"}`);
+  }
+  const que = partes.join(" ");
+  const origen = (opts?.origen ?? "").trim();
+  const destino = (opts?.destino ?? "").trim();
+  if (origen && destino && que) return `${origen} → ${destino}, ${que}`;
+  if (origen && destino) return `${origen} → ${destino}`;
+  return que;
+}
+
 function frasePlazasQueQuedan(n: number): string {
   return `te queda libre ${n} plaza${n === 1 ? "" : "s"}`;
 }

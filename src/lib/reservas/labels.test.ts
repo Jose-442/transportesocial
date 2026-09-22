@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { chatPermitido, fraseQueHasReservado, fraseQueIncluyeReservas } from "@/lib/reservas/labels";
+import { chatPermitido, fraseQueHasReservado, fraseQueIncluyeReservas, resumenChatViaje } from "@/lib/reservas/labels";
 
 describe("fraseQueHasReservado", () => {
   it("una plaza no dice bulto", () => {
@@ -103,6 +103,28 @@ describe("fraseQueIncluyeReservas", () => {
         },
       ])
     ).toBe("Reserva para 1 bulto y 1 plaza");
+  });
+});
+
+describe("resumenChatViaje", () => {
+  it("pone trayecto, bulto y plazas", () => {
+    expect(
+      resumenChatViaje(
+        [
+          {
+            tipo: "ruta_directa",
+            bulto_descripcion: "lavadora",
+            cantidad: 1,
+          },
+          {
+            tipo: "capacidad_extra",
+            bulto_descripcion: "Plaza de acompañante (×2)",
+            cantidad: 2,
+          },
+        ],
+        { origen: "Burgos", destino: "Madrid" }
+      )
+    ).toBe("Burgos → Madrid, 1 bulto 2 plazas");
   });
 });
 

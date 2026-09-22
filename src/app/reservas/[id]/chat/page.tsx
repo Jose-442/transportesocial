@@ -6,8 +6,14 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { abrirChatReserva } from "@/lib/reservas/chat";
-import { chatPermitido } from "@/lib/reservas/labels";
-import type { ChatMensaje, PerfilPublico, Reserva } from "@/types/database";
+import { chatPermitido, resumenChatViaje } from "@/lib/reservas/labels";
+import { formatCiudad } from "@/lib/format-ciudad";
+import type {
+  ChatMensaje,
+  PerfilPublico,
+  Reserva,
+  RutaConductor,
+} from "@/types/database";
 
 async function asegurarCanalAbierto(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -107,6 +113,42 @@ export default async function ReservaChatPage({
   const otro = perfiles[otroId];
   const otroNombre = otro?.display_name?.trim() || "Usuario";
 
+  let relacionadas: Reserva[] = [reserva];
+  if (reserva.ruta_conductor_id) {
+    const { data: hermanas } = await supabase
+      .from("reservas")
+      .select("*")
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+      .eq("cliente_id", reserva.cliente_id)
+      .neq("estado", "cancelado");
+    if (hermanas && hermanas.length > 0) {
+      relacionadas = hermanas as Reserva[];
+    }
+  }
+
+  let origen = "";
+  let destino = "";
+  if (reserva.ruta_conductor_id) {
+    const { data: rutaData } = await supabase
+      .from("rutas_conductores")
+      .select("origen, destino")
+      .eq("id", reserva.ruta_conductor_id)
+      .maybeSingle();
+    const ruta = rutaData as Pick<RutaConductor, "origen" | "destino"> | null;
+    origen = formatCiudad(ruta?.origen ?? "");
+    destino = formatCiudad(ruta?.destino ?? "");
+  } else if (reserva.anuncio_bulto_id) {
+    const { data: bultoData } = await supabase
+      .from("anuncios_bultos")
+      .select("origen, destino")
+      .eq("id", reserva.anuncio_bulto_id)
+      .maybeSingle();
+    origen = formatCiudad(bultoData?.origen ?? "");
+    destino = formatCiudad(bultoData?.destino ?? "");
+  }
+  const tituloViaje =
+    resumenChatViaje(relacionadas, { origen, destino }) || "Chat del viaje";
+
   return (
     <div className="space-y-4">
       <MarcarNotificacionesEnlaceLeida
@@ -118,20 +160,29 @@ export default async function ReservaChatPage({
       >
         ← Volver a la reserva
       </Link>
-      <Link
-        href={`/perfil/${otroId}`}
-        className="flex items-center gap-3"
-      >
-        <UserAvatar
-          name={otroNombre}
-          avatarUrl={otro?.avatar_url}
-          size={48}
-        />
+      <div className="flex items-center gap-3">
+        <Link href={`/perfil/${otroId}`} className="shrink-0">
+          <UserAvatar
+            name={otroNombre}
+            avatarUrl={otro?.avatar_url}
+            size={48}
+          />
+        </Link>
         <div>
-          <h1 className="text-xl font-bold text-zinc-900">{otroNombre}</h1>
-          <p className="text-sm text-zinc-500">Chat del viaje</p>
+          <Link
+            href={`/perfil/${otroId}`}
+            className="text-xl font-bold text-zinc-900 hover:text-emerald-800"
+          >
+            {otroNombre}
+          </Link>
+          <Link
+            href={`/reservas/${id}`}
+            className="mt-0.5 block text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+          >
+            {tituloViaje}
+          </Link>
         </div>
-      </Link>
+      </div>
       <Card>
         <ChatPanel
           reservaId={id}
