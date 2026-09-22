@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { LEGAL_TITULAR } from "@/lib/legal-info";
+import { ADMIN_EMAILS } from "@/lib/admin";
 
 export async function idsUsuariosAdmin(
   admin: SupabaseClient
@@ -10,14 +10,14 @@ export async function idsUsuariosAdmin(
       .map((id) => id.trim())
       .filter(Boolean)
   );
-  const email = LEGAL_TITULAR.email.toLowerCase();
   try {
     const { data } = await admin.auth.admin.listUsers({
       page: 1,
       perPage: 1000,
     });
     for (const u of data?.users ?? []) {
-      if (u.email?.toLowerCase() === email) ids.add(u.id);
+      const email = u.email?.trim().toLowerCase();
+      if (email && ADMIN_EMAILS.has(email)) ids.add(u.id);
     }
   } catch (err) {
     console.error("[admin] listar ids", err);

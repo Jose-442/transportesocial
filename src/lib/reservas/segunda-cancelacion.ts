@@ -24,6 +24,31 @@ export function contarViajesCancelados(
   return new Set(filas.map(claveViajeCancelado)).size;
 }
 
+export function agruparViajesCancelados(
+  filas: FilaCancelacionContable[]
+): FilaCancelacionContable[][] {
+  const grupos = new Map<string, FilaCancelacionContable[]>();
+  for (const fila of filas) {
+    const clave = claveViajeCancelado(fila);
+    const grupo = grupos.get(clave) ?? [];
+    grupo.push(fila);
+    grupos.set(clave, grupo);
+  }
+  return [...grupos.values()];
+}
+
+/** Los dos escribieron. Un mensaje solo o abrir la pantalla no cuenta. */
+export function huboConversacionDeAmbos(opts: {
+  clienteId: string;
+  conductorId: string;
+  mensajes: { remitente_id: string; eliminado?: boolean }[];
+}): boolean {
+  const vivos = opts.mensajes.filter((m) => !m.eliminado);
+  const cliente = vivos.some((m) => m.remitente_id === opts.clienteId);
+  const conductor = vivos.some((m) => m.remitente_id === opts.conductorId);
+  return cliente && conductor;
+}
+
 export function enlaceChatAdmin(reservaId: string): string {
   return `/admin/reservas/${reservaId}/chat`;
 }

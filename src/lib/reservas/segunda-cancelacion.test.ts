@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  agruparViajesCancelados,
   claveViajeCancelado,
   contarViajesCancelados,
   enlaceChatAdmin,
   esAvisoChatAdmin,
+  huboConversacionDeAmbos,
 } from "./segunda-cancelacion";
 
 const base = {
@@ -65,6 +67,49 @@ describe("claveViajeCancelado", () => {
         cancelada_en: null,
       })
     ).toBe("solo");
+  });
+});
+
+describe("huboConversacionDeAmbos", () => {
+  it("hace falta que escriban los dos", () => {
+    expect(
+      huboConversacionDeAmbos({
+        clienteId: "cli",
+        conductorId: "con",
+        mensajes: [{ remitente_id: "cli" }],
+      })
+    ).toBe(false);
+    expect(
+      huboConversacionDeAmbos({
+        clienteId: "cli",
+        conductorId: "con",
+        mensajes: [{ remitente_id: "cli" }, { remitente_id: "con" }],
+      })
+    ).toBe(true);
+  });
+
+  it("un mensaje borrado no cuenta", () => {
+    expect(
+      huboConversacionDeAmbos({
+        clienteId: "cli",
+        conductorId: "con",
+        mensajes: [
+          { remitente_id: "cli" },
+          { remitente_id: "con", eliminado: true },
+        ],
+      })
+    ).toBe(false);
+  });
+});
+
+describe("agruparViajesCancelados", () => {
+  it("junta bulto y plaza", () => {
+    const grupos = agruparViajesCancelados([
+      { ...base, id: "bulto" },
+      { ...base, id: "plaza" },
+    ]);
+    expect(grupos).toHaveLength(1);
+    expect(grupos[0]).toHaveLength(2);
   });
 });
 

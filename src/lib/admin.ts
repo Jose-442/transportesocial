@@ -1,6 +1,6 @@
 import { LEGAL_TITULAR } from "@/lib/legal-info";
 
-const ADMIN_EMAILS = new Set([
+export const ADMIN_EMAILS = new Set([
   LEGAL_TITULAR.email.toLowerCase(),
   "randyroad@hotmail.es",
 ]);

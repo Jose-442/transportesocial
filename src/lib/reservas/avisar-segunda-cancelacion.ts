@@ -5,13 +5,42 @@ import {
   MOTIVO_CANCELACION_CLIENTE,
   MOTIVO_CANCELACION_CONDUCTOR,
   TITULO_AVISO_SEGUNDA_CANCELACION,
-  contarViajesCancelados,
+  agruparViajesCancelados,
   enlaceChatAdmin,
+  huboConversacionDeAmbos,
   type FilaCancelacionContable,
 } from "@/lib/reservas/segunda-cancelacion";
 
 const CAMPOS =
   "id, cliente_id, transportista_id, ruta_conductor_id, cancelada_en";
+
+type FilaChat = {
+  remitente_id: string;
+  eliminado?: boolean;
+};
+
+async function mensajesDelViaje(
+  admin: SupabaseClient,
+  reservaIds: string[]
+): Promise<FilaChat[]> {
+  const out: FilaChat[] = [];
+  for (const reservaId of reservaIds) {
+    const { data, error } = await admin.rpc("admin_leer_chat", {
+      p_reserva_id: reservaId,
+    });
+    if (error || !Array.isArray(data)) continue;
+    for (const fila of data as {
+      remitente_id: string;
+      eliminado?: boolean;
+    }[]) {
+      out.push({
+        remitente_id: fila.remitente_id,
+        eliminado: Boolean(fila.eliminado),
+      });
+    }
+  }
+  return out;
+}
 
 export async function avisarAdminSiSegundaCancelacion(
   admin: SupabaseClient,
@@ -38,8 +67,30 @@ export async function avisarAdminSiSegundaCancelacion(
     ...((comoCliente as FilaCancelacionContable[] | null) ?? []),
     ...((comoConductor as FilaCancelacionContable[] | null) ?? []),
   ];
-  const veces = contarViajesCancelados(filas);
-  if (veces < 2) return;
+  const grupos = agruparViajesCancelados(filas);
+  const conChat: FilaCancelacionContable[][] = [];
+  for (const grupo of grupos) {
+    const primero = grupo[0];
+    if (!primero) continue;
+    const mensajes = await mensajesDelViaje(
+      admin,
+      grupo.map((f) => f.id)
+    );
+    if (
+      huboConversacionDeAmbos({
+        clienteId: primero.cliente_id,
+        conductorId: primero.transportista_id,
+        mensajes,
+      })
+    ) {
+      conChat.push(grupo);
+    }
+  }
+  if (conChat.length < 2) return;
+  const esteViaje = conChat.some((grupo) =>
+    grupo.some((f) => f.id === opts.reservaId)
+  );
+  if (!esteViaje) return;
 
   const { data: perfil } = await admin
     .from("profiles")
