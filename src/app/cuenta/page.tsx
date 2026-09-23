@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { cerrarSesion } from "@/actions/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminUser } from "@/lib/admin";
@@ -155,17 +155,13 @@ export default async function CuentaPage({
           sobreTiInicial={profile.sobre_ti}
           compactPc={perfilCompactPc}
         />
-        <Link
+        <ButtonLink
           href={`/perfil/${user.id}`}
-          className={[
-            "inline-flex min-h-11 items-center font-semibold text-emerald-700 hover:text-emerald-800",
-            perfilCompactPc && "md:min-h-0 md:py-1",
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          variant="secondary"
+          className={CUENTA_BTN_SECONDARY}
         >
           Ver cómo me ven los demás
-        </Link>
+        </ButtonLink>
       </Card>
 
       <div id="vehiculo" className="scroll-mt-4">
