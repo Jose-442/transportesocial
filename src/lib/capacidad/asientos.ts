@@ -11,7 +11,6 @@ export function plazasElegidasDesplegable(
   plazasLibres: number
 ): number {
   if (plazasLibres <= 0) return 0;
-  if (plazasLibres === 1) return 1;
   const n = Number.parseInt(value, 10);
   if (!Number.isInteger(n) || n < 1) return 0;
   return Math.min(n, plazasLibres);

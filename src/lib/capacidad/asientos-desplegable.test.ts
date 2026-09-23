@@ -9,4 +9,8 @@ describe("plazasElegidasDesplegable", () => {
   it("resta 1 de 3 al elegir 1 plaza", () => {
     expect(plazasElegidasDesplegable("1", 3)).toBe(1);
   });
+
+  it("no marca plaza si elige ninguna", () => {
+    expect(plazasElegidasDesplegable("0", 3)).toBe(0);
+  });
 });

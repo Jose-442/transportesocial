@@ -50,13 +50,10 @@ export function ReservarRutaForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const cantidad =
-    plazasLibres === 1
-      ? 1
-      : Math.min(
-          plazasLibres,
-          Math.max(0, Number.parseInt(form.plazas, 10) || 0)
-        );
+  const cantidad = Math.min(
+    plazasLibres,
+    Math.max(0, Number.parseInt(form.plazas, 10) || 0)
+  );
   const llevaBulto = ofreceBulto && form.bulto_descripcion.trim().length > 0;
   const total =
     (llevaBulto && precioBulto != null ? precioBulto : 0) +
@@ -109,7 +106,7 @@ export function ReservarRutaForm({
           <Textarea
             label="Descripción del bulto que deseas enviar"
             name="bulto_descripcion"
-            required={plazasLibres <= 0}
+            required={cantidad < 1}
             placeholder="Ej. caja mediana con ropa, frágil"
             value={form.bulto_descripcion}
             onChange={(e) =>
@@ -135,7 +132,7 @@ export function ReservarRutaForm({
             plazasOcupadas={ofertaAsiento.plazas_ocupadas}
             value={form.plazas}
             onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
-            hintSuffix="Si no viajas de pasajero, no elijas plaza."
+            permitirNinguna={ofreceBulto}
           />
         </Card>
       )}
