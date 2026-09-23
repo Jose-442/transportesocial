@@ -23,7 +23,17 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
           </Link>
         </div>
 
-        {isLoggedIn ? <HeaderAuthActions /> : null}
+        {isLoggedIn ? (
+          <HeaderAuthActions />
+        ) : (
+          <ButtonLink
+            href="/login"
+            variant="secondary"
+            className="h-11 shrink-0 px-3 text-sm"
+          >
+            Entrar
+          </ButtonLink>
+        )}
       </div>
     </header>
   );
