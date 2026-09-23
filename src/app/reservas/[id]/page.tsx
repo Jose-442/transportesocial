@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
+import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
@@ -232,21 +233,22 @@ export default async function ReservaDetallePage({
 
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>
-        <p className="mt-0.5 text-sm text-zinc-600">
-          {esCliente ? "Conductor" : "Usuario"}:{" "}
-          <Link
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <ButtonLink
             href={`/perfil/${otroPerfil?.id ?? (esCliente ? reserva.transportista_id : reserva.cliente_id)}`}
-            className="font-semibold text-emerald-700 hover:text-emerald-800"
+            variant="secondary"
+            className={CUENTA_BTN_SECONDARY}
           >
+            {esCliente ? "Conductor" : "Usuario"}:{" "}
             {otroPerfil?.display_name ?? "Usuario"}
-          </Link>
+          </ButtonLink>
           {(otroPerfil?.rating_cantidad ?? 0) > 0 && (
-            <span className="ml-1 text-amber-600">
+            <span className="text-sm text-amber-600">
               ★ {Number(otroPerfil?.rating_promedio).toFixed(1)} (
               {otroPerfil?.rating_cantidad})
             </span>
           )}
-        </p>
+        </div>
       </div>
 
       <ReservaAcciones
