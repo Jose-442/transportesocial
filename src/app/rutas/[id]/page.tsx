@@ -229,9 +229,13 @@ export default async function RutaDetallePage({
               Salida
             </p>
             <p className="mt-1 text-sm font-medium text-zinc-900">{origen}</p>
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 hidden text-xs text-zinc-500 md:block">
               El punto exacto de recogida se concretará por el chat interno al
               aceptar la propuesta.
+            </p>
+            <p className="mt-1 text-xs text-zinc-500 md:hidden">
+              El punto exacto lo concretareis por el chat interno al aceptar la
+              propuesta.
             </p>
           </div>
           <div>
@@ -239,7 +243,7 @@ export default async function RutaDetallePage({
               Destino
             </p>
             <p className="mt-1 text-sm font-medium text-zinc-900">{destino}</p>
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 hidden text-xs text-zinc-500 md:block">
               El punto exacto de entrega se concretará por el chat interno al
               aceptar la propuesta.
             </p>
