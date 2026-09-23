@@ -42,7 +42,7 @@ export function ResumenAsientosViaje({
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
               Precio por plaza
             </p>
-            <p className="text-3xl font-bold text-emerald-700">
+            <p className="text-lg font-bold text-emerald-700 md:text-3xl">
               {formatEur(Number(o.precio_publicado))}
             </p>
           </div>

@@ -277,7 +277,7 @@ export default async function RutaDetallePage({
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Precio por el porte del bulto
               </p>
-              <p className="text-3xl font-bold text-emerald-700">
+              <p className="text-lg font-bold text-emerald-700 md:text-3xl">
                 {formatEur(Number(ruta.precio_publicado))}
               </p>
               <p className="text-xs text-zinc-500">
