@@ -49,10 +49,7 @@ export function OfertasCapacidadReserva({
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
   const esAsiento = ofertaSel?.tipo === "asiento";
-  const plazasElegidas =
-    esAsiento && maxCantidad === 1
-      ? 1
-      : Math.max(0, Number.parseInt(cantidad, 10) || 0);
+  const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const total =
     ofertaSel && plazasElegidas > 0
       ? Number(ofertaSel.precio_publicado) * plazasElegidas

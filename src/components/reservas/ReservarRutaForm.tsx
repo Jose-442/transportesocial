@@ -132,7 +132,6 @@ export function ReservarRutaForm({
             plazasOcupadas={ofertaAsiento.plazas_ocupadas}
             value={form.plazas}
             onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
-            permitirNinguna={ofreceBulto}
           />
         </Card>
       )}
