@@ -50,7 +50,7 @@ export default async function LoginPage({
         href={registroHref}
         className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
       >
-        PULSA AQUÍ PARA CREAR CUENTA
+        Pulsa aquí para registrarte
       </Link>
       {esRedirectBulto && (
         <p className="text-base text-zinc-600">
