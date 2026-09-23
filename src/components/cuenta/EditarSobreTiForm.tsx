@@ -52,8 +52,8 @@ export function EditarSobreTiForm({
         label="Cuéntanos quién eres"
         value={sobreTi}
         onChange={(e) => setForm({ sobreTi: e.target.value })}
-        placeholder="Ej.: Soy conductor con furgoneta. Puntual y cuidadoso."
-        hint="Si propones precio para transportar bultos y/o pasajeros, a las personas que necesiten esos servicios les gustará saber algo de ti"
+        placeholder="Ej.: Soy puntual y respondo rápido."
+        hint="A la otra persona del viaje le gustará saber algo de ti."
         hintClassName="text-sm text-zinc-500"
         maxLength={PROFILE_SOBRE_TI_MAX}
         rows={4}
