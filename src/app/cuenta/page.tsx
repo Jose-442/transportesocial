@@ -169,8 +169,7 @@ export default async function CuentaPage({
           <div>
             <h2 className="font-semibold text-zinc-900">Mi vehículo</h2>
             <p className="mt-1 text-base text-zinc-600">
-              Obligatorio para proponer precio o publicar una ruta. Lo verá quien
-              reciba tu propuesta.
+              Obligatorio para anunciar un viaje.
             </p>
             <p className="mt-2 text-base text-zinc-600">
               En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
