@@ -356,6 +356,7 @@ export function NuevaRutaForm({
         value={form.origen}
         error={fieldErrors.origen}
         hint="Elige un municipio de la lista. El punto exacto se concreta después."
+        hintClassName="hidden md:block text-xs text-zinc-500"
         onChange={(value) => updateField("origen", value)}
       />
       <MunicipioAutocomplete
@@ -365,6 +366,7 @@ export function NuevaRutaForm({
         value={form.destino}
         error={fieldErrors.destino}
         hint="Elige un municipio de la lista. El punto exacto se concreta después."
+        hintClassName="hidden md:block text-xs text-zinc-500"
         onChange={(value) => updateField("destino", value)}
         incluirFrontera
       />

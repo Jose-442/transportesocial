@@ -25,6 +25,7 @@ type Props = {
   placeholder?: string;
   error?: string;
   hint?: string;
+  hintClassName?: string;
   incluirFrontera?: boolean;
 };
 
@@ -37,6 +38,7 @@ export function MunicipioAutocomplete({
   placeholder = "Escribe la población",
   error,
   hint,
+  hintClassName = "text-xs text-zinc-500",
   incluirFrontera = false,
 }: Props) {
   const listId = useId();
@@ -195,7 +197,7 @@ export function MunicipioAutocomplete({
           )}
         </div>
       </label>
-      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
+      {hint && !error && <p className={hintClassName}>{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   );
