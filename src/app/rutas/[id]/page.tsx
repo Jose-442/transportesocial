@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { ButtonLink } from "@/components/ui/Button";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { EquisCancelado } from "@/components/rutas/EquisCancelado";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
@@ -419,12 +420,9 @@ export default async function RutaDetallePage({
       {!esPropio &&
         !user &&
         (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
-        <p className="mb-4 text-center text-2xl font-bold leading-snug text-zinc-800">
-          <Link href={loginHref} className="text-emerald-700 hover:text-emerald-800">
-            Inicia sesión
-          </Link>{" "}
-          para reservar este viaje.
-        </p>
+        <ButtonLink href={loginHref} fullWidth>
+          Iniciar sesión
+        </ButtonLink>
       )}
     </div>
   );
