@@ -8,7 +8,6 @@ import { isAdminUser } from "@/lib/admin";
 import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
-import { MisPublicaciones } from "@/components/cuenta/MisPublicaciones";
 import { MisViajesTabs } from "@/components/cuenta/MisViajesTabs";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
@@ -18,7 +17,6 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
-import { loadMisPublicaciones } from "@/lib/cuenta/mis-publicaciones";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
 import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
 
@@ -79,10 +77,7 @@ export default async function CuentaPage({
   }
 
   const profile = result.profile;
-  const [viajes, publicaciones] = await Promise.all([
-    loadMisViajes(supabase, user.id),
-    loadMisPublicaciones(supabase, user.id),
-  ]);
+  const viajes = await loadMisViajes(supabase, user.id);
 
   const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
   const perfilCompactPc = volverTrasVehiculo !== null;
@@ -187,22 +182,6 @@ export default async function CuentaPage({
           />
         </Card>
       </div>
-
-      <Card className="space-y-4">
-        <div>
-          <h2 className="font-semibold text-zinc-900">
-            El estado de tu propuesta de viaje ahora
-          </h2>
-          <p className="mt-1 text-base text-zinc-600">
-            El sitio que aún queda libre. El viaje tal como lo publicaste está
-            en Mis viajes → Propuestos.
-          </p>
-        </div>
-        <MisPublicaciones
-          bultos={publicaciones.bultos}
-          rutas={publicaciones.rutas}
-        />
-      </Card>
 
       <Card className="space-y-4">
         <div>
