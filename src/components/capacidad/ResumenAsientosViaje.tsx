@@ -15,8 +15,8 @@ export function ResumenAsientosViaje({
   const libres = Math.max(0, ofrecidas - ocupadas);
 
   return (
-    <Card className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <Card className="space-y-2 p-3 md:space-y-3 md:p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 md:gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             Nº de acompañantes

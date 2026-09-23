@@ -148,7 +148,6 @@ export default async function RutaDetallePage({
     weekday: "long",
     day: "numeric",
     month: "long",
-    year: "numeric",
   });
   const horaSalida = new Date(ruta.fecha_llegada_prevista).toLocaleTimeString(
     "es-ES",
@@ -176,30 +175,30 @@ export default async function RutaDetallePage({
         : "zinc";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2 md:space-y-4">
       <Link
         href={volverHref}
-        className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
+        className="inline-flex min-h-9 items-center text-sm font-semibold text-emerald-700 md:min-h-11"
       >
         ← Volver a buscar viajes
       </Link>
 
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">
+        <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">
           {origen} → {destino}
         </h1>
-        <p className="mt-1 text-sm text-zinc-600">{dia}</p>
+        <p className="mt-1 hidden text-sm text-zinc-600 md:block">{dia}</p>
       </div>
 
-      <div className="relative space-y-4">
-      <Card className="space-y-4">
-        <div className="flex items-start justify-between gap-3">
+      <div className="relative space-y-2 md:space-y-4">
+      <Card className="space-y-2 p-3 md:space-y-4 md:p-4">
+        <div className="flex items-start justify-between gap-2 md:gap-3">
           <p className="text-sm font-semibold text-zinc-800">
             Detalle del trayecto
           </p>
           <span
             className={[
-              "inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-sm font-bold",
+              "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-bold md:px-3 md:py-1.5 md:text-sm",
               badgeTone === "green"
                 ? "bg-emerald-100 text-emerald-800"
                 : badgeTone === "amber"
@@ -210,11 +209,11 @@ export default async function RutaDetallePage({
             {badgeLabel}
           </span>
         </div>
-        <div>
+        <div className="flex flex-wrap items-baseline gap-x-2 md:block">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
             Propuesto por
           </p>
-          <p className="mt-1 text-sm font-medium text-zinc-900">
+          <p className="text-sm font-medium text-zinc-900 md:mt-1">
             <Link
               href={`/perfil/${ruta.user_id}`}
               className="font-semibold text-emerald-700 hover:text-emerald-800"
@@ -223,49 +222,54 @@ export default async function RutaDetallePage({
             </Link>
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-1 md:gap-4">
           <div>
             <p className="text-xs uppercase tracking-wide text-zinc-500">
               Salida
             </p>
-            <p className="mt-1 text-sm font-medium text-zinc-900">{origen}</p>
+            <p className="mt-0.5 text-sm font-medium text-zinc-900 md:mt-1">
+              {origen}
+            </p>
             <p className="mt-1 hidden text-xs text-zinc-500 md:block">
               El punto exacto de recogida se concretará por el chat interno al
               aceptar la propuesta.
-            </p>
-            <p className="mt-1 text-xs text-zinc-500 md:hidden">
-              El punto exacto lo concretareis por el chat interno al aceptar la
-              propuesta.
             </p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-zinc-500">
               Destino
             </p>
-            <p className="mt-1 text-sm font-medium text-zinc-900">{destino}</p>
+            <p className="mt-0.5 text-sm font-medium text-zinc-900 md:mt-1">
+              {destino}
+            </p>
             <p className="mt-1 hidden text-xs text-zinc-500 md:block">
               El punto exacto de entrega se concretará por el chat interno al
               aceptar la propuesta.
             </p>
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <p className="text-xs leading-tight text-zinc-500 md:hidden">
+          El punto exacto lo concretareis por el chat interno al aceptar la
+          propuesta.
+        </p>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-1 md:gap-4">
           <div>
             <p className="text-xs uppercase tracking-wide text-zinc-500">Día</p>
-            <p className="mt-1 text-sm text-zinc-800">{dia}</p>
+            <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">{dia}</p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-zinc-500">
-              Hora de salida
+              <span className="md:hidden">Hora</span>
+              <span className="hidden md:inline">Hora de salida</span>
             </p>
-            <p className="mt-1 text-sm text-zinc-800">{horaSalida}</p>
+            <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">{horaSalida}</p>
           </div>
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-zinc-500">
             Espacio para el bulto
           </p>
-          <p className="mt-1 text-sm text-zinc-800">
+          <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">
             {ocupacion.bultoOcupado
               ? "El espacio para bulto de este viaje ya está reservado."
               : ofreceBulto
@@ -273,16 +277,18 @@ export default async function RutaDetallePage({
                 : "Este viaje no ofrece espacio para bultos."}
           </p>
           {ruta.estado === "activa" && ofreceBulto && (
-            <div className="mt-3 space-y-1">
+            <div className="mt-2 md:mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Precio por el porte del bulto
               </p>
-              <p className="text-lg font-bold text-emerald-700 md:text-3xl">
-                {formatEur(Number(ruta.precio_publicado))}
-              </p>
-              <p className="text-xs text-zinc-500">
-                Gastos de gestión incluidos.
-              </p>
+              <div className="mt-0.5 flex items-baseline gap-2 md:mt-1">
+                <p className="shrink-0 text-lg font-bold text-emerald-700 md:text-3xl">
+                  {formatEur(Number(ruta.precio_publicado))}
+                </p>
+                <p className="text-xs leading-tight text-zinc-500">
+                  Gastos de gestión incluidos.
+                </p>
+              </div>
             </div>
           )}
         </div>
