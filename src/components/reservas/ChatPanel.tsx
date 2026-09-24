@@ -44,9 +44,12 @@ export function ChatPanel({
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const ultimoPropioVisible = [...mensajes]
-    .reverse()
-    .find((m) => m.remitente_id === userId && !m.eliminado);
+  const ultimoDelChat =
+    mensajes.length > 0 ? mensajes[mensajes.length - 1] : null;
+  const puedeEditarAnular =
+    Boolean(ultimoDelChat) &&
+    !ultimoDelChat!.eliminado &&
+    ultimoDelChat!.remitente_id === userId;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -166,7 +169,8 @@ export function ChatPanel({
             const propio = m.remitente_id === userId;
             const nombre =
               perfiles[m.remitente_id]?.display_name ?? "Usuario";
-            const esUltimoPropio = ultimoPropioVisible?.id === m.id;
+            const esUltimoEditable =
+              puedeEditarAnular && ultimoDelChat!.id === m.id;
             const editandoEste = editandoId === m.id;
 
             return (
@@ -227,7 +231,7 @@ export function ChatPanel({
                         Editado
                       </p>
                     ) : null}
-                    {esUltimoPropio ? (
+                    {esUltimoEditable ? (
                       <div className="mt-1.5 flex flex-wrap gap-2">
                         <button
                           type="button"

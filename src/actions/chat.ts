@@ -64,14 +64,13 @@ async function obtenerUltimoMensajeCanal(
 ) {
   const { data } = await supabase
     .from("chat_mensajes")
-    .select("id, remitente_id")
+    .select("id, remitente_id, eliminado")
     .eq("canal_id", canalId)
-    .eq("eliminado", false)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  return data;
+  return data as { id: string; remitente_id: string; eliminado: boolean } | null;
 }
 
 function validarCuerpo(cuerpo: string): {
@@ -138,8 +137,8 @@ export async function editarUltimoMensajeChat(
   const { supabase, user, canal } = acceso;
   const ultimo = await obtenerUltimoMensajeCanal(supabase, canal.id);
 
-  if (!ultimo || ultimo.remitente_id !== user.id) {
-    return { error: "Solo puedes editar/borrar tu último mensaje." };
+  if (!ultimo || ultimo.remitente_id !== user.id || ultimo.eliminado) {
+    return { error: "Solo puedes editar tu último mensaje." };
   }
 
   const { error } = await supabase
@@ -163,8 +162,8 @@ export async function eliminarUltimoMensajeChat(reservaId: string) {
   const { supabase, user, canal } = acceso;
   const ultimo = await obtenerUltimoMensajeCanal(supabase, canal.id);
 
-  if (!ultimo || ultimo.remitente_id !== user.id) {
-    return { error: "Solo puedes editar/borrar tu último mensaje." };
+  if (!ultimo || ultimo.remitente_id !== user.id || ultimo.eliminado) {
+    return { error: "Solo puedes anular tu último mensaje." };
   }
 
   const { error } = await supabase

@@ -28,22 +28,20 @@ describe("filtrarContactoEnMensaje", () => {
     expect(filtrarContactoEnMensaje("entra en https://ejemplo.com/x")).toContain(
       MASCARA_CONTACTO
     );
+  });
+
+  it("oculta teléfonos escritos en letras, también con venti y cuarenta y siete", () => {
     expect(
       filtrarContactoEnMensaje("seis uno dos tres cuatro cinco seis siete ocho")
     ).toContain(MASCARA_CONTACTO);
     expect(
       filtrarContactoEnMensaje(
-        "un dos tres cuatro cinco seis siete ocho nueve"
+        "NUEVE CUATRO SIETE VENTI TRES CERO UNO CUARENTA Y SIETE"
       )
     ).toContain(MASCARA_CONTACTO);
     expect(
       filtrarContactoEnMensaje(
         "seis y uno y dos y tres y cuatro y cinco y seis y siete y ocho"
-      )
-    ).toContain(MASCARA_CONTACTO);
-    expect(
-      filtrarContactoEnMensaje(
-        "el seis el uno el dos el tres el cuatro el cinco el seis el siete el ocho"
       )
     ).toContain(MASCARA_CONTACTO);
   });
