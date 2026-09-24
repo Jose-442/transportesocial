@@ -180,7 +180,7 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
         variant="secondary"
         className={CUENTA_BTN_SECONDARY}
       >
-        Ver anuncio
+        Ver anuncio con acceso al chat
       </ButtonLink>
     </Card>
   );

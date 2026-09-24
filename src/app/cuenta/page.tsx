@@ -187,8 +187,9 @@ export default async function CuentaPage({
         <div>
           <h2 className="font-semibold text-zinc-900">Mis viajes</h2>
           <p className="mt-1 text-base text-zinc-600">
-            Lo que tú has propuesto, lo que has aceptado como conductor, lo que
-            tú has pagado y las aceptaciones de conductores.
+            Los que tú has propuesto, los que has aceptado como conductor, los
+            que tú has pagado-reservado y las aceptaciones de otros conductores
+            a tus propuestas.
           </p>
         </div>
         <MisViajesTabs
