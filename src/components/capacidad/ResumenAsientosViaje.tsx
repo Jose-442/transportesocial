@@ -22,8 +22,7 @@ export function ResumenAsientosViaje({
             Nº de acompañantes
           </p>
           <p className="mt-1 text-sm font-medium text-zinc-900">
-            {libres} {libres === 1 ? "plaza libre" : "plazas libres"} de{" "}
-            {ofrecidas}
+            {libres} {libres === 1 ? "plaza libre" : "plazas libres"}
           </p>
         </div>
         <div className="text-right">
