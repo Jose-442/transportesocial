@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY, CUENTA_TAB_ACTIVE, CUENTA_TAB_INACTIVE, CUENTA_TABS_LIST } from "@/components/cuenta/cuenta-ui";
-import { ESTADO_RESERVA_LABELS } from "@/lib/reservas/labels";
+import { ESTADO_RESERVA_LABELS, chatPermitido } from "@/lib/reservas/labels";
 import type { ApartadoViajes } from "@/lib/reservas/categorias";
 import { formatEur } from "@/lib/pricing";
 import type { EstadoReserva } from "@/types/database";
@@ -79,7 +79,11 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
         variant="secondary"
         className={CUENTA_BTN_SECONDARY}
       >
-        {item.estado === "liberado" ? "Valorar viaje" : "Ver reserva"}
+        {item.estado === "liberado"
+          ? "Valorar viaje"
+          : chatPermitido(item.estado)
+            ? "Ver reserva y chat"
+            : "Ver reserva"}
       </ButtonLink>
     </Card>
   );
@@ -180,7 +184,7 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
         variant="secondary"
         className={CUENTA_BTN_SECONDARY}
       >
-        Ver anuncio con acceso al chat
+        Ver anuncio
       </ButtonLink>
     </Card>
   );

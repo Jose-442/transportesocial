@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
+import { ButtonLink } from "@/components/ui/Button";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { EquisCancelado } from "@/components/rutas/EquisCancelado";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
@@ -23,7 +24,8 @@ import {
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
 import { loadPerfilPublico } from "@/lib/profile";
-import type { OfertaCapacidad, RutaConductor } from "@/types/database";
+import { chatPermitido } from "@/lib/reservas/labels";
+import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 
 export const dynamic = "force-dynamic";
 
@@ -113,6 +115,19 @@ export default async function RutaDetallePage({
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
 
+  let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
+  if (esPropio) {
+    const { data: reservasRuta } = await supabase
+      .from("reservas")
+      .select("id, estado")
+      .eq("ruta_conductor_id", id)
+      .eq("transportista_id", user!.id)
+      .order("created_at", { ascending: false });
+    reservasConChat = ((reservasRuta as Pick<Reserva, "id" | "estado">[]) ?? []).filter(
+      (r) => chatPermitido(r.estado)
+    );
+  }
+
   await sincronizarOcupacionRuta(supabase, id);
 
   const { data: ofertasRaw } = await supabase
@@ -199,6 +214,21 @@ export default async function RutaDetallePage({
         </h1>
         <p className="mt-1 hidden text-sm text-zinc-600 md:block">{dia}</p>
       </div>
+
+      {esPropio && reservasConChat.length > 0 && (
+        <Card className="space-y-2 p-3">
+          <p className="text-sm font-semibold text-zinc-800">
+            {reservasConChat.length === 1
+              ? "Chat de esta reserva"
+              : "Chats de este viaje"}
+          </p>
+          {reservasConChat.map((r) => (
+            <ButtonLink key={r.id} href={`/reservas/${r.id}/chat`} fullWidth>
+              Abrir chat
+            </ButtonLink>
+          ))}
+        </Card>
+      )}
 
       <div className="relative space-y-2 md:space-y-4">
       <Card className="space-y-2 p-3 md:space-y-4 md:p-4">
@@ -313,8 +343,6 @@ export default async function RutaDetallePage({
       )}
       {ruta.estado === "cancelada" ? <EquisCancelado /> : null}
       </div>
-
-      {ruta.estado === "reservada" && tieneCapacidadExtra ? null : null}
 
       {!esPropio && user && reservaPendienteId && (
         <Card className="space-y-3 border-amber-200 bg-amber-50/80">
