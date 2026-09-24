@@ -127,12 +127,22 @@ export default async function RutaDetallePage({
     ocupacion
   );
   const ofertasDisponibles = ofertas.filter(ofertaDisponible);
-  const tieneCapacidadExtra = ofertasDisponibles.some((o) => o.tipo === "bulto");
+  const ofertaBultoLibre = ofertasDisponibles.find((o) => o.tipo === "bulto");
+  const tieneCapacidadExtra = Boolean(ofertaBultoLibre);
   const { ofrecidas: asientoOfrecidas, ocupadas: asientoOcupadas } =
     resumenAsientosRuta(ofertas);
   const tieneAsientos = asientoOfrecidas > 0;
-  const ofreceBulto =
+  const ofreceBultoOriginal =
     rutaOfreceBulto(ruta.espacio_disponible) && !ocupacion.bultoOcupado;
+  const ofreceBulto = ofreceBultoOriginal || Boolean(ofertaBultoLibre);
+  const espacioBultoMostrar = ofreceBultoOriginal
+    ? ruta.espacio_disponible
+    : (ofertaBultoLibre?.espacio_tamano ?? "");
+  const precioBultoMostrar = ofreceBultoOriginal
+    ? Number(ruta.precio_publicado)
+    : ofertaBultoLibre
+      ? Number(ofertaBultoLibre.precio_publicado)
+      : null;
   const plazasAsientoLibres = ofertasDisponibles
     .filter((o) => o.tipo === "asiento")
     .some(ofertaDisponible);
@@ -270,20 +280,20 @@ export default async function RutaDetallePage({
             Espacio para el bulto
           </p>
           <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">
-            {ocupacion.bultoOcupado
-              ? "El espacio para bulto de este viaje ya está reservado."
-              : ofreceBulto
-                ? formatEspacioDisponibleListado(ruta.espacio_disponible)
+            {ofreceBulto
+              ? formatEspacioDisponibleListado(espacioBultoMostrar)
+              : ocupacion.bultoOcupado
+                ? "El espacio para bulto de este viaje ya está reservado."
                 : "Este viaje no ofrece espacio para bultos."}
           </p>
-          {ruta.estado === "activa" && ofreceBulto && (
+          {ofreceBulto && precioBultoMostrar != null && (
             <div className="mt-2 md:mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
                 Precio por el porte del bulto
               </p>
               <div className="mt-0.5 flex items-baseline gap-2 md:mt-1">
                 <p className="shrink-0 text-lg font-bold text-emerald-700 md:text-3xl">
-                  {formatEur(Number(ruta.precio_publicado))}
+                  {formatEur(precioBultoMostrar)}
                 </p>
                 <p className="text-xs leading-tight text-zinc-500">
                   Gastos de gestión incluidos.
@@ -304,26 +314,7 @@ export default async function RutaDetallePage({
       {ruta.estado === "cancelada" ? <EquisCancelado /> : null}
       </div>
 
-      {ruta.estado === "reservada" && tieneCapacidadExtra && (
-        <Card className="space-y-2 border-amber-200 bg-amber-50/50">
-          <p className="text-sm font-semibold text-amber-900">
-            Espacio para el bulto
-          </p>
-          <ul className="space-y-1 text-sm text-zinc-700">
-            {ofertasDisponibles
-              .filter((o) => o.tipo === "bulto")
-              .map((o) => (
-              <li key={o.id}>
-                {`Bulto · ${formatEspacioDisponibleListado(o.espacio_tamano ?? "")}`}
-                {" — "}
-                <span className="font-semibold text-emerald-700">
-                  {formatEur(Number(o.precio_publicado))}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
+      {ruta.estado === "reservada" && tieneCapacidadExtra ? null : null}
 
       {!esPropio && user && reservaPendienteId && (
         <Card className="space-y-3 border-amber-200 bg-amber-50/80">

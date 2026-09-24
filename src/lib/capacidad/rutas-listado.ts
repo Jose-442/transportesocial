@@ -18,6 +18,10 @@ export type RutaListadoItem = RutaConductor & {
   asientoOcupadas?: number;
   bultoDisponible?: boolean;
   precioPlazaPublicado?: number | null;
+  /** Precio del bulto libre (anuncio original o capacidad añadida). */
+  precioBultoPublicado?: number | null;
+  /** Tamaño del bulto libre a mostrar en el listado. */
+  espacioBultoListado?: string | null;
 };
 
 export function quedaSitioEnRuta(item: RutaListadoItem): boolean {
@@ -58,14 +62,23 @@ export async function enriquecerRutasConDisponibilidad(
     );
     const disponibles = ofertasRuta.filter(ofertaDisponible);
     const { ofrecidas, ocupadas } = resumenAsientosRuta(ofertasRuta);
-    const extraPostReserva =
-      ruta.estado === "reservada" &&
-      disponibles.some((o) => o.tipo === "bulto");
-    const asiento = ofertasRuta.find((o) => o.tipo === "asiento");
-    const bultoDisponible =
+    const ofertaBultoLibre = disponibles.find((o) => o.tipo === "bulto");
+    const bultoOriginalLibre =
       rutaOfreceBulto(ruta.espacio_disponible) &&
       !ocupacion.bultoOcupado &&
-      ruta.estado !== "reservada";
+      ruta.estado === "activa";
+    const bultoDisponible = bultoOriginalLibre || Boolean(ofertaBultoLibre);
+    const extraPostReserva =
+      ruta.estado === "reservada" && Boolean(ofertaBultoLibre);
+    const asiento = ofertasRuta.find((o) => o.tipo === "asiento");
+    const precioBultoPublicado = bultoOriginalLibre
+      ? Number(ruta.precio_publicado)
+      : ofertaBultoLibre
+        ? Number(ofertaBultoLibre.precio_publicado)
+        : null;
+    const espacioBultoListado = bultoOriginalLibre
+      ? ruta.espacio_disponible
+      : ofertaBultoLibre?.espacio_tamano ?? null;
 
     return {
       ...ruta,
@@ -75,6 +88,8 @@ export async function enriquecerRutasConDisponibilidad(
       asientoOcupadas: ocupadas,
       bultoDisponible,
       precioPlazaPublicado: asiento ? Number(asiento.precio_publicado) : null,
+      precioBultoPublicado,
+      espacioBultoListado,
     };
   });
 }

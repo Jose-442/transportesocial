@@ -31,23 +31,25 @@ export function RutaCard({
   );
 
   const item = ruta as RutaListadoItem;
-  const reservadaConExtra = item.tieneCapacidadExtra;
   const asientoOfrecidas = item.asientoOfrecidas ?? 0;
   const asientoOcupadas = item.asientoOcupadas ?? 0;
   const asientoLibres = Math.max(0, asientoOfrecidas - asientoOcupadas);
   const tieneAsientos = asientoOfrecidas > 0;
   const conBulto =
     item.bultoDisponible ?? rutaOfreceBulto(ruta.espacio_disponible);
-  const precioBulto = conBulto ? Number(ruta.precio_publicado) : null;
+  const espacioBulto =
+    item.espacioBultoListado ?? ruta.espacio_disponible;
+  const precioBulto = conBulto
+    ? (item.precioBultoPublicado ?? Number(ruta.precio_publicado))
+    : null;
   const precioPlaza =
     item.precioPlazaPublicado ??
     (tieneAsientos && !conBulto ? Number(ruta.precio_publicado) : null);
 
   const ofertaInput = {
-    espacio_disponible: ruta.espacio_disponible,
+    espacio_disponible: espacioBulto,
     asientoOfrecidas: asientoLibres,
     bultoDisponible: conBulto,
-    tieneCapacidadExtra: reservadaConExtra,
     estado: ruta.estado,
   };
 
