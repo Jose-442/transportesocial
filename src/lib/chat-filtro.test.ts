@@ -31,5 +31,20 @@ describe("filtrarContactoEnMensaje", () => {
     expect(
       filtrarContactoEnMensaje("seis uno dos tres cuatro cinco seis siete ocho")
     ).toContain(MASCARA_CONTACTO);
+    expect(
+      filtrarContactoEnMensaje(
+        "un dos tres cuatro cinco seis siete ocho nueve"
+      )
+    ).toContain(MASCARA_CONTACTO);
+    expect(
+      filtrarContactoEnMensaje(
+        "seis y uno y dos y tres y cuatro y cinco y seis y siete y ocho"
+      )
+    ).toContain(MASCARA_CONTACTO);
+    expect(
+      filtrarContactoEnMensaje(
+        "el seis el uno el dos el tres el cuatro el cinco el seis el siete el ocho"
+      )
+    ).toContain(MASCARA_CONTACTO);
   });
 });

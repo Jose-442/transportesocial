@@ -37,6 +37,7 @@ export function ChatPanel({
     cuerpo: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [textoEdicion, setTextoEdicion] = useState("");
@@ -95,12 +96,18 @@ export function ChatPanel({
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setAviso(null);
     setLoading(true);
     const result = await enviarMensajeChat(reservaId, form.cuerpo);
     setLoading(false);
     if (result.error) {
       setError(result.error);
       return;
+    }
+    if (result.oculto) {
+      setAviso(
+        "Se ha ocultado un teléfono, correo o dato de contacto por seguridad."
+      );
     }
     clear();
     setForm({ cuerpo: "" });
@@ -119,12 +126,18 @@ export function ChatPanel({
 
   async function guardarEdicion() {
     setError(null);
+    setAviso(null);
     setCargandoAccion(true);
     const result = await editarUltimoMensajeChat(reservaId, textoEdicion);
     setCargandoAccion(false);
     if (result.error) {
       setError(result.error);
       return;
+    }
+    if (result.oculto) {
+      setAviso(
+        "Se ha ocultado un teléfono, correo o dato de contacto por seguridad."
+      );
     }
     cancelarEdicion();
   }
@@ -255,6 +268,7 @@ export function ChatPanel({
           }
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
+        {aviso && <p className="text-sm text-amber-800">{aviso}</p>}
         <Button type="submit" disabled={loading || cargandoAccion} fullWidth>
           Enviar
         </Button>
