@@ -65,7 +65,7 @@ export function RutaCard({
             </p>
             {variant === "listado" && (
               <Badge
-                tone={reservadaConExtra ? "amber" : "green"}
+                tone="green"
                 className="shrink-0 px-3.5 py-1.5 text-sm"
               >
                 {badgeOfertaRuta(ofertaInput)}
@@ -75,7 +75,7 @@ export function RutaCard({
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
-          {variant === "cuenta" && !reservadaConExtra && (
+          {variant === "cuenta" && (
             <p className="mt-1 text-lg font-bold text-emerald-700">
               {formatEur(Number(ruta.precio_publicado))}
             </p>
@@ -104,9 +104,9 @@ export function RutaCard({
         <div className="shrink-0 text-right">
           {variant === "cuenta" ? (
             <p className="max-w-[6.5rem] text-right text-[10px] font-bold uppercase leading-tight text-emerald-800 sm:max-w-none sm:text-xs">
-              {reservadaConExtra ? "Más sitio" : "Propuesta de viaje"}
+              Propuesta de viaje
             </p>
-          ) : !reservadaConExtra ? (
+          ) : (
             <div className="space-y-1">
               {precioBulto != null && (
                 <p className="text-lg font-bold leading-tight text-emerald-700">
@@ -137,7 +137,7 @@ export function RutaCard({
                 </p>
               )}
             </div>
-          ) : null}
+          )}
         </div>
       </div>
     </CardLink>

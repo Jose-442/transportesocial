@@ -158,17 +158,17 @@ export default async function RutaDetallePage({
   );
 
   const badgeLabel =
-    ruta.estado === "reservada" && tieneCapacidadExtra
-      ? "Viaje reservado · Dispone de más sitio"
-      : ruta.estado === "activa"
-        ? "ACTIVO"
-        : ruta.estado === "reservada"
-          ? "RESERVADO"
-          : ruta.estado === "completada"
-            ? "COMPLETADO"
-            : "CANCELADO";
+    ruta.estado === "activa" ||
+    (ruta.estado === "reservada" && tieneCapacidadExtra)
+      ? "ACTIVO"
+      : ruta.estado === "reservada"
+        ? "RESERVADO"
+        : ruta.estado === "completada"
+          ? "COMPLETADO"
+          : "CANCELADO";
   const badgeTone =
-    ruta.estado === "activa"
+    ruta.estado === "activa" ||
+    (ruta.estado === "reservada" && tieneCapacidadExtra)
       ? "green"
       : ruta.estado === "reservada"
         ? "amber"
@@ -307,14 +307,14 @@ export default async function RutaDetallePage({
       {ruta.estado === "reservada" && tieneCapacidadExtra && (
         <Card className="space-y-2 border-amber-200 bg-amber-50/50">
           <p className="text-sm font-semibold text-amber-900">
-            Capacidad adicional disponible
+            Espacio para el bulto
           </p>
           <ul className="space-y-1 text-sm text-zinc-700">
             {ofertasDisponibles
               .filter((o) => o.tipo === "bulto")
               .map((o) => (
               <li key={o.id}>
-                {`Bulto extra · ${formatEspacioDisponibleListado(o.espacio_tamano ?? "")}`}
+                {`Bulto · ${formatEspacioDisponibleListado(o.espacio_tamano ?? "")}`}
                 {" — "}
                 <span className="font-semibold text-emerald-700">
                   {formatEur(Number(o.precio_publicado))}

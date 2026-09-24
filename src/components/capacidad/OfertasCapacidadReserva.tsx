@@ -24,7 +24,7 @@ function etiquetaOferta(oferta: OfertaCapacidad): string {
   ]
     .filter(Boolean)
     .join(" · ");
-  return `Bulto extra · ${espacio}`;
+  return `Bulto · ${espacio}`;
 }
 
 export function OfertasCapacidadReserva({
@@ -91,7 +91,7 @@ export function OfertasCapacidadReserva({
       <p className="text-sm text-zinc-600">
         {rutaEstado === "activa"
           ? "Reserva una o más plazas de acompañante y paga por adelantado."
-          : "Este viaje ya tiene reserva principal, pero el conductor ofrece más capacidad. Elige una opción y paga por adelantado."}
+          : "Elige lo que necesites y paga por adelantado."}
       </p>
 
       <label className="block space-y-1.5">

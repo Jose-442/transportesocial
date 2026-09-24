@@ -33,8 +33,7 @@ function ofreceBultoEnListado(input: OfertaRutaInput): boolean {
 }
 
 export function lineasOfertaRuta(input: OfertaRutaInput): string[] {
-  const { espacio_disponible, asientoOfrecidas = 0, tieneCapacidadExtra, estado } =
-    input;
+  const { espacio_disponible, asientoOfrecidas = 0 } = input;
   const conBulto = ofreceBultoEnListado(input);
   const lineas: string[] = [];
   if (conBulto) {
@@ -43,10 +42,6 @@ export function lineasOfertaRuta(input: OfertaRutaInput): string[] {
 
   const acompanantes = lineaAcompanantes(asientoOfrecidas, conBulto);
   if (acompanantes) lineas.push(acompanantes);
-
-  if (estado === "reservada" && tieneCapacidadExtra) {
-    lineas.push("Viaje reservado · Más espacio para bulto");
-  }
 
   return lineas;
 }
@@ -65,10 +60,6 @@ export function ofertaOriginalRuta(input: {
 }
 
 export function badgeOfertaRuta(input: OfertaRutaInput): string {
-  if (input.estado === "reservada" && input.tieneCapacidadExtra) {
-    return "Más sitio";
-  }
-
   const plazas = input.asientoOfrecidas ?? 0;
   const conBulto = ofreceBultoEnListado(input);
   if (!conBulto) {
