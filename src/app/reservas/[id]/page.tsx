@@ -189,13 +189,13 @@ export default async function ReservaDetallePage({
     : perfiles[reserva.cliente_id];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 md:space-y-3">
       <MarcarNotificacionesEnlaceLeida
         enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
       />
       <Link
         href="/cuenta/viajes"
-        className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
+        className="inline-flex min-h-9 items-center text-sm font-semibold text-emerald-700 md:min-h-11"
       >
         ← Mis viajes
       </Link>
@@ -232,8 +232,8 @@ export default async function ReservaDetallePage({
       )}
 
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{titulo}</h1>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
+        <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">{titulo}</h1>
+        <div className="mt-1 flex flex-wrap items-center gap-2 md:mt-2">
           <ButtonLink
             href={`/perfil/${otroPerfil?.id ?? (esCliente ? reserva.transportista_id : reserva.cliente_id)}`}
             variant="secondary"
@@ -261,10 +261,10 @@ export default async function ReservaDetallePage({
         yaPagadoEnStripe={Boolean(sessionId || errorPago || pagoComprobado)}
       />
 
-      <Card className="space-y-1.5 p-3">
+      <Card className="space-y-1 p-2 md:space-y-1.5 md:p-3">
         <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
           <span className="text-sm font-semibold text-zinc-900">Precio:</span>
-          <span className="text-2xl font-bold text-emerald-700">
+          <span className="text-lg font-bold text-emerald-700 md:text-2xl">
             {formatEur(precioMostrar)}
           </span>
         </p>
@@ -292,7 +292,7 @@ export default async function ReservaDetallePage({
       </Card>
 
       {chatPermitido(estadoMostrar) && (
-        <Card className="p-3">
+        <Card className="p-2 md:p-3">
           <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
             Abrir chat
           </ButtonLink>

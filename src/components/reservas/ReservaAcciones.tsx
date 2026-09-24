@@ -69,14 +69,14 @@ export function ReservaAcciones({
       : "";
 
   return (
-    <Card className="space-y-2 p-3">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+    <Card className="space-y-1.5 p-2 md:space-y-2 md:p-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 md:gap-x-4 md:gap-y-1">
         <span className="inline-flex flex-wrap items-center gap-2 text-sm text-zinc-900">
           <span className="font-semibold">Estado del viaje:</span>
           <Badge tone="green">{etiquetaEstado}</Badge>
         </span>
         {chatPermitido(estado) ? (
-          <span className="text-sm text-zinc-600">
+          <span className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
             Usad el chat interno para coordinaros. Por seguridad no está
             permitido compartir ni teléfonos ni correos; el chat es solo para
             eso.
@@ -112,9 +112,8 @@ export function ReservaAcciones({
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
         <div className="space-y-2">
           <PorteEntregadoBoton reservaId={reserva.id} />
-          <p className="text-sm leading-snug text-zinc-600">
-            Púlsalo cuando hayas entregado el bulto. Quien reservó recibe un
-            aviso en la campana y en el móvil, si los tiene activados.
+          <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+            Pulsa cuando hayas entregado el bulto
           </p>
         </div>
       )}
@@ -140,7 +139,7 @@ export function ReservaAcciones({
           <CancelarReservaBoton
             reservaId={reserva.id}
             textoBoton="Cancelar reserva"
-            textoAyuda={textoAyudaCancelar}
+            textoAyuda="Si tu cancelas se le devuelve su dinero"
           />
         )}
 

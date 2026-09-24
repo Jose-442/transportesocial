@@ -51,7 +51,9 @@ export function CancelarReservaBoton({
         >
           {textoBoton}
         </Button>
-        <p className="text-sm leading-snug text-zinc-600">{textoAyuda}</p>
+        <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+          {textoAyuda}
+        </p>
       </div>
     );
   }
@@ -61,7 +63,9 @@ export function CancelarReservaBoton({
       <p className="text-sm font-medium text-zinc-800">
         ¿Seguro? Esta cancelación no se puede deshacer.
       </p>
-      <p className="text-sm leading-snug text-zinc-600">{textoAyuda}</p>
+      <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+        {textoAyuda}
+      </p>
       <Button
         type="button"
         variant="secondary"
