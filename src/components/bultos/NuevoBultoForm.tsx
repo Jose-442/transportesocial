@@ -231,7 +231,7 @@ export function NuevoBultoForm() {
           <Textarea
             name="descripcion"
             label="Qué necesitas enviar (opcional)"
-            placeholder="Describe el bulto con detalle"
+            placeholder="Describe el bulto"
             value={form.descripcion}
             onChange={(e) => updateField("descripcion", e.target.value)}
           />
