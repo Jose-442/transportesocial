@@ -123,11 +123,11 @@ export default async function BultoDetallePage({
         <p className="text-sm font-semibold text-zinc-800">
           Detalle del viaje ({labelTipoSolicitud(tipoSolicitud)})
         </p>
-        <div>
-          <p className="text-sm uppercase tracking-wide text-zinc-500">
-            Propuesto por
-          </p>
-          <p className="mt-1 text-sm font-medium text-zinc-900">
+        <div className="space-y-2 text-sm">
+          <p className="text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Propuesto por:
+            </span>{" "}
             <Link
               href={`/perfil/${bulto.user_id}`}
               className="font-semibold text-emerald-700 hover:text-emerald-800"
@@ -135,51 +135,51 @@ export default async function BultoDetallePage({
               {nombreProponente}
             </Link>
           </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <p className="text-sm uppercase tracking-wide text-zinc-500">
-              Salida
-            </p>
-            <p className="mt-1 text-sm font-medium text-zinc-900">{origen}</p>
-          </div>
-          <div>
-            <p className="text-sm uppercase tracking-wide text-zinc-500">
-              Llegada
-            </p>
-            <p className="mt-1 text-sm font-medium text-zinc-900">{destino}</p>
-          </div>
+          <p className="text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Salida:
+            </span>{" "}
+            <span className="font-medium">{origen}</span>
+          </p>
+          <p className="text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Llegada:
+            </span>{" "}
+            <span className="font-medium">{destino}</span>
+          </p>
         </div>
         <p className="text-sm text-zinc-500">
           Los puntos exactos los concretaréis cuando un conductor ponga precio
           y aceptes su propuesta.
         </p>
         <div>
-          <p className="text-sm uppercase tracking-wide text-zinc-500">Medidas</p>
           <p className="text-sm text-zinc-800">
-            {necesitaBulto && medidasVisibles
-              ? formatEspacioDisponibleListado(medidasVisibles)
-              : "—"}
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Medidas:
+            </span>{" "}
+            <span className="font-medium">
+              {necesitaBulto && medidasVisibles
+                ? formatEspacioDisponibleListado(medidasVisibles)
+                : "—"}
+            </span>
           </p>
         </div>
         {bulto.fecha_limite && (
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <p className="text-sm uppercase tracking-wide text-zinc-500">
-                Fecha
-              </p>
-              <p className="text-sm font-medium text-zinc-800">
+          <div className="space-y-2 text-sm">
+            <p className="text-zinc-800">
+              <span className="font-medium uppercase tracking-wide text-zinc-500">
+                Fecha:
+              </span>{" "}
+              <span className="font-medium">
                 {formatFechaDiaEs(bulto.fecha_limite)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm uppercase tracking-wide text-zinc-500">
-                Hora
-              </p>
-              <p className="text-sm font-medium text-zinc-800">
-                {horaBulto ?? "—"}
-              </p>
-            </div>
+              </span>
+            </p>
+            <p className="text-zinc-800">
+              <span className="font-medium uppercase tracking-wide text-zinc-500">
+                Hora:
+              </span>{" "}
+              <span className="font-medium">{horaBulto ?? "—"}</span>
+            </p>
           </div>
         )}
       </Card>
