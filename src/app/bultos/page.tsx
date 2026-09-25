@@ -9,7 +9,6 @@ import {
   tieneBusquedaCompleta,
   tieneFiltrosActivos,
 } from "@/lib/listado-filters";
-import { formatCiudad } from "@/lib/format-ciudad";
 import type { AnuncioBulto } from "@/types/database";
 
 export const dynamic = "force-dynamic";

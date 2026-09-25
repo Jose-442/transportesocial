@@ -8,7 +8,6 @@ import {
   tieneBusquedaCompleta,
   tieneFiltrosActivos,
 } from "@/lib/listado-filters";
-import { formatCiudad } from "@/lib/format-ciudad";
 import { listarRutasConCapacidad } from "@/lib/capacidad/rutas-listado";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
 
@@ -53,21 +52,10 @@ export default async function RutasPage({
         </p>
       ) : rutas.length === 0 ? (
         <p className="text-sm text-zinc-500">
-          No hay viajes ese día de {formatCiudad(filtros.origen!)} a{" "}
-          {formatCiudad(filtros.destino!)}. Prueba
-          otras fechas o ciudades.
+          No se encontraron viajes en esta búsqueda.
         </p>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-zinc-700">
-            {rutas.length} {rutas.length === 1 ? "viaje" : "viajes"} ·{" "}
-            {formatCiudad(filtros.origen!)} → {formatCiudad(filtros.destino!)} ·{" "}
-            {new Date(filtros.fecha!).toLocaleDateString("es-ES", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
-          </p>
           {rutas.map((ruta) => (
             <RutaCard key={ruta.id} ruta={ruta} listadoSearch={listadoSearch} />
           ))}
