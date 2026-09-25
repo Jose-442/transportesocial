@@ -30,6 +30,10 @@ export default async function BultosPage({
 
   if (busquedaCompleta) {
     const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const { data } = await supabase
       .from("anuncios_bultos")
       .select("*")
@@ -39,6 +43,25 @@ export default async function BultosPage({
     bultos = ((data as AnuncioBulto[]) ?? []).filter((b) =>
       coincideFiltrosBulto(b, filtros)
     );
+
+    // Si te rechazaron en un bulto, no vuelve a salir en la búsqueda.
+    if (user && bultos.length > 0) {
+      const { data: rechazadas } = await supabase
+        .from("ofertas_precio")
+        .select("anuncio_bulto_id")
+        .eq("conductor_id", user.id)
+        .eq("estado", "rechazada")
+        .in(
+          "anuncio_bulto_id",
+          bultos.map((b) => b.id)
+        );
+      if (rechazadas?.length) {
+        const ocultos = new Set(
+          rechazadas.map((o) => o.anuncio_bulto_id as string)
+        );
+        bultos = bultos.filter((b) => !ocultos.has(b.id));
+      }
+    }
   }
 
   return (
@@ -66,9 +89,8 @@ export default async function BultosPage({
         </p>
       ) : bultos.length === 0 ? (
         <p className="text-sm text-zinc-500">
-          No hay bultos ese día de {formatCiudad(filtros.origen!)} a{" "}
-          {formatCiudad(filtros.destino!)}. Prueba
-          otras fechas o ciudades.
+          No se encontraron viajes en esta búsqueda. Prueba otras fechas o
+          ciudades.
         </p>
       ) : (
         <div className="space-y-3">
