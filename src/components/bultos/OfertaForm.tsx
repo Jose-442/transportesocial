@@ -171,7 +171,7 @@ export function OfertaForm({
           label="Tu precio por el bulto (€)"
           type="text"
           inputMode="decimal"
-          placeholder="Ej. 25.00"
+          placeholder="Ej. 25"
           required
           value={form.precio_neto_bulto}
           onChange={(e) =>
@@ -186,7 +186,7 @@ export function OfertaForm({
             label="Pon precio por pasajero (€)"
             type="text"
             inputMode="decimal"
-            placeholder="Ej. 25.00"
+            placeholder="Ej. 25"
             required
             value={form.precio_neto_plaza}
             hint={`Nº de plazas solicitadas para pasajeros en este viaje (${plazas})`}
