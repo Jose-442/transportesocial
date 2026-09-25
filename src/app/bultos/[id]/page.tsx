@@ -198,7 +198,7 @@ export default async function BultoDetallePage({
         {esDueno && bulto.estado === "activo" && (
           <p className="text-base text-zinc-600">
             Este es tu anuncio. Aquí aparecerán las propuestas de los
-            conductores. Para ofertar en otros bultos, busca en la lista.
+            conductores.
           </p>
         )}
         <OfertasList
