@@ -6,8 +6,8 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendNuevaOfertaEmail } from "@/lib/email/nueva-oferta";
 import { crearNotificacion } from "@/lib/reservas/notify";
-import { enviarPushNotificacion } from "@/lib/push/send";
 import { publicationFeeAmount } from "@/lib/pricing";
+import { formatCiudad } from "@/lib/format-ciudad";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { getOrCreateProfile } from "@/lib/profile";
 import { perfilVehiculoIncompleto, ERROR_VEHICULO_INCOMPLETO } from "@/lib/vehiculo";
@@ -18,6 +18,16 @@ import {
   numPasajeros,
 } from "@/lib/solicitud-viaje";
 import type { TipoSolicitud } from "@/lib/solicitud-viaje";
+
+function textoCoberturaOferta(conBulto: boolean, plazasOfrecidas: number): string {
+  const partes: string[] = [];
+  if (conBulto) partes.push("tu bulto");
+  if (plazasOfrecidas === 1) partes.push("1 plaza");
+  else if (plazasOfrecidas > 1) partes.push(`${plazasOfrecidas} plazas`);
+  if (partes.length === 0) return "tu viaje";
+  if (partes.length === 1) return partes[0];
+  return `${partes[0]} y ${partes[1]}`;
+}
 
 export async function enviarOferta(formData: FormData) {
   const supabase = await createClient();
@@ -117,17 +127,20 @@ export async function enviarOferta(formData: FormData) {
 
   if (error) return { error: supabaseErrorMessage(error) };
 
-  void enviarPushNotificacion({
-    userId: bulto.user_id,
-    titulo: "Nueva propuesta de precio",
-    mensaje: `Un conductor propone ${precio_total} € para tu bulto ${bulto.origen} → ${bulto.destino}.`,
-    enlace: `/bultos/${bultoId}`,
-  }).catch((err) => {
-    console.error("[nueva-oferta-push]", err);
-  });
+  const cobertura = textoCoberturaOferta(conBulto, plazas > 0 ? plazasOfrecidas : 0);
+  const rutaLabel = `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`;
+  const mensajeAviso = `Un conductor propone ${precio_total} € para ${cobertura}, ${rutaLabel}.`;
 
   const admin = createAdminClient();
   if (admin) {
+    await crearNotificacion(admin, {
+      user_id: bulto.user_id,
+      tipo: "nueva_oferta",
+      titulo: "Nueva propuesta de precio",
+      mensaje: mensajeAviso,
+      enlace: `/bultos/${bultoId}`,
+    });
+
     const [{ data: ownerProfile }, { data: ownerAuth }] = await Promise.all([
       supabase
         .from("profiles")
