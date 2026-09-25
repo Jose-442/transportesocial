@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaHoraEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
-import { labelTipoSolicitud } from "@/lib/solicitud-viaje";
+import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
 
 export function BultoCard({
@@ -21,9 +21,13 @@ export function BultoCard({
     ? formatFechaHoraEs(bulto.fecha_limite, horaBulto)
     : null;
 
-  const tipoLabel = labelTipoSolicitud(
-    bulto.tipo_solicitud ?? "solo_bulto"
-  );
+  const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
+  const tipoLabel = labelTipoSolicitud(tipoSolicitud);
+  const textoDescripcion = incluyeBulto(tipoSolicitud)
+    ? descripcionVisible
+      ? `Bulto = ${descripcionVisible}`
+      : "Bulto = sin descripción"
+    : descripcionVisible || null;
 
   const href = listadoSearch
     ? `/bultos/${bulto.id}?${listadoSearch}`
@@ -39,9 +43,11 @@ export function BultoCard({
           <p className="mt-1 text-sm font-medium text-emerald-800">
             {tipoLabel}
           </p>
-          <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
-            {descripcionVisible || "Sin descripción"}
-          </p>
+          {textoDescripcion ? (
+            <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
+              {textoDescripcion}
+            </p>
+          ) : null}
           <p className="mt-1 text-xs text-zinc-500">
             Pulsa para ver detalle
             {fechaLimite ? ` · límite ${fechaLimite}` : ""}
