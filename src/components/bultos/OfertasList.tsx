@@ -72,9 +72,20 @@ export function OfertasList({
                   oferta.desglose.plazas_ofrecidas <
                     oferta.desglose.plazas_solicitadas && (
                     <p className="mt-1 text-sm text-zinc-600">
-                      Cubre {oferta.desglose.plazas_ofrecidas} de{" "}
-                      {oferta.desglose.plazas_solicitadas} pasajeros
-                      solicitados
+                      {oferta.desglose.precio_total_bulto != null
+                        ? `Cubre el bulto y ${oferta.desglose.plazas_ofrecidas} de ${oferta.desglose.plazas_solicitadas} pasajeros solicitados`
+                        : `Cubre ${oferta.desglose.plazas_ofrecidas} de ${oferta.desglose.plazas_solicitadas} pasajeros solicitados`}
+                    </p>
+                  )}
+                {oferta.desglose &&
+                  oferta.desglose.precio_total_bulto != null &&
+                  (oferta.desglose.plazas_solicitadas === 0 ||
+                    oferta.desglose.plazas_ofrecidas >=
+                      oferta.desglose.plazas_solicitadas) && (
+                    <p className="mt-1 text-sm text-zinc-600">
+                      {oferta.desglose.plazas_ofrecidas > 0
+                        ? `Cubre el bulto y ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`
+                        : "Cubre el bulto"}
                     </p>
                   )}
                 {oferta.mensaje && (
