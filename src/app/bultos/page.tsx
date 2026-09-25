@@ -93,10 +93,6 @@ export default async function BultosPage({
         </p>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-zinc-700">
-            {bultos.length} {bultos.length === 1 ? "bulto" : "bultos"} ·{" "}
-            {formatCiudad(filtros.origen!)} → {formatCiudad(filtros.destino!)}
-          </p>
           {bultos.map((bulto) => (
             <BultoCard key={bulto.id} bulto={bulto} listadoSearch={listadoSearch} />
           ))}
