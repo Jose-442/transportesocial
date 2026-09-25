@@ -6,6 +6,7 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendNuevaOfertaEmail } from "@/lib/email/nueva-oferta";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { enviarPushNotificacion } from "@/lib/push/send";
 import { publicationFeeAmount } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { getRequestOrigin } from "@/lib/stripe/origin";
@@ -131,16 +132,18 @@ export async function enviarOferta(formData: FormData) {
   const rutaLabel = `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`;
   const mensajeAviso = `Un conductor propone ${precio_total} € para ${cobertura}, ${rutaLabel}.`;
 
+  // El aviso en pantalla lo crea un disparador de la base; aquí solo el push del móvil.
+  void enviarPushNotificacion({
+    userId: bulto.user_id,
+    titulo: "Nueva propuesta de precio",
+    mensaje: mensajeAviso,
+    enlace: `/bultos/${bultoId}`,
+  }).catch((err) => {
+    console.error("[nueva-oferta-push]", err);
+  });
+
   const admin = createAdminClient();
   if (admin) {
-    await crearNotificacion(admin, {
-      user_id: bulto.user_id,
-      tipo: "nueva_oferta",
-      titulo: "Nueva propuesta de precio",
-      mensaje: mensajeAviso,
-      enlace: `/bultos/${bultoId}`,
-    });
-
     const [{ data: ownerProfile }, { data: ownerAuth }] = await Promise.all([
       supabase
         .from("profiles")
