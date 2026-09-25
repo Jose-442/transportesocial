@@ -96,13 +96,18 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
   const { supabase, user, reserva, canal } = acceso;
   const texto = validado.texto;
 
-  const { error } = await supabase.from("chat_mensajes").insert({
-    canal_id: canal.id,
-    remitente_id: user.id,
-    cuerpo: texto,
-  });
+  const { data: insertado, error } = await supabase
+    .from("chat_mensajes")
+    .insert({
+      canal_id: canal.id,
+      remitente_id: user.id,
+      cuerpo: texto,
+    })
+    .select("id, canal_id, remitente_id, cuerpo, editado_en, eliminado, created_at")
+    .single();
 
   if (error) return { error: supabaseErrorMessage(error) };
+  if (!insertado) return { error: "No se ha podido enviar el mensaje." };
 
   const otroId =
     user.id === reserva.cliente_id
@@ -121,7 +126,15 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
-  return { ok: true, oculto: Boolean(validado.oculto) };
+  return {
+    ok: true,
+    oculto: Boolean(validado.oculto),
+    mensaje: {
+      ...insertado,
+      eliminado: insertado.eliminado ?? false,
+      editado_en: insertado.editado_en ?? null,
+    },
+  };
 }
 
 export async function editarUltimoMensajeChat(
@@ -174,7 +187,12 @@ export async function editarUltimoMensajeChat(
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
-  return { ok: true, oculto: Boolean(validado.oculto) };
+  return {
+    ok: true,
+    oculto: Boolean(validado.oculto),
+    cuerpo: validado.texto,
+    mensajeId: ultimo.id,
+  };
 }
 
 export async function eliminarUltimoMensajeChat(reservaId: string) {

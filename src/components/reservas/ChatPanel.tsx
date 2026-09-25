@@ -102,11 +102,19 @@ export function ChatPanel({
     setError(null);
     setAviso(null);
     setLoading(true);
-    const result = await enviarMensajeChat(reservaId, form.cuerpo);
+    const textoEnviado = form.cuerpo;
+    const result = await enviarMensajeChat(reservaId, textoEnviado);
     setLoading(false);
     if (result.error) {
       setError(result.error);
       return;
+    }
+    if (result.mensaje) {
+      setMensajes((prev) =>
+        prev.some((m) => m.id === result.mensaje!.id)
+          ? prev
+          : [...prev, result.mensaje!]
+      );
     }
     if (result.oculto) {
       setAviso(
@@ -137,6 +145,19 @@ export function ChatPanel({
     if (result.error) {
       setError(result.error);
       return;
+    }
+    if (result.mensajeId && result.cuerpo) {
+      setMensajes((prev) =>
+        prev.map((m) =>
+          m.id === result.mensajeId
+            ? {
+                ...m,
+                cuerpo: result.cuerpo!,
+                editado_en: new Date().toISOString(),
+              }
+            : m
+        )
+      );
     }
     if (result.oculto) {
       setAviso(
