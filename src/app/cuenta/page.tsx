@@ -48,19 +48,7 @@ export default async function CuentaPage({
     redirect("/cuenta");
   }
 
-  let result = await getOrCreateProfile(supabase, user);
-
-  if (
-    result.profile?.stripe_connect_account_id &&
-    !result.profile.stripe_connect_payouts_enabled
-  ) {
-    try {
-      await sincronizarStripeConnectUsuario(user.id);
-      result = await getOrCreateProfile(supabase, user);
-    } catch (err) {
-      console.error("[cuenta connect sync]", err);
-    }
-  }
+  const result = await getOrCreateProfile(supabase, user);
 
   if (result.error || !result.profile) {
     return (
