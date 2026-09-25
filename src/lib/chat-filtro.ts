@@ -44,10 +44,11 @@ const DIEZ_A_19: Record<string, string> = {
 
 const DECENAS: Record<string, string> = {
   veinte: "20",
-  venti: "20",
   veinti: "20",
   venty: "20",
+  venti: "20",
   benti: "20",
+  vent: "20",
   treinta: "30",
   cuarenta: "40",
   cincuenta: "50",
@@ -57,14 +58,17 @@ const DECENAS: Record<string, string> = {
   noventa: "90",
 };
 
-const PALABRA_NUMERO = new Set([
-  ...Object.keys(UNIDADES),
-  ...Object.keys(DIEZ_A_19),
-  ...Object.keys(DECENAS),
-  "y",
-  "el",
-  "la",
-]);
+const CONECTORES = new Set(["y", "el", "la"]);
+
+/** Palabras de número, de más largas a más cortas (para pegadas: ventytres, cuarentaysiete). */
+const PALABRAS_ORDEN: string[] = Array.from(
+  new Set([
+    ...Object.keys(DIEZ_A_19),
+    ...Object.keys(DECENAS),
+    ...Object.keys(UNIDADES),
+    ...CONECTORES,
+  ])
+).sort((a, b) => b.length - a.length);
 
 function enmascarar(regex: RegExp, texto: string): string {
   return texto.replace(regex, MASCARA_CONTACTO);
@@ -74,7 +78,7 @@ function normalizarEspaciosRaros(texto: string): string {
   return texto.replace(/[\u00A0\u202F]/g, " ");
 }
 
-function normalizarToken(raw: string): string {
+function soloLetras(raw: string): string {
   return raw
     .toLowerCase()
     .normalize("NFD")
@@ -82,18 +86,87 @@ function normalizarToken(raw: string): string {
     .replace(/[^a-z]/g, "");
 }
 
-/** Typo frecuente: venty / vent / veinti… */
 function esPrefijoVeinti(n: string): boolean {
-  return n === "veinti" || n === "venti" || n === "venty" || n === "vent";
-}
-
-function esPalabraNumero(n: string): boolean {
-  return PALABRA_NUMERO.has(n) || esPrefijoVeinti(n);
+  return (
+    n === "veinti" ||
+    n === "venti" ||
+    n === "venty" ||
+    n === "vent" ||
+    n === "benti"
+  );
 }
 
 /**
- * Convierte rachas de números en letras (venti/venty, cuarenta y siete…)
- * a cifras. Si una racha da 6 o más dígitos, la sustituye por la máscara.
+ * Parte una palabra pegada en números en letras.
+ * "ventytres" → ["venty","tres"]; "cuarentaysiete" → ["cuarenta","y","siete"].
+ * null si no se puede cubrir entera con palabras de número.
+ */
+function expandirPegadas(norm: string): string[] | null {
+  if (!norm) return [];
+  const out: string[] = [];
+  let i = 0;
+  while (i < norm.length) {
+    let hit: string | null = null;
+    for (const w of PALABRAS_ORDEN) {
+      if (norm.startsWith(w, i)) {
+        hit = w;
+        break;
+      }
+    }
+    if (!hit) return null;
+    out.push(hit);
+    i += hit.length;
+  }
+  return out;
+}
+
+function palabrasADigitos(palabras: string[]): string {
+  let digitos = "";
+  let i = 0;
+  while (i < palabras.length) {
+    const n = palabras[i];
+    if (CONECTORES.has(n)) {
+      i += 1;
+      continue;
+    }
+    if (DIEZ_A_19[n]) {
+      digitos += DIEZ_A_19[n];
+      i += 1;
+      continue;
+    }
+    if (DECENAS[n] || esPrefijoVeinti(n)) {
+      const valorDecena = DECENAS[n] ?? "20";
+      const next = palabras[i + 1];
+      if (esPrefijoVeinti(n) && next && UNIDADES[next] && next !== "cero") {
+        digitos += "2" + UNIDADES[next];
+        i += 2;
+        continue;
+      }
+      if (next === "y" && palabras[i + 2]) {
+        const unidad = palabras[i + 2];
+        if (UNIDADES[unidad] && unidad !== "cero") {
+          digitos += valorDecena[0] + UNIDADES[unidad];
+          i += 3;
+          continue;
+        }
+      }
+      digitos += valorDecena;
+      i += 1;
+      continue;
+    }
+    if (UNIDADES[n]) {
+      digitos += UNIDADES[n];
+      i += 1;
+      continue;
+    }
+    break;
+  }
+  return digitos;
+}
+
+/**
+ * Detecta teléfonos en letras con o sin espacios
+ * (VENTY TRES, VENTYTRES, CUARENTA Y SIETE, CUARENTAYSIETE…).
  */
 function ocultarNumerosEnLetras(texto: string): string {
   const partes = texto.split(/(\s+)/);
@@ -108,15 +181,18 @@ function ocultarNumerosEnLetras(texto: string): string {
       continue;
     }
 
-    const norm = normalizarToken(token);
-    if (!esPalabraNumero(norm) || norm === "y" || norm === "el" || norm === "la") {
+    const norm = soloLetras(token);
+    const exp = expandirPegadas(norm);
+    const esSoloConector =
+      Boolean(exp) && exp!.length > 0 && exp!.every((p) => CONECTORES.has(p));
+    if (!exp || exp.length === 0 || esSoloConector) {
       out.push(token);
       i += 1;
       continue;
     }
 
     const start = i;
-    let digitos = "";
+    const palabras: string[] = [];
     let j = i;
 
     while (j < partes.length) {
@@ -125,61 +201,18 @@ function ocultarNumerosEnLetras(texto: string): string {
         j += 1;
         continue;
       }
-      const n = normalizarToken(t);
+      const n = soloLetras(t);
       if (!n) {
         j += 1;
         continue;
       }
-
-      if (n === "el" || n === "la" || n === "y") {
-        j += 1;
-        continue;
-      }
-
-      if (DIEZ_A_19[n]) {
-        digitos += DIEZ_A_19[n];
-        j += 1;
-        continue;
-      }
-
-      if (DECENAS[n] || esPrefijoVeinti(n)) {
-        const valorDecena = DECENAS[n] ?? "20";
-        if (esPrefijoVeinti(n) && j + 1 < partes.length) {
-          let k = j + 1;
-          while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
-          const next = k < partes.length ? normalizarToken(partes[k]) : "";
-          if (UNIDADES[next] && next !== "cero") {
-            digitos += "2" + UNIDADES[next];
-            j = k + 1;
-            continue;
-          }
-        }
-        let k = j + 1;
-        while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
-        if (k < partes.length && normalizarToken(partes[k]) === "y") {
-          k += 1;
-          while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
-          const next = k < partes.length ? normalizarToken(partes[k]) : "";
-          if (UNIDADES[next] && next !== "cero") {
-            digitos += valorDecena[0] + UNIDADES[next];
-            j = k + 1;
-            continue;
-          }
-        }
-        digitos += valorDecena;
-        j += 1;
-        continue;
-      }
-
-      if (UNIDADES[n]) {
-        digitos += UNIDADES[n];
-        j += 1;
-        continue;
-      }
-
-      break;
+      const e = expandirPegadas(n);
+      if (!e || e.length === 0) break;
+      palabras.push(...e);
+      j += 1;
     }
 
+    const digitos = palabrasADigitos(palabras);
     if (digitos.length >= 6) {
       out.push(MASCARA_CONTACTO);
     } else {
