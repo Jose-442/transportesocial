@@ -25,8 +25,8 @@ export function BultoCard({
   const tipoLabel = labelTipoSolicitud(tipoSolicitud);
   const textoDescripcion = incluyeBulto(tipoSolicitud)
     ? descripcionVisible
-      ? `Bulto = ${descripcionVisible}`
-      : "Bulto = sin descripción"
+      ? `Bulto: ${descripcionVisible}`
+      : "Bulto: sin descripción"
     : descripcionVisible || null;
 
   const href = listadoSearch
