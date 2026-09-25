@@ -8,7 +8,7 @@ import { isAdminUser } from "@/lib/admin";
 import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
-import { MisViajesTabs } from "@/components/cuenta/MisViajesTabs";
+import { CuentaMisViajes } from "@/components/cuenta/CuentaMisViajes";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
 import { EditarVehiculoForm } from "@/components/cuenta/EditarVehiculoForm";
@@ -17,7 +17,6 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
-import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
 import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
 
 export const metadata = { title: "Mi cuenta" };
@@ -65,8 +64,6 @@ export default async function CuentaPage({
   }
 
   const profile = result.profile;
-  const viajes = await loadMisViajes(supabase, user.id);
-
   const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
   const perfilCompactPc = volverTrasVehiculo !== null;
 
@@ -171,23 +168,7 @@ export default async function CuentaPage({
         </Card>
       </div>
 
-      <Card className="space-y-4">
-        <div>
-          <h2 className="font-semibold text-zinc-900">Mis viajes</h2>
-          <p className="mt-1 text-base text-zinc-600">
-            Los que tú has propuesto, los que has aceptado como conductor, los
-            que tú has pagado-reservado y las aceptaciones de otros conductores
-            a tus propuestas.
-          </p>
-        </div>
-        <MisViajesTabs
-          propuestos={viajes.propuestos}
-          aceptados={viajes.aceptados}
-          pagados={viajes.pagados}
-          paraMi={viajes.paraMi}
-          historial={viajes.historial}
-        />
-      </Card>
+      <CuentaMisViajes userId={user.id} />
 
       <Card className="space-y-3">
         <h2 className="font-semibold text-zinc-900">Preferencias de conductor</h2>

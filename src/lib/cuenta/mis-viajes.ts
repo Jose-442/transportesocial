@@ -77,7 +77,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     ]);
 
   const lista = (reservas ?? []) as Reserva[];
-  await asegurarAvisosConductor(supabase, userId, lista);
+  const avisosPromise = asegurarAvisosConductor(supabase, userId, lista);
   const bultos = (misBultos ?? []) as Pick<
     AnuncioBulto,
     "id" | "origen" | "destino" | "created_at" | "estado"
@@ -284,6 +284,8 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     };
     paraMi.push(item);
   }
+
+  await avisosPromise;
 
   return {
     propuestos: ordenarPorFecha(propuestos),
