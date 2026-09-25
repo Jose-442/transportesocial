@@ -196,5 +196,6 @@ export async function cancelarBultoPublicacion(
 
   revalidatePath("/cuenta");
   revalidatePath("/bultos");
+  revalidatePath(`/bultos/${bultoId}`);
   return { ok: true };
 }

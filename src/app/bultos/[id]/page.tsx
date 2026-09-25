@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { OfertaForm } from "@/components/bultos/OfertaForm";
 import { OfertasList } from "@/components/bultos/OfertasList";
+import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { formatCiudad } from "@/lib/format-ciudad";
@@ -106,15 +107,6 @@ export default async function BultoDetallePage({
         <Badge tone="blue">{bulto.estado}</Badge>
       </div>
 
-      {descripcionVisible ? (
-        <Card>
-          <p className="text-sm uppercase tracking-wide text-zinc-500">
-            Descripción
-          </p>
-          <p className="mt-1 text-base text-zinc-800">{descripcionVisible}</p>
-        </Card>
-      ) : null}
-
       {bulto.foto_url && (
         <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
           <Image
@@ -159,8 +151,8 @@ export default async function BultoDetallePage({
           </div>
         </div>
         <p className="text-sm text-zinc-500">
-          El punto exacto de recogida y entrega se concretará por el chat
-          interno al aceptar la propuesta.
+          Los puntos exactos los concretaréis cuando un conductor ponga precio
+          y aceptes su propuesta.
         </p>
         <div>
           <p className="text-sm uppercase tracking-wide text-zinc-500">Medidas</p>
@@ -192,6 +184,15 @@ export default async function BultoDetallePage({
         )}
       </Card>
 
+      {descripcionVisible ? (
+        <Card>
+          <p className="text-sm uppercase tracking-wide text-zinc-500">
+            Descripción del bulto
+          </p>
+          <p className="mt-1 text-base text-zinc-800">{descripcionVisible}</p>
+        </Card>
+      ) : null}
+
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-zinc-900">Propuesta</h2>
         {esDueno && bulto.estado === "activo" && (
@@ -206,6 +207,15 @@ export default async function BultoDetallePage({
           perfiles={perfilesConductores}
         />
       </section>
+
+      {esDueno && bulto.estado === "activo" && (
+        <div className="space-y-2">
+          <p className="text-center text-sm text-zinc-600">
+            Este anuncio lo has publicado tú.
+          </p>
+          <CancelarPublicacionButton id={bulto.id} tipo="bulto" />
+        </div>
+      )}
 
       {!esDueno && bulto.estado === "activo" && !yaPropuso && (
         <Card>
