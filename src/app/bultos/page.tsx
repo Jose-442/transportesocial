@@ -89,8 +89,7 @@ export default async function BultosPage({
         </p>
       ) : bultos.length === 0 ? (
         <p className="text-sm text-zinc-500">
-          No se encontraron viajes en esta búsqueda. Prueba otras fechas o
-          ciudades.
+          No se encontraron viajes en esta búsqueda.
         </p>
       ) : (
         <div className="space-y-3">
