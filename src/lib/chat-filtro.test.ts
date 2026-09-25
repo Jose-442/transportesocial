@@ -30,13 +30,18 @@ describe("filtrarContactoEnMensaje", () => {
     );
   });
 
-  it("oculta teléfonos escritos en letras, también con venti y cuarenta y siete", () => {
+  it("oculta teléfonos escritos en letras, también con venti/venty y cuarenta y siete", () => {
     expect(
       filtrarContactoEnMensaje("seis uno dos tres cuatro cinco seis siete ocho")
     ).toContain(MASCARA_CONTACTO);
     expect(
       filtrarContactoEnMensaje(
         "NUEVE CUATRO SIETE VENTI TRES CERO UNO CUARENTA Y SIETE"
+      )
+    ).toContain(MASCARA_CONTACTO);
+    expect(
+      filtrarContactoEnMensaje(
+        "NUEVE CUATRO SIETE VENTY TRES CERO UNO CUARENTA Y SIETE"
       )
     ).toContain(MASCARA_CONTACTO);
     expect(

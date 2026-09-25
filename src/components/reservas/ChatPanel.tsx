@@ -10,6 +10,7 @@ import {
 } from "@/actions/chat";
 import { createClient } from "@/lib/supabase/client";
 import type { ChatMensaje, PerfilPublico } from "@/types/database";
+import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
 
@@ -146,6 +147,8 @@ export function ChatPanel({
   }
 
   async function anularUltimo() {
+    if (!ultimoDelChat) return;
+    const idAnular = ultimoDelChat.id;
     setError(null);
     setCargandoAccion(true);
     const result = await eliminarUltimoMensajeChat(reservaId);
@@ -154,6 +157,9 @@ export function ChatPanel({
       setError(result.error);
       return;
     }
+    setMensajes((prev) =>
+      prev.map((m) => (m.id === idAnular ? { ...m, eliminado: true } : m))
+    );
     cancelarEdicion();
   }
 
@@ -220,7 +226,9 @@ export function ChatPanel({
                   </div>
                 ) : (
                   <>
-                    <p className="whitespace-pre-wrap">{m.cuerpo}</p>
+                    <p className="whitespace-pre-wrap">
+                      {filtrarContactoEnMensaje(m.cuerpo)}
+                    </p>
                     {m.editado_en ? (
                       <p
                         className={[
@@ -237,7 +245,7 @@ export function ChatPanel({
                           type="button"
                           disabled={cargandoAccion}
                           onClick={() => empezarEdicion(m)}
-                          className="rounded-lg bg-white/20 px-2 py-0.5 text-xs font-semibold text-white hover:bg-white/30"
+                          className="cursor-pointer rounded-lg bg-white/20 px-2 py-0.5 text-xs font-semibold text-white hover:bg-white/30 disabled:cursor-not-allowed"
                         >
                           Editar
                         </button>
@@ -245,7 +253,7 @@ export function ChatPanel({
                           type="button"
                           disabled={cargandoAccion}
                           onClick={() => void anularUltimo()}
-                          className="rounded-lg bg-white/20 px-2 py-0.5 text-xs font-semibold text-white hover:bg-white/30"
+                          className="cursor-pointer rounded-lg bg-white/20 px-2 py-0.5 text-xs font-semibold text-white hover:bg-white/30 disabled:cursor-not-allowed"
                         >
                           Anular
                         </button>

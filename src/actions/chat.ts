@@ -147,9 +147,31 @@ export async function editarUltimoMensajeChat(
       cuerpo: validado.texto,
       editado_en: new Date().toISOString(),
     })
-    .eq("id", ultimo.id);
+    .eq("id", ultimo.id)
+    .eq("remitente_id", user.id);
 
   if (error) return { error: supabaseErrorMessage(error) };
+
+  // Si RLS no aplica el cambio, lo hacemos con la clave de servidor
+  const { data: comprobado } = await supabase
+    .from("chat_mensajes")
+    .select("cuerpo")
+    .eq("id", ultimo.id)
+    .maybeSingle();
+  if (comprobado && comprobado.cuerpo !== validado.texto) {
+    const admin = createAdminClient();
+    if (!admin) {
+      return { error: "No se ha podido guardar el mensaje editado." };
+    }
+    const { error: errAdmin } = await admin
+      .from("chat_mensajes")
+      .update({
+        cuerpo: validado.texto,
+        editado_en: new Date().toISOString(),
+      })
+      .eq("id", ultimo.id);
+    if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
+  }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
   return { ok: true, oculto: Boolean(validado.oculto) };
@@ -169,9 +191,35 @@ export async function eliminarUltimoMensajeChat(reservaId: string) {
   const { error } = await supabase
     .from("chat_mensajes")
     .update({ eliminado: true })
-    .eq("id", ultimo.id);
+    .eq("id", ultimo.id)
+    .eq("remitente_id", user.id);
 
-  if (error) return { error: supabaseErrorMessage(error) };
+  if (error) {
+    const admin = createAdminClient();
+    if (!admin) return { error: supabaseErrorMessage(error) };
+    const { error: errAdmin } = await admin
+      .from("chat_mensajes")
+      .update({ eliminado: true })
+      .eq("id", ultimo.id);
+    if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
+  } else {
+    const { data: comprobado } = await supabase
+      .from("chat_mensajes")
+      .select("eliminado")
+      .eq("id", ultimo.id)
+      .maybeSingle();
+    if (comprobado && !comprobado.eliminado) {
+      const admin = createAdminClient();
+      if (!admin) {
+        return { error: "No se ha podido anular el mensaje." };
+      }
+      const { error: errAdmin } = await admin
+        .from("chat_mensajes")
+        .update({ eliminado: true })
+        .eq("id", ultimo.id);
+      if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
+    }
+  }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
   return { ok: true };

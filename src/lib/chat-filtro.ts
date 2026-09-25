@@ -37,7 +37,6 @@ const DIEZ_A_19: Record<string, string> = {
   catorce: "14",
   quince: "15",
   dieciseis: "16",
-  dieciséis: "16",
   diecisiete: "17",
   dieciocho: "18",
   diecinueve: "19",
@@ -47,6 +46,8 @@ const DECENAS: Record<string, string> = {
   veinte: "20",
   venti: "20",
   veinti: "20",
+  venty: "20",
+  benti: "20",
   treinta: "30",
   cuarenta: "40",
   cincuenta: "50",
@@ -81,8 +82,17 @@ function normalizarToken(raw: string): string {
     .replace(/[^a-z]/g, "");
 }
 
+/** Typo frecuente: venty / vent / veinti… */
+function esPrefijoVeinti(n: string): boolean {
+  return n === "veinti" || n === "venti" || n === "venty" || n === "vent";
+}
+
+function esPalabraNumero(n: string): boolean {
+  return PALABRA_NUMERO.has(n) || esPrefijoVeinti(n);
+}
+
 /**
- * Convierte rachas de números en letras (incluido venti, cuarenta y siete…)
+ * Convierte rachas de números en letras (venti/venty, cuarenta y siete…)
  * a cifras. Si una racha da 6 o más dígitos, la sustituye por la máscara.
  */
 function ocultarNumerosEnLetras(texto: string): string {
@@ -99,7 +109,7 @@ function ocultarNumerosEnLetras(texto: string): string {
     }
 
     const norm = normalizarToken(token);
-    if (!PALABRA_NUMERO.has(norm) || norm === "y" || norm === "el" || norm === "la") {
+    if (!esPalabraNumero(norm) || norm === "y" || norm === "el" || norm === "la") {
       out.push(token);
       i += 1;
       continue;
@@ -121,12 +131,7 @@ function ocultarNumerosEnLetras(texto: string): string {
         continue;
       }
 
-      if (n === "el" || n === "la") {
-        j += 1;
-        continue;
-      }
-
-      if (n === "y") {
+      if (n === "el" || n === "la" || n === "y") {
         j += 1;
         continue;
       }
@@ -137,9 +142,9 @@ function ocultarNumerosEnLetras(texto: string): string {
         continue;
       }
 
-      if (DECENAS[n]) {
-        // veinti/venti + unidad (venti tres → 23)
-        if ((n === "veinti" || n === "venti") && j + 1 < partes.length) {
+      if (DECENAS[n] || esPrefijoVeinti(n)) {
+        const valorDecena = DECENAS[n] ?? "20";
+        if (esPrefijoVeinti(n) && j + 1 < partes.length) {
           let k = j + 1;
           while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
           const next = k < partes.length ? normalizarToken(partes[k]) : "";
@@ -149,7 +154,6 @@ function ocultarNumerosEnLetras(texto: string): string {
             continue;
           }
         }
-        // cuarenta y siete → 47
         let k = j + 1;
         while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
         if (k < partes.length && normalizarToken(partes[k]) === "y") {
@@ -157,12 +161,12 @@ function ocultarNumerosEnLetras(texto: string): string {
           while (k < partes.length && /^\s+$/.test(partes[k])) k += 1;
           const next = k < partes.length ? normalizarToken(partes[k]) : "";
           if (UNIDADES[next] && next !== "cero") {
-            digitos += DECENAS[n][0] + UNIDADES[next];
+            digitos += valorDecena[0] + UNIDADES[next];
             j = k + 1;
             continue;
           }
         }
-        digitos += DECENAS[n];
+        digitos += valorDecena;
         j += 1;
         continue;
       }
@@ -184,6 +188,7 @@ function ocultarNumerosEnLetras(texto: string): string {
       }
     }
     i = j > start ? j : start + 1;
+  }
 
   return out.join("");
 }
