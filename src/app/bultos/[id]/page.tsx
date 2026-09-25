@@ -149,8 +149,8 @@ export default async function BultoDetallePage({
           </p>
         </div>
         <p className="text-sm text-zinc-500">
-          Los puntos exactos los concretaréis cuando un conductor ponga precio
-          y aceptes su propuesta.
+          Se concretará el viaje por el chat interno cuando se pague-reserve la
+          propuesta.
         </p>
         <div>
           <p className="text-sm text-zinc-800">
