@@ -307,6 +307,23 @@ export function OfertaForm({
           {error}
         </p>
       )}
+      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
+        <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
+          <p>
+            Para enviar propuestas necesitas indicar los{" "}
+            <Link
+              href={cuentaHrefConVolver(`/bultos/${bultoId}`)}
+              className="font-semibold text-emerald-700 hover:text-emerald-800"
+              onClick={() => {
+                sessionStorage.setItem(DESDE_VEHICULO_KEY, "1");
+              }}
+            >
+              Datos del vehículo
+            </Link>
+            .
+          </p>
+        </div>
+      )}
       {mostrarAvisoPerfil && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p>
@@ -318,23 +335,6 @@ export function OfertaForm({
             className="mt-1 inline-block font-semibold text-emerald-700 hover:text-emerald-800"
           >
             Completar mi perfil
-          </Link>
-        </div>
-      )}
-      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
-        <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
-          <p>
-            Para enviar propuestas necesitas indicar marca, modelo, año y
-            distintivo ambiental de tu vehículo.
-          </p>
-          <Link
-            href={cuentaHrefConVolver(`/bultos/${bultoId}`)}
-            className="mt-1 inline-block font-semibold text-emerald-700 hover:text-emerald-800"
-            onClick={() => {
-              sessionStorage.setItem(DESDE_VEHICULO_KEY, "1");
-            }}
-          >
-            Datos de mi vehículo
           </Link>
         </div>
       )}
