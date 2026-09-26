@@ -16,13 +16,17 @@ export type EspacioOpcion = (typeof ESPACIO_OPCIONES)[number];
 
 const ETIQUETA_MAS_GRANDE = "Más grande que un frigorífico estándar";
 
-const ESPACIO_ETIQUETA: Partial<Record<EspacioOpcion, string>> = {
-  "Más grande": ETIQUETA_MAS_GRANDE,
+/** Etiquetas del desplegable (el valor guardado sigue siendo ESPACIO_OPCIONES). */
+const ESPACIO_ETIQUETA_SELECT: Record<EspacioOpcion, string> = {
+  "Pequeño (Maleta)": "Tamaño Pequeño (Maleta)",
+  "Medio (Frigorífico estándar)": "Tamaño Medio (Frigorífico estándar)",
+  "Más grande": `Tamaño ${ETIQUETA_MAS_GRANDE}`,
+  "XXL (Mudanza completa)": "Tamaño XXL (Mudanza completa)",
 };
 
 export const ESPACIO_SELECT_OPTIONS = ESPACIO_OPCIONES.map((value) => ({
   value,
-  label: ESPACIO_ETIQUETA[value] ?? value,
+  label: ESPACIO_ETIQUETA_SELECT[value],
 }));
 
 export function combinarEspacio(tamano: string, detalle?: string): string {
