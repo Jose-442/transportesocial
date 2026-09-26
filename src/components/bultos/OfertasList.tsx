@@ -103,7 +103,7 @@ export function OfertasList({
               </div>
               <Badge tone={estadoTone[oferta.estado]}>
                 {esMia && oferta.estado === "pendiente"
-                  ? "enviada"
+                  ? "Pendiente de aprobación"
                   : oferta.estado}
               </Badge>
             </div>
