@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input, Textarea } from "@/components/ui/Input";
+import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { enviarOferta } from "@/actions/ofertas";
@@ -24,7 +24,6 @@ import {
   setOfertaPostLogin,
 } from "@/lib/form-draft";
 
-const OFERTA_MENSAJE_MAX = 500;
 const DESDE_VEHICULO_KEY = "transporte-social-desde-vehiculo";
 
 const EMPTY_OFERTA_DRAFT: OfertaDraft = {
@@ -169,20 +168,13 @@ export function OfertaForm({
     setLoading(true);
     setError("");
 
-    const mensaje = form.mensaje.trim();
-    if (mensaje.length > OFERTA_MENSAJE_MAX) {
-      setLoading(false);
-      setError(`La aclaración no puede superar ${OFERTA_MENSAJE_MAX} caracteres.`);
-      return;
-    }
-
     const formData = new FormData();
     formData.set("precio_neto_bulto", form.precio_neto_bulto);
     formData.set("precio_neto_plaza", form.precio_neto_plaza);
     if (plazas > 0) {
       formData.set("plazas_ofrecidas", form.plazas_ofrecidas);
     }
-    formData.set("mensaje", mensaje);
+    formData.set("mensaje", "");
     formData.set("anuncio_bulto_id", bultoId);
 
     const result = await enviarOferta(formData);
@@ -310,23 +302,6 @@ export function OfertaForm({
           )}
         </div>
       )}
-      <Textarea
-        name="mensaje"
-        label="Qué puedes llevar en este viaje"
-        placeholder="Ej.: Solo tengo espacio para el bulto y 1 pasajero. Esta es mi propuesta de precio."
-        hint={
-          plazas > 0
-            ? "Si no puedes cubrir todo lo que pide el anuncio, indícalo aquí. El solicitante lo verá junto al precio."
-            : undefined
-        }
-        hintClassName="text-sm text-zinc-500"
-        value={form.mensaje}
-        maxLength={OFERTA_MENSAJE_MAX}
-        rows={3}
-        onChange={(e) =>
-          setForm((prev) => ({ ...prev, mensaje: e.target.value }))
-        }
-      />
       {error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
