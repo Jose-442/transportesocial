@@ -9,9 +9,9 @@ alwaysApply: true
 
 1. Tras rellenar el vehículo, vuelve al bulto con «Enviar propuesta» visible.
 2. El conductor puede eliminar su propuesta pendiente (botón + SQL `043`).
+3. Aceptación parcial: si queda plaza, el anuncio sigue en búsqueda como solo plazas (SQL `045`).
 
 ## SQL que José debe ejecutar en Supabase
 
-Pegar y Run el contenido de `supabase/migrations/043_conductor_eliminar_oferta_pendiente.sql` (permiso DELETE de oferta pendiente).
-
-Sin ese SQL, el botón «Eliminar propuesta» puede fallar.
+Pegar y Run el contenido de `supabase/migrations/045_bulto_resto_plazas_tras_aceptar.sql`
+(Yet: bulto+2 aceptó bulto+1 → debe quedar activo como 1 pasajero sin bulto).

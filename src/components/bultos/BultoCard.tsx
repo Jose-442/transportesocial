@@ -23,11 +23,13 @@ export function BultoCard({
 
   const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
   const tipoLabel = labelTipoSolicitud(tipoSolicitud);
-  const textoDescripcion = incluyeBulto(tipoSolicitud)
-    ? descripcionVisible
+  // Si ya no hace falta bulto (p. ej. quedó 1 plaza), no enseñar «lavadora».
+  const textoDescripcion =
+    incluyeBulto(tipoSolicitud) && descripcionVisible
       ? `Bulto: ${descripcionVisible}`
-      : "Bulto: sin descripción"
-    : descripcionVisible || null;
+      : incluyeBulto(tipoSolicitud)
+        ? "Bulto: sin descripción"
+        : null;
 
   const href = listadoSearch
     ? `/bultos/${bulto.id}?${listadoSearch}`

@@ -19,7 +19,12 @@ import {
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
-import type { Reserva } from "@/types/database";
+import {
+  isTipoSolicitud,
+  necesidadRestanteTrasOferta,
+  tipoSolicitudDesdeDesglose,
+} from "@/lib/solicitud-viaje";
+import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
 
 async function pendientesDelMismoViaje(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -425,6 +430,55 @@ export async function cancelarReservaPendiente(reservaId: string): Promise<void>
         "id",
         filas.map((fila) => fila.id)
       );
+
+    // Si era un bulto aceptado sin pagar: restaura la necesidad original y la propuesta.
+    if (reserva.anuncio_bulto_id) {
+      const { data: otras } = await supabase
+        .from("reservas")
+        .select("id")
+        .eq("anuncio_bulto_id", reserva.anuncio_bulto_id)
+        .in("estado", ESTADOS_RESERVA_OCUPAN)
+        .limit(1);
+      if ((otras ?? []).length === 0) {
+        let tipoRestaurar: AnuncioBulto["tipo_solicitud"] | undefined;
+        if (reserva.oferta_precio_id) {
+          const { data: oferta } = await supabase
+            .from("ofertas_precio")
+            .select("desglose")
+            .eq("id", reserva.oferta_precio_id)
+            .maybeSingle();
+          const { data: bultoActual } = await supabase
+            .from("anuncios_bultos")
+            .select("tipo_solicitud")
+            .eq("id", reserva.anuncio_bulto_id)
+            .maybeSingle();
+          const fallback = isTipoSolicitud(bultoActual?.tipo_solicitud ?? "")
+            ? (bultoActual!.tipo_solicitud as AnuncioBulto["tipo_solicitud"])
+            : "solo_bulto";
+          tipoRestaurar = tipoSolicitudDesdeDesglose(
+            (oferta as OfertaPrecio | null)?.desglose,
+            fallback
+          );
+        }
+        await supabase
+          .from("anuncios_bultos")
+          .update({
+            estado: "activo",
+            ...(tipoRestaurar ? { tipo_solicitud: tipoRestaurar } : {}),
+          })
+          .eq("id", reserva.anuncio_bulto_id);
+      }
+      if (reserva.oferta_precio_id) {
+        await supabase
+          .from("ofertas_precio")
+          .update({ estado: "pendiente" })
+          .eq("id", reserva.oferta_precio_id)
+          .eq("estado", "aceptada");
+      }
+      revalidatePath(`/bultos/${reserva.anuncio_bulto_id}`);
+      revalidatePath("/bultos");
+    }
+
     revalidatePath(`/reservas/${reservaId}`);
     revalidatePath("/cuenta/viajes");
     if (reserva.ruta_conductor_id) {
@@ -604,6 +658,32 @@ export async function prepararReservaBulto(ofertaId: string) {
     .neq("id", ofertaId)
     .eq("estado", "pendiente");
 
+  // Si Jose lleva bulto + 1 de 2, el anuncio sigue en búsqueda como «1 plaza».
+  // Solo se oculta (reservado) cuando ya no queda necesidad.
+  const tipoActual = isTipoSolicitud(bulto.tipo_solicitud)
+    ? bulto.tipo_solicitud
+    : "solo_bulto";
+  const resto = necesidadRestanteTrasOferta(
+    tipoActual,
+    (oferta as OfertaPrecio).desglose
+  );
+  if (resto.cubreTodo || !resto.tipoRestante) {
+    await supabase
+      .from("anuncios_bultos")
+      .update({ estado: "reservado" })
+      .eq("id", oferta.anuncio_bulto_id)
+      .eq("user_id", user.id);
+  } else {
+    await supabase
+      .from("anuncios_bultos")
+      .update({
+        estado: "activo",
+        tipo_solicitud: resto.tipoRestante,
+      })
+      .eq("id", oferta.anuncio_bulto_id)
+      .eq("user_id", user.id);
+  }
+
   const checkout = await createTripCheckoutSession(reserva.id);
   if (!checkout.ok) {
     return {
@@ -613,6 +693,7 @@ export async function prepararReservaBulto(ofertaId: string) {
   }
 
   revalidatePath(`/bultos/${oferta.anuncio_bulto_id}`);
+  revalidatePath("/bultos");
   return { checkoutUrl: checkout.url, reservaId: reserva.id };
 }
 

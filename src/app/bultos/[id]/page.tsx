@@ -108,7 +108,7 @@ export default async function BultoDetallePage({
         </p>
       </div>
 
-      {bulto.foto_url && (
+      {necesitaBulto && bulto.foto_url && (
         <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
           <Image
             src={bulto.foto_url}
@@ -184,7 +184,7 @@ export default async function BultoDetallePage({
         )}
       </Card>
 
-      {descripcionVisible ? (
+      {necesitaBulto && descripcionVisible ? (
         <Card>
           <p className="text-sm uppercase tracking-wide text-zinc-500">
             Descripción del bulto

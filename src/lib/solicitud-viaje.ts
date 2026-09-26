@@ -56,6 +56,62 @@ export function numPasajeros(tipo: TipoSolicitud): number {
   }
 }
 
+/** Arma el tipo de solicitud según si sigue haciendo falta bulto y cuántas plazas. */
+export function tipoSolicitudDesdePartes(
+  conBulto: boolean,
+  plazas: number
+): TipoSolicitud | null {
+  const n = Math.max(0, Math.trunc(plazas));
+  if (n <= 0) return conBulto ? "solo_bulto" : null;
+  if (n === 1) return conBulto ? "bulto_1_pasajero" : "solo_1_pasajero";
+  if (n === 2) return conBulto ? "bulto_2_pasajeros" : "solo_2_pasajeros";
+  return conBulto ? "bulto_3_pasajeros" : "solo_3_pasajeros";
+}
+
+/**
+ * Tras aceptar una propuesta: qué necesidad queda en el anuncio.
+ * Si el conductor cubre el bulto, las plazas restantes salen sin bulto.
+ */
+export function necesidadRestanteTrasOferta(
+  tipoActual: TipoSolicitud,
+  desglose: OfertaDesglose | null | undefined
+): { cubreTodo: boolean; tipoRestante: TipoSolicitud | null } {
+  const plazasSolicitadas =
+    desglose?.plazas_solicitadas ?? numPasajeros(tipoActual);
+  const plazasCubiertas = Math.min(
+    plazasSolicitadas,
+    Math.max(0, desglose?.plazas_ofrecidas ?? desglose?.num_plazas ?? 0)
+  );
+  const restante = Math.max(0, plazasSolicitadas - plazasCubiertas);
+  const anuncioTeniaBulto = incluyeBulto(tipoActual);
+  // Si el anuncio pedía bulto, la propuesta lo incluye (precio de bulto).
+  const ofertaCubreBulto =
+    anuncioTeniaBulto &&
+    (!desglose ||
+      (desglose.precio_neto_bulto != null && desglose.precio_neto_bulto > 0));
+
+  const bultoQueda = anuncioTeniaBulto && !ofertaCubreBulto;
+  if (restante <= 0 && !bultoQueda) {
+    return { cubreTodo: true, tipoRestante: null };
+  }
+  return {
+    cubreTodo: false,
+    tipoRestante: tipoSolicitudDesdePartes(bultoQueda, restante),
+  };
+}
+
+/** Tipo original del anuncio según el desglose de la propuesta aceptada. */
+export function tipoSolicitudDesdeDesglose(
+  desglose: OfertaDesglose | null | undefined,
+  fallback: TipoSolicitud
+): TipoSolicitud {
+  if (!desglose) return fallback;
+  const plazas = desglose.plazas_solicitadas ?? numPasajeros(fallback);
+  const conBulto =
+    desglose.precio_neto_bulto != null && desglose.precio_neto_bulto > 0;
+  return tipoSolicitudDesdePartes(conBulto, plazas) ?? fallback;
+}
+
 import { calcPrecioConComision } from "@/lib/pricing";
 
 export function labelTipoSolicitud(tipo: TipoSolicitud): string {

@@ -14,6 +14,7 @@ import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { plazoAprobacionConductor } from "@/lib/reservas/timing";
 import { getStripeServer } from "@/lib/stripe/server";
 import { sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
+import { isTipoSolicitud, numPasajeros } from "@/lib/solicitud-viaje";
 import type { Reserva } from "@/types/database";
 
 type AdminClient = SupabaseClient;
@@ -441,10 +442,24 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
     .eq("id", r.id);
 
   if (r.anuncio_bulto_id) {
-    await admin
+    // Si tras la aceptación parcial aún quedan plazas (anuncio activo),
+    // no lo marques reservado: debe seguir en búsqueda.
+    const { data: bulto } = await admin
       .from("anuncios_bultos")
-      .update({ estado: "reservado" })
-      .eq("id", r.anuncio_bulto_id);
+      .select("estado, tipo_solicitud")
+      .eq("id", r.anuncio_bulto_id)
+      .maybeSingle();
+    const tipo = isTipoSolicitud(bulto?.tipo_solicitud ?? "")
+      ? bulto!.tipo_solicitud
+      : "solo_bulto";
+    const quedaNecesidad =
+      bulto?.estado === "activo" && numPasajeros(tipo) > 0;
+    if (!quedaNecesidad) {
+      await admin
+        .from("anuncios_bultos")
+        .update({ estado: "reservado" })
+        .eq("id", r.anuncio_bulto_id);
+    }
   }
 
   await abrirChatReserva(admin, r.id);
