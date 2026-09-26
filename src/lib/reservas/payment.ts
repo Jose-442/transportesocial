@@ -252,20 +252,42 @@ async function avisarPagoViaje(
     .maybeSingle();
   if (avisoCliente) return;
 
-  if (auto) {
+  // Propuesta de precio al anuncio: el conductor ya aceptó al ofertar.
+  const confirmada =
+    auto ||
+    principal.tipo === "bulto_oferta" ||
+    principal.estado === "confirmada";
+
+  if (confirmada) {
+    const enlaceChat = `/reservas/${principal.id}/chat`;
+    const { data: avisoConductor } = await db
+      .from("notificaciones")
+      .select("id")
+      .eq("user_id", principal.transportista_id)
+      .or(`enlace.eq.${enlace},enlace.eq.${enlaceChat}`)
+      .limit(1)
+      .maybeSingle();
+    if (avisoConductor) return;
+
     await crearNotificacion(db, {
       user_id: principal.transportista_id,
       tipo: "reserva_confirmada",
-      titulo: "Nueva reserva confirmada",
-      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace: `/reservas/${principal.id}/chat`,
+      titulo:
+        principal.tipo === "bulto_oferta"
+          ? "Reserva confirmada"
+          : "Nueva reserva confirmada",
+      mensaje:
+        principal.tipo === "bulto_oferta"
+          ? "El dueño del bulto ha pagado. Ya puedes coordinar por el chat."
+          : "Un usuario ha reservado tu viaje. Revisa el chat.",
+      enlace: enlaceChat,
     });
     await crearNotificacion(db, {
       user_id: principal.cliente_id,
       tipo: "reserva_confirmada",
       titulo: "Reserva confirmada",
       mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-      enlace: `/reservas/${principal.id}/chat`,
+      enlace: enlaceChat,
     });
     return;
   }
@@ -318,6 +340,26 @@ export async function confirmarPagoViajeDesdeIntent(
     return { error: "No autorizado." };
   }
 
+  // Bulto con propuesta de precio: al pagar queda confirmada (ya aceptó al ofertar).
+  if (principal.tipo === "bulto_oferta") {
+    const admin = createAdminClient();
+    if (!admin) {
+      return { error: "No se pudo confirmar el pago." };
+    }
+    const result = await confirmarPagoReserva(admin, paymentIntentId, reservaId, {
+      omitirImporte: opts?.saltarImporte,
+    });
+    if (result.error) return result;
+    revalidatePath(`/reservas/${reservaId}`);
+    revalidatePath(`/reservas/${reservaId}/chat`);
+    revalidatePath("/cuenta/viajes");
+    if (principal.anuncio_bulto_id) {
+      revalidatePath(`/bultos/${principal.anuncio_bulto_id}`);
+      revalidatePath("/bultos");
+    }
+    return {};
+  }
+
   let cobros: Reserva[] = [principal];
   if (principal.ruta_conductor_id) {
     const { data: hermanas } = await supabase
@@ -344,7 +386,11 @@ export async function confirmarPagoViajeDesdeIntent(
     if (principal.ruta_conductor_id) {
       await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
     }
-    await avisarPagoViaje(dbAvisos, principal, auto);
+    const yaConfirmada =
+      auto ||
+      principal.estado === "confirmada" ||
+      principal.tipo === "bulto_oferta";
+    await avisarPagoViaje(dbAvisos, principal, yaConfirmada);
     return {};
   }
 
