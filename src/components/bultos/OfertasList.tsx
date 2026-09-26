@@ -101,7 +101,11 @@ export function OfertasList({
                   </div>
                 )}
               </div>
-              <Badge tone={estadoTone[oferta.estado]}>{oferta.estado}</Badge>
+              <Badge tone={estadoTone[oferta.estado]}>
+                {esMia && oferta.estado === "pendiente"
+                  ? "enviada"
+                  : oferta.estado}
+              </Badge>
             </div>
             {esDueno && oferta.estado === "pendiente" && (
               <OfertaAcciones ofertaId={oferta.id} />

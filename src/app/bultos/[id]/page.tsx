@@ -196,7 +196,7 @@ export default async function BultoDetallePage({
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-zinc-900">
           {!esDueno && yaPropuso
-            ? "Mi propuesta a este viaje:"
+            ? "Mi propuesta a este viaje: Enviada"
             : esDueno
               ? "Propuestas de conductores"
               : "Propuesta"}
