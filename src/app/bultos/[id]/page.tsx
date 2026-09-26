@@ -101,7 +101,8 @@ export default async function BultoDetallePage({
             {origen} → {destino}
           </h1>
           <p className="mt-2 text-base font-semibold text-emerald-800">
-            Necesita viaje: {labelTipoSolicitud(tipoSolicitud)}
+            {esDueno ? "Mi propuesta de viaje" : "Necesita viaje"}:{" "}
+            {labelTipoSolicitud(tipoSolicitud)}
           </p>
         </div>
         <Badge tone="blue">{bulto.estado}</Badge>
