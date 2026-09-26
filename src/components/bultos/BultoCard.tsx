@@ -1,7 +1,7 @@
 import { CardLink } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
-import { formatFechaHoraEs } from "@/lib/datetime-form";
+import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
@@ -17,9 +17,17 @@ export function BultoCard({
 }) {
   const { texto: descripcionVisible } = separarHoraOculta(bulto.descripcion);
   const horaBulto = horaDeAnuncio(bulto.descripcion, bulto.medidas);
-  const fechaLimite = bulto.fecha_limite
-    ? formatFechaHoraEs(bulto.fecha_limite, horaBulto)
+  const fechaDia = bulto.fecha_limite
+    ? formatFechaDiaEs(bulto.fecha_limite)
     : null;
+  const fechaConMayuscula = fechaDia
+    ? fechaDia.charAt(0).toUpperCase() + fechaDia.slice(1)
+    : null;
+  const horaCorta =
+    horaBulto && /^\d{2}:\d{2}$/.test(horaBulto)
+      ? `${Number.parseInt(horaBulto.slice(0, 2), 10)} h`
+      : null;
+  const lineaFecha = [fechaConMayuscula, horaCorta].filter(Boolean).join(", ");
 
   const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
   const tipoLabel = labelTipoSolicitud(tipoSolicitud);
@@ -50,10 +58,10 @@ export function BultoCard({
               {textoDescripcion}
             </p>
           ) : null}
-          <p className="mt-1 text-xs text-zinc-500">
-            Pulsa para ver detalle
-            {fechaLimite ? ` · límite ${fechaLimite}` : ""}
-          </p>
+          {lineaFecha ? (
+            <p className="mt-1 text-sm text-zinc-800">{lineaFecha}</p>
+          ) : null}
+          <p className="mt-0.5 text-xs text-zinc-500">Pulsa para ver detalles</p>
         </div>
         <div className="shrink-0 text-right">
           {variant === "cuenta" ? (
