@@ -203,9 +203,50 @@ export const DRAFT_KEYS = {
 const ofertaPostLoginKey = (bultoId: string) =>
   `transporte-social-oferta-post-login-${bultoId}`;
 
-export function setOfertaPostLogin(bultoId: string) {
+const ofertaBackupKey = (bultoId: string) =>
+  `transporte-social-oferta-backup-${bultoId}`;
+
+export function setOfertaPostLogin(
+  bultoId: string,
+  draft?: {
+    precio_neto_bulto?: string;
+    precio_neto_plaza?: string;
+    plazas_ofrecidas?: string;
+    mensaje?: string;
+  }
+) {
   if (typeof window === "undefined") return;
   sessionStorage.setItem(ofertaPostLoginKey(bultoId), "1");
+  if (draft) {
+    try {
+      sessionStorage.setItem(ofertaBackupKey(bultoId), JSON.stringify(draft));
+    } catch {
+      // Sin espacio: no bloqueamos el flujo.
+    }
+  }
+}
+
+export function loadOfertaBackup(bultoId: string): {
+  precio_neto_bulto?: string;
+  precio_neto_plaza?: string;
+  plazas_ofrecidas?: string;
+  mensaje?: string;
+} | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(ofertaBackupKey(bultoId));
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== "object") return null;
+    return data as {
+      precio_neto_bulto?: string;
+      precio_neto_plaza?: string;
+      plazas_ofrecidas?: string;
+      mensaje?: string;
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function consumeOfertaPostLogin(bultoId: string): boolean {
@@ -219,6 +260,7 @@ export function consumeOfertaPostLogin(bultoId: string): boolean {
 export function clearOfertaPostLogin(bultoId: string) {
   if (typeof window === "undefined") return;
   sessionStorage.removeItem(ofertaPostLoginKey(bultoId));
+  sessionStorage.removeItem(ofertaBackupKey(bultoId));
 }
 
 export type LoginDraft = {

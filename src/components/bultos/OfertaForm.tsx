@@ -17,6 +17,7 @@ import {
   clearOfertaPostLogin,
   consumeOfertaPostLogin,
   DRAFT_KEYS,
+  loadOfertaBackup,
   loadOwnedDraft,
   type OfertaDraft,
   saveOwnedDraft,
@@ -79,7 +80,9 @@ export function OfertaForm({
     void sincronizarCuentaBorradores().then((uid) => {
       if (cancelled) return;
       uidRef.current = uid;
-      const draft = loadOwnedDraft<OfertaDraft>(draftKey, uid);
+      const draft =
+        loadOwnedDraft<OfertaDraft>(draftKey, uid) ??
+        (loadOfertaBackup(bultoId) as OfertaDraft | null);
       if (draft) {
         const ofrecidas = parseInt(draft.plazas_ofrecidas ?? "", 10);
         setForm({
@@ -94,13 +97,30 @@ export function OfertaForm({
               : String(plazas),
           mensaje: draft.mensaje ?? "",
         });
+        // Reasigna el borrador a la cuenta por si venía del backup de sesión.
+        saveOwnedDraft(
+          draftKey,
+          {
+            precio_neto_bulto: draft.precio_neto_bulto ?? "",
+            precio_neto_plaza: draft.precio_neto_plaza ?? "",
+            plazas_ofrecidas:
+              plazas > 0 &&
+              Number.isInteger(ofrecidas) &&
+              ofrecidas >= 1 &&
+              ofrecidas <= plazas
+                ? String(ofrecidas)
+                : String(plazas),
+            mensaje: draft.mensaje ?? "",
+          },
+          uid
+        );
       }
       setReady(true);
     });
     return () => {
       cancelled = true;
     };
-  }, [draftKey, plazas]);
+  }, [draftKey, plazas, bultoId]);
 
   useEffect(() => {
     if (!ready) return;
@@ -141,7 +161,7 @@ export function OfertaForm({
     if (!isLoggedIn) {
       // Guarda ya lo rellenado antes de ir a entrar/registrarse.
       saveOwnedDraft(draftKey, form, uidRef.current);
-      setOfertaPostLogin(bultoId);
+      setOfertaPostLogin(bultoId, form);
       router.push(`/login?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`);
       return;
     }
