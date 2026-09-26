@@ -74,6 +74,9 @@ export async function crearBulto(formData: FormData) {
   let medidas = "";
 
   if (necesitaBulto) {
+    if (!descripcion) {
+      return { error: "Describe el bulto que necesitas enviar." };
+    }
     const espacioTamano = String(formData.get("espacio_tamano")).trim();
     if (
       !ESPACIO_OPCIONES.includes(

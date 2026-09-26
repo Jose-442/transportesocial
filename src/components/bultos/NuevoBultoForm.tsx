@@ -36,6 +36,7 @@ export function NuevoBultoForm() {
     destino?: string;
     fecha_limite?: string;
     hora_limite?: string;
+    descripcion?: string;
   }>({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
@@ -119,6 +120,7 @@ export function NuevoBultoForm() {
       destino?: string;
       fecha_limite?: string;
       hora_limite?: string;
+      descripcion?: string;
     } = {};
     if (!isTipoSolicitud(form.tipo_solicitud)) {
       errors.tipo_solicitud = "Elige cuántas plazas necesitas.";
@@ -138,6 +140,12 @@ export function NuevoBultoForm() {
     }
     if (!form.hora_limite.trim()) {
       errors.hora_limite = "Indica la hora.";
+    }
+    if (
+      incluyeBulto(form.tipo_solicitud) &&
+      !form.descripcion.trim()
+    ) {
+      errors.descripcion = "Describe el bulto que necesitas enviar.";
     }
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -230,9 +238,11 @@ export function NuevoBultoForm() {
         <>
           <Textarea
             name="descripcion"
-            label="Qué necesitas enviar (opcional)"
+            label="Qué necesitas enviar"
             placeholder="Describe el bulto"
+            required
             value={form.descripcion}
+            error={fieldErrors.descripcion}
             onChange={(e) => updateField("descripcion", e.target.value)}
           />
           <Select

@@ -272,9 +272,6 @@ export default async function ReservaDetallePage({
         {detalleBulto?.bulto_descripcion && (
           <p className="text-sm text-zinc-600">
             {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
-            {detalleBulto.bulto_medidas
-              ? ` (${separarHoraOculta(detalleBulto.bulto_medidas).texto})`
-              : ""}
           </p>
         )}
         <p className="text-sm text-zinc-600">
