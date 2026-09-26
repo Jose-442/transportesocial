@@ -135,7 +135,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       </div>
       <DatePickerInput
         name="fecha"
-        label={tipo === "viajes" ? "Día del viaje" : "Día (fecha límite)"}
+        label={tipo === "viajes" ? "Día del viaje" : undefined}
         value={fecha}
         onChange={setFecha}
         required
