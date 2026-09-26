@@ -49,12 +49,18 @@ export function politicaCancelacionCliente(
 }
 
 export function politicaCancelacionConductor(
-  estado: EstadoReserva
+  estado: EstadoReserva,
+  fechaSalidaIso?: string,
+  ahora = new Date()
 ): { puede: boolean; tipo?: TipoRepartoCancelacion } {
-  if (estado === "confirmada") {
-    return { puede: true, tipo: "total" };
+  if (estado !== "confirmada") {
+    return { puede: false };
   }
-  return { puede: false };
+  // Puede rechazar hasta el último minuto antes del viaje.
+  if (fechaSalidaIso && horasHasta(fechaSalidaIso, ahora) <= 0) {
+    return { puede: false };
+  }
+  return { puede: true, tipo: "total" };
 }
 
 export function repartoCancelacion(
@@ -112,5 +118,5 @@ export function fraseAyudaCancelacionCliente(
 }
 
 export function fraseAyudaCancelacionConductor(reembolsoEur: string): string {
-  return `Si cancelas, se le devuelve el 100 % a quien reservó (${reembolsoEur}), también los gastos de gestión.`;
+  return `Puedes rechazar hasta la hora del viaje. Si lo haces, se le avisa al otro y se le devuelve el 100 % (${reembolsoEur}), también los gastos de gestión.`;
 }

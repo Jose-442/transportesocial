@@ -466,20 +466,18 @@ export async function confirmarPagoViajeDesdeIntent(
 }
 
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
-  // El conductor ya aceptó al poner precio. Tras el pago tiene 8 h solo para rechazar;
-  // si no rechaza, el viaje queda confirmado solo.
-  const expira = plazoAprobacionConductor().toISOString();
+  // El conductor ya aceptó al poner precio. Tras el pago queda confirmado;
+  // puede rechazar/cancelar hasta el momento del viaje (aviso + reembolso al otro).
   await admin
     .from("reservas")
     .update({
-      estado: "pendiente_aprobacion",
-      expira_aprobacion_en: expira,
+      estado: "confirmada",
+      aceptada_en: new Date().toISOString(),
+      expira_aprobacion_en: null,
     })
     .eq("id", r.id);
 
   if (r.anuncio_bulto_id) {
-    // Si tras la aceptación parcial aún quedan plazas (anuncio activo),
-    // no lo marques reservado: debe seguir en búsqueda.
     const { data: bulto } = await admin
       .from("anuncios_bultos")
       .select("estado, tipo_solicitud")
@@ -498,22 +496,22 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
     }
   }
 
+  await abrirChatReserva(admin, r.id);
+
   await crearNotificacion(admin, {
     user_id: r.transportista_id,
-    tipo: "reserva_pendiente_aprobacion",
+    tipo: "reserva_confirmada",
     titulo: "Propuesta pagada",
-    mensaje:
-      "Han pagado tu propuesta. Tienes 8 horas para rechazar si no puedes hacer el viaje. Si no rechazas, queda confirmado.",
-    enlace: `/reservas/${r.id}`,
+    mensaje: "Han pagado tu propuesta. Coordina los detalles por el chat.",
+    enlace: `/reservas/${r.id}/chat`,
   });
 
   await crearNotificacion(admin, {
     user_id: r.cliente_id,
-    tipo: "nueva_reserva",
-    titulo: "Pago recibido",
-    mensaje:
-      "Pago recibido. El conductor tiene 8 horas para rechazar si no puede; si no, el viaje queda confirmado.",
-    enlace: `/reservas/${r.id}`,
+    tipo: "reserva_confirmada",
+    titulo: "Reserva confirmada",
+    mensaje: "Pago recibido. Coordina los detalles por el chat.",
+    enlace: `/reservas/${r.id}/chat`,
   });
 
   return {};

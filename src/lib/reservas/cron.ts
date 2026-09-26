@@ -26,7 +26,7 @@ export async function procesarCronsReservas(admin: AdminClient) {
     .lte("expira_aprobacion_en", ahora);
 
   for (const r of expiradas ?? []) {
-    // Propuesta de precio al bulto: al ofertar ya aceptó. Si no rechaza en 8 h → confirmada.
+    // Bultos viejos que quedaron mal en «esperando respuesta»: al pagar ya estaban aceptados.
     if (r.tipo === "bulto_oferta") {
       const ok = await persistirAceptacionReserva(admin, r);
       if (ok) {
@@ -35,16 +35,14 @@ export async function procesarCronsReservas(admin: AdminClient) {
           user_id: r.cliente_id,
           tipo: "reserva_confirmada",
           titulo: "Viaje confirmado",
-          mensaje:
-            "Han pasado 8 horas sin rechazo. El viaje queda confirmado. Coordina por el chat.",
+          mensaje: "El viaje queda confirmado. Coordina por el chat.",
           enlace: `/reservas/${r.id}/chat`,
         });
         await crearNotificacion(admin, {
           user_id: r.transportista_id,
           tipo: "reserva_confirmada",
           titulo: "Viaje confirmado",
-          mensaje:
-            "Han pasado 8 horas sin rechazar. El viaje queda confirmado. Coordina por el chat.",
+          mensaje: "El viaje queda confirmado. Coordina por el chat.",
           enlace: `/reservas/${r.id}/chat`,
         });
         resultados.aprobacionesExpiradas++;

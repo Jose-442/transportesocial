@@ -64,11 +64,27 @@ describe("politicaCancelacionCliente", () => {
 });
 
 describe("politicaCancelacionConductor", () => {
-  it("si ya está confirmada, cancela y se devuelve el 100 %", () => {
-    expect(politicaCancelacionConductor("confirmada")).toEqual({
+  it("si ya está confirmada y aún no ha salido, cancela y se devuelve el 100 %", () => {
+    expect(
+      politicaCancelacionConductor(
+        "confirmada",
+        salida,
+        new Date("2026-09-22T09:00:00.000Z")
+      )
+    ).toEqual({
       puede: true,
       tipo: "total",
     });
+  });
+
+  it("ya pasada la hora del viaje, el conductor no puede cancelar", () => {
+    expect(
+      politicaCancelacionConductor(
+        "confirmada",
+        salida,
+        new Date("2026-09-22T11:00:00.000Z")
+      )
+    ).toEqual({ puede: false });
   });
 
   it("mientras espera respuesta usa Rechazar, no este botón", () => {

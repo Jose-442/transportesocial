@@ -51,7 +51,7 @@ export function ReservaAcciones({
   const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];
   const politica = esCliente
     ? politicaCancelacionCliente(estado, fechaSalida)
-    : politicaCancelacionConductor(estado);
+    : politicaCancelacionConductor(estado, fechaSalida);
   const reparto =
     politica.puede && politica.tipo
       ? repartoCancelacion(filasPrecio, politica.tipo)
@@ -141,8 +141,12 @@ export function ReservaAcciones({
         textoAyudaCancelar && (
           <CancelarReservaBoton
             reservaId={reserva.id}
-            textoBoton="Cancelar reserva"
-            textoAyuda="Si tu cancelas se le devuelve su dinero"
+            textoBoton={
+              reserva.tipo === "bulto_oferta"
+                ? "Rechazar viaje"
+                : "Cancelar reserva"
+            }
+            textoAyuda={textoAyudaCancelar}
           />
         )}
 
