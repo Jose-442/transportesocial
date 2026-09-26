@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
-export function AceptarRechazarBotones({ reservaId }: { reservaId: string }) {
+export function AceptarRechazarBotones({
+  reservaId,
+  soloRechazar = false,
+}: {
+  reservaId: string;
+  /** Propuesta de bulto: el conductor ya aceptó al poner precio; solo puede rechazar. */
+  soloRechazar?: boolean;
+}) {
   const [pendiente, setPendiente] = useState<"aceptar" | "rechazar" | null>(
     null
   );
@@ -35,25 +42,44 @@ export function AceptarRechazarBotones({ reservaId }: { reservaId: string }) {
 
   return (
     <div className="space-y-2">
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          fullWidth
-          disabled={pendiente !== null}
-          onClick={() => void decidir("aceptar")}
-        >
-          {pendiente === "aceptar" ? "Guardando…" : "Aceptar reserva"}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          fullWidth
-          disabled={pendiente !== null}
-          onClick={() => void decidir("rechazar")}
-        >
-          {pendiente === "rechazar" ? "Guardando…" : "Rechazar"}
-        </Button>
-      </div>
+      {soloRechazar ? (
+        <>
+          <p className="text-sm text-zinc-600">
+            Al poner precio ya aceptaste el viaje. Si no puedes hacerlo, rechaza
+            en las próximas 8 horas (el otro recibirá aviso y reembolso). Si no
+            rechazas, el viaje queda confirmado.
+          </p>
+          <Button
+            type="button"
+            variant="secondary"
+            fullWidth
+            disabled={pendiente !== null}
+            onClick={() => void decidir("rechazar")}
+          >
+            {pendiente === "rechazar" ? "Guardando…" : "Rechazar viaje"}
+          </Button>
+        </>
+      ) : (
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            fullWidth
+            disabled={pendiente !== null}
+            onClick={() => void decidir("aceptar")}
+          >
+            {pendiente === "aceptar" ? "Guardando…" : "Aceptar reserva"}
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            fullWidth
+            disabled={pendiente !== null}
+            onClick={() => void decidir("rechazar")}
+          >
+            {pendiente === "rechazar" ? "Guardando…" : "Rechazar"}
+          </Button>
+        </div>
+      )}
       {aviso ? (
         <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
           {aviso}

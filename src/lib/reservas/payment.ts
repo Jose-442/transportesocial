@@ -252,11 +252,7 @@ async function avisarPagoViaje(
     .maybeSingle();
   if (avisoCliente) return;
 
-  // Propuesta de precio al anuncio: el conductor ya aceptó al ofertar.
-  const confirmada =
-    auto ||
-    principal.tipo === "bulto_oferta" ||
-    principal.estado === "confirmada";
+  const confirmada = auto || principal.estado === "confirmada";
 
   if (confirmada) {
     const enlaceChat = `/reservas/${principal.id}/chat`;
@@ -272,14 +268,8 @@ async function avisarPagoViaje(
     await crearNotificacion(db, {
       user_id: principal.transportista_id,
       tipo: "reserva_confirmada",
-      titulo:
-        principal.tipo === "bulto_oferta"
-          ? "Reserva confirmada"
-          : "Nueva reserva confirmada",
-      mensaje:
-        principal.tipo === "bulto_oferta"
-          ? "El dueño del bulto ha pagado. Ya puedes coordinar por el chat."
-          : "Un usuario ha reservado tu viaje. Revisa el chat.",
+      titulo: "Nueva reserva confirmada",
+      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
       enlace: enlaceChat,
     });
     await crearNotificacion(db, {
@@ -386,10 +376,7 @@ export async function confirmarPagoViajeDesdeIntent(
     if (principal.ruta_conductor_id) {
       await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
     }
-    const yaConfirmada =
-      auto ||
-      principal.estado === "confirmada" ||
-      principal.tipo === "bulto_oferta";
+    const yaConfirmada = auto || principal.estado === "confirmada";
     await avisarPagoViaje(dbAvisos, principal, yaConfirmada);
     return {};
   }
@@ -479,11 +466,14 @@ export async function confirmarPagoViajeDesdeIntent(
 }
 
 async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
+  // El conductor ya aceptó al poner precio. Tras el pago tiene 8 h solo para rechazar;
+  // si no rechaza, el viaje queda confirmado solo.
+  const expira = plazoAprobacionConductor().toISOString();
   await admin
     .from("reservas")
     .update({
-      estado: "confirmada",
-      aceptada_en: new Date().toISOString(),
+      estado: "pendiente_aprobacion",
+      expira_aprobacion_en: expira,
     })
     .eq("id", r.id);
 
@@ -508,22 +498,22 @@ async function confirmarReservaBulto(admin: AdminClient, r: Reserva) {
     }
   }
 
-  await abrirChatReserva(admin, r.id);
-
   await crearNotificacion(admin, {
     user_id: r.transportista_id,
-    tipo: "reserva_confirmada",
-    titulo: "Reserva confirmada",
-    mensaje: "El dueño del bulto ha pagado. Ya puedes coordinar por el chat.",
-    enlace: `/reservas/${r.id}/chat`,
+    tipo: "reserva_pendiente_aprobacion",
+    titulo: "Propuesta pagada",
+    mensaje:
+      "Han pagado tu propuesta. Tienes 8 horas para rechazar si no puedes hacer el viaje. Si no rechazas, queda confirmado.",
+    enlace: `/reservas/${r.id}`,
   });
 
   await crearNotificacion(admin, {
     user_id: r.cliente_id,
-    tipo: "reserva_confirmada",
-    titulo: "Reserva confirmada",
-    mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-    enlace: `/reservas/${r.id}/chat`,
+    tipo: "nueva_reserva",
+    titulo: "Pago recibido",
+    mensaje:
+      "Pago recibido. El conductor tiene 8 horas para rechazar si no puede; si no, el viaje queda confirmado.",
+    enlace: `/reservas/${r.id}`,
   });
 
   return {};

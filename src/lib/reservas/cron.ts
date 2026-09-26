@@ -21,11 +21,37 @@ export async function procesarCronsReservas(admin: AdminClient) {
 
   const { data: expiradas } = await admin
     .from("reservas")
-    .select("id, cliente_id, transportista_id")
+    .select("id, cliente_id, transportista_id, tipo, anuncio_bulto_id")
     .eq("estado", "pendiente_aprobacion")
     .lte("expira_aprobacion_en", ahora);
 
   for (const r of expiradas ?? []) {
+    // Propuesta de precio al bulto: al ofertar ya aceptó. Si no rechaza en 8 h → confirmada.
+    if (r.tipo === "bulto_oferta") {
+      const ok = await persistirAceptacionReserva(admin, r);
+      if (ok) {
+        await abrirChatReserva(admin, r.id);
+        await crearNotificacion(admin, {
+          user_id: r.cliente_id,
+          tipo: "reserva_confirmada",
+          titulo: "Viaje confirmado",
+          mensaje:
+            "Han pasado 8 horas sin rechazo. El viaje queda confirmado. Coordina por el chat.",
+          enlace: `/reservas/${r.id}/chat`,
+        });
+        await crearNotificacion(admin, {
+          user_id: r.transportista_id,
+          tipo: "reserva_confirmada",
+          titulo: "Viaje confirmado",
+          mensaje:
+            "Han pasado 8 horas sin rechazar. El viaje queda confirmado. Coordina por el chat.",
+          enlace: `/reservas/${r.id}/chat`,
+        });
+        resultados.aprobacionesExpiradas++;
+      }
+      continue;
+    }
+
     await reembolsarReserva(admin, r.id, "Conductor no respondió en el plazo de 8 horas.");
     await crearNotificacion(admin, {
       user_id: r.cliente_id,

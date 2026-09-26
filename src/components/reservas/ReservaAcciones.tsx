@@ -106,7 +106,10 @@ export function ReservaAcciones({
       )}
 
       {estado === "pendiente_aprobacion" && esConductor && (
-        <AceptarRechazarBotones reservaId={reserva.id} />
+        <AceptarRechazarBotones
+          reservaId={reserva.id}
+          soloRechazar={reserva.tipo === "bulto_oferta"}
+        />
       )}
 
       {["confirmada", "en_transito"].includes(estado) && esConductor && (
