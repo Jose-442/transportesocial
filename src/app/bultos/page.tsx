@@ -13,7 +13,7 @@ import type { AnuncioBulto } from "@/types/database";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = { title: "Buscar bultos" };
+export const metadata = { title: "Buscar portes" };
 
 export default async function BultosPage({
   searchParams,
@@ -67,12 +67,10 @@ export default async function BultosPage({
     <div className="space-y-4">
       <div>
         <h1 className="text-xl font-bold leading-snug text-zinc-900 sm:text-2xl">
-          Buscar bultos
+          Buscar portes
         </h1>
-        <p className="mt-1 text-sm text-zinc-600">
-          Envíos del día con salida y llegada en la misma provincia que indiques,
-          hasta 50 km de cada ciudad. Pulsa en uno para ver medidas y afinar el
-          punto exacto.
+        <p className="mt-1 text-xs text-zinc-500">
+          Incluye localidades a hasta 50 km de salida y llegada.
         </p>
       </div>
 

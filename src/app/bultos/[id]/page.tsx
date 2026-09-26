@@ -92,7 +92,7 @@ export default async function BultoDetallePage({
         href="/bultos"
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
       >
-        ← Volver a buscar bultos
+        ← Volver a buscar portes
       </Link>
 
       <div className="space-y-2">
