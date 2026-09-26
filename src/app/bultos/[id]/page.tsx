@@ -194,7 +194,13 @@ export default async function BultoDetallePage({
       ) : null}
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-zinc-900">Propuesta</h2>
+        <h2 className="text-lg font-semibold text-zinc-900">
+          {!esDueno && yaPropuso
+            ? "Mi propuesta a este viaje:"
+            : esDueno
+              ? "Propuestas de conductores"
+              : "Propuesta"}
+        </h2>
         {esDueno && bulto.estado === "activo" && (
           <p className="text-base text-zinc-600">
             Este es tu anuncio. Aquí aparecerán las propuestas de los
