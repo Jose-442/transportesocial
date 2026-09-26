@@ -7,15 +7,15 @@ import {
 } from "@/lib/oferta-ruta-labels";
 
 describe("formatEspacioDisponibleListado", () => {
-  it("amplía Más grande comparándolo con el frigorífico", () => {
+  it("amplía Más grande comparándolo con el frigorífico y antepone Tamaño", () => {
     expect(formatEspacioDisponibleListado("Más grande")).toBe(
-      "Más grande que un frigorífico estándar"
+      "Tamaño Más grande que un frigorífico estándar"
     );
   });
 
   it("amplía Más grande también si hay detalle detrás", () => {
     expect(formatEspacioDisponibleListado("Más grande. Hueco extra")).toBe(
-      "Más grande que un frigorífico estándar. Hueco extra"
+      "Tamaño Más grande que un frigorífico estándar. Hueco extra"
     );
   });
 
@@ -24,12 +24,12 @@ describe("formatEspacioDisponibleListado", () => {
       formatEspacioDisponibleListado(
         "Más grande (referencia: frigorífico estándar)"
       )
-    ).toBe("Más grande que un frigorífico estándar");
+    ).toBe("Tamaño Más grande que un frigorífico estándar");
   });
 
-  it("deja el resto de opciones tal cual", () => {
+  it("antepone Tamaño al resto de opciones", () => {
     expect(formatEspacioDisponibleListado("Medio (Frigorífico estándar)")).toBe(
-      "Medio (Frigorífico estándar)"
+      "Tamaño Medio (Frigorífico estándar)"
     );
   });
 });
@@ -43,7 +43,7 @@ describe("lineasOfertaRuta", () => {
         estado: "activa",
       })
     ).toEqual([
-      "Bulto (Tamaño del espacio disponible: Más grande que un frigorífico estándar)",
+      "Bulto (Tamaño Más grande que un frigorífico estándar)",
       "+ 1 acompañante",
     ]);
   });
@@ -56,7 +56,7 @@ describe("lineasOfertaRuta", () => {
         estado: "activa",
       })
     ).toEqual([
-      "Bulto (Tamaño del espacio disponible: Pequeño (Maleta))",
+      "Bulto (Tamaño Pequeño (Maleta))",
     ]);
   });
 
@@ -112,7 +112,7 @@ describe("ofertaOriginalRuta", () => {
     });
     expect(badgeOfertaRuta(original)).toBe("Bulto + 2 plazas");
     expect(lineasOfertaRuta(original)).toEqual([
-      "Bulto (Tamaño del espacio disponible: Pequeño (Maleta))",
+      "Bulto (Tamaño Pequeño (Maleta))",
       "+ 2 acompañantes",
     ]);
   });

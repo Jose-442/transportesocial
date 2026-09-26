@@ -16,8 +16,8 @@ export type EspacioOpcion = (typeof ESPACIO_OPCIONES)[number];
 
 const ETIQUETA_MAS_GRANDE = "Más grande que un frigorífico estándar";
 
-/** Etiquetas del desplegable (el valor guardado sigue siendo ESPACIO_OPCIONES). */
-const ESPACIO_ETIQUETA_SELECT: Record<EspacioOpcion, string> = {
+/** Etiquetas con la palabra Tamaño (desplegable y fichas). */
+const ESPACIO_ETIQUETA: Record<EspacioOpcion, string> = {
   "Pequeño (Maleta)": "Tamaño Pequeño (Maleta)",
   "Medio (Frigorífico estándar)": "Tamaño Medio (Frigorífico estándar)",
   "Más grande": `Tamaño ${ETIQUETA_MAS_GRANDE}`,
@@ -26,7 +26,7 @@ const ESPACIO_ETIQUETA_SELECT: Record<EspacioOpcion, string> = {
 
 export const ESPACIO_SELECT_OPTIONS = ESPACIO_OPCIONES.map((value) => ({
   value,
-  label: ESPACIO_ETIQUETA_SELECT[value],
+  label: ESPACIO_ETIQUETA[value],
 }));
 
 export function combinarEspacio(tamano: string, detalle?: string): string {
@@ -36,21 +36,31 @@ export function combinarEspacio(tamano: string, detalle?: string): string {
   return `${base}. ${extra}`;
 }
 
-/** Texto del tamaño en listados y fichas, con referencias explícitas. */
+/** Texto del tamaño en listados y fichas, con la palabra Tamaño. */
 export function formatEspacioDisponibleListado(espacio: string): string {
   const valor = espacio.trim();
   if (!valor) return "Sin especificar";
+
+  for (const opcion of ESPACIO_OPCIONES) {
+    if (valor === opcion || valor.startsWith(`${opcion}.`)) {
+      return valor.replace(opcion, ESPACIO_ETIQUETA[opcion]);
+    }
+  }
+
   if (
     /^Más grande(\.|$)/.test(valor) &&
     !/frigorífico|referencia/i.test(valor)
   ) {
-    return valor.replace(/^Más grande/, ETIQUETA_MAS_GRANDE);
+    return valor.replace(/^Más grande/, `Tamaño ${ETIQUETA_MAS_GRANDE}`);
   }
   if (/^Más grande \(referencia: frigorífico estándar\)/.test(valor)) {
     return valor.replace(
       /^Más grande \(referencia: frigorífico estándar\)/,
-      ETIQUETA_MAS_GRANDE
+      `Tamaño ${ETIQUETA_MAS_GRANDE}`
     );
+  }
+  if (!/^Tamaño\b/i.test(valor)) {
+    return `Tamaño ${valor}`;
   }
   return valor;
 }

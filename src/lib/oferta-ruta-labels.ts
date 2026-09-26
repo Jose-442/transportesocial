@@ -14,7 +14,7 @@ export type OfertaRutaInput = {
 
 function lineaBulto(espacio: string): string {
   const tamano = formatEspacioDisponibleListado(espacio);
-  return `Bulto (Tamaño del espacio disponible: ${tamano})`;
+  return `Bulto (${tamano})`;
 }
 
 function lineaAcompanantes(
