@@ -14,8 +14,8 @@ describe("borradorEsDeCuenta", () => {
     );
   });
 
-  it("rechaza un borrador viejo sin dueño si hay cuenta iniciada", () => {
-    expect(borradorEsDeCuenta({ origen: "Madrid" }, "user-a")).toBe(false);
+  it("acepta un borrador de invitado si hay cuenta iniciada (tras registrarse)", () => {
+    expect(borradorEsDeCuenta({ origen: "Madrid" }, "user-a")).toBe(true);
   });
 
   it("acepta un borrador sin dueño si no hay sesión", () => {

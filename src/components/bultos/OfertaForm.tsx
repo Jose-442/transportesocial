@@ -139,6 +139,8 @@ export function OfertaForm({
     e.preventDefault();
 
     if (!isLoggedIn) {
+      // Guarda ya lo rellenado antes de ir a entrar/registrarse.
+      saveOwnedDraft(draftKey, form, uidRef.current);
       setOfertaPostLogin(bultoId);
       router.push(`/login?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`);
       return;

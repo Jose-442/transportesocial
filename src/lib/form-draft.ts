@@ -64,13 +64,51 @@ export function clearAllFormDrafts() {
   for (const k of sesion) sessionStorage.removeItem(k);
 }
 
+/** Borradores hechos sin sesión pasan a la cuenta que acaba de entrar. */
+function reclamarBorradoresInvitado(uid: string) {
+  if (typeof window === "undefined" || !uid) return;
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (
+      k &&
+      k.startsWith(DRAFT_PREFIX) &&
+      k !== CUENTA_ID_KEY &&
+      k !== "transporte-social-cookie-consent"
+    ) {
+      keys.push(k);
+    }
+  }
+  for (const k of keys) {
+    try {
+      const raw = JSON.parse(localStorage.getItem(k) ?? "null");
+      if (!raw || typeof raw !== "object") continue;
+      const draftUid = String((raw as { _uid?: string })._uid ?? "");
+      if (draftUid === "") {
+        localStorage.setItem(k, JSON.stringify({ ...raw, _uid: uid }));
+      }
+    } catch {
+      // Ignorar entradas corruptas.
+    }
+  }
+}
+
 export function syncBorradoresConCuenta(userId: string | null) {
   if (typeof window === "undefined") return;
   const last = localStorage.getItem(CUENTA_ID_KEY) ?? "";
   const uid = userId ?? "";
-  if (last !== uid) {
+
+  if (last && uid && last !== uid) {
+    // Cambio de una cuenta real a otra: no mezclar.
     clearAllFormDrafts();
+  } else if (last && !uid) {
+    // Cierre de sesión.
+    clearAllFormDrafts();
+  } else if (!last && uid) {
+    // Invitado → registro/entrada: conservar lo rellenado y asignarlo a la cuenta.
+    reclamarBorradoresInvitado(uid);
   }
+
   if (uid) {
     localStorage.setItem(CUENTA_ID_KEY, uid);
   } else {
@@ -83,7 +121,10 @@ type DraftConUid<T> = T & { _uid?: string };
 export function borradorEsDeCuenta(raw: unknown, uid: string): boolean {
   if (!raw || typeof raw !== "object") return false;
   const draftUid = String((raw as { _uid?: string })._uid ?? "");
-  if (uid) return draftUid === uid;
+  if (uid) {
+    // Misma cuenta, o borrador de invitado aún no reclamado.
+    return draftUid === uid || draftUid === "";
+  }
   return draftUid === "";
 }
 
