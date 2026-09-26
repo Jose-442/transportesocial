@@ -200,7 +200,8 @@ function parseMonthDay(value: string): MonthDayParts {
   return { month, day };
 }
 
-type DatePickerInputProps = FieldProps & {
+type DatePickerInputProps = Omit<FieldProps, "label"> & {
+  label?: string;
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
@@ -261,13 +262,17 @@ export function DatePickerInput({
 
   return (
     <fieldset className="space-y-1.5">
-      <legend className="text-sm font-medium text-zinc-800">{label}</legend>
+      {label ? (
+        <legend className="text-sm font-medium text-zinc-800">{label}</legend>
+      ) : (
+        <legend className="sr-only">Fecha</legend>
+      )}
       {name && (
         <input type="hidden" name={name} value={value} required={required} />
       )}
       <div className="grid grid-cols-2 gap-2 sm:gap-3">
         <label className="block space-y-1">
-          <span className="text-xs text-zinc-500">Mes</span>
+          <span className="text-sm font-medium text-zinc-900">Mes</span>
           <GridSelectField
             error={!!error}
             value={parts.month}
@@ -280,7 +285,7 @@ export function DatePickerInput({
           />
         </label>
         <label className="block space-y-1">
-          <span className="text-xs text-zinc-500">Día</span>
+          <span className="text-sm font-medium text-zinc-900">Día</span>
           <GridSelectField
             error={!!error}
             disabled={!parts.month}
