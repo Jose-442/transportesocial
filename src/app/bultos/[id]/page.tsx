@@ -166,22 +166,21 @@ export default async function BultoDetallePage({
           </p>
         </div>
         {bulto.fecha_limite && (
-          <div className="space-y-2 text-sm">
-            <p className="text-zinc-800">
-              <span className="font-medium uppercase tracking-wide text-zinc-500">
-                Fecha:
-              </span>{" "}
-              <span className="font-medium">
-                {formatFechaDiaEs(bulto.fecha_limite)}
-              </span>
-            </p>
-            <p className="text-zinc-800">
-              <span className="font-medium uppercase tracking-wide text-zinc-500">
-                Hora:
-              </span>{" "}
-              <span className="font-medium">{horaBulto ?? "—"}</span>
-            </p>
-          </div>
+          <p className="text-sm text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Fecha:
+            </span>{" "}
+            <span className="font-medium">
+              {formatFechaDiaEs(bulto.fecha_limite)}
+            </span>
+            <span className="mx-2 text-zinc-300" aria-hidden>
+              ·
+            </span>
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Hora:
+            </span>{" "}
+            <span className="font-medium">{horaBulto ?? "—"}</span>
+          </p>
         )}
       </Card>
 
