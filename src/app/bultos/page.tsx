@@ -69,7 +69,7 @@ export default async function BultosPage({
         <h1 className="text-xl font-bold leading-snug text-zinc-900 sm:text-2xl">
           Buscar portes
         </h1>
-        <p className="mt-1 text-xs text-zinc-500">
+        <p className="mt-1 text-sm text-zinc-500">
           Aparecerán localidades a hasta 50 km de salida y llegada.
         </p>
       </div>
