@@ -254,3 +254,43 @@ export async function rechazarOferta(
   revalidatePath(`/bultos/${oferta.anuncio_bulto_id}`);
   return { ok: true };
 }
+
+export async function retirarOfertaPropia(
+  ofertaId: string
+): Promise<{ error?: string; ok?: boolean }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Debes iniciar sesión." };
+
+  const { data: oferta } = await supabase
+    .from("ofertas_precio")
+    .select("id, anuncio_bulto_id, conductor_id, estado")
+    .eq("id", ofertaId)
+    .single();
+
+  if (!oferta) return { error: "Propuesta no encontrada." };
+  if (oferta.conductor_id !== user.id) {
+    return { error: "No autorizado." };
+  }
+  if (oferta.estado !== "pendiente") {
+    return {
+      error: "Solo puedes eliminar una propuesta mientras esté pendiente.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("ofertas_precio")
+    .delete()
+    .eq("id", ofertaId)
+    .eq("conductor_id", user.id)
+    .eq("estado", "pendiente");
+
+  if (error) return { error: supabaseErrorMessage(error) };
+
+  revalidatePath(`/bultos/${oferta.anuncio_bulto_id}`);
+  revalidatePath("/cuenta");
+  revalidatePath("/cuenta/viajes");
+  return { ok: true };
+}

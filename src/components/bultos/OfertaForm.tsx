@@ -10,6 +10,7 @@ import { enviarOferta } from "@/actions/ofertas";
 import { calcOfertaTotales, incluyeBulto, numPasajeros } from "@/lib/solicitud-viaje";
 import { formatEur } from "@/lib/pricing";
 import type { TipoSolicitud } from "@/lib/solicitud-viaje";
+import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
   clearDraft,
@@ -23,6 +24,7 @@ import {
 } from "@/lib/form-draft";
 
 const OFERTA_MENSAJE_MAX = 500;
+const DESDE_VEHICULO_KEY = "transporte-social-desde-vehiculo";
 
 const EMPTY_OFERTA_DRAFT: OfertaDraft = {
   precio_neto_bulto: "",
@@ -47,6 +49,7 @@ export function OfertaForm({
   mostrarAvisoVehiculo?: boolean;
 }) {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const draftKey = DRAFT_KEYS.oferta(bultoId);
   const conBulto = incluyeBulto(tipoSolicitud);
   const plazas = numPasajeros(tipoSolicitud);
@@ -54,11 +57,22 @@ export function OfertaForm({
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [mostrarBannerPostLogin, setMostrarBannerPostLogin] = useState(false);
+  const [volviendoDelVehiculo, setVolviendoDelVehiculo] = useState(false);
   const [form, setForm] = useState<OfertaFormState>(() => ({
     ...EMPTY_OFERTA_DRAFT,
     plazas_ofrecidas: String(plazas),
   }));
   const uidRef = useRef("");
+
+  useEffect(() => {
+    const desdeQuery =
+      new URLSearchParams(window.location.search).get("desde") === "vehiculo";
+    const desdeStorage = sessionStorage.getItem(DESDE_VEHICULO_KEY) === "1";
+    if (desdeQuery || desdeStorage) {
+      setVolviendoDelVehiculo(true);
+      sessionStorage.removeItem(DESDE_VEHICULO_KEY);
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -99,6 +113,13 @@ export function OfertaForm({
       setMostrarBannerPostLogin(true);
     }
   }, [ready, isLoggedIn, bultoId]);
+
+  const botonArriba = ready && volviendoDelVehiculo && !mostrarAvisoVehiculo;
+
+  useEffect(() => {
+    if (!botonArriba) return;
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [botonArriba]);
 
   const netoBulto = parseFloat(form.precio_neto_bulto) || 0;
   const netoPlaza = parseFloat(form.precio_neto_plaza) || 0;
@@ -153,16 +174,36 @@ export function OfertaForm({
     clearDraft(draftKey);
     clearOfertaPostLogin(bultoId);
     setMostrarBannerPostLogin(false);
+    setVolviendoDelVehiculo(false);
     setForm({ ...EMPTY_OFERTA_DRAFT, plazas_ofrecidas: String(plazas) });
     router.refresh();
   }
 
+  const botonEnviar = (
+    <Button type="submit" fullWidth disabled={loading}>
+      {loading ? "Enviando…" : "Enviar propuesta"}
+    </Button>
+  );
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      ref={formRef}
+      id="proponer-precio"
+      onSubmit={handleSubmit}
+      className="scroll-mt-4 space-y-4"
+    >
       {mostrarBannerPostLogin && (
         <div className="rounded-xl bg-emerald-50 px-3 py-2.5 text-base text-emerald-900">
           Ya has entrado. Revisa el precio y pulsa «Enviar propuesta» para que
           el solicitante la reciba.
+        </div>
+      )}
+      {botonArriba && (
+        <div className="space-y-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-base text-emerald-900">
+          <p>
+            Vehículo guardado. Revisa el precio y pulsa «Enviar propuesta».
+          </p>
+          {botonEnviar}
         </div>
       )}
       {conBulto && (
@@ -234,13 +275,13 @@ export function OfertaForm({
                 </strong>
               </p>
             )}
-          <p className="pt-1 font-semibold">
-            Total que verá el solicitante:{" "}
+          <p>
+            Total a pagar por el solicitante:{" "}
             <strong>{formatEur(totales.precio_total)}</strong>
           </p>
           {totales.desglose.plazas_ofrecidas <
             totales.desglose.plazas_solicitadas && (
-            <p className="text-xs text-zinc-600">
+            <p className="text-amber-800">
               En el anuncio se solicitan {totales.desglose.plazas_solicitadas}{" "}
               pasajeros; tu propuesta cubre {totales.desglose.plazas_ofrecidas}.
             </p>
@@ -283,15 +324,18 @@ export function OfertaForm({
           </Link>
         </div>
       )}
-      {mostrarAvisoVehiculo && (
+      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p>
             Para enviar propuestas necesitas indicar marca, modelo, año y
             distintivo ambiental de tu vehículo.
           </p>
           <Link
-            href="/cuenta#vehiculo"
+            href={cuentaHrefConVolver(`/bultos/${bultoId}`)}
             className="mt-1 inline-block font-semibold text-emerald-700 hover:text-emerald-800"
+            onClick={() => {
+              sessionStorage.setItem(DESDE_VEHICULO_KEY, "1");
+            }}
           >
             Datos de mi vehículo
           </Link>
@@ -303,9 +347,7 @@ export function OfertaForm({
           verá quién eres y tu oferta.
         </div>
       )}
-      <Button type="submit" fullWidth disabled={loading}>
-        {loading ? "Enviando…" : "Enviar propuesta"}
-      </Button>
+      {!botonArriba && botonEnviar}
     </form>
   );
 }

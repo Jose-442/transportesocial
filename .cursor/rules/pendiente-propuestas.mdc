@@ -1,0 +1,17 @@
+---
+description: Pendiente Transporte Social (José) — propuestas
+alwaysApply: true
+---
+
+# Pendiente Transporte Social — propuestas
+
+## Hecho (26-sep-2026)
+
+1. Tras rellenar el vehículo, vuelve al bulto con «Enviar propuesta» visible.
+2. El conductor puede eliminar su propuesta pendiente (botón + SQL `043`).
+
+## SQL que José debe ejecutar en Supabase
+
+Pegar y Run el contenido de `supabase/migrations/043_conductor_eliminar_oferta_pendiente.sql` (permiso DELETE de oferta pendiente).
+
+Sin ese SQL, el botón «Eliminar propuesta» puede fallar.

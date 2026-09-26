@@ -6,6 +6,7 @@ import { formatEur } from "@/lib/pricing";
 import { resumenVehiculoPublico } from "@/lib/vehiculo";
 import type { OfertaPrecio, PerfilPublico } from "@/types/database";
 import { OfertaAcciones } from "./OfertaAcciones";
+import { RetirarOfertaButton } from "./RetirarOfertaButton";
 
 const estadoTone = {
   pendiente: "amber",
@@ -17,10 +18,12 @@ const estadoTone = {
 export function OfertasList({
   ofertas,
   esDueno,
+  userId = null,
   perfiles = {},
 }: {
   ofertas: OfertaPrecio[];
   esDueno: boolean;
+  userId?: string | null;
   perfiles?: Record<string, PerfilPublico>;
 }) {
   if (ofertas.length === 0) {
@@ -34,6 +37,7 @@ export function OfertasList({
       {ofertas.map((oferta) => {
         const perfil = perfiles[oferta.conductor_id];
         const vehiculo = perfil ? resumenVehiculoPublico(perfil) : null;
+        const esMia = Boolean(userId) && oferta.conductor_id === userId;
 
         return (
           <Card key={oferta.id}>
@@ -101,6 +105,9 @@ export function OfertasList({
             </div>
             {esDueno && oferta.estado === "pendiente" && (
               <OfertaAcciones ofertaId={oferta.id} />
+            )}
+            {esMia && oferta.estado === "pendiente" && (
+              <RetirarOfertaButton ofertaId={oferta.id} />
             )}
           </Card>
         );

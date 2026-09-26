@@ -204,6 +204,7 @@ export default async function BultoDetallePage({
         <OfertasList
           ofertas={ofertas}
           esDueno={!!esDueno}
+          userId={user?.id ?? null}
           perfiles={perfilesConductores}
         />
       </section>

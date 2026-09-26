@@ -1,22 +1,31 @@
-export const CUENTA_VOLVER_DESTINATIONS = ["/rutas/nueva"] as const;
+import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 
-export type CuentaVolverDest = (typeof CUENTA_VOLVER_DESTINATIONS)[number];
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+/** Destinos seguros tras guardar el vehículo en Mi cuenta. */
 export function parseCuentaVolver(
   value: string | string[] | undefined
-): CuentaVolverDest | null {
+): string | null {
   const raw = Array.isArray(value) ? value[0] : value;
-  if (raw && CUENTA_VOLVER_DESTINATIONS.includes(raw as CuentaVolverDest)) {
-    return raw as CuentaVolverDest;
-  }
+  const seguro = parseSafeInternalRedirect(raw);
+  if (!seguro) return null;
+
+  const path = (seguro.split("?")[0] ?? seguro).replace(/\/$/, "") || "/";
+  if (path === "/rutas/nueva") return path;
+
+  const bulto = path.match(/^\/bultos\/([^/]+)$/);
+  if (bulto && UUID_RE.test(bulto[1])) return path;
+
   return null;
 }
 
-export function cuentaHrefConVolver(dest: CuentaVolverDest): string {
+export function cuentaHrefConVolver(dest: string): string {
   return `/cuenta?volver=${encodeURIComponent(dest)}`;
 }
 
-/** Vuelves a publicar tras guardar el vehículo: el botón Publicar sale arriba. */
-export function hrefTrasGuardarVehiculo(dest: CuentaVolverDest): string {
-  return `${dest}?desde=vehiculo`;
+/** Vuelves al anuncio/formulario tras guardar el vehículo. */
+export function hrefTrasGuardarVehiculo(dest: string): string {
+  const sep = dest.includes("?") ? "&" : "?";
+  return `${dest}${sep}desde=vehiculo`;
 }
