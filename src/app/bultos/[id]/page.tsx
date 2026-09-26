@@ -95,17 +95,17 @@ export default async function BultoDetallePage({
         ← Volver a buscar bultos
       </Link>
 
-      <div className="flex items-start justify-between gap-3">
-        <div>
+      <div className="space-y-2">
+        <div className="flex items-start justify-between gap-3">
           <h1 className="text-2xl font-bold text-zinc-900">
             {origen} → {destino}
           </h1>
-          <p className="mt-2 text-base font-semibold text-emerald-800">
-            {esDueno ? "Mi propuesta de viaje" : "Necesita viaje"}:{" "}
-            {labelTipoSolicitud(tipoSolicitud)}
-          </p>
+          <Badge tone="blue">{bulto.estado}</Badge>
         </div>
-        <Badge tone="blue">{bulto.estado}</Badge>
+        <p className="text-sm font-semibold leading-snug text-emerald-800 sm:text-base">
+          {esDueno ? "Mi propuesta de viaje" : "Necesita viaje"}:{" "}
+          {labelTipoSolicitud(tipoSolicitud)}
+        </p>
       </div>
 
       {bulto.foto_url && (
