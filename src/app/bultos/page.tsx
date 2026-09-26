@@ -84,16 +84,25 @@ export default async function BultosPage({
             ? "Completa salida, llegada, mes y día para ver los bultos."
             : "Rellena los cuatro campos y pulsa Buscar."}
         </p>
-      ) : bultos.length === 0 ? (
-        <p className="text-sm text-zinc-500">
-          No se encontraron viajes en esta búsqueda.
-        </p>
       ) : (
-        <div className="space-y-3">
-          {bultos.map((bulto) => (
-            <BultoCard key={bulto.id} bulto={bulto} listadoSearch={listadoSearch} />
-          ))}
-        </div>
+        <>
+          <p className="text-sm font-medium text-zinc-700">
+            {bultos.length === 1
+              ? "1 encontrado"
+              : `${bultos.length} encontrados`}
+          </p>
+          {bultos.length === 0 ? null : (
+            <div className="space-y-3">
+              {bultos.map((bulto) => (
+                <BultoCard
+                  key={bulto.id}
+                  bulto={bulto}
+                  listadoSearch={listadoSearch}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
