@@ -336,23 +336,47 @@ export default async function ReservaDetallePage({
         </Card>
       )}
 
-      {disputa && (
-        <Card className="space-y-2 text-sm text-zinc-700">
-          <p className="font-semibold text-zinc-900">Detalle de la disputa</p>
-          <p>{disputa.descripcion}</p>
-          {disputa.version_conductor && (
-            <p className="text-zinc-600">
-              <strong>Versión del conductor:</strong>{" "}
-              {disputa.version_conductor}
-            </p>
-          )}
-          {disputa.version_cliente && (
-            <p className="text-zinc-600">
-              <strong>Versión del usuario:</strong> {disputa.version_cliente}
-            </p>
-          )}
-        </Card>
-      )}
+      {disputa && (() => {
+        const yoAbri = disputa.abierta_por === user.id;
+        const miVersion = yoAbri
+          ? disputa.descripcion
+          : esConductor
+            ? disputa.version_conductor
+            : disputa.version_cliente;
+        const suVersion = yoAbri
+          ? esConductor
+            ? disputa.version_cliente
+            : disputa.version_conductor
+          : disputa.descripcion;
+
+        return (
+          <Card className="space-y-3 text-sm text-zinc-700">
+            <p className="font-semibold text-zinc-900">Detalle de la disputa</p>
+            <div className="space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800">
+                Mi versión
+              </p>
+              {miVersion?.trim() ? (
+                <p>{miVersion}</p>
+              ) : (
+                <p className="text-zinc-500">Aún no has enviado tu versión.</p>
+              )}
+            </div>
+            <div className="space-y-1 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
+                Su versión
+              </p>
+              {suVersion?.trim() ? (
+                <p>{suVersion}</p>
+              ) : (
+                <p className="text-zinc-500">
+                  Todavía no ha enviado su versión.
+                </p>
+              )}
+            </div>
+          </Card>
+        );
+      })()}
     </div>
   );
 }
