@@ -153,18 +153,20 @@ export default async function BultoDetallePage({
           Se concretará el viaje por el chat interno cuando se pague-reserve la
           propuesta.
         </p>
-        <div>
-          <p className="text-sm text-zinc-800">
-            <span className="font-medium uppercase tracking-wide text-zinc-500">
-              Medidas:
-            </span>{" "}
-            <span className="font-medium">
-              {necesitaBulto && medidasVisibles
-                ? formatEspacioDisponibleListado(medidasVisibles)
-                : "—"}
-            </span>
-          </p>
-        </div>
+        {necesitaBulto ? (
+          <div>
+            <p className="text-sm text-zinc-800">
+              <span className="font-medium uppercase tracking-wide text-zinc-500">
+                Medidas:
+              </span>{" "}
+              <span className="font-medium">
+                {medidasVisibles
+                  ? formatEspacioDisponibleListado(medidasVisibles)
+                  : "—"}
+              </span>
+            </p>
+          </div>
+        ) : null}
         {bulto.fecha_limite && (
           <p className="text-sm text-zinc-800">
             <span className="font-medium uppercase tracking-wide text-zinc-500">
