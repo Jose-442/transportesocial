@@ -45,7 +45,7 @@ export function ReservaAcciones({
   disputa: Disputa | null;
   yaPagadoEnStripe?: boolean;
 }) {
-  const estado = reserva.estado;
+  const estado = disputa ? "disputa" : reserva.estado;
   const etiquetaEstado =
     estado === "confirmada" ? "Confirmado" : ESTADO_RESERVA_LABELS[estado];
   const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];

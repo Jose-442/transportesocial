@@ -2,7 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  createAdminClient,
+  patchReservaEstadoConServicio,
+} from "@/lib/supabase/admin";
+import { idsUsuariosAdmin } from "@/lib/admin/ids-admin";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { puedeReclamar } from "@/lib/reservas/labels";
@@ -73,10 +77,13 @@ export async function abrirDisputa(formData: FormData) {
 
   const admin = createAdminClient();
   if (admin) {
-    await admin
+    const { error: updReserva } = await admin
       .from("reservas")
       .update({ estado: "disputa" })
       .eq("id", reservaId);
+    if (updReserva) {
+      await patchReservaEstadoConServicio(reservaId, { estado: "disputa" });
+    }
 
     await admin
       .from("transacciones")
@@ -85,16 +92,34 @@ export async function abrirDisputa(formData: FormData) {
       .eq("tipo", "cobro_viaje");
 
     const otroId = esCliente ? reserva.transportista_id : reserva.cliente_id;
+    const enlace = `/reservas/${reservaId}`;
     await crearNotificacion(admin, {
       user_id: otroId,
       tipo: "disputa_abierta",
       titulo: "Disputa abierta",
-      mensaje: "Se ha abierto una disputa. Puedes añadir tu versión en la reserva.",
-      enlace: `/reservas/${reservaId}`,
+      mensaje:
+        "Se ha abierto una disputa. Puedes añadir tu versión en la reserva.",
+      enlace,
     });
+
+    const admins = await idsUsuariosAdmin(admin);
+    for (const adminId of admins) {
+      if (adminId === user.id || adminId === otroId) continue;
+      await crearNotificacion(admin, {
+        user_id: adminId,
+        tipo: "disputa_abierta",
+        titulo: "Disputa abierta",
+        mensaje: "Hay una disputa nueva. Revísala en Administración.",
+        enlace: "/admin/disputas",
+      });
+    }
+  } else {
+    await patchReservaEstadoConServicio(reservaId, { estado: "disputa" });
   }
 
   revalidatePath(`/reservas/${reservaId}`);
+  revalidatePath("/admin/disputas");
+  revalidatePath("/admin");
   return { ok: true };
 }
 
