@@ -64,6 +64,8 @@ export async function loadDisputasAdmin(
       motivo: row.motivo as Disputa["motivo"],
       descripcion: row.descripcion,
       version_conductor: row.version_conductor,
+      version_cliente:
+        (row as { version_cliente?: string | null }).version_cliente ?? null,
       estado: row.estado as Disputa["estado"],
       created_at: row.created_at,
       resuelta_en: row.resuelta_en,
