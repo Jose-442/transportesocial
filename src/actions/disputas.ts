@@ -7,7 +7,9 @@ import {
   patchReservaEstadoConServicio,
 } from "@/lib/supabase/admin";
 import { idsUsuariosAdmin } from "@/lib/admin/ids-admin";
+import { ADMIN_EMAILS } from "@/lib/admin";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { sendDisputaAdminEmail } from "@/lib/email/disputa-admin";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { puedeReclamar } from "@/lib/reservas/labels";
 import type { MotivoDisputa, Reserva } from "@/types/database";
@@ -115,6 +117,24 @@ export async function abrirDisputa(formData: FormData) {
     }
   } else {
     await patchReservaEstadoConServicio(reservaId, { estado: "disputa" });
+  }
+
+  const { data: autorPerfil } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("id", user.id)
+    .maybeSingle();
+  const abiertaPor =
+    autorPerfil?.display_name?.trim() || user.email?.trim() || "Un usuario";
+  for (const email of ADMIN_EMAILS) {
+    void sendDisputaAdminEmail({
+      to: email,
+      abiertaPor,
+      descripcion,
+      reservaId,
+    }).catch((err) => {
+      console.error("[disputa-admin-email]", err);
+    });
   }
 
   revalidatePath(`/reservas/${reservaId}`);
