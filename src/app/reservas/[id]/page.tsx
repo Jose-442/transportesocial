@@ -221,13 +221,6 @@ export default async function ReservaDetallePage({
     ? perfiles[reserva.transportista_id]
     : perfiles[reserva.cliente_id];
 
-  const puedeAnadirVersion = Boolean(
-    disputa &&
-      disputa.abierta_por !== user.id &&
-      ((esConductor && !disputa.version_conductor?.trim()) ||
-        (esCliente && !disputa.version_cliente?.trim()))
-  );
-
   return (
     <div className="space-y-2 md:space-y-3">
       <MarcarNotificacionesEnlaceLeida
