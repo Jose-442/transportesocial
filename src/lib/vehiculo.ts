@@ -36,7 +36,7 @@ export const VEHICULO_MARCA_MAX = 60;
 export const VEHICULO_MODELO_MAX = 60;
 
 export const ERROR_VEHICULO_INCOMPLETO =
-  "Completa marca, modelo, año y distintivo ambiental de tu vehículo en Mi cuenta antes de continuar.";
+  "Entra en: (Mi cuenta) y completa los datos de tu vehículo antes de continuar";
 
 export function isDistintivoAmbiental(value: string): value is DistintivoAmbiental {
   return (DISTINTIVOS_AMBIENTALES as readonly string[]).includes(value);
