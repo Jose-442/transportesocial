@@ -27,12 +27,11 @@ export function VersionDisputaForm({ reservaId }: { reservaId: string }) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
-      <p className="text-sm font-semibold text-zinc-900">Tu versión</p>
       <p className="text-sm text-zinc-600">
         Explica qué ha pasado desde tu punto de vista. El equipo lo revisará.
       </p>
       <Textarea
-        label="Explica qué ha pasado"
+        label="Escribe tu versión"
         name="version"
         required
         minLength={10}
