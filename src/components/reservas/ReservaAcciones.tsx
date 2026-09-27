@@ -26,6 +26,7 @@ import {
 } from "@/lib/reservas/cancelacion";
 import { formatEur } from "@/lib/pricing";
 import { DisputaForm } from "@/components/reservas/DisputaForm";
+import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
 import type { Disputa, Reserva } from "@/types/database";
 
 export function ReservaAcciones({
@@ -36,6 +37,7 @@ export function ReservaAcciones({
   esConductor,
   disputa,
   yaPagadoEnStripe = false,
+  puedeAnadirVersion = false,
 }: {
   reserva: Reserva;
   relacionadas: Reserva[];
@@ -44,6 +46,8 @@ export function ReservaAcciones({
   esConductor: boolean;
   disputa: Disputa | null;
   yaPagadoEnStripe?: boolean;
+  /** La otra parte aún puede escribir su versión de la disputa. */
+  puedeAnadirVersion?: boolean;
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
   const etiquetaEstado =
@@ -173,11 +177,18 @@ export function ReservaAcciones({
         )}
 
       {disputa && (
-        <div className="rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
-          <p className="font-semibold">Disputa abierta</p>
-          <p className="mt-1">
-            El equipo revisará el caso manualmente. El pago está congelado.
-          </p>
+        <div className="space-y-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
+          <div>
+            <p className="font-semibold">Disputa abierta</p>
+            <p className="mt-1">
+              El equipo revisará el caso manualmente. El pago está congelado.
+            </p>
+          </div>
+          {puedeAnadirVersion ? (
+            <div className="rounded-xl border border-amber-200 bg-white p-3 text-zinc-800">
+              <VersionDisputaForm reservaId={reserva.id} />
+            </div>
+          ) : null}
         </div>
       )}
     </Card>
