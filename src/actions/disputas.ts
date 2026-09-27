@@ -143,7 +143,7 @@ export async function abrirDisputa(formData: FormData) {
   return { ok: true };
 }
 
-export async function anadirVersionConductorDisputa(
+export async function anadirVersionDisputa(
   reservaId: string,
   version: string
 ) {
@@ -160,20 +160,58 @@ export async function anadirVersionConductorDisputa(
 
   const { data: reserva } = await supabase
     .from("reservas")
-    .select("transportista_id")
+    .select("cliente_id, transportista_id")
     .eq("id", reservaId)
     .single();
 
-  if (!reserva || reserva.transportista_id !== user.id) {
+  if (!reserva) return { error: "Reserva no encontrada." };
+
+  const esCliente = reserva.cliente_id === user.id;
+  const esConductor = reserva.transportista_id === user.id;
+  if (!esCliente && !esConductor) {
     return { error: "No autorizado." };
   }
 
-  const { error } = await supabase
+  const { data: disputa } = await supabase
     .from("disputas")
-    .update({ version_conductor: texto })
-    .eq("reserva_id", reservaId);
+    .select("abierta_por, version_conductor, version_cliente")
+    .eq("reserva_id", reservaId)
+    .maybeSingle();
 
-  if (error) return { error: supabaseErrorMessage(error) };
+  if (!disputa) return { error: "No hay disputa abierta." };
+  if (disputa.abierta_por === user.id) {
+    return { error: "Ya enviaste tu versión al abrir la disputa." };
+  }
+
+  if (esConductor) {
+    if (disputa.version_conductor?.trim()) {
+      return { error: "Ya has enviado tu versión." };
+    }
+    const { error } = await supabase
+      .from("disputas")
+      .update({ version_conductor: texto })
+      .eq("reserva_id", reservaId);
+    if (error) return { error: supabaseErrorMessage(error) };
+  } else {
+    if (disputa.version_cliente?.trim()) {
+      return { error: "Ya has enviado tu versión." };
+    }
+    const { error } = await supabase
+      .from("disputas")
+      .update({ version_cliente: texto })
+      .eq("reserva_id", reservaId);
+    if (error) return { error: supabaseErrorMessage(error) };
+  }
+
   revalidatePath(`/reservas/${reservaId}`);
+  revalidatePath("/admin/disputas");
   return { ok: true };
+}
+
+/** @deprecated Usar anadirVersionDisputa */
+export async function anadirVersionConductorDisputa(
+  reservaId: string,
+  version: string
+) {
+  return anadirVersionDisputa(reservaId, version);
 }

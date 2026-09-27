@@ -120,6 +120,7 @@ export type Disputa = {
   motivo: MotivoDisputa;
   descripcion: string;
   version_conductor: string | null;
+  version_cliente: string | null;
   estado: EstadoDisputa;
   created_at: string;
   resuelta_en: string | null;

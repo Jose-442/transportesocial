@@ -15,6 +15,7 @@ export type DisputaAdminItem = {
   motivo: Disputa["motivo"];
   descripcion: string;
   version_conductor: string | null;
+  version_cliente: string | null;
   estado: Disputa["estado"];
   created_at: string;
   resuelta_en: string | null;
@@ -39,7 +40,7 @@ export async function loadDisputasAdmin(
   let query = admin
     .from("disputas")
     .select(
-      "id, reserva_id, motivo, descripcion, version_conductor, estado, created_at, resuelta_en, reservas!inner(estado)"
+      "id, reserva_id, motivo, descripcion, version_conductor, version_cliente, estado, created_at, resuelta_en, reservas!inner(estado)"
     )
     .order("created_at", { ascending: false })
     .limit(80);

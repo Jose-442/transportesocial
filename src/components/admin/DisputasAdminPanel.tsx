@@ -150,6 +150,12 @@ export function DisputasAdminPanel({
                   {d.version_conductor}
                 </p>
               )}
+              {d.version_cliente && (
+                <p className="text-sm text-zinc-600">
+                  <span className="font-medium">Usuario:</span>{" "}
+                  {d.version_cliente}
+                </p>
+              )}
               {d.estado === "abierta" && (
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <Button
