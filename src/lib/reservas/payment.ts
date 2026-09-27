@@ -200,7 +200,8 @@ export async function confirmarPagoReserva(
 export async function confirmarPagoReservas(
   admin: AdminClient,
   paymentIntentId: string,
-  reservaIds: string[]
+  reservaIds: string[],
+  opts?: { omitirImporte?: boolean }
 ): Promise<{ error?: string }> {
   const ids = [...new Set(reservaIds.filter(Boolean))];
   if (ids.length === 0) {
@@ -208,7 +209,9 @@ export async function confirmarPagoReservas(
   }
   const unica = ids[0];
   if (ids.length === 1 && unica) {
-    return confirmarPagoReserva(admin, paymentIntentId, unica);
+    return confirmarPagoReserva(admin, paymentIntentId, unica, {
+      omitirImporte: opts?.omitirImporte,
+    });
   }
 
   const stripe = getStripeServer();
@@ -222,9 +225,11 @@ export async function confirmarPagoReservas(
   if (reservas.length === 0) {
     return { error: "Reserva no encontrada." };
   }
-  const esperado = sumaEurosToCents(reservas.map((item) => item.precio_total));
-  if (intent.amount !== esperado || intent.currency !== "eur") {
-    return { error: "Importe de pago no válido." };
+  if (!opts?.omitirImporte) {
+    const esperado = sumaEurosToCents(reservas.map((item) => item.precio_total));
+    if (intent.amount !== esperado || intent.currency !== "eur") {
+      return { error: "Importe de pago no válido." };
+    }
   }
 
   for (const item of reservas) {
@@ -321,11 +326,22 @@ export async function confirmarPagoViajeDesdeIntent(
     .from("reservas")
     .select("*")
     .eq("id", reservaId)
-    .single();
-  if (vistaError || !vista) {
+    .maybeSingle();
+  let principal = vista as Reserva | null;
+  if (vistaError || !principal) {
+    const adminFallback = createAdminClient();
+    if (adminFallback) {
+      const { data: adminVista } = await adminFallback
+        .from("reservas")
+        .select("*")
+        .eq("id", reservaId)
+        .maybeSingle();
+      principal = (adminVista as Reserva | null) ?? null;
+    }
+  }
+  if (!principal) {
     return { error: "Reserva no encontrada." };
   }
-  const principal = vista as Reserva;
   if (principal.cliente_id !== user.id) {
     return { error: "No autorizado." };
   }
@@ -348,6 +364,42 @@ export async function confirmarPagoViajeDesdeIntent(
       revalidatePath("/bultos");
     }
     return {};
+  }
+
+  // Plazas / ruta: preferir admin (mismo camino que el webhook de Stripe).
+  const adminPago = createAdminClient();
+  if (adminPago) {
+    const idsGrupo = [reservaId];
+    if (principal.ruta_conductor_id) {
+      const { data: hermanas } = await adminPago
+        .from("reservas")
+        .select("id")
+        .eq("cliente_id", user.id)
+        .eq("ruta_conductor_id", principal.ruta_conductor_id)
+        .eq("estado", "pendiente_pago");
+      for (const h of hermanas ?? []) idsGrupo.push(h.id);
+    }
+    const adminResult = await confirmarPagoReservas(
+      adminPago,
+      paymentIntentId,
+      idsGrupo,
+      { omitirImporte: true }
+    );
+    if (!adminResult.error) {
+      revalidatePath(`/reservas/${reservaId}`);
+      revalidatePath(`/reservas/${reservaId}/chat`);
+      revalidatePath("/cuenta/viajes");
+      if (principal.ruta_conductor_id) {
+        revalidatePath(`/rutas/${principal.ruta_conductor_id}`);
+      }
+      revalidatePath("/rutas");
+      return {};
+    }
+    console.error(
+      "[confirmarPagoViajeDesdeIntent] admin",
+      adminResult.error,
+      reservaId
+    );
   }
 
   let cobros: Reserva[] = [principal];

@@ -70,7 +70,9 @@ export async function POST(request: Request) {
             .split(",")
             .map((id) => id.trim())
             .filter(Boolean);
-          await confirmarPagoReservas(admin, paymentIntentId, ids);
+          await confirmarPagoReservas(admin, paymentIntentId, ids, {
+            omitirImporte: true,
+          });
         }
       }
       break;

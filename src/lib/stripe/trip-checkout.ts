@@ -146,10 +146,12 @@ export async function completeTripCheckout(
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    if (!user) {
+      return { error: "Debes iniciar sesión." };
+    }
+
     const cubre = checkoutCubreReserva(session, reservaId);
-    const esDelUsuario = Boolean(
-      user && session.metadata?.user_id === user.id
-    );
+    const esDelUsuario = session.metadata?.user_id === user.id;
     if (!cubre && !esDelUsuario) {
       return { error: "Reserva no válida." };
     }
@@ -163,12 +165,47 @@ export async function completeTripCheckout(
       return { error: "No se pudo verificar el pago." };
     }
 
+    const ids = [
+      ...new Set(
+        (
+          session.metadata?.reserva_ids ||
+          session.metadata?.reserva_id ||
+          reservaId
+        )
+          .split(",")
+          .map((id) => id.trim())
+          .filter(Boolean)
+          .concat(reservaId)
+      ),
+    ];
+
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    if (admin) {
+      const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
+      const adminResult = await confirmarPagoReservas(
+        admin,
+        paymentIntentId,
+        ids,
+        { omitirImporte: true }
+      );
+      if (!adminResult.error) {
+        return {};
+      }
+      console.error("[completeTripCheckout] admin", adminResult.error, {
+        checkoutSessionId,
+        reservaId,
+      });
+    }
+
     const { confirmarPagoViajeDesdeIntent } = await import(
       "@/lib/reservas/payment"
     );
-    const result = await confirmarPagoViajeDesdeIntent(paymentIntentId, reservaId, {
-      saltarImporte: true,
-    });
+    const result = await confirmarPagoViajeDesdeIntent(
+      paymentIntentId,
+      reservaId,
+      { saltarImporte: true }
+    );
     if (result.error) {
       console.error("[completeTripCheckout]", result.error, {
         checkoutSessionId,
