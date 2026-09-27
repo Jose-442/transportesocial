@@ -49,7 +49,7 @@ export function EditarSobreTiForm({
   return (
     <form onSubmit={onSubmit} className="space-y-2">
       <Textarea
-        label="Cuéntanos quién eres"
+        label="Cuéntanos sobre ti"
         value={sobreTi}
         onChange={(e) => setForm({ sobreTi: e.target.value })}
         placeholder="Ej.: Soy puntual y respondo rápido."
