@@ -10,7 +10,7 @@ export function CancelarReservaBoton({
 }: {
   reservaId: string;
   textoBoton: string;
-  textoAyuda: string;
+  textoAyuda?: string;
 }) {
   const [pideConfirmacion, setPideConfirmacion] = useState(false);
   const [pendiente, setPendiente] = useState(false);
@@ -51,9 +51,11 @@ export function CancelarReservaBoton({
         >
           {textoBoton}
         </Button>
-        <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
-          {textoAyuda}
-        </p>
+        {textoAyuda ? (
+          <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+            {textoAyuda}
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -63,9 +65,11 @@ export function CancelarReservaBoton({
       <p className="text-sm font-medium text-zinc-800">
         ¿Seguro? Esta cancelación no se puede deshacer.
       </p>
-      <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
-        {textoAyuda}
-      </p>
+      {textoAyuda ? (
+        <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+          {textoAyuda}
+        </p>
+      ) : null}
       <Button
         type="button"
         variant="secondary"

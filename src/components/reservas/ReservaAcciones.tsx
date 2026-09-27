@@ -137,8 +137,7 @@ export function ReservaAcciones({
         !disputa &&
         estado === "confirmada" &&
         politica.puede &&
-        politica.tipo &&
-        textoAyudaCancelar && (
+        politica.tipo && (
           <CancelarReservaBoton
             reservaId={reserva.id}
             textoBoton={
@@ -146,7 +145,6 @@ export function ReservaAcciones({
                 ? "Rechazar viaje"
                 : "Cancelar reserva"
             }
-            textoAyuda={textoAyudaCancelar}
           />
         )}
 
