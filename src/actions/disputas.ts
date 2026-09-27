@@ -174,34 +174,27 @@ export async function anadirVersionDisputa(
 
   const { data: disputa } = await supabase
     .from("disputas")
-    .select("abierta_por, version_conductor, version_cliente")
+    .select("abierta_por, estado, version_conductor, version_cliente")
     .eq("reserva_id", reservaId)
     .maybeSingle();
 
   if (!disputa) return { error: "No hay disputa abierta." };
-  if (disputa.abierta_por === user.id) {
-    return { error: "Ya enviaste tu versión al abrir la disputa." };
+  if (disputa.estado !== "abierta") {
+    return { error: "Esta disputa ya está cerrada." };
   }
 
-  if (esConductor) {
-    if (disputa.version_conductor?.trim()) {
-      return { error: "Ya has enviado tu versión." };
-    }
-    const { error } = await supabase
-      .from("disputas")
-      .update({ version_conductor: texto })
-      .eq("reserva_id", reservaId);
-    if (error) return { error: supabaseErrorMessage(error) };
-  } else {
-    if (disputa.version_cliente?.trim()) {
-      return { error: "Ya has enviado tu versión." };
-    }
-    const { error } = await supabase
-      .from("disputas")
-      .update({ version_cliente: texto })
-      .eq("reserva_id", reservaId);
-    if (error) return { error: supabaseErrorMessage(error) };
-  }
+  const yoAbri = disputa.abierta_por === user.id;
+  const payload = yoAbri
+    ? { descripcion: texto }
+    : esConductor
+      ? { version_conductor: texto }
+      : { version_cliente: texto };
+
+  const { error } = await supabase
+    .from("disputas")
+    .update(payload)
+    .eq("reserva_id", reservaId);
+  if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath(`/reservas/${reservaId}`);
   revalidatePath("/admin/disputas");

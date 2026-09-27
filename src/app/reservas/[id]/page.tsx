@@ -6,6 +6,7 @@ import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
+import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
 import { createClient } from "@/lib/supabase/server";
 import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
@@ -348,6 +349,7 @@ export default async function ReservaDetallePage({
             ? disputa.version_cliente
             : disputa.version_conductor
           : disputa.descripcion;
+        const abierta = disputa.estado === "abierta";
 
         return (
           <Card className="space-y-3 text-sm text-zinc-700">
@@ -356,7 +358,12 @@ export default async function ReservaDetallePage({
               <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800">
                 Mi versión
               </p>
-              {miVersion?.trim() ? (
+              {abierta ? (
+                <VersionDisputaForm
+                  reservaId={id}
+                  valorInicial={miVersion ?? ""}
+                />
+              ) : miVersion?.trim() ? (
                 <p>{miVersion}</p>
               ) : (
                 <p className="text-zinc-500">Aún no has enviado tu versión.</p>
