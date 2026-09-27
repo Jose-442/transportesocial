@@ -165,39 +165,6 @@ export async function completeTripCheckout(
       return { error: "No se pudo verificar el pago." };
     }
 
-    const ids = [
-      ...new Set(
-        (
-          session.metadata?.reserva_ids ||
-          session.metadata?.reserva_id ||
-          reservaId
-        )
-          .split(",")
-          .map((id) => id.trim())
-          .filter(Boolean)
-          .concat(reservaId)
-      ),
-    ];
-
-    const { createAdminClient } = await import("@/lib/supabase/admin");
-    const admin = createAdminClient();
-    if (admin) {
-      const { confirmarPagoReservas } = await import("@/lib/reservas/payment");
-      const adminResult = await confirmarPagoReservas(
-        admin,
-        paymentIntentId,
-        ids,
-        { omitirImporte: true }
-      );
-      if (!adminResult.error) {
-        return {};
-      }
-      console.error("[completeTripCheckout] admin", adminResult.error, {
-        checkoutSessionId,
-        reservaId,
-      });
-    }
-
     const { confirmarPagoViajeDesdeIntent } = await import(
       "@/lib/reservas/payment"
     );
