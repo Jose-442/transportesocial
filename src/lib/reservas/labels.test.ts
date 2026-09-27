@@ -85,6 +85,29 @@ describe("fraseQueHasReservado", () => {
       )
     ).toBe("Oto ha reservado espacio para 2 plazas, te queda libre 1 plaza");
   });
+
+  it("oferta de bulto + plaza en la reserva del conductor", () => {
+    expect(
+      fraseQueHasReservado(
+        {
+          tipo: "bulto_oferta",
+          bulto_descripcion: "lavadora",
+          cantidad: 1,
+        },
+        { esCliente: false, nombreCliente: "Pat" }
+      )
+    ).toBe("Pat ha reservado espacio para 1 bulto y 1 plaza");
+  });
+
+  it("oferta solo bulto no inventa plazas", () => {
+    expect(
+      fraseQueHasReservado({
+        tipo: "bulto_oferta",
+        bulto_descripcion: "lavadora",
+        cantidad: 0,
+      })
+    ).toBe("Has reservado espacio para 1 bulto");
+  });
 });
 
 describe("fraseQueIncluyeReservas", () => {
@@ -99,6 +122,18 @@ describe("fraseQueIncluyeReservas", () => {
         {
           tipo: "capacidad_extra",
           bulto_descripcion: "Plaza de acompañante (×1)",
+          cantidad: 1,
+        },
+      ])
+    ).toBe("Reserva para 1 bulto y 1 plaza");
+  });
+
+  it("bulto_oferta con plazas", () => {
+    expect(
+      fraseQueIncluyeReservas([
+        {
+          tipo: "bulto_oferta",
+          bulto_descripcion: "lavadora",
           cantidad: 1,
         },
       ])

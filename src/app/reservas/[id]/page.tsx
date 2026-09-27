@@ -10,9 +10,11 @@ import { createClient } from "@/lib/supabase/server";
 import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
 import {
+  aplicarDesgloseOfertaAReserva,
   chatPermitido,
   esReservaDePlazas,
   fraseQueHasReservado,
+  fraseQueIncluyeReservas,
 } from "@/lib/reservas/labels";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
@@ -25,6 +27,7 @@ import {
 import type {
   Disputa,
   OfertaCapacidad,
+  OfertaDesglose,
   PerfilPublico,
   Reserva,
   RutaConductor,
@@ -140,6 +143,29 @@ export default async function ReservaDetallePage({
       relacionadas = hermanas as Reserva[];
     }
   }
+
+  const ofertaIds = relacionadas
+    .map((item) => item.oferta_precio_id)
+    .filter((id): id is string => Boolean(id));
+  const desglosesPorOferta: Record<string, OfertaDesglose | null> = {};
+  if (ofertaIds.length > 0) {
+    const { data: ofertasPrecio } = await supabase
+      .from("ofertas_precio")
+      .select("id, desglose")
+      .in("id", ofertaIds);
+    for (const o of ofertasPrecio ?? []) {
+      desglosesPorOferta[o.id] = (o.desglose as OfertaDesglose | null) ?? null;
+    }
+  }
+  relacionadas = relacionadas.map((item) =>
+    item.oferta_precio_id
+      ? (aplicarDesgloseOfertaAReserva(
+          item,
+          desglosesPorOferta[item.oferta_precio_id]
+        ) as Reserva)
+      : item
+  );
+
   let plazasLibres: number | undefined;
   if (!esCliente && reserva.ruta_conductor_id) {
     const ocupacion = await cargarOcupacionRuta(reserva.ruta_conductor_id);
@@ -182,7 +208,7 @@ export default async function ReservaDetallePage({
 
   const titulo = ruta
     ? `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`
-    : "Reserva de bulto";
+    : fraseQueIncluyeReservas(relacionadas);
 
   const otroPerfil = esCliente
     ? perfiles[reserva.transportista_id]

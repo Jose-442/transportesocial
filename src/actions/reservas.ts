@@ -16,15 +16,29 @@ import {
   createTripCheckoutSession,
   recuperarPagoPendiente,
 } from "@/lib/stripe/trip-checkout";
-import { separarHoraOculta } from "@/lib/bulto-hora";
+import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import {
   isTipoSolicitud,
   necesidadRestanteTrasOferta,
   tipoSolicitudDesdeDesglose,
+  type OfertaDesglose,
 } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
+
+function fechaLlegadaDesdeBulto(bulto: AnuncioBulto): string {
+  const hora = horaDeAnuncio(bulto.descripcion, bulto.medidas);
+  if (!bulto.fecha_limite) {
+    return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  }
+  const d = new Date(bulto.fecha_limite);
+  if (hora && /^\d{2}:\d{2}$/.test(hora)) {
+    const [hh, mm] = hora.split(":").map((x) => parseInt(x, 10));
+    d.setHours(hh, mm, 0, 0);
+  }
+  return d.toISOString();
+}
 
 async function pendientesDelMismoViaje(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -618,9 +632,17 @@ export async function prepararReservaBulto(ofertaId: string) {
     return { error: "No autorizado." };
   }
 
-  const llegada = bulto.fecha_limite
-    ? new Date(bulto.fecha_limite).toISOString()
-    : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  const desglose = (oferta.desglose ?? null) as OfertaDesglose | null;
+  const plazasOfrecidas = Math.max(
+    0,
+    Number(desglose?.plazas_ofrecidas ?? desglose?.num_plazas) || 0
+  );
+  const conBulto =
+    desglose == null
+      ? true
+      : desglose.precio_neto_bulto != null &&
+        Number(desglose.precio_neto_bulto) > 0;
+  const llegada = fechaLlegadaDesdeBulto(bulto as AnuncioBulto);
 
   const { data: reserva, error } = await supabase
     .from("reservas")
@@ -636,8 +658,13 @@ export async function prepararReservaBulto(ofertaId: string) {
         Number(oferta.precio_total) - Number(oferta.precio_neto),
       estado: "pendiente_pago",
       fecha_llegada_prevista: llegada,
-      bulto_descripcion: separarHoraOculta(bulto.descripcion).texto,
-      bulto_medidas: separarHoraOculta(bulto.medidas).texto,
+      cantidad: plazasOfrecidas,
+      bulto_descripcion: conBulto
+        ? separarHoraOculta(bulto.descripcion).texto
+        : null,
+      bulto_medidas: conBulto
+        ? separarHoraOculta(bulto.medidas).texto
+        : null,
     })
     .select("id")
     .single();

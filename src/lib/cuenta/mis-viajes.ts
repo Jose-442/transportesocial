@@ -13,7 +13,7 @@ import {
   lineasOfertaRuta,
   ofertaOriginalRuta,
 } from "@/lib/oferta-ruta-labels";
-import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
+import { fraseQueIncluyeReservas, aplicarDesgloseOfertaAReserva } from "@/lib/reservas/labels";
 import { asegurarAvisosConductor } from "@/lib/reservas/notify";
 import type {
   AnuncioBulto,
@@ -39,7 +39,9 @@ function tituloReserva(
   if (ruta) {
     return `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`;
   }
-  return reserva.tipo === "bulto_oferta" ? "Envío por oferta" : "Reserva";
+  return reserva.tipo === "bulto_oferta"
+    ? fraseQueIncluyeReservas([reserva])
+    : "Reserva";
 }
 
 function tituloOferta(oferta: OfertaConBulto): string {
@@ -194,17 +196,37 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     });
   }
 
+  const ofertaIds = lista
+    .map((r) => r.oferta_precio_id)
+    .filter((id): id is string => Boolean(id));
+  const desglosesPorOferta: Record<string, OfertaPrecio["desglose"]> = {};
+  if (ofertaIds.length > 0) {
+    const { data: ofertasDesglose } = await supabase
+      .from("ofertas_precio")
+      .select("id, desglose")
+      .in("id", ofertaIds);
+    for (const o of ofertasDesglose ?? []) {
+      desglosesPorOferta[o.id] = (o.desglose as OfertaPrecio["desglose"]) ?? null;
+    }
+  }
+
   const grupos = new Map<string, Reserva[]>();
   for (const r of lista) {
-    const esCliente = r.cliente_id === userId;
-    const apartado = apartadoReserva(r.estado, esCliente);
+    const normalizada = r.oferta_precio_id
+      ? (aplicarDesgloseOfertaAReserva(
+          r,
+          desglosesPorOferta[r.oferta_precio_id]
+        ) as Reserva)
+      : r;
+    const esCliente = normalizada.cliente_id === userId;
+    const apartado = apartadoReserva(normalizada.estado, esCliente);
     if (!apartado) continue;
     const clave =
-      r.ruta_conductor_id && r.estado !== "cancelado"
-        ? `${apartado}:${r.cliente_id}:${r.ruta_conductor_id}`
-        : r.id;
+      normalizada.ruta_conductor_id && normalizada.estado !== "cancelado"
+        ? `${apartado}:${normalizada.cliente_id}:${normalizada.ruta_conductor_id}`
+        : normalizada.id;
     const grupo = grupos.get(clave) ?? [];
-    grupo.push(r);
+    grupo.push(normalizada);
     grupos.set(clave, grupo);
   }
 
