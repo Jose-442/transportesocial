@@ -308,7 +308,7 @@ export function OfertaForm({
           {totales.desglose.plazas_solicitadas > 0 &&
             totales.desglose.plazas_ofrecidas === 0 && (
               <p className="text-amber-800">
-                Solo propones el bulto; no llevas pasajeros en este viaje.
+                Solo propones para el bulto; no llevas pasajeros en este viaje.
               </p>
             )}
           <p>
