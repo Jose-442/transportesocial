@@ -84,16 +84,16 @@ export function OfertaForm({
         (loadOfertaBackup(bultoId) as OfertaDraft | null);
       if (draft) {
         const ofrecidas = parseInt(draft.plazas_ofrecidas ?? "", 10);
+        const plazasValidas =
+          plazas > 0 &&
+          Number.isInteger(ofrecidas) &&
+          ofrecidas >= 0 &&
+          ofrecidas <= plazas &&
+          (conBulto || ofrecidas >= 1);
         setForm({
           precio_neto_bulto: draft.precio_neto_bulto ?? "",
           precio_neto_plaza: draft.precio_neto_plaza ?? "",
-          plazas_ofrecidas:
-            plazas > 0 &&
-            Number.isInteger(ofrecidas) &&
-            ofrecidas >= 1 &&
-            ofrecidas <= plazas
-              ? String(ofrecidas)
-              : String(plazas),
+          plazas_ofrecidas: plazasValidas ? String(ofrecidas) : String(plazas),
           mensaje: draft.mensaje ?? "",
         });
         // Reasigna el borrador a la cuenta por si venía del backup de sesión.
@@ -102,13 +102,7 @@ export function OfertaForm({
           {
             precio_neto_bulto: draft.precio_neto_bulto ?? "",
             precio_neto_plaza: draft.precio_neto_plaza ?? "",
-            plazas_ofrecidas:
-              plazas > 0 &&
-              Number.isInteger(ofrecidas) &&
-              ofrecidas >= 1 &&
-              ofrecidas <= plazas
-                ? String(ofrecidas)
-                : String(plazas),
+            plazas_ofrecidas: plazasValidas ? String(ofrecidas) : String(plazas),
             mensaje: draft.mensaje ?? "",
           },
           uid
@@ -119,7 +113,7 @@ export function OfertaForm({
     return () => {
       cancelled = true;
     };
-  }, [draftKey, plazas, bultoId]);
+  }, [draftKey, plazas, bultoId, conBulto]);
 
   useEffect(() => {
     if (!ready) return;
@@ -142,14 +136,21 @@ export function OfertaForm({
 
   const netoBulto = parseFloat(form.precio_neto_bulto) || 0;
   const netoPlaza = parseFloat(form.precio_neto_plaza) || 0;
+  const plazasOfrecidasRaw = parseInt(form.plazas_ofrecidas, 10);
   const plazasOfrecidas =
-    plazas > 0 ? parseInt(form.plazas_ofrecidas, 10) || plazas : 0;
+    plazas > 0
+      ? Number.isInteger(plazasOfrecidasRaw) &&
+        plazasOfrecidasRaw >= 0 &&
+        plazasOfrecidasRaw <= plazas
+        ? plazasOfrecidasRaw
+        : plazas
+      : 0;
   const totales =
-    (conBulto && netoBulto > 0) || (plazas > 0 && netoPlaza > 0)
+    (conBulto && netoBulto > 0) || (plazasOfrecidas > 0 && netoPlaza > 0)
       ? calcOfertaTotales(
           tipoSolicitud,
           netoBulto,
-          netoPlaza,
+          plazasOfrecidas > 0 ? netoPlaza : 0,
           plazas > 0 ? plazasOfrecidas : undefined
         )
       : null;
@@ -236,36 +237,51 @@ export function OfertaForm({
       )}
       {plazas > 0 && (
         <>
-          <Input
-            name="precio_neto_plaza"
-            label="Pon precio por pasajero (€)"
-            type="text"
-            inputMode="decimal"
-            placeholder="Ej. 25"
-            required
-            value={form.precio_neto_plaza}
-            hint={`Nº de plazas solicitadas para pasajeros en este viaje (${plazas})`}
-            hintClassName="text-sm text-zinc-500"
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, precio_neto_plaza: e.target.value }))
-            }
-          />
           <Select
             name="plazas_ofrecidas"
             label="Plazas de pasajero que puedes llevar en este viaje"
             value={form.plazas_ofrecidas}
             required
-            options={Array.from({ length: plazas }, (_, i) => {
-              const n = i + 1;
-              return {
-                value: String(n),
-                label: n === 1 ? "1 pasajero" : `${n} pasajeros`,
-              };
-            })}
+            options={[
+              ...(conBulto
+                ? [{ value: "0", label: "0 — sin plazas de pasajero" }]
+                : []),
+              ...Array.from({ length: plazas }, (_, i) => {
+                const n = i + 1;
+                return {
+                  value: String(n),
+                  label: n === 1 ? "1 pasajero" : `${n} pasajeros`,
+                };
+              }),
+            ]}
             onChange={(e) =>
-              setForm((prev) => ({ ...prev, plazas_ofrecidas: e.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                plazas_ofrecidas: e.target.value,
+                ...(e.target.value === "0" ? { precio_neto_plaza: "" } : {}),
+              }))
             }
           />
+          <p className="text-sm text-zinc-500">
+            Nº de plazas solicitadas para pasajeros en este viaje ({plazas})
+          </p>
+          {plazasOfrecidas > 0 && (
+            <Input
+              name="precio_neto_plaza"
+              label="Pon precio por pasajero (€)"
+              type="text"
+              inputMode="decimal"
+              placeholder="Ej. 25"
+              required
+              value={form.precio_neto_plaza}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  precio_neto_plaza: e.target.value,
+                }))
+              }
+            />
+          )}
         </>
       )}
       {totales && (
@@ -289,12 +305,19 @@ export function OfertaForm({
                 </strong>
               </p>
             )}
+          {totales.desglose.plazas_solicitadas > 0 &&
+            totales.desglose.plazas_ofrecidas === 0 && (
+              <p className="text-amber-800">
+                Solo propones el bulto; no llevas pasajeros en este viaje.
+              </p>
+            )}
           <p>
             Total a pagar por el solicitante:{" "}
             <strong>{formatEur(totales.precio_total)}</strong>
           </p>
-          {totales.desglose.plazas_ofrecidas <
-            totales.desglose.plazas_solicitadas && (
+          {totales.desglose.plazas_ofrecidas > 0 &&
+            totales.desglose.plazas_ofrecidas <
+              totales.desglose.plazas_solicitadas && (
             <p className="text-amber-800">
               En el anuncio se solicitan {totales.desglose.plazas_solicitadas}{" "}
               pasajeros; tu propuesta cubre {totales.desglose.plazas_ofrecidas}.

@@ -140,7 +140,7 @@ export function calcOfertaTotales(
   if (plazasSolicitadas > 0) {
     const ofrecidas = plazasOfrecidas ?? plazasSolicitadas;
     plazas = Math.min(
-      Math.max(1, Math.trunc(ofrecidas)),
+      Math.max(0, Math.trunc(ofrecidas)),
       plazasSolicitadas
     );
   }

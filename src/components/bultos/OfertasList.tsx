@@ -78,7 +78,9 @@ export function OfertasList({
                     <div className="mt-1 space-y-0.5 text-sm text-zinc-600">
                       <p>
                         {oferta.desglose.precio_total_bulto != null
-                          ? `Cubre el bulto y ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`
+                          ? oferta.desglose.plazas_ofrecidas === 0
+                            ? "Cubre solo el bulto"
+                            : `Cubre el bulto y ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`
                           : `Cubre ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`}
                       </p>
                       <p>

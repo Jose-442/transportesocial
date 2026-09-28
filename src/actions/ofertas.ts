@@ -71,28 +71,35 @@ export async function enviarOferta(formData: FormData) {
   if (conBulto && (!precioNetoBulto || precioNetoBulto <= 0)) {
     return { error: "Indica el precio neto del bulto." };
   }
-  if (plazas > 0 && (!precioNetoPlaza || precioNetoPlaza <= 0)) {
-    return { error: "Indica el precio neto por pasajero." };
-  }
 
   let plazasOfrecidas = plazas;
   if (plazas > 0) {
     plazasOfrecidas = parseInt(String(formData.get("plazas_ofrecidas") ?? ""), 10);
     if (
       !Number.isInteger(plazasOfrecidas) ||
-      plazasOfrecidas < 1 ||
+      plazasOfrecidas < 0 ||
       plazasOfrecidas > plazas
     ) {
       return {
-        error: `Indica cuántas plazas puedes llevar (entre 1 y ${plazas}).`,
+        error: conBulto
+          ? `Indica cuántas plazas puedes llevar (entre 0 y ${plazas}).`
+          : `Indica cuántas plazas puedes llevar (entre 1 y ${plazas}).`,
       };
     }
+    // Solo plazas (sin bulto): tiene que ofrecer al menos 1.
+    if (!conBulto && plazasOfrecidas < 1) {
+      return { error: "Indica al menos 1 plaza." };
+    }
+  }
+
+  if (plazasOfrecidas > 0 && (!precioNetoPlaza || precioNetoPlaza <= 0)) {
+    return { error: "Indica el precio neto por pasajero." };
   }
 
   const { precio_neto, precio_total, desglose } = calcOfertaTotales(
     tipoSolicitud,
     conBulto ? precioNetoBulto : 0,
-    plazas > 0 ? precioNetoPlaza : 0,
+    plazasOfrecidas > 0 ? precioNetoPlaza : 0,
     plazas > 0 ? plazasOfrecidas : undefined
   );
 

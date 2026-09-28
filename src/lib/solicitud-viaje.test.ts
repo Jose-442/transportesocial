@@ -44,6 +44,20 @@ describe("solicitud-viaje", () => {
     expect(partial.precio_total).toBeLessThan(full.precio_total);
   });
 
+  it("calcOfertaTotales solo bulto aunque el anuncio pida plazas", () => {
+    const soloBulto = calcOfertaTotales("bulto_3_pasajeros", 40, 0, 0);
+    expect(soloBulto.precio_neto).toBe(40);
+    expect(soloBulto.desglose.plazas_ofrecidas).toBe(0);
+    expect(soloBulto.desglose.plazas_solicitadas).toBe(3);
+    expect(soloBulto.desglose.precio_neto_plaza).toBeNull();
+    const resto = necesidadRestanteTrasOferta(
+      "bulto_3_pasajeros",
+      soloBulto.desglose
+    );
+    expect(resto.cubreTodo).toBe(false);
+    expect(resto.tipoRestante).toBe("solo_3_pasajeros");
+  });
+
   it("tras aceptar bulto+1 de 2 queda solo 1 pasajero en búsqueda", () => {
     const partial = calcOfertaTotales("bulto_2_pasajeros", 10, 5, 1);
     const resto = necesidadRestanteTrasOferta(
