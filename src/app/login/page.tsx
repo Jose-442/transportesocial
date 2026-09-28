@@ -53,7 +53,7 @@ export default async function LoginPage({
       )}
       {esRedirectPublicarBulto && (
         <p className="text-2xl font-bold leading-snug text-zinc-900">
-          Para publicar tu propuesta de porte necesitas crear una cuenta
+          Para publicar tu propuesta de porte y/o viaje necesitas crear una cuenta
         </p>
       )}
       <Link
