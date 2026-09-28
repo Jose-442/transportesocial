@@ -83,16 +83,17 @@ export function OfertasList({
                             : `Cubre el bulto y ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`
                           : `Cubre ${oferta.desglose.plazas_ofrecidas} pasajero${oferta.desglose.plazas_ofrecidas !== 1 ? "s" : ""}`}
                       </p>
-                      <p>
-                        Queda pendiente: Faltan{" "}
-                        {oferta.desglose.plazas_solicitadas -
-                          oferta.desglose.plazas_ofrecidas}{" "}
-                        pasajero
-                        {oferta.desglose.plazas_solicitadas -
-                          oferta.desglose.plazas_ofrecidas !==
-                        1
-                          ? "s"
-                          : ""}
+                      <p className="whitespace-nowrap">
+                        {`Queda pendiente: Faltan ${
+                          oferta.desglose.plazas_solicitadas -
+                          oferta.desglose.plazas_ofrecidas
+                        } pasajero${
+                          oferta.desglose.plazas_solicitadas -
+                            oferta.desglose.plazas_ofrecidas !==
+                          1
+                            ? "s"
+                            : ""
+                        }`}
                       </p>
                     </div>
                   )}
