@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { abrirChatReserva } from "@/lib/reservas/chat";
-import { patchReservaEstadoConServicio, patchReservaConUsuario } from "@/lib/supabase/admin";
 import { liberarPagoConductor, reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import {
@@ -26,30 +25,6 @@ export async function procesarCronsReservas(admin: AdminClient) {
     .lte("expira_aprobacion_en", ahora);
 
   for (const r of expiradas ?? []) {
-    // Bultos viejos que quedaron mal en «esperando respuesta»: al pagar ya estaban aceptados.
-    if (r.tipo === "bulto_oferta") {
-      const ok = await persistirAceptacionReserva(admin, r);
-      if (ok) {
-        await abrirChatReserva(admin, r.id);
-        await crearNotificacion(admin, {
-          user_id: r.cliente_id,
-          tipo: "reserva_confirmada",
-          titulo: "Viaje confirmado",
-          mensaje: "El viaje queda confirmado. Coordina por el chat.",
-          enlace: `/reservas/${r.id}/chat`,
-        });
-        await crearNotificacion(admin, {
-          user_id: r.transportista_id,
-          tipo: "reserva_confirmada",
-          titulo: "Viaje confirmado",
-          mensaje: "El viaje queda confirmado. Coordina por el chat.",
-          enlace: `/reservas/${r.id}/chat`,
-        });
-        resultados.aprobacionesExpiradas++;
-      }
-      continue;
-    }
-
     await reembolsarReserva(admin, r.id, "Conductor no respondió en el plazo de 8 horas.");
     await crearNotificacion(admin, {
       user_id: r.cliente_id,
@@ -148,26 +123,7 @@ async function estadoDeReserva(
   return data?.estado ?? null;
 }
 
-async function esperarTope<T>(
-  trabajo: PromiseLike<T>,
-  ms: number
-): Promise<T | null> {
-  return Promise.race([
-    Promise.resolve(trabajo).catch((err) => {
-      console.error(err);
-      return null;
-    }),
-    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
-  ]);
-}
-
-type RpcFila = {
-  data?: unknown;
-  error?: { message: string } | null;
-};
-
-function textoRpc(rpc: RpcFila | null): string {
-  const data = rpc?.data;
+function textoRpc(data: unknown): string {
   if (typeof data === "string") return data;
   if (Array.isArray(data) && data[0] && typeof data[0] === "object") {
     return String((data[0] as { estado?: string }).estado ?? "");
@@ -178,102 +134,39 @@ function textoRpc(rpc: RpcFila | null): string {
   return "";
 }
 
+/** Un solo camino BD: aceptar_reserva_conductor (SECURITY DEFINER). */
 export async function persistirAceptacionReserva(
   db: AdminClient,
-  reserva: Pick<Reserva, "id">,
-  accessToken?: string
+  reserva: Pick<Reserva, "id">
 ): Promise<boolean> {
   if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
 
-  const payload = {
-    estado: "confirmada",
-    aceptada_en: new Date().toISOString(),
-  };
-
-  const rpcUno = (await esperarTope(
-    db.rpc("aceptar_reserva_conductor", { p_id: reserva.id }),
-    8000
-  )) as RpcFila | null;
-  if (rpcUno?.error) {
-    console.error("[aceptar] rpc uno", rpcUno.error.message);
-  }
-  if (textoRpc(rpcUno) === "confirmada") return true;
-  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
-
-  const { error } = await db
-    .from("reservas")
-    .update(payload)
-    .eq("id", reserva.id)
-    .eq("estado", "pendiente_aprobacion");
+  const { data, error } = await db.rpc("aceptar_reserva_conductor", {
+    p_id: reserva.id,
+  });
   if (error) {
-    console.error("[aceptar] update", error.message);
+    console.error("[aceptar] rpc", error.message, reserva.id);
   }
-  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
-
-  if (accessToken) {
-    const conUsuario = await patchReservaConUsuario(
-      accessToken,
-      reserva.id,
-      payload
-    );
-    if (conUsuario.estado === "confirmada") return true;
-  }
-  if ((await estadoDeReserva(db, reserva.id)) === "confirmada") return true;
-
-  const parche = await patchReservaEstadoConServicio(reserva.id, payload);
-  if (parche.estado === "confirmada") return true;
+  if (textoRpc(data) === "confirmada") return true;
   return (await estadoDeReserva(db, reserva.id)) === "confirmada";
 }
 
+/** Un solo camino BD: rechazar_reserva_conductor (SECURITY DEFINER). */
 export async function persistirRechazoReserva(
   db: AdminClient,
   reserva: Pick<Reserva, "id">,
-  motivo: string,
-  accessToken?: string
+  motivo: string
 ): Promise<boolean> {
   if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
 
-  const payload = {
-    estado: "cancelado",
-    cancelada_en: new Date().toISOString(),
-    motivo_cancelacion: motivo,
-  };
-
-  const rpcUno = (await esperarTope(
-    db.rpc("rechazar_reserva_conductor", {
-      p_id: reserva.id,
-      p_motivo: motivo,
-    }),
-    8000
-  )) as RpcFila | null;
-  if (rpcUno?.error) {
-    console.error("[rechazar] rpc uno", rpcUno.error.message);
-  }
-  if (textoRpc(rpcUno) === "cancelado") return true;
-  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
-
-  const { error } = await db
-    .from("reservas")
-    .update(payload)
-    .eq("id", reserva.id)
-    .eq("estado", "pendiente_aprobacion");
+  const { data, error } = await db.rpc("rechazar_reserva_conductor", {
+    p_id: reserva.id,
+    p_motivo: motivo,
+  });
   if (error) {
-    console.error("[rechazar] update", error.message);
+    console.error("[rechazar] rpc", error.message, reserva.id);
   }
-  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
-
-  if (accessToken) {
-    const conUsuario = await patchReservaConUsuario(
-      accessToken,
-      reserva.id,
-      payload
-    );
-    if (conUsuario.estado === "cancelado") return true;
-  }
-  if ((await estadoDeReserva(db, reserva.id)) === "cancelado") return true;
-
-  const parche = await patchReservaEstadoConServicio(reserva.id, payload);
-  if (parche.estado === "cancelado") return true;
+  if (textoRpc(data) === "cancelado") return true;
   return (await estadoDeReserva(db, reserva.id)) === "cancelado";
 }
 

@@ -2,10 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import {
-  createAdminClient,
-  patchReservaEstadoConServicio,
-} from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { idsUsuariosAdmin } from "@/lib/admin/ids-admin";
 import { ADMIN_EMAILS } from "@/lib/admin";
 import { crearNotificacion } from "@/lib/reservas/notify";
@@ -77,22 +74,17 @@ export async function abrirDisputa(formData: FormData) {
 
   if (insertError) return { error: supabaseErrorMessage(insertError) };
 
+  const dbDisputa = createAdminClient() ?? supabase;
+  const { error: disputaRpcError } = await dbDisputa.rpc(
+    "marcar_reserva_en_disputa",
+    { p_reserva_id: reservaId }
+  );
+  if (disputaRpcError) {
+    return { error: supabaseErrorMessage(disputaRpcError) };
+  }
+
   const admin = createAdminClient();
   if (admin) {
-    const { error: updReserva } = await admin
-      .from("reservas")
-      .update({ estado: "disputa" })
-      .eq("id", reservaId);
-    if (updReserva) {
-      await patchReservaEstadoConServicio(reservaId, { estado: "disputa" });
-    }
-
-    await admin
-      .from("transacciones")
-      .update({ estado_escrow: "disputa" })
-      .eq("reserva_id", reservaId)
-      .eq("tipo", "cobro_viaje");
-
     const otroId = esCliente ? reserva.transportista_id : reserva.cliente_id;
     const enlace = `/reservas/${reservaId}`;
     await crearNotificacion(admin, {
@@ -115,8 +107,6 @@ export async function abrirDisputa(formData: FormData) {
         enlace: "/admin/disputas",
       });
     }
-  } else {
-    await patchReservaEstadoConServicio(reservaId, { estado: "disputa" });
   }
 
   const { data: autorPerfil } = await supabase
