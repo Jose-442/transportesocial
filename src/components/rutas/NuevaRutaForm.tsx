@@ -519,7 +519,7 @@ export function NuevaRutaForm({
               sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
             }}
           >
-            Datos de mi vehículo
+            Datos del vehículo
           </ButtonLink>
           <p className="mt-2 uppercase">
             Completar también los datos de tu perfil da confianza a tu viaje.
