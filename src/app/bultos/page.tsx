@@ -79,11 +79,11 @@ export default async function BultosPage({
       </Suspense>
 
       {!busquedaCompleta ? (
-        <p className="text-sm text-zinc-500">
-          {hayFiltros
-            ? "Completa salida, llegada, mes y día para ver los bultos."
-            : "Rellena los cuatro campos y pulsa Buscar."}
-        </p>
+        hayFiltros ? (
+          <p className="text-sm text-zinc-500">
+            Completa salida, llegada, mes y día para ver los bultos.
+          </p>
+        ) : null
       ) : (
         <>
           <p className="text-sm font-medium text-zinc-700">

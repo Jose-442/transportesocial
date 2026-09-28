@@ -45,11 +45,11 @@ export default async function RutasPage({
       </Suspense>
 
       {!busquedaCompleta ? (
-        <p className="text-sm text-zinc-500">
-          {hayFiltros
-            ? "Completa salida, llegada, mes y día para ver los viajes."
-            : "Rellena los cuatro campos y pulsa Buscar."}
-        </p>
+        hayFiltros ? (
+          <p className="text-sm text-zinc-500">
+            Completa salida, llegada, mes y día para ver los viajes.
+          </p>
+        ) : null
       ) : rutas.length === 0 ? (
         <p className="text-sm text-zinc-500">
           No se encontraron viajes en esta búsqueda.
