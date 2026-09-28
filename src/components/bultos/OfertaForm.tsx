@@ -350,7 +350,7 @@ export function OfertaForm({
       {mostrarAvisoPerfil && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p>
-            Consejo: a la gente le gusta ver con quién va a compartir viaje.
+            Consejo: A la gente le gusta ver con quién va a compartir viaje.
             Una foto y una presentación ayudan.
           </p>
           <Link
