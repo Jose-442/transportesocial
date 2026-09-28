@@ -121,7 +121,7 @@ export function OfertasList({
               {!(esDueno && oferta.estado === "pendiente") && (
                 <Badge tone={estadoTone[oferta.estado]}>
                   {esMia && oferta.estado === "pendiente"
-                    ? "Pendiente de aprobación"
+                    ? "A falta de aprobación"
                     : oferta.estado}
                 </Badge>
               )}
