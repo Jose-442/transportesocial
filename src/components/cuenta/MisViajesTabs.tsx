@@ -101,7 +101,7 @@ function OfertaCard({ item }: { item: OfertaViajeItem }) {
               : "Tú has puesto precio a este viaje."}
           </p>
         </div>
-        <Badge tone="amber">Pendiente</Badge>
+        <Badge tone="amber">A falta de aprobación</Badge>
       </div>
       <p className="text-sm font-medium text-emerald-700">
         {formatEur(item.precioTotal)}
