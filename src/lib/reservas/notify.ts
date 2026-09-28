@@ -14,8 +14,8 @@ type Aviso = Pick<
   "user_id" | "tipo" | "titulo" | "mensaje" | "enlace"
 >;
 
+/** Solo tras cobro (o aprobación). Nunca en pendiente_pago: el otro aún no ha pagado. */
 const ESTADOS_AVISO_CONDUCTOR: Reserva["estado"][] = [
-  "pendiente_pago",
   "pendiente_aprobacion",
   "confirmada",
   "pagado_escrow",

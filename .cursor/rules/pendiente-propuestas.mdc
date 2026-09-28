@@ -5,13 +5,28 @@ alwaysApply: true
 
 # Pendiente Transporte Social — propuestas
 
+## Hecho (28-sep-2026)
+
+1. Aceptar / rechazar / disputa: un solo camino limpio en BD (SQL `051` + código).
+2. Web vaciada de datos de prueba (todo a 0).
+3. Conductor no ve ni recibe aviso de reservas en «pendiente de pago» (solo quien paga).
+
+## Sigue pendiente de probar
+
+**Conductor rechaza un viaje YA PAGADO por quien necesitaba el porte.**
+
+Comprobar:
+1. El conductor puede pulsar rechazar/cancelar hasta la hora del viaje.
+2. Al otro le llega aviso.
+3. Se inicia el reembolso del 100 % (también gastos de gestión).
+
+## Hecho (27-sep-2026)
+
+1. Pago tras Stripe: función única `confirmar_pago_viaje` (SQL `050` + código).
+
 ## Hecho (26-sep-2026)
 
 1. Tras rellenar el vehículo, vuelve al bulto con «Enviar propuesta» visible.
 2. El conductor puede eliminar su propuesta pendiente (botón + SQL `043`).
 3. Aceptación parcial: si queda plaza, el anuncio sigue en búsqueda como solo plazas (SQL `045`).
-
-## SQL que José debe ejecutar en Supabase
-
-Pegar y Run el contenido de `supabase/migrations/045_bulto_resto_plazas_tras_aceptar.sql`
-(Yet: bulto+2 aceptó bulto+1 → debe quedar activo como 1 pasajero sin bulto).
+4. Bulto pagado: ambos aceptan al pagar; solo avisa si alguien rechaza después (SQL `046` si quedó mal en «esperando al conductor»).

@@ -104,6 +104,11 @@ export default async function ReservaDetallePage({
   const esCliente = reserva.cliente_id === user.id;
   const esConductor = reserva.transportista_id === user.id;
 
+  // El conductor no debe ver reservas aún sin pagar (ni el estado «pendiente de pago»).
+  if (esConductor && !esCliente && reserva.estado === "pendiente_pago") {
+    redirect("/cuenta/viajes");
+  }
+
   const ids = [reserva.cliente_id, reserva.transportista_id];
   const { data: perfilesData } = await supabase
     .from("profiles")
