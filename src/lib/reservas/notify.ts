@@ -2,7 +2,6 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Notificacion, Reserva } from "@/types/database";
 import { enviarPushNotificacion } from "@/lib/push/send";
-import { getSupabaseServerUrl } from "@/lib/supabase/env";
 import {
   agruparReservasMismoCobro,
   idReservaDelAviso,
@@ -25,91 +24,22 @@ const ESTADOS_AVISO_CONDUCTOR: Reserva["estado"][] = [
   "disputa",
 ];
 
-async function insertarNotificacionConServicio(
-  data: Aviso
-): Promise<{ error?: string }> {
-  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-  const supabaseUrl = getSupabaseServerUrl();
-  if (!serviceRole || !supabaseUrl) {
-    return { error: "Servidor no configurado." };
-  }
-
-  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/notificaciones`;
-  const cuerpo = JSON.stringify(data);
-  const intentos: Record<string, string>[] = [
-    {
-      apikey: serviceRole,
-      Authorization: `Bearer ${serviceRole}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-      Accept: "application/json",
-    },
-    {
-      apikey: serviceRole,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-      Accept: "application/json",
-    },
-  ];
-
-  for (const headers of intentos) {
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers,
-        body: cuerpo,
-      });
-      if (res.ok || res.status === 409) return {};
-    } catch (err) {
-      console.error("[notificacion] insert servicio", err);
-    }
-  }
-  return { error: "No se pudo guardar el aviso." };
-}
-
+/** Un solo camino BD: crear_notificacion (SECURITY DEFINER). */
 export async function crearNotificacion(
   db: DbClient,
   data: Aviso
 ): Promise<{ error?: string }> {
-  if (data.enlace) {
-    const { data: repetida } = await db
-      .from("notificaciones")
-      .select("id")
-      .eq("user_id", data.user_id)
-      .eq("enlace", data.enlace)
-      .eq("titulo", data.titulo)
-      .limit(1)
-      .maybeSingle();
-    if (repetida) return {};
-  }
-
-  const { error: rpcError } = await db.rpc("crear_notificacion", {
+  const { error } = await db.rpc("crear_notificacion", {
     p_user_id: data.user_id,
     p_tipo: data.tipo,
     p_titulo: data.titulo,
     p_mensaje: data.mensaje,
     p_enlace: data.enlace,
   });
-  if (!rpcError) {
-    void enviarPushNotificacion({
-      userId: data.user_id,
-      titulo: data.titulo,
-      mensaje: data.mensaje,
-      enlace: data.enlace,
-    }).catch((err) => {
-      console.error("[push] notificación", err);
-    });
-    return {};
-  }
 
-  const { error } = await db.from("notificaciones").insert(data);
   if (error) {
-    console.error("[notificacion] insert", error.message, rpcError.message);
-    const fallback = await insertarNotificacionConServicio(data);
-    if (fallback.error) {
-      console.error("[notificacion] insert fallback", fallback.error);
-      return { error: fallback.error };
-    }
+    console.error("[notificacion] rpc crear_notificacion", error.message);
+    return { error: "No se pudo guardar el aviso." };
   }
 
   void enviarPushNotificacion({
@@ -120,6 +50,7 @@ export async function crearNotificacion(
   }).catch((err) => {
     console.error("[push] notificación", err);
   });
+
   return {};
 }
 
