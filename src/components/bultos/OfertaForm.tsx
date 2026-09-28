@@ -350,8 +350,8 @@ export function OfertaForm({
       {mostrarAvisoPerfil && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p>
-            Consejo: quien publica el bulto verá tu perfil. Foto y una breve
-            presentación suelen ayudar a que acepten tu propuesta.
+            Consejo: a la gente le gusta ver con quién va a compartir viaje.
+            Una foto y una presentación ayudan.
           </p>
           <Link
             href="/cuenta"
