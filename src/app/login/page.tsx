@@ -31,8 +31,13 @@ export default async function LoginPage({
   const registroHref = rawRedirect
     ? `/registro?redirect=${encodeURIComponent(rawRedirect)}`
     : "/registro";
-  const esRedirectBulto =
-    typeof rawRedirect === "string" && rawRedirect.startsWith("/bultos/");
+  const esRedirectPublicarBulto =
+    typeof rawRedirect === "string" &&
+    (rawRedirect === "/bultos/nuevo" || rawRedirect.startsWith("/bultos/nuevo?"));
+  const esRedirectOfertaBulto =
+    typeof rawRedirect === "string" &&
+    rawRedirect.startsWith("/bultos/") &&
+    !esRedirectPublicarBulto;
   const esRedirectPublicarViaje =
     typeof rawRedirect === "string" && rawRedirect.startsWith("/rutas/nueva");
   const contrasenaActualizada =
@@ -46,13 +51,18 @@ export default async function LoginPage({
           Para publicar un viaje necesitas crear una cuenta
         </p>
       )}
+      {esRedirectPublicarBulto && (
+        <p className="text-2xl font-bold leading-snug text-zinc-900">
+          Para publicar tu propuesta de porte necesitas crear una cuenta
+        </p>
+      )}
       <Link
         href={registroHref}
         className="inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-3 text-center text-xl font-bold leading-snug text-emerald-800 hover:bg-emerald-50"
       >
         Pulsa aquí para registrarte
       </Link>
-      {esRedirectBulto && (
+      {esRedirectOfertaBulto && (
         <p className="text-base text-zinc-600">
           Casi listo. Inicia sesión o crea cuenta para enviar tu propuesta de
           precio. El solicitante solo verá tu oferta cuando estés registrado.

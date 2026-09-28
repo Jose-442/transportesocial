@@ -12,7 +12,7 @@ const FRASE_TITULAR_CLASS =
 function FraseTitular({ children }: { children: string }) {
   return (
     <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-      !!{children}!!
+      ¡¡{children}!!
     </p>
   );
 }
@@ -21,7 +21,7 @@ export function HomeSofaHighlight() {
   return (
     <div className="flex min-w-0 max-w-full flex-col items-stretch gap-4 overflow-x-hidden px-1 sm:gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-6 lg:px-0">
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        !!{FRASE_IZQ}!!
+        ¡¡{FRASE_IZQ}!!
         <br />
         {FRASE_IZQ_SUB}
       </p>
