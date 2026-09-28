@@ -1,4 +1,4 @@
--- Si falla abrir el chat, NO debe deshacer el cobro ya guardado.
+-- Cobro primero; chat y extras no pueden tumbar el pago.
 -- Supabase → SQL Editor → pega TODO → Run.
 
 CREATE OR REPLACE FUNCTION public.confirmar_pago_viaje(
@@ -82,6 +82,7 @@ BEGIN
       v_expira := NOW() + make_interval(hours => v_horas);
     END IF;
 
+    -- 1) Cobro: esto es lo que cuenta.
     UPDATE public.reservas r
     SET
       estado = v_nuevo,
@@ -136,39 +137,42 @@ BEGIN
       WHERE id = v_tx_id;
     END IF;
 
-    IF v_r.tipo = 'bulto_oferta'
-       AND v_r.anuncio_bulto_id IS NOT NULL
-       AND v_nuevo = 'confirmada' THEN
-      UPDATE public.anuncios_bultos a
-      SET estado = 'reservado'
-      WHERE a.id = v_r.anuncio_bulto_id
-        AND NOT (
-          a.estado = 'activo'
-          AND a.tipo_solicitud IN (
-            'bulto_1_pasajero',
-            'bulto_2_pasajeros',
-            'bulto_3_pasajeros'
-          )
-        );
-    END IF;
+    -- 2) Extras: si fallan, el cobro YA quedó.
+    BEGIN
+      IF v_r.tipo = 'bulto_oferta'
+         AND v_r.anuncio_bulto_id IS NOT NULL
+         AND v_nuevo = 'confirmada' THEN
+        UPDATE public.anuncios_bultos a
+        SET estado = 'reservado'
+        WHERE a.id = v_r.anuncio_bulto_id
+          AND NOT (
+            a.estado = 'activo'
+            AND a.tipo_solicitud IN (
+              'bulto_1_pasajero',
+              'bulto_2_pasajeros',
+              'bulto_3_pasajeros'
+            )
+          );
+      END IF;
 
-    IF v_nuevo = 'confirmada'
-       AND v_r.tipo = 'ruta_directa'
-       AND v_r.ruta_conductor_id IS NOT NULL THEN
-      UPDATE public.rutas_conductores
-      SET estado = 'reservada'
-      WHERE id = v_r.ruta_conductor_id;
-    END IF;
+      IF v_nuevo = 'confirmada'
+         AND v_r.tipo = 'ruta_directa'
+         AND v_r.ruta_conductor_id IS NOT NULL THEN
+        UPDATE public.rutas_conductores
+        SET estado = 'reservada'
+        WHERE id = v_r.ruta_conductor_id;
+      END IF;
 
-    -- El cobro ya está guardado: el chat no puede tumbar la confirmación.
-    IF v_nuevo = 'confirmada' THEN
-      BEGIN
-        PERFORM public.abrir_chat_reserva(v_r.id);
-      EXCEPTION
-        WHEN OTHERS THEN
-          RAISE WARNING 'abrir_chat_reserva %: %', v_r.id, SQLERRM;
-      END;
-    END IF;
+      IF v_nuevo = 'confirmada' THEN
+        INSERT INTO public.chat_canales (reserva_id, abierto)
+        VALUES (v_r.id, true)
+        ON CONFLICT (reserva_id) DO UPDATE
+        SET abierto = true, cerrado_en = NULL;
+      END IF;
+    EXCEPTION
+      WHEN OTHERS THEN
+        RAISE WARNING 'post-cobro %: %', v_r.id, SQLERRM;
+    END;
 
     id := v_r.id;
     estado := v_r.estado;
