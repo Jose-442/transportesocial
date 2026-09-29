@@ -12,13 +12,10 @@ export function ProfilePhotoEditor({
   userId,
   displayName,
   avatarUrl: initialAvatarUrl,
-  compact = false,
 }: {
   userId: string;
   displayName: string;
   avatarUrl: string | null;
-  /** Menos alto (flujo «rellena el vehículo»). */
-  compact?: boolean;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -85,17 +82,11 @@ export function ProfilePhotoEditor({
   }
 
   return (
-    <div
-      className={
-        compact
-          ? "flex shrink-0 flex-col items-center gap-1"
-          : "flex shrink-0 flex-col items-center gap-2"
-      }
-    >
+    <div className="flex shrink-0 flex-col items-center gap-2">
       <UserAvatar
         name={displayName}
         avatarUrl={previewUrl ?? avatarUrl}
-        size={compact ? 48 : 72}
+        size={72}
       />
       <input
         ref={inputRef}
