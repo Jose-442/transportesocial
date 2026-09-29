@@ -292,14 +292,14 @@ export function OfertaForm({
             </p>
           )}
           {totales.desglose.num_plazas > 0 &&
-            totales.desglose.precio_total_plaza_unitario != null && (
+            (totales.desglose.precio_total_plaza_unitario ?? 0) > 0 && (
               <p>
                 {totales.desglose.num_plazas} pasajero
                 {totales.desglose.num_plazas !== 1 ? "s" : ""} ×{" "}
-                {formatEur(totales.desglose.precio_total_plaza_unitario)} ={" "}
+                {formatEur(totales.desglose.precio_total_plaza_unitario!)} ={" "}
                 <strong>
                   {formatEur(
-                    totales.desglose.precio_total_plaza_unitario *
+                    totales.desglose.precio_total_plaza_unitario! *
                       totales.desglose.num_plazas
                   )}
                 </strong>
