@@ -507,7 +507,7 @@ export function NuevaRutaForm({
           {error}
         </p>
       )}
-      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
+      {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p className="uppercase">
             Para publicar una ruta necesitas indicar los datos de tu vehículo

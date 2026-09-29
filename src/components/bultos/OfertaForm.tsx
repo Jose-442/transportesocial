@@ -292,14 +292,14 @@ export function OfertaForm({
             </p>
           )}
           {totales.desglose.num_plazas > 0 &&
-            (totales.desglose.precio_total_plaza_unitario ?? 0) > 0 && (
+            totales.desglose.precio_total_plaza_unitario != null && (
               <p>
                 {totales.desglose.num_plazas} pasajero
                 {totales.desglose.num_plazas !== 1 ? "s" : ""} ×{" "}
-                {formatEur(totales.desglose.precio_total_plaza_unitario!)} ={" "}
+                {formatEur(totales.desglose.precio_total_plaza_unitario)} ={" "}
                 <strong>
                   {formatEur(
-                    totales.desglose.precio_total_plaza_unitario! *
+                    totales.desglose.precio_total_plaza_unitario *
                       totales.desglose.num_plazas
                   )}
                 </strong>
@@ -330,7 +330,7 @@ export function OfertaForm({
           {error}
         </p>
       )}
-      {mostrarAvisoVehiculo && !volviendoDelVehiculo && (
+      {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p>
             Para enviar propuestas necesitas indicar los{" "}
