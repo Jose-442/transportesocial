@@ -243,7 +243,7 @@ export function NuevaRutaForm({
     return errors;
   }
 
-  const botonArriba = ready && volviendoDelVehiculo;
+  const botonArriba = ready && volviendoDelVehiculo && !mostrarAvisoVehiculo;
 
   useEffect(() => {
     if (!botonArriba) return;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Textarea } from "@/components/ui/Input";
 import { actualizarSobreTi } from "@/actions/cuenta";
@@ -12,10 +12,13 @@ import { useFormDraft } from "@/lib/use-form-draft";
 
 export function EditarSobreTiForm({
   sobreTiInicial,
+  verPerfilHref,
   compactPc = false,
 }: {
   sobreTiInicial: string | null;
-  /** Menos altura en escritorio (flujo ?volver= en /cuenta). Móvil sin cambios. */
+  /** Enlace «Ver cómo me ven los demás» (misma fila que Guardar). */
+  verPerfilHref?: string;
+  /** Menos altura en escritorio (flujo ?volver= en /cuenta). */
   compactPc?: boolean;
 }) {
   const router = useRouter();
@@ -56,19 +59,34 @@ export function EditarSobreTiForm({
         hint="A la otra persona del viaje le gustará saber algo de ti."
         hintClassName="text-sm text-zinc-500"
         maxLength={PROFILE_SOBRE_TI_MAX}
-        rows={4}
-        className={compactPc ? "md:min-h-0 md:h-[4.25rem]" : ""}
+        rows={2}
+        className={
+          compactPc
+            ? "!min-h-0 h-[3.25rem] md:h-[4.25rem]"
+            : "!min-h-0 h-[3.25rem] md:min-h-24 md:h-auto"
+        }
       />
       {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <Button
-        type="submit"
-        variant="secondary"
-        className={CUENTA_BTN_SECONDARY}
-        disabled={loading}
-      >
-        {loading ? "Guardando…" : "Guardar"}
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          type="submit"
+          variant="secondary"
+          className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1`}
+          disabled={loading}
+        >
+          {loading ? "Guardando…" : "Guardar"}
+        </Button>
+        {verPerfilHref ? (
+          <ButtonLink
+            href={verPerfilHref}
+            variant="secondary"
+            className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 px-2 text-center text-sm leading-tight`}
+          >
+            Ver cómo me ven los demás
+          </ButtonLink>
+        ) : null}
+      </div>
     </form>
   );
 }

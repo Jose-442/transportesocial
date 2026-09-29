@@ -84,7 +84,7 @@ export default async function CuentaPage({
 
       <Card
         className={[
-          "relative space-y-4",
+          "relative space-y-2 md:space-y-4",
           perfilCompactPc && "md:space-y-2 md:p-3",
         ]
           .filter(Boolean)
@@ -133,15 +133,9 @@ export default async function CuentaPage({
         </div>
         <EditarSobreTiForm
           sobreTiInicial={profile.sobre_ti}
+          verPerfilHref={`/perfil/${user.id}`}
           compactPc={perfilCompactPc}
         />
-        <ButtonLink
-          href={`/perfil/${user.id}`}
-          variant="secondary"
-          className={CUENTA_BTN_SECONDARY}
-        >
-          Ver cómo me ven los demás
-        </ButtonLink>
       </Card>
 
       <div id="vehiculo" className="scroll-mt-4">
