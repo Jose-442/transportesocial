@@ -274,7 +274,7 @@ export function MisViajesTabs({
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
             className={[
-              "min-w-[46%] flex-1 rounded-lg px-1 py-2 text-center text-[10px] font-semibold leading-tight transition-colors sm:min-w-0 sm:px-2 sm:py-2.5 sm:text-sm",
+              "min-w-[46%] flex-1 rounded-lg px-1.5 py-2.5 text-center text-sm font-semibold leading-snug transition-colors sm:min-w-0 sm:px-2 sm:py-2.5 sm:text-base",
               tab === t.id ? CUENTA_TAB_ACTIVE : CUENTA_TAB_INACTIVE,
             ].join(" ")}
           >
