@@ -18,6 +18,7 @@ import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
+import { ScrollAVehiculo } from "@/components/cuenta/ScrollAVehiculo";
 
 export const metadata = { title: "Mi cuenta" };
 
@@ -65,13 +66,22 @@ export default async function CuentaPage({
 
   const profile = result.profile;
   const payoutsEnabled = Boolean(profile.stripe_connect_payouts_enabled);
-  const perfilCompactPc = volverTrasVehiculo !== null;
+  const perfilCompacto = volverTrasVehiculo !== null;
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">Mi cuenta</h1>
+    <div className={perfilCompacto ? "space-y-2 md:space-y-4" : "space-y-4"}>
+      <ScrollAVehiculo activo={perfilCompacto} />
+      <h1
+        className={
+          perfilCompacto
+            ? "text-xl font-bold text-zinc-900 md:text-2xl"
+            : "text-2xl font-bold text-zinc-900"
+        }
+      >
+        Mi cuenta
+      </h1>
 
-      {isAdminUser(user) && (
+      {isAdminUser(user) && !perfilCompacto && (
         <p className="text-sm">
           <Link
             href="/admin"
@@ -84,8 +94,8 @@ export default async function CuentaPage({
 
       <Card
         className={[
-          "relative space-y-2 md:space-y-4",
-          perfilCompactPc && "md:space-y-2 md:p-3",
+          "relative space-y-2",
+          perfilCompacto ? "p-3 md:space-y-2 md:p-3" : "md:space-y-4",
         ]
           .filter(Boolean)
           .join(" ")}
@@ -93,11 +103,11 @@ export default async function CuentaPage({
         <div className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
           <NotificationBell />
         </div>
-        <h2 className="font-semibold text-zinc-900 pr-12">Mi perfil</h2>
+        <h2 className="pr-12 font-semibold text-zinc-900">Mi perfil</h2>
         <div
           className={[
-            "flex flex-col gap-4 sm:flex-row sm:items-start",
-            perfilCompactPc && "md:gap-2",
+            "flex items-start gap-3",
+            perfilCompacto ? "flex-row gap-2" : "flex-col gap-3 sm:flex-row sm:items-start sm:gap-4",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -106,9 +116,10 @@ export default async function CuentaPage({
             userId={user.id}
             displayName={profile.display_name}
             avatarUrl={profile.avatar_url}
+            compact={perfilCompacto}
           />
-          <div className="flex-1 pt-1">
-            <p className="text-lg font-semibold text-zinc-900">
+          <div className="min-w-0 flex-1 pt-0.5">
+            <p className="text-base font-semibold text-zinc-900 sm:text-lg">
               {profile.display_name}
             </p>
             {(profile.rating_cantidad ?? 0) > 0 && (
@@ -125,31 +136,36 @@ export default async function CuentaPage({
                 </Link>
               </p>
             )}
-            <p className="text-sm text-zinc-600">{user.email}</p>
-            <p className="mt-2 text-xs text-zinc-500">
-              JPG, PNG o WebP. Máx. 5 MB.
-            </p>
+            <p className="truncate text-sm text-zinc-600">{user.email}</p>
+            {!perfilCompacto && (
+              <p className="mt-2 text-xs text-zinc-500">
+                JPG, PNG o WebP. Máx. 5 MB.
+              </p>
+            )}
           </div>
         </div>
-        <EditarSobreTiForm
-          sobreTiInicial={profile.sobre_ti}
-          verPerfilHref={`/perfil/${user.id}`}
-          compactPc={perfilCompactPc}
-        />
+        {!perfilCompacto && (
+          <EditarSobreTiForm
+            sobreTiInicial={profile.sobre_ti}
+            verPerfilHref={`/perfil/${user.id}`}
+          />
+        )}
       </Card>
 
-      <div id="vehiculo" className="scroll-mt-4">
-        <Card className="space-y-4">
+      <div id="vehiculo" className="scroll-mt-3">
+        <Card className={perfilCompacto ? "space-y-3 p-3" : "space-y-4"}>
           <div>
             <h2 className="font-semibold text-zinc-900">Mi vehículo</h2>
-            <p className="mt-1 text-base text-zinc-600">
+            <p className="mt-1 text-sm text-zinc-600 md:text-base">
               Obligatorio para anunciar un viaje.
             </p>
-            <p className="mt-2 text-base text-zinc-600">
-              En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
-              más, publica más de un viaje con mismo día, misma hora, misma
-              ruta.
-            </p>
+            {!perfilCompacto && (
+              <p className="mt-2 text-base text-zinc-600">
+                En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
+                más, publica más de un viaje con mismo día, misma hora, misma
+                ruta.
+              </p>
+            )}
           </div>
           <EditarVehiculoForm
             vehiculoInicial={profile}
