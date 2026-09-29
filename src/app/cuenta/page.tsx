@@ -137,19 +137,18 @@ export default async function CuentaPage({
               </p>
             )}
             <p className="truncate text-sm text-zinc-600">{user.email}</p>
-            {!perfilCompacto && (
-              <p className="mt-2 text-xs text-zinc-500">
-                JPG, PNG o WebP. Máx. 5 MB.
-              </p>
-            )}
+        {!perfilCompacto && (
+          <p className="mt-2 text-xs text-zinc-500">
+            JPG, PNG o WebP. Máx. 5 MB.
+          </p>
+        )}
           </div>
         </div>
-        {!perfilCompacto && (
-          <EditarSobreTiForm
-            sobreTiInicial={profile.sobre_ti}
-            verPerfilHref={`/perfil/${user.id}`}
-          />
-        )}
+        <EditarSobreTiForm
+          sobreTiInicial={profile.sobre_ti}
+          verPerfilHref={`/perfil/${user.id}`}
+          compactPc={perfilCompacto}
+        />
       </Card>
 
       <div id="vehiculo" className="scroll-mt-3">
