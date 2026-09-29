@@ -68,11 +68,11 @@ export function EditarSobreTiForm({
       />
       {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="flex gap-2">
+      <div className="flex flex-row flex-nowrap items-stretch gap-2">
         <Button
           type="submit"
           variant="secondary"
-          className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1`}
+          className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 md:flex-none md:px-6`}
           disabled={loading}
         >
           {loading ? "Guardando…" : "Guardar"}
@@ -81,7 +81,7 @@ export function EditarSobreTiForm({
           <ButtonLink
             href={verPerfilHref}
             variant="secondary"
-            className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 px-2 text-center text-sm leading-tight`}
+            className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 px-2 text-center text-sm leading-tight md:flex-none md:px-4 md:text-sm`}
           >
             Ver cómo me ven los demás
           </ButtonLink>
