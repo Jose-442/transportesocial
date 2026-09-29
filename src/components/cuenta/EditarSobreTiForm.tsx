@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, ButtonLink } from "@/components/ui/Button";
-import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Textarea } from "@/components/ui/Input";
 import { actualizarSobreTi } from "@/actions/cuenta";
 import { PROFILE_SOBRE_TI_MAX } from "@/lib/profile";
@@ -62,7 +61,7 @@ export function EditarSobreTiForm({
         rows={2}
         className={
           compactPc
-            ? "!min-h-0 h-[3.25rem] md:h-[4.25rem]"
+            ? "!min-h-0 h-[2.75rem]"
             : "!min-h-0 h-[3.25rem] md:min-h-24 md:h-auto"
         }
       />
@@ -71,8 +70,8 @@ export function EditarSobreTiForm({
       <div className="flex flex-row flex-nowrap items-stretch gap-2">
         <Button
           type="submit"
-          variant="secondary"
-          className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 md:flex-none md:px-6`}
+          variant="ghost"
+          className="min-w-0 flex-1 border border-emerald-600 !bg-transparent text-emerald-800 hover:!bg-emerald-50 md:flex-none md:px-6"
           disabled={loading}
         >
           {loading ? "Guardando…" : "Guardar"}
@@ -80,8 +79,8 @@ export function EditarSobreTiForm({
         {verPerfilHref ? (
           <ButtonLink
             href={verPerfilHref}
-            variant="secondary"
-            className={`${CUENTA_BTN_SECONDARY} min-w-0 flex-1 px-2 text-center text-sm leading-tight md:flex-none md:px-4 md:text-sm`}
+            variant="ghost"
+            className="min-w-0 flex-1 border border-emerald-600 !bg-transparent px-2 text-center text-sm leading-tight text-emerald-800 hover:!bg-emerald-50 md:flex-none md:px-4"
           >
             Ver cómo me ven los demás
           </ButtonLink>

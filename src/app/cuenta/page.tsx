@@ -68,10 +68,12 @@ export default async function CuentaPage({
   const perfilCompactPc = volverTrasVehiculo !== null;
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-zinc-900">Mi cuenta</h1>
+    <div className={perfilCompactPc ? "space-y-2" : "space-y-4"}>
+      {!perfilCompactPc && (
+        <h1 className="text-2xl font-bold text-zinc-900">Mi cuenta</h1>
+      )}
 
-      {isAdminUser(user) && (
+      {isAdminUser(user) && !perfilCompactPc && (
         <p className="text-sm">
           <Link
             href="/admin"
@@ -84,53 +86,62 @@ export default async function CuentaPage({
 
       <Card
         className={[
-          "relative space-y-2 md:space-y-4",
+          "relative",
+          perfilCompactPc
+            ? "space-y-1.5 p-2 pt-2"
+            : "space-y-2 p-4 md:space-y-4",
           perfilCompactPc && "md:space-y-2 md:p-3",
         ]
           .filter(Boolean)
           .join(" ")}
       >
-        <div className="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
+        <div className="absolute right-2 top-2 z-10 sm:right-4 sm:top-4">
           <NotificationBell />
         </div>
-        <h2 className="font-semibold text-zinc-900 pr-12">Mi perfil</h2>
-        <div
-          className={[
-            "flex flex-col gap-4 sm:flex-row sm:items-start",
-            perfilCompactPc && "md:gap-2",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        >
-          <ProfilePhotoEditor
-            userId={user.id}
-            displayName={profile.display_name}
-            avatarUrl={profile.avatar_url}
-          />
-          <div className="flex-1 pt-1">
-            <p className="text-lg font-semibold text-zinc-900">
-              {profile.display_name}
-            </p>
-            {(profile.rating_cantidad ?? 0) > 0 && (
-              <p className="text-sm text-amber-600">
-                ★ {Number(profile.rating_promedio).toFixed(1)} ·{" "}
-                <Link
-                  href={`/perfil/${user.id}`}
-                  className="font-medium text-emerald-700 hover:text-emerald-800"
-                >
-                  {profile.rating_cantidad}{" "}
-                  {profile.rating_cantidad === 1
-                    ? "valoración"
-                    : "valoraciones"}
-                </Link>
-              </p>
-            )}
-            <p className="text-sm text-zinc-600">{user.email}</p>
-            <p className="mt-2 text-xs text-zinc-500">
-              JPG, PNG o WebP. Máx. 5 MB.
-            </p>
+        {!perfilCompactPc && (
+          <h2 className="pr-12 font-semibold text-zinc-900">Mi perfil</h2>
+        )}
+        {perfilCompactPc ? (
+          <div className="pr-10">
+            <ProfilePhotoEditor
+              userId={user.id}
+              displayName={profile.display_name}
+              avatarUrl={profile.avatar_url}
+              nombreAlLado
+            />
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <ProfilePhotoEditor
+              userId={user.id}
+              displayName={profile.display_name}
+              avatarUrl={profile.avatar_url}
+            />
+            <div className="flex-1 pt-1">
+              <p className="text-lg font-semibold text-zinc-900">
+                {profile.display_name}
+              </p>
+              {(profile.rating_cantidad ?? 0) > 0 && (
+                <p className="text-sm text-amber-600">
+                  ★ {Number(profile.rating_promedio).toFixed(1)} ·{" "}
+                  <Link
+                    href={`/perfil/${user.id}`}
+                    className="font-medium text-emerald-700 hover:text-emerald-800"
+                  >
+                    {profile.rating_cantidad}{" "}
+                    {profile.rating_cantidad === 1
+                      ? "valoración"
+                      : "valoraciones"}
+                  </Link>
+                </p>
+              )}
+              <p className="text-sm text-zinc-600">{user.email}</p>
+              <p className="mt-2 text-xs text-zinc-500">
+                JPG, PNG o WebP. Máx. 5 MB.
+              </p>
+            </div>
+          </div>
+        )}
         <EditarSobreTiForm
           sobreTiInicial={profile.sobre_ti}
           verPerfilHref={`/perfil/${user.id}`}
@@ -138,18 +149,20 @@ export default async function CuentaPage({
         />
       </Card>
 
-      <div id="vehiculo" className="scroll-mt-4">
-        <Card className="space-y-4">
+      <div id="vehiculo" className="scroll-mt-2">
+        <Card className={perfilCompactPc ? "space-y-2 p-3" : "space-y-4"}>
           <div>
             <h2 className="font-semibold text-zinc-900">Mi vehículo</h2>
-            <p className="mt-1 text-base text-zinc-600">
+            <p className="mt-1 text-sm text-zinc-600 md:text-base">
               Obligatorio para anunciar un viaje.
             </p>
-            <p className="mt-2 text-base text-zinc-600">
-              En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
-              más, publica más de un viaje con mismo día, misma hora, misma
-              ruta.
-            </p>
+            {!perfilCompactPc && (
+              <p className="mt-2 text-base text-zinc-600">
+                En cada viaje solo puedes ofrecer 3 plazas. Si tu vehículo es de
+                más, publica más de un viaje con mismo día, misma hora, misma
+                ruta.
+              </p>
+            )}
           </div>
           <EditarVehiculoForm
             vehiculoInicial={profile}
@@ -161,7 +174,6 @@ export default async function CuentaPage({
           />
         </Card>
       </div>
-
       <CuentaMisViajes userId={user.id} />
 
       <Card className="space-y-3">

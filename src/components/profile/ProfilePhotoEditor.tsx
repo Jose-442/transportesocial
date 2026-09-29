@@ -12,10 +12,13 @@ export function ProfilePhotoEditor({
   userId,
   displayName,
   avatarUrl: initialAvatarUrl,
+  nombreAlLado = false,
 }: {
   userId: string;
   displayName: string;
   avatarUrl: string | null;
+  /** Nombre pegado al botón Añadir foto (flujo vehículo). */
+  nombreAlLado?: boolean;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,6 +84,59 @@ export function ProfilePhotoEditor({
     router.refresh();
   }
 
+  const botonFoto = (
+    <Button
+      type="button"
+      variant="secondary"
+      className={`min-h-8 px-2.5 py-1 text-xs ${CUENTA_BTN_SECONDARY}`}
+      disabled={loading}
+      onClick={() => inputRef.current?.click()}
+    >
+      {loading ? "Guardando…" : avatarUrl ? "Cambiar foto" : "Añadir foto"}
+    </Button>
+  );
+
+  if (nombreAlLado) {
+    return (
+      <div className="flex items-center gap-2">
+        <UserAvatar
+          name={displayName}
+          avatarUrl={previewUrl ?? avatarUrl}
+          size={48}
+        />
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          className="sr-only"
+          onChange={handleFileChange}
+        />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {botonFoto}
+            <p className="truncate text-base font-semibold text-zinc-900">
+              {displayName}
+            </p>
+            {avatarUrl ? (
+              <Button
+                type="button"
+                variant="ghost"
+                className="min-h-8 px-2 py-1 text-xs text-red-700 hover:bg-red-50"
+                disabled={loading}
+                onClick={handleDelete}
+              >
+                Eliminar
+              </Button>
+            ) : null}
+          </div>
+          {error ? (
+            <p className="mt-1 text-xs text-red-600">{error}</p>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex shrink-0 flex-col items-center gap-2">
       <UserAvatar
@@ -96,15 +152,7 @@ export function ProfilePhotoEditor({
         onChange={handleFileChange}
       />
       <div className="flex flex-wrap justify-center gap-2">
-        <Button
-          type="button"
-          variant="secondary"
-          className={`min-h-9 px-3 py-1.5 text-xs ${CUENTA_BTN_SECONDARY}`}
-          disabled={loading}
-          onClick={() => inputRef.current?.click()}
-        >
-          {loading ? "Guardando…" : avatarUrl ? "Cambiar foto" : "Añadir foto"}
-        </Button>
+        {botonFoto}
         {avatarUrl && (
           <Button
             type="button"
