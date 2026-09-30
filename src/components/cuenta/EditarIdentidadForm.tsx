@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { actualizarIdentidad } from "@/actions/cuenta";
+import {
+  documentoIdentidadValido,
+  telefonoEsValido,
+} from "@/lib/identidad";
 import type { Profile } from "@/types/database";
 
 export function EditarIdentidadForm({
@@ -24,19 +28,47 @@ export function EditarIdentidadForm({
   const [documento, setDocumento] = useState(inicial.documento_identidad ?? "");
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
+  const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
+  const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    setError(null);
     setMensaje(null);
+    setErrorTelefono(null);
+    setErrorDocumento(null);
+    setErrorGeneral(null);
+
+    let hayError = false;
+    if (!telefonoEsValido(telefono)) {
+      setErrorTelefono("Por favor, introduce un número de teléfono válido");
+      hayError = true;
+    }
+    if (!documentoIdentidadValido(documento)) {
+      setErrorDocumento(
+        "El DNI o NIE introducido no es válido. Revisa los números y la letra"
+      );
+      hayError = true;
+    }
+    if (hayError) {
+      setLoading(false);
+      return;
+    }
 
     const result = await actualizarIdentidad({ telefono, documento });
     setLoading(false);
 
+    if (result.errorTelefono) {
+      setErrorTelefono(result.errorTelefono);
+      return;
+    }
+    if (result.errorDocumento) {
+      setErrorDocumento(result.errorDocumento);
+      return;
+    }
     if (result.error) {
-      setError(result.error);
+      setErrorGeneral(result.error);
       return;
     }
 
@@ -45,7 +77,7 @@ export function EditarIdentidadForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form onSubmit={onSubmit} className="space-y-3" noValidate>
       <Input
         label="Teléfono móvil"
         name="telefono"
@@ -54,13 +86,18 @@ export function EditarIdentidadForm({
         autoComplete="tel"
         placeholder="Ej.: 612 345 678"
         value={telefono}
-        onChange={(e) => setTelefono(e.target.value)}
+        onChange={(e) => {
+          setTelefono(e.target.value);
+          if (errorTelefono) setErrorTelefono(null);
+        }}
+        error={errorTelefono ?? undefined}
         hint={
-          inicial.phone_verified
-            ? "Móvil verificado por SMS."
-            : "Aún no verificado por SMS. La verificación llegará en el siguiente paso."
+          errorTelefono
+            ? undefined
+            : inicial.phone_verified
+              ? "Móvil verificado por SMS."
+              : "Aún no verificado por SMS. La verificación llegará en el siguiente paso."
         }
-        required
       />
       <Input
         label="DNI o NIE"
@@ -69,18 +106,25 @@ export function EditarIdentidadForm({
         autoComplete="off"
         placeholder="Ej.: 12345678Z"
         value={documento}
-        onChange={(e) => setDocumento(e.target.value.toUpperCase())}
+        onChange={(e) => {
+          setDocumento(e.target.value.toUpperCase());
+          if (errorDocumento) setErrorDocumento(null);
+        }}
+        error={errorDocumento ?? undefined}
         hint={
-          inicial.documento_verificado
-            ? "Documento verificado."
-            : "Solo lo ves tú. Nadie más en la web puede verlo."
+          errorDocumento
+            ? undefined
+            : inicial.documento_verificado
+              ? "Documento verificado."
+              : "Solo lo ves tú. Nadie más en la web puede verlo."
         }
-        required
       />
       {mensaje ? (
         <p className="text-sm text-emerald-700">{mensaje}</p>
       ) : null}
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {errorGeneral ? (
+        <p className="text-sm text-red-600">{errorGeneral}</p>
+      ) : null}
       <Button
         type="submit"
         variant="secondary"

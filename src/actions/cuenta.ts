@@ -130,18 +130,25 @@ export async function actualizarVehiculo(input: {
 export async function actualizarIdentidad(input: {
   telefono: string;
   documento: string;
-}): Promise<{ error?: string; ok?: boolean }> {
+}): Promise<{
+  error?: string;
+  errorTelefono?: string;
+  errorDocumento?: string;
+  ok?: boolean;
+}> {
   const telefono = normalizarTelefonoEs(input.telefono);
   if (!telefono) {
     return {
-      error:
-        "Indica un móvil español válido (9 dígitos, empieza por 6 o 7).",
+      errorTelefono: "Por favor, introduce un número de teléfono válido",
     };
   }
 
   const documento = normalizarDocumentoIdentidad(input.documento);
   if (!documento) {
-    return { error: "Indica un DNI o NIE válido." };
+    return {
+      errorDocumento:
+        "El DNI o NIE introducido no es válido. Revisa los números y la letra",
+    };
   }
 
   const supabase = await createClient();
