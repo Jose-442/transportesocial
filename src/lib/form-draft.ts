@@ -289,6 +289,9 @@ export type NuevoBultoDraft = {
   descripcion: string;
   espacio_tamano: string;
   espacio_detalle: string;
+  tipo_carga: import("@/lib/porte-legal").TipoCarga | "";
+  categoria_carga: string;
+  declaracion_aceptada: boolean;
   fecha_limite: string;
   hora_limite: string;
   foto: StoredFile | null;
@@ -323,6 +326,9 @@ export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
   descripcion: "",
   espacio_tamano: "",
   espacio_detalle: "",
+  tipo_carga: "",
+  categoria_carga: "",
+  declaracion_aceptada: false,
   fecha_limite: "",
   hora_limite: "",
   foto: null,

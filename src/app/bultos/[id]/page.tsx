@@ -13,6 +13,7 @@ import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
+import { TIPO_CARGA_OPTIONS } from "@/lib/porte-legal";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
 import type { AnuncioBulto, OfertaPrecio } from "@/types/database";
@@ -154,7 +155,26 @@ export default async function BultoDetallePage({
           propuesta.
         </p>
         {necesitaBulto ? (
-          <div>
+          <div className="space-y-2">
+            {bulto.tipo_carga ? (
+              <p className="text-sm text-zinc-800">
+                <span className="font-medium uppercase tracking-wide text-zinc-500">
+                  Tipo de carga:
+                </span>{" "}
+                <span className="font-medium">
+                  {TIPO_CARGA_OPTIONS.find((o) => o.value === bulto.tipo_carga)
+                    ?.label ?? bulto.tipo_carga}
+                </span>
+              </p>
+            ) : null}
+            {bulto.categoria_carga ? (
+              <p className="text-sm text-zinc-800">
+                <span className="font-medium uppercase tracking-wide text-zinc-500">
+                  Categoría:
+                </span>{" "}
+                <span className="font-medium">{bulto.categoria_carga}</span>
+              </p>
+            ) : null}
             <p className="text-sm text-zinc-800">
               <span className="font-medium uppercase tracking-wide text-zinc-500">
                 Medidas:

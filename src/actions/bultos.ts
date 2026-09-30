@@ -10,6 +10,11 @@ import { adjuntarHoraOculta } from "@/lib/bulto-hora";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
+  categoriaValida,
+  isTipoCarga,
+  type TipoCarga,
+} from "@/lib/porte-legal";
+import {
   incluyeBulto,
   isTipoSolicitud,
   type TipoSolicitud,
@@ -19,6 +24,14 @@ import {
   consumePublicationCredit,
   shouldConsumePublicationCredit,
 } from "@/actions/publication-fee";
+
+const FOTO_MAX_BYTES = 5 * 1024 * 1024;
+const FOTO_TIPOS = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
 
 export async function crearBulto(formData: FormData) {
   const supabase = await createClient();
@@ -42,10 +55,43 @@ export async function crearBulto(formData: FormData) {
     return { error: "Selecciona qué necesitas para el viaje." };
   }
   const tipoSolicitud: TipoSolicitud = tipoRaw;
+  const necesitaBulto = incluyeBulto(tipoSolicitud);
 
   let fotoUrl: string | null = null;
-  const foto = formData.get("foto");
-  if (foto instanceof File && foto.size > 0) {
+  let tipoCarga: TipoCarga | null = null;
+  let categoriaCarga: string | null = null;
+  let declaracionAceptadaEn: string | null = null;
+
+  if (necesitaBulto) {
+    const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
+    if (!isTipoCarga(tipoCargaRaw)) {
+      return { error: "Indica si es un objeto voluminoso o un paquete." };
+    }
+    tipoCarga = tipoCargaRaw;
+    const categoriaRaw = String(formData.get("categoria_carga") ?? "").trim();
+    if (!categoriaValida(tipoCarga, categoriaRaw)) {
+      return { error: "Elige la categoría de la carga." };
+    }
+    categoriaCarga = categoriaRaw;
+
+    const declaracion = String(formData.get("declaracion_aceptada") ?? "").trim();
+    if (declaracion !== "1" && declaracion !== "true" && declaracion !== "on") {
+      return {
+        error: "Debes aceptar la declaración de responsabilidad del porte.",
+      };
+    }
+    declaracionAceptadaEn = new Date().toISOString();
+
+    const foto = formData.get("foto");
+    if (!(foto instanceof File) || foto.size <= 0) {
+      return { error: "Añade al menos una foto de la carga." };
+    }
+    if (foto.size > FOTO_MAX_BYTES) {
+      return { error: "La foto no puede superar 5 MB." };
+    }
+    if (foto.type && !FOTO_TIPOS.has(foto.type)) {
+      return { error: "La foto debe ser JPG, PNG, WebP o GIF." };
+    }
     const ext = foto.name.split(".").pop() ?? "jpg";
     const path = `${user.id}/${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage
@@ -68,7 +114,6 @@ export async function crearBulto(formData: FormData) {
   if (!fechaLimite) {
     return { error: "Fecha u hora no válida." };
   }
-  const necesitaBulto = incluyeBulto(tipoSolicitud);
 
   let descripcion = String(formData.get("descripcion") ?? "").trim();
   let medidas = "";
@@ -116,6 +161,9 @@ export async function crearBulto(formData: FormData) {
       foto_url: fotoUrl,
       fecha_limite: fechaLimiteDia,
       tipo_solicitud: tipoSolicitud,
+      tipo_carga: tipoCarga,
+      categoria_carga: categoriaCarga,
+      declaracion_aceptada_en: declaracionAceptadaEn,
     })
     .select("id")
     .single();

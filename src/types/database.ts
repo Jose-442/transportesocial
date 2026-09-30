@@ -189,6 +189,10 @@ export type AnuncioBulto = {
   foto_url: string | null;
   fecha_limite: string | null;
   tipo_solicitud: TipoSolicitud;
+  /** voluminoso | paquete. Null en anuncios antiguos. */
+  tipo_carga: "voluminoso" | "paquete" | null;
+  categoria_carga: string | null;
+  declaracion_aceptada_en: string | null;
   estado: "activo" | "reservado" | "completado" | "cancelado";
   created_at: string;
   updated_at: string;
