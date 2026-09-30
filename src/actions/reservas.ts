@@ -359,6 +359,9 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
   if (checkout.ok) {
     redirect(checkout.url);
   }
+  if ("redirectTo" in checkout && checkout.redirectTo) {
+    redirect(checkout.redirectTo);
+  }
   redirect(
     `/reservas/${reservaId}?err=${encodeURIComponent(checkout.error)}`
   );

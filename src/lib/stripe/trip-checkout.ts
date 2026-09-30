@@ -1,10 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { getRequestOrigin } from "./origin";
 import { getStripeServer, isStripeConfigured } from "./server";
+import {
+  HREF_IDENTIDAD_CUENTA,
+  identidadListaParaPagar,
+} from "@/lib/identidad-pago";
 
 export type CreateTripCheckoutResult =
   | { ok: true; url: string }
-  | { ok: false; error: string };
+  | { ok: false; error: string; redirectTo?: string };
 
 export async function createTripCheckoutSession(
   reservaId: string
@@ -20,6 +24,21 @@ export async function createTripCheckoutSession(
 
   if (!user) {
     return { ok: false, error: "Debes iniciar sesión." };
+  }
+
+  const { data: perfilIdentidad } = await supabase
+    .from("profiles")
+    .select("phone, documento_identidad")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const identidad = identidadListaParaPagar(perfilIdentidad ?? {});
+  if (!identidad.ok) {
+    return {
+      ok: false,
+      error: identidad.error,
+      redirectTo: HREF_IDENTIDAD_CUENTA,
+    };
   }
 
   const { data: reserva, error } = await supabase

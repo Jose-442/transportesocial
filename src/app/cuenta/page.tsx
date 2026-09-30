@@ -150,11 +150,11 @@ export default async function CuentaPage({
         />
       </Card>
 
-      <Card className="space-y-3">
+      <Card id="identidad" className="scroll-mt-4 space-y-3">
         <div>
           <h2 className="font-semibold text-zinc-900">Identidad</h2>
           <p className="mt-1 text-sm text-zinc-600">
-            Teléfono y DNI/NIE solo los ves tú. Harán falta antes de pagar un
+            Teléfono y DNI/NIE solo los ves tú. Son obligatorios para pagar un
             viaje.
           </p>
         </div>
