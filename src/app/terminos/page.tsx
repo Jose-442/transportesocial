@@ -16,7 +16,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "21 de septiembre de 2026";
+  const fechaActualizacion = "30 de septiembre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -280,7 +280,28 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            8. Disposiciones generales
+            8. Resolución de litigios en línea
+          </h3>
+          <p>
+            De conformidad con el Art. 14.1 del Reglamento (UE) 524/2013, la
+            Comisión Europea facilita una plataforma de resolución de litigios
+            en línea (ODR) para resolver desacuerdos en materia de consumo,
+            disponible en el siguiente enlace:{" "}
+            <a
+              href="https://ec.europa.eu/consumers/odr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-emerald-700 hover:text-emerald-800 break-all"
+            >
+              https://ec.europa.eu/consumers/odr/
+            </a>
+            .
+          </p>
+        </section>
+
+        <section>
+          <h3 className="mb-2 font-semibold text-zinc-900">
+            9. Disposiciones generales
           </h3>
           <ul className="list-disc space-y-2 pl-5">
             <li>
