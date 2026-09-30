@@ -80,7 +80,9 @@ export function RegisterForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!aceptaTerminos) {
-      setError("Debes aceptar los Términos y la Política de Privacidad.");
+      setError(
+        "Debes aceptar los Términos, la Política de Privacidad y confirmar que eres mayor de 18 años."
+      );
       return;
     }
     setLoading(true);
@@ -215,21 +217,21 @@ export function RegisterForm({
           className="mt-1 h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500"
         />
         <span>
-          Acepto los{" "}
+          He leído y acepto los{" "}
           <Link
             href="/terminos"
             className="font-semibold text-emerald-700 hover:text-emerald-800"
           >
             Términos y Condiciones
-          </Link>{" "}
-          y la{" "}
+          </Link>
+          , la{" "}
           <Link
             href="/terminos#privacidad"
             className="font-semibold text-emerald-700 hover:text-emerald-800"
           >
             Política de Privacidad
-          </Link>
-          .
+          </Link>{" "}
+          y confirmo que soy mayor de 18 años.
         </span>
       </label>
       {error && (

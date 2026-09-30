@@ -105,8 +105,17 @@ export default function TerminosPage() {
           </h3>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              El uso de la Plataforma está reservado a personas mayores de{" "}
-              <strong>18 años</strong> con capacidad legal para contratar.
+              La creación de cuenta, la publicación de anuncios y la
+              contratación de servicios están reservadas a personas físicas
+              mayores de <strong>18 años</strong> con plena capacidad legal para
+              contratar.
+            </li>
+            <li>
+              Los menores de 18 años podrán viajar como pasajeros únicamente si
+              van acompañados en todo momento por un usuario adulto registrado
+              (padre, madre, tutor legal o adulto debidamente autorizado) que
+              haya realizado la reserva en su nombre y bajo su exclusiva
+              responsabilidad.
             </li>
             <li>
               Por seguridad, prevención del fraude y cumplimiento normativo,
