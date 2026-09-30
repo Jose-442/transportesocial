@@ -12,6 +12,9 @@ export type Profile = {
   vehiculo_anio: number | null;
   distintivo_ambiental: import("@/lib/vehiculo").DistintivoAmbiental | null;
   phone: string | null;
+  phone_verified: boolean;
+  documento_identidad: string | null;
+  documento_verificado: boolean;
   trial_ends_at: string;
   subscription_active: boolean;
   subscription_ends_at: string | null;

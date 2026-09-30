@@ -153,7 +153,7 @@ export async function enviarOferta(formData: FormData) {
   if (admin) {
     const [{ data: ownerProfile }, { data: ownerAuth }] = await Promise.all([
       supabase
-        .from("profiles")
+        .from("perfiles_publicos")
         .select("display_name")
         .eq("id", bulto.user_id)
         .single(),

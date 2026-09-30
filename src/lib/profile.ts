@@ -60,24 +60,34 @@ export async function loadPerfilPublico(
   id: string
 ): Promise<PerfilPublico | null> {
   const { data, error } = await supabase
-    .from("profiles")
+    .from("perfiles_publicos")
     .select(PERFIL_PUBLICO_SELECT)
     .eq("id", id)
     .maybeSingle();
 
   if (data) return withPerfilDefaults(data, {}) as PerfilPublico;
 
-  if (isVehiculoColumnError(error) || isSobreTiColumnError(error)) {
-    const legacy = await supabase
+  // Compatibilidad si la vista aún no está aplicada en BD.
+  if (error) {
+    const { data: fallback } = await supabase
       .from("profiles")
-      .select(PERFIL_PUBLICO_SELECT_LEGACY)
+      .select(PERFIL_PUBLICO_SELECT)
       .eq("id", id)
       .maybeSingle();
-    if (legacy.data) {
-      return withPerfilDefaults(legacy.data, {
-        sobreTi: false,
-        vehiculo: false,
-      });
+    if (fallback) return withPerfilDefaults(fallback, {}) as PerfilPublico;
+
+    if (isVehiculoColumnError(error) || isSobreTiColumnError(error)) {
+      const legacy = await supabase
+        .from("profiles")
+        .select(PERFIL_PUBLICO_SELECT_LEGACY)
+        .eq("id", id)
+        .maybeSingle();
+      if (legacy.data) {
+        return withPerfilDefaults(legacy.data, {
+          sobreTi: false,
+          vehiculo: false,
+        });
+      }
     }
   }
 
@@ -92,13 +102,24 @@ export async function loadPerfilesPublicos(
 
   const uniqueIds = [...new Set(ids)];
   const { data, error } = await supabase
-    .from("profiles")
+    .from("perfiles_publicos")
     .select(PERFIL_PUBLICO_SELECT)
     .in("id", uniqueIds);
 
   if (data?.length) {
     return Object.fromEntries(
       data.map((p) => [p.id, withPerfilDefaults(p, {}) as PerfilPublico])
+    );
+  }
+
+  // Compatibilidad si la vista aún no está aplicada.
+  const legacyTable = await supabase
+    .from("profiles")
+    .select(PERFIL_PUBLICO_SELECT)
+    .in("id", uniqueIds);
+  if (legacyTable.data?.length) {
+    return Object.fromEntries(
+      legacyTable.data.map((p) => [p.id, withPerfilDefaults(p, {}) as PerfilPublico])
     );
   }
 

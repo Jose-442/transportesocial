@@ -25,11 +25,11 @@ import {
   aplicarOcupacionAOfertas,
   cargarOcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
+import { loadPerfilesPublicos } from "@/lib/profile";
 import type {
   Disputa,
   OfertaCapacidad,
   OfertaDesglose,
-  PerfilPublico,
   Reserva,
   RutaConductor,
 } from "@/types/database";
@@ -110,14 +110,7 @@ export default async function ReservaDetallePage({
   }
 
   const ids = [reserva.cliente_id, reserva.transportista_id];
-  const { data: perfilesData } = await supabase
-    .from("profiles")
-    .select("id, display_name, avatar_url, rating_promedio, rating_cantidad")
-    .in("id", ids);
-
-  const perfiles = Object.fromEntries(
-    (perfilesData ?? []).map((p) => [p.id, p as PerfilPublico])
-  );
+  const perfiles = await loadPerfilesPublicos(supabase, ids);
 
   let ruta: RutaConductor | null = null;
   if (reserva.ruta_conductor_id) {

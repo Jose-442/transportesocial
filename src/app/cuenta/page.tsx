@@ -11,6 +11,7 @@ import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAuto
 import { CuentaMisViajes } from "@/components/cuenta/CuentaMisViajes";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
+import { EditarIdentidadForm } from "@/components/cuenta/EditarIdentidadForm";
 import { EditarVehiculoForm } from "@/components/cuenta/EditarVehiculoForm";
 import { StripeConnectSection } from "@/components/cuenta/StripeConnectSection";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
@@ -146,6 +147,24 @@ export default async function CuentaPage({
           sobreTiInicial={profile.sobre_ti}
           verPerfilHref={`/perfil/${user.id}`}
           compactPc={perfilCompactPc}
+        />
+      </Card>
+
+      <Card className="space-y-3">
+        <div>
+          <h2 className="font-semibold text-zinc-900">Identidad</h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            Teléfono y DNI/NIE solo los ves tú. Harán falta antes de pagar un
+            viaje.
+          </p>
+        </div>
+        <EditarIdentidadForm
+          inicial={{
+            phone: profile.phone,
+            phone_verified: Boolean(profile.phone_verified),
+            documento_identidad: profile.documento_identidad,
+            documento_verificado: Boolean(profile.documento_verificado),
+          }}
         />
       </Card>
 

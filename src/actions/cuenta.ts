@@ -9,6 +9,10 @@ import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-us
 import { enviarEnlaceRecuperarContrasena } from "@/lib/auth/enviar-recuperacion";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
 import { isDistintivoAmbiental } from "@/lib/vehiculo";
+import {
+  normalizarDocumentoIdentidad,
+  normalizarTelefonoEs,
+} from "@/lib/identidad";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
 export async function actualizarNombreMostrar(
@@ -120,6 +124,43 @@ export async function actualizarVehiculo(input: {
   revalidatePath("/bultos", "layout");
   revalidatePath("/rutas", "layout");
   revalidatePath("/rutas/nueva");
+  return { ok: true };
+}
+
+export async function actualizarIdentidad(input: {
+  telefono: string;
+  documento: string;
+}): Promise<{ error?: string; ok?: boolean }> {
+  const telefono = normalizarTelefonoEs(input.telefono);
+  if (!telefono) {
+    return {
+      error:
+        "Indica un móvil español válido (9 dígitos, empieza por 6 o 7).",
+    };
+  }
+
+  const documento = normalizarDocumentoIdentidad(input.documento);
+  if (!documento) {
+    return { error: "Indica un DNI o NIE válido." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      phone: telefono,
+      documento_identidad: documento,
+    })
+    .eq("id", user.id);
+
+  if (error) return { error: supabaseErrorMessage(error) };
+
+  revalidatePath("/cuenta");
   return { ok: true };
 }
 

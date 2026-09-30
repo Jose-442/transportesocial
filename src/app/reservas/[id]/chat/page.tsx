@@ -9,9 +9,9 @@ import { createClient } from "@/lib/supabase/server";
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { chatPermitido, resumenChatViaje } from "@/lib/reservas/labels";
 import { formatCiudad } from "@/lib/format-ciudad";
+import { loadPerfilesPublicos } from "@/lib/profile";
 import type {
   ChatMensaje,
-  PerfilPublico,
   Reserva,
   RutaConductor,
 } from "@/types/database";
@@ -99,14 +99,7 @@ export default async function ReservaChatPage({
     .order("created_at", { ascending: true });
 
   const ids = [reserva.cliente_id, reserva.transportista_id];
-  const { data: perfilesData } = await supabase
-    .from("profiles")
-    .select("id, display_name, avatar_url")
-    .in("id", ids);
-
-  const perfiles = Object.fromEntries(
-    (perfilesData ?? []).map((p) => [p.id, p as PerfilPublico])
-  );
+  const perfiles = await loadPerfilesPublicos(supabase, ids);
   const otroId =
     reserva.cliente_id === user.id
       ? reserva.transportista_id
