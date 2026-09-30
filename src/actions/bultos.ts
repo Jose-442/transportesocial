@@ -65,7 +65,7 @@ export async function crearBulto(formData: FormData) {
   if (necesitaBulto) {
     const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
     if (!isTipoCarga(tipoCargaRaw)) {
-      return { error: "Indica si es un objeto voluminoso o un paquete." };
+      return { error: "Indica el tipo de carga." };
     }
     tipoCarga = tipoCargaRaw;
     const categoriaRaw = String(formData.get("categoria_carga") ?? "").trim();
