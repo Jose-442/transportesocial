@@ -127,7 +127,7 @@ export function EditarIdentidadForm({
         className={CUENTA_BTN_SECONDARY}
         disabled={loading}
       >
-        {loading ? "Guardando…" : "Guardar identidad"}
+        {loading ? "Guardando…" : "Guardar"}
       </Button>
     </form>
   );
