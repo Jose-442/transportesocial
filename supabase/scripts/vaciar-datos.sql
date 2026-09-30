@@ -19,6 +19,7 @@ DECLARE
     'anuncios_bultos',
     'rutas_conductores',
     'notificaciones',
+    'phone_verification_codes',
     'profiles'
   ];
 BEGIN
