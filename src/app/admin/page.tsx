@@ -1,14 +1,17 @@
 import Link from "next/link";
 import { loadAlertasSegundaCancelacion } from "@/actions/admin-chat";
+import { loadAlertasRechazoRecogida } from "@/actions/admin-alertas-recogida";
 import { loadAdminDashboardStats } from "@/actions/admin-dashboard";
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
 
 export default async function AdminHomePage() {
-  const [{ stats, avisoServidor }, alertasCancelacion] = await Promise.all([
-    loadAdminDashboardStats(),
-    loadAlertasSegundaCancelacion(),
-  ]);
+  const [{ stats, avisoServidor }, alertasCancelacion, alertasRecogida] =
+    await Promise.all([
+      loadAdminDashboardStats(),
+      loadAlertasSegundaCancelacion(),
+      loadAlertasRechazoRecogida(),
+    ]);
 
   return (
     <div className="space-y-6">
@@ -24,6 +27,26 @@ export default async function AdminHomePage() {
           detalle.
         </p>
       </div>
+
+      {alertasRecogida.length > 0 ? (
+        <Card className="space-y-3 border-red-300 bg-red-50">
+          <h2 className="font-semibold text-red-950">
+            Alertas de seguridad — rechazo en recogida
+          </h2>
+          {alertasRecogida.map((a) => (
+            <Link
+              key={a.id}
+              href={a.enlace}
+              className="block rounded-xl bg-white px-3 py-2 text-sm text-zinc-800"
+            >
+              <p className="font-semibold">{a.mensaje}</p>
+              <p className="mt-1 text-xs text-zinc-500">
+                {new Date(a.created_at).toLocaleString("es-ES")}
+              </p>
+            </Link>
+          ))}
+        </Card>
+      ) : null}
 
       {alertasCancelacion.length > 0 ? (
         <Card className="space-y-3 border-amber-300 bg-amber-50">

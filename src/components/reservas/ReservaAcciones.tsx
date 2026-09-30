@@ -9,6 +9,8 @@ import {
   editarReservaPendiente,
 } from "@/actions/reservas";
 import { PorteEntregadoBoton } from "@/components/reservas/PorteEntregadoBoton";
+import { ConfirmarRecogidaBoton } from "@/components/reservas/ConfirmarRecogidaBoton";
+import { RechazarRecogidaBoton } from "@/components/reservas/RechazarRecogidaBoton";
 import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import {
   chatPermitido,
@@ -37,6 +39,7 @@ export function ReservaAcciones({
   disputa,
   yaPagadoEnStripe = false,
   puedeAnadirVersion = false,
+  tienePorte = false,
 }: {
   reserva: Reserva;
   relacionadas: Reserva[];
@@ -45,8 +48,9 @@ export function ReservaAcciones({
   esConductor: boolean;
   disputa: Disputa | null;
   yaPagadoEnStripe?: boolean;
-  /** La otra parte aún no ha escrito su versión. */
   puedeAnadirVersion?: boolean;
+  /** Hay bulto: confirmar/rechazar recogida en lugar del cancelar genérico. */
+  tienePorte?: boolean;
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
   const etiquetaEstado =
@@ -115,11 +119,31 @@ export function ReservaAcciones({
         />
       )}
 
-      {["confirmada", "en_transito"].includes(estado) && esConductor && (
+      {estado === "confirmada" && esConductor && !disputa && (
+        <div className="space-y-2">
+          <ConfirmarRecogidaBoton reservaId={reserva.id} />
+          <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+            {tienePorte
+              ? "Pulsa cuando hayas cargado el bulto en el vehículo."
+              : "Pulsa cuando los pasajeros estén a bordo y salgas."}
+          </p>
+          {tienePorte ? (
+            <RechazarRecogidaBoton reservaId={reserva.id} />
+          ) : politica.puede && politica.tipo ? (
+            <CancelarReservaBoton
+              reservaId={reserva.id}
+              textoBoton="Cancelar reserva"
+              textoAyuda={textoAyudaCancelar}
+            />
+          ) : null}
+        </div>
+      )}
+
+      {estado === "en_transito" && esConductor && (
         <div className="space-y-2">
           <PorteEntregadoBoton reservaId={reserva.id} />
           <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
-            Pulsa cuando hayas entregado el bulto
+            Pulsa cuando hayas entregado el bulto o llegado a destino
           </p>
         </div>
       )}
@@ -133,21 +157,6 @@ export function ReservaAcciones({
             reservaId={reserva.id}
             textoBoton={textoBotonCancelacion(politica.tipo)}
             textoAyuda={textoAyudaCancelar}
-          />
-        )}
-
-      {esConductor &&
-        !disputa &&
-        estado === "confirmada" &&
-        politica.puede &&
-        politica.tipo && (
-          <CancelarReservaBoton
-            reservaId={reserva.id}
-            textoBoton={
-              reserva.tipo === "bulto_oferta"
-                ? "Rechazar viaje"
-                : "Cancelar reserva"
-            }
           />
         )}
 

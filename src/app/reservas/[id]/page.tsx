@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
+import { FichaPorteConductor } from "@/components/reservas/FichaPorteConductor";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
@@ -189,6 +190,47 @@ export default async function ReservaDetallePage({
   const detalleBulto = relacionadas.find(
     (item) => !esReservaDePlazas(item) && item.bulto_descripcion
   );
+
+  let porteFicha: {
+    descripcion: string | null;
+    medidas: string | null;
+    foto_url: string | null;
+    foto_url_2: string | null;
+    tipo_carga: "voluminoso" | "paquete" | null;
+  } | null = null;
+  const bultoId =
+    relacionadas.find((r) => r.anuncio_bulto_id)?.anuncio_bulto_id ??
+    reserva.anuncio_bulto_id;
+  if (bultoId) {
+    const { data: bultoRow } = await supabase
+      .from("anuncios_bultos")
+      .select("descripcion, medidas, foto_url, foto_url_2, tipo_carga")
+      .eq("id", bultoId)
+      .maybeSingle();
+    if (bultoRow) {
+      porteFicha = {
+        descripcion: bultoRow.descripcion ?? null,
+        medidas: bultoRow.medidas ?? null,
+        foto_url: bultoRow.foto_url ?? null,
+        foto_url_2: (bultoRow as { foto_url_2?: string | null }).foto_url_2 ?? null,
+        tipo_carga:
+          ((bultoRow as { tipo_carga?: string | null }).tipo_carga as
+            | "voluminoso"
+            | "paquete"
+            | null) ?? null,
+      };
+    }
+  } else if (detalleBulto?.bulto_descripcion) {
+    porteFicha = {
+      descripcion: detalleBulto.bulto_descripcion,
+      medidas: detalleBulto.bulto_medidas,
+      foto_url: null,
+      foto_url_2: null,
+      tipo_carga: null,
+    };
+  }
+  const tienePorte = Boolean(porteFicha || bultoId);
+
   const precioMostrar = relacionadas.reduce(
     (sum, item) => sum + Number(item.precio_total),
     0
@@ -292,7 +334,20 @@ export default async function ReservaDetallePage({
         disputa={disputa}
         yaPagadoEnStripe={Boolean(sessionId || errorPago || pagoComprobado)}
         puedeAnadirVersion={puedeAnadirVersion}
+        tienePorte={tienePorte}
       />
+
+      {esConductor &&
+      porteFicha &&
+      ["confirmada", "en_transito", "pendiente_aprobacion"].includes(
+        estadoMostrar
+      ) ? (
+        <FichaPorteConductor
+          porte={porteFicha}
+          reservaId={id}
+          estado={estadoMostrar as Reserva["estado"]}
+        />
+      ) : null}
 
       <Card className="space-y-1 p-2 md:space-y-1.5 md:p-3">
         <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
