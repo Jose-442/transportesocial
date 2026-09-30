@@ -4,13 +4,16 @@ import { type ReactNode } from "react";
 export function Card({
   children,
   className = "",
+  id,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
   const paddingPropio = /(^|\s)(p|px|py|pt|pb|ps|pe)-/.test(className);
   return (
     <div
+      id={id}
       className={[
         "rounded-2xl border border-zinc-200 bg-white shadow-sm",
         paddingPropio ? "" : "p-4",
