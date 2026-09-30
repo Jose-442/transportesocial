@@ -19,24 +19,6 @@ export const TIPO_CARGA_OPTIONS: { value: TipoCarga; label: string }[] = [
   },
 ];
 
-export const CATEGORIAS_POR_TIPO: Record<TipoCarga, string[]> = {
-  voluminoso: [
-    "Mueble",
-    "Bicicleta",
-    "Electrodoméstico",
-    "Otro objeto voluminoso",
-  ],
-  paquete: ["Paquete cerrado", "Caja / maleta", "Otro bulto"],
-};
-
 export function isTipoCarga(v: string): v is TipoCarga {
   return v === "voluminoso" || v === "paquete";
-}
-
-export function categoriasDeTipo(tipo: TipoCarga): string[] {
-  return CATEGORIAS_POR_TIPO[tipo];
-}
-
-export function categoriaValida(tipo: TipoCarga, categoria: string): boolean {
-  return CATEGORIAS_POR_TIPO[tipo].includes(categoria);
 }

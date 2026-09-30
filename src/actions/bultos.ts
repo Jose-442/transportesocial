@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
@@ -9,11 +10,7 @@ import { combineDateAndTime } from "@/lib/datetime-form";
 import { adjuntarHoraOculta } from "@/lib/bulto-hora";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { getOrCreateProfile } from "@/lib/profile";
-import {
-  categoriaValida,
-  isTipoCarga,
-  type TipoCarga,
-} from "@/lib/porte-legal";
+import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 import {
   incluyeBulto,
   isTipoSolicitud,
@@ -32,6 +29,32 @@ const FOTO_TIPOS = new Set([
   "image/webp",
   "image/gif",
 ]);
+
+async function subirFotoBulto(
+  supabase: SupabaseClient,
+  userId: string,
+  foto: File,
+  sufijo: string
+): Promise<{ url?: string; error?: string }> {
+  if (foto.size <= 0) return { error: "Añade al menos una foto de la carga." };
+  if (foto.size > FOTO_MAX_BYTES) {
+    return { error: "Cada foto no puede superar 5 MB." };
+  }
+  if (foto.type && !FOTO_TIPOS.has(foto.type)) {
+    return { error: "Las fotos deben ser JPG, PNG, WebP o GIF." };
+  }
+  const ext = foto.name.split(".").pop() ?? "jpg";
+  const path = `${userId}/${Date.now()}-${sufijo}.${ext}`;
+  const { error: uploadError } = await supabase.storage
+    .from("bultos-fotos")
+    .upload(path, foto, { upsert: false });
+  if (uploadError) return { error: supabaseErrorMessage(uploadError) };
+
+  const { data: publicUrl } = supabase.storage
+    .from("bultos-fotos")
+    .getPublicUrl(path);
+  return { url: publicUrl.publicUrl };
+}
 
 export async function crearBulto(formData: FormData) {
   const supabase = await createClient();
@@ -58,8 +81,8 @@ export async function crearBulto(formData: FormData) {
   const necesitaBulto = incluyeBulto(tipoSolicitud);
 
   let fotoUrl: string | null = null;
+  let fotoUrl2: string | null = null;
   let tipoCarga: TipoCarga | null = null;
-  let categoriaCarga: string | null = null;
   let declaracionAceptadaEn: string | null = null;
 
   if (necesitaBulto) {
@@ -68,11 +91,6 @@ export async function crearBulto(formData: FormData) {
       return { error: "Indica el tipo de carga." };
     }
     tipoCarga = tipoCargaRaw;
-    const categoriaRaw = String(formData.get("categoria_carga") ?? "").trim();
-    if (!categoriaValida(tipoCarga, categoriaRaw)) {
-      return { error: "Elige la categoría de la carga." };
-    }
-    categoriaCarga = categoriaRaw;
 
     const declaracion = String(formData.get("declaracion_aceptada") ?? "").trim();
     if (declaracion !== "1" && declaracion !== "true" && declaracion !== "on") {
@@ -86,23 +104,20 @@ export async function crearBulto(formData: FormData) {
     if (!(foto instanceof File) || foto.size <= 0) {
       return { error: "Añade al menos una foto de la carga." };
     }
-    if (foto.size > FOTO_MAX_BYTES) {
-      return { error: "La foto no puede superar 5 MB." };
+    const subida1 = await subirFotoBulto(supabase, user.id, foto, "1");
+    if (subida1.error || !subida1.url) {
+      return { error: subida1.error ?? "No se pudo subir la foto." };
     }
-    if (foto.type && !FOTO_TIPOS.has(foto.type)) {
-      return { error: "La foto debe ser JPG, PNG, WebP o GIF." };
-    }
-    const ext = foto.name.split(".").pop() ?? "jpg";
-    const path = `${user.id}/${Date.now()}.${ext}`;
-    const { error: uploadError } = await supabase.storage
-      .from("bultos-fotos")
-      .upload(path, foto, { upsert: false });
-    if (uploadError) return { error: supabaseErrorMessage(uploadError) };
+    fotoUrl = subida1.url;
 
-    const { data: publicUrl } = supabase.storage
-      .from("bultos-fotos")
-      .getPublicUrl(path);
-    fotoUrl = publicUrl.publicUrl;
+    const foto2 = formData.get("foto_2");
+    if (foto2 instanceof File && foto2.size > 0) {
+      const subida2 = await subirFotoBulto(supabase, user.id, foto2, "2");
+      if (subida2.error || !subida2.url) {
+        return { error: subida2.error ?? "No se pudo subir la segunda foto." };
+      }
+      fotoUrl2 = subida2.url;
+    }
   }
 
   const fechaLimiteDia = String(formData.get("fecha_limite") ?? "").trim();
@@ -159,10 +174,11 @@ export async function crearBulto(formData: FormData) {
       descripcion,
       medidas,
       foto_url: fotoUrl,
+      foto_url_2: fotoUrl2,
       fecha_limite: fechaLimiteDia,
       tipo_solicitud: tipoSolicitud,
       tipo_carga: tipoCarga,
-      categoria_carga: categoriaCarga,
+      categoria_carga: null,
       declaracion_aceptada_en: declaracionAceptadaEn,
     })
     .select("id")

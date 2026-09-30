@@ -12,7 +12,6 @@ import { crearBulto } from "@/actions/bultos";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import {
   AVISO_PIE_DE_CALLE,
-  CATEGORIAS_POR_TIPO,
   TEXTO_DECLARACION_PORTE,
   TIPO_CARGA_OPTIONS,
   isTipoCarga,
@@ -38,10 +37,111 @@ import { extractDateFromDatetime, extractTimeFromDatetime } from "@/lib/datetime
 
 const FOTO_MAX_BYTES = 5 * 1024 * 1024;
 
+type FotoSlot = {
+  file: File | null;
+  preview: string | null;
+};
+
+function FotoCargaSlot({
+  titulo,
+  obligatoria,
+  slot,
+  onChange,
+  error,
+}: {
+  titulo: string;
+  obligatoria?: boolean;
+  slot: FotoSlot;
+  onChange: (file: File | null) => void;
+  error?: string;
+}) {
+  const galeriaRef = useRef<HTMLInputElement>(null);
+  const camaraRef = useRef<HTMLInputElement>(null);
+
+  function applyFile(file: File | null) {
+    if (!file) {
+      onChange(null);
+      return;
+    }
+    if (file.size > FOTO_MAX_BYTES) {
+      onChange(null);
+      return;
+    }
+    onChange(file);
+  }
+
+  return (
+    <div className="space-y-2 rounded-xl border border-zinc-200 p-3">
+      <span className="text-sm font-medium text-zinc-800">
+        {titulo}
+        {obligatoria ? " (obligatoria)" : " (opcional)"}
+      </span>
+      <div className="flex items-start gap-4">
+        {slot.preview ? (
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+            <Image
+              src={slot.preview}
+              alt={titulo}
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+        ) : null}
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => camaraRef.current?.click()}
+            >
+              Hacer foto
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => galeriaRef.current?.click()}
+            >
+              Galería
+            </Button>
+            {slot.file ? (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  onChange(null);
+                  if (galeriaRef.current) galeriaRef.current.value = "";
+                  if (camaraRef.current) camaraRef.current.value = "";
+                }}
+              >
+                Quitar
+              </Button>
+            ) : null}
+          </div>
+          {error ? <p className="text-sm text-red-700">{error}</p> : null}
+        </div>
+      </div>
+      <input
+        ref={camaraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="sr-only"
+        onChange={(e) => applyFile(e.target.files?.[0] ?? null)}
+      />
+      <input
+        ref={galeriaRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        className="sr-only"
+        onChange={(e) => applyFile(e.target.files?.[0] ?? null)}
+      />
+    </div>
+  );
+}
+
 export function NuevoBultoForm() {
   const router = useRouter();
-  const fotoInputRef = useRef<HTMLInputElement>(null);
-  const fotoCamaraRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
     tipo_solicitud?: string;
@@ -51,22 +151,17 @@ export function NuevoBultoForm() {
     hora_limite?: string;
     descripcion?: string;
     tipo_carga?: string;
-    categoria_carga?: string;
     foto?: string;
     declaracion_aceptada?: string;
   }>({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [form, setForm] = useState<NuevoBultoDraft>(EMPTY_NUEVO_BULTO_DRAFT);
-  const [fotoFile, setFotoFile] = useState<File | null>(null);
-  const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+  const [foto1, setFoto1] = useState<FotoSlot>({ file: null, preview: null });
+  const [foto2, setFoto2] = useState<FotoSlot>({ file: null, preview: null });
   const uidRef = useRef("");
 
   const necesitaBulto = incluyeBulto(form.tipo_solicitud);
-  const categorias =
-    form.tipo_carga && isTipoCarga(form.tipo_carga)
-      ? CATEGORIAS_POR_TIPO[form.tipo_carga]
-      : [];
 
   useEffect(() => {
     let cancelled = false;
@@ -89,7 +184,6 @@ export function NuevoBultoForm() {
           tipo_carga: isTipoCarga(draft.tipo_carga ?? "")
             ? draft.tipo_carga
             : "",
-          categoria_carga: draft.categoria_carga ?? "",
           declaracion_aceptada: Boolean(draft.declaracion_aceptada),
           fecha_limite:
             extractDateFromDatetime(draft.fecha_limite) || draft.fecha_limite,
@@ -116,60 +210,46 @@ export function NuevoBultoForm() {
     );
   }, [ready, form]);
 
-  useEffect(() => {
-    if (!fotoFile) {
-      setFotoPreview(null);
-      return;
-    }
-    const url = URL.createObjectURL(fotoFile);
-    setFotoPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [fotoFile]);
-
-  function updateField<K extends keyof Omit<NuevoBultoDraft, "foto">>(
-    field: K,
-    value: NuevoBultoDraft[K]
+  function setFotoSlot(
+    which: 1 | 2,
+    file: File | null
   ) {
-    setForm((prev) => {
-      const next = {
-        ...prev,
-        [field]: value,
-        ...(field === "tipo_solicitud"
-          ? { tipo_solicitud_marcada: Boolean(value) }
-          : {}),
-      };
-      if (field === "tipo_carga") {
-        next.categoria_carga = "";
-      }
-      return next;
-    });
-    setFieldErrors((prev) => {
-      const next = { ...prev };
-      delete next[field as keyof typeof next];
-      return next;
-    });
-  }
-
-  function onFotoChange(file: File | null) {
     setFieldErrors((prev) => {
       const next = { ...prev };
       delete next.foto;
       return next;
     });
-    if (!file) {
-      setFotoFile(null);
-      return;
-    }
-    if (file.size > FOTO_MAX_BYTES) {
+    if (file && file.size > FOTO_MAX_BYTES) {
       setFieldErrors((prev) => ({
         ...prev,
-        foto: "La foto no puede superar 5 MB.",
+        foto: "Cada foto no puede superar 5 MB.",
       }));
-      setFotoFile(null);
-      if (fotoInputRef.current) fotoInputRef.current.value = "";
-      return;
+      file = null;
     }
-    setFotoFile(file);
+    const preview = file ? URL.createObjectURL(file) : null;
+    const setter = which === 1 ? setFoto1 : setFoto2;
+    setter((prev) => {
+      if (prev.preview) URL.revokeObjectURL(prev.preview);
+      return { file, preview };
+    });
+  }
+
+  function updateField<K extends keyof Omit<NuevoBultoDraft, "foto">>(
+    field: K,
+    value: NuevoBultoDraft[K]
+  ) {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+      ...(field === "tipo_solicitud"
+        ? { tipo_solicitud_marcada: Boolean(value) }
+        : {}),
+    }));
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next[field as keyof typeof next];
+      return next;
+    });
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -186,7 +266,6 @@ export function NuevoBultoForm() {
       hora_limite?: string;
       descripcion?: string;
       tipo_carga?: string;
-      categoria_carga?: string;
       foto?: string;
       declaracion_aceptada?: string;
     } = {};
@@ -215,13 +294,9 @@ export function NuevoBultoForm() {
       }
       if (!isTipoCarga(form.tipo_carga)) {
         errors.tipo_carga = "Indica el tipo de carga.";
-      } else if (
-        !CATEGORIAS_POR_TIPO[form.tipo_carga].includes(form.categoria_carga)
-      ) {
-        errors.categoria_carga = "Elige la categoría.";
       }
-      if (!fotoFile) {
-        errors.foto = "Añade una foto de la carga.";
+      if (!foto1.file) {
+        errors.foto = "Añade al menos una foto de la carga.";
       }
       if (!form.declaracion_aceptada) {
         errors.declaracion_aceptada =
@@ -245,9 +320,9 @@ export function NuevoBultoForm() {
     formData.set("hora_limite", form.hora_limite);
     if (incluyeBulto(form.tipo_solicitud)) {
       formData.set("tipo_carga", form.tipo_carga);
-      formData.set("categoria_carga", form.categoria_carga);
       formData.set("declaracion_aceptada", "1");
-      if (fotoFile) formData.set("foto", fotoFile);
+      if (foto1.file) formData.set("foto", foto1.file);
+      if (foto2.file) formData.set("foto_2", foto2.file);
     }
 
     const result = await crearBulto(formData);
@@ -357,19 +432,6 @@ export function NuevoBultoForm() {
             )}
           </fieldset>
 
-          {form.tipo_carga ? (
-            <Select
-              name="categoria_carga"
-              label="Categoría"
-              options={categorias.map((c) => ({ value: c, label: c }))}
-              placeholder="Elige una categoría"
-              required
-              value={form.categoria_carga}
-              error={fieldErrors.categoria_carga}
-              onChange={(e) => updateField("categoria_carga", e.target.value)}
-            />
-          ) : null}
-
           <Textarea
             name="descripcion"
             label="Qué necesitas enviar"
@@ -390,64 +452,26 @@ export function NuevoBultoForm() {
           />
           <p className="text-sm text-zinc-600">{AVISO_PIE_DE_CALLE}</p>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <span className="text-sm font-medium text-zinc-800">
-              Foto de la carga (obligatoria)
+              Fotos de la carga (máximo 2)
             </span>
-            <div className="flex items-start gap-4">
-              {fotoPreview ? (
-                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
-                  <Image
-                    src={fotoPreview}
-                    alt="Vista previa de la carga"
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-              ) : null}
-              <div className="min-w-0 flex-1 space-y-1.5">
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => fotoCamaraRef.current?.click()}
-                  >
-                    {fotoFile ? "Hacer otra foto" : "Hacer foto"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => fotoInputRef.current?.click()}
-                  >
-                    {fotoFile ? "Cambiar desde galería" : "Elegir de galería"}
-                  </Button>
-                </div>
-                <p className="text-xs text-zinc-500">
-                  Puedes hacerla ahora con la cámara o elegirla de la galería.
-                  JPG, PNG o WebP. Máx. 5 MB.
-                </p>
-                {fieldErrors.foto ? (
-                  <p className="text-sm text-red-700">{fieldErrors.foto}</p>
-                ) : null}
-              </div>
-            </div>
-            <input
-              ref={fotoCamaraRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="sr-only"
-              onChange={(e) => onFotoChange(e.target.files?.[0] ?? null)}
+            <FotoCargaSlot
+              titulo="Foto 1"
+              obligatoria
+              slot={foto1}
+              onChange={(file) => setFotoSlot(1, file)}
+              error={fieldErrors.foto}
             />
-            <input
-              ref={fotoInputRef}
-              name="foto"
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              className="sr-only"
-              onChange={(e) => onFotoChange(e.target.files?.[0] ?? null)}
+            <FotoCargaSlot
+              titulo="Foto 2"
+              slot={foto2}
+              onChange={(file) => setFotoSlot(2, file)}
             />
+            <p className="text-xs text-zinc-500">
+              Puedes hacerla con la cámara o elegirla de la galería. JPG, PNG o
+              WebP. Máx. 5 MB cada una.
+            </p>
           </div>
 
           <label

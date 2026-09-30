@@ -109,17 +109,39 @@ export default async function BultoDetallePage({
         </p>
       </div>
 
-      {necesitaBulto && bulto.foto_url && (
-        <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
-          <Image
-            src={bulto.foto_url}
-            alt="Foto del bulto"
-            fill
-            className="object-cover"
-            sizes="(max-width: 512px) 100vw, 512px"
-          />
+      {necesitaBulto && (bulto.foto_url || bulto.foto_url_2) ? (
+        <div
+          className={[
+            "grid gap-3",
+            bulto.foto_url && bulto.foto_url_2
+              ? "grid-cols-1 sm:grid-cols-2"
+              : "grid-cols-1",
+          ].join(" ")}
+        >
+          {bulto.foto_url ? (
+            <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
+              <Image
+                src={bulto.foto_url}
+                alt="Foto del bulto"
+                fill
+                className="object-cover"
+                sizes="(max-width: 512px) 100vw, 512px"
+              />
+            </div>
+          ) : null}
+          {bulto.foto_url_2 ? (
+            <div className="relative aspect-video overflow-hidden rounded-2xl bg-zinc-100">
+              <Image
+                src={bulto.foto_url_2}
+                alt="Segunda foto del bulto"
+                fill
+                className="object-cover"
+                sizes="(max-width: 512px) 100vw, 512px"
+              />
+            </div>
+          ) : null}
         </div>
-      )}
+      ) : null}
 
       <Card className="space-y-4">
         <p className="text-sm font-semibold text-zinc-800">
@@ -165,14 +187,6 @@ export default async function BultoDetallePage({
                   {TIPO_CARGA_OPTIONS.find((o) => o.value === bulto.tipo_carga)
                     ?.label ?? bulto.tipo_carga}
                 </span>
-              </p>
-            ) : null}
-            {bulto.categoria_carga ? (
-              <p className="text-sm text-zinc-800">
-                <span className="font-medium uppercase tracking-wide text-zinc-500">
-                  Categoría:
-                </span>{" "}
-                <span className="font-medium">{bulto.categoria_carga}</span>
               </p>
             ) : null}
             <p className="text-sm text-zinc-800">

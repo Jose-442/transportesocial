@@ -187,6 +187,8 @@ export type AnuncioBulto = {
   descripcion: string;
   medidas: string;
   foto_url: string | null;
+  /** Segunda foto opcional. */
+  foto_url_2: string | null;
   fecha_limite: string | null;
   tipo_solicitud: TipoSolicitud;
   /** voluminoso | paquete. Null en anuncios antiguos. */
