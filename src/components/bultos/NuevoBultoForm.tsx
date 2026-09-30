@@ -41,6 +41,7 @@ const FOTO_MAX_BYTES = 5 * 1024 * 1024;
 export function NuevoBultoForm() {
   const router = useRouter();
   const fotoInputRef = useRef<HTMLInputElement>(null);
+  const fotoCamaraRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
     tipo_solicitud?: string;
@@ -406,22 +407,39 @@ export function NuevoBultoForm() {
                 </div>
               ) : null}
               <div className="min-w-0 flex-1 space-y-1.5">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => fotoInputRef.current?.click()}
-                >
-                  {fotoFile ? "Cambiar foto" : "Elegir foto"}
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => fotoCamaraRef.current?.click()}
+                  >
+                    {fotoFile ? "Hacer otra foto" : "Hacer foto"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => fotoInputRef.current?.click()}
+                  >
+                    {fotoFile ? "Cambiar desde galería" : "Elegir de galería"}
+                  </Button>
+                </div>
                 <p className="text-xs text-zinc-500">
-                  JPG, PNG o WebP. Máx. 5 MB. Debe verse claramente lo que se
-                  envía.
+                  Puedes hacerla ahora con la cámara o elegirla de la galería.
+                  JPG, PNG o WebP. Máx. 5 MB.
                 </p>
                 {fieldErrors.foto ? (
                   <p className="text-sm text-red-700">{fieldErrors.foto}</p>
                 ) : null}
               </div>
             </div>
+            <input
+              ref={fotoCamaraRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="sr-only"
+              onChange={(e) => onFotoChange(e.target.files?.[0] ?? null)}
+            />
             <input
               ref={fotoInputRef}
               name="foto"
