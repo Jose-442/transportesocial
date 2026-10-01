@@ -161,9 +161,7 @@ export default async function CuentaPage({
         <EditarIdentidadForm
           inicial={{
             phone: profile.phone,
-            phone_verified: Boolean(profile.phone_verified),
             documento_identidad: profile.documento_identidad,
-            documento_verificado: Boolean(profile.documento_verificado),
           }}
         />
       </Card>

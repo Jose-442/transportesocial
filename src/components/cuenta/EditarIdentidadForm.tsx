@@ -15,13 +15,7 @@ import type { Profile } from "@/types/database";
 export function EditarIdentidadForm({
   inicial,
 }: {
-  inicial: Pick<
-    Profile,
-    | "phone"
-    | "phone_verified"
-    | "documento_identidad"
-    | "documento_verificado"
-  >;
+  inicial: Pick<Profile, "phone" | "documento_identidad">;
 }) {
   const router = useRouter();
   const [telefono, setTelefono] = useState(inicial.phone ?? "");

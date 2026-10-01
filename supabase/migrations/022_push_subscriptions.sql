@@ -39,3 +39,4 @@ CREATE POLICY "Usuario borra sus push"
   USING (user_id = auth.uid());
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.push_subscriptions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.push_subscriptions TO service_role;

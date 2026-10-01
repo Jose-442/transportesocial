@@ -263,6 +263,11 @@ export default function TerminosPage() {
               límite de {MAX_ASIENTOS_POR_VIAJE} plazas de acompañante en total
               por trayecto.
             </li>
+            <li>
+              Si viaja un menor de 18 años como pasajero, debe ir acompañado en
+              todo momento por el adulto registrado que hizo la reserva, bajo la
+              responsabilidad exclusiva de ese adulto (véase el apartado 2).
+            </li>
           </ul>
         </section>
 
