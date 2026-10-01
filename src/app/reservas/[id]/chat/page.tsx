@@ -19,7 +19,6 @@ async function asegurarCanalAbierto(
   supabase: Awaited<ReturnType<typeof createClient>>,
   reservaId: string
 ): Promise<{ id: string; abierto: boolean } | null> {
-  await abrirChatReserva(supabase, reservaId);
   const { data: rpcId } = await supabase.rpc("abrir_chat_reserva", {
     p_reserva_id: reservaId,
   });
