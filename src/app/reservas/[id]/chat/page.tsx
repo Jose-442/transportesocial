@@ -6,7 +6,6 @@ import { ChatPanel } from "@/components/reservas/ChatPanel";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
-import { abrirChatReserva } from "@/lib/reservas/chat";
 import { chatPermitido, resumenChatViaje } from "@/lib/reservas/labels";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { loadPerfilesPublicos } from "@/lib/profile";

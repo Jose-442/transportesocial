@@ -7,7 +7,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcComision } from "@/lib/pricing";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
-import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { plazoReclamacionDesdeLlegada } from "@/lib/reservas/timing";
 import { cookies } from "next/headers";
@@ -365,18 +364,6 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
   redirect(
     `/reservas/${reservaId}?err=${encodeURIComponent(checkout.error)}`
   );
-}
-
-export async function decidirReservaConductor(
-  _prev: { error?: string; ok?: boolean } | null,
-  formData: FormData
-): Promise<{ error?: string; ok?: boolean }> {
-  const reservaId = String(formData.get("reserva_id") ?? "").trim();
-  const decision = String(formData.get("decision") ?? "").trim();
-  if (decision !== "aceptar" && decision !== "rechazar") {
-    return { error: "No se ha podido guardar. Recarga e inténtalo otra vez." };
-  }
-  return ejecutarDecisionConductor({ reservaId, decision });
 }
 
 export async function editarReservaPendiente(reservaId: string): Promise<void> {
