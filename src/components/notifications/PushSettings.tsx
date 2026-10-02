@@ -125,7 +125,7 @@ export function PushSettings() {
       {(estado === "default" || estado === "inactivo") && (
         <>
           <p className="text-sm text-zinc-600">
-            Recibe un aviso aunque no tengas la web abierta: reservas, mensajes y
+            Recibe un aviso aunque no tengas la App abierta: reservas, mensajes y
             propuestas.
           </p>
           <Button

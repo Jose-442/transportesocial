@@ -33,7 +33,7 @@ export function CookieBanner() {
         <p className="text-sm leading-relaxed text-zinc-700">
           Usamos cookies técnicas necesarias para el funcionamiento del servicio
           (sesión, autenticación). Con tu permiso, podríamos usar cookies
-          analíticas para mejorar la web. Puedes aceptar o rechazar las no
+          analíticas para mejorar la App. Puedes aceptar o rechazar las no
           esenciales.{" "}
           <Link
             href="/terminos#cookies"

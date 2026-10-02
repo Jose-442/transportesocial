@@ -39,8 +39,8 @@ export default function TerminosPage() {
           </h2>
           <p>
             Las presentes Condiciones Generales de Uso y Contratación (en
-            adelante, los «Términos») rigen el acceso, navegación y uso del
-            sitio web{" "}
+            adelante, los «Términos») rigen el acceso, navegación y uso de la
+            App{" "}
             <strong>{APP_NAME}</strong> (en adelante, la «Plataforma»), así como
             la contratación de los servicios tecnológicos prestados a través de
             la misma, operada por <strong>{nombre}</strong> (en adelante, el
@@ -561,7 +561,7 @@ export default function TerminosPage() {
             para el funcionamiento de la Plataforma (por ejemplo, mantener la
             sesión iniciada con Supabase). Las cookies o tecnologías analíticas
             no esenciales solo se activarán si usted pulsa «Aceptar todo» en el
-            aviso de cookies. Si pulsa «Rechazar todo», la web seguirá
+            aviso de cookies. Si pulsa «Rechazar todo», la App seguirá
             funcionando con las cookies técnicas imprescindibles. Puede cambiar
             de opinión eliminando la clave{" "}
             <code className="rounded bg-zinc-100 px-1 text-xs">

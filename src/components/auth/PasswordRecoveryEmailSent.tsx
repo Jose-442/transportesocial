@@ -26,7 +26,7 @@ export function PasswordRecoveryEmailSent({
         </li>
         <li>
           Al abrir el enlace, te pediremos la <strong>nueva contraseña</strong> en
-          esta web.
+          esta App.
         </li>
       </ul>
       <p className="text-xs text-zinc-500">

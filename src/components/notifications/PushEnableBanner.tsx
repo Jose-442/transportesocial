@@ -97,7 +97,7 @@ export function PushEnableBanner({ userId }: { userId: string | null }) {
         <strong>Avisos en el móvil</strong>
         <span>
           {error ??
-            "Entérate de reservas y mensajes aunque no tengas la web abierta."}
+            "Entérate de reservas y mensajes aunque no tengas la App abierta."}
         </span>
       </div>
       <button
