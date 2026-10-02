@@ -154,8 +154,9 @@ export default async function CuentaPage({
         <div>
           <h2 className="font-semibold text-zinc-900">Identidad</h2>
           <p className="mt-1 text-sm text-zinc-600">
-            Teléfono y DNI/NIE solo los ves tú. Son obligatorios para pagar un
-            viaje.
+            Tus datos son 100% privados y nunca serán visibles. Verificamos tu
+            DNI/NIE y teléfono para garantizar la seguridad y confianza de toda
+            la comunidad.
           </p>
         </div>
         <EditarIdentidadForm

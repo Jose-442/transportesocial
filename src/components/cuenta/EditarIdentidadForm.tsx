@@ -88,7 +88,7 @@ export function EditarIdentidadForm({
         hint={
           errorTelefono
             ? undefined
-            : "Obligatorio para pagar un viaje. Solo lo ves tú."
+            : "Obligatorio para pagar un viaje."
         }
       />
       <Input
@@ -106,7 +106,7 @@ export function EditarIdentidadForm({
         hint={
           errorDocumento
             ? undefined
-            : "Obligatorio para pagar un viaje. Solo lo ves tú."
+            : "Obligatorio para pagar un viaje."
         }
       />
       {mensaje ? (
