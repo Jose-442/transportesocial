@@ -595,8 +595,8 @@ export function NuevaRutaForm({
       )}
       {faltaIdentidad && (
         <div className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5">
-          <p className="text-base uppercase text-zinc-600">
-            Para publicar una ruta necesitas indicar tu teléfono y DNI/NIE
+          <p className="text-base text-zinc-600">
+            Por normativa legal necesitamos pedirte tu DNI/NIE y tu teléfono
           </p>
           <p className="text-sm text-zinc-600">
             Tus datos son 100% privados y nunca serán visibles. Verificamos tu
