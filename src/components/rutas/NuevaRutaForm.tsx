@@ -660,6 +660,9 @@ export function NuevaRutaForm({
           >
             Datos del vehículo
           </ButtonLink>
+          <p className="mt-2 text-base text-zinc-600">
+            Completar también los datos de tu perfil da confianza a tu viaje.
+          </p>
         </div>
       )}
       {!botonArriba && botonPublicar}
