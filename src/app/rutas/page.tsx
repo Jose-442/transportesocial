@@ -50,16 +50,25 @@ export default async function RutasPage({
             Completa salida, llegada, mes y día para ver los viajes.
           </p>
         ) : null
-      ) : rutas.length === 0 ? (
-        <p className="text-sm text-zinc-500">
-          No se encontraron viajes en esta búsqueda.
-        </p>
       ) : (
-        <div className="space-y-3">
-          {rutas.map((ruta) => (
-            <RutaCard key={ruta.id} ruta={ruta} listadoSearch={listadoSearch} />
-          ))}
-        </div>
+        <>
+          <p className="text-sm font-medium text-zinc-700">
+            {rutas.length === 1
+              ? "1 viaje encontrado"
+              : `${rutas.length} viajes encontrados`}
+          </p>
+          {rutas.length === 0 ? null : (
+            <div className="space-y-3">
+              {rutas.map((ruta) => (
+                <RutaCard
+                  key={ruta.id}
+                  ruta={ruta}
+                  listadoSearch={listadoSearch}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
