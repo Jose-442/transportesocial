@@ -150,23 +150,6 @@ export default async function CuentaPage({
         />
       </Card>
 
-      <Card id="identidad" className="scroll-mt-4 space-y-3">
-        <div>
-          <h2 className="font-semibold text-zinc-900">Identidad</h2>
-          <p className="mt-1 text-sm text-zinc-600">
-            Tus datos son 100% privados y nunca serán visibles. Verificamos tu
-            DNI/NIE y teléfono para garantizar la seguridad y confianza de toda
-            la comunidad.
-          </p>
-        </div>
-        <EditarIdentidadForm
-          inicial={{
-            phone: profile.phone,
-            documento_identidad: profile.documento_identidad,
-          }}
-        />
-      </Card>
-
       <div id="vehiculo" className="scroll-mt-2">
         <Card className={perfilCompactPc ? "space-y-2 p-3" : "space-y-4"}>
           <div>
@@ -192,6 +175,24 @@ export default async function CuentaPage({
           />
         </Card>
       </div>
+
+      <Card id="identidad" className="scroll-mt-4 space-y-3">
+        <div>
+          <h2 className="font-semibold text-zinc-900">Identidad</h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            Tus datos son 100% privados y nunca serán visibles. Verificamos tu
+            DNI/NIE y teléfono para garantizar la seguridad y confianza de toda
+            la comunidad.
+          </p>
+        </div>
+        <EditarIdentidadForm
+          inicial={{
+            phone: profile.phone,
+            documento_identidad: profile.documento_identidad,
+          }}
+        />
+      </Card>
+
       <CuentaMisViajes userId={user.id} />
 
       <Card className="space-y-3">
