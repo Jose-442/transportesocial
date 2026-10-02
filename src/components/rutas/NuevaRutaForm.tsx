@@ -648,7 +648,7 @@ export function NuevaRutaForm({
       )}
       {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
-          <p className="uppercase">
+          <p className="text-base text-zinc-600">
             Para publicar una ruta necesitas indicar los datos de tu vehículo
           </p>
           <ButtonLink
