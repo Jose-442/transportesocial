@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/Card";
-import { COMMISSION_PERCENT_LABEL } from "@/lib/constants";
 
 export function HomeSubscriptionBanner() {
   return (
@@ -10,9 +9,8 @@ export function HomeSubscriptionBanner() {
         </p>
         <p>
           Registrarse, publicar viajes y buscar es gratis. Solo se paga al
-          reservar un viaje: el importe se cobra por adelantado y la web lo
-          retiene hasta confirmar que el viaje o el porte ha salido bien. Entonces
-          se aplica un {COMMISSION_PERCENT_LABEL} de gestión.
+          reservar un viaje: la web retiene el importe hasta confirmar que el
+          viaje o el porte ha ido bien.
         </p>
       </div>
     </Card>
