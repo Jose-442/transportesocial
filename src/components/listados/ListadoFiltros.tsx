@@ -113,7 +113,6 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       onSubmit={aplicar}
       className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4"
     >
-      <p className="text-sm font-semibold text-zinc-800">Buscar</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <MunicipioAutocomplete
           name="origen"
