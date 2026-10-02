@@ -168,6 +168,7 @@ export async function actualizarIdentidad(input: {
   if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/cuenta");
+  revalidatePath("/rutas/nueva");
   return { ok: true };
 }
 

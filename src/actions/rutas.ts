@@ -9,6 +9,10 @@ import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
+import {
+  identidadListaParaPagar,
+  MENSAJE_IDENTIDAD_PARA_PUBLICAR,
+} from "@/lib/identidad-pago";
 import { perfilVehiculoIncompleto, ERROR_VEHICULO_INCOMPLETO } from "@/lib/vehiculo";
 import {
   parseTipoOfertaRuta,
@@ -56,6 +60,14 @@ export async function crearRuta(formData: FormData) {
 
   const access = await assertCanPublish(profile, user.id, "/rutas/nueva");
   if (access.error) return { error: access.error };
+
+  const identidad = identidadListaParaPagar(
+    profile,
+    MENSAJE_IDENTIDAD_PARA_PUBLICAR
+  );
+  if (!identidad.ok) {
+    return { error: identidad.error };
+  }
 
   if (perfilVehiculoIncompleto(profile)) {
     return { error: ERROR_VEHICULO_INCOMPLETO };

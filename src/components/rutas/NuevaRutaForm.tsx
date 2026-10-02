@@ -10,8 +10,13 @@ import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { crearRuta } from "@/actions/rutas";
+import { actualizarIdentidad } from "@/actions/cuenta";
 import { cerrarSesion } from "@/actions/auth";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
+import {
+  documentoIdentidadValido,
+  telefonoEsValido,
+} from "@/lib/identidad";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
@@ -61,9 +66,13 @@ function botonClase(activo: boolean): string {
 }
 
 export function NuevaRutaForm({
+  mostrarAvisoIdentidad = false,
+  identidadInicial = { phone: "", documento_identidad: "" },
   mostrarAvisoVehiculo = false,
   desdeVehiculo = false,
 }: {
+  mostrarAvisoIdentidad?: boolean;
+  identidadInicial?: { phone: string; documento_identidad: string };
   mostrarAvisoVehiculo?: boolean;
   desdeVehiculo?: boolean;
 }) {
@@ -82,6 +91,25 @@ export function NuevaRutaForm({
   const [ready, setReady] = useState(false);
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
+  const [faltaIdentidad, setFaltaIdentidad] = useState(mostrarAvisoIdentidad);
+  const [telefono, setTelefono] = useState(identidadInicial.phone);
+  const [documento, setDocumento] = useState(
+    identidadInicial.documento_identidad
+  );
+  const [guardandoIdentidad, setGuardandoIdentidad] = useState(false);
+  const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
+  const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
+  const [errorIdentidad, setErrorIdentidad] = useState<string | null>(null);
+  const [mensajeIdentidad, setMensajeIdentidad] = useState<string | null>(null);
+
+  useEffect(() => {
+    setFaltaIdentidad(mostrarAvisoIdentidad);
+  }, [mostrarAvisoIdentidad]);
+
+  useEffect(() => {
+    setTelefono(identidadInicial.phone);
+    setDocumento(identidadInicial.documento_identidad);
+  }, [identidadInicial.phone, identidadInicial.documento_identidad]);
 
   useEffect(() => {
     let cancelled = false;
@@ -244,17 +272,73 @@ export function NuevaRutaForm({
     return errors;
   }
 
-  const botonArriba = ready && volviendoDelVehiculo && !mostrarAvisoVehiculo;
+  const botonArriba =
+    ready && volviendoDelVehiculo && !mostrarAvisoVehiculo && !faltaIdentidad;
 
   useEffect(() => {
     if (!botonArriba) return;
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [botonArriba]);
 
+  async function guardarIdentidad() {
+    setGuardandoIdentidad(true);
+    setErrorTelefono(null);
+    setErrorDocumento(null);
+    setErrorIdentidad(null);
+    setMensajeIdentidad(null);
+
+    let hayError = false;
+    if (!telefonoEsValido(telefono)) {
+      setErrorTelefono("Por favor, introduce un número de teléfono válido");
+      hayError = true;
+    }
+    if (!documentoIdentidadValido(documento)) {
+      setErrorDocumento(
+        "El DNI o NIE introducido no es válido. Revisa los números y la letra"
+      );
+      hayError = true;
+    }
+    if (hayError) {
+      setGuardandoIdentidad(false);
+      return;
+    }
+
+    const result = await actualizarIdentidad({ telefono, documento });
+    setGuardandoIdentidad(false);
+    if (result.errorTelefono) {
+      setErrorTelefono(result.errorTelefono);
+      return;
+    }
+    if (result.errorDocumento) {
+      setErrorDocumento(result.errorDocumento);
+      return;
+    }
+    if (result.error) {
+      setErrorIdentidad(result.error);
+      return;
+    }
+
+    setFaltaIdentidad(false);
+    setMensajeIdentidad("Identidad guardada.");
+    setError("");
+    router.refresh();
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    if (faltaIdentidad) {
+      setError("Indica tu teléfono y DNI/NIE antes de publicar.");
+      setLoading(false);
+      return;
+    }
+    if (mostrarAvisoVehiculo) {
+      setError('Pulsa abajo en: "Datos del vehículo" y complétalos antes de continuar');
+      setLoading(false);
+      return;
+    }
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
@@ -314,7 +398,7 @@ export function NuevaRutaForm({
       <Button
         type="submit"
         fullWidth
-        disabled={loading}
+        disabled={loading || faltaIdentidad || mostrarAvisoVehiculo}
         className="ts-btn-publicar-ruta"
       >
         {loading ? "Publicando…" : "Publicar ruta"}
@@ -509,6 +593,59 @@ export function NuevaRutaForm({
           {error}
         </p>
       )}
+      {faltaIdentidad && (
+        <div className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5">
+          <p className="text-base uppercase text-zinc-600">
+            Para publicar una ruta necesitas indicar tu teléfono y DNI/NIE
+          </p>
+          <p className="text-sm text-zinc-600">
+            Tus datos son 100% privados y nunca serán visibles. Verificamos tu
+            DNI/NIE y teléfono para garantizar la seguridad y confianza de toda
+            la comunidad.
+          </p>
+          <Input
+            label="Teléfono móvil"
+            name="telefono_identidad"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="Ej.: 612 345 678"
+            value={telefono}
+            onChange={(e) => {
+              setTelefono(e.target.value);
+              if (errorTelefono) setErrorTelefono(null);
+            }}
+            error={errorTelefono ?? undefined}
+          />
+          <Input
+            label="DNI o NIE"
+            name="documento_identidad"
+            type="text"
+            autoComplete="off"
+            placeholder="Ej.: 12345678Z"
+            value={documento}
+            onChange={(e) => {
+              setDocumento(e.target.value.toUpperCase());
+              if (errorDocumento) setErrorDocumento(null);
+            }}
+            error={errorDocumento ?? undefined}
+          />
+          {mensajeIdentidad ? (
+            <p className="text-sm text-emerald-700">{mensajeIdentidad}</p>
+          ) : null}
+          {errorIdentidad ? (
+            <p className="text-sm text-red-600">{errorIdentidad}</p>
+          ) : null}
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={guardandoIdentidad}
+            onClick={() => void guardarIdentidad()}
+          >
+            {guardandoIdentidad ? "Guardando…" : "Guardar identidad"}
+          </Button>
+        </div>
+      )}
       {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p className="uppercase">
@@ -523,9 +660,6 @@ export function NuevaRutaForm({
           >
             Datos del vehículo
           </ButtonLink>
-          <p className="mt-2 uppercase">
-            Completar también los datos de tu perfil da confianza a tu viaje.
-          </p>
         </div>
       )}
       {!botonArriba && botonPublicar}
