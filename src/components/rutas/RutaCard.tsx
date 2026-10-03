@@ -73,6 +73,24 @@ export function RutaCard({
                 {badgeOfertaRuta(ofertaInput)}
               </Badge>
             )}
+            {ruta.acepta_mascotas === true && (
+              <>
+                <Badge
+                  tone="turquoise"
+                  className="shrink-0 px-3.5 py-1.5 text-sm"
+                >
+                  SI LLEVO MASCOTAS
+                </Badge>
+                <span className="text-sm text-teal-800">
+                  (acompañadas y normativa DGT)
+                </span>
+              </>
+            )}
+            {ruta.acepta_mascotas === false && (
+              <Badge tone="zinc" className="shrink-0 px-3.5 py-1.5 text-sm">
+                NO LLEVO MASCOTAS
+              </Badge>
+            )}
           </div>
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
@@ -86,10 +104,6 @@ export function RutaCard({
             {lineasOfertaRuta(ofertaInput).map((linea) => (
               <p key={linea}>{linea}</p>
             ))}
-            {ruta.acepta_mascotas === true && (
-              <p>Mascotas: sí (acompañadas, normativa DGT)</p>
-            )}
-            {ruta.acepta_mascotas === false && <p>Mascotas: no</p>}
           </div>
           {asientoLibres > 0 && (
             <div className="mt-2 flex flex-wrap items-center gap-2">

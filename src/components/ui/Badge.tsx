@@ -5,6 +5,7 @@ const tones = {
   amber: "bg-amber-100 text-amber-800",
   zinc: "bg-zinc-100 text-zinc-700",
   blue: "bg-sky-100 text-sky-800",
+  turquoise: "bg-teal-100 text-teal-800",
 };
 
 export function Badge({
