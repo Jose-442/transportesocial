@@ -264,7 +264,7 @@ export default async function RutaDetallePage({
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-1 md:gap-4">
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
               Salida
             </p>
             <p className="mt-0.5 text-sm font-medium text-zinc-900 md:mt-1">
@@ -276,7 +276,7 @@ export default async function RutaDetallePage({
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
               Destino
             </p>
             <p className="mt-0.5 text-sm font-medium text-zinc-900 md:mt-1">
@@ -306,7 +306,7 @@ export default async function RutaDetallePage({
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-zinc-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
             Espacio para el bulto
           </p>
           <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">
@@ -334,7 +334,7 @@ export default async function RutaDetallePage({
         </div>
         {ruta.acepta_mascotas != null && (
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
               Mascotas
             </p>
             <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">
