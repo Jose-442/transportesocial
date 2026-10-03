@@ -77,9 +77,9 @@ export default async function HomePage() {
               {BRAND_TAGLINE}
             </p>
             <p className="mt-2 text-xs text-emerald-50 sm:mt-3 sm:text-sm lg:mt-4 lg:text-base">
-              Cercano, práctico, útil. Conectamos conductores de vehículos
-              grandes que disponen de espacio libre con personas que necesitan
-              enviar algo voluminoso o necesitan solamente viajar.
+              Cercano, práctico, útil. Conectamos conductores con espacio libre
+              con personas que necesitan enviar un bulto, viajar o desplazarse
+              con su mascota.
             </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mt-8 lg:max-w-md lg:gap-4">
               <ButtonLink
