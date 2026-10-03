@@ -86,6 +86,10 @@ export function RutaCard({
             {lineasOfertaRuta(ofertaInput).map((linea) => (
               <p key={linea}>{linea}</p>
             ))}
+            {ruta.acepta_mascotas === true && (
+              <p>Mascotas: sí (acompañadas, normativa DGT)</p>
+            )}
+            {ruta.acepta_mascotas === false && <p>Mascotas: no</p>}
           </div>
           {asientoLibres > 0 && (
             <div className="mt-2 flex flex-wrap items-center gap-2">
