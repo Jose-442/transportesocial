@@ -86,11 +86,6 @@ export function RutaCard({
                 </span>
               </>
             )}
-            {ruta.acepta_mascotas === false && (
-              <Badge tone="zinc" className="shrink-0 px-3.5 py-1.5 text-sm">
-                NO LLEVO MASCOTAS
-              </Badge>
-            )}
           </div>
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
