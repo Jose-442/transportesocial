@@ -129,6 +129,12 @@ export async function crearRuta(formData: FormData) {
     precioPublicado = precioPublicadoPlaza;
   }
 
+  const mascotasRaw = String(formData.get("acepta_mascotas") ?? "").trim();
+  if (mascotasRaw !== "si" && mascotasRaw !== "no") {
+    return { error: "Indica si aceptas mascotas en este viaje." };
+  }
+  const aceptaMascotas = mascotasRaw === "si";
+
   const origenInput = formatCiudad(String(formData.get("origen")));
   const destinoInput = formatCiudad(String(formData.get("destino")));
   const origenResuelto = resolverMunicipioFormulario(origenInput, "salida");
@@ -149,6 +155,7 @@ export async function crearRuta(formData: FormData) {
       espacio_disponible: espacioDisponible,
       precio_neto: precioNeto,
       precio_publicado: precioPublicado,
+      acepta_mascotas: aceptaMascotas,
     })
     .select("id")
     .single();

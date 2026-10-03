@@ -174,6 +174,8 @@ export type RutaConductor = {
   espacio_disponible: string;
   precio_neto: number;
   precio_publicado: number;
+  /** true = sí (acompañadas / DGT); false = no; null = rutas antiguas. */
+  acepta_mascotas: boolean | null;
   estado: "activa" | "reservada" | "completada" | "cancelada";
   created_at: string;
   updated_at: string;

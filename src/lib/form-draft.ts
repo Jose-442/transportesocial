@@ -279,6 +279,8 @@ export type NuevaRutaDraft = {
   plazas_marcadas?: boolean;
   precio_neto_plaza: string;
   precio_neto: string;
+  /** "" = sin marcar; "si" | "no" */
+  acepta_mascotas: "" | "si" | "no";
 };
 
 export type NuevoBultoDraft = {
@@ -315,6 +317,7 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
   plazas_marcadas: false,
   precio_neto_plaza: "",
   precio_neto: "",
+  acepta_mascotas: "",
 };
 
 export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
@@ -404,6 +407,10 @@ export function normalizeNuevaRutaDraft(
     plazas_marcadas = false;
   }
 
+  const mascotasRaw = String(raw.acepta_mascotas ?? "");
+  const acepta_mascotas =
+    mascotasRaw === "si" || mascotasRaw === "no" ? mascotasRaw : "";
+
   return {
     origen: String(raw.origen ?? ""),
     destino: String(raw.destino ?? ""),
@@ -416,5 +423,6 @@ export function normalizeNuevaRutaDraft(
     plazas_marcadas,
     precio_neto_plaza: String(raw.precio_neto_plaza ?? ""),
     precio_neto: String(raw.precio_neto ?? ""),
+    acepta_mascotas,
   };
 }

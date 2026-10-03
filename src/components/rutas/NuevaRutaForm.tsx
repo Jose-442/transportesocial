@@ -48,7 +48,19 @@ type RutaFieldKey =
   | "espacio_tamano"
   | "plazas_acompanante"
   | "precio_neto"
-  | "precio_neto_plaza";
+  | "precio_neto_plaza"
+  | "acepta_mascotas";
+
+const MASCOTAS_OPCIONES: {
+  value: "no" | "si";
+  label: string;
+}[] = [
+  { value: "no", label: "No" },
+  {
+    value: "si",
+    label: "Sí, acompañadas y según la normativa de la DGT",
+  },
+];
 
 const TIPOS_BOTON: { value: TipoOfertaRuta; label: string }[] = [
   { value: "solo_bulto", label: "Solo para bulto" },
@@ -269,6 +281,10 @@ export function NuevaRutaForm({
         errors.precio_neto_plaza = "Indica un precio válido por acompañante.";
       }
     }
+
+    if (draft.acepta_mascotas !== "si" && draft.acepta_mascotas !== "no") {
+      errors.acepta_mascotas = "Indica si aceptas mascotas en este viaje.";
+    }
     return errors;
   }
 
@@ -373,6 +389,7 @@ export function NuevaRutaForm({
     formData.set("plazas_acompanante", form.plazas_acompanante);
     formData.set("precio_neto_plaza", form.precio_neto_plaza);
     formData.set("precio_neto", form.precio_neto);
+    formData.set("acepta_mascotas", form.acepta_mascotas);
 
     const result = await crearRuta(formData);
 
@@ -587,6 +604,38 @@ export function NuevaRutaForm({
           )}
         </div>
       )}
+
+      <fieldset className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
+        <legend className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
+          ¿Aceptas mascotas en este viaje?
+        </legend>
+        <div className="space-y-2">
+          {MASCOTAS_OPCIONES.map((opcion) => (
+            <label
+              key={opcion.value}
+              className={[
+                "flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border px-3 py-2 text-sm",
+                form.acepta_mascotas === opcion.value
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-900"
+                  : "border-zinc-200 bg-white text-zinc-800",
+              ].join(" ")}
+            >
+              <input
+                type="radio"
+                name="acepta_mascotas"
+                value={opcion.value}
+                checked={form.acepta_mascotas === opcion.value}
+                onChange={() => updateField("acepta_mascotas", opcion.value)}
+                className="mt-1 size-4 accent-emerald-600"
+              />
+              <span>{opcion.label}</span>
+            </label>
+          ))}
+        </div>
+        {fieldErrors.acepta_mascotas && (
+          <p className="text-sm text-red-700">{fieldErrors.acepta_mascotas}</p>
+        )}
+      </fieldset>
 
       {mostrarError && !botonArriba && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">

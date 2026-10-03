@@ -332,6 +332,18 @@ export default async function RutaDetallePage({
             </div>
           )}
         </div>
+        {ruta.acepta_mascotas != null && (
+          <div>
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              Mascotas
+            </p>
+            <p className="mt-0.5 text-sm text-zinc-800 md:mt-1">
+              {ruta.acepta_mascotas
+                ? "Sí, acompañadas y según la normativa de la DGT"
+                : "No"}
+            </p>
+          </div>
+        )}
       </Card>
 
       {tieneAsientos && !mostrarFormulario && (

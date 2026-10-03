@@ -79,4 +79,14 @@ describe("normalizeNuevaRutaDraft plazas", () => {
     expect(draft.tipo_oferta).toBe("bulto_y_pasajeros");
     expect(draft.plazas_acompanante).toBe("2");
   });
+
+  it("conserva la respuesta de mascotas del borrador", () => {
+    expect(
+      normalizeNuevaRutaDraft({ acepta_mascotas: "si" }).acepta_mascotas
+    ).toBe("si");
+    expect(
+      normalizeNuevaRutaDraft({ acepta_mascotas: "no" }).acepta_mascotas
+    ).toBe("no");
+    expect(normalizeNuevaRutaDraft({}).acepta_mascotas).toBe("");
+  });
 });
