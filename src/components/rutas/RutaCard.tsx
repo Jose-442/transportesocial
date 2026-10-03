@@ -73,23 +73,23 @@ export function RutaCard({
                 {badgeOfertaRuta(ofertaInput)}
               </Badge>
             )}
-            {ruta.acepta_mascotas === true && (
-              <>
-                <Badge
-                  tone="turquoise"
-                  className="shrink-0 px-3.5 py-1.5 text-sm"
-                >
-                  SI LLEVO MASCOTAS
-                </Badge>
-                <span className="text-sm text-teal-800">
-                  (acompañadas y normativa DGT)
-                </span>
-              </>
-            )}
           </div>
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
+          {ruta.acepta_mascotas === true && (
+            <div className="mt-1 flex flex-nowrap items-center gap-x-2">
+              <Badge
+                tone="turquoise"
+                className="shrink-0 px-3.5 py-1.5 text-sm"
+              >
+                SI LLEVO MASCOTAS
+              </Badge>
+              <span className="whitespace-nowrap text-sm text-teal-800">
+                (acompañadas y normativa DGT)
+              </span>
+            </div>
+          )}
           {variant === "cuenta" && (
             <p className="mt-1 text-lg font-bold text-emerald-700">
               {formatEur(Number(ruta.precio_publicado))}
