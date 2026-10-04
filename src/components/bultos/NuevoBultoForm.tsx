@@ -467,8 +467,6 @@ export function NuevoBultoForm() {
         />
       ) : null}
 
-      {form.mascota ? (
-        <>
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Cuántas plazas necesitas?
@@ -671,8 +669,6 @@ export function NuevoBultoForm() {
       <Button type="submit" fullWidth disabled={loading}>
         {loading ? "Publicando…" : "Publicar solicitud"}
       </Button>
-        </>
-      ) : null}
     </form>
   );
 }

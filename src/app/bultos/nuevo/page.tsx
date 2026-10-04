@@ -3,7 +3,7 @@ import { NuevoBultoForm } from "@/components/bultos/NuevoBultoForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
 
 export const metadata = {
-  title: "Publicar porte para bulto y/o viaje para pasajero",
+  title: "Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)",
 };
 
 export default async function NuevoBultoPage() {
@@ -12,7 +12,7 @@ export default async function NuevoBultoPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">
-        Publicar porte para bulto y/o viaje para pasajero
+        Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)
       </h1>
       <Card>
         <NuevoBultoForm />
