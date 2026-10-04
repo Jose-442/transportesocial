@@ -412,12 +412,6 @@ export function NuevoBultoForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {form.mascota === "no" ? null : (
-      <>
-      <p className="text-sm leading-snug text-zinc-600">
-        Al publicar esta propuesta, el usuario confirma que se responsabiliza
-        de aportar los elementos de sujeción homologados y la documentación
-        exigida por la normativa vigente.
-      </p>
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Viaja alguna mascota?
@@ -451,8 +445,15 @@ export function NuevoBultoForm() {
           <p className="text-sm text-red-700">{fieldErrors.mascota}</p>
         )}
       </fieldset>
-      </>
       )}
+
+      {form.mascota === "pequena" || mascotaGrande ? (
+        <p className="text-sm leading-snug text-zinc-600">
+          Al publicar esta propuesta, te responsabilizas de aportar los
+          elementos de sujeción homologados y la documentación exigida por la
+          normativa vigente.
+        </p>
+      ) : null}
 
       {form.mascota === "pequena" || mascotaGrande ? (
         <Textarea
