@@ -142,8 +142,8 @@ export default async function HomePage() {
               </span>
               <span className="text-base leading-snug sm:text-lg">
                 Proponer un viaje porque necesito enviar un bulto. O solo
-                necesito viajar yo; para que un conductor le ponga precio a mi
-                propuesta
+                necesito viajar yo (con o sin mascota); para que un conductor
+                le ponga precio a mi propuesta
               </span>
             </ButtonLink>
           </div>
