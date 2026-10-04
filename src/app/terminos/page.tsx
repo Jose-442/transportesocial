@@ -16,7 +16,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "30 de septiembre de 2026";
+  const fechaActualizacion = "4 de octubre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -252,6 +252,12 @@ export default function TerminosPage() {
               El Conductor garantiza plazas homologadas y libres, seguro
               obligatorio en vigor que cubra ocupantes, y cumplimiento de la
               normativa de tráfico.
+            </li>
+            <li>
+              El Conductor declara bajo su responsabilidad que dispone de
+              carnet de conducir en vigor, así como de la ITV y seguro
+              obligatorio del vehículo actualizados conforme a la normativa
+              vigente.
             </li>
             <li>
               El Titular no responde por daños personales, accidentes, retrasos
