@@ -24,6 +24,7 @@ import {
   consumePublicationCredit,
   shouldConsumePublicationCredit,
 } from "@/actions/publication-fee";
+import { avisarAlertasDeRuta } from "@/lib/alertas-viaje-avisar";
 
 async function rollbackRutaTrasFallo(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -184,6 +185,18 @@ export async function crearRuta(formData: FormData) {
 
   if (await shouldConsumePublicationCredit(user.id, profile)) {
     await consumePublicationCredit(user.id, "/rutas/nueva", "ruta_id", data.id);
+  }
+
+  try {
+    await avisarAlertasDeRuta({
+      id: data.id,
+      user_id: user.id,
+      origen: etiquetaMunicipio(origenResuelto.municipio!),
+      destino: etiquetaMunicipio(destinoResuelto.municipio!),
+      fecha_salida: String(formData.get("fecha_salida")),
+    });
+  } catch (err) {
+    console.error("[alerta viaje]", err);
   }
 
   revalidatePath("/rutas");

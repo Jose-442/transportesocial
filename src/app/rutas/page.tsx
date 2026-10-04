@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { AlertaViajeBusqueda } from "@/components/rutas/AlertaViajeBusqueda";
 import { RutaCard } from "@/components/rutas/RutaCard";
 import { ListadoFiltros } from "@/components/listados/ListadoFiltros";
 import { createClient } from "@/lib/supabase/server";
@@ -26,10 +27,27 @@ export default async function RutasPage({
   const listadoSearch = busquedaCompleta ? filtrosToSearchQuery(filtros) : null;
 
   let rutas: RutaListadoItem[] = [];
+  let sesion = false;
+  let tieneAlerta = false;
 
   if (busquedaCompleta) {
     const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    sesion = !!user;
     rutas = await listarRutasConCapacidad(supabase, filtros);
+    if (user && rutas.length === 0) {
+      const { data: alerta } = await supabase
+        .from("alertas_viaje")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("origen", filtros.origen!)
+        .eq("destino", filtros.destino!)
+        .eq("fecha", filtros.fecha!.slice(0, 10))
+        .maybeSingle();
+      tieneAlerta = !!alerta;
+    }
   }
 
   return (
@@ -57,7 +75,15 @@ export default async function RutasPage({
               ? "1 viaje encontrado"
               : `${rutas.length} viajes encontrados`}
           </p>
-          {rutas.length === 0 ? null : (
+          {rutas.length === 0 ? (
+            <AlertaViajeBusqueda
+              origen={filtros.origen!}
+              destino={filtros.destino!}
+              fecha={filtros.fecha!.slice(0, 10)}
+              sesion={sesion}
+              tieneAlerta={tieneAlerta}
+            />
+          ) : (
             <div className="space-y-3">
               {rutas.map((ruta) => (
                 <RutaCard
