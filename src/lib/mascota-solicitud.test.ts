@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   isMascotaSolicitud,
+  textoMascotaEnVezDeBulto,
   textoMascotaSolicitud,
 } from "@/lib/mascota-solicitud";
 
@@ -15,6 +16,15 @@ describe("mascota en la solicitud", () => {
   it("no muestra nada si no viaja mascota", () => {
     expect(textoMascotaSolicitud("no", "")).toBeNull();
     expect(textoMascotaSolicitud(null, null)).toBeNull();
+  });
+
+  it("cambia bulto por mascota solo si es grande", () => {
+    expect(textoMascotaEnVezDeBulto("Bulto + 1 pasajero", "grande")).toBe(
+      "Mascota + 1 pasajero"
+    );
+    expect(textoMascotaEnVezDeBulto("Bulto + 1 pasajero", "pequena")).toBe(
+      "Bulto + 1 pasajero"
+    );
   });
 
   it("describe la mascota pequeña y la grande", () => {

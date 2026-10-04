@@ -3,7 +3,10 @@ import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
-import { textoMascotaSolicitud } from "@/lib/mascota-solicitud";
+import {
+  textoMascotaEnVezDeBulto,
+  textoMascotaSolicitud,
+} from "@/lib/mascota-solicitud";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
 
@@ -31,7 +34,10 @@ export function BultoCard({
   const lineaFecha = [fechaConMayuscula, horaCorta].filter(Boolean).join(", ");
 
   const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
-  const tipoLabel = labelTipoSolicitud(tipoSolicitud);
+  const tipoLabel = textoMascotaEnVezDeBulto(
+    labelTipoSolicitud(tipoSolicitud),
+    bulto.mascota
+  );
   const textoMascota = textoMascotaSolicitud(
     bulto.mascota,
     bulto.mascota_detalle
@@ -39,9 +45,9 @@ export function BultoCard({
   // Si ya no hace falta bulto (p. ej. quedó 1 plaza), no enseñar «lavadora».
   const textoDescripcion =
     incluyeBulto(tipoSolicitud) && descripcionVisible
-      ? `Bulto: ${descripcionVisible}`
+      ? `${bulto.mascota === "grande" ? "Mascota" : "Bulto"}: ${descripcionVisible}`
       : incluyeBulto(tipoSolicitud)
-        ? "Bulto: sin descripción"
+        ? `${bulto.mascota === "grande" ? "Mascota" : "Bulto"}: sin descripción`
         : null;
 
   const href = listadoSearch

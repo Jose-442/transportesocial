@@ -23,6 +23,19 @@ export function isMascotaSolicitud(value: string): value is MascotaSolicitud {
   return (MASCOTAS_SOLICITUD as readonly string[]).includes(value);
 }
 
+/** En mascota grande, las preguntas hablan de mascota, no de bulto. */
+export function textoMascotaEnVezDeBulto(
+  texto: string,
+  mascota: string | null | undefined
+): string {
+  if (mascota !== "grande") return texto;
+  return texto
+    .replace(/Bultos/g, "Mascotas")
+    .replace(/bultos/g, "mascotas")
+    .replace(/Bulto/g, "Mascota")
+    .replace(/bulto/g, "mascota");
+}
+
 /** Texto visible en el anuncio. Null si no viaja mascota o el anuncio es antiguo. */
 export function textoMascotaSolicitud(
   mascota: string | null | undefined,

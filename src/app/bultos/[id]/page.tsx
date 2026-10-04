@@ -12,7 +12,10 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
-import { textoMascotaSolicitud } from "@/lib/mascota-solicitud";
+import {
+  textoMascotaEnVezDeBulto,
+  textoMascotaSolicitud,
+} from "@/lib/mascota-solicitud";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import { TIPO_CARGA_OPTIONS } from "@/lib/porte-legal";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
@@ -110,7 +113,10 @@ export default async function BultoDetallePage({
         </div>
         <p className="text-sm font-semibold leading-snug text-emerald-800 sm:text-base">
           {esDueno ? "Mi propuesta de viaje" : "Necesita viaje"}:{" "}
-          {labelTipoSolicitud(tipoSolicitud)}
+          {textoMascotaEnVezDeBulto(
+            labelTipoSolicitud(tipoSolicitud),
+            bulto.mascota
+          )}
         </p>
       </div>
 
@@ -150,7 +156,12 @@ export default async function BultoDetallePage({
 
       <Card className="space-y-4">
         <p className="text-sm font-semibold text-zinc-800">
-          Detalle del viaje ({labelTipoSolicitud(tipoSolicitud)})
+          Detalle del viaje (
+          {textoMascotaEnVezDeBulto(
+            labelTipoSolicitud(tipoSolicitud),
+            bulto.mascota
+          )}
+          )
         </p>
         <div className="space-y-2 text-sm">
           <p className="text-zinc-800">
@@ -236,7 +247,9 @@ export default async function BultoDetallePage({
       {necesitaBulto && descripcionVisible ? (
         <Card>
           <p className="text-sm uppercase tracking-wide text-zinc-500">
-            Descripción del bulto
+            {bulto.mascota === "grande"
+              ? "Descripción de la mascota"
+              : "Descripción del bulto"}
           </p>
           <p className="mt-1 text-base text-zinc-800">{descripcionVisible}</p>
         </Card>

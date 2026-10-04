@@ -93,10 +93,12 @@ export async function crearBulto(formData: FormData) {
   if ((mascota === "pequena" || mascota === "grande") && !mascotaDetalle) {
     return { error: "Indica qué mascota es." };
   }
-  if (mascota === "grande" && !necesitaBulto) {
+  if (
+    mascota === "grande" &&
+    (tipoSolicitud === "solo_bulto" || !necesitaBulto)
+  ) {
     return {
-      error:
-        "La mascota grande se publica como un bulto. Elige plazas con bulto.",
+      error: "El dueño tiene que viajar con la mascota. Elige las plazas.",
     };
   }
 

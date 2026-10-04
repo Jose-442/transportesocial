@@ -16,6 +16,7 @@ import {
 import {
   isMascotaSolicitud,
   MASCOTA_SOLICITUD_OPTIONS,
+  textoMascotaEnVezDeBulto,
   type MascotaSolicitud,
 } from "@/lib/mascota-solicitud";
 import {
@@ -264,8 +265,8 @@ export function NuevoBultoForm() {
       if (
         field === "mascota" &&
         value === "grande" &&
-        next.tipo_solicitud &&
-        !incluyeBulto(next.tipo_solicitud)
+        (next.tipo_solicitud === "solo_bulto" ||
+          (next.tipo_solicitud && !incluyeBulto(next.tipo_solicitud)))
       ) {
         next.tipo_solicitud = "";
         next.tipo_solicitud_marcada = false;
@@ -315,10 +316,11 @@ export function NuevoBultoForm() {
       errors.tipo_solicitud = "Elige cuántas plazas necesitas.";
     } else if (
       form.mascota === "grande" &&
-      !incluyeBulto(form.tipo_solicitud)
+      (form.tipo_solicitud === "solo_bulto" ||
+        !incluyeBulto(form.tipo_solicitud))
     ) {
       errors.tipo_solicitud =
-        "La mascota grande va como un bulto. Elige una opción con bulto.";
+        "El dueño tiene que viajar con la mascota. Elige las plazas.";
     }
     if (!form.origen.trim()) {
       errors.origen = "Indica la salida.";
@@ -399,7 +401,12 @@ export function NuevoBultoForm() {
 
   const mascotaGrande = form.mascota === "grande";
   const opcionesPlazas = mascotaGrande
-    ? TIPO_SOLICITUD_OPTIONS.filter((opt) => incluyeBulto(opt.value))
+    ? TIPO_SOLICITUD_OPTIONS.filter(
+        (opt) => incluyeBulto(opt.value) && opt.value !== "solo_bulto"
+      ).map((opt) => ({
+        ...opt,
+        label: textoMascotaEnVezDeBulto(opt.label, "grande"),
+      }))
     : TIPO_SOLICITUD_OPTIONS;
 
   return (
@@ -582,7 +589,9 @@ export function NuevoBultoForm() {
               />
             </>
           )}
-          <p className="text-sm text-zinc-600">{AVISO_PIE_DE_CALLE}</p>
+          <p className="text-sm text-zinc-600">
+            {textoMascotaEnVezDeBulto(AVISO_PIE_DE_CALLE, form.mascota)}
+          </p>
 
           <div className="space-y-3">
             <span className="text-sm font-medium text-zinc-800">
