@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
+import { textoMascotaSolicitud } from "@/lib/mascota-solicitud";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto } from "@/types/database";
 
@@ -31,6 +32,10 @@ export function BultoCard({
 
   const tipoSolicitud = bulto.tipo_solicitud ?? "solo_bulto";
   const tipoLabel = labelTipoSolicitud(tipoSolicitud);
+  const textoMascota = textoMascotaSolicitud(
+    bulto.mascota,
+    bulto.mascota_detalle
+  );
   // Si ya no hace falta bulto (p. ej. quedó 1 plaza), no enseñar «lavadora».
   const textoDescripcion =
     incluyeBulto(tipoSolicitud) && descripcionVisible
@@ -53,6 +58,9 @@ export function BultoCard({
           <p className="mt-1 text-sm font-medium text-emerald-800">
             {tipoLabel}
           </p>
+          {textoMascota ? (
+            <p className="mt-1 text-sm text-zinc-800">{textoMascota}</p>
+          ) : null}
           {textoDescripcion ? (
             <p className="mt-1 line-clamp-2 text-sm text-zinc-600">
               {textoDescripcion}

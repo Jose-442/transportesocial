@@ -197,6 +197,10 @@ export type AnuncioBulto = {
   tipo_carga: "voluminoso" | "paquete" | null;
   categoria_carga: string | null;
   declaracion_aceptada_en: string | null;
+  /** no | pequena | grande. Null en anuncios antiguos. */
+  mascota: "no" | "pequena" | "grande" | null;
+  /** Qué mascota es, si viaja alguna. */
+  mascota_detalle: string | null;
   estado: "activo" | "reservado" | "completado" | "cancelado";
   created_at: string;
   updated_at: string;

@@ -12,6 +12,7 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
+import { textoMascotaSolicitud } from "@/lib/mascota-solicitud";
 import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
 import { TIPO_CARGA_OPTIONS } from "@/lib/porte-legal";
 import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
@@ -57,6 +58,10 @@ export default async function BultoDetallePage({
   const { texto: descripcionVisible } = separarHoraOculta(bulto.descripcion);
   const { texto: medidasVisibles } = separarHoraOculta(bulto.medidas);
   const horaBulto = horaDeAnuncio(bulto.descripcion, bulto.medidas);
+  const textoMascota = textoMascotaSolicitud(
+    bulto.mascota,
+    bulto.mascota_detalle
+  );
 
   const { data: ofertasData } = await supabase
     .from("ofertas_precio")
@@ -172,6 +177,14 @@ export default async function BultoDetallePage({
             <span className="font-medium">{destino}</span>
           </p>
         </div>
+        {textoMascota ? (
+          <p className="text-sm text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Mascota:
+            </span>{" "}
+            <span className="font-medium">{textoMascota}</span>
+          </p>
+        ) : null}
         <p className="text-sm text-zinc-500">
           Se concretará el viaje por el chat interno cuando se pague-reserve la
           propuesta.

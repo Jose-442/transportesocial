@@ -9,7 +9,15 @@ import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { crearBulto } from "@/actions/bultos";
-import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
+import {
+  ESPACIO_SELECT_OPTIONS,
+  espacioTamanoAceptado,
+} from "@/lib/espacio-opciones";
+import {
+  isMascotaSolicitud,
+  MASCOTA_SOLICITUD_OPTIONS,
+  type MascotaSolicitud,
+} from "@/lib/mascota-solicitud";
 import {
   AVISO_PIE_DE_CALLE,
   TEXTO_DECLARACION_PORTE,
@@ -144,6 +152,9 @@ export function NuevoBultoForm() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
+    mascota?: string;
+    mascota_detalle?: string;
+    espacio_tamano?: string;
     tipo_solicitud?: string;
     origen?: string;
     destino?: string;
@@ -189,6 +200,10 @@ export function NuevoBultoForm() {
             extractDateFromDatetime(draft.fecha_limite) || draft.fecha_limite,
           hora_limite:
             draft.hora_limite || extractTimeFromDatetime(draft.fecha_limite),
+          mascota: isMascotaSolicitud(draft.mascota ?? "")
+            ? draft.mascota
+            : "",
+          mascota_detalle: draft.mascota_detalle ?? "",
           foto: null,
         });
       } else if (draft) {
@@ -238,16 +253,29 @@ export function NuevoBultoForm() {
     field: K,
     value: NuevoBultoDraft[K]
   ) {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-      ...(field === "tipo_solicitud"
-        ? { tipo_solicitud_marcada: Boolean(value) }
-        : {}),
-    }));
+    setForm((prev) => {
+      const next = {
+        ...prev,
+        [field]: value,
+        ...(field === "tipo_solicitud"
+          ? { tipo_solicitud_marcada: Boolean(value) }
+          : {}),
+      };
+      if (
+        field === "mascota" &&
+        value === "grande" &&
+        next.tipo_solicitud &&
+        !incluyeBulto(next.tipo_solicitud)
+      ) {
+        next.tipo_solicitud = "";
+        next.tipo_solicitud_marcada = false;
+      }
+      return next;
+    });
     setFieldErrors((prev) => {
       const next = { ...prev };
       delete next[field as keyof typeof next];
+      if (field === "mascota_detalle") delete next.mascota_detalle;
       return next;
     });
   }
@@ -259,6 +287,9 @@ export function NuevoBultoForm() {
     setFieldErrors({});
 
     const errors: {
+      mascota?: string;
+      mascota_detalle?: string;
+      espacio_tamano?: string;
       tipo_solicitud?: string;
       origen?: string;
       destino?: string;
@@ -269,8 +300,25 @@ export function NuevoBultoForm() {
       foto?: string;
       declaracion_aceptada?: string;
     } = {};
+    if (!isMascotaSolicitud(form.mascota)) {
+      errors.mascota = "Indica si viaja alguna mascota.";
+    }
+    if (form.mascota === "pequena" || form.mascota === "grande") {
+      if (!form.mascota_detalle.trim()) {
+        errors.mascota_detalle = "Indica qué mascota es.";
+      }
+    }
+    if (form.mascota === "grande" && !espacioTamanoAceptado(form.espacio_tamano)) {
+      errors.espacio_tamano = "Indica qué espacio necesita.";
+    }
     if (!isTipoSolicitud(form.tipo_solicitud)) {
       errors.tipo_solicitud = "Elige cuántas plazas necesitas.";
+    } else if (
+      form.mascota === "grande" &&
+      !incluyeBulto(form.tipo_solicitud)
+    ) {
+      errors.tipo_solicitud =
+        "La mascota grande va como un bulto. Elige una opción con bulto.";
     }
     if (!form.origen.trim()) {
       errors.origen = "Indica la salida.";
@@ -289,14 +337,17 @@ export function NuevoBultoForm() {
       errors.hora_limite = "Indica la hora.";
     }
     if (incluyeBulto(form.tipo_solicitud)) {
-      if (!form.descripcion.trim()) {
+      if (form.mascota !== "grande" && !form.descripcion.trim()) {
         errors.descripcion = "Describe el bulto que necesitas enviar.";
       }
       if (!isTipoCarga(form.tipo_carga)) {
         errors.tipo_carga = "Indica el tipo de carga.";
       }
       if (!foto1.file) {
-        errors.foto = "Añade al menos una foto de la carga.";
+        errors.foto =
+          form.mascota === "grande"
+            ? "Añade al menos una foto de la mascota."
+            : "Añade al menos una foto de la carga.";
       }
       if (!form.declaracion_aceptada) {
         errors.declaracion_aceptada =
@@ -311,10 +362,18 @@ export function NuevoBultoForm() {
     }
 
     const formData = new FormData();
+    formData.set("mascota", form.mascota);
+    formData.set(
+      "mascota_detalle",
+      form.mascota === "no" ? "" : form.mascota_detalle
+    );
     formData.set("tipo_solicitud", form.tipo_solicitud);
     formData.set("origen", form.origen);
     formData.set("destino", form.destino);
-    formData.set("descripcion", form.descripcion);
+    formData.set(
+      "descripcion",
+      form.mascota === "grande" ? form.mascota_detalle : form.descripcion
+    );
     formData.set("espacio_tamano", form.espacio_tamano);
     formData.set("fecha_limite", form.fecha_limite);
     formData.set("hora_limite", form.hora_limite);
@@ -338,14 +397,84 @@ export function NuevoBultoForm() {
     router.refresh();
   }
 
+  const mascotaGrande = form.mascota === "grande";
+  const opcionesPlazas = mascotaGrande
+    ? TIPO_SOLICITUD_OPTIONS.filter((opt) => incluyeBulto(opt.value))
+    : TIPO_SOLICITUD_OPTIONS;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {form.mascota === "no" ? null : (
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-semibold text-zinc-900">
+          ¿Viaja alguna mascota?
+        </legend>
+        <div className="space-y-2">
+          {MASCOTA_SOLICITUD_OPTIONS.map((opt) => (
+            <label
+              key={opt.value}
+              className={[
+                "flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border px-3 py-2 text-sm transition-colors",
+                form.mascota === opt.value
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-900"
+                  : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300",
+              ].join(" ")}
+            >
+              <input
+                type="radio"
+                name="mascota"
+                value={opt.value}
+                checked={form.mascota === opt.value}
+                onChange={() =>
+                  updateField("mascota", opt.value as MascotaSolicitud)
+                }
+                className="mt-1 size-4 accent-emerald-600"
+              />
+              <span className="font-medium">{opt.label}</span>
+            </label>
+          ))}
+        </div>
+        {fieldErrors.mascota && (
+          <p className="text-sm text-red-700">{fieldErrors.mascota}</p>
+        )}
+      </fieldset>
+      )}
+
+      {form.mascota === "pequena" || mascotaGrande ? (
+        <Textarea
+          name="mascota_detalle"
+          label="Qué mascota es"
+          placeholder={
+            mascotaGrande ? "Por ejemplo, un perro grande" : "Por ejemplo, un gato"
+          }
+          required
+          value={form.mascota_detalle}
+          error={fieldErrors.mascota_detalle}
+          onChange={(e) => updateField("mascota_detalle", e.target.value)}
+        />
+      ) : null}
+
+      {mascotaGrande ? (
+        <Select
+          name="espacio_tamano"
+          label="Qué espacio necesita"
+          options={ESPACIO_SELECT_OPTIONS}
+          placeholder="Elige una opción"
+          required
+          value={form.espacio_tamano}
+          error={fieldErrors.espacio_tamano}
+          onChange={(e) => updateField("espacio_tamano", e.target.value)}
+        />
+      ) : null}
+
+      {form.mascota ? (
+        <>
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Cuántas plazas necesitas?
         </legend>
         <div className="space-y-2">
-          {TIPO_SOLICITUD_OPTIONS.map((opt) => (
+          {opcionesPlazas.map((opt) => (
             <label
               key={opt.value}
               className={[
@@ -432,29 +561,36 @@ export function NuevoBultoForm() {
             )}
           </fieldset>
 
-          <Textarea
-            name="descripcion"
-            label="Qué necesitas enviar"
-            placeholder="Describe el bulto"
-            required
-            value={form.descripcion}
-            error={fieldErrors.descripcion}
-            onChange={(e) => updateField("descripcion", e.target.value)}
-          />
-          <Select
-            name="espacio_tamano"
-            label="Detalla el espacio que necesitas para el bulto"
-            options={ESPACIO_SELECT_OPTIONS}
-            placeholder="Elige una opción"
-            required
-            value={form.espacio_tamano}
-            onChange={(e) => updateField("espacio_tamano", e.target.value)}
-          />
+          {mascotaGrande ? null : (
+            <>
+              <Textarea
+                name="descripcion"
+                label="Qué necesitas enviar"
+                placeholder="Describe el bulto"
+                required
+                value={form.descripcion}
+                error={fieldErrors.descripcion}
+                onChange={(e) => updateField("descripcion", e.target.value)}
+              />
+              <Select
+                name="espacio_tamano"
+                label="Detalla el espacio que necesitas para el bulto"
+                options={ESPACIO_SELECT_OPTIONS}
+                placeholder="Elige una opción"
+                required
+                value={form.espacio_tamano}
+                error={fieldErrors.espacio_tamano}
+                onChange={(e) => updateField("espacio_tamano", e.target.value)}
+              />
+            </>
+          )}
           <p className="text-sm text-zinc-600">{AVISO_PIE_DE_CALLE}</p>
 
           <div className="space-y-3">
             <span className="text-sm font-medium text-zinc-800">
-              Fotos de la carga (máximo 2)
+              {mascotaGrande
+                ? "Fotos de la mascota (máximo 2)"
+                : "Fotos de la carga (máximo 2)"}
             </span>
             <FotoCargaSlot
               titulo="Foto 1"
@@ -535,6 +671,8 @@ export function NuevoBultoForm() {
       <Button type="submit" fullWidth disabled={loading}>
         {loading ? "Publicando…" : "Publicar solicitud"}
       </Button>
+        </>
+      ) : null}
     </form>
   );
 }

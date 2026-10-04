@@ -295,6 +295,9 @@ export type NuevoBultoDraft = {
   declaracion_aceptada: boolean;
   fecha_limite: string;
   hora_limite: string;
+  /** "" = sin marcar; no | pequena | grande */
+  mascota: "" | "no" | "pequena" | "grande";
+  mascota_detalle: string;
   foto: StoredFile | null;
 };
 
@@ -332,6 +335,8 @@ export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
   declaracion_aceptada: false,
   fecha_limite: "",
   hora_limite: "",
+  mascota: "",
+  mascota_detalle: "",
   foto: null,
 };
 

@@ -17,6 +17,10 @@ import {
   type TipoSolicitud,
 } from "@/lib/solicitud-viaje";
 import {
+  isMascotaSolicitud,
+  type MascotaSolicitud,
+} from "@/lib/mascota-solicitud";
+import {
   assertCanPublish,
   consumePublicationCredit,
   shouldConsumePublicationCredit,
@@ -80,6 +84,22 @@ export async function crearBulto(formData: FormData) {
   const tipoSolicitud: TipoSolicitud = tipoRaw;
   const necesitaBulto = incluyeBulto(tipoSolicitud);
 
+  const mascotaRaw = String(formData.get("mascota") ?? "").trim();
+  if (!isMascotaSolicitud(mascotaRaw)) {
+    return { error: "Indica si viaja alguna mascota." };
+  }
+  const mascota: MascotaSolicitud = mascotaRaw;
+  const mascotaDetalle = String(formData.get("mascota_detalle") ?? "").trim();
+  if ((mascota === "pequena" || mascota === "grande") && !mascotaDetalle) {
+    return { error: "Indica qué mascota es." };
+  }
+  if (mascota === "grande" && !necesitaBulto) {
+    return {
+      error:
+        "La mascota grande se publica como un bulto. Elige plazas con bulto.",
+    };
+  }
+
   let fotoUrl: string | null = null;
   let fotoUrl2: string | null = null;
   let tipoCarga: TipoCarga | null = null;
@@ -102,7 +122,12 @@ export async function crearBulto(formData: FormData) {
 
     const foto = formData.get("foto");
     if (!(foto instanceof File) || foto.size <= 0) {
-      return { error: "Añade al menos una foto de la carga." };
+      return {
+        error:
+          mascota === "grande"
+            ? "Añade al menos una foto de la mascota."
+            : "Añade al menos una foto de la carga.",
+      };
     }
     const subida1 = await subirFotoBulto(supabase, user.id, foto, "1");
     if (subida1.error || !subida1.url) {
@@ -131,11 +156,19 @@ export async function crearBulto(formData: FormData) {
   }
 
   let descripcion = String(formData.get("descripcion") ?? "").trim();
+  if (mascota === "grande") {
+    descripcion = mascotaDetalle || descripcion;
+  }
   let medidas = "";
 
   if (necesitaBulto) {
     if (!descripcion) {
-      return { error: "Describe el bulto que necesitas enviar." };
+      return {
+        error:
+          mascota === "grande"
+            ? "Indica qué mascota es."
+            : "Describe el bulto que necesitas enviar.",
+      };
     }
     const espacioTamano = String(formData.get("espacio_tamano")).trim();
     if (
@@ -180,6 +213,9 @@ export async function crearBulto(formData: FormData) {
       tipo_carga: tipoCarga,
       categoria_carga: null,
       declaracion_aceptada_en: declaracionAceptadaEn,
+      mascota,
+      mascota_detalle:
+        mascota === "pequena" || mascota === "grande" ? mascotaDetalle : null,
     })
     .select("id")
     .single();
