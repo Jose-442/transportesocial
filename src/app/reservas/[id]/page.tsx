@@ -19,6 +19,7 @@ import {
   fraseQueIncluyeReservas,
 } from "@/lib/reservas/labels";
 import { formatEur } from "@/lib/pricing";
+import { puedeDescargarJustificante } from "@/lib/justificante-pago";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -374,6 +375,14 @@ export default async function ReservaDetallePage({
             minute: "2-digit",
           })}
         </p>
+        {esCliente && puedeDescargarJustificante(estadoMostrar) ? (
+          <a
+            href={`/api/reservas/${reserva.id}/justificante`}
+            className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
+          >
+            Descargar justificante de pago
+          </a>
+        ) : null}
       </Card>
 
       {chatPermitido(estadoMostrar) && (
