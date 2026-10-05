@@ -68,8 +68,8 @@ export default async function HomePage() {
                 </div>
               </div>
               <h1 className="min-w-0 flex-1 text-sm font-bold leading-[1.12] text-white sm:text-base md:pl-3 md:text-lg lg:text-2xl xl:text-3xl">
-                <span className="block">Viaja barato, además lleva,</span>
-                <span className="block">o que te lleven bultos</span>
+                <span className="block">Viaja barato, además lleva</span>
+                <span className="block">o que te lleven bultos y mascotas</span>
                 <span className="block">compartiendo ruta</span>
               </h1>
             </div>
