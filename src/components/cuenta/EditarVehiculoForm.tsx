@@ -103,7 +103,7 @@ export function EditarVehiculoForm({
         maxLength={12}
         autoCapitalize="characters"
         spellCheck={false}
-        hint="Obligatoria. Sin espacios. Ejemplo: 1234BCD"
+        hint="Dato privado y protegido. Tu matrícula nunca se mostrará públicamente. Solo para verificar la seguridad del viaje."
       />
       <Select
         label="Año de matriculación"
