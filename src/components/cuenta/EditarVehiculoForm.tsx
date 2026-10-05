@@ -23,6 +23,7 @@ export function EditarVehiculoForm({
     | "vehiculo_modelo"
     | "vehiculo_anio"
     | "distintivo_ambiental"
+    | "vehiculo_matricula"
   >;
   volverTrasGuardar?: string | null;
 }) {
@@ -34,6 +35,9 @@ export function EditarVehiculoForm({
   );
   const [distintivo, setDistintivo] = useState(
     vehiculoInicial.distintivo_ambiental ?? ""
+  );
+  const [matricula, setMatricula] = useState(
+    vehiculoInicial.vehiculo_matricula ?? ""
   );
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -50,6 +54,7 @@ export function EditarVehiculoForm({
       modelo,
       anio,
       distintivo,
+      matricula,
     });
     setLoading(false);
 
@@ -89,6 +94,17 @@ export function EditarVehiculoForm({
           maxLength={60}
         />
       </div>
+      <Input
+        label="Matrícula"
+        value={matricula}
+        onChange={(e) => setMatricula(e.target.value.toUpperCase())}
+        placeholder="1234BCD"
+        required
+        maxLength={12}
+        autoCapitalize="characters"
+        spellCheck={false}
+        hint="Obligatoria. Sin espacios. Ejemplo: 1234BCD"
+      />
       <Select
         label="Año de matriculación"
         value={anio}

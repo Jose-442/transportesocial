@@ -25,6 +25,7 @@ import {
   type OfertaDesglose,
 } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
+import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
 
 function fechaLlegadaDesdeBulto(bulto: AnuncioBulto): string {
   const hora = horaDeAnuncio(bulto.descripcion, bulto.medidas);
@@ -164,6 +165,12 @@ export async function solicitarReservaRuta(formData: FormData) {
       fecha_llegada_prevista: ruta.fecha_llegada_prevista,
       bulto_descripcion: descripcion,
       bulto_medidas: medidas || null,
+      ...datosCaeAlCrearReserva({
+        origen: ruta.origen,
+        destino: ruta.destino,
+        clienteId: user.id,
+        numPasajeros: 0,
+      }),
     })
     .select("id")
     .single();
@@ -263,6 +270,12 @@ export async function solicitarReservaViaje(formData: FormData) {
         fecha_llegada_prevista: ruta.fecha_llegada_prevista,
         bulto_descripcion: descripcion,
         bulto_medidas: medidas || null,
+        ...datosCaeAlCrearReserva({
+          origen: ruta.origen,
+          destino: ruta.destino,
+          clienteId: user.id,
+          numPasajeros: 0,
+        }),
       })
       .select("id")
       .single();
@@ -655,6 +668,12 @@ export async function prepararReservaBulto(ofertaId: string) {
       bulto_medidas: conBulto
         ? separarHoraOculta(bulto.medidas).texto
         : null,
+      ...datosCaeAlCrearReserva({
+        origen: bulto.origen,
+        destino: bulto.destino,
+        clienteId: user.id,
+        numPasajeros: plazasOfrecidas,
+      }),
     })
     .select("id")
     .single();
@@ -848,6 +867,12 @@ export async function solicitarReservaCapacidad(
           ? descripcion
           : `Plaza${cantidad > 1 ? "s" : ""} de acompañante (×${cantidad})`,
       bulto_medidas: oferta.tipo === "bulto" ? medidas || null : null,
+      ...datosCaeAlCrearReserva({
+        origen: ruta.origen,
+        destino: ruta.destino,
+        clienteId: user.id,
+        numPasajeros: oferta.tipo === "asiento" ? cantidad : 0,
+      }),
     })
     .select("id")
     .single();

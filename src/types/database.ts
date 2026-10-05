@@ -11,6 +11,8 @@ export type Profile = {
   vehiculo_modelo: string | null;
   vehiculo_anio: number | null;
   distintivo_ambiental: import("@/lib/vehiculo").DistintivoAmbiental | null;
+  /** Solo en el perfil propio. No sale en la ficha pública. */
+  vehiculo_matricula: string | null;
   phone: string | null;
   phone_verified: boolean;
   documento_identidad: string | null;
@@ -95,6 +97,18 @@ export type Reserva = {
   motivo_cancelacion: string | null;
   en_transito_en: string | null;
   entregada_en: string | null;
+  origen_lat: number | null;
+  origen_lng: number | null;
+  destino_lat: number | null;
+  destino_lng: number | null;
+  ruta_trazado: unknown | null;
+  vehiculo_matricula: string | null;
+  vehiculo_tipo: string | null;
+  num_pasajeros: number | null;
+  pasajero_ids: string[] | null;
+  /** Hora del servidor al confirmar el pago. */
+  pagada_en: string | null;
+  cae_elegible: boolean;
   entregada_auto: boolean;
   plazo_reclamacion_hasta: string | null;
   plazo_resena_hasta: string | null;
@@ -169,6 +183,10 @@ export type RutaConductor = {
   user_id: string;
   origen: string;
   destino: string;
+  origen_lat: number | null;
+  origen_lng: number | null;
+  destino_lat: number | null;
+  destino_lng: number | null;
   fecha_salida: string;
   fecha_llegada_prevista: string;
   espacio_disponible: string;
@@ -186,6 +204,10 @@ export type AnuncioBulto = {
   user_id: string;
   origen: string;
   destino: string;
+  origen_lat: number | null;
+  origen_lng: number | null;
+  destino_lat: number | null;
+  destino_lng: number | null;
   descripcion: string;
   medidas: string;
   foto_url: string | null;

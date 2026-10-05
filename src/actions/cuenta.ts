@@ -8,7 +8,7 @@ import { obtenerBloqueosEliminacion } from "@/lib/cuenta/eliminacion";
 import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-usuario";
 import { enviarEnlaceRecuperarContrasena } from "@/lib/auth/enviar-recuperacion";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
-import { isDistintivoAmbiental } from "@/lib/vehiculo";
+import { isDistintivoAmbiental, normalizarMatricula } from "@/lib/vehiculo";
 import {
   normalizarDocumentoIdentidad,
   normalizarTelefonoEs,
@@ -76,10 +76,12 @@ export async function actualizarVehiculo(input: {
   modelo: string;
   anio: string;
   distintivo: string;
+  matricula: string;
 }): Promise<{ error?: string; ok?: boolean }> {
   const marca = input.marca.trim();
   const modelo = input.modelo.trim();
   const anio = parseInt(input.anio, 10);
+  const matricula = normalizarMatricula(input.matricula);
 
   if (!marca || marca.length < 2) {
     return { error: "Indica la marca del vehículo." };
@@ -100,6 +102,9 @@ export async function actualizarVehiculo(input: {
   if (!isDistintivoAmbiental(input.distintivo)) {
     return { error: "Selecciona tu distintivo ambiental." };
   }
+  if (!matricula) {
+    return { error: "Escribe una matrícula válida. Ejemplo: 1234BCD" };
+  }
 
   const supabase = await createClient();
   const {
@@ -114,6 +119,7 @@ export async function actualizarVehiculo(input: {
       vehiculo_modelo: modelo,
       vehiculo_anio: anio,
       distintivo_ambiental: input.distintivo,
+      vehiculo_matricula: matricula,
     })
     .eq("id", user.id);
 

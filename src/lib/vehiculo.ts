@@ -42,11 +42,20 @@ export function isDistintivoAmbiental(value: string): value is DistintivoAmbient
   return (DISTINTIVOS_AMBIENTALES as readonly string[]).includes(value);
 }
 
+/** Mayúsculas, sin espacios ni guiones. Null si no parece una matrícula. */
+export function normalizarMatricula(value: string): string | null {
+  const limpia = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (limpia.length < 4 || limpia.length > 10) return null;
+  if (!/[A-Z]/.test(limpia) || !/[0-9]/.test(limpia)) return null;
+  return limpia;
+}
+
 export function perfilVehiculoIncompleto(profile: {
   vehiculo_marca?: string | null;
   vehiculo_modelo?: string | null;
   vehiculo_anio?: number | null;
   distintivo_ambiental?: string | null;
+  vehiculo_matricula?: string | null;
 }): boolean {
   if (!profile.vehiculo_marca?.trim()) return true;
   if (!profile.vehiculo_modelo?.trim()) return true;
@@ -60,6 +69,12 @@ export function perfilVehiculoIncompleto(profile: {
   if (
     !profile.distintivo_ambiental ||
     !isDistintivoAmbiental(profile.distintivo_ambiental)
+  ) {
+    return true;
+  }
+  if (
+    Object.prototype.hasOwnProperty.call(profile, "vehiculo_matricula") &&
+    !normalizarMatricula(profile.vehiculo_matricula ?? "")
   ) {
     return true;
   }

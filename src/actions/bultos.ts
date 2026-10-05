@@ -9,6 +9,7 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { adjuntarHoraOculta } from "@/lib/bulto-hora";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
+import { columnasCoordenadas } from "@/lib/cae-reserva";
 import { getOrCreateProfile } from "@/lib/profile";
 import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 import {
@@ -200,12 +201,15 @@ export async function crearBulto(formData: FormData) {
   });
   if (destinoResuelto.error) return { error: destinoResuelto.error };
 
+  const origen = etiquetaMunicipio(origenResuelto.municipio!);
+  const destino = etiquetaMunicipio(destinoResuelto.municipio!);
   const { data, error } = await supabase
     .from("anuncios_bultos")
     .insert({
       user_id: user.id,
-      origen: etiquetaMunicipio(origenResuelto.municipio!),
-      destino: etiquetaMunicipio(destinoResuelto.municipio!),
+      origen,
+      destino,
+      ...columnasCoordenadas(origen, destino),
       descripcion,
       medidas,
       foto_url: fotoUrl,

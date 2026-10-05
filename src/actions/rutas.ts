@@ -6,6 +6,7 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { combinarEspacio, ESPACIO_OPCIONES, ESPACIO_SIN_BULTO } from "@/lib/espacio-opciones";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
+import { columnasCoordenadas } from "@/lib/cae-reserva";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -145,12 +146,15 @@ export async function crearRuta(formData: FormData) {
   });
   if (destinoResuelto.error) return { error: destinoResuelto.error };
 
+  const origen = etiquetaMunicipio(origenResuelto.municipio!);
+  const destino = etiquetaMunicipio(destinoResuelto.municipio!);
   const { data, error } = await supabase
     .from("rutas_conductores")
     .insert({
       user_id: user.id,
-      origen: etiquetaMunicipio(origenResuelto.municipio!),
-      destino: etiquetaMunicipio(destinoResuelto.municipio!),
+      origen,
+      destino,
+      ...columnasCoordenadas(origen, destino),
       fecha_salida: String(formData.get("fecha_salida")),
       fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
       espacio_disponible: espacioDisponible,
