@@ -132,7 +132,7 @@ export default async function HomePage() {
               </span>
             </ButtonLink>
             <ButtonLink
-              href="/bultos/nuevo"
+              href="/bultos/nuevo?entrada=portada"
               variant="secondary"
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"

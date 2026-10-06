@@ -6,8 +6,17 @@ export const metadata = {
   title: "Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)",
 };
 
-export default async function NuevoBultoPage() {
+export default async function NuevoBultoPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   await requirePublicationAccess("/bultos/nuevo");
+  const params = await searchParams;
+  const entrada = params.entrada;
+  const desdePortada =
+    entrada === "portada" ||
+    (Array.isArray(entrada) && entrada.includes("portada"));
 
   return (
     <div className="space-y-4">
@@ -15,7 +24,7 @@ export default async function NuevoBultoPage() {
         Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)
       </h1>
       <Card>
-        <NuevoBultoForm />
+        <NuevoBultoForm desdePortada={desdePortada} />
       </Card>
     </div>
   );

@@ -148,7 +148,11 @@ function FotoCargaSlot({
   );
 }
 
-export function NuevoBultoForm() {
+export function NuevoBultoForm({
+  desdePortada = false,
+}: {
+  desdePortada?: boolean;
+}) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
@@ -167,6 +171,7 @@ export function NuevoBultoForm() {
   }>({});
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
+  const [ocultarPreguntaMascota, setOcultarPreguntaMascota] = useState(false);
   const [form, setForm] = useState<NuevoBultoDraft>(EMPTY_NUEVO_BULTO_DRAFT);
   const [foto1, setFoto1] = useState<FotoSlot>({ file: null, preview: null });
   const [foto2, setFoto2] = useState<FotoSlot>({ file: null, preview: null });
@@ -215,6 +220,12 @@ export function NuevoBultoForm() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!desdePortada) return;
+    setOcultarPreguntaMascota(false);
+    router.replace("/bultos/nuevo", { scroll: false });
+  }, [desdePortada, router]);
 
   useEffect(() => {
     if (!ready) return;
@@ -272,6 +283,9 @@ export function NuevoBultoForm() {
       }
       return next;
     });
+    if (field === "mascota") {
+      setOcultarPreguntaMascota(value === "no");
+    }
     setFieldErrors((prev) => {
       const next = { ...prev };
       delete next[field as keyof typeof next];
@@ -412,7 +426,7 @@ export function NuevoBultoForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {form.mascota === "no" ? null : (
+      {ocultarPreguntaMascota ? null : (
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Viaja alguna mascota?
