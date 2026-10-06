@@ -20,7 +20,6 @@ import {
   type MascotaSolicitud,
 } from "@/lib/mascota-solicitud";
 import {
-  AVISO_PIE_DE_CALLE,
   TEXTO_DECLARACION_PORTE,
   TIPO_CARGA_OPTIONS,
   isTipoCarga,
@@ -601,10 +600,6 @@ export function NuevoBultoForm() {
               />
             </>
           )}
-          {mascotaGrande ? null : (
-            <p className="text-sm text-zinc-600">{AVISO_PIE_DE_CALLE}</p>
-          )}
-
           <div className="space-y-3">
             <span className="text-sm font-medium text-zinc-800">
               {mascotaGrande

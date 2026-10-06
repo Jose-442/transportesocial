@@ -20,7 +20,6 @@ import {
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
-import { AVISO_PIE_DE_CALLE } from "@/lib/porte-legal";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
@@ -522,7 +521,6 @@ export function NuevaRutaForm({
             error={fieldErrors.espacio_tamano}
             onChange={(e) => updateField("espacio_tamano", e.target.value)}
           />
-          <p className="text-sm text-zinc-600">{AVISO_PIE_DE_CALLE}</p>
           <Input
             name="precio_neto"
             label="PRECIO POR EL PORTE DEL BULTO"
