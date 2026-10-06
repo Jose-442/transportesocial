@@ -63,9 +63,7 @@ export function textoMascotaSolicitud(
       : "Pequeña, va con el dueño en el regazo.";
   }
   if (mascota === "grande") {
-    return nombre
-      ? `Grande, necesita su propio espacio. ${nombre}.`
-      : "Grande, necesita su propio espacio.";
+    return "Grande, necesita su propio espacio.";
   }
   return null;
 }

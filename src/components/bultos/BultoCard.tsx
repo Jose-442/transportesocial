@@ -4,7 +4,6 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import {
-  descripcionRepiteMascota,
   textoMascotaEnVezDeBulto,
   textoMascotaSolicitud,
 } from "@/lib/mascota-solicitud";
@@ -43,11 +42,6 @@ export function BultoCard({
     bulto.mascota,
     bulto.mascota_detalle
   );
-  const nombreYaDicho = descripcionRepiteMascota(
-    bulto.mascota,
-    bulto.mascota_detalle,
-    descripcionVisible
-  );
   // Si ya no hace falta bulto (p. ej. quedó 1 plaza), no enseñar «lavadora».
   const textoDescripcion =
     incluyeBulto(tipoSolicitud) && descripcionVisible
@@ -75,7 +69,7 @@ export function BultoCard({
           <p className="mt-1 text-sm font-medium text-emerald-800">
             {tipoLabel}
           </p>
-          {textoMascota && !nombreYaDicho ? (
+          {textoMascota ? (
             <p className="mt-1 text-sm text-zinc-800">{textoMascota}</p>
           ) : null}
           {textoDescripcion ? (

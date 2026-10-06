@@ -198,14 +198,22 @@ export default async function BultoDetallePage({
             <span className="font-medium">{destino}</span>
           </p>
         </div>
-        {textoMascota ? (
+        {bulto.mascota === "grande" ? (
+          <p className="text-sm text-zinc-800">Grande, necesita su propio espacio.</p>
+        ) : null}
+        {bulto.mascota === "grande" && nombreMascotaVisible ? (
           <p className="text-sm text-zinc-800">
             <span className="font-medium uppercase tracking-wide text-zinc-500">
               Mascota:
             </span>{" "}
-            <span className="font-medium">
-              {mascotaSoloNombre ? nombreMascotaVisible : textoMascota}
-            </span>
+            <span className="font-medium">{nombreMascotaVisible}</span>
+          </p>
+        ) : textoMascota && bulto.mascota !== "grande" ? (
+          <p className="text-sm text-zinc-800">
+            <span className="font-medium uppercase tracking-wide text-zinc-500">
+              Mascota:
+            </span>{" "}
+            <span className="font-medium">{textoMascota}</span>
           </p>
         ) : null}
         <p className="text-sm text-zinc-500">

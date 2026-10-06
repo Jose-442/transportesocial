@@ -33,7 +33,7 @@ describe("mascota en la solicitud", () => {
       "Pequeña, va con el dueño en el regazo. Un gato."
     );
     expect(textoMascotaSolicitud("grande", "Un perro")).toBe(
-      "Grande, necesita su propio espacio. Un perro."
+      "Grande, necesita su propio espacio."
     );
   });
 
