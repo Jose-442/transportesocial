@@ -40,6 +40,19 @@ export function textoMascotaEnVezDeBulto(
 }
 
 /** Texto visible en el anuncio. Null si no viaja mascota o el anuncio es antiguo. */
+/** El nombre ya va en la frase de la mascota. No repetirlo como descripción. */
+export function descripcionRepiteMascota(
+  mascota: string | null | undefined,
+  detalle: string | null | undefined,
+  descripcion: string | null | undefined
+): boolean {
+  if (mascota !== "grande" && mascota !== "pequena") return false;
+  const nombre = (detalle ?? "").trim();
+  const texto = (descripcion ?? "").trim();
+  if (!nombre || !texto) return false;
+  return nombre.toLocaleLowerCase("es") === texto.toLocaleLowerCase("es");
+}
+
 export function textoMascotaSolicitud(
   mascota: string | null | undefined,
   detalle: string | null | undefined

@@ -13,6 +13,7 @@ import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { formatFechaDiaEs } from "@/lib/datetime-form";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import {
+  descripcionRepiteMascota,
   textoMascotaEnVezDeBulto,
   textoMascotaSolicitud,
 } from "@/lib/mascota-solicitud";
@@ -244,7 +245,13 @@ export default async function BultoDetallePage({
         )}
       </Card>
 
-      {necesitaBulto && descripcionVisible ? (
+      {necesitaBulto &&
+      descripcionVisible &&
+      !descripcionRepiteMascota(
+        bulto.mascota,
+        bulto.mascota_detalle,
+        descripcionVisible
+      ) ? (
         <Card>
           <p className="text-sm uppercase tracking-wide text-zinc-500">
             {bulto.mascota === "grande"

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   isMascotaSolicitud,
+  descripcionRepiteMascota,
   textoMascotaEnVezDeBulto,
   textoMascotaSolicitud,
 } from "@/lib/mascota-solicitud";
@@ -33,6 +34,15 @@ describe("mascota en la solicitud", () => {
     );
     expect(textoMascotaSolicitud("grande", "Un perro")).toBe(
       "Grande, necesita su propio espacio. Un perro."
+    );
+  });
+
+  it("no repite el nombre si ya va en la frase de la mascota", () => {
+    expect(descripcionRepiteMascota("grande", "san bernardo", "san bernardo")).toBe(
+      true
+    );
+    expect(descripcionRepiteMascota("grande", "san bernardo", "una caja")).toBe(
+      false
     );
   });
 });
