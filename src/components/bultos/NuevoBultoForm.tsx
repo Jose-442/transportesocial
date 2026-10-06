@@ -16,6 +16,7 @@ import {
 import {
   isMascotaSolicitud,
   MASCOTA_SOLICITUD_OPTIONS,
+  TEXTO_DECLARACION_MASCOTA,
   textoMascotaEnVezDeBulto,
   type MascotaSolicitud,
 } from "@/lib/mascota-solicitud";
@@ -656,7 +657,9 @@ export function NuevoBultoForm({
               className="mt-1 size-4 shrink-0 accent-emerald-600"
             />
             <span className="text-zinc-800 leading-snug">
-              {TEXTO_DECLARACION_PORTE}
+              {form.mascota === "pequena" || form.mascota === "grande"
+                ? TEXTO_DECLARACION_MASCOTA
+                : TEXTO_DECLARACION_PORTE}
             </span>
           </label>
           {fieldErrors.declaracion_aceptada ? (

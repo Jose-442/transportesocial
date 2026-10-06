@@ -120,7 +120,10 @@ export async function crearBulto(formData: FormData) {
     const declaracion = String(formData.get("declaracion_aceptada") ?? "").trim();
     if (declaracion !== "1" && declaracion !== "true" && declaracion !== "on") {
       return {
-        error: "Debes aceptar la declaración de responsabilidad del porte.",
+        error:
+          mascota === "pequena" || mascota === "grande"
+            ? "Debes aceptar la declaración de responsabilidad de la mascota."
+            : "Debes aceptar la declaración de responsabilidad del porte.",
       };
     }
     declaracionAceptadaEn = new Date().toISOString();

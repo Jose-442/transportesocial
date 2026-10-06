@@ -19,6 +19,9 @@ export const MASCOTA_SOLICITUD_OPTIONS: {
   },
 ];
 
+export const TEXTO_DECLARACION_MASCOTA =
+  "Declaro que me responsabilizo de la mascota durante el viaje: de su cuidado, de su sujeción y de la documentación exigida.";
+
 export function isMascotaSolicitud(value: string): value is MascotaSolicitud {
   return (MASCOTAS_SOLICITUD as readonly string[]).includes(value);
 }
