@@ -402,17 +402,23 @@ export function NuevoBultoForm({
       if (foto2.file) formData.set("foto_2", foto2.file);
     }
 
-    const result = await crearBulto(formData);
+    try {
+      const result = await crearBulto(formData);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
 
-    setLoading(false);
-    if (result.error) {
-      setError(result.error);
-      return;
+      clearDraft(DRAFT_KEYS.nuevoBulto);
+      router.push(`/bultos/${result.id}`);
+      router.refresh();
+    } catch {
+      setError(
+        "No se ha podido publicar. Recarga la página y pulsa otra vez. Si la foto pesa mucho, elige una más pequeña."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    clearDraft(DRAFT_KEYS.nuevoBulto);
-    router.push(`/bultos/${result.id}`);
-    router.refresh();
   }
 
   const mascotaGrande = form.mascota === "grande";
