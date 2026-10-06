@@ -165,7 +165,7 @@ export function OfertaForm({
       // Guarda ya lo rellenado antes de ir a entrar/registrarse.
       saveOwnedDraft(draftKey, form, uidRef.current);
       setOfertaPostLogin(bultoId, form);
-      const destino = `/registro?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`;
+      const destino = `/login?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`;
       if ("scrollRestoration" in history) {
         history.scrollRestoration = "manual";
       }
