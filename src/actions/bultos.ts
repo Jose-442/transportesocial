@@ -109,11 +109,13 @@ export async function crearBulto(formData: FormData) {
   let declaracionAceptadaEn: string | null = null;
 
   if (necesitaBulto) {
-    const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
-    if (!isTipoCarga(tipoCargaRaw)) {
-      return { error: "Indica el tipo de carga." };
+    if (mascota !== "grande") {
+      const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
+      if (!isTipoCarga(tipoCargaRaw)) {
+        return { error: "Indica el tipo de carga." };
+      }
+      tipoCarga = tipoCargaRaw;
     }
-    tipoCarga = tipoCargaRaw;
 
     const declaracion = String(formData.get("declaracion_aceptada") ?? "").trim();
     if (declaracion !== "1" && declaracion !== "true" && declaracion !== "on") {

@@ -202,7 +202,7 @@ export default async function BultoDetallePage({
         </p>
         {necesitaBulto ? (
           <div className="space-y-2">
-            {bulto.tipo_carga ? (
+            {bulto.tipo_carga && bulto.mascota !== "grande" ? (
               <p className="text-sm text-zinc-800">
                 <span className="font-medium uppercase tracking-wide text-zinc-500">
                   Tipo de carga:

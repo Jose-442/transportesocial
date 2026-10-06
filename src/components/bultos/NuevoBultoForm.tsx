@@ -342,7 +342,7 @@ export function NuevoBultoForm() {
       if (form.mascota !== "grande" && !form.descripcion.trim()) {
         errors.descripcion = "Describe el bulto que necesitas enviar.";
       }
-      if (!isTipoCarga(form.tipo_carga)) {
+      if (form.mascota !== "grande" && !isTipoCarga(form.tipo_carga)) {
         errors.tipo_carga = "Indica el tipo de carga.";
       }
       if (!foto1.file) {
@@ -380,7 +380,9 @@ export function NuevoBultoForm() {
     formData.set("fecha_limite", form.fecha_limite);
     formData.set("hora_limite", form.hora_limite);
     if (incluyeBulto(form.tipo_solicitud)) {
-      formData.set("tipo_carga", form.tipo_carga);
+      if (form.mascota !== "grande") {
+        formData.set("tipo_carga", form.tipo_carga);
+      }
       formData.set("declaracion_aceptada", "1");
       if (foto1.file) formData.set("foto", foto1.file);
       if (foto2.file) formData.set("foto_2", foto2.file);
@@ -540,6 +542,7 @@ export function NuevoBultoForm() {
 
       {form.tipo_solicitud && necesitaBulto ? (
         <>
+          {mascotaGrande ? null : (
           <fieldset className="space-y-2">
             <legend className="text-sm font-semibold text-zinc-900">
               Tipo de carga
@@ -573,6 +576,7 @@ export function NuevoBultoForm() {
               <p className="text-sm text-red-700">{fieldErrors.tipo_carga}</p>
             )}
           </fieldset>
+          )}
 
           {mascotaGrande ? null : (
             <>
