@@ -165,7 +165,12 @@ export function OfertaForm({
       // Guarda ya lo rellenado antes de ir a entrar/registrarse.
       saveOwnedDraft(draftKey, form, uidRef.current);
       setOfertaPostLogin(bultoId, form);
-      router.push(`/login?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`);
+      const destino = `/registro?redirect=${encodeURIComponent(`/bultos/${bultoId}`)}`;
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+      window.location.assign(destino);
       return;
     }
 

@@ -46,6 +46,17 @@ export function RegisterForm({
   }, [redirectAfter]);
 
   useEffect(() => {
+    const subir = () => window.scrollTo(0, 0);
+    subir();
+    const frame = requestAnimationFrame(subir);
+    const luego = window.setTimeout(subir, 50);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(luego);
+    };
+  }, []);
+
+  useEffect(() => {
     const draft = loadRegisterDraft();
     if (draft) {
       setDisplayName(draft.displayName);
