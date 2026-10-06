@@ -764,7 +764,7 @@ export async function solicitarReservaCapacidad(
 
   const { data: rutaRow } = await supabase
     .from("rutas_conductores")
-    .select("id, user_id, estado, fecha_llegada_prevista")
+    .select("id, user_id, estado, fecha_llegada_prevista, origen, destino")
     .eq("id", oferta.ruta_conductor_id)
     .single();
 
