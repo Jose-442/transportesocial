@@ -312,7 +312,7 @@ export default async function BultoDetallePage({
         <Card>
           <h2 className="font-semibold text-zinc-900">Proponer precio</h2>
           <p className="mt-1 text-base text-zinc-600">
-            Indica el precio por bulto y/o por asiento libre
+            Indica el precio por {bulto.mascota === "grande" ? "bulto (mascota)" : "bulto"} y/o por asiento libre
           </p>
           <div className="mt-4">
             <OfertaForm
@@ -321,6 +321,7 @@ export default async function BultoDetallePage({
               isLoggedIn={!!user}
               mostrarAvisoPerfil={mostrarAvisoPerfil}
               mostrarAvisoVehiculo={mostrarAvisoVehiculo}
+              esMascota={bulto.mascota === "grande"}
             />
           </div>
         </Card>

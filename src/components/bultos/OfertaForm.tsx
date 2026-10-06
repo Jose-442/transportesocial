@@ -41,17 +41,20 @@ export function OfertaForm({
   isLoggedIn,
   mostrarAvisoPerfil = false,
   mostrarAvisoVehiculo = false,
+  esMascota = false,
 }: {
   bultoId: string;
   tipoSolicitud: TipoSolicitud;
   isLoggedIn: boolean;
   mostrarAvisoPerfil?: boolean;
   mostrarAvisoVehiculo?: boolean;
+  esMascota?: boolean;
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const draftKey = DRAFT_KEYS.oferta(bultoId);
   const conBulto = incluyeBulto(tipoSolicitud);
+  const nombreBulto = esMascota ? "bulto (mascota)" : "bulto";
   const plazas = numPasajeros(tipoSolicitud);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -224,7 +227,7 @@ export function OfertaForm({
       {conBulto && (
         <Input
           name="precio_neto_bulto"
-          label="Tu precio por el bulto (€)"
+          label={`Tu precio por el ${nombreBulto} (€)`}
           type="text"
           inputMode="decimal"
           placeholder="Ej. 25"
@@ -288,7 +291,8 @@ export function OfertaForm({
         <div className="space-y-1 rounded-xl bg-sky-50 px-3 py-2 text-sm text-sky-900">
           {totales.desglose.precio_total_bulto != null && (
             <p>
-              Bulto: <strong>{formatEur(totales.desglose.precio_total_bulto)}</strong>
+              {esMascota ? "Bulto (mascota)" : "Bulto"}:{" "}
+              <strong>{formatEur(totales.desglose.precio_total_bulto)}</strong>
             </p>
           )}
           {totales.desglose.num_plazas > 0 &&
@@ -308,7 +312,7 @@ export function OfertaForm({
           {totales.desglose.plazas_solicitadas > 0 &&
             totales.desglose.plazas_ofrecidas === 0 && (
               <p className="text-amber-800">
-                Solo propones para el bulto; no llevas pasajeros en este viaje.
+                Solo propones para el {nombreBulto}; no llevas pasajeros en este viaje.
               </p>
             )}
           <p>
