@@ -49,10 +49,14 @@ export function BultoCard({
     descripcionVisible
   );
   // Si ya no hace falta bulto (p. ej. quedó 1 plaza), no enseñar «lavadora».
-  const textoDescripcion = nombreYaDicho
-    ? null
-    : incluyeBulto(tipoSolicitud) && descripcionVisible
-      ? `${bulto.mascota === "grande" ? "Mascota" : "Bulto"}: ${descripcionVisible}`
+  const textoDescripcion =
+    incluyeBulto(tipoSolicitud) && descripcionVisible
+      ? `${bulto.mascota === "grande" ? "Mascota" : "Bulto"}: ${
+          bulto.mascota === "grande"
+            ? descripcionVisible.charAt(0).toLocaleUpperCase("es") +
+              descripcionVisible.slice(1)
+            : descripcionVisible
+        }`
       : incluyeBulto(tipoSolicitud)
         ? `${bulto.mascota === "grande" ? "Mascota" : "Bulto"}: sin descripción`
         : null;
@@ -71,7 +75,7 @@ export function BultoCard({
           <p className="mt-1 text-sm font-medium text-emerald-800">
             {tipoLabel}
           </p>
-          {textoMascota ? (
+          {textoMascota && !nombreYaDicho ? (
             <p className="mt-1 text-sm text-zinc-800">{textoMascota}</p>
           ) : null}
           {textoDescripcion ? (

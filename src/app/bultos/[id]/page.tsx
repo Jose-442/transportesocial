@@ -66,6 +66,15 @@ export default async function BultoDetallePage({
     bulto.mascota,
     bulto.mascota_detalle
   );
+  const nombreMascota = (bulto.mascota_detalle ?? "").trim();
+  const nombreMascotaVisible = nombreMascota
+    ? nombreMascota.charAt(0).toLocaleUpperCase("es") + nombreMascota.slice(1)
+    : "";
+  const mascotaSoloNombre = descripcionRepiteMascota(
+    bulto.mascota,
+    bulto.mascota_detalle,
+    descripcionVisible
+  );
 
   const { data: ofertasData } = await supabase
     .from("ofertas_precio")
@@ -194,7 +203,9 @@ export default async function BultoDetallePage({
             <span className="font-medium uppercase tracking-wide text-zinc-500">
               Mascota:
             </span>{" "}
-            <span className="font-medium">{textoMascota}</span>
+            <span className="font-medium">
+              {mascotaSoloNombre ? nombreMascotaVisible : textoMascota}
+            </span>
           </p>
         ) : null}
         <p className="text-sm text-zinc-500">
@@ -247,11 +258,7 @@ export default async function BultoDetallePage({
 
       {necesitaBulto &&
       descripcionVisible &&
-      !descripcionRepiteMascota(
-        bulto.mascota,
-        bulto.mascota_detalle,
-        descripcionVisible
-      ) ? (
+      !mascotaSoloNombre ? (
         <Card>
           <p className="text-sm uppercase tracking-wide text-zinc-500">
             {bulto.mascota === "grande"

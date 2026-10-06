@@ -39,8 +39,7 @@ export function textoMascotaEnVezDeBulto(
     .replace(/bulto/g, "mascota");
 }
 
-/** Texto visible en el anuncio. Null si no viaja mascota o el anuncio es antiguo. */
-/** El nombre ya va en la frase de la mascota. No repetirlo como descripción. */
+/** True si la descripción es solo el nombre que ya se enseña como mascota. */
 export function descripcionRepiteMascota(
   mascota: string | null | undefined,
   detalle: string | null | undefined,
