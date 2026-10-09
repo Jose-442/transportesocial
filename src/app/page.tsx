@@ -89,10 +89,7 @@ export default async function HomePage() {
                 className="!h-auto flex-col gap-1 px-4 py-3"
               >
                 <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
-                  🔍 Buscar viaje de un conductor
-                </span>
-                <span className="block w-full text-xs font-normal leading-snug text-emerald-800/80 sm:text-sm">
-                  Para quien quiere viajar o enviar un bulto/mascota en el vehículo de otro
+                  🔍 Necesito viajar y/o enviar un bulto o mascota
                 </span>
               </ButtonLink>
               <ButtonLink
@@ -102,10 +99,7 @@ export default async function HomePage() {
                 className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
               >
                 <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
-                  🚚 Buscar solicitudes de pasajeros / envíos
-                </span>
-                <span className="block w-full text-xs font-normal leading-snug text-white/85 sm:text-sm">
-                  Para el conductor que tiene hueco y quiere ver qué gente necesita transporte
+                  🚚 Soy conductor, tengo hueco y plazas libres
                 </span>
               </ButtonLink>
             </div>
