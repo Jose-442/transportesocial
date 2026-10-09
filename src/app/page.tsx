@@ -55,7 +55,7 @@ export default async function HomePage() {
         <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 md:overflow-hidden lg:min-h-0 lg:flex-[3] lg:rounded-none">
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:p-10 xl:p-12">
             <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-3 sm:mb-4 lg:mb-6">
-              <div className="w-[34%] max-w-[7.5rem] shrink-0 sm:max-w-[8.5rem] md:w-[40%] md:max-w-[13rem] lg:max-w-[15rem] xl:max-w-[17rem]">
+              <div className="w-[40%] max-w-[9rem] shrink-0 overflow-hidden sm:max-w-[10rem] md:w-[46%] md:max-w-[16rem] lg:max-w-[18rem] xl:max-w-[20rem]">
                 <BrandLogo
                   size="hero"
                   showText={false}
