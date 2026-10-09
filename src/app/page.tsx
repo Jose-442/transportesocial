@@ -128,11 +128,10 @@ export default async function HomePage() {
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
               <span className="text-sm font-semibold text-amber-200 sm:text-base">
-                Pulsa aquí para:
+                🚚 (Soy Conductor)
               </span>
-              <span className="text-base leading-snug sm:text-lg">
-                Conductor, ofrece tu viaje: di el espacio de que dispones y/o
-                los asientos que tienes libres y ponle precio
+              <span className="text-base font-semibold leading-snug sm:text-lg">
+                PUBLICAR mi vehículo y ruta disponible
               </span>
             </ButtonLink>
             <ButtonLink
@@ -142,12 +141,10 @@ export default async function HomePage() {
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
               <span className="text-sm font-semibold text-emerald-900 sm:text-base">
-                Pulsa aquí para:
+                📦 (Soy Remitente/Pasajero)
               </span>
-              <span className="text-base leading-snug sm:text-lg">
-                Proponer un viaje porque necesito enviar un bulto. O solo
-                necesito viajar yo (con o sin mascota); para que un conductor
-                le ponga precio a mi propuesta
+              <span className="text-base font-semibold leading-snug sm:text-lg">
+                PUBLICAR mi necesidad de transporte
               </span>
             </ButtonLink>
           </div>
