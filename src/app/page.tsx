@@ -54,18 +54,16 @@ export default async function HomePage() {
         {/* Hero: en PC ocupa la mitad superior de la pantalla */}
         <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 md:overflow-hidden lg:min-h-0 lg:flex-[3] lg:rounded-none">
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:p-10 xl:p-12">
-            <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-2 sm:mb-4 sm:gap-2 lg:mb-6">
-              <div className="w-[38%] max-w-[6.75rem] shrink-0 overflow-hidden sm:max-w-[7.5rem] md:w-[58%] md:max-w-none md:overflow-visible md:origin-left md:scale-110 md:translate-x-[-2cm] md:translate-y-[3mm] lg:max-w-[320px] lg:scale-[1.2] xl:max-w-[360px] xl:scale-[1.3]">
-                <div className="origin-top-left -translate-x-[5mm] -translate-y-[2mm] scale-[1.35] md:translate-x-0 md:translate-y-0 md:scale-100">
-                  <BrandLogo
-                    size="hero"
-                    showText={false}
-                    onDark
-                    plain
-                    linked={false}
-                    className="w-full"
-                  />
-                </div>
+            <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-3 sm:mb-4 lg:mb-6">
+              <div className="w-[34%] max-w-[7.5rem] shrink-0 sm:max-w-[8.5rem] md:w-[40%] md:max-w-[13rem] lg:max-w-[15rem] xl:max-w-[17rem]">
+                <BrandLogo
+                  size="hero"
+                  showText={false}
+                  onDark
+                  plain
+                  linked={false}
+                  className="w-full"
+                />
               </div>
               <h1 className="min-w-0 flex-1 text-sm font-bold leading-[1.12] text-white sm:text-base md:pl-3 md:text-lg lg:text-2xl xl:text-3xl">
                 <span className="block">Viaja barato, además lleva</span>
