@@ -81,22 +81,32 @@ export default async function HomePage() {
               con personas que necesitan enviar un bulto, viajar o desplazarse
               con su mascota.
             </p>
-            <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mt-8 lg:max-w-md lg:gap-4">
+            <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mt-8 lg:max-w-xl lg:gap-4">
               <ButtonLink
                 href="/rutas"
                 variant="secondary"
                 fullWidth
-                className="!text-base leading-snug sm:!text-lg"
+                className="!h-auto flex-col gap-1 px-4 py-3"
               >
-                Pasajero, busca ruta de un conductor con espacio libre para bultos y/o asientos libres
+                <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
+                  🔍 Buscar viaje de un conductor
+                </span>
+                <span className="block w-full text-xs font-normal leading-snug text-emerald-800/80 sm:text-sm">
+                  Para quien quiere viajar o enviar un bulto/mascota en el vehículo de otro
+                </span>
               </ButtonLink>
               <ButtonLink
                 href="/bultos"
                 variant="secondary"
                 fullWidth
-                className="border-white/30 bg-white/10 text-white hover:bg-white/20 !text-base leading-snug sm:!text-lg"
+                className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
               >
-                Conductor, busca ruta con necesidad de hacer un porte y/o llevar pasajeros
+                <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
+                  🚚 Buscar solicitudes de pasajeros / envíos
+                </span>
+                <span className="block w-full text-xs font-normal leading-snug text-white/85 sm:text-sm">
+                  Para el conductor que tiene hueco y quiere ver qué gente necesita transporte
+                </span>
               </ButtonLink>
             </div>
           </div>
