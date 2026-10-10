@@ -24,6 +24,7 @@ import {
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
 import { loadPerfilPublico } from "@/lib/profile";
+import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 
@@ -114,6 +115,7 @@ export default async function RutaDetallePage({
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
+  const datosVehiculo = proponente ? datosVehiculoVisibles(proponente) : [];
 
   let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
   if (esPropio) {
@@ -262,6 +264,20 @@ export default async function RutaDetallePage({
             </Link>
           </p>
         </div>
+        {datosVehiculo.length > 0 && (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2 md:gap-4">
+            {datosVehiculo.map((dato) => (
+              <div key={dato.label}>
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                  {dato.label}
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-zinc-900 md:mt-1">
+                  {dato.valor}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-x-3 gap-y-1 md:gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">

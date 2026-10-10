@@ -7,8 +7,10 @@ type ServerClient = Awaited<ReturnType<typeof createClient>>;
 
 export const PROFILE_SOBRE_TI_MAX = 280;
 
-const PERFIL_PUBLICO_SELECT =
+const PERFIL_PUBLICO_SELECT_BASE =
   "id, display_name, avatar_url, sobre_ti, vehiculo_marca, vehiculo_modelo, vehiculo_anio, distintivo_ambiental, rating_promedio, rating_cantidad";
+
+const PERFIL_PUBLICO_SELECT = `${PERFIL_PUBLICO_SELECT_BASE}, vehiculo_tipo`;
 
 const PERFIL_PUBLICO_SELECT_LEGACY =
   "id, display_name, avatar_url, rating_promedio, rating_cantidad";
@@ -52,6 +54,10 @@ function withPerfilDefaults(
       opts.vehiculo === false
         ? null
         : (row.distintivo_ambiental as PerfilPublico["distintivo_ambiental"]) ?? null,
+    vehiculo_tipo:
+      opts.vehiculo === false
+        ? null
+        : (row.vehiculo_tipo as PerfilPublico["vehiculo_tipo"]) ?? null,
   } as PerfilPublico;
 }
 
@@ -59,11 +65,21 @@ export async function loadPerfilPublico(
   supabase: ServerClient,
   id: string
 ): Promise<PerfilPublico | null> {
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("perfiles_publicos")
     .select(PERFIL_PUBLICO_SELECT)
     .eq("id", id)
     .maybeSingle();
+
+  if (error && isPerfilColumnError(error, "vehiculo_tipo")) {
+    const sinTipo = await supabase
+      .from("perfiles_publicos")
+      .select(PERFIL_PUBLICO_SELECT_BASE)
+      .eq("id", id)
+      .maybeSingle();
+    data = sinTipo.data;
+    error = sinTipo.error;
+  }
 
   if (data) return withPerfilDefaults(data, {}) as PerfilPublico;
 
@@ -101,10 +117,19 @@ export async function loadPerfilesPublicos(
   if (ids.length === 0) return {};
 
   const uniqueIds = [...new Set(ids)];
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("perfiles_publicos")
     .select(PERFIL_PUBLICO_SELECT)
     .in("id", uniqueIds);
+
+  if (error && isPerfilColumnError(error, "vehiculo_tipo")) {
+    const sinTipo = await supabase
+      .from("perfiles_publicos")
+      .select(PERFIL_PUBLICO_SELECT_BASE)
+      .in("id", uniqueIds);
+    data = sinTipo.data;
+    error = sinTipo.error;
+  }
 
   if (data?.length) {
     return Object.fromEntries(

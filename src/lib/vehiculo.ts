@@ -135,3 +135,40 @@ export function resumenVehiculoPublico(profile: {
 
   return `${marca} ${modelo} (${anio}) · ${distintivo}`;
 }
+
+/** Lo que se puede enseñar del vehículo. La matrícula no entra. */
+export function datosVehiculoVisibles(profile: {
+  vehiculo_tipo?: string | null;
+  vehiculo_marca?: string | null;
+  vehiculo_modelo?: string | null;
+  vehiculo_anio?: number | null;
+  distintivo_ambiental?: string | null;
+}): { label: string; valor: string }[] {
+  const lineas: { label: string; valor: string }[] = [];
+  if (profile.vehiculo_tipo && isTipoVehiculo(profile.vehiculo_tipo)) {
+    lineas.push({
+      label: "Tipo de vehículo",
+      valor: TIPO_VEHICULO_LABELS[profile.vehiculo_tipo],
+    });
+  }
+  const marca = profile.vehiculo_marca?.trim();
+  if (marca) lineas.push({ label: "Marca", valor: marca });
+  const modelo = profile.vehiculo_modelo?.trim();
+  if (modelo) lineas.push({ label: "Modelo", valor: modelo });
+  if (profile.vehiculo_anio) {
+    lineas.push({
+      label: "Año de matriculación",
+      valor: String(profile.vehiculo_anio),
+    });
+  }
+  if (
+    profile.distintivo_ambiental &&
+    isDistintivoAmbiental(profile.distintivo_ambiental)
+  ) {
+    lineas.push({
+      label: "Distintivo ambiental",
+      valor: DISTINTIVO_AMBIENTAL_LABELS[profile.distintivo_ambiental],
+    });
+  }
+  return lineas;
+}

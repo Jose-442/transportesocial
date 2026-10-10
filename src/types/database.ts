@@ -43,6 +43,7 @@ export type PerfilPublico = Pick<
   | "vehiculo_marca"
   | "vehiculo_modelo"
   | "vehiculo_anio"
+  | "vehiculo_tipo"
   | "distintivo_ambiental"
   | "rating_promedio"
   | "rating_cantidad"

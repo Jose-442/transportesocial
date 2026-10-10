@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  datosVehiculoVisibles,
   normalizarMatricula,
   perfilVehiculoIncompleto,
   resumenVehiculoPublico,
@@ -52,6 +53,22 @@ describe("matrícula", () => {
         vehiculo_tipo: "furgon_grande",
       })
     ).toBe(false);
+  });
+
+  it("en el viaje se ven los datos del vehículo y no la matrícula", () => {
+    expect(
+      datosVehiculoVisibles({
+        ...vehiculoBase,
+        vehiculo_tipo: "furgon_grande",
+        vehiculo_matricula: "1234BCD",
+      })
+    ).toEqual([
+      { label: "Tipo de vehículo", valor: "Furgón grande" },
+      { label: "Marca", valor: "Ford" },
+      { label: "Modelo", valor: "Transit" },
+      { label: "Año de matriculación", valor: "2018" },
+      { label: "Distintivo ambiental", valor: "C (verde)" },
+    ]);
   });
 
   it("la ficha pública no pide la matrícula para mostrar el vehículo", () => {
