@@ -131,11 +131,14 @@ export default async function HomePage() {
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
-              <span className="text-sm font-semibold text-amber-200 sm:text-base">
-                🚚 (Soy Conductor)
+              <span className="flex items-center gap-2 text-sm font-semibold text-amber-200 sm:text-base">
+                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
+                  🚚
+                </span>
+                (Soy Conductor)
               </span>
               <span className="text-base font-semibold leading-snug sm:text-lg">
-                PUBLICAR mi vehículo y ruta disponible
+                PUBLICAR: ruta disponible con espacio y asientos libres
               </span>
             </ButtonLink>
             <ButtonLink
@@ -144,8 +147,11 @@ export default async function HomePage() {
               fullWidth
               className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
             >
-              <span className="text-sm font-semibold text-emerald-900 sm:text-base">
-                📦 (Soy Remitente/Pasajero)
+              <span className="flex items-center gap-2 text-sm font-semibold text-emerald-900 sm:text-base">
+                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
+                  📦
+                </span>
+                (Soy Remitente/Pasajero)
               </span>
               <span className="text-base font-semibold leading-snug sm:text-lg">
                 PUBLICAR mi necesidad de transporte
