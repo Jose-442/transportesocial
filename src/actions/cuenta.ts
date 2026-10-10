@@ -8,7 +8,11 @@ import { obtenerBloqueosEliminacion } from "@/lib/cuenta/eliminacion";
 import { ejecutarEliminacionUsuario } from "@/lib/cuenta/ejecutar-eliminacion-usuario";
 import { enviarEnlaceRecuperarContrasena } from "@/lib/auth/enviar-recuperacion";
 import { createBillingPortalSession } from "@/lib/stripe/billing-portal";
-import { isDistintivoAmbiental, normalizarMatricula } from "@/lib/vehiculo";
+import {
+  isDistintivoAmbiental,
+  isTipoVehiculo,
+  normalizarMatricula,
+} from "@/lib/vehiculo";
 import {
   normalizarDocumentoIdentidad,
   normalizarTelefonoEs,
@@ -77,6 +81,7 @@ export async function actualizarVehiculo(input: {
   anio: string;
   distintivo: string;
   matricula: string;
+  tipo: string;
 }): Promise<{ error?: string; ok?: boolean }> {
   const marca = input.marca.trim();
   const modelo = input.modelo.trim();
@@ -99,6 +104,9 @@ export async function actualizarVehiculo(input: {
     return { error: "Indica un año de matriculación válido (1980–2030)." };
   }
 
+  if (!isTipoVehiculo(input.tipo)) {
+    return { error: "Selecciona el tipo de vehículo." };
+  }
   if (!isDistintivoAmbiental(input.distintivo)) {
     return { error: "Selecciona tu distintivo ambiental." };
   }
@@ -120,6 +128,7 @@ export async function actualizarVehiculo(input: {
       vehiculo_anio: anio,
       distintivo_ambiental: input.distintivo,
       vehiculo_matricula: matricula,
+      vehiculo_tipo: input.tipo,
     })
     .eq("id", user.id);
 

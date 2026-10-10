@@ -37,6 +37,23 @@ describe("matrícula", () => {
     ).toBe(false);
   });
 
+  it("sin tipo de vehículo el conductor no puede anunciar", () => {
+    expect(
+      perfilVehiculoIncompleto({
+        ...vehiculoBase,
+        vehiculo_matricula: "1234BCD",
+        vehiculo_tipo: null,
+      })
+    ).toBe(true);
+    expect(
+      perfilVehiculoIncompleto({
+        ...vehiculoBase,
+        vehiculo_matricula: "1234BCD",
+        vehiculo_tipo: "furgon_grande",
+      })
+    ).toBe(false);
+  });
+
   it("la ficha pública no pide la matrícula para mostrar el vehículo", () => {
     expect(resumenVehiculoPublico(vehiculoBase)).toBe(
       "Ford Transit (2018) · C (verde)"

@@ -43,6 +43,10 @@ export function supabaseErrorMessage(error: { message: string }): string {
     return "Falta una tabla en la base de datos. Revisa las migraciones en Supabase.";
   }
 
+  if (/vehiculo_tipo/i.test(msg)) {
+    return "Aún no se puede guardar el tipo de vehículo. Falta un paso en la base de datos.";
+  }
+
   if (/infinite recursion/i.test(msg) && /chat_mensajes/i.test(msg)) {
     return "No se ha podido enviar el mensaje. Prueba otra vez.";
   }

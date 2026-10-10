@@ -11,6 +11,7 @@ export type Profile = {
   vehiculo_modelo: string | null;
   vehiculo_anio: number | null;
   distintivo_ambiental: import("@/lib/vehiculo").DistintivoAmbiental | null;
+  vehiculo_tipo: import("@/lib/vehiculo").TipoVehiculo | null;
   /** Solo en el perfil propio. No sale en la ficha pública. */
   vehiculo_matricula: string | null;
   phone: string | null;

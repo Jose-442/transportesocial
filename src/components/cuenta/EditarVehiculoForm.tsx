@@ -9,6 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { actualizarVehiculo } from "@/actions/cuenta";
 import {
   DISTINTIVO_AMBIENTAL_OPTIONS,
+  TIPO_VEHICULO_OPTIONS,
   VEHICULO_ANIO_OPTIONS,
 } from "@/lib/vehiculo";
 import type { Profile } from "@/types/database";
@@ -24,6 +25,7 @@ export function EditarVehiculoForm({
     | "vehiculo_anio"
     | "distintivo_ambiental"
     | "vehiculo_matricula"
+    | "vehiculo_tipo"
   >;
   volverTrasGuardar?: string | null;
 }) {
@@ -39,6 +41,7 @@ export function EditarVehiculoForm({
   const [matricula, setMatricula] = useState(
     vehiculoInicial.vehiculo_matricula ?? ""
   );
+  const [tipo, setTipo] = useState(vehiculoInicial.vehiculo_tipo ?? "");
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +58,7 @@ export function EditarVehiculoForm({
       anio,
       distintivo,
       matricula,
+      tipo,
     });
     setLoading(false);
 
@@ -76,6 +80,13 @@ export function EditarVehiculoForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
+      <Select
+        label="Tipo de vehículo"
+        value={tipo}
+        onChange={(e) => setTipo(e.target.value)}
+        options={TIPO_VEHICULO_OPTIONS}
+        required
+      />
       <div className="grid gap-3 sm:grid-cols-2">
         <Input
           label="Marca"
