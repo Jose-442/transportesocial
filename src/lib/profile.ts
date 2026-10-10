@@ -77,7 +77,7 @@ export async function loadPerfilPublico(
       .select(PERFIL_PUBLICO_SELECT_BASE)
       .eq("id", id)
       .maybeSingle();
-    data = sinTipo.data;
+    data = sinTipo.data as typeof data;
     error = sinTipo.error;
   }
 
@@ -127,7 +127,7 @@ export async function loadPerfilesPublicos(
       .from("perfiles_publicos")
       .select(PERFIL_PUBLICO_SELECT_BASE)
       .in("id", uniqueIds);
-    data = sinTipo.data;
+    data = sinTipo.data as typeof data;
     error = sinTipo.error;
   }
 

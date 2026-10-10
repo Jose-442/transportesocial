@@ -60,7 +60,6 @@ describe("matrícula", () => {
       datosVehiculoVisibles({
         ...vehiculoBase,
         vehiculo_tipo: "furgon_grande",
-        vehiculo_matricula: "1234BCD",
       })
     ).toEqual([
       { label: "Tipo de vehículo", valor: "Furgón grande" },
