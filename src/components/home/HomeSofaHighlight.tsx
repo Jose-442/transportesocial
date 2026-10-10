@@ -11,12 +11,12 @@ export function HomeSofaHighlight() {
         <br />
         más economico, más eficiente, más rapido, viaja, envia lo que necesites, puedes acompañar a tu envío
       </p>
-      <div className="mx-auto flex w-full max-w-[17rem] shrink-0 justify-center leading-none sm:max-w-[19rem] lg:max-w-[32rem]">
+      <div className="mx-auto flex w-full max-w-[19rem] shrink-0 justify-center leading-none sm:max-w-[22rem] lg:max-w-[36rem]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={BRAND.heroSofa}
           alt="Transporte Social — compartiendo ruta con humor"
-          className="mx-auto h-auto w-full max-w-[17rem] sm:max-w-[19rem] lg:max-w-[32rem]"
+          className="mx-auto h-auto w-full max-w-[19rem] sm:max-w-[22rem] lg:max-w-[36rem]"
         />
       </div>
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
