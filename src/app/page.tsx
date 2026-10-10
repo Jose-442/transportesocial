@@ -53,8 +53,8 @@ export default async function HomePage() {
       <div className="lg:flex lg:min-h-[calc(100dvh-8rem)] lg:flex-col">
         {/* Hero: en PC ocupa la mitad superior de la pantalla */}
         <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 md:overflow-hidden lg:min-h-0 lg:flex-[3] lg:rounded-none">
-          <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:p-10 xl:p-12">
-            <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-3 sm:mb-4 lg:mb-6">
+          <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:px-10 lg:pt-4 lg:pb-6 xl:px-16 xl:pt-5 xl:pb-8">
+            <div className="mb-3 flex min-w-0 flex-nowrap items-start gap-3 sm:mb-4 lg:mb-2">
               <div className="w-[40%] max-w-[9rem] shrink-0 overflow-hidden sm:max-w-[10rem] md:w-[46%] md:max-w-[16rem] lg:max-w-[18rem] xl:max-w-[20rem]">
                 <BrandLogo
                   size="hero"
@@ -74,12 +74,12 @@ export default async function HomePage() {
             <p className="text-xs text-emerald-100/90 sm:text-sm lg:text-base">
               {BRAND_TAGLINE}
             </p>
-            <p className="mt-2 text-xs text-emerald-50 sm:mt-3 sm:text-sm lg:mt-4 lg:text-base">
+            <p className="mt-2 text-xs text-emerald-50 sm:mt-3 sm:text-sm lg:mt-2 lg:text-base">
               Cercano, práctico, útil. Conectamos conductores con espacio libre
               con personas que necesitan enviar un bulto, viajar o desplazarse
               con su mascota.
             </p>
-            <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mt-8 lg:max-w-xl lg:gap-4">
+            <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
                 href="/rutas"
                 variant="secondary"
