@@ -134,7 +134,6 @@ export function EditarVehiculoForm({
           onChange={(e) => setDistintivo(e.target.value)}
           options={DISTINTIVO_AMBIENTAL_OPTIONS}
           required
-          hint="Obligatorio si propones precio o publicas una ruta como conductor."
         />
       </div>
       {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
