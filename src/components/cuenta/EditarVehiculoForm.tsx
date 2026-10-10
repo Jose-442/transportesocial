@@ -161,6 +161,7 @@ export function EditarVehiculoForm({
       <Button
         type="submit"
         variant="secondary"
+        fullWidth
         className={CUENTA_BTN_SECONDARY}
         disabled={loading}
       >
