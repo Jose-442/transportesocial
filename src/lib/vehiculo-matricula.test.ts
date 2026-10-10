@@ -63,8 +63,7 @@ describe("matrícula", () => {
       })
     ).toEqual([
       { label: "Tipo de vehículo", valor: "Furgón grande" },
-      { label: "Marca", valor: "Ford" },
-      { label: "Modelo", valor: "Transit" },
+      { label: "Marca y modelo", valor: "Ford Transit" },
       { label: "Año de matriculación", valor: "2018" },
       { label: "Distintivo ambiental", valor: "C (verde)" },
     ]);

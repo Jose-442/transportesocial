@@ -151,10 +151,12 @@ export function datosVehiculoVisibles(profile: {
       valor: TIPO_VEHICULO_LABELS[profile.vehiculo_tipo],
     });
   }
-  const marca = profile.vehiculo_marca?.trim();
-  if (marca) lineas.push({ label: "Marca", valor: marca });
-  const modelo = profile.vehiculo_modelo?.trim();
-  if (modelo) lineas.push({ label: "Modelo", valor: modelo });
+  const marca = profile.vehiculo_marca?.trim() ?? "";
+  const modelo = profile.vehiculo_modelo?.trim() ?? "";
+  const marcaModelo = [marca, modelo].filter(Boolean).join(" ");
+  if (marcaModelo) {
+    lineas.push({ label: "Marca y modelo", valor: marcaModelo });
+  }
   if (profile.vehiculo_anio) {
     lineas.push({
       label: "Año de matriculación",
