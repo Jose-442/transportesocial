@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { actualizarVehiculo } from "@/actions/cuenta";
+import {
+  hrefTrasGuardarVehiculo,
+  parseCuentaVolver,
+} from "@/lib/cuenta-volver";
 import {
   DISTINTIVO_AMBIENTAL_OPTIONS,
   TIPO_VEHICULO_OPTIONS,
@@ -29,7 +32,6 @@ export function EditarVehiculoForm({
   >;
   volverTrasGuardar?: string | null;
 }) {
-  const router = useRouter();
   const [marca, setMarca] = useState(vehiculoInicial.vehiculo_marca ?? "");
   const [modelo, setModelo] = useState(vehiculoInicial.vehiculo_modelo ?? "");
   const [anio, setAnio] = useState(
@@ -43,14 +45,12 @@ export function EditarVehiculoForm({
   );
   const [tipo, setTipo] = useState(vehiculoInicial.vehiculo_tipo ?? "");
   const [loading, setLoading] = useState(false);
-  const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setMensaje(null);
 
     if (!tipo) {
       setLoading(false);
@@ -73,15 +73,16 @@ export function EditarVehiculoForm({
       return;
     }
 
-    if (volverTrasGuardar) {
-      sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
-      router.push(volverTrasGuardar);
-      router.refresh();
-      return;
-    }
+    const volverEnUrl = parseCuentaVolver(
+      new URLSearchParams(window.location.search).get("volver") ?? undefined
+    );
+    const destino =
+      volverTrasGuardar ||
+      (volverEnUrl ? hrefTrasGuardarVehiculo(volverEnUrl) : null) ||
+      "/rutas/nueva?desde=vehiculo";
 
-    setMensaje("Datos del vehículo guardados.");
-    router.refresh();
+    sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
+    window.location.assign(destino);
   }
 
   return (
@@ -136,7 +137,6 @@ export function EditarVehiculoForm({
           required
         />
       </div>
-      {mensaje && <p className="text-sm text-emerald-700">{mensaje}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <Button
         type="submit"
