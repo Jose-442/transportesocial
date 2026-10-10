@@ -23,6 +23,7 @@ import {
 } from "@/lib/capacidad/ocupacion";
 import { filtrosToSearchQuery, hrefVolverListado, parseFiltros } from "@/lib/listado-filters";
 import { hrefLoginConVuelta } from "@/lib/safe-redirect";
+import { UserAvatar } from "@/components/profile/UserAvatar";
 import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
@@ -115,6 +116,7 @@ export default async function RutaDetallePage({
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
+  const comentarioConductor = proponente?.sobre_ti?.trim() || "";
   const datosVehiculo = proponente ? datosVehiculoVisibles(proponente) : [];
 
   let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
@@ -251,18 +253,30 @@ export default async function RutaDetallePage({
             {badgeLabel}
           </span>
         </div>
-        <div className="flex flex-wrap items-baseline gap-x-2 md:block">
-          <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Propuesto por
-          </p>
-          <p className="text-sm font-medium text-zinc-900 md:mt-1">
-            <Link
-              href={`/perfil/${ruta.user_id}`}
-              className="font-semibold text-emerald-700 hover:text-emerald-800"
-            >
-              {nombreProponente}
-            </Link>
-          </p>
+        <div className="flex items-start gap-3">
+          <Link href={`/perfil/${ruta.user_id}`} className="shrink-0">
+            <UserAvatar
+              name={nombreProponente}
+              avatarUrl={proponente?.avatar_url}
+              size={64}
+            />
+          </Link>
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-wide text-zinc-500">
+              Propuesto por
+            </p>
+            <p className="text-sm font-medium text-zinc-900 md:mt-1">
+              <Link
+                href={`/perfil/${ruta.user_id}`}
+                className="font-semibold text-emerald-700 hover:text-emerald-800"
+              >
+                {nombreProponente}
+              </Link>
+            </p>
+            {comentarioConductor ? (
+              <p className="mt-1 text-sm text-zinc-700">{comentarioConductor}</p>
+            ) : null}
+          </div>
         </div>
         {datosVehiculo.length > 0 && (
           <div className="grid grid-cols-2 gap-x-3 gap-y-2 md:gap-4">
