@@ -86,8 +86,11 @@ export default async function HomePage() {
                 fullWidth
                 className="!h-auto flex-col gap-1 px-4 py-3"
               >
-                <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
-                  🔍 Necesito viajar y/o enviar un bulto o mascota
+                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
+                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                    🔍
+                  </span>
+                  Buscar conductor con viaje previsto
                 </span>
               </ButtonLink>
               <ButtonLink
@@ -96,8 +99,11 @@ export default async function HomePage() {
                 fullWidth
                 className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
               >
-                <span className="block w-full text-base font-semibold leading-snug sm:text-lg">
-                  🚚 Soy conductor, tengo hueco y plazas libres
+                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
+                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                    📦
+                  </span>
+                  Buscar porte o pasajeros
                 </span>
               </ButtonLink>
             </div>
