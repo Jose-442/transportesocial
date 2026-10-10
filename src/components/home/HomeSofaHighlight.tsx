@@ -20,11 +20,9 @@ export function HomeSofaHighlight() {
         />
       </div>
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        ¡¡Compartiendo gastos, de tu a tu!!
+        ¡¡Compartiendo gastos!!
         <br />
-        ¡¡Pasajeros, bultos y mascotas!!
-        <br />
-        ¡¡Ahorra en cada trayecto!!
+        ¡¡De tu a tu!!
       </p>
     </div>
   );
