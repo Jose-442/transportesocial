@@ -1,9 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { subirFotoBulto } from "@/lib/bulto-foto";
-import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 
 export type DatosDeclaracionPorte = {
-  tipo_carga: TipoCarga;
+  tipo_carga: null;
   foto_bulto_url: string;
   foto_bulto_url_2: string | null;
   declaracion_aceptada_en: string;
@@ -14,17 +13,12 @@ function declaracionMarcada(valor: FormDataEntryValue | null): boolean {
   return texto === "1" || texto === "true" || texto === "on";
 }
 
-/** Misma exigencia que al anunciar un bulto: tipo, foto y declaración. */
+/** Al reservar un bulto: foto y declaración. */
 export async function leerDeclaracionPorteReserva(
   supabase: SupabaseClient,
   userId: string,
   formData: FormData
 ): Promise<{ error: string } | DatosDeclaracionPorte> {
-  const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
-  if (!isTipoCarga(tipoCargaRaw)) {
-    return { error: "Indica el tipo de carga." };
-  }
-
   if (!declaracionMarcada(formData.get("declaracion_aceptada"))) {
     return {
       error: "Debes aceptar la declaración de responsabilidad del porte.",
@@ -51,7 +45,7 @@ export async function leerDeclaracionPorteReserva(
   }
 
   return {
-    tipo_carga: tipoCargaRaw,
+    tipo_carga: null,
     foto_bulto_url: subida1.url,
     foto_bulto_url_2: foto2Url,
     declaracion_aceptada_en: new Date().toISOString(),

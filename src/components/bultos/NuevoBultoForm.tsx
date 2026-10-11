@@ -20,12 +20,7 @@ import {
   textoMascotaEnVezDeBulto,
   type MascotaSolicitud,
 } from "@/lib/mascota-solicitud";
-import {
-  TEXTO_DECLARACION_PORTE,
-  TIPO_CARGA_OPTIONS,
-  isTipoCarga,
-  type TipoCarga,
-} from "@/lib/porte-legal";
+import { TEXTO_DECLARACION_PORTE } from "@/lib/porte-legal";
 import {
   incluyeBulto,
   isTipoSolicitud,
@@ -166,7 +161,6 @@ export function NuevoBultoForm({
     fecha_limite?: string;
     hora_limite?: string;
     descripcion?: string;
-    tipo_carga?: string;
     foto?: string;
     declaracion_aceptada?: string;
   }>({});
@@ -198,9 +192,7 @@ export function NuevoBultoForm({
           descripcion: draft.descripcion,
           espacio_tamano: draft.espacio_tamano,
           espacio_detalle: draft.espacio_detalle,
-          tipo_carga: isTipoCarga(draft.tipo_carga ?? "")
-            ? draft.tipo_carga
-            : "",
+          tipo_carga: "",
           declaracion_aceptada: Boolean(draft.declaracion_aceptada),
           fecha_limite:
             extractDateFromDatetime(draft.fecha_limite) || draft.fecha_limite,
@@ -311,7 +303,6 @@ export function NuevoBultoForm({
       fecha_limite?: string;
       hora_limite?: string;
       descripcion?: string;
-      tipo_carga?: string;
       foto?: string;
       declaracion_aceptada?: string;
     } = {};
@@ -356,9 +347,6 @@ export function NuevoBultoForm({
       if (form.mascota !== "grande" && !form.descripcion.trim()) {
         errors.descripcion = "Describe el bulto que necesitas enviar.";
       }
-      if (form.mascota !== "grande" && !isTipoCarga(form.tipo_carga)) {
-        errors.tipo_carga = "Indica el tipo de carga.";
-      }
       if (!foto1.file) {
         errors.foto =
           form.mascota === "grande"
@@ -394,9 +382,6 @@ export function NuevoBultoForm({
     formData.set("fecha_limite", form.fecha_limite);
     formData.set("hora_limite", form.hora_limite);
     if (incluyeBulto(form.tipo_solicitud)) {
-      if (form.mascota !== "grande") {
-        formData.set("tipo_carga", form.tipo_carga);
-      }
       formData.set("declaracion_aceptada", "1");
       if (foto1.file) formData.set("foto", foto1.file);
       if (foto2.file) formData.set("foto_2", foto2.file);
@@ -562,42 +547,6 @@ export function NuevoBultoForm({
 
       {form.tipo_solicitud && necesitaBulto ? (
         <>
-          {mascotaGrande ? null : (
-          <fieldset className="space-y-2">
-            <legend className="text-sm font-semibold text-zinc-900">
-              Tipo de carga
-            </legend>
-            <div className="space-y-2">
-              {TIPO_CARGA_OPTIONS.map((opt) => (
-                <label
-                  key={opt.value}
-                  className={[
-                    "flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-sm transition-colors",
-                    form.tipo_carga === opt.value
-                      ? "border-emerald-600 bg-emerald-50 text-emerald-900"
-                      : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300",
-                  ].join(" ")}
-                >
-                  <input
-                    type="radio"
-                    name="tipo_carga"
-                    value={opt.value}
-                    checked={form.tipo_carga === opt.value}
-                    onChange={() =>
-                      updateField("tipo_carga", opt.value as TipoCarga)
-                    }
-                    className="size-4 accent-emerald-600"
-                  />
-                  <span className="font-medium">{opt.label}</span>
-                </label>
-              ))}
-            </div>
-            {fieldErrors.tipo_carga && (
-              <p className="text-sm text-red-700">{fieldErrors.tipo_carga}</p>
-            )}
-          </fieldset>
-          )}
-
           {mascotaGrande ? null : (
             <>
               <Textarea

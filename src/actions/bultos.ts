@@ -11,7 +11,6 @@ import { adjuntarHoraOculta } from "@/lib/bulto-hora";
 import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios-espana";
 import { columnasCoordenadas } from "@/lib/cae-reserva";
 import { getOrCreateProfile } from "@/lib/profile";
-import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 import {
   incluyeBulto,
   isTipoSolicitud,
@@ -105,18 +104,9 @@ export async function crearBulto(formData: FormData) {
 
   let fotoUrl: string | null = null;
   let fotoUrl2: string | null = null;
-  let tipoCarga: TipoCarga | null = null;
   let declaracionAceptadaEn: string | null = null;
 
   if (necesitaBulto) {
-    if (mascota !== "grande") {
-      const tipoCargaRaw = String(formData.get("tipo_carga") ?? "").trim();
-      if (!isTipoCarga(tipoCargaRaw)) {
-        return { error: "Indica el tipo de carga." };
-      }
-      tipoCarga = tipoCargaRaw;
-    }
-
     const declaracion = String(formData.get("declaracion_aceptada") ?? "").trim();
     if (declaracion !== "1" && declaracion !== "true" && declaracion !== "on") {
       return {
@@ -221,7 +211,7 @@ export async function crearBulto(formData: FormData) {
       foto_url_2: fotoUrl2,
       fecha_limite: fechaLimiteDia,
       tipo_solicitud: tipoSolicitud,
-      tipo_carga: tipoCarga,
+      tipo_carga: null,
       categoria_carga: null,
       declaracion_aceptada_en: declaracionAceptadaEn,
       mascota,

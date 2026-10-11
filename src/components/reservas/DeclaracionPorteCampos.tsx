@@ -3,11 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import {
-  TEXTO_DECLARACION_PORTE,
-  TIPO_CARGA_OPTIONS,
-  type TipoCarga,
-} from "@/lib/porte-legal";
+import { TEXTO_DECLARACION_PORTE } from "@/lib/porte-legal";
 
 const FOTO_MAX_BYTES = 5 * 1024 * 1024;
 
@@ -126,47 +122,14 @@ function FotoCarga({
 }
 
 export function DeclaracionPorteCampos({
-  tipoCarga,
   declaracionAceptada,
-  onTipoCarga,
   onDeclaracion,
 }: {
-  tipoCarga: TipoCarga | "";
   declaracionAceptada: boolean;
-  onTipoCarga: (value: TipoCarga) => void;
   onDeclaracion: (value: boolean) => void;
 }) {
   return (
     <div className="space-y-3">
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold text-zinc-900">
-          Tipo de carga
-        </legend>
-        <div className="space-y-2">
-          {TIPO_CARGA_OPTIONS.map((opt) => (
-            <label
-              key={opt.value}
-              className={[
-                "flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-sm transition-colors",
-                tipoCarga === opt.value
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-900"
-                  : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300",
-              ].join(" ")}
-            >
-              <input
-                type="radio"
-                name="tipo_carga"
-                value={opt.value}
-                checked={tipoCarga === opt.value}
-                onChange={() => onTipoCarga(opt.value)}
-                className="size-4 accent-emerald-600"
-              />
-              <span className="font-medium">{opt.label}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
       <div className="space-y-3">
         <span className="text-sm font-medium text-zinc-800">
           Fotos de la carga (máximo 2)
