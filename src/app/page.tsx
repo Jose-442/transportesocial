@@ -138,7 +138,7 @@ export default async function HomePage() {
                 (Soy Conductor)
               </span>
               <span className="text-base font-semibold leading-snug sm:text-lg">
-                PUBLICAR: ruta disponible con espacio y asientos libres
+                Publicar mi ruta con el espacio y asientos libres
               </span>
             </ButtonLink>
             <ButtonLink
