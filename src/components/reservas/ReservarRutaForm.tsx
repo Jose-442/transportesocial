@@ -7,7 +7,10 @@ import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
-import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
+import {
+  CamposIdentidadPago,
+  guardarIdentidadParaPagar,
+} from "@/components/cuenta/CamposIdentidadPago";
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -23,6 +26,7 @@ export function ReservarRutaForm({
   inicial,
   resumenAsientos,
   faltaIdentidad = false,
+  identidadInicial,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
@@ -35,6 +39,7 @@ export function ReservarRutaForm({
   };
   resumenAsientos?: { ofrecidas: number; ocupadas: number };
   faltaIdentidad?: boolean;
+  identidadInicial?: { telefono: string; documento: string };
 }) {
   const ofertaAsiento = ofertas.find(
     (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
@@ -50,8 +55,19 @@ export function ReservarRutaForm({
     plazas: inicial?.plazas ?? "",
     declaracion_aceptada: false,
   });
+  const {
+    form: identidad,
+    setForm: setIdentidad,
+    clear: clearIdentidad,
+  } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
+    telefono: identidadInicial?.telefono ?? "",
+    documento: identidadInicial?.documento ?? "",
+  });
   const [error, setError] = useState<string | null>(null);
+  const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
+  const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pedirIdentidad, setPedirIdentidad] = useState(faltaIdentidad);
 
   const cantidad = Math.min(
     plazasLibres,
@@ -85,6 +101,24 @@ export function ReservarRutaForm({
         setLoading(false);
         return;
       }
+    }
+
+    if (pedirIdentidad) {
+      setErrorTelefono(null);
+      setErrorDocumento(null);
+      const guardado = await guardarIdentidadParaPagar(
+        identidad.telefono,
+        identidad.documento
+      );
+      if (!guardado.ok) {
+        setErrorTelefono(guardado.errorTelefono ?? null);
+        setErrorDocumento(guardado.errorDocumento ?? null);
+        setError(guardado.error ?? null);
+        setLoading(false);
+        return;
+      }
+      clearIdentidad();
+      setPedirIdentidad(false);
     }
 
     const result = await solicitarReservaViaje(formData);
@@ -168,7 +202,22 @@ export function ReservarRutaForm({
           Total: {formatEur(total)}
         </p>
       )}
-      {faltaIdentidad ? <AvisoIdentidadPago /> : null}
+      {pedirIdentidad ? (
+        <CamposIdentidadPago
+          telefono={identidad.telefono}
+          documento={identidad.documento}
+          errorTelefono={errorTelefono}
+          errorDocumento={errorDocumento}
+          onTelefono={(telefono) => {
+            setIdentidad((prev) => ({ ...prev, telefono }));
+            if (errorTelefono) setErrorTelefono(null);
+          }}
+          onDocumento={(documento) => {
+            setIdentidad((prev) => ({ ...prev, documento }));
+            if (errorDocumento) setErrorDocumento(null);
+          }}
+        />
+      ) : null}
       {error && (
         <p className="text-sm text-red-600" data-campo-error="">
           {error}

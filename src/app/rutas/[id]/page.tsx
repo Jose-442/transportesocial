@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { EquisCancelado } from "@/components/rutas/EquisCancelado";
-import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { identidadListaParaPagar } from "@/lib/identidad-pago";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
@@ -65,6 +64,7 @@ export default async function RutaDetallePage({
   let reservaPendienteId: string | null = null;
   let reservaMiaId: string | null = null;
   let faltaIdentidad = false;
+  let identidadInicial = { telefono: "", documento: "" };
   if (user) {
     const { data: perfil } = await supabase
       .from("profiles")
@@ -72,6 +72,10 @@ export default async function RutaDetallePage({
       .eq("id", user.id)
       .maybeSingle();
     faltaIdentidad = !identidadListaParaPagar(perfil ?? {}).ok;
+    identidadInicial = {
+      telefono: perfil?.phone ?? "",
+      documento: perfil?.documento_identidad ?? "",
+    };
     const { data: reservaMia } = await supabase
       .from("reservas")
       .select("id, estado")
@@ -402,10 +406,11 @@ export default async function RutaDetallePage({
             Ya empezaste a reservar este viaje y el pago no se ha completado.
             No se ha cobrado nada.
           </p>
-          {faltaIdentidad ? <AvisoIdentidadPago /> : null}
           <CompletarPagoBoton
             reservaId={reservaPendienteId}
             label="Pagar con tarjeta"
+            faltaIdentidad={faltaIdentidad}
+            identidadInicial={identidadInicial}
           />
         </Card>
       )}
@@ -437,6 +442,7 @@ export default async function RutaDetallePage({
               : undefined
           }
           faltaIdentidad={faltaIdentidad}
+          identidadInicial={identidadInicial}
         />
       )}
 
@@ -450,6 +456,7 @@ export default async function RutaDetallePage({
             ofertas={ofertas}
             rutaEstado="reservada"
             faltaIdentidad={faltaIdentidad}
+            identidadInicial={identidadInicial}
           />
         </Card>
       )}

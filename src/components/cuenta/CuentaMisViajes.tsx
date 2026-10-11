@@ -3,16 +3,10 @@ import { Card } from "@/components/ui/Card";
 import { MisViajesTabs } from "@/components/cuenta/MisViajesTabs";
 import { createClient } from "@/lib/supabase/server";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
-import { identidadListaParaPagar } from "@/lib/identidad-pago";
 
 async function MisViajesContenido({ userId }: { userId: string }) {
   const supabase = await createClient();
   const viajes = await loadMisViajes(supabase, userId);
-  const { data: perfil } = await supabase
-    .from("profiles")
-    .select("phone, documento_identidad")
-    .eq("id", userId)
-    .maybeSingle();
 
   return (
     <MisViajesTabs
@@ -20,7 +14,6 @@ async function MisViajesContenido({ userId }: { userId: string }) {
       aceptados={viajes.aceptados}
       pagados={viajes.pagados}
       sinPagar={viajes.sinPagar}
-      faltaIdentidad={!identidadListaParaPagar(perfil ?? {}).ok}
       paraMi={viajes.paraMi}
       historial={viajes.historial}
     />

@@ -19,7 +19,6 @@ import { abrirPortalSuscripcion } from "@/actions/cuenta";
 import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
-import { identidadListaParaPagar } from "@/lib/identidad-pago";
 
 export const metadata = { title: "Mi cuenta" };
 
@@ -187,7 +186,6 @@ export default async function CuentaPage({
           </p>
         </div>
         <EditarIdentidadForm
-          faltaIdentidad={!identidadListaParaPagar(profile).ok}
           inicial={{
             phone: profile.phone,
             documento_identidad: profile.documento_identidad,

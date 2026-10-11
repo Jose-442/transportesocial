@@ -4,7 +4,6 @@ import { MisViajesTabs } from "@/components/cuenta/MisViajesTabs";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
 import { loadMisViajes } from "@/lib/cuenta/mis-viajes";
-import { identidadListaParaPagar } from "@/lib/identidad-pago";
 
 export const metadata = { title: "Mis viajes" };
 
@@ -17,12 +16,6 @@ export default async function MisViajesPage() {
   if (!user) redirect("/login?redirect=/cuenta/viajes");
 
   const viajes = await loadMisViajes(supabase, user.id);
-  const { data: perfil } = await supabase
-    .from("profiles")
-    .select("phone, documento_identidad")
-    .eq("id", user.id)
-    .maybeSingle();
-  const faltaIdentidad = !identidadListaParaPagar(perfil ?? {}).ok;
 
   return (
     <div className="space-y-4">
@@ -47,7 +40,6 @@ export default async function MisViajesPage() {
         aceptados={viajes.aceptados}
         pagados={viajes.pagados}
         sinPagar={viajes.sinPagar}
-        faltaIdentidad={faltaIdentidad}
         paraMi={viajes.paraMi}
         historial={viajes.historial}
       />

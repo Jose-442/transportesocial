@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
-import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { CUENTA_BTN_SECONDARY, CUENTA_TAB_ACTIVE, CUENTA_TAB_INACTIVE, CUENTA_TABS_LIST } from "@/components/cuenta/cuenta-ui";
 import { ESTADO_RESERVA_LABELS, chatPermitido } from "@/lib/reservas/labels";
@@ -235,7 +234,6 @@ export function MisViajesTabs({
   aceptados,
   pagados,
   sinPagar = [],
-  faltaIdentidad = false,
   paraMi,
   historial,
 }: {
@@ -243,7 +241,6 @@ export function MisViajesTabs({
   aceptados: ViajeListItem[];
   pagados: ViajeListItem[];
   sinPagar?: ReservaViajeItem[];
-  faltaIdentidad?: boolean;
   paraMi: ViajeListItem[];
   historial: ViajeListItem[];
 }) {
@@ -280,7 +277,6 @@ export function MisViajesTabs({
           <p className="text-base font-semibold text-amber-950">
             Pendiente de pago
           </p>
-          {faltaIdentidad ? <AvisoIdentidadPago /> : null}
           {sinPagar.map((item) => (
             <ReservaCard key={`sin-${item.id}`} item={item} />
           ))}

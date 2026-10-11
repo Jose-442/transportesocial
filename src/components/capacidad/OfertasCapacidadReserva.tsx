@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
-import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
+import {
+  CamposIdentidadPago,
+  guardarIdentidadParaPagar,
+} from "@/components/cuenta/CamposIdentidadPago";
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -35,10 +38,12 @@ export function OfertasCapacidadReserva({
   ofertas,
   rutaEstado = "reservada",
   faltaIdentidad = false,
+  identidadInicial,
 }: {
   ofertas: OfertaCapacidad[];
   rutaEstado?: "activa" | "reservada";
   faltaIdentidad?: boolean;
+  identidadInicial?: { telefono: string; documento: string };
 }) {
   const router = useRouter();
   const disponibles = ofertas.filter((o) => {
@@ -61,8 +66,19 @@ export function OfertasCapacidadReserva({
     ? form.ofertaId
     : (disponibles[0]?.id ?? "");
   const { cantidad, descripcion, medidas } = form;
+  const {
+    form: identidad,
+    setForm: setIdentidad,
+    clear: clearIdentidad,
+  } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
+    telefono: identidadInicial?.telefono ?? "",
+    documento: identidadInicial?.documento ?? "",
+  });
   const [error, setError] = useState<string | null>(null);
+  const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
+  const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pedirIdentidad, setPedirIdentidad] = useState(faltaIdentidad);
 
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
@@ -97,6 +113,24 @@ export function OfertasCapacidadReserva({
         setLoading(false);
         return;
       }
+    }
+
+    if (pedirIdentidad) {
+      setErrorTelefono(null);
+      setErrorDocumento(null);
+      const guardado = await guardarIdentidadParaPagar(
+        identidad.telefono,
+        identidad.documento
+      );
+      if (!guardado.ok) {
+        setErrorTelefono(guardado.errorTelefono ?? null);
+        setErrorDocumento(guardado.errorDocumento ?? null);
+        setError(guardado.error ?? null);
+        setLoading(false);
+        return;
+      }
+      clearIdentidad();
+      setPedirIdentidad(false);
     }
 
     const result = await solicitarReservaCapacidad(formData);
@@ -209,7 +243,22 @@ export function OfertasCapacidadReserva({
         </p>
       )}
 
-      {faltaIdentidad ? <AvisoIdentidadPago /> : null}
+      {pedirIdentidad ? (
+        <CamposIdentidadPago
+          telefono={identidad.telefono}
+          documento={identidad.documento}
+          errorTelefono={errorTelefono}
+          errorDocumento={errorDocumento}
+          onTelefono={(telefono) => {
+            setIdentidad((prev) => ({ ...prev, telefono }));
+            if (errorTelefono) setErrorTelefono(null);
+          }}
+          onDocumento={(documento) => {
+            setIdentidad((prev) => ({ ...prev, documento }));
+            if (errorDocumento) setErrorDocumento(null);
+          }}
+        />
+      ) : null}
       {error && (
         <p className="text-sm text-red-600" data-campo-error="">
           {error}
