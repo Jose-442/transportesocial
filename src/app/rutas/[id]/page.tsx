@@ -4,7 +4,9 @@ import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { EquisCancelado } from "@/components/rutas/EquisCancelado";
+import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
+import { identidadListaParaPagar } from "@/lib/identidad-pago";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
@@ -62,7 +64,14 @@ export default async function RutaDetallePage({
 
   let reservaPendienteId: string | null = null;
   let reservaMiaId: string | null = null;
+  let faltaIdentidad = false;
   if (user) {
+    const { data: perfil } = await supabase
+      .from("profiles")
+      .select("phone, documento_identidad")
+      .eq("id", user.id)
+      .maybeSingle();
+    faltaIdentidad = !identidadListaParaPagar(perfil ?? {}).ok;
     const { data: reservaMia } = await supabase
       .from("reservas")
       .select("id, estado")
@@ -393,6 +402,7 @@ export default async function RutaDetallePage({
             Ya empezaste a reservar este viaje y el pago no se ha completado.
             No se ha cobrado nada.
           </p>
+          {faltaIdentidad ? <AvisoIdentidadPago /> : null}
           <CompletarPagoBoton
             reservaId={reservaPendienteId}
             label="Pagar con tarjeta"
@@ -426,6 +436,7 @@ export default async function RutaDetallePage({
               ? { ofrecidas: asientoOfrecidas, ocupadas: asientoOcupadas }
               : undefined
           }
+          faltaIdentidad={faltaIdentidad}
         />
       )}
 
@@ -435,7 +446,11 @@ export default async function RutaDetallePage({
         ruta.estado === "reservada" &&
         ofertasDisponibles.length > 0 && (
         <Card className="bg-zinc-50">
-          <OfertasCapacidadReserva ofertas={ofertas} rutaEstado="reservada" />
+          <OfertasCapacidadReserva
+            ofertas={ofertas}
+            rutaEstado="reservada"
+            faltaIdentidad={faltaIdentidad}
+          />
         </Card>
       )}
 

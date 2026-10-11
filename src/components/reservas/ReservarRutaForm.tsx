@@ -7,6 +7,7 @@ import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
+import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -21,6 +22,7 @@ export function ReservarRutaForm({
   ofertas,
   inicial,
   resumenAsientos,
+  faltaIdentidad = false,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
@@ -32,6 +34,7 @@ export function ReservarRutaForm({
     plazas: string;
   };
   resumenAsientos?: { ofrecidas: number; ocupadas: number };
+  faltaIdentidad?: boolean;
 }) {
   const ofertaAsiento = ofertas.find(
     (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
@@ -41,7 +44,7 @@ export function ReservarRutaForm({
     ? Number(ofertaAsiento.precio_publicado)
     : null;
 
-  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
+  const { form, setForm } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
     bulto_descripcion: inicial?.bulto_descripcion ?? "",
     bulto_medidas: inicial?.bulto_medidas ?? "",
     plazas: inicial?.plazas ?? "",
@@ -85,14 +88,20 @@ export function ReservarRutaForm({
     }
 
     const result = await solicitarReservaViaje(formData);
-    setLoading(false);
 
     if (result.error) {
       setError(result.error);
+      setLoading(false);
       return;
     }
 
-    clear();
+    if (result.checkoutUrl) {
+      window.location.replace(result.checkoutUrl);
+      return;
+    }
+
+    setError("No se pudo abrir la página de la tarjeta. Prueba otra vez.");
+    setLoading(false);
   }
 
   return (
@@ -159,7 +168,12 @@ export function ReservarRutaForm({
           Total: {formatEur(total)}
         </p>
       )}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {faltaIdentidad ? <AvisoIdentidadPago /> : null}
+      {error && (
+        <p className="text-sm text-red-600" data-campo-error="">
+          {error}
+        </p>
+      )}
       <p className="text-sm text-zinc-600">
         La coordinación con el conductor será por el chat interno una vez hecha
         la reserva.

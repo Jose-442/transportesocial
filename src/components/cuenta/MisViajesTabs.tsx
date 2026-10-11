@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
+import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
+import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { CUENTA_BTN_SECONDARY, CUENTA_TAB_ACTIVE, CUENTA_TAB_INACTIVE, CUENTA_TABS_LIST } from "@/components/cuenta/cuenta-ui";
 import { ESTADO_RESERVA_LABELS, chatPermitido } from "@/lib/reservas/labels";
 import type { ApartadoViajes } from "@/lib/reservas/categorias";
@@ -68,11 +70,19 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
         </div>
-        <Badge tone="green">{ESTADO_RESERVA_LABELS[item.estado]}</Badge>
+        <Badge tone={item.estado === "pendiente_pago" ? "amber" : "green"}>
+          {ESTADO_RESERVA_LABELS[item.estado]}
+        </Badge>
       </div>
       <p className="text-sm font-medium text-emerald-700">
         {formatEur(item.precioTotal)}
       </p>
+      {item.estado === "pendiente_pago" && (
+        <>
+          <p className="text-sm text-amber-950">No se ha cobrado nada.</p>
+          <CompletarPagoBoton reservaId={item.id} label="Pagar con tarjeta" />
+        </>
+      )}
       <ButtonLink
         href={`/reservas/${item.id}`}
         fullWidth
@@ -224,12 +234,16 @@ export function MisViajesTabs({
   propuestos,
   aceptados,
   pagados,
+  sinPagar = [],
+  faltaIdentidad = false,
   paraMi,
   historial,
 }: {
   propuestos: ViajeListItem[];
   aceptados: ViajeListItem[];
   pagados: ViajeListItem[];
+  sinPagar?: ReservaViajeItem[];
+  faltaIdentidad?: boolean;
   paraMi: ViajeListItem[];
   historial: ViajeListItem[];
 }) {
@@ -253,8 +267,7 @@ export function MisViajesTabs({
   const vacios: Record<ApartadoViajes, string> = {
     propuestos: "Aún no has propuesto ningún viaje.",
     aceptados: "Aquí saldrán los viajes que hayas aceptado como conductor.",
-    pagados:
-      "Aquí saldrán los viajes que tú hayas pagado o tengas pendientes de pago.",
+    pagados: "Aquí saldrán los viajes que tú hayas pagado.",
     para_mi:
       "Aquí saldrán los viajes propuestos por ti y que algún conductor haya puesto precio.",
     historial: "Aún no hay viajes realizados o cancelados.",
@@ -262,6 +275,17 @@ export function MisViajesTabs({
 
   return (
     <div className="space-y-4">
+      {sinPagar.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-base font-semibold text-amber-950">
+            Pendiente de pago
+          </p>
+          {faltaIdentidad ? <AvisoIdentidadPago /> : null}
+          {sinPagar.map((item) => (
+            <ReservaCard key={`sin-${item.id}`} item={item} />
+          ))}
+        </div>
+      )}
       <div
         className={`flex flex-wrap gap-1 rounded-xl border p-1 ${CUENTA_TABS_LIST}`}
         role="tablist"

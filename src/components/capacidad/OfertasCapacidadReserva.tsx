@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
+import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -33,9 +34,11 @@ function etiquetaOferta(oferta: OfertaCapacidad): string {
 export function OfertasCapacidadReserva({
   ofertas,
   rutaEstado = "reservada",
+  faltaIdentidad = false,
 }: {
   ofertas: OfertaCapacidad[];
   rutaEstado?: "activa" | "reservada";
+  faltaIdentidad?: boolean;
 }) {
   const router = useRouter();
   const disponibles = ofertas.filter((o) => {
@@ -97,10 +100,15 @@ export function OfertasCapacidadReserva({
     }
 
     const result = await solicitarReservaCapacidad(formData);
-    setLoading(false);
 
     if (result.error) {
       setError(result.error);
+      setLoading(false);
+      return;
+    }
+
+    if (result.checkoutUrl) {
+      window.location.replace(result.checkoutUrl);
       return;
     }
 
@@ -108,7 +116,11 @@ export function OfertasCapacidadReserva({
 
     if (result.reservaId) {
       router.push(`/reservas/${result.reservaId}`);
+      return;
     }
+
+    setError("No se pudo abrir la página de la tarjeta. Prueba otra vez.");
+    setLoading(false);
   }
 
   if (disponibles.length === 0) return null;
@@ -197,7 +209,12 @@ export function OfertasCapacidadReserva({
         </p>
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {faltaIdentidad ? <AvisoIdentidadPago /> : null}
+      {error && (
+        <p className="text-sm text-red-600" data-campo-error="">
+          {error}
+        </p>
+      )}
       <Button type="submit" fullWidth disabled={loading || !ofertaSel}>
         {loading ? "Preparando pago…" : "Pagar y reservar"}
       </Button>

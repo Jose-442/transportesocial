@@ -27,6 +27,20 @@ import {
 import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
 import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
 import { leerDeclaracionPorteReserva } from "@/lib/porte-reserva";
+import { identidadListaParaPagar } from "@/lib/identidad-pago";
+
+async function errorSiFaltaIdentidadParaPagar(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<string | null> {
+  const { data } = await supabase
+    .from("profiles")
+    .select("phone, documento_identidad")
+    .eq("id", userId)
+    .maybeSingle();
+  const identidad = identidadListaParaPagar(data ?? {});
+  return identidad.ok ? null : identidad.error;
+}
 
 function fechaLlegadaDesdeBulto(bulto: AnuncioBulto): string {
   const hora = horaDeAnuncio(bulto.descripcion, bulto.medidas);
@@ -149,6 +163,9 @@ export async function solicitarReservaRuta(formData: FormData) {
     return { error: "Este viaje ya tiene una reserva activa." };
   }
 
+  const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
+  if (faltaIdentidad) return { error: faltaIdentidad };
+
   const precioNeto = Number(ruta.precio_neto);
   const precioTotal = Number(ruta.precio_publicado);
   const porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
@@ -235,6 +252,9 @@ export async function solicitarReservaViaje(formData: FormData) {
     return { error: "Describe el bulto o elige al menos una plaza." };
   }
 
+  const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
+  if (faltaIdentidad) return { error: faltaIdentidad };
+
   let reservaPrincipalId: string | null = null;
 
   if (conBulto) {
@@ -313,11 +333,10 @@ export async function solicitarReservaViaje(formData: FormData) {
 
   const checkout = await createTripCheckoutSession(reservaPrincipalId);
   if (!checkout.ok) {
-    if (checkout.redirectTo) redirect(checkout.redirectTo);
     return { error: checkout.error, reservaId: reservaPrincipalId };
   }
 
-  redirect(checkout.url);
+  return { checkoutUrl: checkout.url, reservaId: reservaPrincipalId };
 }
 
 async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise<
@@ -378,9 +397,6 @@ export async function iniciarPagoReserva(formData: FormData): Promise<void> {
 
   if (checkout.ok) {
     redirect(checkout.url);
-  }
-  if ("redirectTo" in checkout && checkout.redirectTo) {
-    redirect(checkout.redirectTo);
   }
   redirect(
     `/reservas/${reservaId}?err=${encodeURIComponent(checkout.error)}`
@@ -643,6 +659,9 @@ export async function prepararReservaBulto(ofertaId: string) {
     return { error: "No autorizado." };
   }
 
+  const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
+  if (faltaIdentidad) return { error: faltaIdentidad };
+
   const desglose = (oferta.desglose ?? null) as OfertaDesglose | null;
   const plazasOfrecidas = Math.max(
     0,
@@ -855,6 +874,14 @@ export async function solicitarReservaCapacidad(
     return { error: "Ya tienes una reserva activa para esta oferta." };
   }
 
+  if (opts?.conPago !== false) {
+    const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(
+      supabase,
+      user.id
+    );
+    if (faltaIdentidad) return { error: faltaIdentidad };
+  }
+
   const precioNetoUnit = Number(oferta.precio_neto);
   const precioTotalUnit = Number(oferta.precio_publicado);
   const precioNeto = precioNetoUnit * cantidad;
@@ -903,9 +930,8 @@ export async function solicitarReservaCapacidad(
 
   const checkout = await createTripCheckoutSession(reserva.id);
   if (!checkout.ok) {
-    if (checkout.redirectTo) redirect(checkout.redirectTo);
-    return { error: checkout.error };
+    return { error: checkout.error, reservaId: reserva.id };
   }
 
-  redirect(checkout.url);
+  return { checkoutUrl: checkout.url, reservaId: reserva.id };
 }

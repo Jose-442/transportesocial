@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { AvisoIdentidadPago } from "@/components/cuenta/AvisoIdentidadPago";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { actualizarIdentidad } from "@/actions/cuenta";
@@ -16,8 +17,10 @@ import type { Profile } from "@/types/database";
 
 export function EditarIdentidadForm({
   inicial,
+  faltaIdentidad = false,
 }: {
   inicial: Pick<Profile, "phone" | "documento_identidad">;
+  faltaIdentidad?: boolean;
 }) {
   const router = useRouter();
   const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
@@ -78,6 +81,7 @@ export function EditarIdentidadForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-3" noValidate>
+      {faltaIdentidad ? <AvisoIdentidadPago /> : null}
       <Input
         label="Teléfono móvil"
         name="telefono"

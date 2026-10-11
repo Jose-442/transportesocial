@@ -24,7 +24,7 @@ export function apartadoReserva(
 ): ApartadoViajes | null {
   if (ESTADOS_HISTORIAL.includes(estado)) return "historial";
   if (estado === "pendiente_pago") {
-    return esCliente ? "pagados" : null;
+    return null;
   }
   if (ESTADOS_ACEPTADOS.includes(estado)) {
     return esCliente ? "pagados" : "aceptados";

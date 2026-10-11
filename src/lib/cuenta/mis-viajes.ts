@@ -52,7 +52,7 @@ function tituloOferta(oferta: OfertaConBulto): string {
   return "Propuesta de bulto";
 }
 
-function ordenarPorFecha(items: ViajeListItem[]): ViajeListItem[] {
+function ordenarPorFecha<T extends { fecha: string }>(items: T[]): T[] {
   return [...items].sort(
     (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
   );
@@ -128,6 +128,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   const propuestos: ViajeListItem[] = [];
   const aceptados: ViajeListItem[] = [];
   const pagados: ViajeListItem[] = [];
+  const sinPagar: ReservaViajeItem[] = [];
   const paraMi: ViajeListItem[] = [];
   const historial: ViajeListItem[] = [];
 
@@ -211,6 +212,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   }
 
   const grupos = new Map<string, Reserva[]>();
+  const gruposSinPagar = new Map<string, Reserva[]>();
   for (const r of lista) {
     const normalizada = r.oferta_precio_id
       ? (aplicarDesgloseOfertaAReserva(
@@ -219,6 +221,15 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         ) as Reserva)
       : r;
     const esCliente = normalizada.cliente_id === userId;
+    if (normalizada.estado === "pendiente_pago" && esCliente) {
+      const clave = normalizada.ruta_conductor_id
+        ? `sinpagar:${normalizada.cliente_id}:${normalizada.ruta_conductor_id}`
+        : normalizada.id;
+      const grupo = gruposSinPagar.get(clave) ?? [];
+      grupo.push(normalizada);
+      gruposSinPagar.set(clave, grupo);
+      continue;
+    }
     const apartado = apartadoReserva(normalizada.estado, esCliente);
     if (!apartado) continue;
     const clave =
@@ -228,6 +239,22 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     const grupo = grupos.get(clave) ?? [];
     grupo.push(normalizada);
     grupos.set(clave, grupo);
+  }
+
+  for (const grupo of gruposSinPagar.values()) {
+    const principal =
+      grupo.find((item) => item.tipo === "ruta_directa") ?? grupo[0];
+    if (!principal) continue;
+    sinPagar.push({
+      kind: "reserva",
+      id: principal.id,
+      titulo: tituloReserva(principal, rutasMap),
+      precioTotal: grupo.reduce((sum, item) => sum + Number(item.precio_total), 0),
+      estado: "pendiente_pago",
+      esCliente: true,
+      queIncluye: fraseQueIncluyeReservas(grupo),
+      fecha: principal.created_at,
+    });
   }
 
   for (const grupo of grupos.values()) {
@@ -313,12 +340,14 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     propuestos: ordenarPorFecha(propuestos),
     aceptados: ordenarPorFecha(aceptados),
     pagados: ordenarPorFecha(pagados),
+    sinPagar: ordenarPorFecha(sinPagar),
     paraMi: ordenarPorFecha(paraMi),
     historial: ordenarPorFecha(historial),
     todoVacio:
       propuestos.length === 0 &&
       aceptados.length === 0 &&
       pagados.length === 0 &&
+      sinPagar.length === 0 &&
       paraMi.length === 0 &&
       historial.length === 0,
   };
