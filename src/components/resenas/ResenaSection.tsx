@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
 import { enviarResena } from "@/actions/resenas";
 import type { EstadoResenas } from "@/actions/resenas";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 import type { Resena } from "@/types/database";
 
 function Estrellas({
@@ -68,8 +70,12 @@ export function ResenaSection({
   estado: EstadoResenas;
 }) {
   const router = useRouter();
-  const [puntuacion, setPuntuacion] = useState(0);
-  const [metrica, setMetrica] = useState("");
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.resena(reservaId), {
+    puntuacion: 0,
+    metrica: "",
+    comentario: "",
+  });
+  const { puntuacion, metrica, comentario } = form;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -99,6 +105,7 @@ export function ResenaSection({
         setError(result.error);
         return;
       }
+      clear();
       router.refresh();
     }
 
@@ -115,13 +122,20 @@ export function ResenaSection({
             })}
           </p>
         )}
-        <Estrellas value={puntuacion} onChange={setPuntuacion} />
+        <Estrellas
+          value={puntuacion}
+          onChange={(n) => setForm((prev) => ({ ...prev, puntuacion: n }))}
+        />
         <Textarea
           label="Comentario"
           name="comentario"
           required
           minLength={10}
           placeholder="Cuéntanos tu experiencia…"
+          value={comentario}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, comentario: e.target.value }))
+          }
         />
         <fieldset className="space-y-2">
           <legend className="text-sm font-medium text-zinc-800">{pregunta}</legend>
@@ -131,7 +145,7 @@ export function ResenaSection({
               name="metrica_radio"
               value="si"
               checked={metrica === "si"}
-              onChange={() => setMetrica("si")}
+              onChange={() => setForm((prev) => ({ ...prev, metrica: "si" }))}
             />
             Sí
           </label>
@@ -141,7 +155,7 @@ export function ResenaSection({
               name="metrica_radio"
               value="no"
               checked={metrica === "no"}
-              onChange={() => setMetrica("no")}
+              onChange={() => setForm((prev) => ({ ...prev, metrica: "no" }))}
             />
             No
           </label>

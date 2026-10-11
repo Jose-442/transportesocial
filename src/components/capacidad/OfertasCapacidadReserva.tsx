@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
@@ -40,9 +42,20 @@ export function OfertasCapacidadReserva({
     if (rutaEstado === "activa" && o.tipo !== "asiento") return false;
     return true;
   });
-
-  const [ofertaId, setOfertaId] = useState(disponibles[0]?.id ?? "");
-  const [cantidad, setCantidad] = useState("");
+  const rutaId = ofertas[0]?.ruta_conductor_id ?? "sin-ruta";
+  const { form, setForm, clear } = useFormDraft(
+    DRAFT_KEYS.reservaCapacidad(rutaId),
+    {
+      ofertaId: disponibles[0]?.id ?? "",
+      cantidad: "",
+      descripcion: "",
+      medidas: "",
+    }
+  );
+  const ofertaId = disponibles.some((o) => o.id === form.ofertaId)
+    ? form.ofertaId
+    : (disponibles[0]?.id ?? "");
+  const { cantidad, descripcion, medidas } = form;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -74,6 +87,8 @@ export function OfertasCapacidadReserva({
       return;
     }
 
+    clear();
+
     if (result.checkoutUrl) {
       window.location.replace(result.checkoutUrl);
       return;
@@ -98,10 +113,13 @@ export function OfertasCapacidadReserva({
         <span className="text-sm font-medium text-zinc-800">Oferta</span>
         <select
           value={ofertaId}
-          onChange={(e) => {
-            setOfertaId(e.target.value);
-            setCantidad("");
-          }}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              ofertaId: e.target.value,
+              cantidad: "",
+            }))
+          }
           className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
           required
         >
@@ -120,7 +138,9 @@ export function OfertasCapacidadReserva({
           plazasTotales={ofertaSel.plazas_totales}
           plazasOcupadas={ofertaSel.plazas_ocupadas}
           value={cantidad}
-          onChange={setCantidad}
+          onChange={(value) =>
+            setForm((prev) => ({ ...prev, cantidad: value }))
+          }
         />
       )}
 
@@ -131,11 +151,19 @@ export function OfertasCapacidadReserva({
             name="bulto_descripcion"
             required
             placeholder="Ej. caja mediana con ropa"
+            value={descripcion}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, descripcion: e.target.value }))
+            }
           />
           <Input
             label="Medidas aproximadas (opcional)"
             name="bulto_medidas"
             placeholder="Ej. 40×30×25 cm"
+            value={medidas}
+            onChange={(e) =>
+              setForm((prev) => ({ ...prev, medidas: e.target.value }))
+            }
           />
         </>
       )}

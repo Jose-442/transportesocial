@@ -32,6 +32,7 @@ import {
   type NuevaRutaDraft,
   saveOwnedDraft,
 } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 import {
   tipoOfertaLlevaBulto,
   tipoOfertaLlevaPasajeros,
@@ -103,10 +104,15 @@ export function NuevaRutaForm({
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
   const [faltaIdentidad, setFaltaIdentidad] = useState(mostrarAvisoIdentidad);
-  const [telefono, setTelefono] = useState(identidadInicial.phone);
-  const [documento, setDocumento] = useState(
-    identidadInicial.documento_identidad
-  );
+  const {
+    form: identidad,
+    setForm: setIdentidad,
+    clear: clearIdentidad,
+  } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
+    telefono: identidadInicial.phone ?? "",
+    documento: identidadInicial.documento_identidad ?? "",
+  });
+  const { telefono, documento } = identidad;
   const [guardandoIdentidad, setGuardandoIdentidad] = useState(false);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
@@ -116,11 +122,6 @@ export function NuevaRutaForm({
   useEffect(() => {
     setFaltaIdentidad(mostrarAvisoIdentidad);
   }, [mostrarAvisoIdentidad]);
-
-  useEffect(() => {
-    setTelefono(identidadInicial.phone);
-    setDocumento(identidadInicial.documento_identidad);
-  }, [identidadInicial.phone, identidadInicial.documento_identidad]);
 
   useEffect(() => {
     let cancelled = false;
@@ -333,6 +334,7 @@ export function NuevaRutaForm({
       return;
     }
 
+    clearIdentidad();
     setFaltaIdentidad(false);
     setMensajeIdentidad("Identidad guardada.");
     setError("");
@@ -659,7 +661,7 @@ export function NuevaRutaForm({
             placeholder="Ej.: 612 345 678"
             value={telefono}
             onChange={(e) => {
-              setTelefono(e.target.value);
+              setIdentidad((prev) => ({ ...prev, telefono: e.target.value }));
               if (errorTelefono) setErrorTelefono(null);
             }}
             error={errorTelefono ?? undefined}
@@ -672,7 +674,10 @@ export function NuevaRutaForm({
             placeholder="Ej.: 12345678Z"
             value={documento}
             onChange={(e) => {
-              setDocumento(e.target.value.toUpperCase());
+              setIdentidad((prev) => ({
+                ...prev,
+                documento: e.target.value.toUpperCase(),
+              }));
               if (errorDocumento) setErrorDocumento(null);
             }}
             error={errorDocumento ?? undefined}

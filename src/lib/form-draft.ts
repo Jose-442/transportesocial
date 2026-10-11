@@ -198,6 +198,11 @@ export const DRAFT_KEYS = {
   capacidad: (rutaId: string) => `transporte-social-capacidad-draft-${rutaId}`,
   disputa: (reservaId: string) =>
     `transporte-social-disputa-draft-${reservaId}`,
+  versionDisputa: (reservaId: string) =>
+    `transporte-social-version-disputa-draft-${reservaId}`,
+  resena: (reservaId: string) => `transporte-social-resena-draft-${reservaId}`,
+  reservaCapacidad: (rutaId: string) =>
+    `transporte-social-reserva-capacidad-draft-${rutaId}`,
   chat: (reservaId: string) => `transporte-social-chat-draft-${reservaId}`,
 } as const;
 
