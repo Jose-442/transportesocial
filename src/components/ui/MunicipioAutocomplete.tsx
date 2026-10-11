@@ -133,7 +133,10 @@ export function MunicipioAutocomplete({
   }
 
   return (
-    <div className="block space-y-1.5">
+    <div
+      className="block space-y-1.5"
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
       <label htmlFor={inputId} className="block">
         <span className="text-sm font-medium text-zinc-800">{label}</span>
         <div ref={campoRef} className="relative mt-1.5">

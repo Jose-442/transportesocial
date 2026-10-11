@@ -87,9 +87,6 @@ export function OfertasCapacidadReserva({
       if (!(foto instanceof File) || foto.size <= 0) {
         setError("Añade al menos una foto de la carga.");
         setLoading(false);
-        e.currentTarget
-          .querySelector("[data-fotos-carga]")
-          ?.scrollIntoView({ block: "center", behavior: "smooth" });
         return;
       }
       if (declaracion !== "1" && declaracion !== "on") {
@@ -182,6 +179,11 @@ export function OfertasCapacidadReserva({
           />
           <DeclaracionPorteCampos
             declaracionAceptada={form.declaracion_aceptada}
+            faltaFoto={error === "Añade al menos una foto de la carga."}
+            faltaDeclaracion={
+              error ===
+              "Debes aceptar la declaración de responsabilidad del porte."
+            }
             onDeclaracion={(declaracion_aceptada) =>
               setForm((prev) => ({ ...prev, declaracion_aceptada }))
             }

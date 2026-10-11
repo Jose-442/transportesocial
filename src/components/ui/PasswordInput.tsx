@@ -20,7 +20,11 @@ export function PasswordInput({
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <label htmlFor={inputId} className="block space-y-1.5">
+    <label
+      htmlFor={inputId}
+      className="block space-y-1.5"
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
       <span className="text-sm font-medium text-zinc-800">{label}</span>
       <div className="relative">
         <input

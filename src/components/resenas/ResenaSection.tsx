@@ -122,10 +122,16 @@ export function ResenaSection({
             })}
           </p>
         )}
-        <Estrellas
-          value={puntuacion}
-          onChange={(n) => setForm((prev) => ({ ...prev, puntuacion: n }))}
-        />
+        <div
+          {...(error === "Selecciona una puntuación."
+            ? { "data-campo-error": "" }
+            : {})}
+        >
+          <Estrellas
+            value={puntuacion}
+            onChange={(n) => setForm((prev) => ({ ...prev, puntuacion: n }))}
+          />
+        </div>
         <Textarea
           label="Comentario"
           name="comentario"
@@ -137,7 +143,12 @@ export function ResenaSection({
             setForm((prev) => ({ ...prev, comentario: e.target.value }))
           }
         />
-        <fieldset className="space-y-2">
+        <fieldset
+          className="space-y-2"
+          {...(error === "Responde la pregunta sobre el bulto."
+            ? { "data-campo-error": "" }
+            : {})}
+        >
           <legend className="text-sm font-medium text-zinc-800">{pregunta}</legend>
           <label className="flex items-center gap-2 text-sm">
             <input

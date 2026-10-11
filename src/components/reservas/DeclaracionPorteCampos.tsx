@@ -124,9 +124,13 @@ function FotoCarga({
 export function DeclaracionPorteCampos({
   declaracionAceptada,
   onDeclaracion,
+  faltaFoto = false,
+  faltaDeclaracion = false,
 }: {
   declaracionAceptada: boolean;
   onDeclaracion: (value: boolean) => void;
+  faltaFoto?: boolean;
+  faltaDeclaracion?: boolean;
 }) {
   return (
     <div className="space-y-3">
@@ -137,6 +141,7 @@ export function DeclaracionPorteCampos({
         <div
           data-fotos-carga
           className="grid grid-cols-1 gap-3 md:grid-cols-2"
+          {...(faltaFoto ? { "data-campo-error": "" } : {})}
         >
           <FotoCarga titulo="Foto 1" obligatoria name="foto" />
           <FotoCarga titulo="Foto 2" name="foto_2" />
@@ -147,7 +152,10 @@ export function DeclaracionPorteCampos({
         </p>
       </div>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 text-sm">
+      <label
+        className="flex cursor-pointer items-start gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 text-sm"
+        {...(faltaDeclaracion ? { "data-campo-error": "" } : {})}
+      >
         <input
           type="checkbox"
           name="declaracion_aceptada"

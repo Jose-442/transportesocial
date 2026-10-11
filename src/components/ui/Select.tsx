@@ -29,7 +29,11 @@ export function Select({
   const tieneVacio = options.some((opt) => opt.value === "");
 
   return (
-    <label htmlFor={selectId} className="block space-y-1.5">
+    <label
+      htmlFor={selectId}
+      className="block space-y-1.5"
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
       {labelRight ? (
         <span className="flex items-start justify-between gap-3">
           <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">

@@ -419,7 +419,10 @@ export function NuevoBultoForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {ocultarPreguntaMascota ? null : (
-      <fieldset className="space-y-2">
+      <fieldset
+        className="space-y-2"
+        {...(fieldErrors.mascota ? { "data-campo-error": "" } : {})}
+      >
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Viaja alguna mascota?
         </legend>
@@ -489,7 +492,10 @@ export function NuevoBultoForm({
         />
       ) : null}
 
-      <fieldset className="space-y-2">
+      <fieldset
+        className="space-y-2"
+        {...(fieldErrors.tipo_solicitud ? { "data-campo-error": "" } : {})}
+      >
         <legend className="text-sm font-semibold text-zinc-900">
           ¿Cuántas plazas necesitas?
         </legend>
@@ -570,7 +576,10 @@ export function NuevoBultoForm({
               />
             </>
           )}
-          <div className="space-y-3">
+          <div
+            className="space-y-3"
+            {...(fieldErrors.foto ? { "data-campo-error": "" } : {})}
+          >
             <span className="text-sm font-medium text-zinc-800">
               {mascotaGrande
                 ? "Fotos de la mascota (máximo 2)"
@@ -601,6 +610,9 @@ export function NuevoBultoForm({
                 ? "border-red-300 bg-red-50"
                 : "border-zinc-200 bg-white",
             ].join(" ")}
+            {...(fieldErrors.declaracion_aceptada
+              ? { "data-campo-error": "" }
+              : {})}
           >
             <input
               type="checkbox"

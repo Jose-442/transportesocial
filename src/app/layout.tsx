@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
+import { ScrollCampoVacio } from "@/components/ui/ScrollCampoVacio";
 import { CookieBanner } from "@/components/legal/CookieBanner";
 import { AddToHomeScreenBanner } from "@/components/pwa/AddToHomeScreenBanner";
 import { ServiceWorkerRegistrar } from "@/components/pwa/ServiceWorkerRegistrar";
@@ -47,6 +48,7 @@ export default function RootLayout({
     <html lang="es" className={`${geistSans.variable} h-full`}>
       <body className="min-h-dvh antialiased">
         <AppShell>{children}</AppShell>
+        <ScrollCampoVacio />
         <ServiceWorkerRegistrar />
         <AddToHomeScreenBanner />
         <CookieBanner />

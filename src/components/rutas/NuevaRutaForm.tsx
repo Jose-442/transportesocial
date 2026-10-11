@@ -490,7 +490,10 @@ export function NuevaRutaForm({
         onChange={(value) => updateField("hora_salida", value)}
       />
 
-      <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
+      <div
+        className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
+        {...(fieldErrors.tipo_oferta ? { "data-campo-error": "" } : {})}
+      >
         <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
           ¿Qué ofreces en este viaje?
         </p>
@@ -605,7 +608,10 @@ export function NuevaRutaForm({
         </div>
       )}
 
-      <fieldset className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
+      <fieldset
+        className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
+        {...(fieldErrors.acepta_mascotas ? { "data-campo-error": "" } : {})}
+      >
         <legend className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
           ¿Aceptas mascotas en este viaje?
         </legend>
@@ -643,7 +649,12 @@ export function NuevaRutaForm({
         </p>
       )}
       {faltaIdentidad && (
-        <div className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5">
+        <div
+          className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5"
+          {...(error === "Indica tu teléfono y DNI/NIE antes de publicar."
+            ? { "data-campo-error": "" }
+            : {})}
+        >
           <p className="text-base text-zinc-600">
             Por normativa legal necesitamos pedirte tu DNI/NIE y tu teléfono
           </p>

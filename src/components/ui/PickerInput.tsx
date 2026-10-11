@@ -261,7 +261,10 @@ export function DatePickerInput({
   }
 
   return (
-    <fieldset className="space-y-1.5">
+    <fieldset
+      className="space-y-1.5"
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
       {label ? (
         <legend className="text-sm font-medium text-zinc-800">{label}</legend>
       ) : (
@@ -333,7 +336,10 @@ export function TimePickerInput({
   }
 
   return (
-    <fieldset className="space-y-1.5">
+    <fieldset
+      className="space-y-1.5"
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
       <legend className="text-sm font-medium text-zinc-800">{label}</legend>
       {name && (
         <input type="hidden" name={name} value={value} required={required} />
