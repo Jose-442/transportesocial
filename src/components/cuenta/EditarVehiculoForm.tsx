@@ -10,6 +10,8 @@ import {
   hrefTrasGuardarVehiculo,
   parseCuentaVolver,
 } from "@/lib/cuenta-volver";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 import {
   DISTINTIVO_AMBIENTAL_OPTIONS,
   TIPO_VEHICULO_OPTIONS,
@@ -32,18 +34,17 @@ export function EditarVehiculoForm({
   >;
   volverTrasGuardar?: string | null;
 }) {
-  const [marca, setMarca] = useState(vehiculoInicial.vehiculo_marca ?? "");
-  const [modelo, setModelo] = useState(vehiculoInicial.vehiculo_modelo ?? "");
-  const [anio, setAnio] = useState(
-    vehiculoInicial.vehiculo_anio ? String(vehiculoInicial.vehiculo_anio) : ""
-  );
-  const [distintivo, setDistintivo] = useState(
-    vehiculoInicial.distintivo_ambiental ?? ""
-  );
-  const [matricula, setMatricula] = useState(
-    vehiculoInicial.vehiculo_matricula ?? ""
-  );
-  const [tipo, setTipo] = useState(vehiculoInicial.vehiculo_tipo ?? "");
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarVehiculo, {
+    tipo: vehiculoInicial.vehiculo_tipo ?? "",
+    marca: vehiculoInicial.vehiculo_marca ?? "",
+    modelo: vehiculoInicial.vehiculo_modelo ?? "",
+    matricula: vehiculoInicial.vehiculo_matricula ?? "",
+    anio: vehiculoInicial.vehiculo_anio
+      ? String(vehiculoInicial.vehiculo_anio)
+      : "",
+    distintivo: vehiculoInicial.distintivo_ambiental ?? "",
+  });
+  const { tipo, marca, modelo, matricula, anio, distintivo } = form;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,6 +82,7 @@ export function EditarVehiculoForm({
       (volverEnUrl ? hrefTrasGuardarVehiculo(volverEnUrl) : null) ||
       "/rutas/nueva?desde=vehiculo";
 
+    clear();
     sessionStorage.setItem("transporte-social-desde-vehiculo", "1");
     window.location.assign(destino);
   }
@@ -91,14 +93,14 @@ export function EditarVehiculoForm({
         <Select
           label="Tipo de vehículo"
           value={tipo}
-          onChange={(e) => setTipo(e.target.value)}
+          onChange={(e) => setForm((prev) => ({ ...prev, tipo: e.target.value }))}
           options={TIPO_VEHICULO_OPTIONS}
           required
         />
         <Input
           label="Marca"
           value={marca}
-          onChange={(e) => setMarca(e.target.value)}
+          onChange={(e) => setForm((prev) => ({ ...prev, marca: e.target.value }))}
           placeholder="Ej. Ford"
           required
           maxLength={60}
@@ -106,7 +108,9 @@ export function EditarVehiculoForm({
         <Input
           label="Modelo"
           value={modelo}
-          onChange={(e) => setModelo(e.target.value)}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, modelo: e.target.value }))
+          }
           placeholder="Ej. Transit"
           required
           maxLength={60}
@@ -114,7 +118,12 @@ export function EditarVehiculoForm({
         <Input
           label="Matrícula"
           value={matricula}
-          onChange={(e) => setMatricula(e.target.value.toUpperCase())}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              matricula: e.target.value.toUpperCase(),
+            }))
+          }
           placeholder="1234BCD"
           required
           maxLength={12}
@@ -125,14 +134,16 @@ export function EditarVehiculoForm({
         <Select
           label="Año de matriculación"
           value={anio}
-          onChange={(e) => setAnio(e.target.value)}
+          onChange={(e) => setForm((prev) => ({ ...prev, anio: e.target.value }))}
           options={VEHICULO_ANIO_OPTIONS}
           required
         />
         <Select
           label="Distintivo ambiental"
           value={distintivo}
-          onChange={(e) => setDistintivo(e.target.value)}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, distintivo: e.target.value }))
+          }
           options={DISTINTIVO_AMBIENTAL_OPTIONS}
           required
         />

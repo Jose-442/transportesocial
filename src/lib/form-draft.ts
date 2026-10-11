@@ -192,6 +192,7 @@ export const DRAFT_KEYS = {
   editarNombre: "transporte-social-editar-nombre-draft",
   editarSobreTi: "transporte-social-editar-sobre-ti-draft",
   editarVehiculo: "transporte-social-editar-vehiculo-draft",
+  editarIdentidad: "transporte-social-editar-identidad-draft",
   reservarRuta: (rutaId: string) =>
     `transporte-social-reservar-ruta-draft-${rutaId}`,
   capacidad: (rutaId: string) => `transporte-social-capacidad-draft-${rutaId}`,

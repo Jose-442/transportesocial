@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { Input } from "@/components/ui/Input";
 import { actualizarIdentidad } from "@/actions/cuenta";
+import { DRAFT_KEYS } from "@/lib/form-draft";
+import { useFormDraft } from "@/lib/use-form-draft";
 import {
   documentoIdentidadValido,
   telefonoEsValido,
@@ -18,8 +20,11 @@ export function EditarIdentidadForm({
   inicial: Pick<Profile, "phone" | "documento_identidad">;
 }) {
   const router = useRouter();
-  const [telefono, setTelefono] = useState(inicial.phone ?? "");
-  const [documento, setDocumento] = useState(inicial.documento_identidad ?? "");
+  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
+    telefono: inicial.phone ?? "",
+    documento: inicial.documento_identidad ?? "",
+  });
+  const { telefono, documento } = form;
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
@@ -67,6 +72,7 @@ export function EditarIdentidadForm({
     }
 
     setMensaje("Datos de identidad guardados.");
+    clear();
     router.refresh();
   }
 
@@ -81,7 +87,7 @@ export function EditarIdentidadForm({
         placeholder="Ej.: 612 345 678"
         value={telefono}
         onChange={(e) => {
-          setTelefono(e.target.value);
+          setForm((prev) => ({ ...prev, telefono: e.target.value }));
           if (errorTelefono) setErrorTelefono(null);
         }}
         error={errorTelefono ?? undefined}
@@ -99,7 +105,10 @@ export function EditarIdentidadForm({
         placeholder="Ej.: 12345678Z"
         value={documento}
         onChange={(e) => {
-          setDocumento(e.target.value.toUpperCase());
+          setForm((prev) => ({
+            ...prev,
+            documento: e.target.value.toUpperCase(),
+          }));
           if (errorDocumento) setErrorDocumento(null);
         }}
         error={errorDocumento ?? undefined}
