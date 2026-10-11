@@ -7,6 +7,10 @@ export function HomeSubscriptionBanner() {
         </span>
         Usar Transporte Social es gratis
       </p>
+      <p className="mt-1">
+        Solo se paga al reservar un viaje: la App retiene el importe hasta
+        confirmar que el viaje o el porte ha ido bien.
+      </p>
     </div>
   );
 }
