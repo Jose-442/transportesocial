@@ -134,8 +134,13 @@ export function DeclaracionPorteCampos({
         <span className="text-sm font-medium text-zinc-800">
           Fotos de la carga (máximo 2)
         </span>
-        <FotoCarga titulo="Foto 1" obligatoria name="foto" />
-        <FotoCarga titulo="Foto 2" name="foto_2" />
+        <div
+          data-fotos-carga
+          className="grid grid-cols-1 gap-3 md:grid-cols-2"
+        >
+          <FotoCarga titulo="Foto 1" obligatoria name="foto" />
+          <FotoCarga titulo="Foto 2" name="foto_2" />
+        </div>
         <p className="text-xs text-zinc-500">
           Puedes hacerla con la cámara o elegirla de la galería. JPG, PNG o
           WebP. Máx. 5 MB cada una.

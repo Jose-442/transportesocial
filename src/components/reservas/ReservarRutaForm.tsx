@@ -75,6 +75,9 @@ export function ReservarRutaForm({
       if (!(foto instanceof File) || foto.size <= 0) {
         setError("Añade al menos una foto de la carga.");
         setLoading(false);
+        e.currentTarget
+          .querySelector("[data-fotos-carga]")
+          ?.scrollIntoView({ block: "center", behavior: "smooth" });
         return;
       }
       if (declaracion !== "1" && declaracion !== "on") {
