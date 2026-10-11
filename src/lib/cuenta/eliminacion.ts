@@ -1,7 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 const ESTADOS_RESERVA_ACTIVOS = [
-  "pendiente_pago",
   "pendiente_aprobacion",
   "confirmada",
   "en_transito",
@@ -21,15 +20,19 @@ export async function obtenerBloqueosEliminacion(
 ): Promise<BloqueoEliminacion[]> {
   const bloqueos: BloqueoEliminacion[] = [];
 
-  const { count: reservasActivas } = await supabase
+  const { data: reservasActivas } = await supabase
     .from("reservas")
-    .select("id", { count: "exact", head: true })
+    .select("id, ruta_conductor_id")
     .or(`cliente_id.eq.${userId},transportista_id.eq.${userId}`)
     .in("estado", [...ESTADOS_RESERVA_ACTIVOS]);
 
-  if ((reservasActivas ?? 0) > 0) {
+  const viajesActivos = new Set(
+    (reservasActivas ?? []).map((fila) => fila.ruta_conductor_id || fila.id)
+  );
+  if (viajesActivos.size > 0) {
+    const n = viajesActivos.size;
     bloqueos.push({
-      mensaje: `Tienes ${reservasActivas} reserva${reservasActivas !== 1 ? "s" : ""} activa${reservasActivas !== 1 ? "s" : ""}.`,
+      mensaje: `Tienes ${n} viaje${n !== 1 ? "s" : ""} sin cerrar.`,
       enlace: "/cuenta/viajes",
     });
   }

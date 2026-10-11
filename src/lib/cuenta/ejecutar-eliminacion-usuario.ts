@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import { getStripeServer, isStripeConfigured } from "@/lib/stripe/server";
 import { syncProfileSubscription } from "@/lib/stripe/sync-subscription";
 
@@ -30,6 +31,62 @@ function motivoFalloEliminacion(
     return `${contexto} ${raw}`;
   }
   return `${contexto} Inténtalo de nuevo.`;
+}
+
+async function liberarReservasSinPagar(
+  admin: SupabaseClient,
+  userId: string
+): Promise<void> {
+  const { data: sinPagar } = await admin
+    .from("reservas")
+    .select("id, ruta_conductor_id, anuncio_bulto_id, oferta_precio_id")
+    .or(`cliente_id.eq.${userId},transportista_id.eq.${userId}`)
+    .eq("estado", "pendiente_pago");
+
+  const filas = sinPagar ?? [];
+  if (filas.length === 0) return;
+
+  await admin
+    .from("reservas")
+    .update({ estado: "cancelado" })
+    .in(
+      "id",
+      filas.map((fila) => fila.id)
+    );
+
+  const rutaIds = [
+    ...new Set(
+      filas
+        .map((fila) => fila.ruta_conductor_id)
+        .filter((id): id is string => Boolean(id))
+    ),
+  ];
+  for (const rutaId of rutaIds) {
+    await sincronizarOcupacionRuta(admin, rutaId);
+  }
+
+  for (const fila of filas) {
+    if (!fila.anuncio_bulto_id) continue;
+    const { count } = await admin
+      .from("reservas")
+      .select("id", { count: "exact", head: true })
+      .eq("anuncio_bulto_id", fila.anuncio_bulto_id)
+      .in("estado", ESTADOS_RESERVA_OCUPAN);
+    if ((count ?? 0) === 0) {
+      await admin
+        .from("anuncios_bultos")
+        .update({ estado: "activo" })
+        .eq("id", fila.anuncio_bulto_id)
+        .eq("estado", "reservado");
+    }
+    if (fila.oferta_precio_id) {
+      await admin
+        .from("ofertas_precio")
+        .update({ estado: "pendiente" })
+        .eq("id", fila.oferta_precio_id)
+        .eq("estado", "aceptada");
+    }
+  }
 }
 
 export async function ejecutarEliminacionUsuario(
@@ -66,6 +123,8 @@ export async function ejecutarEliminacionUsuario(
     .update({ estado: "cancelado" })
     .eq("user_id", userId)
     .in("estado", ["activo", "reservado"]);
+
+  await liberarReservasSinPagar(admin, userId);
 
   const { count: totalReservas } = await admin
     .from("reservas")
