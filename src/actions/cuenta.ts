@@ -12,6 +12,8 @@ import {
   isDistintivoAmbiental,
   isTipoVehiculo,
   normalizarMatricula,
+  VEHICULO_ANIO_MAX,
+  VEHICULO_ANIO_MIN,
 } from "@/lib/vehiculo";
 import {
   normalizarDocumentoIdentidad,
@@ -100,8 +102,14 @@ export async function actualizarVehiculo(input: {
   if (modelo.length > 60) {
     return { error: "El modelo es demasiado largo." };
   }
-  if (!Number.isInteger(anio) || anio < 1980 || anio > 2030) {
-    return { error: "Indica un año de matriculación válido (1980–2030)." };
+  if (
+    !Number.isInteger(anio) ||
+    anio < VEHICULO_ANIO_MIN ||
+    anio > VEHICULO_ANIO_MAX
+  ) {
+    return {
+      error: `Indica un año de matriculación válido (${VEHICULO_ANIO_MIN}–${VEHICULO_ANIO_MAX}).`,
+    };
   }
 
   if (!isTipoVehiculo(input.tipo)) {
