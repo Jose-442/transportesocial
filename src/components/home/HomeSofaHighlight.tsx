@@ -23,6 +23,10 @@ export function HomeSofaHighlight() {
         ¡¡Compartiendo gastos!!
         <br />
         ¡¡De tu a tu!!
+        <br />
+        ¡¡Pasajeros, bultos y mascotas!!
+        <br />
+        ¡¡Ahorra en cada trayecto!!
       </p>
     </div>
   );
