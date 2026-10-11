@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
+import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
+import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 import { useFormDraft } from "@/lib/use-form-draft";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
@@ -50,6 +52,8 @@ export function OfertasCapacidadReserva({
       cantidad: "",
       descripcion: "",
       medidas: "",
+      tipo_carga: "" as TipoCarga | "",
+      declaracion_aceptada: false,
     }
   );
   const ofertaId = disponibles.some((o) => o.id === form.ofertaId)
@@ -77,7 +81,28 @@ export function OfertasCapacidadReserva({
 
     const formData = new FormData(e.currentTarget);
     formData.set("oferta_id", ofertaSel.id);
-    formData.set("cantidad", String(plazasElegidas));
+    formData.set("cantidad", esAsiento ? String(plazasElegidas) : "1");
+
+    if (!esAsiento) {
+      const tipo = String(formData.get("tipo_carga") ?? "");
+      const foto = formData.get("foto");
+      const declaracion = String(formData.get("declaracion_aceptada") ?? "");
+      if (!isTipoCarga(tipo)) {
+        setError("Indica el tipo de carga.");
+        setLoading(false);
+        return;
+      }
+      if (!(foto instanceof File) || foto.size <= 0) {
+        setError("Añade al menos una foto de la carga.");
+        setLoading(false);
+        return;
+      }
+      if (declaracion !== "1" && declaracion !== "on") {
+        setError("Debes aceptar la declaración de responsabilidad del porte.");
+        setLoading(false);
+        return;
+      }
+    }
 
     const result = await solicitarReservaCapacidad(formData);
     setLoading(false);
@@ -158,6 +183,16 @@ export function OfertasCapacidadReserva({
             value={medidas}
             onChange={(e) =>
               setForm((prev) => ({ ...prev, medidas: e.target.value }))
+            }
+          />
+          <DeclaracionPorteCampos
+            tipoCarga={form.tipo_carga}
+            declaracionAceptada={form.declaracion_aceptada}
+            onTipoCarga={(tipo_carga) =>
+              setForm((prev) => ({ ...prev, tipo_carga }))
+            }
+            onDeclaracion={(declaracion_aceptada) =>
+              setForm((prev) => ({ ...prev, declaracion_aceptada }))
             }
           />
         </>

@@ -26,6 +26,7 @@ import {
 } from "@/lib/solicitud-viaje";
 import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
 import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
+import { leerDeclaracionPorteReserva } from "@/lib/porte-reserva";
 
 function fechaLlegadaDesdeBulto(bulto: AnuncioBulto): string {
   const hora = horaDeAnuncio(bulto.descripcion, bulto.medidas);
@@ -150,6 +151,8 @@ export async function solicitarReservaRuta(formData: FormData) {
 
   const precioNeto = Number(ruta.precio_neto);
   const precioTotal = Number(ruta.precio_publicado);
+  const porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
+  if ("error" in porte) return { error: porte.error };
 
   const { data: reserva, error } = await supabase
     .from("reservas")
@@ -165,6 +168,7 @@ export async function solicitarReservaRuta(formData: FormData) {
       fecha_llegada_prevista: ruta.fecha_llegada_prevista,
       bulto_descripcion: descripcion,
       bulto_medidas: medidas || null,
+      ...porte,
       ...datosCaeAlCrearReserva({
         origen: ruta.origen,
         destino: ruta.destino,
@@ -254,6 +258,9 @@ export async function solicitarReservaViaje(formData: FormData) {
       return { error: "Este viaje ya tiene una reserva de bulto activa." };
     }
 
+    const porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
+    if ("error" in porte) return { error: porte.error };
+
     const precioNeto = Number(ruta.precio_neto);
     const precioTotal = Number(ruta.precio_publicado);
     const { data: reserva, error } = await supabase
@@ -270,6 +277,7 @@ export async function solicitarReservaViaje(formData: FormData) {
         fecha_llegada_prevista: ruta.fecha_llegada_prevista,
         bulto_descripcion: descripcion,
         bulto_medidas: medidas || null,
+        ...porte,
         ...datosCaeAlCrearReserva({
           origen: ruta.origen,
           destino: ruta.destino,
@@ -814,6 +822,8 @@ export async function solicitarReservaCapacidad(
     return { error: "No hay suficientes plazas disponibles." };
   }
 
+  let porte: Awaited<ReturnType<typeof leerDeclaracionPorteReserva>> | null =
+    null;
   if (oferta.tipo === "bulto") {
     if (cantidad !== 1) {
       return { error: "Solo puedes reservar un bulto por oferta." };
@@ -821,6 +831,8 @@ export async function solicitarReservaCapacidad(
     if (!descripcion) {
       return { error: "Describe el bulto que quieres enviar." };
     }
+    porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
+    if ("error" in porte) return { error: porte.error };
   }
 
   const { data: reservaActiva } = await supabase
@@ -867,6 +879,7 @@ export async function solicitarReservaCapacidad(
           ? descripcion
           : `Plaza${cantidad > 1 ? "s" : ""} de acompañante (×${cantidad})`,
       bulto_medidas: oferta.tipo === "bulto" ? medidas || null : null,
+      ...(porte ?? {}),
       ...datosCaeAlCrearReserva({
         origen: ruta.origen,
         destino: ruta.destino,

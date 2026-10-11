@@ -116,6 +116,11 @@ export type Reserva = {
   plazo_resena_hasta: string | null;
   bulto_descripcion: string | null;
   bulto_medidas: string | null;
+  /** voluminoso | paquete. Solo si la reserva lleva bulto. */
+  tipo_carga: "voluminoso" | "paquete" | null;
+  foto_bulto_url: string | null;
+  foto_bulto_url_2: string | null;
+  declaracion_aceptada_en: string | null;
   created_at: string;
   updated_at: string;
 };

@@ -7,8 +7,10 @@ import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
+import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
+import { isTipoCarga, type TipoCarga } from "@/lib/porte-legal";
 import { formatEur } from "@/lib/pricing";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
@@ -44,6 +46,8 @@ export function ReservarRutaForm({
     bulto_descripcion: inicial?.bulto_descripcion ?? "",
     bulto_medidas: inicial?.bulto_medidas ?? "",
     plazas: inicial?.plazas ?? "",
+    tipo_carga: "" as TipoCarga | "",
+    declaracion_aceptada: false,
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -66,6 +70,27 @@ export function ReservarRutaForm({
     formData.set("ruta_id", rutaId);
     formData.set("cantidad", String(cantidad));
     if (ofertaAsiento) formData.set("oferta_id", ofertaAsiento.id);
+
+    if (llevaBulto) {
+      const tipo = String(formData.get("tipo_carga") ?? "");
+      const foto = formData.get("foto");
+      const declaracion = String(formData.get("declaracion_aceptada") ?? "");
+      if (!isTipoCarga(tipo)) {
+        setError("Indica el tipo de carga.");
+        setLoading(false);
+        return;
+      }
+      if (!(foto instanceof File) || foto.size <= 0) {
+        setError("Añade al menos una foto de la carga.");
+        setLoading(false);
+        return;
+      }
+      if (declaracion !== "1" && declaracion !== "on") {
+        setError("Debes aceptar la declaración de responsabilidad del porte.");
+        setLoading(false);
+        return;
+      }
+    }
 
     const result = await solicitarReservaViaje(formData);
     setLoading(false);
@@ -111,6 +136,18 @@ export function ReservarRutaForm({
               setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
             }
           />
+          {llevaBulto ? (
+            <DeclaracionPorteCampos
+              tipoCarga={form.tipo_carga}
+              declaracionAceptada={form.declaracion_aceptada}
+              onTipoCarga={(tipo_carga) =>
+                setForm((prev) => ({ ...prev, tipo_carga }))
+              }
+              onDeclaracion={(declaracion_aceptada) =>
+                setForm((prev) => ({ ...prev, declaracion_aceptada }))
+              }
+            />
+          ) : null}
         </Card>
       )}
       {plazasLibres > 0 && ofertaAsiento && (

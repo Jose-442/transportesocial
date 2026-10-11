@@ -225,9 +225,9 @@ export default async function ReservaDetallePage({
     porteFicha = {
       descripcion: detalleBulto.bulto_descripcion,
       medidas: detalleBulto.bulto_medidas,
-      foto_url: null,
-      foto_url_2: null,
-      tipo_carga: null,
+      foto_url: detalleBulto.foto_bulto_url,
+      foto_url_2: detalleBulto.foto_bulto_url_2,
+      tipo_carga: detalleBulto.tipo_carga,
     };
   }
   const tienePorte = Boolean(porteFicha || bultoId);
