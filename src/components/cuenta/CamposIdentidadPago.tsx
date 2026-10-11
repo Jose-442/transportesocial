@@ -28,6 +28,11 @@ export function CamposIdentidadPago({
 }) {
   return (
     <div className="space-y-3">
+      <p className="text-sm text-zinc-600">
+        Tus datos son 100% privados y nunca serán visibles. Verificamos tu
+        DNI/NIE y teléfono para garantizar la seguridad y confianza de toda la
+        comunidad.
+      </p>
       <Input
         label="Teléfono móvil"
         name="telefono_identidad"
