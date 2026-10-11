@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -33,7 +32,6 @@ export function ReservarRutaForm({
   };
   resumenAsientos?: { ofrecidas: number; ocupadas: number };
 }) {
-  const router = useRouter();
   const ofertaAsiento = ofertas.find(
     (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
   );
@@ -78,15 +76,6 @@ export function ReservarRutaForm({
     }
 
     clear();
-
-    if (result.checkoutUrl) {
-      window.location.replace(result.checkoutUrl);
-      return;
-    }
-
-    if (result.reservaId) {
-      router.push(`/reservas/${result.reservaId}`);
-    }
   }
 
   return (

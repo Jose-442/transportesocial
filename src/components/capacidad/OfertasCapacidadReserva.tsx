@@ -89,11 +89,6 @@ export function OfertasCapacidadReserva({
 
     clear();
 
-    if (result.checkoutUrl) {
-      window.location.replace(result.checkoutUrl);
-      return;
-    }
-
     if (result.reservaId) {
       router.push(`/reservas/${result.reservaId}`);
     }
