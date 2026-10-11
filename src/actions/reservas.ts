@@ -305,11 +305,11 @@ export async function solicitarReservaViaje(formData: FormData) {
 
   const checkout = await createTripCheckoutSession(reservaPrincipalId);
   if (!checkout.ok) {
+    if (checkout.redirectTo) redirect(checkout.redirectTo);
     return { error: checkout.error, reservaId: reservaPrincipalId };
   }
 
-  revalidatePath(`/rutas/${rutaId}`);
-  return { checkoutUrl: checkout.url, reservaId: reservaPrincipalId };
+  redirect(checkout.url);
 }
 
 async function solicitarReservaCapacidadSinCheckout(formData: FormData): Promise<
@@ -890,9 +890,9 @@ export async function solicitarReservaCapacidad(
 
   const checkout = await createTripCheckoutSession(reserva.id);
   if (!checkout.ok) {
+    if (checkout.redirectTo) redirect(checkout.redirectTo);
     return { error: checkout.error };
   }
 
-  revalidatePath(`/rutas/${ruta.id}`);
-  return { checkoutUrl: checkout.url, reservaId: reserva.id };
+  redirect(checkout.url);
 }

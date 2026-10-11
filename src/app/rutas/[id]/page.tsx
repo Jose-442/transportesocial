@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { EquisCancelado } from "@/components/rutas/EquisCancelado";
+import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
 import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
@@ -390,15 +391,12 @@ export default async function RutaDetallePage({
         <Card className="space-y-3 border-amber-200 bg-amber-50/80">
           <p className="text-sm text-amber-950">
             Ya empezaste a reservar este viaje y el pago no se ha completado.
-            No se ha cobrado nada. En tu reserva puedes pagar, editar o
-            cancelar.
+            No se ha cobrado nada.
           </p>
-          <Link
-            href={`/reservas/${reservaPendienteId}?cancelado=1`}
-            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
-          >
-            Ir a mi reserva
-          </Link>
+          <CompletarPagoBoton
+            reservaId={reservaPendienteId}
+            label="Pagar con tarjeta"
+          />
         </Card>
       )}
 
