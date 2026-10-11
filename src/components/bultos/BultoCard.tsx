@@ -80,7 +80,7 @@ export function BultoCard({
           {lineaFecha ? (
             <p className="mt-1 text-sm text-zinc-800">{lineaFecha}</p>
           ) : null}
-          <p className="mt-0.5 text-xs text-zinc-500">Pulsa para ver detalles</p>
+          <p className="mt-2 text-base text-zinc-500">Pulsa para ver detalles</p>
         </div>
         <div className="shrink-0 text-right">
           {variant === "cuenta" ? (
