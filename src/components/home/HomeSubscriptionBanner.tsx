@@ -1,8 +1,10 @@
 export function HomeSubscriptionBanner() {
   return (
-    <div className="px-1 text-base font-semibold text-[#00b4c4] sm:text-lg">
+    <div className="px-1 text-sm font-normal text-zinc-600 sm:text-base">
       <p>
-        <span aria-hidden>✓ </span>
+        <span className="font-semibold text-[#00b4c4]" aria-hidden>
+          ✓{" "}
+        </span>
         Usar Transporte Social es gratis
       </p>
       <p className="mt-1">
