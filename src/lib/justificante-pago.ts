@@ -40,8 +40,12 @@ export function partirIvaIncluido(
 }
 
 export function lineasJustificante(datos: DatosJustificante): string[] {
+  const estado = datos.devuelto
+    ? `Estado: Cancelado. Devuelto: ${datos.devuelto}.`
+    : "Estado: Pagado a través de la plataforma.";
   return [
-    "JUSTIFICANTE DE RESERVA Y PAGO",
+    "JUSTIFICANTE DE PAGO",
+    estado,
     "Transporte Social",
     "",
     `Reserva: ${datos.referencia}`,
@@ -54,9 +58,6 @@ export function lineasJustificante(datos: DatosJustificante): string[] {
     `Gastos de gestión (IVA incluido): ${datos.gastosGestion}`,
     `Base imponible: ${datos.baseImponible}`,
     `IVA 21 %: ${datos.iva}`,
-    datos.devuelto
-      ? `Estado: Cancelado. Devuelto: ${datos.devuelto}.`
-      : "Estado: Pagado a través de la plataforma.",
     "",
     "Este documento actúa como comprobante de pago de la reserva realizada a través de la plataforma. La plataforma actúa como mero intermediario en la gestión del trayecto. El IVA se aplica solo a los gastos de gestión.",
   ];

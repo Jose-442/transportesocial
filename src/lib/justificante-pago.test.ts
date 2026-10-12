@@ -27,12 +27,14 @@ describe("justificante de pago", () => {
       iva: "2,50 EUR",
     }).join("\n");
 
-    expect(texto).toContain("JUSTIFICANTE DE RESERVA Y PAGO");
+    expect(texto).toContain("JUSTIFICANTE DE PAGO");
+    expect(texto).not.toContain("JUSTIFICANTE DE RESERVA");
     expect(texto).toContain("Importe total abonado: 94,40 EUR");
     expect(texto).toContain("Gastos de gestión (IVA incluido): 14,40 EUR");
     expect(texto).toContain("Base imponible: 11,90 EUR");
     expect(texto).toContain("IVA 21 %: 2,50 EUR");
-    expect(texto).toContain("Estado: Pagado a través de la plataforma.");
+    expect(texto.split("\n")[0]).toBe("JUSTIFICANTE DE PAGO");
+    expect(texto.split("\n")[1]).toBe("Estado: Pagado a través de la plataforma.");
     expect(texto.toLowerCase()).not.toContain("factura");
   });
 
@@ -51,7 +53,8 @@ describe("justificante de pago", () => {
       devuelto: "94,40 EUR",
     }).join("\n");
 
-    expect(texto).toContain("Estado: Cancelado. Devuelto: 94,40 EUR.");
+    expect(texto.split("\n")[0]).toBe("JUSTIFICANTE DE PAGO");
+    expect(texto.split("\n")[1]).toBe("Estado: Cancelado. Devuelto: 94,40 EUR.");
     expect(texto).not.toContain("Estado: Pagado a través de la plataforma.");
   });
 
