@@ -44,21 +44,53 @@ export async function GET(
       .from("reservas")
       .select("*")
       .eq("ruta_conductor_id", reserva.ruta_conductor_id)
-      .eq("cliente_id", reserva.cliente_id)
-      .neq("estado", "cancelado");
-    if (hermanas && hermanas.length > 0) {
-      relacionadas = hermanas as Reserva[];
-    }
+      .eq("cliente_id", reserva.cliente_id);
+    const delMismoViaje = ((hermanas ?? []) as Reserva[]).filter((item) => {
+      if (item.estado === "pendiente_pago") return false;
+      if (reserva.estado !== "cancelado" && item.estado === "cancelado") {
+        return false;
+      }
+      const diferencia = Math.abs(
+        new Date(item.created_at).getTime() - new Date(reserva.created_at).getTime()
+      );
+      return diferencia < 5 * 60 * 1000;
+    });
+    if (delMismoViaje.length > 0) relacionadas = delMismoViaje;
   }
 
-  if (
-    relacionadas.some((item) => item.estado === "pendiente_pago") ||
-    !puedeDescargarJustificante(reserva.estado)
-  ) {
+  if (relacionadas.some((item) => item.estado === "pendiente_pago")) {
     return NextResponse.json(
       { error: "El justificante está disponible cuando el pago ya está hecho." },
       { status: 404 }
     );
+  }
+
+  const cobrado =
+    puedeDescargarJustificante(reserva.estado) || reserva.estado === "cancelado";
+  if (!cobrado) {
+    return NextResponse.json(
+      { error: "El justificante está disponible cuando el pago ya está hecho." },
+      { status: 404 }
+    );
+  }
+
+  if (reserva.estado === "cancelado") {
+    const { data: cobros } = await supabase
+      .from("transacciones")
+      .select("id")
+      .in(
+        "reserva_id",
+        relacionadas.map((item) => item.id)
+      )
+      .eq("user_id", user.id)
+      .eq("tipo", "cobro_viaje")
+      .limit(1);
+    if (!cobros || cobros.length === 0) {
+      return NextResponse.json(
+        { error: "El justificante está disponible cuando el pago ya está hecho." },
+        { status: 404 }
+      );
+    }
   }
 
   let origen = "";

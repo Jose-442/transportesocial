@@ -105,6 +105,17 @@ export default async function ReservaDetallePage({
 
   const esCliente = reserva.cliente_id === user.id;
   const esConductor = reserva.transportista_id === user.id;
+  let huboCobro = false;
+  if (esCliente && reserva.estado === "cancelado") {
+    const { data: cobro } = await supabase
+      .from("transacciones")
+      .select("id")
+      .eq("reserva_id", reserva.id)
+      .eq("user_id", user.id)
+      .eq("tipo", "cobro_viaje")
+      .limit(1);
+    huboCobro = (cobro ?? []).length > 0;
+  }
 
   // El conductor no debe ver reservas aún sin pagar (ni el estado «pendiente de pago»).
   if (esConductor && !esCliente && reserva.estado === "pendiente_pago") {
@@ -375,7 +386,8 @@ export default async function ReservaDetallePage({
             minute: "2-digit",
           })}
         </p>
-        {esCliente && puedeDescargarJustificante(estadoMostrar) ? (
+        {esCliente &&
+        (puedeDescargarJustificante(estadoMostrar) || huboCobro) ? (
           <a
             href={`/api/reservas/${reserva.id}/justificante`}
             className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 hover:bg-emerald-50"

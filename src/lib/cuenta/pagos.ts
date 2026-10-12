@@ -7,7 +7,6 @@ import {
   repartoCancelacion,
   type PrecioCancelacion,
 } from "@/lib/reservas/cancelacion";
-import { puedeDescargarJustificante } from "@/lib/justificante-pago";
 import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
 import {
   MOTIVO_CANCELACION_CLIENTE,
@@ -247,7 +246,7 @@ export async function loadPagosCuenta(
       detalle: fraseQueIncluyeReservas(filas),
       pagadoEur: centimosAEuros(pagadoCents),
       devueltoEur: importeDevuelto(filas, txsGrupo),
-      puedeJustificante: puedeDescargarJustificante(principal.estado),
+      puedeJustificante: true,
       fecha,
     });
   }
