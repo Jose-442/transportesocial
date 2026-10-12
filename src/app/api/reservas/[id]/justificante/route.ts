@@ -5,7 +5,11 @@ import { formatCiudad } from "@/lib/format-ciudad";
 import { formatFechaHoraEs } from "@/lib/datetime-form";
 import { loadPerfilesPublicos } from "@/lib/profile";
 import { pdfJustificante } from "@/lib/justificante-pdf";
-import { puedeDescargarJustificante } from "@/lib/justificante-pago";
+import {
+  partirIvaIncluido,
+  puedeDescargarJustificante,
+} from "@/lib/justificante-pago";
+import { desglosePago } from "@/lib/precios/desglose-pago";
 import type { Reserva } from "@/types/database";
 
 export async function GET(
@@ -81,10 +85,13 @@ export async function GET(
     reserva.cliente_id,
     reserva.transportista_id,
   ]);
-  const importe = relacionadas.reduce(
-    (sum, item) => sum + Number(item.precio_total),
-    0
-  );
+  const desglose = desglosePago(relacionadas);
+  const gastosCentimos =
+    desglose.lineas.find((linea) => linea.concepto === "Gastos de gestión")
+      ?.centimos ?? 0;
+  const iva = partirIvaIncluido(gastosCentimos);
+  const euros = (centimos: number) =>
+    formatEur(centimos / 100).replace("€", "EUR").replace(/\s+/g, " ").trim();
   const bytes = await pdfJustificante({
     referencia: reserva.id.slice(0, 8).toUpperCase(),
     cliente: perfiles[reserva.cliente_id]?.display_name?.trim() || "Usuario",
@@ -93,7 +100,10 @@ export async function GET(
     origen: origen || "—",
     destino: destino || "—",
     fechaHora: formatFechaHoraEs(reserva.fecha_llegada_prevista),
-    importe: formatEur(importe).replace("€", "EUR").replace(/\s+/g, " "),
+    importe: euros(desglose.totalCentimos),
+    gastosGestion: euros(gastosCentimos),
+    baseImponible: euros(iva.base),
+    iva: euros(iva.cuota),
   });
 
   return new NextResponse(Buffer.from(bytes), {

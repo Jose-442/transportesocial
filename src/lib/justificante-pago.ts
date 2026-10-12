@@ -23,7 +23,19 @@ export type DatosJustificante = {
   destino: string;
   fechaHora: string;
   importe: string;
+  gastosGestion: string;
+  baseImponible: string;
+  iva: string;
 };
+
+/** El 21 % ya va dentro del importe. La base y la cuota suman esos céntimos. */
+export function partirIvaIncluido(
+  centimos: number,
+  porcentaje = 21
+): { base: number; cuota: number } {
+  const base = Math.round((centimos * 100) / (100 + porcentaje));
+  return { base, cuota: centimos - base };
+}
 
 export function lineasJustificante(datos: DatosJustificante): string[] {
   return [
@@ -37,8 +49,11 @@ export function lineasJustificante(datos: DatosJustificante): string[] {
     `Destino: ${datos.destino}`,
     `Fecha y hora: ${datos.fechaHora}`,
     `Importe total abonado: ${datos.importe}`,
+    `Gastos de gestión (IVA incluido): ${datos.gastosGestion}`,
+    `Base imponible: ${datos.baseImponible}`,
+    `IVA 21 %: ${datos.iva}`,
     "Estado: Pagado a través de la plataforma.",
     "",
-    "Este documento actúa como comprobante de pago de la reserva realizada a través de la plataforma. La plataforma actúa como mero intermediario en la gestión del trayecto.",
+    "Este documento actúa como comprobante de pago de la reserva realizada a través de la plataforma. La plataforma actúa como mero intermediario en la gestión del trayecto. El IVA se aplica solo a los gastos de gestión.",
   ];
 }

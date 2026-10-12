@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   lineasJustificante,
+  partirIvaIncluido,
   puedeDescargarJustificante,
 } from "@/lib/justificante-pago";
 
@@ -12,7 +13,7 @@ describe("justificante de pago", () => {
     expect(puedeDescargarJustificante("liberado")).toBe(true);
   });
 
-  it("no lo llama factura ni desglosa el IVA", () => {
+  it("desglosa el IVA de los gastos de gestión y no lo llama factura", () => {
     const texto = lineasJustificante({
       referencia: "ABCD1234",
       cliente: "Ana",
@@ -20,12 +21,22 @@ describe("justificante de pago", () => {
       origen: "Madrid",
       destino: "Valencia",
       fechaHora: "lunes, 20 de octubre, 09:00",
-      importe: "20,00 EUR",
+      importe: "94,40 EUR",
+      gastosGestion: "14,40 EUR",
+      baseImponible: "11,90 EUR",
+      iva: "2,50 EUR",
     }).join("\n");
 
     expect(texto).toContain("JUSTIFICANTE DE RESERVA Y PAGO");
-    expect(texto).toContain("Importe total abonado: 20,00 EUR");
+    expect(texto).toContain("Importe total abonado: 94,40 EUR");
+    expect(texto).toContain("Gastos de gestión (IVA incluido): 14,40 EUR");
+    expect(texto).toContain("Base imponible: 11,90 EUR");
+    expect(texto).toContain("IVA 21 %: 2,50 EUR");
     expect(texto.toLowerCase()).not.toContain("factura");
-    expect(texto).not.toContain("IVA");
+  });
+
+  it("el 21 % ya va dentro de los gastos de gestión", () => {
+    expect(partirIvaIncluido(1440)).toEqual({ base: 1190, cuota: 250 });
+    expect(partirIvaIncluido(720)).toEqual({ base: 595, cuota: 125 });
   });
 });

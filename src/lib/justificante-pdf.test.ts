@@ -11,6 +11,9 @@ describe("pdf del justificante", () => {
       destino: "A Coruña",
       fechaHora: "lunes, 20 de octubre, 09:00",
       importe: "20,00 EUR",
+      gastosGestion: "3,60 EUR",
+      baseImponible: "2,98 EUR",
+      iva: "0,62 EUR",
     });
     const inicio = Buffer.from(bytes.subarray(0, 5)).toString("utf8");
     expect(inicio).toBe("%PDF-");
