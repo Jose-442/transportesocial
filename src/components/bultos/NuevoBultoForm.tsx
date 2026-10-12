@@ -421,6 +421,8 @@ export function NuevoBultoForm({
       {ocultarPreguntaMascota ? null : (
       <fieldset
         className="space-y-2"
+        data-campo=""
+        {...(!form.mascota ? { "data-campo-vacio": "" } : {})}
         {...(fieldErrors.mascota ? { "data-campo-error": "" } : {})}
       >
         <legend className="text-sm font-semibold text-zinc-900">
@@ -494,6 +496,8 @@ export function NuevoBultoForm({
 
       <fieldset
         className="space-y-2"
+        data-campo=""
+        {...(!form.tipo_solicitud ? { "data-campo-vacio": "" } : {})}
         {...(fieldErrors.tipo_solicitud ? { "data-campo-error": "" } : {})}
       >
         <legend className="text-sm font-semibold text-zinc-900">
