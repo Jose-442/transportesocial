@@ -10,7 +10,7 @@ export const ESTADO_RESERVA_LABELS: Record<EstadoReserva, string> = {
   entregado: "Entregado",
   disputa: "Disputa abierta",
   liberado: "Completado",
-  cancelado: "Cancelada",
+  cancelado: "Cancelado",
 };
 
 export const MOTIVO_DISPUTA_LABELS: Record<MotivoDisputa, string> = {
