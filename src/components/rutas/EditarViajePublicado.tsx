@@ -198,6 +198,9 @@ export function EditarViajePublicado({
     setLoading(false);
     setAbierto(false);
     router.refresh();
+    const volverArriba = () => window.scrollTo({ top: 0, behavior: "auto" });
+    volverArriba();
+    window.setTimeout(volverArriba, 60);
   }
 
   return (
