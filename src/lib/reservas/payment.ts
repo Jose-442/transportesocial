@@ -70,7 +70,11 @@ export async function confirmarPagoReservas(
   const { data: filas } = await admin.from("reservas").select("*").in("id", ids);
   const reservas = (filas ?? []) as Reserva[];
   if (reservas.length === 0) {
-    return { error: "Reserva no encontrada." };
+    // La clave de servicio no lee la tabla (va sin Authorization). El cobro sí:
+    // la función va con el rol de servicio y guarda el pago igual.
+    const aplicado = await aplicarConfirmarPagoViaje(admin, ids, paymentIntentId);
+    if (aplicado.error) return { error: aplicado.error };
+    return {};
   }
 
   const pendientes = reservas.filter((item) => item.estado === "pendiente_pago");
@@ -121,67 +125,6 @@ export async function confirmarPagoReservas(
   return {};
 }
 
-async function avisarPagoViaje(
-  db: SupabaseClient,
-  principal: Reserva,
-  auto: boolean
-) {
-  const enlace = `/reservas/${principal.id}`;
-  const { data: avisoCliente } = await db
-    .from("notificaciones")
-    .select("id")
-    .eq("user_id", principal.cliente_id)
-    .eq("enlace", enlace)
-    .limit(1)
-    .maybeSingle();
-  if (avisoCliente) return;
-
-  const confirmada = auto || principal.estado === "confirmada";
-
-  if (confirmada) {
-    const enlaceChat = `/reservas/${principal.id}/chat`;
-    const { data: avisoConductor } = await db
-      .from("notificaciones")
-      .select("id")
-      .eq("user_id", principal.transportista_id)
-      .or(`enlace.eq.${enlace},enlace.eq.${enlaceChat}`)
-      .limit(1)
-      .maybeSingle();
-    if (avisoConductor) return;
-
-    await crearNotificacion(db, {
-      user_id: principal.transportista_id,
-      tipo: "reserva_confirmada",
-      titulo: "Nueva reserva confirmada",
-      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
-      enlace: enlaceChat,
-    });
-    await crearNotificacion(db, {
-      user_id: principal.cliente_id,
-      tipo: "reserva_confirmada",
-      titulo: "Reserva confirmada",
-      mensaje: "Pago recibido. Coordina los detalles por el chat interno.",
-      enlace: enlaceChat,
-    });
-    return;
-  }
-
-  await crearNotificacion(db, {
-    user_id: principal.transportista_id,
-    tipo: "reserva_pendiente_aprobacion",
-    titulo: "Nueva solicitud de reserva",
-    mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
-    enlace,
-  });
-  await crearNotificacion(db, {
-    user_id: principal.cliente_id,
-    tipo: "nueva_reserva",
-    titulo: "Reserva enviada",
-    mensaje: "Pago recibido. Esperando confirmación del conductor.",
-    enlace,
-  });
-}
-
 export async function confirmarPagoViajeDesdeIntent(
   paymentIntentId: string,
   reservaId: string,
@@ -202,9 +145,10 @@ export async function confirmarPagoViajeDesdeIntent(
   }
 
   const admin = createAdminClient();
-  const db = admin ?? supabase;
 
-  const { data: vista, error: vistaError } = await db
+  // La reserva la lee quien pagó. La clave de servicio no ve la tabla y
+  // devolvía «Reserva no encontrada» con el cobro ya hecho en la tarjeta.
+  const { data: vista, error: vistaError } = await supabase
     .from("reservas")
     .select("*")
     .eq("id", reservaId)
@@ -219,7 +163,7 @@ export async function confirmarPagoViajeDesdeIntent(
 
   const idsGrupo = [reservaId];
   if (principal.ruta_conductor_id && principal.estado === "pendiente_pago") {
-    const { data: hermanas } = await db
+    const { data: hermanas } = await supabase
       .from("reservas")
       .select("id")
       .eq("cliente_id", user.id)
@@ -233,11 +177,12 @@ export async function confirmarPagoViajeDesdeIntent(
     revalidatePath(`/reservas/${reservaId}`);
     revalidatePath(`/reservas/${reservaId}/chat`);
     revalidatePath("/cuenta/viajes");
+    revalidatePath("/cuenta");
     return {};
   }
 
   if (!opts?.saltarImporte) {
-    const { data: filasImporte } = await db
+    const { data: filasImporte } = await supabase
       .from("reservas")
       .select("precio_total")
       .in("id", [...new Set(idsGrupo)]);
@@ -251,30 +196,41 @@ export async function confirmarPagoViajeDesdeIntent(
     }
   }
 
-  if (admin) {
-    const result = await confirmarPagoReservas(admin, paymentIntentId, idsGrupo, {
-      omitirImporte: true,
-    });
-    if (result.error) return result;
-  } else {
-    const aplicado = await aplicarConfirmarPagoViaje(
-      supabase,
-      idsGrupo,
-      paymentIntentId
-    );
-    if (aplicado.error) return { error: aplicado.error };
+  const aplicado = await aplicarConfirmarPagoViaje(
+    supabase,
+    idsGrupo,
+    paymentIntentId
+  );
+  if (aplicado.error) return { error: aplicado.error };
 
-    const auto = aplicado.filas.some((f) => f.estado === "confirmada");
-    await avisarPagoViaje(supabase, { ...principal, estado: aplicado.filas[0]?.estado ?? principal.estado }, auto);
+  const { data: trasPago } = await supabase
+    .from("reservas")
+    .select("*")
+    .in("id", [...new Set(idsGrupo)]);
+  const actualizadas = (trasPago ?? []) as Reserva[];
+  const dbAvisos = admin ?? supabase;
+
+  for (const item of actualizadas) {
+    const omitirAvisos = omitirAvisoPlazaEnLote(actualizadas, item.tipo);
+    let aviso: { error?: string } = {};
+    if (item.tipo === "bulto_oferta") {
+      aviso = await avisarReservaBulto(dbAvisos, item);
+    } else if (item.tipo === "capacidad_extra") {
+      aviso = await avisarReservaCapacidad(dbAvisos, item, { omitirAvisos });
+    } else {
+      aviso = await avisarReservaRuta(dbAvisos, item);
+    }
+    if (aviso.error) return aviso;
   }
 
   if (principal.ruta_conductor_id) {
-    await sincronizarOcupacionRuta(db, principal.ruta_conductor_id);
+    await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
   }
 
   revalidatePath(`/reservas/${reservaId}`);
   revalidatePath(`/reservas/${reservaId}/chat`);
   revalidatePath("/cuenta/viajes");
+  revalidatePath("/cuenta");
   if (principal.anuncio_bulto_id) {
     revalidatePath(`/bultos/${principal.anuncio_bulto_id}`);
     revalidatePath("/bultos");
