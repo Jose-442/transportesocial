@@ -13,6 +13,8 @@ import {
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
+import { DesglosePrecio } from "@/components/reservas/DesglosePrecio";
+import { desglosePago } from "@/lib/precios/desglose-pago";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
@@ -84,10 +86,23 @@ export function OfertasCapacidadReserva({
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
   const esAsiento = ofertaSel?.tipo === "asiento";
   const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
-  const total =
+  const desglose =
     ofertaSel && plazasElegidas > 0
-      ? Number(ofertaSel.precio_publicado) * plazasElegidas
-      : 0;
+      ? desglosePago([
+          {
+            tipo: "capacidad_extra",
+            precio_neto: Number(ofertaSel.precio_neto) * plazasElegidas,
+            precio_total: Number(ofertaSel.precio_publicado) * plazasElegidas,
+            cantidad: plazasElegidas,
+            bulto_descripcion: esAsiento
+              ? plazasElegidas > 1
+                ? `Plazas de acompañante (×${plazasElegidas})`
+                : "Plaza de acompañante (×1)"
+              : "bulto",
+          },
+        ])
+      : null;
+  const total = desglose ? desglose.totalCentimos / 100 : 0;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -237,10 +252,11 @@ export function OfertasCapacidadReserva({
         </>
       )}
 
-      {ofertaSel && (
-        <p className="text-sm font-semibold text-emerald-700">
-          Total: {formatEur(total)}
-        </p>
+      {desglose && total > 0 && (
+        <DesglosePrecio
+          lineas={desglose.lineas}
+          totalCentimos={desglose.totalCentimos}
+        />
       )}
 
       {pedirIdentidad ? (

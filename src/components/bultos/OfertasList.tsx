@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { UserAvatar } from "@/components/profile/UserAvatar";
-import { formatEur } from "@/lib/pricing";
+import { DesglosePrecio } from "@/components/reservas/DesglosePrecio";
+import { desglosePago } from "@/lib/precios/desglose-pago";
 import { resumenVehiculoPublico } from "@/lib/vehiculo";
 import type { OfertaPrecio, PerfilPublico } from "@/types/database";
 import { OfertaAcciones } from "./OfertaAcciones";
@@ -38,6 +39,16 @@ export function OfertasList({
         const perfil = perfiles[oferta.conductor_id];
         const vehiculo = perfil ? resumenVehiculoPublico(perfil) : null;
         const esMia = Boolean(userId) && oferta.conductor_id === userId;
+        const desglose = desglosePago([
+          {
+            tipo: "bulto_oferta",
+            precio_neto: Number(oferta.precio_neto),
+            precio_total: Number(oferta.precio_total),
+            cantidad: oferta.desglose?.plazas_ofrecidas ?? 0,
+            bulto_descripcion: oferta.desglose?.precio_neto_bulto ? "bulto" : null,
+            desglose: oferta.desglose,
+          },
+        ]);
 
         return (
           <Card key={oferta.id}>
@@ -68,9 +79,10 @@ export function OfertasList({
             )}
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-lg font-bold text-emerald-700">
-                  Total: {formatEur(Number(oferta.precio_total))}
-                </p>
+                <DesglosePrecio
+                  lineas={desglose.lineas}
+                  totalCentimos={desglose.totalCentimos}
+                />
                 {oferta.desglose &&
                   oferta.desglose.plazas_solicitadas > 0 &&
                   oferta.desglose.plazas_ofrecidas <

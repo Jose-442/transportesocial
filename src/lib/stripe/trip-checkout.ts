@@ -5,6 +5,8 @@ import {
   HREF_IDENTIDAD_CUENTA,
   identidadListaParaPagar,
 } from "@/lib/identidad-pago";
+import { desglosePago, type FilaDesglosePago } from "@/lib/precios/desglose-pago";
+import type { OfertaDesglose } from "@/lib/solicitud-viaje";
 
 export type CreateTripCheckoutResult =
   | { ok: true; url: string }
@@ -43,7 +45,9 @@ export async function createTripCheckoutSession(
 
   const { data: reserva, error } = await supabase
     .from("reservas")
-    .select("id, cliente_id, precio_total, estado, ruta_conductor_id")
+    .select(
+      "id, cliente_id, precio_neto, precio_total, tipo, cantidad, bulto_descripcion, oferta_precio_id, estado, ruta_conductor_id"
+    )
     .eq("id", reservaId)
     .single();
 
@@ -59,29 +63,66 @@ export async function createTripCheckoutSession(
     return { ok: false, error: "Esta reserva ya no está pendiente de pago." };
   }
 
-  let cobros = [
-    { id: reserva.id, precio_total: Number(reserva.precio_total) },
+  type Cobro = FilaDesglosePago & {
+    id: string;
+    oferta_precio_id: string | null;
+  };
+  let cobros: Cobro[] = [
+    {
+      id: reserva.id,
+      tipo: reserva.tipo,
+      precio_neto: Number(reserva.precio_neto),
+      precio_total: Number(reserva.precio_total),
+      cantidad: Number(reserva.cantidad) || 1,
+      bulto_descripcion: reserva.bulto_descripcion,
+      oferta_precio_id: reserva.oferta_precio_id,
+    },
   ];
   if (reserva.ruta_conductor_id) {
     const { data: hermanas } = await supabase
       .from("reservas")
-      .select("id, precio_total")
+      .select(
+        "id, precio_neto, precio_total, tipo, cantidad, bulto_descripcion, oferta_precio_id"
+      )
       .eq("cliente_id", user.id)
       .eq("ruta_conductor_id", reserva.ruta_conductor_id)
       .eq("estado", "pendiente_pago");
     if (hermanas && hermanas.length > 0) {
       cobros = hermanas.map((r) => ({
         id: r.id,
+        tipo: r.tipo,
+        precio_neto: Number(r.precio_neto),
         precio_total: Number(r.precio_total),
+        cantidad: Number(r.cantidad) || 1,
+        bulto_descripcion: r.bulto_descripcion,
+        oferta_precio_id: r.oferta_precio_id,
       }));
     }
   }
 
+  const ofertaIds = cobros
+    .map((fila) => fila.oferta_precio_id)
+    .filter((id): id is string => Boolean(id));
+  if (ofertaIds.length > 0) {
+    const { data: ofertas } = await supabase
+      .from("ofertas_precio")
+      .select("id, desglose")
+      .in("id", ofertaIds);
+    const porId = new Map(
+      (ofertas ?? []).map((oferta) => [
+        oferta.id,
+        (oferta.desglose as OfertaDesglose | null) ?? null,
+      ])
+    );
+    cobros = cobros.map((fila) => ({
+      ...fila,
+      desglose: fila.oferta_precio_id ? porId.get(fila.oferta_precio_id) : null,
+    }));
+  }
+
+  const { lineas } = desglosePago(cobros);
   const origin = await getRequestOrigin();
   const stripe = getStripeServer();
-  const amountCents = Math.round(
-    cobros.reduce((sum, r) => sum + r.precio_total, 0) * 100
-  );
   const reservaIds = cobros.map((r) => r.id).join(",");
   const metadata = {
     user_id: user.id,
@@ -93,18 +134,16 @@ export async function createTripCheckoutSession(
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
-    line_items: [
-      {
-        quantity: 1,
-        price_data: {
-          currency: "eur",
-          unit_amount: amountCents,
-          product_data: {
-            name: "Reserva de transporte",
-          },
+    line_items: lineas.map((linea) => ({
+      quantity: 1,
+      price_data: {
+        currency: "eur",
+        unit_amount: linea.centimos,
+        product_data: {
+          name: linea.concepto,
         },
       },
-    ],
+    })),
     metadata,
     payment_intent_data: { metadata },
     success_url: `${origin}/reservas/${reservaId}?session_id={CHECKOUT_SESSION_ID}`,

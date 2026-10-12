@@ -14,7 +14,8 @@ import {
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
-import { formatEur } from "@/lib/pricing";
+import { DesglosePrecio } from "@/components/reservas/DesglosePrecio";
+import { desglosePago } from "@/lib/precios/desglose-pago";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
 
@@ -22,6 +23,7 @@ export function ReservarRutaForm({
   rutaId,
   ofreceBulto,
   precioBulto,
+  precioNetoBulto = null,
   ofertas,
   inicial,
   resumenAsientos,
@@ -31,6 +33,7 @@ export function ReservarRutaForm({
   rutaId: string;
   ofreceBulto: boolean;
   precioBulto: number | null;
+  precioNetoBulto?: number | null;
   ofertas: OfertaCapacidad[];
   inicial?: {
     bulto_descripcion: string;
@@ -74,9 +77,30 @@ export function ReservarRutaForm({
     Math.max(0, Number.parseInt(form.plazas, 10) || 0)
   );
   const llevaBulto = ofreceBulto && form.bulto_descripcion.trim().length > 0;
-  const total =
-    (llevaBulto && precioBulto != null ? precioBulto : 0) +
-    (precioPlaza != null ? precioPlaza * cantidad : 0);
+  const filasPrecio = [];
+  if (llevaBulto && precioBulto != null && precioNetoBulto != null) {
+    filasPrecio.push({
+      tipo: "ruta_directa" as const,
+      precio_neto: precioNetoBulto,
+      precio_total: precioBulto,
+      cantidad: 1,
+      bulto_descripcion: form.bulto_descripcion,
+    });
+  }
+  if (cantidad >= 1 && ofertaAsiento && precioPlaza != null) {
+    filasPrecio.push({
+      tipo: "capacidad_extra" as const,
+      precio_neto: Number(ofertaAsiento.precio_neto) * cantidad,
+      precio_total: precioPlaza * cantidad,
+      cantidad,
+      bulto_descripcion:
+        cantidad > 1
+          ? `Plazas de acompañante (×${cantidad})`
+          : "Plaza de acompañante (×1)",
+    });
+  }
+  const desglose = desglosePago(filasPrecio);
+  const total = desglose.totalCentimos / 100;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -198,9 +222,10 @@ export function ReservarRutaForm({
         </Card>
       )}
       {total > 0 && (
-        <p className="text-sm font-semibold text-emerald-700">
-          Total: {formatEur(total)}
-        </p>
+        <DesglosePrecio
+          lineas={desglose.lineas}
+          totalCentimos={desglose.totalCentimos}
+        />
       )}
       {pedirIdentidad ? (
         <CamposIdentidadPago

@@ -434,6 +434,7 @@ export default async function RutaDetallePage({
           rutaId={ruta.id}
           ofreceBulto={ofreceBulto}
           precioBulto={ofreceBulto ? Number(ruta.precio_publicado) : null}
+          precioNetoBulto={ofreceBulto ? Number(ruta.precio_neto) : null}
           ofertas={ofertas}
           inicial={formInicial}
           resumenAsientos={
