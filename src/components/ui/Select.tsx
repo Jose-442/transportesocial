@@ -27,11 +27,14 @@ export function Select({
 }: Props) {
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const tieneVacio = options.some((opt) => opt.value === "");
+  const vacio = String(props.value ?? "").trim() === "";
 
   return (
     <label
       htmlFor={selectId}
       className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       {labelRight ? (

@@ -42,10 +42,13 @@ export function Input({
 }: InputHTMLAttributes<HTMLInputElement> & FieldProps) {
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const esNumero = type === "number";
+  const vacio = String(props.value ?? "").trim() === "";
   return (
     <label
       htmlFor={inputId}
       className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       <FieldLabel label={label} labelRight={labelRight} />
@@ -77,10 +80,13 @@ export function Textarea({
   ...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement> & FieldProps) {
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
+  const vacio = String(props.value ?? "").trim() === "";
   return (
     <label
       htmlFor={inputId}
       className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       <span className="text-sm font-medium text-zinc-800">{label}</span>

@@ -69,6 +69,22 @@ function siguienteVacio(actual: Control): HTMLElement | null {
   return null;
 }
 
+function siguienteMarcado(desde: HTMLElement): HTMLElement | null {
+  const form = desde.closest("form");
+  if (!form) return null;
+  const actual = desde.closest("[data-campo]");
+  if (!(actual instanceof HTMLElement) || actual.hasAttribute("data-campo-vacio")) {
+    return null;
+  }
+  const campos = [...form.querySelectorAll("[data-campo]")];
+  const indice = campos.indexOf(actual);
+  if (indice < 0) return null;
+  const siguiente = campos
+    .slice(indice + 1)
+    .find((campo) => campo.hasAttribute("data-campo-vacio"));
+  return siguiente instanceof HTMLElement ? siguiente : null;
+}
+
 function destinoVisible(el: HTMLElement): HTMLElement {
   if (
     el instanceof HTMLInputElement &&
@@ -82,8 +98,9 @@ function destinoVisible(el: HTMLElement): HTMLElement {
 
 function yaSeVe(el: HTMLElement): boolean {
   const caja = el.getBoundingClientRect();
-  const margen = 96;
-  return caja.top >= margen && caja.bottom <= window.innerHeight - margen;
+  const arriba = 72;
+  const abajo = 170;
+  return caja.top >= arriba && caja.bottom <= window.innerHeight - abajo;
 }
 
 function llevar(el: HTMLElement) {
@@ -142,8 +159,15 @@ export function ScrollCampoVacio() {
       if (aparece) alCambio();
     }
 
-    function alSiguiente(actual: Control) {
+    function alSiguiente(actual: HTMLElement) {
       if (ocupado) return;
+      const marcado = siguienteMarcado(actual);
+      if (marcado) {
+        reservar();
+        llevar(marcado);
+        return;
+      }
+      if (!esControl(actual)) return;
       const siguiente = siguienteVacio(actual);
       if (!siguiente) return;
       reservar();
@@ -172,12 +196,28 @@ export function ScrollCampoVacio() {
         (el instanceof HTMLInputElement &&
           (el.type === "radio" || el.type === "checkbox" || el.type === "file"));
       if (!inmediato) return;
-      window.setTimeout(() => alSiguiente(el), 30);
+      window.setTimeout(() => alSiguiente(el), 80);
+    }
+
+    function alClick(event: MouseEvent) {
+      const el = event.target;
+      if (!(el instanceof HTMLElement)) return;
+      const boton = el.closest("button");
+      if (!(boton instanceof HTMLButtonElement) || boton.type === "submit") return;
+      const campo = boton.closest("[data-campo]");
+      if (!(campo instanceof HTMLElement) || !campo.hasAttribute("data-campo-vacio")) {
+        return;
+      }
+      window.setTimeout(() => {
+        if (campo.hasAttribute("data-campo-vacio")) return;
+        alSiguiente(boton);
+      }, 80);
     }
 
     document.addEventListener("invalid", alInvalid, true);
     document.addEventListener("focusout", alSalir, true);
     document.addEventListener("change", alElegir, true);
+    document.addEventListener("click", alClick, true);
     const observador = new MutationObserver(alMutacion);
     observador.observe(document.body, {
       childList: true,
@@ -190,6 +230,7 @@ export function ScrollCampoVacio() {
       document.removeEventListener("invalid", alInvalid, true);
       document.removeEventListener("focusout", alSalir, true);
       document.removeEventListener("change", alElegir, true);
+      document.removeEventListener("click", alClick, true);
       observador.disconnect();
       window.clearTimeout(espera);
     };

@@ -18,11 +18,14 @@ export function PasswordInput({
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & FieldProps) {
   const [visible, setVisible] = useState(false);
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
+  const vacio = String(props.value ?? "").trim() === "";
 
   return (
     <label
       htmlFor={inputId}
       className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       <span className="text-sm font-medium text-zinc-800">{label}</span>

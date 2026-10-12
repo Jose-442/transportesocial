@@ -135,6 +135,8 @@ export function MunicipioAutocomplete({
   return (
     <div
       className="block space-y-1.5"
+      data-campo=""
+      {...(!value.trim() ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       <label htmlFor={inputId} className="block">

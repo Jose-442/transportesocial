@@ -492,6 +492,8 @@ export function NuevaRutaForm({
 
       <div
         className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
+        data-campo=""
+        {...(!form.tipo_oferta ? { "data-campo-vacio": "" } : {})}
         {...(fieldErrors.tipo_oferta ? { "data-campo-error": "" } : {})}
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
@@ -547,7 +549,11 @@ export function NuevaRutaForm({
       )}
 
       {llevaPasajeros && (
-        <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
+        <div
+          className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
+          data-campo=""
+          {...(!form.plazas_acompanante ? { "data-campo-vacio": "" } : {})}
+        >
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
             {llevaBulto
               ? "Además del espacio para el bulto, ¿cuántas plazas para pasajeros ofreces?"
