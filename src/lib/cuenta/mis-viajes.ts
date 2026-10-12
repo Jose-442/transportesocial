@@ -7,6 +7,7 @@ import type {
 } from "@/components/cuenta/MisViajesTabs";
 import { apartadoReserva } from "@/lib/reservas/categorias";
 import { claveGrupoReserva } from "@/lib/cuenta/grupo-viaje";
+import { salidaYaPasada } from "@/lib/cuenta/salida-pasada";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
@@ -69,12 +70,12 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         .order("created_at", { ascending: false }),
       supabase
         .from("anuncios_bultos")
-        .select("id, origen, destino, created_at, estado")
+        .select("id, origen, destino, created_at, fecha_limite, estado")
         .eq("user_id", userId),
       supabase
         .from("rutas_conductores")
         .select(
-          "id, origen, destino, created_at, estado, espacio_disponible, precio_publicado"
+          "id, origen, destino, created_at, fecha_salida, estado, espacio_disponible, precio_publicado"
         )
         .eq("user_id", userId),
     ]);
@@ -83,7 +84,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   const avisosPromise = asegurarAvisosConductor(supabase, userId, lista);
   const bultos = (misBultos ?? []) as Pick<
     AnuncioBulto,
-    "id" | "origen" | "destino" | "created_at" | "estado"
+    "id" | "origen" | "destino" | "created_at" | "fecha_limite" | "estado"
   >[];
   const rutas = (misRutas ?? []) as Pick<
     RutaConductor,
@@ -91,6 +92,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     | "origen"
     | "destino"
     | "created_at"
+    | "fecha_salida"
     | "estado"
     | "espacio_disponible"
     | "precio_publicado"
@@ -149,7 +151,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       id: ruta.id,
       tipo: "ruta",
       titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
-      fecha: ruta.created_at,
+      fecha: ruta.fecha_salida || ruta.created_at,
       estado: "publicado",
       badge: badgeOfertaRuta(original),
       lineas: lineasOfertaRuta(original),
@@ -158,7 +160,8 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         : null,
       precioPlaza: asiento ? Number(asiento.precio_publicado) : null,
     };
-    propuestos.push(item);
+    if (salidaYaPasada(ruta.fecha_salida)) historial.push(item);
+    else propuestos.push(item);
   }
 
   for (const ruta of rutas) {
@@ -180,10 +183,14 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       id: bulto.id,
       tipo: "bulto",
       titulo: `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`,
-      fecha: bulto.created_at,
+      fecha: bulto.fecha_limite || bulto.created_at,
       estado: "publicado",
     };
-    propuestos.push(item);
+    if (bulto.fecha_limite && salidaYaPasada(bulto.fecha_limite)) {
+      historial.push(item);
+    } else {
+      propuestos.push(item);
+    }
   }
 
   for (const bulto of bultos) {
