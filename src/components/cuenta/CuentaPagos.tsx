@@ -49,7 +49,7 @@ export async function CuentaPagos({ userId }: { userId: string }) {
                 variant="secondary"
                 className={CUENTA_BTN_SECONDARY}
               >
-                Ver reserva
+                Ver viaje
               </ButtonLink>
             </Card>
           ))}

@@ -6,6 +6,7 @@ import type {
   ViajeListItem,
 } from "@/components/cuenta/MisViajesTabs";
 import { apartadoReserva } from "@/lib/reservas/categorias";
+import { claveGrupoReserva } from "@/lib/cuenta/grupo-viaje";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
@@ -232,10 +233,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     }
     const apartado = apartadoReserva(normalizada.estado, esCliente);
     if (!apartado) continue;
-    const clave =
-      normalizada.ruta_conductor_id && normalizada.estado !== "cancelado"
-        ? `${apartado}:${normalizada.cliente_id}:${normalizada.ruta_conductor_id}`
-        : normalizada.id;
+    const clave = claveGrupoReserva(normalizada, apartado);
     const grupo = grupos.get(clave) ?? [];
     grupo.push(normalizada);
     grupos.set(clave, grupo);

@@ -93,8 +93,8 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
         {item.estado === "liberado"
           ? "Valorar viaje"
           : chatPermitido(item.estado)
-            ? "Ver reserva y chat"
-            : "Ver reserva"}
+            ? "Ver viaje y chat"
+            : "Ver viaje"}
       </ButtonLink>
     </Card>
   );
