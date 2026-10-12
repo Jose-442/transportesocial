@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -11,6 +11,7 @@ import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { plazasAsientoDisponiblesRestantes } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
 import { DRAFT_KEYS } from "@/lib/form-draft";
+import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { useFormDraft } from "@/lib/use-form-draft";
 
 export function AnadirCapacidadForm({
@@ -31,6 +32,19 @@ export function AnadirCapacidadForm({
   const tipo = form.tipo;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const yaMontado = useRef(false);
+
+  useEffect(() => {
+    if (!yaMontado.current) {
+      yaMontado.current = true;
+      return;
+    }
+    const espera = window.setTimeout(() => {
+      scrollAlSiguienteVacio(formRef.current);
+    }, 80);
+    return () => window.clearTimeout(espera);
+  }, [tipo]);
 
   const plazasRestantes = plazasAsientoDisponiblesRestantes(ofertasExistentes);
 
@@ -63,13 +77,16 @@ export function AnadirCapacidadForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form ref={formRef} onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-600">
         El bulto principal ya está reservado. Puedes ofrecer espacio adicional
         en el mismo viaje.
       </p>
 
-      <div className="flex gap-2">
+      <div
+        className="flex gap-2"
+        data-campo=""
+      >
         <button
           type="button"
           onClick={() => setForm((prev) => ({ ...prev, tipo: "bulto" }))}

@@ -49,7 +49,15 @@ function FotoCarga({
   }
 
   return (
-    <div className="space-y-2 rounded-xl border border-zinc-200 p-3">
+    <div
+      className="space-y-2 rounded-xl border border-zinc-200 p-3"
+      {...(obligatoria
+        ? {
+            "data-campo": "",
+            ...(!preview ? { "data-campo-vacio": "" } : {}),
+          }
+        : {})}
+    >
       <span className="text-sm font-medium text-zinc-800">
         {titulo}
         {obligatoria ? " (obligatoria)" : " (opcional)"}
@@ -154,6 +162,8 @@ export function DeclaracionPorteCampos({
 
       <label
         className="flex cursor-pointer items-start gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 text-sm"
+        data-campo=""
+        {...(!declaracionAceptada ? { "data-campo-vacio": "" } : {})}
         {...(faltaDeclaracion ? { "data-campo-error": "" } : {})}
       >
         <input

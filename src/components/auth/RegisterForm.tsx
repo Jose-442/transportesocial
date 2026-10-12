@@ -209,7 +209,11 @@ export function RegisterForm({
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <label className="flex cursor-pointer items-start gap-3 text-sm text-zinc-700">
+      <label
+        className="flex cursor-pointer items-start gap-3 text-sm text-zinc-700"
+        data-campo=""
+        {...(!aceptaTerminos ? { "data-campo-vacio": "" } : {})}
+      >
         <input
           type="checkbox"
           checked={aceptaTerminos}

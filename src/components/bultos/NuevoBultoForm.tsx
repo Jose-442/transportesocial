@@ -75,7 +75,15 @@ function FotoCargaSlot({
   }
 
   return (
-    <div className="space-y-2 rounded-xl border border-zinc-200 p-3">
+    <div
+      className="space-y-2 rounded-xl border border-zinc-200 p-3"
+      {...(obligatoria
+        ? {
+            "data-campo": "",
+            ...(!slot.file ? { "data-campo-vacio": "" } : {}),
+          }
+        : {})}
+    >
       <span className="text-sm font-medium text-zinc-800">
         {titulo}
         {obligatoria ? " (obligatoria)" : " (opcional)"}
@@ -614,6 +622,8 @@ export function NuevoBultoForm({
                 ? "border-red-300 bg-red-50"
                 : "border-zinc-200 bg-white",
             ].join(" ")}
+            data-campo=""
+            {...(!form.declaracion_aceptada ? { "data-campo-vacio": "" } : {})}
             {...(fieldErrors.declaracion_aceptada
               ? { "data-campo-error": "" }
               : {})}

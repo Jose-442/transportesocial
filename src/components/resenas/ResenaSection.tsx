@@ -123,6 +123,8 @@ export function ResenaSection({
           </p>
         )}
         <div
+          data-campo=""
+          {...(puntuacion < 1 ? { "data-campo-vacio": "" } : {})}
           {...(error === "Selecciona una puntuación."
             ? { "data-campo-error": "" }
             : {})}
@@ -145,6 +147,8 @@ export function ResenaSection({
         />
         <fieldset
           className="space-y-2"
+          data-campo=""
+          {...(!metrica ? { "data-campo-vacio": "" } : {})}
           {...(error === "Responde la pregunta sobre el bulto."
             ? { "data-campo-error": "" }
             : {})}
