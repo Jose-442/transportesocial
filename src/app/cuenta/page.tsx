@@ -9,6 +9,7 @@ import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
 import { CuentaMisViajes } from "@/components/cuenta/CuentaMisViajes";
+import { CuentaPagos } from "@/components/cuenta/CuentaPagos";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
 import { EditarSobreTiForm } from "@/components/cuenta/EditarSobreTiForm";
 import { EditarIdentidadForm } from "@/components/cuenta/EditarIdentidadForm";
@@ -194,6 +195,8 @@ export default async function CuentaPage({
       </Card>
 
       <CuentaMisViajes userId={user.id} />
+
+      <CuentaPagos userId={user.id} />
 
       <Card className="space-y-3">
         <h2 className="font-semibold text-zinc-900">Preferencias de conductor</h2>
