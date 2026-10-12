@@ -11,9 +11,10 @@
   --font-sans: var(--font-geist-sans);
 }
 
+[data-campo],
 [data-campo-error] {
-  scroll-margin-top: 6rem;
-  scroll-margin-bottom: 6rem;
+  scroll-margin-top: 5rem;
+  scroll-margin-bottom: 13rem;
 }
 
 body {

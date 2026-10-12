@@ -1,238 +1,103 @@
 "use client";
 
 import { useEffect } from "react";
+import { scrollAlCampo, scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 
-type Control = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-
-function esControl(el: EventTarget | null): el is Control {
+function escribiendo(campo: HTMLElement): boolean {
+  const activo = document.activeElement;
+  if (!(activo instanceof HTMLElement) || !campo.contains(activo)) return false;
+  if (activo instanceof HTMLTextAreaElement) return true;
+  if (!(activo instanceof HTMLInputElement)) return false;
+  if (activo.getAttribute("role") === "combobox") return false;
+  const tipo = activo.type;
   return (
-    el instanceof HTMLInputElement ||
-    el instanceof HTMLSelectElement ||
-    el instanceof HTMLTextAreaElement
+    tipo === "text" ||
+    tipo === "number" ||
+    tipo === "tel" ||
+    tipo === "email" ||
+    tipo === "password" ||
+    tipo === "search" ||
+    tipo === ""
   );
-}
-
-function visible(el: HTMLElement): boolean {
-  if (el instanceof HTMLInputElement && (el.type === "hidden" || el.type === "submit" || el.type === "button" || el.type === "reset")) {
-    return false;
-  }
-  return el.getClientRects().length > 0 && !el.hasAttribute("disabled");
-}
-
-function vacio(el: Control, form: HTMLFormElement): boolean {
-  if (el instanceof HTMLInputElement && el.type === "radio") {
-    const nombre = CSS.escape(el.name);
-    return form.querySelector(`input[type="radio"][name="${nombre}"]:checked`) == null;
-  }
-  if (el instanceof HTMLInputElement && el.type === "checkbox") return !el.checked;
-  if (el instanceof HTMLInputElement && el.type === "file") {
-    return el.files == null || el.files.length === 0;
-  }
-  return el.value.trim() === "";
-}
-
-function camposDelFormulario(form: HTMLFormElement): Control[] {
-  const vistos = new Set<string>();
-  const campos: Control[] = [];
-  for (const el of form.querySelectorAll("input, select, textarea")) {
-    if (!esControl(el) || !visible(el)) continue;
-    if (el instanceof HTMLInputElement && el.type === "radio") {
-      if (!el.name || vistos.has(el.name)) continue;
-      vistos.add(el.name);
-    }
-    campos.push(el);
-  }
-  return campos;
-}
-
-function indiceDe(campos: Control[], actual: Control): number {
-  if (actual instanceof HTMLInputElement && actual.type === "radio" && actual.name) {
-    return campos.findIndex(
-      (campo) =>
-        campo instanceof HTMLInputElement &&
-        campo.type === "radio" &&
-        campo.name === actual.name
-    );
-  }
-  return campos.indexOf(actual);
-}
-
-function siguienteVacio(actual: Control): HTMLElement | null {
-  const form = actual.form;
-  if (!form || vacio(actual, form)) return null;
-  const campos = camposDelFormulario(form);
-  const desde = indiceDe(campos, actual);
-  if (desde < 0) return null;
-  for (const campo of campos.slice(desde + 1)) {
-    if (vacio(campo, form)) return campo;
-  }
-  return null;
-}
-
-function siguienteMarcado(desde: HTMLElement): HTMLElement | null {
-  const form = desde.closest("form");
-  if (!form) return null;
-  const actual = desde.closest("[data-campo]");
-  if (!(actual instanceof HTMLElement) || actual.hasAttribute("data-campo-vacio")) {
-    return null;
-  }
-  const campos = [...form.querySelectorAll("[data-campo]")];
-  const indice = campos.indexOf(actual);
-  if (indice < 0) return null;
-  const siguiente = campos
-    .slice(indice + 1)
-    .find((campo) => campo.hasAttribute("data-campo-vacio"));
-  return siguiente instanceof HTMLElement ? siguiente : null;
-}
-
-function destinoVisible(el: HTMLElement): HTMLElement {
-  if (
-    el instanceof HTMLInputElement &&
-    (el.type === "hidden" || el.type === "radio" || el.type === "checkbox")
-  ) {
-    const caja = el.closest("fieldset, label");
-    if (caja instanceof HTMLElement) return caja;
-  }
-  return el;
-}
-
-function yaSeVe(el: HTMLElement): boolean {
-  const caja = el.getBoundingClientRect();
-  const arriba = 72;
-  const abajo = 170;
-  return caja.top >= arriba && caja.bottom <= window.innerHeight - abajo;
-}
-
-function llevar(el: HTMLElement) {
-  const destino = destinoVisible(el);
-  if (yaSeVe(destino)) return;
-  destino.scrollIntoView({ block: "center", behavior: "smooth" });
 }
 
 export function ScrollCampoVacio() {
   useEffect(() => {
-    let ocupado = false;
-    let espera = 0;
+    function alRellenar(campo: HTMLElement) {
+      if (escribiendo(campo)) return;
+      const form = campo.closest("form");
+      scrollAlSiguienteVacio(form ?? document);
+    }
 
-    function reservar() {
-      ocupado = true;
-      window.setTimeout(() => {
-        ocupado = false;
-      }, 700);
+    function alError(el: HTMLElement) {
+      scrollAlCampo(el);
+    }
+
+    function alMutacion(cambios: MutationRecord[]) {
+      const rellenos: HTMLElement[] = [];
+      for (const cambio of cambios) {
+        if (
+          cambio.type === "attributes" &&
+          cambio.attributeName === "data-campo-vacio" &&
+          cambio.target instanceof HTMLElement &&
+          cambio.oldValue !== null &&
+          !cambio.target.hasAttribute("data-campo-vacio")
+        ) {
+          rellenos.push(cambio.target);
+        }
+        if (
+          cambio.type === "attributes" &&
+          cambio.attributeName === "data-campo-error" &&
+          cambio.target instanceof HTMLElement &&
+          cambio.target.hasAttribute("data-campo-error")
+        ) {
+          alError(cambio.target);
+        }
+        if (cambio.type === "childList") {
+          for (const nodo of cambio.addedNodes) {
+            if (!(nodo instanceof HTMLElement)) continue;
+            const marcado = nodo.hasAttribute("data-campo-error")
+              ? nodo
+              : nodo.querySelector("[data-campo-error]");
+            if (marcado instanceof HTMLElement) alError(marcado);
+          }
+        }
+      }
+      const ultimo = rellenos[rellenos.length - 1];
+      if (ultimo) alRellenar(ultimo);
     }
 
     function alInvalid(event: Event) {
       const el = event.target;
-      if (!(el instanceof HTMLElement) || ocupado) return;
-      reservar();
-      llevar(el);
-    }
-
-    function alCambio() {
-      window.clearTimeout(espera);
-      espera = window.setTimeout(() => {
-        if (ocupado) return;
-        const marcado = document.querySelector("[data-campo-error]");
-        if (!(marcado instanceof HTMLElement)) return;
-        reservar();
-        llevar(marcado);
-      }, 40);
-    }
-
-    function alMutacion(cambios: MutationRecord[]) {
-      const aparece = cambios.some((cambio) => {
-        if (
-          cambio.type === "attributes" &&
-          cambio.target instanceof HTMLElement &&
-          cambio.target.hasAttribute("data-campo-error")
-        ) {
-          return true;
-        }
-        if (cambio.type !== "childList") return false;
-        return [...cambio.addedNodes].some(
-          (nodo) =>
-            nodo instanceof HTMLElement &&
-            (nodo.hasAttribute("data-campo-error") ||
-              nodo.querySelector("[data-campo-error]") != null)
-        );
-      });
-      if (aparece) alCambio();
-    }
-
-    function alSiguiente(actual: HTMLElement) {
-      if (ocupado) return;
-      const marcado = siguienteMarcado(actual);
-      if (marcado) {
-        reservar();
-        llevar(marcado);
-        return;
-      }
-      if (!esControl(actual)) return;
-      const siguiente = siguienteVacio(actual);
-      if (!siguiente) return;
-      reservar();
-      llevar(siguiente);
+      if (el instanceof HTMLElement) scrollAlCampo(el);
     }
 
     function alSalir(event: FocusEvent) {
       const el = event.target;
-      if (!esControl(el)) return;
-      window.setTimeout(() => {
-        if (ocupado) return;
-        const activo = document.activeElement;
-        if (esControl(activo) && activo !== el) {
-          llevar(activo);
-          return;
-        }
-        alSiguiente(el);
-      }, 30);
-    }
-
-    function alElegir(event: Event) {
-      const el = event.target;
-      if (!esControl(el)) return;
-      const inmediato =
-        el instanceof HTMLSelectElement ||
-        (el instanceof HTMLInputElement &&
-          (el.type === "radio" || el.type === "checkbox" || el.type === "file"));
-      if (!inmediato) return;
-      window.setTimeout(() => alSiguiente(el), 80);
-    }
-
-    function alClick(event: MouseEvent) {
-      const el = event.target;
       if (!(el instanceof HTMLElement)) return;
-      const boton = el.closest("button");
-      if (!(boton instanceof HTMLButtonElement) || boton.type === "submit") return;
-      const campo = boton.closest("[data-campo]");
-      if (!(campo instanceof HTMLElement) || !campo.hasAttribute("data-campo-vacio")) {
-        return;
-      }
+      const campo = el.closest("[data-campo]");
+      if (!(campo instanceof HTMLElement)) return;
       window.setTimeout(() => {
         if (campo.hasAttribute("data-campo-vacio")) return;
-        alSiguiente(boton);
-      }, 80);
+        alRellenar(campo);
+      }, 160);
     }
 
     document.addEventListener("invalid", alInvalid, true);
     document.addEventListener("focusout", alSalir, true);
-    document.addEventListener("change", alElegir, true);
-    document.addEventListener("click", alClick, true);
     const observador = new MutationObserver(alMutacion);
     observador.observe(document.body, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["data-campo-error"],
+      attributeOldValue: true,
+      attributeFilter: ["data-campo-vacio", "data-campo-error"],
     });
 
     return () => {
       document.removeEventListener("invalid", alInvalid, true);
       document.removeEventListener("focusout", alSalir, true);
-      document.removeEventListener("change", alElegir, true);
-      document.removeEventListener("click", alClick, true);
       observador.disconnect();
-      window.clearTimeout(espera);
     };
   }, []);
 

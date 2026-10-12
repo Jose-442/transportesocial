@@ -12,7 +12,7 @@ export function Main({ children }: { children: ReactNode }) {
         "mx-auto w-full flex-1",
         isHome
           ? "max-w-none bg-emerald-100 px-0 py-0 pb-28 md:pb-36"
-          : "min-h-[calc(100dvh-7rem)] max-w-lg px-4 py-4 pb-28 md:max-w-2xl md:pb-36 lg:max-w-4xl",
+          : "min-h-[calc(100dvh-7rem)] max-w-lg px-4 py-4 pb-36 md:max-w-2xl md:pb-52 lg:max-w-4xl",
       ].join(" ")}
     >
       {children}

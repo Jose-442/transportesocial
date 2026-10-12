@@ -18,6 +18,7 @@ import {
   telefonoEsValido,
 } from "@/lib/identidad";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
+import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
@@ -103,6 +104,7 @@ export function NuevaRutaForm({
   const [ready, setReady] = useState(false);
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
+  const formRef = useRef<HTMLFormElement>(null);
   const [faltaIdentidad, setFaltaIdentidad] = useState(mostrarAvisoIdentidad);
   const {
     form: identidad,
@@ -147,6 +149,22 @@ export function NuevaRutaForm({
     if (!ready) return;
     saveOwnedDraft(DRAFT_KEYS.nuevaRuta, form, uidRef.current);
   }, [ready, form]);
+
+  const avance = [
+    form.origen,
+    form.destino,
+    form.fecha_salida,
+    form.hora_salida,
+    form.tipo_oferta,
+    form.espacio_tamano,
+    form.plazas_acompanante,
+    form.acepta_mascotas,
+  ].join("\n");
+
+  useEffect(() => {
+    if (!ready) return;
+    scrollAlSiguienteVacio(formRef.current);
+  }, [ready, avance]);
 
   const llevaBulto = tipoOfertaLlevaBulto(form.tipo_oferta);
   const llevaPasajeros = tipoOfertaLlevaPasajeros(form.tipo_oferta);
@@ -437,7 +455,7 @@ export function NuevaRutaForm({
   );
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">
         Conductor, publica tu ruta
       </h1>
@@ -616,6 +634,8 @@ export function NuevaRutaForm({
 
       <fieldset
         className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
+        data-campo=""
+        {...(!form.acepta_mascotas ? { "data-campo-vacio": "" } : {})}
         {...(fieldErrors.acepta_mascotas ? { "data-campo-error": "" } : {})}
       >
         <legend className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
