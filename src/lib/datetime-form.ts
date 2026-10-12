@@ -73,6 +73,24 @@ export function combineDateAndTime(date: string, time: string): string | null {
   return parsed.toISOString();
 }
 
+/** Hora HH:mm en España, para que el formulario coincida con el reloj del viaje. */
+export function horaEnMadrid(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  const partes = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Madrid",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(d);
+  const hour = partes.find((p) => p.type === "hour")?.value ?? "";
+  const minute = snapMinuteToQuarter(
+    partes.find((p) => p.type === "minute")?.value ?? ""
+  );
+  if (!hour || !minute) return "";
+  return `${hour.padStart(2, "0")}:${minute}`;
+}
+
 /** Extrae hora HH:mm de un valor datetime-local o ISO guardado en borradores antiguos. */
 export function extractTimeFromDatetime(value: string): string {
   if (!value) return "";

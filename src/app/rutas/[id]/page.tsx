@@ -13,7 +13,14 @@ import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaj
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
-import { formatEspacioDisponibleListado, rutaOfreceBulto } from "@/lib/espacio-opciones";
+import { EditarViajePublicado } from "@/components/rutas/EditarViajePublicado";
+import { extractDateFromDatetime, horaEnMadrid } from "@/lib/datetime-form";
+import {
+  ESPACIO_OPCIONES,
+  formatEspacioDisponibleListado,
+  rutaOfreceBulto,
+} from "@/lib/espacio-opciones";
+import type { TipoOfertaRuta } from "@/lib/ruta-oferta";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -30,8 +37,30 @@ import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
+import type { VehiculoEdicion } from "@/components/rutas/EditarViajePublicado";
 
 export const dynamic = "force-dynamic";
+
+function partirEspacioGuardado(espacio: string): {
+  tamano: string;
+  detalle: string;
+} {
+  const valor = espacio.trim();
+  for (const opcion of ESPACIO_OPCIONES) {
+    if (valor === opcion) return { tamano: opcion, detalle: "" };
+    const prefijo = `${opcion}.`;
+    if (valor.startsWith(prefijo)) {
+      return { tamano: opcion, detalle: valor.slice(prefijo.length).trim() };
+    }
+  }
+  return { tamano: "", detalle: "" };
+}
+
+function eurosCampo(valor: number | string | null | undefined): string {
+  const n = Number(valor);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return String(n);
+}
 
 export async function generateMetadata({
   params,
@@ -200,6 +229,74 @@ export default async function RutaDetallePage({
     }
   );
 
+  const ofreceBultoAnuncio = rutaOfreceBulto(ruta.espacio_disponible);
+  const ofertaAsiento = ofertas.find((o) => o.tipo === "asiento");
+  const tipoOfertaAnuncio: TipoOfertaRuta =
+    ofreceBultoAnuncio && asientoOfrecidas > 0
+      ? "bulto_y_pasajeros"
+      : ofreceBultoAnuncio
+        ? "solo_bulto"
+        : asientoOfrecidas > 0
+          ? "solo_pasajeros"
+          : "solo_bulto";
+  const espacioPartido = partirEspacioGuardado(ruta.espacio_disponible);
+
+  let edicionViaje: {
+    fecha: string;
+    hora: string;
+    tipoOferta: TipoOfertaRuta;
+    espacio: string;
+    detalleEspacio: string;
+    precioNeto: string;
+    plazas: string;
+    precioNetoPlaza: string;
+    mascotas: "" | "si" | "no";
+    vehiculo: VehiculoEdicion | null;
+  } | null = null;
+
+  if (esPropio && ruta.estado === "activa" && user) {
+    const { count } = await supabase
+      .from("reservas")
+      .select("id", { count: "exact", head: true })
+      .eq("ruta_conductor_id", id)
+      .in("estado", [...ESTADOS_RESERVA_OCUPAN]);
+    if ((count ?? 0) === 0) {
+      const { data: perfilVehiculo } = await supabase
+        .from("profiles")
+        .select(
+          "vehiculo_tipo, vehiculo_marca, vehiculo_modelo, vehiculo_anio, distintivo_ambiental, vehiculo_matricula"
+        )
+        .eq("id", user.id)
+        .maybeSingle();
+      edicionViaje = {
+        fecha: extractDateFromDatetime(String(ruta.fecha_salida)),
+        hora: horaEnMadrid(String(ruta.fecha_llegada_prevista)),
+        tipoOferta: tipoOfertaAnuncio,
+        espacio: espacioPartido.tamano,
+        detalleEspacio: espacioPartido.detalle,
+        precioNeto: ofreceBultoAnuncio ? eurosCampo(ruta.precio_neto) : "",
+        plazas: asientoOfrecidas > 0 ? String(asientoOfrecidas) : "",
+        precioNetoPlaza: eurosCampo(ofertaAsiento?.precio_neto),
+        mascotas:
+          ruta.acepta_mascotas === true
+            ? "si"
+            : ruta.acepta_mascotas === false
+              ? "no"
+              : "",
+        vehiculo: perfilVehiculo
+          ? {
+              vehiculo_tipo: perfilVehiculo.vehiculo_tipo,
+              vehiculo_marca: perfilVehiculo.vehiculo_marca,
+              vehiculo_modelo: perfilVehiculo.vehiculo_modelo,
+              vehiculo_anio: perfilVehiculo.vehiculo_anio,
+              distintivo_ambiental: perfilVehiculo.distintivo_ambiental,
+              vehiculo_matricula: perfilVehiculo.vehiculo_matricula,
+            }
+          : null,
+      };
+    }
+  }
+
   const badgeLabel =
     ruta.estado === "activa" ||
     (ruta.estado === "reservada" && tieneCapacidadExtra)
@@ -252,7 +349,7 @@ export default async function RutaDetallePage({
       <Card className="space-y-2 p-3 md:space-y-4 md:p-4">
         <div className="flex items-start justify-between gap-2 md:gap-3">
           <p className="text-sm font-semibold text-zinc-800">
-            Detalle del trayecto
+            Detalle del viaje
           </p>
           <span
             className={[
@@ -387,6 +484,23 @@ export default async function RutaDetallePage({
                 : "No"}
             </p>
           </div>
+        )}
+        {edicionViaje && (
+          <EditarViajePublicado
+            rutaId={ruta.id}
+            origen={origen}
+            destino={destino}
+            fecha={edicionViaje.fecha}
+            hora={edicionViaje.hora}
+            tipoOferta={edicionViaje.tipoOferta}
+            espacio={edicionViaje.espacio}
+            detalleEspacio={edicionViaje.detalleEspacio}
+            precioNeto={edicionViaje.precioNeto}
+            plazas={edicionViaje.plazas}
+            precioNetoPlaza={edicionViaje.precioNetoPlaza}
+            mascotas={edicionViaje.mascotas}
+            vehiculo={edicionViaje.vehiculo}
+          />
         )}
       </Card>
 

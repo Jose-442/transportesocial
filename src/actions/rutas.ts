@@ -266,3 +266,232 @@ export async function cancelarRutaPublicacion(
   revalidatePath(`/rutas/${rutaId}`);
   return { ok: true };
 }
+
+function mismosCentimos(a: number, b: number): boolean {
+  return Math.round(a * 100) === Math.round(b * 100);
+}
+
+export async function actualizarRutaPublicada(
+  rutaId: string,
+  formData: FormData
+): Promise<{ error?: string; ok?: boolean }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado." };
+
+  const { data: ruta } = await supabase
+    .from("rutas_conductores")
+    .select("id, user_id, estado")
+    .eq("id", rutaId)
+    .single();
+
+  if (!ruta || ruta.user_id !== user.id) {
+    return { error: "No autorizado." };
+  }
+  if (ruta.estado !== "activa") {
+    return { error: "Solo puedes cambiar anuncios activos." };
+  }
+
+  const { count } = await supabase
+    .from("reservas")
+    .select("id", { count: "exact", head: true })
+    .eq("ruta_conductor_id", rutaId)
+    .in("estado", [...RESERVA_EN_CURSO_ESTADOS]);
+
+  if ((count ?? 0) > 0) {
+    return {
+      error: "No se puede cambiar: ya hay una reserva o propuesta en curso.",
+    };
+  }
+
+  const tipoOferta = parseTipoOfertaRuta(formData.get("tipo_oferta"));
+  if (!tipoOferta) {
+    return { error: "Marca si ofreces bulto, pasajeros o las dos cosas." };
+  }
+  const conBulto = tipoOfertaLlevaBulto(tipoOferta);
+  const conPasajeros = tipoOfertaLlevaPasajeros(tipoOferta);
+
+  let espacioDisponible = ESPACIO_SIN_BULTO;
+  let precioNeto = 0;
+  let precioPublicado = 0;
+  if (conBulto) {
+    precioNeto = parseFloat(String(formData.get("precio_neto")));
+    if (!precioNeto || precioNeto <= 0) {
+      return { error: "Indica un precio neto válido." };
+    }
+    precioPublicado = calcPrecioConComision(precioNeto);
+
+    const espacioTamano = String(formData.get("espacio_tamano")).trim();
+    if (
+      !ESPACIO_OPCIONES.includes(espacioTamano as (typeof ESPACIO_OPCIONES)[number])
+    ) {
+      return { error: "Selecciona el espacio del que dispones." };
+    }
+    espacioDisponible = combinarEspacio(
+      espacioTamano,
+      String(formData.get("espacio_detalle") ?? "")
+    );
+  }
+
+  const plazasRaw = String(formData.get("plazas_acompanante") ?? "").trim();
+  const plazasAcompanante = parseInt(plazasRaw, 10);
+  if (conPasajeros) {
+    if (
+      !Number.isInteger(plazasAcompanante) ||
+      plazasAcompanante < 1 ||
+      plazasAcompanante > MAX_ASIENTOS_POR_VIAJE
+    ) {
+      return { error: "Marca cuántas plazas ofreces." };
+    }
+  }
+
+  let precioNetoPlaza = 0;
+  let precioPublicadoPlaza = 0;
+  if (conPasajeros) {
+    precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
+    if (!precioNetoPlaza || precioNetoPlaza <= 0) {
+      return { error: "Indica un precio neto válido por plaza." };
+    }
+    precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
+  }
+
+  if (!conBulto && conPasajeros) {
+    precioNeto = precioNetoPlaza;
+    precioPublicado = precioPublicadoPlaza;
+  }
+
+  const mascotasRaw = String(formData.get("acepta_mascotas") ?? "").trim();
+  if (mascotasRaw !== "si" && mascotasRaw !== "no") {
+    return { error: "Indica si aceptas mascotas en este viaje." };
+  }
+  const aceptaMascotas = mascotasRaw === "si";
+
+  const origenInput = formatCiudad(String(formData.get("origen")));
+  const destinoInput = formatCiudad(String(formData.get("destino")));
+  const origenResuelto = resolverMunicipioFormulario(origenInput, "salida");
+  if (origenResuelto.error) return { error: origenResuelto.error };
+  const destinoResuelto = resolverMunicipioFormulario(destinoInput, "destino", {
+    incluirFrontera: true,
+  });
+  if (destinoResuelto.error) return { error: destinoResuelto.error };
+
+  const origen = etiquetaMunicipio(origenResuelto.municipio!);
+  const destino = etiquetaMunicipio(destinoResuelto.municipio!);
+
+  const fechaSalida = String(formData.get("fecha_salida") ?? "").trim();
+  const llegada = String(formData.get("fecha_llegada_prevista") ?? "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaSalida)) {
+    return { error: "Indica el día de salida." };
+  }
+  const instante = new Date(llegada);
+  if (Number.isNaN(instante.getTime())) {
+    return { error: "Indica la hora de salida." };
+  }
+  if (instante.getTime() <= Date.now()) {
+    return { error: "Elige una fecha y hora que aún no hayan pasado." };
+  }
+
+  const { data: asientos } = await supabase
+    .from("ofertas_capacidad")
+    .select("id, plazas_totales, plazas_ocupadas, precio_neto")
+    .eq("ruta_conductor_id", rutaId)
+    .eq("tipo", "asiento");
+
+  const filas = asientos ?? [];
+  const hayQueTocarPlazas = !conPasajeros
+    ? filas.length > 0
+    : filas.length !== 1 ||
+      Number(filas[0].plazas_totales) !== plazasAcompanante ||
+      !mismosCentimos(Number(filas[0].precio_neto), precioNetoPlaza);
+
+  if (hayQueTocarPlazas && filas.some((fila) => Number(fila.plazas_ocupadas) > 0)) {
+    return {
+      error: "No se puede cambiar: ya hay una reserva o propuesta en curso.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("rutas_conductores")
+    .update({
+      origen,
+      destino,
+      ...columnasCoordenadas(origen, destino),
+      fecha_salida: fechaSalida,
+      fecha_llegada_prevista: llegada,
+      espacio_disponible: espacioDisponible,
+      precio_neto: precioNeto,
+      precio_publicado: precioPublicado,
+      acepta_mascotas: aceptaMascotas,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", rutaId)
+    .eq("user_id", user.id)
+    .eq("estado", "activa");
+
+  if (error) return { error: supabaseErrorMessage(error) };
+
+  if (hayQueTocarPlazas) {
+    const avisoPlazas =
+      "El viaje se ha guardado. Las plazas de este viaje no se han podido cambiar.";
+
+    if (!conPasajeros || filas.length !== 1) {
+      if (filas.length > 0) {
+        const { error: borrarError } = await supabase
+          .from("ofertas_capacidad")
+          .delete()
+          .eq("ruta_conductor_id", rutaId)
+          .eq("tipo", "asiento");
+        if (borrarError) {
+          return {
+            error: /permission denied/i.test(borrarError.message)
+              ? avisoPlazas
+              : supabaseErrorMessage(borrarError),
+          };
+        }
+      }
+      if (conPasajeros) {
+        const { error: altaError } = await supabase.from("ofertas_capacidad").insert({
+          ruta_conductor_id: rutaId,
+          tipo: "asiento",
+          plazas_totales: plazasAcompanante,
+          plazas_ocupadas: 0,
+          precio_neto: precioNetoPlaza,
+          precio_publicado: precioPublicadoPlaza,
+          estado: "disponible",
+        });
+        if (altaError) {
+          return {
+            error: /permission denied/i.test(altaError.message)
+              ? avisoPlazas
+              : supabaseErrorMessage(altaError),
+          };
+        }
+      }
+    } else {
+      const { error: ofertaError } = await supabase
+        .from("ofertas_capacidad")
+        .update({
+          plazas_totales: plazasAcompanante,
+          precio_neto: precioNetoPlaza,
+          precio_publicado: precioPublicadoPlaza,
+          estado: "disponible",
+        })
+        .eq("id", filas[0].id);
+      if (ofertaError) {
+        return {
+          error: /permission denied/i.test(ofertaError.message)
+            ? avisoPlazas
+            : supabaseErrorMessage(ofertaError),
+        };
+      }
+    }
+  }
+
+  revalidatePath("/cuenta");
+  revalidatePath("/rutas");
+  revalidatePath(`/rutas/${rutaId}`);
+  revalidatePath(`/perfil/${user.id}`);
+  return { ok: true };
+}
