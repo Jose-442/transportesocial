@@ -780,7 +780,7 @@ export function NuevaRutaForm({
           </p>
         </div>
       )}
-      {!botonArriba && botonPublicar}
+      {!botonArriba && <div data-scroll-fin="">{botonPublicar}</div>}
       </Card>
     </form>
   );

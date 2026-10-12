@@ -83,4 +83,12 @@ export function scrollAlSiguienteVacio(
     scrollAlCampo(vacio);
     return;
   }
+  const form =
+    raiz instanceof HTMLFormElement
+      ? raiz
+      : raiz instanceof Element
+        ? raiz.closest("form")
+        : null;
+  const fin = form?.querySelector<HTMLElement>("[data-scroll-fin]");
+  if (fin && fin.getClientRects().length > 0) scrollAlCampo(fin);
 }
