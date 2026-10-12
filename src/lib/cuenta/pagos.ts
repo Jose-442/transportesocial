@@ -36,6 +36,16 @@ export type FilaPago = PrecioCancelacion & {
   created_at: string;
 };
 
+const MOTIVO_RECHAZO_CONDUCTOR = "Rechazada por el conductor.";
+
+function conductorDevolvioTodo(filas: FilaPago[]): boolean {
+  return filas.some(
+    (fila) =>
+      fila.motivo_cancelacion === MOTIVO_CANCELACION_CONDUCTOR ||
+      fila.motivo_cancelacion === MOTIVO_RECHAZO_CONDUCTOR
+  );
+}
+
 export function importeDevuelto(
   filas: FilaPago[],
   txs: Pick<TxCobro, "monto" | "estado_escrow">[]
@@ -49,15 +59,14 @@ export function importeDevuelto(
 
   const principal = filas.find((fila) => fila.cancelada_en) ?? filas[0];
   const todasCanceladas = filas.every((fila) => fila.estado === "cancelado");
+  if (todasCanceladas && conductorDevolvioTodo(filas)) {
+    return centimosAEuros(pagadoCents);
+  }
   if (!todasCanceladas || !principal.cancelada_en) {
     const parcial = txs
       .filter((tx) => tx.estado_escrow === "reembolsado")
       .reduce((sum, tx) => sum + eurosACentimos(tx.monto), 0);
     return parcial > 0 ? centimosAEuros(parcial) : null;
-  }
-
-  if (principal.motivo_cancelacion === MOTIVO_CANCELACION_CONDUCTOR) {
-    return centimosAEuros(pagadoCents);
   }
 
   if (principal.motivo_cancelacion === MOTIVO_CANCELACION_CLIENTE) {

@@ -47,6 +47,33 @@ describe("importeDevuelto", () => {
     ).toBe(47.2);
   });
 
+  it("si el conductor rechaza el viaje, se devuelve todo lo pagado", () => {
+    expect(
+      importeDevuelto(
+        [
+          fila({
+            id: "bulto",
+            estado: "cancelado",
+            motivo_cancelacion: "Rechazada por el conductor.",
+            cancelada_en: "2026-10-12T10:54:00.000Z",
+          }),
+          fila({
+            id: "plaza",
+            tipo: "capacidad_extra",
+            estado: "cancelado",
+            motivo_cancelacion: "Rechazada por el conductor.",
+            cancelada_en: "2026-10-12T10:54:00.000Z",
+            bulto_descripcion: null,
+          }),
+        ],
+        [
+          { monto: 47.2, estado_escrow: "retenido" },
+          { monto: 47.2, estado_escrow: "retenido" },
+        ]
+      )
+    ).toBe(94.4);
+  });
+
   it("si quien reservó cancela con tiempo, devuelve el viaje y no los gastos", () => {
     expect(
       importeDevuelto(
