@@ -38,6 +38,8 @@ export type PublicacionViajeItem = {
   tipo: "ruta" | "bulto";
   titulo: string;
   fecha: string;
+  /** Momento de salida, con hora. El día de la tarjeta sigue siendo `fecha`. */
+  salidaEn?: string | null;
   estado: "publicado" | "cancelado";
   badge?: string;
   lineas?: string[];
@@ -129,8 +131,19 @@ function OfertaCard({ item }: { item: OfertaViajeItem }) {
   );
 }
 
+function horaEnTarjeta(salidaEn: string | null | undefined): string {
+  if (!salidaEn || /^\d{4}-\d{2}-\d{2}$/.test(salidaEn.trim())) return "";
+  const d = new Date(salidaEn);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
   const href = item.tipo === "ruta" ? `/rutas/${item.id}` : `/bultos/${item.id}`;
+  const hora = horaEnTarjeta(item.salidaEn);
   const tienePrecios =
     (item.precioBulto != null && item.precioBulto > 0) ||
     (item.precioPlaza != null && item.precioPlaza > 0);
@@ -142,6 +155,7 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
           <p className="text-xs text-zinc-500">
             {item.tipo === "ruta" ? "Como conductor" : "Como pasajero"} ·{" "}
             {new Date(item.fecha).toLocaleDateString("es-ES")}
+            {hora ? ` · ${hora}` : ""}
           </p>
         </div>
         <Badge tone={item.estado === "cancelado" ? "zinc" : "green"}>

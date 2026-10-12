@@ -153,6 +153,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       tipo: "ruta",
       titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.fecha_salida || ruta.created_at,
+      salidaEn: ruta.fecha_llegada_prevista || null,
       estado: "publicado",
       badge: badgeOfertaRuta(original),
       lineas: lineasOfertaRuta(original),
@@ -186,6 +187,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       tipo: "bulto",
       titulo: `${formatCiudad(bulto.origen)} → ${formatCiudad(bulto.destino)}`,
       fecha: bulto.fecha_limite || bulto.created_at,
+      salidaEn: bulto.fecha_limite || null,
       estado: "publicado",
     };
     if (bulto.fecha_limite && salidaYaPasada(bulto.fecha_limite)) {
