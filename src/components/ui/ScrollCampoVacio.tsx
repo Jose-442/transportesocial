@@ -72,6 +72,23 @@ export function ScrollCampoVacio() {
       if (el instanceof HTMLElement) scrollAlCampo(el);
     }
 
+    let esperaNumero = 0;
+
+    function alTecleo(event: Event) {
+      const el = event.target;
+      if (!(el instanceof HTMLInputElement) || el.type !== "number") return;
+      const campo = el.closest("[data-campo]");
+      if (!(campo instanceof HTMLElement)) return;
+      window.clearTimeout(esperaNumero);
+      esperaNumero = window.setTimeout(() => {
+        const importe = parseFloat(el.value);
+        if (!Number.isFinite(importe) || importe <= 0) return;
+        if (campo.hasAttribute("data-campo-vacio")) return;
+        const form = campo.closest("form");
+        scrollAlSiguienteVacio(form ?? document, campo);
+      }, 450);
+    }
+
     function alSalir(event: FocusEvent) {
       const el = event.target;
       if (!(el instanceof HTMLElement)) return;
@@ -84,6 +101,7 @@ export function ScrollCampoVacio() {
     }
 
     document.addEventListener("invalid", alInvalid, true);
+    document.addEventListener("input", alTecleo, true);
     document.addEventListener("focusout", alSalir, true);
     const observador = new MutationObserver(alMutacion);
     observador.observe(document.body, {
@@ -96,7 +114,9 @@ export function ScrollCampoVacio() {
 
     return () => {
       document.removeEventListener("invalid", alInvalid, true);
+      document.removeEventListener("input", alTecleo, true);
       document.removeEventListener("focusout", alSalir, true);
+      window.clearTimeout(esperaNumero);
       observador.disconnect();
     };
   }, []);

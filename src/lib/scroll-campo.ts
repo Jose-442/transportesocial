@@ -63,9 +63,22 @@ export function scrollAlCampo(el: HTMLElement) {
   }, 60);
 }
 
-export function scrollAlSiguienteVacio(raiz: ParentNode | null) {
+export function scrollAlSiguienteVacio(
+  raiz: ParentNode | null,
+  despuesDe?: HTMLElement | null
+) {
   if (!raiz) return;
-  for (const vacio of raiz.querySelectorAll<HTMLElement>("[data-campo-vacio]")) {
+  let vacios = [...raiz.querySelectorAll<HTMLElement>("[data-campo-vacio]")];
+  if (despuesDe) {
+    const desde = despuesDe.closest("[data-campo]") ?? despuesDe;
+    const campos = [...raiz.querySelectorAll<HTMLElement>("[data-campo]")];
+    const indice = desde instanceof HTMLElement ? campos.indexOf(desde) : -1;
+    if (indice >= 0) {
+      const posteriores = new Set(campos.slice(indice + 1));
+      vacios = vacios.filter((vacio) => posteriores.has(vacio));
+    }
+  }
+  for (const vacio of vacios) {
     if (vacio.getClientRects().length === 0) continue;
     scrollAlCampo(vacio);
     return;

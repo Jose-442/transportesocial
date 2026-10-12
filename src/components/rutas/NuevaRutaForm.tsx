@@ -168,6 +168,32 @@ export function NuevaRutaForm({
 
   const llevaBulto = tipoOfertaLlevaBulto(form.tipo_oferta);
   const llevaPasajeros = tipoOfertaLlevaPasajeros(form.tipo_oferta);
+
+  useEffect(() => {
+    if (!ready) return;
+    const neto = parseFloat(form.precio_neto);
+    const plaza = parseFloat(form.precio_neto_plaza);
+    const precioBulto = llevaBulto && Number.isFinite(neto) && neto > 0;
+    const precioPlaza = llevaPasajeros && Number.isFinite(plaza) && plaza > 0;
+    if (!precioBulto && !precioPlaza) return;
+    const espera = window.setTimeout(() => {
+      const formEl = formRef.current;
+      if (!formEl) return;
+      const nombre =
+        precioPlaza && !precioBulto ? "precio_neto_plaza" : "precio_neto";
+      scrollAlSiguienteVacio(
+        formEl,
+        formEl.querySelector<HTMLElement>(`[name="${nombre}"]`)
+      );
+    }, 450);
+    return () => window.clearTimeout(espera);
+  }, [
+    ready,
+    llevaBulto,
+    llevaPasajeros,
+    form.precio_neto,
+    form.precio_neto_plaza,
+  ]);
   const neto = parseFloat(form.precio_neto) || 0;
   const publicado = neto > 0 ? calcPrecioConComision(neto) : 0;
   const plazas = parseInt(form.plazas_acompanante, 10);
