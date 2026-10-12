@@ -10,6 +10,7 @@ import {
   puedeDescargarJustificante,
 } from "@/lib/justificante-pago";
 import { desglosePago } from "@/lib/precios/desglose-pago";
+import { importeDevuelto, type FilaPago } from "@/lib/cuenta/pagos";
 import type { Reserva } from "@/types/database";
 
 export async function GET(
@@ -95,14 +96,16 @@ export async function GET(
 
   let origen = "";
   let destino = "";
+  let fechaSalida = reserva.fecha_llegada_prevista;
   if (reserva.ruta_conductor_id) {
     const { data: ruta } = await supabase
       .from("rutas_conductores")
-      .select("origen, destino")
+      .select("origen, destino, fecha_salida")
       .eq("id", reserva.ruta_conductor_id)
       .maybeSingle();
     origen = formatCiudad(ruta?.origen ?? "");
     destino = formatCiudad(ruta?.destino ?? "");
+    if (ruta?.fecha_salida) fechaSalida = ruta.fecha_salida;
   } else if (reserva.anuncio_bulto_id) {
     const { data: bulto } = await supabase
       .from("anuncios_bultos")
@@ -124,6 +127,40 @@ export async function GET(
   const iva = partirIvaIncluido(gastosCentimos);
   const euros = (centimos: number) =>
     formatEur(centimos / 100).replace("€", "EUR").replace(/\s+/g, " ").trim();
+
+  let devuelto: string | undefined;
+  if (relacionadas.every((item) => item.estado === "cancelado")) {
+    const { data: txs } = await supabase
+      .from("transacciones")
+      .select("monto, estado_escrow")
+      .in(
+        "reserva_id",
+        relacionadas.map((item) => item.id)
+      )
+      .eq("user_id", user.id)
+      .eq("tipo", "cobro_viaje");
+    const filas: FilaPago[] = relacionadas.map((item) => ({
+      id: item.id,
+      tipo: item.tipo,
+      estado: item.estado,
+      precio_neto: Number(item.precio_neto),
+      precio_total: Number(item.precio_total),
+      comision_plataforma: Number(item.comision_plataforma),
+      cantidad: item.cantidad,
+      bulto_descripcion: item.bulto_descripcion,
+      motivo_cancelacion: item.motivo_cancelacion,
+      cancelada_en: item.cancelada_en,
+      fechaSalida,
+      ruta_conductor_id: item.ruta_conductor_id,
+      anuncio_bulto_id: item.anuncio_bulto_id,
+      created_at: item.created_at,
+    }));
+    const devueltoEur = importeDevuelto(filas, txs ?? []);
+    if (devueltoEur != null && devueltoEur > 0) {
+      devuelto = euros(Math.round(devueltoEur * 100));
+    }
+  }
+
   const bytes = await pdfJustificante({
     referencia: reserva.id.slice(0, 8).toUpperCase(),
     cliente: perfiles[reserva.cliente_id]?.display_name?.trim() || "Usuario",
@@ -136,6 +173,7 @@ export async function GET(
     gastosGestion: euros(gastosCentimos),
     baseImponible: euros(iva.base),
     iva: euros(iva.cuota),
+    devuelto,
   });
 
   return new NextResponse(Buffer.from(bytes), {

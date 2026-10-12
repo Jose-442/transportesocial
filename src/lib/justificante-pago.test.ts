@@ -32,7 +32,27 @@ describe("justificante de pago", () => {
     expect(texto).toContain("Gastos de gestión (IVA incluido): 14,40 EUR");
     expect(texto).toContain("Base imponible: 11,90 EUR");
     expect(texto).toContain("IVA 21 %: 2,50 EUR");
+    expect(texto).toContain("Estado: Pagado a través de la plataforma.");
     expect(texto.toLowerCase()).not.toContain("factura");
+  });
+
+  it("si el viaje se canceló, dice lo devuelto", () => {
+    const texto = lineasJustificante({
+      referencia: "ABCD1234",
+      cliente: "Ana",
+      conductor: "Luis",
+      origen: "Burgos",
+      destino: "Madrid",
+      fechaHora: "lunes, 12 de octubre, 17:00",
+      importe: "94,40 EUR",
+      gastosGestion: "14,40 EUR",
+      baseImponible: "11,90 EUR",
+      iva: "2,50 EUR",
+      devuelto: "94,40 EUR",
+    }).join("\n");
+
+    expect(texto).toContain("Estado: Cancelado. Devuelto: 94,40 EUR.");
+    expect(texto).not.toContain("Estado: Pagado a través de la plataforma.");
   });
 
   it("el 21 % ya va dentro de los gastos de gestión", () => {

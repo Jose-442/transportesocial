@@ -26,6 +26,8 @@ export type DatosJustificante = {
   gastosGestion: string;
   baseImponible: string;
   iva: string;
+  /** Si el viaje se canceló, el importe ya devuelto, con el mismo formato que el total. */
+  devuelto?: string;
 };
 
 /** El 21 % ya va dentro del importe. La base y la cuota suman esos céntimos. */
@@ -52,7 +54,9 @@ export function lineasJustificante(datos: DatosJustificante): string[] {
     `Gastos de gestión (IVA incluido): ${datos.gastosGestion}`,
     `Base imponible: ${datos.baseImponible}`,
     `IVA 21 %: ${datos.iva}`,
-    "Estado: Pagado a través de la plataforma.",
+    datos.devuelto
+      ? `Estado: Cancelado. Devuelto: ${datos.devuelto}.`
+      : "Estado: Pagado a través de la plataforma.",
     "",
     "Este documento actúa como comprobante de pago de la reserva realizada a través de la plataforma. La plataforma actúa como mero intermediario en la gestión del trayecto. El IVA se aplica solo a los gastos de gestión.",
   ];
