@@ -75,7 +75,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       supabase
         .from("rutas_conductores")
         .select(
-          "id, origen, destino, created_at, fecha_salida, estado, espacio_disponible, precio_publicado"
+          "id, origen, destino, created_at, fecha_salida, fecha_llegada_prevista, estado, espacio_disponible, precio_publicado"
         )
         .eq("user_id", userId),
     ]);
@@ -93,6 +93,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     | "destino"
     | "created_at"
     | "fecha_salida"
+    | "fecha_llegada_prevista"
     | "estado"
     | "espacio_disponible"
     | "precio_publicado"
@@ -160,7 +161,8 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         : null,
       precioPlaza: asiento ? Number(asiento.precio_publicado) : null,
     };
-    if (salidaYaPasada(ruta.fecha_salida)) historial.push(item);
+    const salida = ruta.fecha_llegada_prevista || ruta.fecha_salida;
+    if (salidaYaPasada(salida)) historial.push(item);
     else propuestos.push(item);
   }
 

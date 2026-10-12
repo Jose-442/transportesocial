@@ -23,6 +23,16 @@ describe("salidaYaPasada", () => {
   it("un viaje que aún no ha salido sigue en propuestos", () => {
     expect(salidaYaPasada("2026-10-13T11:00:00.000Z", ahora)).toBe(false);
   });
+
+  it("hoy a las 17:00 ya pasó a las 20:28", () => {
+    const noche = new Date("2026-10-12T18:28:00.000Z");
+    expect(salidaYaPasada("2026-10-12T15:00:00.000Z", noche)).toBe(true);
+  });
+
+  it("hoy a las 22:00 sigue vigente a las 20:28", () => {
+    const noche = new Date("2026-10-12T18:28:00.000Z");
+    expect(salidaYaPasada("2026-10-12T20:00:00.000Z", noche)).toBe(false);
+  });
 });
 
 describe("claveGrupoReserva", () => {

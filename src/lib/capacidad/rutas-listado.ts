@@ -8,6 +8,7 @@ import {
   aplicarOcupacionAOfertas,
   cargarOcupacionesPorRutas,
 } from "@/lib/capacidad/ocupacion";
+import { salidaYaPasada } from "@/lib/cuenta/salida-pasada";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
@@ -115,7 +116,11 @@ export async function listarRutasConCapacidad(
   const { data: reservadasRaw } = await queryReservadas;
 
   const filtrarPorFiltros = (rutas: RutaConductor[]) =>
-    rutas.filter((r) => coincideFiltrosRuta(r, filtros));
+    rutas.filter(
+      (r) =>
+        coincideFiltrosRuta(r, filtros) &&
+        !salidaYaPasada(r.fecha_llegada_prevista || r.fecha_salida)
+    );
 
   const activas = filtrarPorFiltros((activasRaw as RutaConductor[]) ?? []);
   const reservadas = filtrarPorFiltros((reservadasRaw as RutaConductor[]) ?? []);
