@@ -89,6 +89,11 @@ export function scrollAlSiguienteVacio(
       : raiz instanceof Element
         ? raiz.closest("form")
         : null;
-  const fin = form?.querySelector<HTMLElement>("[data-scroll-fin]");
+  if (!form) return;
+  const marcado = form.querySelector<HTMLElement>("[data-scroll-fin]");
+  const botones = [...form.querySelectorAll<HTMLButtonElement>("button")].filter(
+    (boton) => (boton.getAttribute("type") ?? "submit") === "submit"
+  );
+  const fin = marcado ?? botones[botones.length - 1];
   if (fin && fin.getClientRects().length > 0) scrollAlCampo(fin);
 }
