@@ -70,7 +70,9 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
           </p>
         </div>
         <Badge tone={item.estado === "pendiente_pago" ? "amber" : "green"}>
-          {ESTADO_RESERVA_LABELS[item.estado]}
+          {item.estado === "pendiente_aprobacion" && !item.esCliente
+            ? "Me toca aceptar o rechazar"
+            : ESTADO_RESERVA_LABELS[item.estado]}
         </Badge>
       </div>
       <p className="text-sm font-medium text-emerald-700">

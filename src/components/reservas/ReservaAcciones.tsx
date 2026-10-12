@@ -54,7 +54,11 @@ export function ReservaAcciones({
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
   const etiquetaEstado =
-    estado === "confirmada" ? "Confirmado" : ESTADO_RESERVA_LABELS[estado];
+    estado === "confirmada"
+      ? "Confirmado"
+      : estado === "pendiente_aprobacion" && esConductor
+        ? "Me toca aceptar o rechazar"
+        : ESTADO_RESERVA_LABELS[estado];
   const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];
   const politica = esCliente
     ? politicaCancelacionCliente(estado, fechaSalida)
