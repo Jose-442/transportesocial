@@ -37,6 +37,9 @@ export default async function RutasPage({
     } = await supabase.auth.getUser();
     sesion = !!user;
     rutas = await listarRutasConCapacidad(supabase, filtros);
+    if (user) {
+      rutas = rutas.filter((ruta) => ruta.user_id !== user.id);
+    }
     if (user && rutas.length === 0) {
       const { data: alerta } = await supabase
         .from("alertas_viaje")
