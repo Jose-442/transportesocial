@@ -38,12 +38,12 @@ export const VEHICULO_MODELO_MAX = 60;
 export const TIPOS_VEHICULO = [
   "coche",
   "monovolumen",
+  "pickup",
+  "remolque_abierto",
   "furgoneta_pequena",
   "furgon_grande",
   "camion_mediano",
   "trailer",
-  "pickup",
-  "remolque_abierto",
 ] as const;
 
 export type TipoVehiculo = (typeof TIPOS_VEHICULO)[number];
