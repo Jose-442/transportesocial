@@ -46,6 +46,22 @@ export default async function HomePage() {
                 max-width: none;
               }
             }
+            p.portada-rebaja {
+              width: 100%;
+              max-width: 17.5rem;
+              margin-left: auto;
+              margin-right: auto;
+            }
+            @media (min-width: 768px) {
+              p.portada-rebaja {
+                max-width: calc(22rem + 2cm);
+              }
+            }
+            @media (min-width: 1024px) {
+              p.portada-rebaja {
+                max-width: min(calc(36rem + 2cm), 100%);
+              }
+            }
           `,
         }}
       />
@@ -108,13 +124,18 @@ export default async function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-0 md:pb-0 md:pt-0 lg:min-h-0">
+          <div className="flex min-w-0 flex-col items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-5 md:pt-2 lg:min-h-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={BRAND.heroNevera}
               alt="Portes para todos… o casi todos"
               className="portada-nevera-hero"
             />
+            <p className="portada-rebaja mt-3 text-center text-sm font-semibold leading-snug text-white sm:text-base">
+              Paga por el espacio real de tu bulto. Si tu paquete es más
+              pequeño, el conductor puede rebajar el precio. ¡Ya era barato y
+              encima ahora con rebaja!
+            </p>
           </div>
         </section>
 
