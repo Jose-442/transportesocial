@@ -6,19 +6,21 @@ import {
 } from "@/lib/precio-minimo";
 
 describe("precio mínimo por carretera", () => {
-  it("redondea al céntimo de arriba", () => {
-    expect(precioMinimoDesdeMetros(210_000)).toBe(14.7);
-    expect(precioMinimoDesdeMetros(242_468)).toBe(16.98);
+  it("redondea al euro de arriba", () => {
+    expect(precioMinimoDesdeMetros(210_000)).toBe(15);
+    expect(precioMinimoDesdeMetros(242_468)).toBe(17);
+    expect(precioMinimoDesdeMetros(100_000)).toBe(7);
     expect(precioMinimoDesdeMetros(0)).toBe(0);
   });
 
   it("compara el precio visible con el mínimo", () => {
-    expect(precioVisiblePorDebajo(16.97, 16.98)).toBe(true);
-    expect(precioVisiblePorDebajo(16.98, 16.98)).toBe(false);
+    expect(precioVisiblePorDebajo(16.5, 17)).toBe(true);
+    expect(precioVisiblePorDebajo(17, 17)).toBe(false);
   });
 
-  it("escribe el mínimo con los kilómetros", () => {
-    expect(mensajePrecioMinimo(16.98, 242)).toContain("16,98");
-    expect(mensajePrecioMinimo(16.98, 242)).toContain("242 km por carretera");
+  it("escribe el mínimo en euros enteros", () => {
+    expect(mensajePrecioMinimo(17, 242)).toContain("17");
+    expect(mensajePrecioMinimo(17, 242)).not.toContain("17,00");
+    expect(mensajePrecioMinimo(17, 242)).toContain("242 km por carretera");
   });
 });
