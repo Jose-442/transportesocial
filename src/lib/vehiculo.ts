@@ -42,6 +42,8 @@ export const TIPOS_VEHICULO = [
   "furgon_grande",
   "camion_mediano",
   "trailer",
+  "pickup",
+  "remolque_abierto",
 ] as const;
 
 export type TipoVehiculo = (typeof TIPOS_VEHICULO)[number];
@@ -53,6 +55,8 @@ export const TIPO_VEHICULO_LABELS: Record<TipoVehiculo, string> = {
   furgon_grande: "Furgón grande",
   camion_mediano: "Camión mediano",
   trailer: "Tráiler",
+  pickup: "Pickup",
+  remolque_abierto: "Remolque abierto",
 };
 
 export const TIPO_VEHICULO_OPTIONS = TIPOS_VEHICULO.map((value) => ({
