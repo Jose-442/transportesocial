@@ -4,6 +4,10 @@ import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { ReservaAcciones } from "@/components/reservas/ReservaAcciones";
+import {
+  DeshacerRecogidaAlVolver,
+  VolverRecogidaBoton,
+} from "@/components/reservas/VolverRecogida";
 import { FichaPorteConductor } from "@/components/reservas/FichaPorteConductor";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
@@ -272,12 +276,16 @@ export default async function ReservaDetallePage({
   const otroPerfil = esCliente
     ? perfiles[reserva.transportista_id]
     : perfiles[reserva.cliente_id];
+  const puedeVolverRecogida =
+    esConductor && estadoMostrar === "en_transito" && !disputa;
 
   return (
     <div className="space-y-2 md:space-y-3">
       <MarcarNotificacionesEnlaceLeida
         enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
       />
+      {esConductor ? <DeshacerRecogidaAlVolver reservaId={id} /> : null}
+      {puedeVolverRecogida ? <VolverRecogidaBoton reservaId={id} /> : null}
       <Link
         href="/cuenta/viajes"
         className="inline-flex min-h-9 items-center text-sm font-semibold text-emerald-700 md:min-h-11"

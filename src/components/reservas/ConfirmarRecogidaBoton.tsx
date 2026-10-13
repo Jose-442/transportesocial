@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { confirmarRecogida } from "@/lib/reservas/recogida";
+import { claveDeshacerRecogida } from "@/components/reservas/VolverRecogida";
 
 export function ConfirmarRecogidaBoton({ reservaId }: { reservaId: string }) {
   const [pide, setPide] = useState(false);
@@ -18,7 +19,10 @@ export function ConfirmarRecogidaBoton({ reservaId }: { reservaId: string }) {
       setPendiente(false);
       return;
     }
-    window.location.reload();
+    sessionStorage.setItem(claveDeshacerRecogida(reservaId), "1");
+    const url = new URL(window.location.href);
+    url.searchParams.set("empezado", "1");
+    window.location.assign(url.toString());
   }
 
   if (!pide) {

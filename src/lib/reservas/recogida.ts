@@ -93,6 +93,34 @@ export async function confirmarRecogida(
 
   if (error) return { error: "No se ha podido confirmar la recogida." };
 
+  await avisarCargaRecogida(reservaId);
+
+  for (const id of ids) {
+    revalidatePath(`/reservas/${id}`);
+  }
+  revalidatePath("/cuenta/viajes");
+  return { ok: true };
+}
+
+/** Avisa a quien reservó. Si se repite, no crea otro aviso igual. */
+export async function avisarCargaRecogida(reservaId: string): Promise<void> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("id", reservaId)
+    .maybeSingle();
+  if (!data) return;
+  const reserva = data as Reserva;
+  if (reserva.transportista_id !== user.id) return;
+  if (reserva.estado !== "en_transito") return;
+
+  const filas = await filasEnTransitoMismoViaje(supabase, reserva);
   const principal =
     filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
   await crearNotificacion(supabase, {
@@ -103,12 +131,70 @@ export async function confirmarRecogida(
       "El conductor ha confirmado la recogida y ya va de camino. Entra en la reserva para verlo.",
     enlace: `/reservas/${principal.id}`,
   });
+}
+
+async function filasEnTransitoMismoViaje(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reserva: Reserva
+): Promise<Reserva[]> {
+  if (!reserva.ruta_conductor_id) {
+    return reserva.estado === "en_transito" ? [reserva] : [];
+  }
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id)
+    .eq("estado", "en_transito");
+  const filas = (data as Reserva[] | null) ?? [];
+  return filas.length > 0 ? filas : reserva.estado === "en_transito" ? [reserva] : [];
+}
+
+/** El conductor pulsó confirmar la carga por error. Vuelven los botones. */
+export async function deshacerConfirmacionRecogida(
+  reservaId: string
+): Promise<{ ok?: boolean; revertida?: boolean; error?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Tienes que iniciar sesión otra vez." };
+
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("id", reservaId)
+    .maybeSingle();
+  if (!data) return { error: "No se ha encontrado la reserva." };
+  const reserva = data as Reserva;
+  if (reserva.transportista_id !== user.id) {
+    return { error: "Solo el conductor puede volver atrás." };
+  }
+  if (reserva.estado !== "en_transito") return { ok: true, revertida: false };
+
+  const filas = await filasEnTransitoMismoViaje(supabase, reserva);
+  const ids = filas.map((fila) => fila.id);
+  if (ids.length === 0) return { ok: true, revertida: false };
+
+  const { data: cambiadas, error } = await supabase
+    .from("reservas")
+    .update({
+      estado: "confirmada",
+      en_transito_en: null,
+    })
+    .in("id", ids)
+    .eq("transportista_id", user.id)
+    .eq("estado", "en_transito")
+    .select("id");
+
+  if (error) return { error: "No se ha podido volver a los botones." };
 
   for (const id of ids) {
     revalidatePath(`/reservas/${id}`);
   }
   revalidatePath("/cuenta/viajes");
-  return { ok: true };
+  return { ok: true, revertida: (cambiadas ?? []).length > 0 };
 }
 
 /** Conductor rechaza en el punto de recogida por un motivo de inspección. */
