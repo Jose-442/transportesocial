@@ -1,11 +1,8 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/Card";
-import { ButtonLink } from "@/components/ui/Button";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { separarHoraOculta } from "@/lib/bulto-hora";
 import { TIPO_CARGA_OPTIONS } from "@/lib/porte-legal";
-import { chatPermitido } from "@/lib/reservas/labels";
-import type { EstadoReserva } from "@/types/database";
 
 export type DatosPorteRecogida = {
   descripcion: string | null;
@@ -17,12 +14,8 @@ export type DatosPorteRecogida = {
 
 export function FichaPorteConductor({
   porte,
-  reservaId,
-  estado,
 }: {
   porte: DatosPorteRecogida;
-  reservaId: string;
-  estado: EstadoReserva;
 }) {
   const descripcion = porte.descripcion
     ? separarHoraOculta(porte.descripcion).texto
@@ -105,12 +98,6 @@ export function FichaPorteConductor({
           </p>
         ) : null}
       </div>
-
-      {chatPermitido(estado) ? (
-        <ButtonLink href={`/reservas/${reservaId}/chat`} fullWidth>
-          Abrir chat interno
-        </ButtonLink>
-      ) : null}
     </Card>
   );
 }

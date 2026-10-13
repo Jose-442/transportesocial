@@ -13,7 +13,6 @@ import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
 import {
   aplicarDesgloseOfertaAReserva,
-  chatPermitido,
   esReservaDePlazas,
   fraseQueHasReservado,
   fraseQueIncluyeReservas,
@@ -354,11 +353,7 @@ export default async function ReservaDetallePage({
       ["confirmada", "en_transito", "pendiente_aprobacion"].includes(
         estadoMostrar
       ) ? (
-        <FichaPorteConductor
-          porte={porteFicha}
-          reservaId={id}
-          estado={estadoMostrar as Reserva["estado"]}
-        />
+        <FichaPorteConductor porte={porteFicha} />
       ) : null}
 
       <Card className="space-y-1 p-2 md:space-y-1.5 md:p-3">
@@ -396,14 +391,6 @@ export default async function ReservaDetallePage({
           </a>
         ) : null}
       </Card>
-
-      {chatPermitido(estadoMostrar) && (
-        <Card className="p-2 md:p-3">
-          <ButtonLink href={`/reservas/${id}/chat`} fullWidth>
-            Abrir chat
-          </ButtonLink>
-        </Card>
-      )}
 
       {estadoResenas && (
         <Card>

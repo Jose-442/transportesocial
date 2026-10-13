@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { CompletarPagoBoton } from "@/components/reservas/CompletarPagoBoton";
@@ -94,6 +94,12 @@ export function ReservaAcciones({
           </span>
         ) : null}
       </div>
+
+      {chatPermitido(estado) ? (
+        <ButtonLink href={`/reservas/${reserva.id}/chat`} fullWidth>
+          Abrir chat
+        </ButtonLink>
+      ) : null}
 
       {estado === "pendiente_pago" && esCliente && (
         <div className="space-y-2">
