@@ -9,6 +9,7 @@ import {
   VolverRecogidaBoton,
 } from "@/components/reservas/VolverRecogida";
 import { FichaPorteConductor } from "@/components/reservas/FichaPorteConductor";
+import { RebajaReservas } from "@/components/reservas/GuardarRebaja";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
@@ -25,6 +26,7 @@ import { formatEur } from "@/lib/pricing";
 import { puedeDescargarJustificante } from "@/lib/justificante-pago";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { separarHoraOculta } from "@/lib/bulto-hora";
+import { esPorteParaRebaja } from "@/lib/reservas/rebaja";
 import { resumenAsientosRuta } from "@/lib/capacidad/asientos";
 import {
   aplicarOcupacionAOfertas,
@@ -399,6 +401,25 @@ export default async function ReservaDetallePage({
           </a>
         ) : null}
       </Card>
+
+      <RebajaReservas
+        portes={relacionadas
+          .filter((item) => esPorteParaRebaja(item))
+          .map((item) => ({
+            id: item.id,
+            precioTotal: Number(item.precio_total),
+            pideRebaja: Boolean(item.pide_rebaja),
+            rebajaEn: item.rebaja_en ?? null,
+            rebajaEur: item.rebaja_eur == null ? null : Number(item.rebaja_eur),
+            estado: item.estado,
+            salida: item.fecha_llegada_prevista,
+            descripcion: separarHoraOculta(item.bulto_descripcion ?? "").texto,
+          }))}
+        esConductor={esConductor}
+        origen={ruta?.origen ?? ""}
+        destino={ruta?.destino ?? ""}
+        rutaId={ruta?.id ?? null}
+      />
 
       {estadoResenas && (
         <Card>

@@ -8,6 +8,7 @@ import {
   type PrecioCancelacion,
 } from "@/lib/reservas/cancelacion";
 import { fraseQueIncluyeReservas } from "@/lib/reservas/labels";
+import { conRebajaDevuelta } from "@/lib/reservas/rebaja";
 import {
   MOTIVO_CANCELACION_CLIENTE,
   MOTIVO_CANCELACION_CONDUCTOR,
@@ -135,6 +136,18 @@ export async function loadPagosCuenta(
   >;
   if (reservas.length === 0) return [];
 
+  const rebajas = new Map<string, number>();
+  const { data: rebajasRaw, error: errorRebajas } = await supabase
+    .from("reservas")
+    .select("id, rebaja_eur")
+    .in("id", reservaIds);
+  if (!errorRebajas) {
+    for (const fila of (rebajasRaw ?? []) as { id: string; rebaja_eur: number | null }[]) {
+      const euros = Number(fila.rebaja_eur ?? 0);
+      if (euros > 0) rebajas.set(fila.id, euros);
+    }
+  }
+
   const rutaIds = [
     ...new Set(
       reservas.map((r) => r.ruta_conductor_id).filter((id): id is string => Boolean(id))
@@ -245,7 +258,11 @@ export async function loadPagosCuenta(
           : "Viaje",
       detalle: fraseQueIncluyeReservas(filas),
       pagadoEur: centimosAEuros(pagadoCents),
-      devueltoEur: importeDevuelto(filas, txsGrupo),
+      devueltoEur: conRebajaDevuelta(
+        importeDevuelto(filas, txsGrupo),
+        grupo.reduce((sum, item) => sum + (rebajas.get(item.id) ?? 0), 0),
+        centimosAEuros(pagadoCents)
+      ),
       puedeJustificante: true,
       fecha,
     });

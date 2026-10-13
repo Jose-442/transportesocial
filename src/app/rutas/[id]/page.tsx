@@ -558,6 +558,7 @@ export default async function RutaDetallePage({
           }
           faltaIdentidad={faltaIdentidad}
           identidadInicial={identidadInicial}
+          salidaIso={ruta.fecha_llegada_prevista}
         />
       )}
 
@@ -572,6 +573,7 @@ export default async function RutaDetallePage({
             rutaEstado="reservada"
             faltaIdentidad={faltaIdentidad}
             identidadInicial={identidadInicial}
+            salidaIso={ruta.fecha_llegada_prevista}
           />
         </Card>
       )}

@@ -18,6 +18,8 @@ import { desglosePago } from "@/lib/precios/desglose-pago";
 import { formatEur } from "@/lib/pricing";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
+import { SolicitarRebaja } from "@/components/reservas/SolicitarRebaja";
+import { cabeRebaja } from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad } from "@/types/database";
 
 function etiquetaOferta(oferta: OfertaCapacidad): string {
@@ -41,11 +43,13 @@ export function OfertasCapacidadReserva({
   rutaEstado = "reservada",
   faltaIdentidad = false,
   identidadInicial,
+  salidaIso = "",
 }: {
   ofertas: OfertaCapacidad[];
   rutaEstado?: "activa" | "reservada";
   faltaIdentidad?: boolean;
   identidadInicial?: { telefono: string; documento: string };
+  salidaIso?: string;
 }) {
   const router = useRouter();
   const disponibles = ofertas.filter((o) => {
@@ -62,6 +66,7 @@ export function OfertasCapacidadReserva({
       descripcion: "",
       medidas: "",
       declaracion_aceptada: false,
+      pide_rebaja: false,
     }
   );
   const ofertaId = disponibles.some((o) => o.id === form.ofertaId)
@@ -258,6 +263,14 @@ export function OfertasCapacidadReserva({
           totalCentimos={desglose.totalCentimos}
         />
       )}
+      {!esAsiento && descripcion.trim() && cabeRebaja(salidaIso) ? (
+        <SolicitarRebaja
+          marcado={Boolean(form.pide_rebaja)}
+          onMarcado={(pide_rebaja) =>
+            setForm((prev) => ({ ...prev, pide_rebaja }))
+          }
+        />
+      ) : null}
 
       {pedirIdentidad ? (
         <CamposIdentidadPago

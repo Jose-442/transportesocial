@@ -121,6 +121,10 @@ export type Reserva = {
   foto_bulto_url: string | null;
   foto_bulto_url_2: string | null;
   declaracion_aceptada_en: string | null;
+  /** Pidió rebaja. El precio no cambia hasta que el conductor lo guarda. */
+  pide_rebaja?: boolean;
+  rebaja_en?: string | null;
+  rebaja_eur?: number | null;
   created_at: string;
   updated_at: string;
 };

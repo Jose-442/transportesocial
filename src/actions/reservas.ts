@@ -19,6 +19,11 @@ import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import {
+  cabeRebaja,
+  faltaColumnaRebaja,
+  marcoPideRebaja,
+} from "@/lib/reservas/rebaja";
+import {
   isTipoSolicitud,
   necesidadRestanteTrasOferta,
   tipoSolicitudDesdeDesglose,
@@ -281,6 +286,13 @@ export async function solicitarReservaViaje(formData: FormData) {
     const porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
     if ("error" in porte) return { error: porte.error };
 
+    const pideRebaja = marcoPideRebaja(formData.get("pide_rebaja"));
+    if (pideRebaja && !cabeRebaja(ruta.fecha_llegada_prevista)) {
+      return {
+        error: "La rebaja solo se puede solicitar hasta 48 horas antes del viaje.",
+      };
+    }
+
     const precioNeto = Number(ruta.precio_neto);
     const precioTotal = Number(ruta.precio_publicado);
     const { data: reserva, error } = await supabase
@@ -297,6 +309,7 @@ export async function solicitarReservaViaje(formData: FormData) {
         fecha_llegada_prevista: ruta.fecha_llegada_prevista,
         bulto_descripcion: descripcion,
         bulto_medidas: medidas || null,
+        ...(pideRebaja ? { pide_rebaja: true } : {}),
         ...porte,
         ...datosCaeAlCrearReserva({
           origen: ruta.origen,
@@ -309,6 +322,12 @@ export async function solicitarReservaViaje(formData: FormData) {
       .single();
 
     if (error || !reserva) {
+      if (error && faltaColumnaRebaja(error.message)) {
+        return {
+          error:
+            "La rebaja todavía no se puede pedir. Reserva otra vez sin marcarla.",
+        };
+      }
       return { error: supabaseErrorMessage(error) };
     }
     reservaPrincipalId = reserva.id;
@@ -886,6 +905,13 @@ export async function solicitarReservaCapacidad(
   const precioTotalUnit = Number(oferta.precio_publicado);
   const precioNeto = precioNetoUnit * cantidad;
   const precioTotal = precioTotalUnit * cantidad;
+  const pideRebaja =
+    oferta.tipo === "bulto" && marcoPideRebaja(formData.get("pide_rebaja"));
+  if (pideRebaja && !cabeRebaja(ruta.fecha_llegada_prevista)) {
+    return {
+      error: "La rebaja solo se puede solicitar hasta 48 horas antes del viaje.",
+    };
+  }
 
   const { data: reserva, error } = await supabase
     .from("reservas")
@@ -906,6 +932,7 @@ export async function solicitarReservaCapacidad(
           ? descripcion
           : `Plaza${cantidad > 1 ? "s" : ""} de acompañante (×${cantidad})`,
       bulto_medidas: oferta.tipo === "bulto" ? medidas || null : null,
+      ...(pideRebaja ? { pide_rebaja: true } : {}),
       ...(porte ?? {}),
       ...datosCaeAlCrearReserva({
         origen: ruta.origen,
@@ -918,6 +945,12 @@ export async function solicitarReservaCapacidad(
     .single();
 
   if (error || !reserva) {
+    if (error && faltaColumnaRebaja(error.message)) {
+      return {
+        error:
+          "La rebaja todavía no se puede pedir. Reserva otra vez sin marcarla.",
+      };
+    }
     return { error: supabaseErrorMessage(error) };
   }
 

@@ -11,6 +11,8 @@ import {
 } from "@/lib/justificante-pago";
 import { desglosePago } from "@/lib/precios/desglose-pago";
 import { importeDevuelto, type FilaPago } from "@/lib/cuenta/pagos";
+import { conRebajaDevuelta } from "@/lib/reservas/rebaja";
+import { eurosACentimos } from "@/lib/reservas/cancelacion";
 import type { Reserva } from "@/types/database";
 
 export async function GET(
@@ -121,9 +123,44 @@ export async function GET(
     reserva.transportista_id,
   ]);
   const desglose = desglosePago(relacionadas);
-  const gastosCentimos =
+  let gastosCentimos =
     desglose.lineas.find((linea) => linea.concepto === "Gastos de gestión")
       ?.centimos ?? 0;
+  const rebajaEur = relacionadas.reduce(
+    (sum, item) => sum + Number(item.rebaja_eur ?? 0),
+    0
+  );
+  let importeCentimos = desglose.totalCentimos + eurosACentimos(rebajaEur);
+  if (rebajaEur > 0) {
+    const { data: txsRebaja } = await supabase
+      .from("transacciones")
+      .select("reserva_id, monto, metadata")
+      .in(
+        "reserva_id",
+        relacionadas.map((item) => item.id)
+      )
+      .eq("user_id", user.id)
+      .eq("tipo", "cobro_viaje");
+    const cobros = (txsRebaja ?? []) as {
+      reserva_id: string;
+      monto: number;
+      metadata: { rebaja_comision_antes?: number } | null;
+    }[];
+    const cobrado = cobros.reduce(
+      (sum, tx) => sum + eurosACentimos(Number(tx.monto)),
+      0
+    );
+    if (cobrado > 0) importeCentimos = cobrado;
+    let feeExtra = 0;
+    for (const tx of cobros) {
+      const antes = Number(tx.metadata?.rebaja_comision_antes);
+      const item = relacionadas.find((fila) => fila.id === tx.reserva_id);
+      if (!item || !Number.isFinite(antes) || antes <= 0) continue;
+      feeExtra +=
+        eurosACentimos(antes) - eurosACentimos(Number(item.comision_plataforma));
+    }
+    gastosCentimos += feeExtra;
+  }
   const iva = partirIvaIncluido(gastosCentimos);
   const euros = (centimos: number) =>
     formatEur(centimos / 100).replace("€", "EUR").replace(/\s+/g, " ").trim();
@@ -155,7 +192,11 @@ export async function GET(
       anuncio_bulto_id: item.anuncio_bulto_id,
       created_at: item.created_at,
     }));
-    const devueltoEur = importeDevuelto(filas, txs ?? []);
+    const devueltoEur = conRebajaDevuelta(
+      importeDevuelto(filas, txs ?? []),
+      rebajaEur,
+      (txs ?? []).reduce((sum, tx) => sum + Number(tx.monto), 0)
+    );
     if (devueltoEur != null && devueltoEur > 0) {
       devuelto = euros(Math.round(devueltoEur * 100));
     }
@@ -169,7 +210,7 @@ export async function GET(
     origen: origen || "—",
     destino: destino || "—",
     fechaHora: formatFechaHoraEs(reserva.fecha_llegada_prevista),
-    importe: euros(desglose.totalCentimos),
+    importe: euros(importeCentimos),
     gastosGestion: euros(gastosCentimos),
     baseImponible: euros(iva.base),
     iva: euros(iva.cuota),

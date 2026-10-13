@@ -17,6 +17,8 @@ import { useFormDraft } from "@/lib/use-form-draft";
 import { DesglosePrecio } from "@/components/reservas/DesglosePrecio";
 import { desglosePago } from "@/lib/precios/desglose-pago";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
+import { SolicitarRebaja } from "@/components/reservas/SolicitarRebaja";
+import { cabeRebaja } from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad } from "@/types/database";
 
 export function ReservarRutaForm({
@@ -29,9 +31,11 @@ export function ReservarRutaForm({
   resumenAsientos,
   faltaIdentidad = false,
   identidadInicial,
+  salidaIso,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
+  salidaIso: string;
   precioBulto: number | null;
   precioNetoBulto?: number | null;
   ofertas: OfertaCapacidad[];
@@ -57,6 +61,7 @@ export function ReservarRutaForm({
     bulto_medidas: inicial?.bulto_medidas ?? "",
     plazas: inicial?.plazas ?? "",
     declaracion_aceptada: false,
+    pide_rebaja: false,
   });
   const {
     form: identidad,
@@ -227,6 +232,12 @@ export function ReservarRutaForm({
           totalCentimos={desglose.totalCentimos}
         />
       )}
+      {llevaBulto && cabeRebaja(salidaIso) ? (
+        <SolicitarRebaja
+          marcado={Boolean(form.pide_rebaja)}
+          onMarcado={(pide_rebaja) => setForm((prev) => ({ ...prev, pide_rebaja }))}
+        />
+      ) : null}
       {pedirIdentidad ? (
         <CamposIdentidadPago
           telefono={identidad.telefono}
