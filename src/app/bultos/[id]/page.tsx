@@ -193,7 +193,7 @@ export default async function BultoDetallePage({
           </p>
           <p className="text-zinc-800">
             <span className="font-medium uppercase tracking-wide text-zinc-500">
-              Llegada:
+              Destino:
             </span>{" "}
             <span className="font-medium">{destino}</span>
           </p>

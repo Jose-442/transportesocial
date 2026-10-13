@@ -70,7 +70,7 @@ export default async function BultosPage({
           Buscar portes
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Aparecerán localidades a hasta 50 km de salida y llegada.
+          Aparecerán localidades a hasta 50 km de salida y destino.
         </p>
       </div>
 
@@ -81,7 +81,7 @@ export default async function BultosPage({
       {!busquedaCompleta ? (
         hayFiltros ? (
           <p className="text-sm text-zinc-500">
-            Completa salida, llegada, mes y día para ver los bultos.
+            Completa salida, destino, mes y día para ver los bultos.
           </p>
         ) : null
       ) : (

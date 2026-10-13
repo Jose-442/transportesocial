@@ -124,7 +124,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         />
         <MunicipioAutocomplete
           name="destino"
-          label="Llegada"
+          label="Destino"
           value={destino}
           onChange={setDestino}
           required

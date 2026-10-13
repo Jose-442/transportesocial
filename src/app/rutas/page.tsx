@@ -68,7 +68,7 @@ export default async function RutasPage({
       {!busquedaCompleta ? (
         hayFiltros ? (
           <p className="text-sm text-zinc-500">
-            Completa salida, llegada, mes y día para ver los viajes.
+            Completa salida, destino, mes y día para ver los viajes.
           </p>
         ) : null
       ) : (
