@@ -42,7 +42,8 @@ export function Input({
 }: InputHTMLAttributes<HTMLInputElement> & FieldProps) {
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const esNumero = type === "number";
-  const vacio = String(props.value ?? "").trim() === "";
+  const vacio =
+    Boolean(props.required) && String(props.value ?? "").trim() === "";
   return (
     <label
       htmlFor={inputId}
@@ -80,7 +81,8 @@ export function Textarea({
   ...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement> & FieldProps) {
   const inputId = id ?? label.toLowerCase().replace(/\s+/g, "-");
-  const vacio = String(props.value ?? "").trim() === "";
+  const vacio =
+    Boolean(props.required) && String(props.value ?? "").trim() === "";
   return (
     <label
       htmlFor={inputId}

@@ -72,17 +72,31 @@ export function ScrollCampoVacio() {
       if (el instanceof HTMLElement) scrollAlCampo(el);
     }
 
-    let esperaNumero = 0;
+    let esperaTecleo = 0;
 
     function alTecleo(event: Event) {
       const el = event.target;
-      if (!(el instanceof HTMLInputElement) || el.type !== "number") return;
+      const esCaja =
+        el instanceof HTMLTextAreaElement ||
+        (el instanceof HTMLInputElement &&
+          (el.type === "text" ||
+            el.type === "search" ||
+            el.type === "tel" ||
+            el.type === "email" ||
+            el.type === "password" ||
+            el.type === "number" ||
+            el.type === ""));
+      if (!esCaja || el.getAttribute("role") === "combobox") return;
       const campo = el.closest("[data-campo]");
       if (!(campo instanceof HTMLElement)) return;
-      window.clearTimeout(esperaNumero);
-      esperaNumero = window.setTimeout(() => {
-        const importe = parseFloat(el.value);
-        if (!Number.isFinite(importe) || importe <= 0) return;
+      window.clearTimeout(esperaTecleo);
+      esperaTecleo = window.setTimeout(() => {
+        if (el instanceof HTMLInputElement && el.type === "number") {
+          const importe = parseFloat(el.value);
+          if (!Number.isFinite(importe) || importe <= 0) return;
+        } else if (el.value.trim() === "") {
+          return;
+        }
         if (campo.hasAttribute("data-campo-vacio")) return;
         const form = campo.closest("form");
         scrollAlSiguienteVacio(form ?? document, campo);
@@ -116,7 +130,7 @@ export function ScrollCampoVacio() {
       document.removeEventListener("invalid", alInvalid, true);
       document.removeEventListener("input", alTecleo, true);
       document.removeEventListener("focusout", alSalir, true);
-      window.clearTimeout(esperaNumero);
+      window.clearTimeout(esperaTecleo);
       observador.disconnect();
     };
   }, []);
