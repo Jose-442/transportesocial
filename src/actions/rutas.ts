@@ -9,6 +9,7 @@ import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios
 import { columnasCoordenadas } from "@/lib/cae-reserva";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
+import { errorSiPrecioBajoMinimo } from "@/lib/km-carretera";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
   identidadListaParaPagar,
@@ -148,6 +149,17 @@ export async function crearRuta(formData: FormData) {
 
   const origen = etiquetaMunicipio(origenResuelto.municipio!);
   const destino = etiquetaMunicipio(destinoResuelto.municipio!);
+  const preciosVisibles = [
+    ...(conBulto ? [precioPublicado] : []),
+    ...(conPasajeros ? [precioPublicadoPlaza] : []),
+  ];
+  const minimo = await errorSiPrecioBajoMinimo({
+    origen,
+    destino,
+    preciosVisibles,
+  });
+  if (minimo) return { error: minimo };
+
   const { data, error } = await supabase
     .from("rutas_conductores")
     .insert({
@@ -379,6 +391,16 @@ export async function actualizarRutaPublicada(
 
   const origen = etiquetaMunicipio(origenResuelto.municipio!);
   const destino = etiquetaMunicipio(destinoResuelto.municipio!);
+  const preciosVisibles = [
+    ...(conBulto ? [precioPublicado] : []),
+    ...(conPasajeros ? [precioPublicadoPlaza] : []),
+  ];
+  const minimo = await errorSiPrecioBajoMinimo({
+    origen,
+    destino,
+    preciosVisibles,
+  });
+  if (minimo) return { error: minimo };
 
   const fechaSalida = String(formData.get("fecha_salida") ?? "").trim();
   const llegada = String(formData.get("fecha_llegada_prevista") ?? "").trim();

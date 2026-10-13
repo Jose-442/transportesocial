@@ -15,6 +15,11 @@ import { combineDateAndTime } from "@/lib/datetime-form";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import {
+  mensajePrecioPorDebajo,
+  precioVisiblePorDebajo,
+} from "@/lib/precio-minimo";
+import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
+import {
   tipoOfertaLlevaBulto,
   tipoOfertaLlevaPasajeros,
   type TipoOfertaRuta,
@@ -120,6 +125,18 @@ export function EditarViajePublicado({
   const publicadoPlaza = calcPrecioConComision(
     parseFloat(form.precioNetoPlaza) || 0
   );
+  const minimoCarretera = usePrecioMinimoCarretera(form.origen, form.destino);
+  const minimoVisible = minimoCarretera.precioMinimo;
+  function avisoPrecioBajo(publicadoPrecio: number): string | null {
+    if (
+      minimoVisible == null ||
+      publicadoPrecio <= 0 ||
+      !precioVisiblePorDebajo(publicadoPrecio, minimoVisible)
+    ) {
+      return null;
+    }
+    return mensajePrecioPorDebajo(minimoVisible);
+  }
 
   useEffect(() => {
     if (!abierto || !formRef.current) return;
@@ -149,6 +166,27 @@ export function EditarViajePublicado({
     }
     if (form.mascotas !== "si" && form.mascotas !== "no") {
       setError("Indica si aceptas mascotas en este viaje.");
+      return;
+    }
+    if (minimoCarretera.cargando) {
+      setError("Espera un momento: se están calculando los kilómetros.");
+      return;
+    }
+    if (minimoCarretera.error) {
+      setError(minimoCarretera.error);
+      return;
+    }
+    if (minimoVisible == null) {
+      setError(
+        "No se han podido calcular los kilómetros por carretera. Prueba otra vez."
+      );
+      return;
+    }
+    const bajo =
+      (llevaBulto ? avisoPrecioBajo(publicado) : null) ??
+      (llevaPasajeros ? avisoPrecioBajo(publicadoPlaza) : null);
+    if (bajo) {
+      setError(bajo);
       return;
     }
 
@@ -302,6 +340,15 @@ export function EditarViajePublicado({
             incluirFrontera
             required
           />
+          {minimoCarretera.cargando ? (
+            <p className="text-sm text-zinc-600">
+              Calculando los kilómetros por carretera…
+            </p>
+          ) : minimoCarretera.texto ? (
+            <p className="text-sm text-zinc-700">{minimoCarretera.texto}</p>
+          ) : minimoCarretera.error ? (
+            <p className="text-sm text-red-700">{minimoCarretera.error}</p>
+          ) : null}
           <DatePickerInput
             name="fecha_salida"
             label="Fecha de salida"
@@ -368,6 +415,9 @@ export function EditarViajePublicado({
                   <strong>{formatEur(publicado)}</strong>
                 </p>
               )}
+              {avisoPrecioBajo(publicado) ? (
+                <p className="text-sm text-red-700">{avisoPrecioBajo(publicado)}</p>
+              ) : null}
             </>
           )}
 
@@ -429,6 +479,11 @@ export function EditarViajePublicado({
                       <strong>{formatEur(publicadoPlaza)}</strong>
                     </p>
                   )}
+                  {avisoPrecioBajo(publicadoPlaza) ? (
+                    <p className="text-sm text-red-700">
+                      {avisoPrecioBajo(publicadoPlaza)}
+                    </p>
+                  ) : null}
                 </>
               )}
             </div>

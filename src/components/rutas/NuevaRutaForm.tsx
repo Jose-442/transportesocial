@@ -22,6 +22,11 @@ import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
+import {
+  mensajePrecioPorDebajo,
+  precioVisiblePorDebajo,
+} from "@/lib/precio-minimo";
+import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
@@ -208,6 +213,18 @@ export function NuevaRutaForm({
   const netoPlaza = parseFloat(form.precio_neto_plaza) || 0;
   const publicadoPlaza =
     netoPlaza > 0 ? calcPrecioConComision(netoPlaza) : 0;
+  const minimoCarretera = usePrecioMinimoCarretera(form.origen, form.destino);
+  const minimoVisible = minimoCarretera.precioMinimo;
+  function avisoPrecioBajo(publicadoPrecio: number): string | null {
+    if (
+      minimoVisible == null ||
+      publicadoPrecio <= 0 ||
+      !precioVisiblePorDebajo(publicadoPrecio, minimoVisible)
+    ) {
+      return null;
+    }
+    return mensajePrecioPorDebajo(minimoVisible);
+  }
 
   function applyTipoOferta(
     current: NuevaRutaDraft,
@@ -402,6 +419,32 @@ export function NuevaRutaForm({
     }
 
     const validationErrors = validateForm();
+    const bajoBulto = llevaBulto ? avisoPrecioBajo(publicado) : null;
+    const bajoPlaza = llevaPasajeros ? avisoPrecioBajo(publicadoPlaza) : null;
+    if (bajoBulto) validationErrors.precio_neto = bajoBulto;
+    if (bajoPlaza) validationErrors.precio_neto_plaza = bajoPlaza;
+    if (minimoCarretera.cargando) {
+      setError("Espera un momento: se están calculando los kilómetros.");
+      setLoading(false);
+      return;
+    }
+    if (minimoCarretera.error) {
+      setError(minimoCarretera.error);
+      setLoading(false);
+      return;
+    }
+    if (
+      (llevaBulto || llevaPasajeros) &&
+      resolverMunicipio(form.origen) &&
+      resolverMunicipio(form.destino, { incluirFrontera: true }) &&
+      minimoVisible == null
+    ) {
+      setError(
+        "No se han podido calcular los kilómetros por carretera. Prueba otra vez."
+      );
+      setLoading(false);
+      return;
+    }
     if (Object.keys(validationErrors).length > 0) {
       setFieldErrors(validationErrors);
       setError("Completa los campos marcados en rojo.");
@@ -517,6 +560,15 @@ export function NuevaRutaForm({
         onChange={(value) => updateField("destino", value)}
         incluirFrontera
       />
+      {minimoCarretera.cargando ? (
+        <p className="text-sm text-zinc-600">
+          Calculando los kilómetros por carretera…
+        </p>
+      ) : minimoCarretera.texto ? (
+        <p className="text-sm text-zinc-700">{minimoCarretera.texto}</p>
+      ) : minimoCarretera.error ? (
+        <p className="text-sm text-red-700">{minimoCarretera.error}</p>
+      ) : null}
       <DatePickerInput
         name="fecha_salida"
         label="Fecha de salida"
@@ -580,7 +632,7 @@ export function NuevaRutaForm({
             step="0.01"
             required
             value={form.precio_neto}
-            error={fieldErrors.precio_neto}
+            error={fieldErrors.precio_neto ?? avisoPrecioBajo(publicado) ?? undefined}
             onChange={(e) => updateField("precio_neto", e.target.value)}
           />
           {publicado > 0 && (
@@ -642,7 +694,11 @@ export function NuevaRutaForm({
                 step="0.01"
                 required
                 value={form.precio_neto_plaza}
-                error={fieldErrors.precio_neto_plaza}
+                error={
+                  fieldErrors.precio_neto_plaza ??
+                  avisoPrecioBajo(publicadoPlaza) ??
+                  undefined
+                }
                 onChange={(e) =>
                   updateField("precio_neto_plaza", e.target.value)
                 }
