@@ -16,6 +16,7 @@ import {
   recuperarPagoPendiente,
 } from "@/lib/stripe/trip-checkout";
 import { horaDeAnuncio, separarHoraOculta } from "@/lib/bulto-hora";
+import { combineDateAndTime } from "@/lib/datetime-form";
 import { esReservaDePlazas } from "@/lib/reservas/labels";
 import { ESTADOS_RESERVA_OCUPAN, sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
 import {
@@ -52,12 +53,12 @@ function fechaLlegadaDesdeBulto(bulto: AnuncioBulto): string {
   if (!bulto.fecha_limite) {
     return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
   }
-  const d = new Date(bulto.fecha_limite);
-  if (hora && /^\d{2}:\d{2}$/.test(hora)) {
-    const [hh, mm] = hora.split(":").map((x) => parseInt(x, 10));
-    d.setHours(hh, mm, 0, 0);
-  }
-  return d.toISOString();
+  const dia = String(bulto.fecha_limite).slice(0, 10);
+  const reloj = hora && /^\d{2}:\d{2}$/.test(hora) ? hora : "23:59";
+  return (
+    combineDateAndTime(dia, reloj) ??
+    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+  );
 }
 
 async function pendientesDelMismoViaje(

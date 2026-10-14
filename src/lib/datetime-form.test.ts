@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { formatFechaHoraEs, formatHoraEs, horaEnMadrid } from "@/lib/datetime-form";
+import {
+  combineDateAndTime,
+  formatFechaHoraEs,
+  formatHoraEs,
+  horaEnMadrid,
+} from "@/lib/datetime-form";
 
 describe("formatFechaHoraEs", () => {
   it("deja solo el día si el valor es una fecha sin hora", () => {
@@ -11,5 +16,14 @@ describe("formatFechaHoraEs", () => {
     expect(horaEnMadrid("2026-10-13T09:00:00.000Z")).toBe("11:00");
     expect(formatHoraEs("2026-10-17T15:00:00.000Z")).toBe("17:00");
     expect(formatHoraEs("2026-10-16T16:00:00.000Z")).toBe("18:00");
+  });
+
+  it("guarda la hora elegida como hora de España", () => {
+    expect(combineDateAndTime("2026-10-17", "18:00")).toBe(
+      "2026-10-17T16:00:00.000Z"
+    );
+    expect(combineDateAndTime("2026-01-17", "18:00")).toBe(
+      "2026-01-17T17:00:00.000Z"
+    );
   });
 });

@@ -116,6 +116,7 @@ export function ResenaSection({
           <p className="text-xs text-zinc-500">
             Plazo hasta{" "}
             {new Date(estado.plazoHasta).toLocaleDateString("es-ES", {
+              timeZone: "Europe/Madrid",
               day: "numeric",
               month: "long",
               year: "numeric",

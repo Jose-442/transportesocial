@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -89,6 +89,7 @@ function Formulario({
   const [netoTexto, setNetoTexto] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const enviando = useRef(false);
   const neto = Number(netoTexto.replace(",", "."));
   const visible = Number.isFinite(neto) && neto > 0 ? calcPrecioConComision(neto) : 0;
   const diferencia = porte.precioTotal - visible;
@@ -100,12 +101,19 @@ function Formulario({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setError(null);
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     formData.set("reserva_id", porte.id);
-    const result = await guardarRebajaReserva(formData);
-    setLoading(false);
+    let result: Awaited<ReturnType<typeof guardarRebajaReserva>>;
+    try {
+      result = await guardarRebajaReserva(formData);
+    } finally {
+      enviando.current = false;
+      setLoading(false);
+    }
     if (result.error) {
       setError(result.error);
       return;

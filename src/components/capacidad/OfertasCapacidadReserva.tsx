@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -85,6 +85,7 @@ export function OfertasCapacidadReserva({
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const enviando = useRef(false);
   const [pedirIdentidad, setPedirIdentidad] = useState(faltaIdentidad);
 
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
@@ -111,7 +112,8 @@ export function OfertasCapacidadReserva({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!ofertaSel) return;
+    if (!ofertaSel || enviando.current) return;
+    enviando.current = true;
 
     setError(null);
     setLoading(true);
@@ -125,11 +127,13 @@ export function OfertasCapacidadReserva({
       const declaracion = String(formData.get("declaracion_aceptada") ?? "");
       if (!(foto instanceof File) || foto.size <= 0) {
         setError("Añade al menos una foto de la carga.");
+        enviando.current = false;
         setLoading(false);
         return;
       }
       if (declaracion !== "1" && declaracion !== "on") {
         setError("Debes aceptar la declaración de responsabilidad del porte.");
+        enviando.current = false;
         setLoading(false);
         return;
       }
@@ -146,6 +150,7 @@ export function OfertasCapacidadReserva({
         setErrorTelefono(guardado.errorTelefono ?? null);
         setErrorDocumento(guardado.errorDocumento ?? null);
         setError(guardado.error ?? null);
+        enviando.current = false;
         setLoading(false);
         return;
       }
@@ -157,6 +162,7 @@ export function OfertasCapacidadReserva({
 
     if (result.error) {
       setError(result.error);
+      enviando.current = false;
       setLoading(false);
       return;
     }
@@ -174,6 +180,7 @@ export function OfertasCapacidadReserva({
     }
 
     setError("No se pudo abrir la página de la tarjeta. Prueba otra vez.");
+    enviando.current = false;
     setLoading(false);
   }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -75,6 +75,7 @@ export function ReservarRutaForm({
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const enviando = useRef(false);
   const [pedirIdentidad, setPedirIdentidad] = useState(faltaIdentidad);
 
   const cantidad = Math.min(
@@ -109,6 +110,8 @@ export function ReservarRutaForm({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setError(null);
     setLoading(true);
 
@@ -122,11 +125,13 @@ export function ReservarRutaForm({
       const declaracion = String(formData.get("declaracion_aceptada") ?? "");
       if (!(foto instanceof File) || foto.size <= 0) {
         setError("Añade al menos una foto de la carga.");
+        enviando.current = false;
         setLoading(false);
         return;
       }
       if (declaracion !== "1" && declaracion !== "on") {
         setError("Debes aceptar la declaración de responsabilidad del porte.");
+        enviando.current = false;
         setLoading(false);
         return;
       }
@@ -143,6 +148,7 @@ export function ReservarRutaForm({
         setErrorTelefono(guardado.errorTelefono ?? null);
         setErrorDocumento(guardado.errorDocumento ?? null);
         setError(guardado.error ?? null);
+        enviando.current = false;
         setLoading(false);
         return;
       }
@@ -154,6 +160,7 @@ export function ReservarRutaForm({
 
     if (result.error) {
       setError(result.error);
+      enviando.current = false;
       setLoading(false);
       return;
     }
@@ -164,6 +171,7 @@ export function ReservarRutaForm({
     }
 
     setError("No se pudo abrir la página de la tarjeta. Prueba otra vez.");
+    enviando.current = false;
     setLoading(false);
   }
 

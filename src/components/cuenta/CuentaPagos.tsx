@@ -24,7 +24,9 @@ export async function CuentaPagos({ userId }: { userId: string }) {
                 <p className="font-semibold text-zinc-900">{pago.titulo}</p>
                 <p className="text-xs text-zinc-500">
                   {pago.detalle} ·{" "}
-                  {new Date(pago.fecha).toLocaleDateString("es-ES")}
+                  {new Date(pago.fecha).toLocaleDateString("es-ES", {
+                    timeZone: "Europe/Madrid",
+                  })}
                 </p>
               </div>
               <p className="text-sm font-medium text-emerald-700">

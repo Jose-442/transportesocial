@@ -34,6 +34,7 @@ export function AnadirCapacidadForm({
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const yaMontado = useRef(false);
+  const enviando = useRef(false);
 
   useEffect(() => {
     if (!yaMontado.current) {
@@ -50,6 +51,8 @@ export function AnadirCapacidadForm({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setError(null);
     setLoading(true);
 
@@ -57,8 +60,13 @@ export function AnadirCapacidadForm({
     formData.set("ruta_id", rutaId);
     formData.set("tipo", tipo);
 
-    const result = await crearOfertaCapacidad(formData);
-    setLoading(false);
+    let result: Awaited<ReturnType<typeof crearOfertaCapacidad>>;
+    try {
+      result = await crearOfertaCapacidad(formData);
+    } finally {
+      enviando.current = false;
+      setLoading(false);
+    }
 
     if (result.error) {
       setError(result.error);

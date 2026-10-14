@@ -179,6 +179,7 @@ export function NuevoBultoForm({
   const [foto1, setFoto1] = useState<FotoSlot>({ file: null, preview: null });
   const [foto2, setFoto2] = useState<FotoSlot>({ file: null, preview: null });
   const uidRef = useRef("");
+  const enviando = useRef(false);
 
   const necesitaBulto = incluyeBulto(form.tipo_solicitud);
 
@@ -297,6 +298,8 @@ export function NuevoBultoForm({
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setLoading(true);
     setError("");
     setFieldErrors({});
@@ -369,6 +372,7 @@ export function NuevoBultoForm({
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setError("Completa los campos marcados en rojo.");
+      enviando.current = false;
       setLoading(false);
       return;
     }
@@ -399,6 +403,7 @@ export function NuevoBultoForm({
       const result = await crearBulto(formData);
       if (result.error) {
         setError(result.error);
+        enviando.current = false;
         return;
       }
 
@@ -406,11 +411,12 @@ export function NuevoBultoForm({
       router.push(`/bultos/${result.id}`);
       router.refresh();
     } catch {
+      enviando.current = false;
       setError(
         "No se ha podido publicar. Recarga la página y pulsa otra vez. Si la foto pesa mucho, elige una más pequeña."
       );
     } finally {
-      setLoading(false);
+      if (!enviando.current) setLoading(false);
     }
   }
 

@@ -96,6 +96,7 @@ export function EditarViajePublicado({
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const enviando = useRef(false);
   const [abierto, setAbierto] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -151,39 +152,46 @@ export function EditarViajePublicado({
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setError(null);
+
+    const rechazar = (mensaje: string) => {
+      enviando.current = false;
+      setError(mensaje);
+    };
 
     const llegada = combineDateAndTime(form.fecha, form.hora);
     if (!llegada) {
-      setError("Indica el día y la hora de salida.");
+      rechazar("Indica el día y la hora de salida.");
       return;
     }
     if (!form.tipoOferta) {
-      setError("Marca si ofreces bulto, pasajeros o las dos cosas.");
+      rechazar("Marca si ofreces bulto, pasajeros o las dos cosas.");
       return;
     }
     if (llevaBulto && !form.espacio) {
-      setError("Selecciona el espacio del que dispones.");
+      rechazar("Selecciona el espacio del que dispones.");
       return;
     }
     if (llevaPasajeros && (plazasOfrecidas < 1 || plazasOfrecidas > 3)) {
-      setError("Marca cuántas plazas ofreces.");
+      rechazar("Marca cuántas plazas ofreces.");
       return;
     }
     if (form.mascotas !== "si" && form.mascotas !== "no") {
-      setError("Indica si aceptas mascotas en este viaje.");
+      rechazar("Indica si aceptas mascotas en este viaje.");
       return;
     }
     if (minimoCarretera.cargando) {
-      setError("Espera un momento: se están calculando los kilómetros.");
+      rechazar("Espera un momento: se están calculando los kilómetros.");
       return;
     }
     if (minimoCarretera.error) {
-      setError(minimoCarretera.error);
+      rechazar(minimoCarretera.error);
       return;
     }
     if (minimoVisible == null) {
-      setError(
+      rechazar(
         "No se han podido calcular los kilómetros por carretera. Prueba otra vez."
       );
       return;
@@ -192,11 +200,15 @@ export function EditarViajePublicado({
       (llevaBulto ? avisoPrecioBajo(publicado) : null) ??
       (llevaPasajeros ? avisoPrecioBajo(publicadoPlaza) : null);
     if (bajo) {
-      setError(bajo);
+      rechazar(bajo);
       return;
     }
 
     setLoading(true);
+    const soltar = () => {
+      enviando.current = false;
+      setLoading(false);
+    };
 
     const datos = new FormData();
     datos.set("origen", form.origen);
@@ -214,32 +226,32 @@ export function EditarViajePublicado({
     datos.set("precio_neto", form.precioNeto);
     datos.set("acepta_mascotas", form.mascotas);
 
-    const viaje = await actualizarRutaPublicada(rutaId, datos);
-    if (viaje.error) {
-      setLoading(false);
-      setError(viaje.error);
-      router.refresh();
-      return;
-    }
-
-    if (vehiculo) {
-      const coche = await actualizarVehiculo({
-        tipo: form.tipo,
-        marca: form.marca,
-        modelo: form.modelo,
-        anio: form.anio,
-        distintivo: form.distintivo,
-        matricula: form.matricula,
-      });
-      if (coche.error) {
-        setLoading(false);
-        setError(coche.error);
+    try {
+      const viaje = await actualizarRutaPublicada(rutaId, datos);
+      if (viaje.error) {
+        setError(viaje.error);
         router.refresh();
         return;
       }
-    }
 
-    setLoading(false);
+      if (vehiculo) {
+        const coche = await actualizarVehiculo({
+          tipo: form.tipo,
+          marca: form.marca,
+          modelo: form.modelo,
+          anio: form.anio,
+          distintivo: form.distintivo,
+          matricula: form.matricula,
+        });
+        if (coche.error) {
+          setError(coche.error);
+          router.refresh();
+          return;
+        }
+      }
+    } finally {
+      soltar();
+    }
     setAbierto(false);
     router.refresh();
     const volverArriba = () => window.scrollTo({ top: 0, behavior: "auto" });

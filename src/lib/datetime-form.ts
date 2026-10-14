@@ -66,11 +66,42 @@ export function snapMinuteToQuarter(minute: string): string {
   return String(snapped).padStart(2, "0");
 }
 
+function minutosDeMadrid(instant: Date): number {
+  const partes = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Madrid",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(instant);
+  const n = (tipo: string) =>
+    Number(partes.find((p) => p.type === tipo)?.value ?? "0");
+  const comoUtc = Date.UTC(
+    n("year"),
+    n("month") - 1,
+    n("day"),
+    n("hour"),
+    n("minute"),
+    n("second")
+  );
+  return Math.round((comoUtc - instant.getTime()) / 60000);
+}
+
+/** Día y hora tal como se eligen en España, aunque el servidor vaya en otra hora. */
 export function combineDateAndTime(date: string, time: string): string | null {
-  if (!date || !time) return null;
-  const parsed = new Date(`${date}T${time}:00`);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return parsed.toISOString();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return null;
+  const pared = Date.parse(`${date}T${time}:00Z`);
+  if (Number.isNaN(pared)) return null;
+  const primero = minutosDeMadrid(new Date(pared));
+  let instante = pared - primero * 60000;
+  const ajuste = minutosDeMadrid(new Date(instante));
+  if (ajuste !== primero) instante = pared - ajuste * 60000;
+  const d = new Date(instante);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
 }
 
 /** Hora HH:mm en España, para que el formulario coincida con el reloj del viaje. */

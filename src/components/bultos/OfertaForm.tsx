@@ -66,6 +66,7 @@ export function OfertaForm({
     plazas_ofrecidas: String(plazas),
   }));
   const uidRef = useRef("");
+  const enviando = useRef(false);
 
   useEffect(() => {
     const desdeQuery =
@@ -174,6 +175,8 @@ export function OfertaForm({
       return;
     }
 
+    if (enviando.current) return;
+    enviando.current = true;
     setLoading(true);
     setError("");
 
@@ -186,20 +189,23 @@ export function OfertaForm({
     formData.set("mensaje", "");
     formData.set("anuncio_bulto_id", bultoId);
 
-    const result = await enviarOferta(formData);
+    try {
+      const result = await enviarOferta(formData);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
 
-    setLoading(false);
-    if (result.error) {
-      setError(result.error);
-      return;
+      clearDraft(draftKey);
+      clearOfertaPostLogin(bultoId);
+      setMostrarBannerPostLogin(false);
+      setVolviendoDelVehiculo(false);
+      setForm({ ...EMPTY_OFERTA_DRAFT, plazas_ofrecidas: String(plazas) });
+      router.refresh();
+    } finally {
+      enviando.current = false;
+      setLoading(false);
     }
-
-    clearDraft(draftKey);
-    clearOfertaPostLogin(bultoId);
-    setMostrarBannerPostLogin(false);
-    setVolviendoDelVehiculo(false);
-    setForm({ ...EMPTY_OFERTA_DRAFT, plazas_ofrecidas: String(plazas) });
-    router.refresh();
   }
 
   const botonEnviar = (
