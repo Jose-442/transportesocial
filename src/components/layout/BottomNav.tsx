@@ -113,11 +113,14 @@ export function BottomNav() {
       {mostrarSubir ? (
         <button
           type="button"
+          aria-label="Arriba"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ bottom: separacion }}
-          className="fixed right-4 z-50 inline-flex min-h-11 items-center justify-center rounded-full border border-emerald-900 bg-emerald-700 px-4 text-sm font-semibold text-white shadow-lg"
+          className="fixed right-4 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900 text-white shadow-lg"
         >
-          ↑ Arriba
+          <span aria-hidden="true" className="text-xl leading-none">
+            ↑
+          </span>
         </button>
       ) : null}
       <nav

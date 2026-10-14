@@ -647,7 +647,7 @@ export async function cargarHistorialPagina(
     (reservasHist.data?.length ?? 0) >= cupo * 3;
 
   return {
-    items: ordenados.slice(0, fin),
+    items: ordenados.slice(paginaSegura * POR_PAGINA_HISTORIAL, fin),
     hayMas: truncado || ordenados.length > fin,
   };
 }

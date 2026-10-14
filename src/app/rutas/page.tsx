@@ -11,6 +11,12 @@ import {
 } from "@/lib/listado-filters";
 import { listarRutasConCapacidad } from "@/lib/capacidad/rutas-listado";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
+import {
+  POR_PAGINA_LISTADO,
+  Paginacion,
+  hrefPagina,
+  paginaPedida,
+} from "@/components/listados/Paginacion";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +27,9 @@ export default async function RutasPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const filtros = parseFiltros(await searchParams);
+  const params = await searchParams;
+  const filtros = parseFiltros(params);
+  const pagina = paginaPedida(params);
   const busquedaCompleta = tieneBusquedaCompleta(filtros);
   const hayFiltros = tieneFiltrosActivos(filtros);
   const listadoSearch = busquedaCompleta ? filtrosToSearchQuery(filtros) : null;
@@ -52,6 +60,16 @@ export default async function RutasPage({
       tieneAlerta = !!alerta;
     }
   }
+
+  const totalPaginasRutas = Math.max(
+    1,
+    Math.ceil(rutas.length / POR_PAGINA_LISTADO)
+  );
+  const paginaRutas = Math.min(pagina, totalPaginasRutas);
+  const rutasPagina = rutas.slice(
+    (paginaRutas - 1) * POR_PAGINA_LISTADO,
+    paginaRutas * POR_PAGINA_LISTADO
+  );
 
   return (
     <div className="space-y-4">
@@ -87,15 +105,22 @@ export default async function RutasPage({
               tieneAlerta={tieneAlerta}
             />
           ) : (
-            <div className="space-y-3">
-              {rutas.map((ruta) => (
-                <RutaCard
-                  key={ruta.id}
-                  ruta={ruta}
-                  listadoSearch={listadoSearch}
-                />
-              ))}
-            </div>
+            <>
+              <div className="space-y-3">
+                {rutasPagina.map((ruta) => (
+                  <RutaCard
+                    key={ruta.id}
+                    ruta={ruta}
+                    listadoSearch={listadoSearch}
+                  />
+                ))}
+              </div>
+              <Paginacion
+                pagina={paginaRutas}
+                totalPaginas={totalPaginasRutas}
+                hrefDe={(n) => hrefPagina("/rutas", listadoSearch, n)}
+              />
+            </>
           )}
         </>
       )}

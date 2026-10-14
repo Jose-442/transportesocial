@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { cargarMasHistorial } from "@/actions/historial";
-import { Button } from "@/components/ui/Button";
+import { Paginacion } from "@/components/listados/Paginacion";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
@@ -273,21 +273,27 @@ export function MisViajesTabs({
   const [errorMas, setErrorMas] = useState<string | null>(null);
   const pidiendoMas = useRef(false);
 
-  async function verMas() {
-    if (pidiendoMas.current) return;
+  async function irAPagina(destino: number) {
+    if (destino < 0 || pidiendoMas.current) return;
+    if (destino === 0) {
+      setHistorialLista(historial);
+      setHayMas(historialHayMas);
+      setPagina(0);
+      setErrorMas(null);
+      return;
+    }
     pidiendoMas.current = true;
     setCargandoMas(true);
     setErrorMas(null);
-    const siguiente = pagina + 1;
     try {
-      const resultado = await cargarMasHistorial(siguiente);
+      const resultado = await cargarMasHistorial(destino);
       if (resultado.error) {
         setErrorMas(resultado.error);
         return;
       }
       setHistorialLista(resultado.items);
       setHayMas(resultado.hayMas);
-      setPagina(siguiente);
+      setPagina(destino);
     } finally {
       pidiendoMas.current = false;
       setCargandoMas(false);
@@ -347,27 +353,22 @@ export function MisViajesTabs({
             ].join(" ")}
           >
             {t.label}
-            {counts[t.id] > 0 && (
-              <span className="ml-0.5 text-zinc-500">
-                ({t.id === "historial" && hayMas ? `${counts[t.id]}+` : counts[t.id]})
-              </span>
+            {counts[t.id] > 0 && (t.id !== "historial" || (!hayMas && pagina === 0)) && (
+              <span className="ml-0.5 text-zinc-500">({counts[t.id]})</span>
             )}
           </button>
         ))}
       </div>
 
       <ListaApartado items={listas[tab]} vacio={vacios[tab]} />
-      {tab === "historial" && hayMas && (
+      {tab === "historial" && (hayMas || pagina > 0) && (
         <div className="space-y-2">
-          <Button
-            type="button"
-            variant="secondary"
-            fullWidth
-            disabled={cargandoMas}
-            onClick={verMas}
-          >
-            {cargandoMas ? "Cargando…" : "Ver más"}
-          </Button>
+          <Paginacion
+            pagina={pagina + 1}
+            totalPaginas={pagina + 1 + (hayMas ? 1 : 0)}
+            deshabilitado={cargandoMas}
+            onPagina={(n) => irAPagina(n - 1)}
+          />
           {errorMas ? <p className="text-sm text-red-600">{errorMas}</p> : null}
         </div>
       )}

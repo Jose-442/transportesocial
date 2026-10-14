@@ -11,6 +11,12 @@ import {
   tieneFiltrosActivos,
 } from "@/lib/listado-filters";
 import type { AnuncioBulto } from "@/types/database";
+import {
+  POR_PAGINA_LISTADO,
+  Paginacion,
+  hrefPagina,
+  paginaPedida,
+} from "@/components/listados/Paginacion";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +27,9 @@ export default async function BultosPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const filtros = parseFiltros(await searchParams);
+  const params = await searchParams;
+  const filtros = parseFiltros(params);
+  const pagina = paginaPedida(params);
   const busquedaCompleta = tieneBusquedaCompleta(filtros);
   const hayFiltros = tieneFiltrosActivos(filtros);
   const listadoSearch = busquedaCompleta ? filtrosToSearchQuery(filtros) : null;
@@ -74,6 +82,16 @@ export default async function BultosPage({
     }
   }
 
+  const totalPaginasBultos = Math.max(
+    1,
+    Math.ceil(bultos.length / POR_PAGINA_LISTADO)
+  );
+  const paginaBultos = Math.min(pagina, totalPaginasBultos);
+  const bultosPagina = bultos.slice(
+    (paginaBultos - 1) * POR_PAGINA_LISTADO,
+    paginaBultos * POR_PAGINA_LISTADO
+  );
+
   return (
     <div className="space-y-4">
       <div>
@@ -103,15 +121,22 @@ export default async function BultosPage({
               : `${bultos.length} encontrados`}
           </p>
           {bultos.length === 0 ? null : (
-            <div className="space-y-3">
-              {bultos.map((bulto) => (
-                <BultoCard
-                  key={bulto.id}
-                  bulto={bulto}
-                  listadoSearch={listadoSearch}
-                />
-              ))}
-            </div>
+            <>
+              <div className="space-y-3">
+                {bultosPagina.map((bulto) => (
+                  <BultoCard
+                    key={bulto.id}
+                    bulto={bulto}
+                    listadoSearch={listadoSearch}
+                  />
+                ))}
+              </div>
+              <Paginacion
+                pagina={paginaBultos}
+                totalPaginas={totalPaginasBultos}
+                hrefDe={(n) => hrefPagina("/bultos", listadoSearch, n)}
+              />
+            </>
           )}
         </>
       )}

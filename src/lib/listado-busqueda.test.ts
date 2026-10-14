@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
+import { numerosDePagina } from "@/components/listados/Paginacion";
 import { fechasCercanasAlDia, limitesBusqueda } from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
+
+describe("numerosDePagina", () => {
+  it("con dos páginas enseña el 1 y el 2", () => {
+    expect(numerosDePagina(1, 2)).toEqual([1, 2]);
+  });
+});
 
 describe("fechasCercanasAlDia", () => {
   it("incluye el mismo día del año anterior y del siguiente", () => {
