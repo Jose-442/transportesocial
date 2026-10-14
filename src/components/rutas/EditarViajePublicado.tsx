@@ -77,6 +77,7 @@ export function EditarViajePublicado({
   precioNetoPlaza,
   mascotas,
   vehiculo,
+  className,
 }: {
   rutaId: string;
   origen: string;
@@ -91,6 +92,7 @@ export function EditarViajePublicado({
   precioNetoPlaza: string;
   mascotas: "" | "si" | "no";
   vehiculo: VehiculoEdicion | null;
+  className?: string;
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
@@ -125,7 +127,11 @@ export function EditarViajePublicado({
   const publicadoPlaza = calcPrecioConComision(
     parseFloat(form.precioNetoPlaza) || 0
   );
-  const minimoCarretera = usePrecioMinimoCarretera(form.origen, form.destino);
+  const minimoCarretera = usePrecioMinimoCarretera(
+    form.origen,
+    form.destino,
+    abierto
+  );
   const minimoVisible = minimoCarretera.precioMinimo;
   function avisoPrecioBajo(publicadoPrecio: number): string | null {
     if (
@@ -242,7 +248,7 @@ export function EditarViajePublicado({
   }
 
   return (
-    <div className="border-t border-zinc-200 pt-3">
+    <div className={className ?? "border-t border-zinc-200 pt-3"}>
       <Button
         type="button"
         variant="secondary"

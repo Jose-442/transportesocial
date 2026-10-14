@@ -297,6 +297,26 @@ export default async function RutaDetallePage({
     }
   }
 
+  const botonEditar = (className: string) =>
+    edicionViaje ? (
+      <EditarViajePublicado
+        className={className}
+        rutaId={ruta.id}
+        origen={origen}
+        destino={destino}
+        fecha={edicionViaje.fecha}
+        hora={edicionViaje.hora}
+        tipoOferta={edicionViaje.tipoOferta}
+        espacio={edicionViaje.espacio}
+        detalleEspacio={edicionViaje.detalleEspacio}
+        precioNeto={edicionViaje.precioNeto}
+        plazas={edicionViaje.plazas}
+        precioNetoPlaza={edicionViaje.precioNetoPlaza}
+        mascotas={edicionViaje.mascotas}
+        vehiculo={edicionViaje.vehiculo}
+      />
+    ) : null;
+
   const badgeLabel =
     ruta.estado === "activa" ||
     (ruta.estado === "reservada" && tieneCapacidadExtra)
@@ -346,6 +366,9 @@ export default async function RutaDetallePage({
       )}
 
       <div className="relative space-y-2 md:space-y-4">
+      {edicionViaje && (
+        <div className="hidden md:block">{botonEditar("")}</div>
+      )}
       <Card className="space-y-2 p-3 md:space-y-4 md:p-4">
         <div className="flex items-start justify-between gap-2 md:gap-3">
           <p className="text-sm font-semibold text-zinc-800">
@@ -485,23 +508,7 @@ export default async function RutaDetallePage({
             </p>
           </div>
         )}
-        {edicionViaje && (
-          <EditarViajePublicado
-            rutaId={ruta.id}
-            origen={origen}
-            destino={destino}
-            fecha={edicionViaje.fecha}
-            hora={edicionViaje.hora}
-            tipoOferta={edicionViaje.tipoOferta}
-            espacio={edicionViaje.espacio}
-            detalleEspacio={edicionViaje.detalleEspacio}
-            precioNeto={edicionViaje.precioNeto}
-            plazas={edicionViaje.plazas}
-            precioNetoPlaza={edicionViaje.precioNetoPlaza}
-            mascotas={edicionViaje.mascotas}
-            vehiculo={edicionViaje.vehiculo}
-          />
-        )}
+        <div className="md:hidden">{botonEditar("border-t border-zinc-200 pt-3")}</div>
       </Card>
 
       {tieneAsientos && !mostrarFormulario && (

@@ -22,11 +22,13 @@ const VACIO: PrecioMinimoCarretera = {
 
 export function usePrecioMinimoCarretera(
   origen: string,
-  destino: string
+  destino: string,
+  activo = true
 ): PrecioMinimoCarretera {
   const [estado, setEstado] = useState<PrecioMinimoCarretera>(VACIO);
 
   useEffect(() => {
+    if (!activo) return;
     const puntos = etiquetasDeViaje(origen, destino);
     if (!puntos) {
       setEstado(VACIO);
@@ -77,7 +79,7 @@ export function usePrecioMinimoCarretera(
       cancelado = true;
       window.clearTimeout(espera);
     };
-  }, [origen, destino]);
+  }, [origen, destino, activo]);
 
   return estado;
 }
