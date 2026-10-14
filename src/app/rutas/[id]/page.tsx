@@ -14,7 +14,12 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
 import { EditarViajePublicado } from "@/components/rutas/EditarViajePublicado";
-import { extractDateFromDatetime, horaEnMadrid } from "@/lib/datetime-form";
+import {
+  extractDateFromDatetime,
+  formatFechaDiaEs,
+  formatHoraEs,
+  horaEnMadrid,
+} from "@/lib/datetime-form";
 import {
   ESPACIO_OPCIONES,
   formatEspacioDisponibleListado,
@@ -216,18 +221,8 @@ export default async function RutaDetallePage({
   const origen = formatCiudad(ruta.origen);
   const destino = formatCiudad(ruta.destino);
 
-  const dia = new Date(ruta.fecha_salida).toLocaleDateString("es-ES", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
-  const horaSalida = new Date(ruta.fecha_llegada_prevista).toLocaleTimeString(
-    "es-ES",
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-  );
+  const dia = formatFechaDiaEs(String(ruta.fecha_salida));
+  const horaSalida = formatHoraEs(String(ruta.fecha_llegada_prevista));
 
   const ofreceBultoAnuncio = rutaOfreceBulto(ruta.espacio_disponible);
   const ofertaAsiento = ofertas.find((o) => o.tipo === "asiento");

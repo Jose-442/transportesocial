@@ -382,11 +382,13 @@ export default async function ReservaDetallePage({
         <p className="text-sm text-zinc-600">
           Para el día:{" "}
           {new Date(reserva.fecha_llegada_prevista).toLocaleDateString("es-ES", {
+            timeZone: "Europe/Madrid",
             day: "numeric",
             month: "numeric",
           })}{" "}
           a las{" "}
           {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString("es-ES", {
+            timeZone: "Europe/Madrid",
             hour: "2-digit",
             minute: "2-digit",
           })}

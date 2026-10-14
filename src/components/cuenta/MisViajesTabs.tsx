@@ -136,6 +136,7 @@ function horaEnTarjeta(salidaEn: string | null | undefined): string {
   const d = new Date(salidaEn);
   if (Number.isNaN(d.getTime())) return "";
   return d.toLocaleTimeString("es-ES", {
+    timeZone: "Europe/Madrid",
     hour: "2-digit",
     minute: "2-digit",
   });

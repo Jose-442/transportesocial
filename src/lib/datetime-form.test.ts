@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatFechaHoraEs, horaEnMadrid } from "@/lib/datetime-form";
+import { formatFechaHoraEs, formatHoraEs, horaEnMadrid } from "@/lib/datetime-form";
 
 describe("formatFechaHoraEs", () => {
   it("deja solo el día si el valor es una fecha sin hora", () => {
@@ -9,5 +9,7 @@ describe("formatFechaHoraEs", () => {
 
   it("pasa la hora guardada a la de España", () => {
     expect(horaEnMadrid("2026-10-13T09:00:00.000Z")).toBe("11:00");
+    expect(formatHoraEs("2026-10-17T15:00:00.000Z")).toBe("17:00");
+    expect(formatHoraEs("2026-10-16T16:00:00.000Z")).toBe("18:00");
   });
 });

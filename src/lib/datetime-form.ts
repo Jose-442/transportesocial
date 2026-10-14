@@ -107,10 +107,24 @@ export function extractDateFromDatetime(value: string): string {
   return match?.[1] ?? "";
 }
 
+const ZONA_ESPANA = "Europe/Madrid";
+
+/** Hora HH:mm en España, también si la página se pinta en el servidor. */
+export function formatHoraEs(value: string): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString("es-ES", {
+    timeZone: ZONA_ESPANA,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function formatFechaDiaEs(value: string): string {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
   return d.toLocaleDateString("es-ES", {
+    timeZone: ZONA_ESPANA,
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -124,10 +138,7 @@ export function formatFechaHoraEs(value: string, hora?: string | null): string {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return fecha;
   if (/^\d{4}-\d{2}-\d{2}$/.test(value.trim())) return fecha;
-  if (d.getHours() === 0 && d.getMinutes() === 0) return fecha;
-  const horaIso = d.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const horaIso = formatHoraEs(value);
+  if (!horaIso || horaIso === "00:00") return fecha;
   return `${fecha}, ${horaIso}`;
 }

@@ -1,6 +1,7 @@
 import { CardLink } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
+import { formatHoraEs } from "@/lib/datetime-form";
 import { formatEur } from "@/lib/pricing";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
@@ -18,17 +19,12 @@ export function RutaCard({
   variant?: "listado" | "cuenta";
 }) {
   const fecha = new Date(ruta.fecha_salida).toLocaleDateString("es-ES", {
+    timeZone: "Europe/Madrid",
     weekday: "short",
     day: "numeric",
     month: "short",
   });
-  const horaSalida = new Date(ruta.fecha_llegada_prevista).toLocaleTimeString(
-    "es-ES",
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-  );
+  const horaSalida = formatHoraEs(String(ruta.fecha_llegada_prevista));
 
   const item = ruta as RutaListadoItem;
   const asientoOfrecidas = item.asientoOfrecidas ?? 0;
