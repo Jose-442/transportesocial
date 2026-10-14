@@ -46,6 +46,27 @@ export default async function HomePage() {
                 max-width: none;
               }
             }
+            .portada-rebaja {
+              width: 100%;
+              max-width: 17.5rem;
+            }
+            @media (min-width: 768px) {
+              .portada-rebaja {
+                width: calc(22rem + 2cm);
+                max-width: 92vw;
+              }
+            }
+            @media (min-width: 1024px) {
+              .portada-rebaja {
+                width: calc(36rem + 2cm);
+                max-width: 100%;
+              }
+            }
+            .portada-rebaja img.portada-nevera-hero {
+              width: 100%;
+              max-width: none;
+              margin: 0;
+            }
           `,
         }}
       />
@@ -108,18 +129,20 @@ export default async function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <div className="flex min-w-0 flex-col items-center justify-center self-stretch px-4 pb-8 pt-1 md:min-h-[14rem] md:px-6 md:pb-8 md:pt-4 lg:min-h-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={BRAND.heroNevera}
-              alt="Portes para todos… o casi todos"
-              className="portada-nevera-hero"
-            />
-            <p className="mt-10 w-full text-center text-2xl font-bold leading-snug text-white sm:text-3xl lg:mt-14 lg:text-4xl">
-              Si tu envío es más pequeño que el espacio publicado, la App le
-              da al conductor la opción de ajustar el precio. ¡Y la diferencia
-              vuelve a tu bolsillo!
-            </p>
+          <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
+            <div className="portada-rebaja flex flex-col items-start">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={BRAND.heroNevera}
+                alt="Portes para todos… o casi todos"
+                className="portada-nevera-hero"
+              />
+              <p className="mt-4 text-left text-base font-semibold leading-snug text-white md:text-lg">
+                Si tu envío es más pequeño que el espacio publicado, la App le
+                da al conductor la opción de ajustar el precio. ¡Y la diferencia
+                vuelve a tu bolsillo!
+              </p>
+            </div>
           </div>
         </section>
 
