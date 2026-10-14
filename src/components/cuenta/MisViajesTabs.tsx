@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { cargarMasHistorial } from "@/actions/historial";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
@@ -253,6 +255,7 @@ export function MisViajesTabs({
   sinPagar = [],
   paraMi,
   historial,
+  historialHayMas = false,
 }: {
   propuestos: ViajeListItem[];
   aceptados: ViajeListItem[];
@@ -260,15 +263,43 @@ export function MisViajesTabs({
   sinPagar?: ReservaViajeItem[];
   paraMi: ViajeListItem[];
   historial: ViajeListItem[];
+  historialHayMas?: boolean;
 }) {
   const [tab, setTab] = useState<ApartadoViajes>("propuestos");
+  const [historialLista, setHistorialLista] = useState(historial);
+  const [hayMas, setHayMas] = useState(historialHayMas);
+  const [pagina, setPagina] = useState(0);
+  const [cargandoMas, setCargandoMas] = useState(false);
+  const [errorMas, setErrorMas] = useState<string | null>(null);
+  const pidiendoMas = useRef(false);
+
+  async function verMas() {
+    if (pidiendoMas.current) return;
+    pidiendoMas.current = true;
+    setCargandoMas(true);
+    setErrorMas(null);
+    const siguiente = pagina + 1;
+    try {
+      const resultado = await cargarMasHistorial(siguiente);
+      if (resultado.error) {
+        setErrorMas(resultado.error);
+        return;
+      }
+      setHistorialLista(resultado.items);
+      setHayMas(resultado.hayMas);
+      setPagina(siguiente);
+    } finally {
+      pidiendoMas.current = false;
+      setCargandoMas(false);
+    }
+  }
 
   const counts = {
     propuestos: propuestos.length,
     aceptados: aceptados.length,
     pagados: pagados.length,
     para_mi: paraMi.length,
-    historial: historial.length,
+    historial: historialLista.length,
   };
 
   const listas: Record<ApartadoViajes, ViajeListItem[]> = {
@@ -276,7 +307,7 @@ export function MisViajesTabs({
     aceptados,
     pagados,
     para_mi: paraMi,
-    historial,
+    historial: historialLista,
   };
   const vacios: Record<ApartadoViajes, string> = {
     propuestos: "Aún no has propuesto ningún viaje.",
@@ -317,13 +348,29 @@ export function MisViajesTabs({
           >
             {t.label}
             {counts[t.id] > 0 && (
-              <span className="ml-0.5 text-zinc-500">({counts[t.id]})</span>
+              <span className="ml-0.5 text-zinc-500">
+                ({t.id === "historial" && hayMas ? `${counts[t.id]}+` : counts[t.id]})
+              </span>
             )}
           </button>
         ))}
       </div>
 
       <ListaApartado items={listas[tab]} vacio={vacios[tab]} />
+      {tab === "historial" && hayMas && (
+        <div className="space-y-2">
+          <Button
+            type="button"
+            variant="secondary"
+            fullWidth
+            disabled={cargandoMas}
+            onClick={verMas}
+          >
+            {cargandoMas ? "Cargando…" : "Ver más"}
+          </Button>
+          {errorMas ? <p className="text-sm text-red-600">{errorMas}</p> : null}
+        </div>
+      )}
     </div>
   );
 }

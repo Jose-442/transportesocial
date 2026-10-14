@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   coincideFiltrosRuta,
+  limitesBusqueda,
   type FiltrosListado,
 } from "@/lib/listado-filters";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -99,21 +100,26 @@ export async function listarRutasConCapacidad(
   supabase: SupabaseClient,
   filtros: FiltrosListado
 ): Promise<RutaListadoItem[]> {
-  const queryActivas = supabase
-    .from("rutas_conductores")
-    .select("*")
-    .eq("estado", "activa")
-    .order("fecha_llegada_prevista", { ascending: true });
+  const limites = limitesBusqueda(filtros);
+  if (!limites) return [];
+  const ahoraIso = new Date().toISOString();
 
-  const { data: activasRaw } = await queryActivas;
+  const consulta = (estado: "activa" | "reservada") => {
+    let query = supabase
+      .from("rutas_conductores")
+      .select("*")
+      .eq("estado", estado)
+      .gte("fecha_llegada_prevista", ahoraIso)
+      .in("fecha_salida", limites.fechas);
+    if (limites.origenes) query = query.in("origen", limites.origenes);
+    if (limites.destinos) query = query.in("destino", limites.destinos);
+    return query.order("fecha_llegada_prevista", { ascending: true });
+  };
 
-  const queryReservadas = supabase
-    .from("rutas_conductores")
-    .select("*")
-    .eq("estado", "reservada")
-    .order("fecha_llegada_prevista", { ascending: true });
-
-  const { data: reservadasRaw } = await queryReservadas;
+  const [{ data: activasRaw }, { data: reservadasRaw }] = await Promise.all([
+    consulta("activa"),
+    consulta("reservada"),
+  ]);
 
   const filtrarPorFiltros = (rutas: RutaConductor[]) =>
     rutas.filter(

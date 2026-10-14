@@ -194,6 +194,34 @@ function mismaProvincia(a: MunicipioEspana, b: MunicipioEspana): boolean {
   );
 }
 
+/**
+ * Municipios que la búsqueda puede aceptar para este origen o destino.
+ * Sirve para pedir a la base solo esa zona, no todos los viajes del país.
+ * Null: hay demasiados y es más seguro no acotar aquí.
+ */
+export function etiquetasMunicipiosCercanos(valor: string): string[] | null {
+  const filtro = resolverMunicipio(valor, { incluirFrontera: true });
+  if (!filtro) return [];
+  if (esMunicipioFrontera(filtro)) return [etiquetaMunicipio(filtro)];
+
+  const coordsFiltro = coordenadasMunicipio(filtro);
+  const cercanos: { etiqueta: string; km: number }[] = [];
+  for (const municipio of MUNICIPIOS_ESPAÑA) {
+    if (!mismaProvincia(municipio, filtro)) continue;
+    const coords = coordenadasMunicipio(municipio);
+    if (coordsFiltro && coords) {
+      const km = distanciaKm(coords, coordsFiltro);
+      if (km > RADIO_BUSQUEDA_KM) continue;
+      cercanos.push({ etiqueta: etiquetaMunicipio(municipio), km });
+    } else {
+      cercanos.push({ etiqueta: etiquetaMunicipio(municipio), km: 0 });
+    }
+  }
+  cercanos.sort((a, b) => a.km - b.km);
+  if (cercanos.length > 250) return null;
+  return cercanos.map((item) => item.etiqueta);
+}
+
 /** Búsqueda de viajes: misma provincia y ≤ RADIO_BUSQUEDA_KM si hay coordenadas. */
 export function coincideMunicipioBusqueda(
   municipioAlmacenado: string,

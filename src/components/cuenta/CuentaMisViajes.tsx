@@ -16,6 +16,7 @@ async function MisViajesContenido({ userId }: { userId: string }) {
       sinPagar={viajes.sinPagar}
       paraMi={viajes.paraMi}
       historial={viajes.historial}
+      historialHayMas={viajes.historialHayMas}
     />
   );
 }

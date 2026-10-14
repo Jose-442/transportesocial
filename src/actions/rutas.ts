@@ -152,11 +152,12 @@ export async function crearRuta(formData: FormData) {
   const fechaSalida = String(formData.get("fecha_salida"));
   const fechaLlegada = String(formData.get("fecha_llegada_prevista"));
 
+  const usuarioId = user.id;
   async function viajesIgualesRecientes() {
     const { data: iguales } = await supabase
       .from("rutas_conductores")
       .select("id, created_at")
-      .eq("user_id", user.id)
+      .eq("user_id", usuarioId)
       .eq("origen", origen)
       .eq("destino", destino)
       .eq("fecha_salida", fechaSalida)

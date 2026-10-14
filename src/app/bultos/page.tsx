@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   coincideFiltrosBulto,
   filtrosToSearchQuery,
+  limitesBusqueda,
   parseFiltros,
   tieneBusquedaCompleta,
   tieneFiltrosActivos,
@@ -33,15 +34,25 @@ export default async function BultosPage({
       data: { user },
     } = await supabase.auth.getUser();
 
-    const { data } = await supabase
-      .from("anuncios_bultos")
-      .select("*")
-      .eq("estado", "activo")
-      .order("created_at", { ascending: false });
+    const limites = limitesBusqueda(filtros);
+    let data: AnuncioBulto[] | null = [];
+    if (limites) {
+      let consulta = supabase
+        .from("anuncios_bultos")
+        .select("*")
+        .eq("estado", "activo")
+        .in("fecha_limite", limites.fechas);
+      if (limites.origenes) consulta = consulta.in("origen", limites.origenes);
+      if (limites.destinos) {
+        consulta = consulta.in("destino", limites.destinos);
+      }
+      const resultado = await consulta.order("created_at", {
+        ascending: false,
+      });
+      data = resultado.data as AnuncioBulto[] | null;
+    }
 
-    bultos = ((data as AnuncioBulto[]) ?? []).filter((b) =>
-      coincideFiltrosBulto(b, filtros)
-    );
+    bultos = (data ?? []).filter((b) => coincideFiltrosBulto(b, filtros));
 
     // Si te rechazaron en un bulto, no vuelve a salir en la búsqueda.
     if (user && bultos.length > 0) {

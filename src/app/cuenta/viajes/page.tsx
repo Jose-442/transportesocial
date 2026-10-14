@@ -42,6 +42,7 @@ export default async function MisViajesPage() {
         sinPagar={viajes.sinPagar}
         paraMi={viajes.paraMi}
         historial={viajes.historial}
+        historialHayMas={viajes.historialHayMas}
       />
     </div>
   );

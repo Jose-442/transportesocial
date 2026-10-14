@@ -1,5 +1,9 @@
 import { parseDate } from "@/lib/datetime-form";
-import { coincideMunicipioBusqueda, resolverMunicipio } from "@/lib/municipios-espana";
+import {
+  coincideMunicipioBusqueda,
+  etiquetasMunicipiosCercanos,
+  resolverMunicipio,
+} from "@/lib/municipios-espana";
 
 export type FiltrosListado = {
   origen?: string;
@@ -78,6 +82,46 @@ export function mismaFechaMesDia(
     almacenada.month === filtro.month &&
     almacenada.day === filtro.day
   );
+}
+
+function fechaCalendarioValida(iso: string): boolean {
+  const [year, month, day] = iso.split("-").map((parte) => Number(parte));
+  if (!year || !month || !day) return false;
+  const fecha = new Date(Date.UTC(year, month - 1, day));
+  return (
+    fecha.getUTCFullYear() === year &&
+    fecha.getUTCMonth() === month - 1 &&
+    fecha.getUTCDate() === day
+  );
+}
+
+/** El mismo mes y día de este año, el anterior y el siguiente. */
+export function fechasCercanasAlDia(fecha: string): string[] {
+  const dia = fecha.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia)) return [];
+  const year = Number(dia.slice(0, 4));
+  const resto = dia.slice(4);
+  return [year - 1, year, year + 1]
+    .map((candidato) => `${candidato}${resto}`)
+    .filter(fechaCalendarioValida);
+}
+
+/**
+ * Zona y días que hay que pedir. Null: la búsqueda no puede dar resultados.
+ * origenes o destinos a null: no acotar ese lado (la lista fina sigue en memoria).
+ */
+export function limitesBusqueda(filtros: FiltrosListado): {
+  origenes: string[] | null;
+  destinos: string[] | null;
+  fechas: string[];
+} | null {
+  if (!filtros.origen || !filtros.destino || !filtros.fecha) return null;
+  const fechas = fechasCercanasAlDia(filtros.fecha);
+  if (fechas.length === 0) return null;
+  const origenes = etiquetasMunicipiosCercanos(filtros.origen);
+  const destinos = etiquetasMunicipiosCercanos(filtros.destino);
+  if (origenes?.length === 0 || destinos?.length === 0) return null;
+  return { origenes, destinos, fechas };
 }
 
 export function coincideFiltrosBulto(
