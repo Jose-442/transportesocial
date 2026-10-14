@@ -2,7 +2,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { HomeSofaHighlight } from "@/components/home/HomeSofaHighlight";
 import { HomeSubscriptionBanner } from "@/components/home/HomeSubscriptionBanner";
-import { BRAND, BRAND_TAGLINE } from "@/lib/brand";
+import { BRAND } from "@/lib/brand";
 
 export default async function HomePage() {
   return (
@@ -92,10 +92,7 @@ export default async function HomePage() {
                 <span className="block">compartiendo ruta</span>
               </h1>
             </div>
-            <p className="text-xs text-emerald-100/90 sm:text-sm lg:text-base">
-              {BRAND_TAGLINE}
-            </p>
-            <p className="mt-2 text-xs text-emerald-50 sm:mt-3 sm:text-sm lg:mt-2 lg:text-base">
+            <p className="text-xs text-emerald-50 sm:text-sm lg:text-base">
               Cercano, práctico, útil. Conectamos conductores con espacio libre
               con personas que necesitan enviar un bulto, viajar o desplazarse
               con su mascota.

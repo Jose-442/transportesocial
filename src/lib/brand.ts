@@ -7,5 +7,3 @@ export const BRAND = {
   quienesSomosNevera: "/brand/quienes-somos-nevera.png",
   quienesSomosCamion: "/brand/quienes-somos-camion.png",
 } as const;
-
-export const BRAND_TAGLINE = "Compartiendo gastos, moviendo lo grande";
