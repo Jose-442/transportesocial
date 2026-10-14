@@ -16,7 +16,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "4 de octubre de 2026";
+  const fechaActualizacion = "14 de octubre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -368,7 +368,43 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            9. Tarifas de la Plataforma
+            9. Ajuste del precio si el porte es más pequeño
+          </h3>
+          <div className="space-y-3">
+            <p>
+              Quien reserva un porte más pequeño que el espacio publicado puede
+              marcar, al reservar, que solicita una rebaja. El pago se hace por
+              el precio entero publicado, y con eso queda hecha la reserva.
+            </p>
+            <p>
+              Después de confirmada y pagada, el Conductor puede guardar un
+              precio más bajo solo para esa reserva. No está obligado. El
+              anuncio público no cambia. Escribir en el chat que sí no cambia
+              el precio: el precio cambia cuando el Conductor guarda el nuevo.
+              Entonces se devuelve la diferencia a quien pagó.
+            </p>
+            <p>
+              Ese precio solo se puede pedir y guardar hasta 48 horas antes de
+              la hora de salida. Si faltan menos de 48 horas, ya no se puede. A
+              partir de ese momento, el precio queda como esté.
+            </p>
+            <p>
+              El precio nuevo no puede bajar del mínimo de la Plataforma: 0,07
+              € por kilómetro de carretera. Si de esa cuenta salen céntimos, el
+              mínimo es el euro de arriba. Ese mínimo es el precio que ve quien
+              reserva, gastos de gestión incluidos.
+            </p>
+            <p>
+              Si el Conductor guarda el precio más bajo, el hueco que sobre lo
+              vuelve a publicar solo si quiere. Si no guarda un precio nuevo,
+              el viaje sigue por lo ya pagado.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h3 className="mb-2 font-semibold text-zinc-900">
+            10. Tarifas de la Plataforma
           </h3>
           <p>
             Usar {APP_NAME} es gratuito: registrarse, publicar viajes y buscar
@@ -382,7 +418,7 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            10. Reseñas «a ciegas»
+            11. Reseñas «a ciegas»
           </h3>
           <ul className="list-disc space-y-2 pl-5">
             <li>
@@ -403,7 +439,7 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            11. Protección de datos personales
+            12. Protección de datos personales
           </h3>
           <p>
             De conformidad con el RGPD (UE) 2016/679 y la LOPDGDD, los datos
@@ -422,7 +458,7 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            12. Resolución de litigios en línea
+            13. Resolución de litigios en línea
           </h3>
           <p>
             De conformidad con el Art. 14.1 del Reglamento (UE) 524/2013, la
@@ -443,7 +479,7 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            13. Legislación aplicable y jurisdicción
+            14. Legislación aplicable y jurisdicción
           </h3>
           <ul className="list-disc space-y-2 pl-5">
             <li>Estas Condiciones se rigen por la legislación española.</li>
