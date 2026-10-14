@@ -27,16 +27,27 @@ export default function QuienesSomosPage() {
         className="mx-auto mb-6 h-auto w-full max-w-2xl"
       />
 
-      <p className="mb-6 text-base leading-relaxed sm:text-lg">
-        Somos una plataforma que conecta a conductores que tienen un viaje ya
-        programado y disponen de espacio libre con personas que necesitan
-        enviar algo muy voluminoso. Al hacer esa conexión, logramos que un porte
-        sea económico, rápido, eficiente y sostenible, con cero emisiones
-        añadidas, ya que el viaje se iba a hacer de todas maneras. También en
-        nuestra plataforma puede publicar su solicitud la persona que necesita
-        hacer un porte, para que los conductores que hagan esa ruta puedan
-        ofrecerle un precio. ¡Así de fácil! Un éxito para ambas partes.
-      </p>
+      <div className="mb-6 space-y-4 text-base leading-relaxed sm:text-lg">
+        <p>
+          Somos una plataforma que conecta a conductores que tienen un viaje ya
+          programado y disponen de espacio libre, con personas que necesitan
+          enviar un porte.
+        </p>
+        <p>
+          Al hacer esa conexión, logramos que un porte sea económico, rápido,
+          eficiente y sostenible, con cero emisiones añadidas, ya que el viaje
+          se iba a hacer de todas formas. También en nuestra plataforma puede
+          publicar su solicitud de viaje la persona que necesite hacer un
+          porte, para que los conductores que hagan esa ruta puedan ofrecerle
+          un precio.
+        </p>
+        <p>
+          Además, si tu envío es más pequeño que el espacio publicado, la App
+          le da al conductor la opción de ajustar el precio hasta 48 horas
+          antes del viaje.
+        </p>
+        <p>¡Así de fácil! Un éxito para ambas partes.</p>
+      </div>
 
       <Image
         src={BRAND.quienesSomosCamion}
