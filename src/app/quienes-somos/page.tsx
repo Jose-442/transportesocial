@@ -205,7 +205,7 @@ export default function QuienesSomosPage() {
           href="/"
           className="font-semibold text-emerald-700 hover:text-emerald-800"
         >
-          Volver a inicio
+          Ir a la portada
         </Link>
       </p>
     </div>
