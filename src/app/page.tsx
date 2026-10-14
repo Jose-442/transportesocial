@@ -131,7 +131,7 @@ export default async function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={BRAND.heroNevera}
-                alt="Portes para todos… o casi todos"
+                alt=""
                 className="portada-nevera-hero"
               />
               <p className="mt-8 text-left text-lg font-semibold leading-snug text-white md:text-xl">
