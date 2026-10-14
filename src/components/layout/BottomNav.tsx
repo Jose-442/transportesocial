@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type NavItem = {
   href: string;
@@ -66,9 +66,64 @@ function NavLink({
 
 export function BottomNav() {
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
+  const [separacion, setSeparacion] = useState(96);
+  const [mostrarSubir, setMostrarSubir] = useState(false);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const medir = () => {
+      let tope = nav.getBoundingClientRect().top;
+      document.querySelectorAll(".ts-pwa-banner, .fixed.bottom-0").forEach((el) => {
+        if (el === nav || el.classList.contains("ts-pwa-banner--out")) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.height < 8 || rect.bottom < window.innerHeight * 0.5) return;
+        tope = Math.min(tope, rect.top);
+      });
+      setSeparacion(Math.ceil(window.innerHeight - tope) + 12);
+    };
+    medir();
+    const obs = new ResizeObserver(medir);
+    obs.observe(nav);
+    const mut = new MutationObserver(medir);
+    mut.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    window.addEventListener("resize", medir);
+    return () => {
+      obs.disconnect();
+      mut.disconnect();
+      window.removeEventListener("resize", medir);
+    };
+  }, []);
+
+  useEffect(() => {
+    const actualizar = () => setMostrarSubir(window.scrollY > 320);
+    actualizar();
+    window.addEventListener("scroll", actualizar, { passive: true });
+    return () => window.removeEventListener("scroll", actualizar);
+  }, [pathname]);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-emerald-800 bg-emerald-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(0,0,0,0.25)] md:pb-0">
+    <>
+      {mostrarSubir ? (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          style={{ bottom: separacion }}
+          className="fixed right-4 z-50 inline-flex min-h-11 items-center justify-center rounded-full border border-emerald-900 bg-emerald-700 px-4 text-sm font-semibold text-white shadow-lg"
+        >
+          ↑ Arriba
+        </button>
+      ) : null}
+      <nav
+        ref={navRef}
+        className="fixed bottom-0 left-0 right-0 z-40 border-t border-emerald-800 bg-emerald-900 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(0,0,0,0.25)] md:pb-0"
+      >
       <div className="mx-auto grid max-w-lg grid-cols-2 gap-1 py-2 md:hidden">
         {mobileItems.map((item) => (
           <NavLink
@@ -93,5 +148,6 @@ export function BottomNav() {
         ))}
       </div>
     </nav>
+    </>
   );
 }
