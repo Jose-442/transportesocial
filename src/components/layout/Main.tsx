@@ -1,10 +1,26 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 export function Main({ children }: { children: ReactNode }) {
-  const isHome = usePathname() === "/";
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  useEffect(() => {
+    if (window.location.hash) return;
+    const subir = () => {
+      if (window.location.hash) return;
+      window.scrollTo(0, 0);
+    };
+    subir();
+    const frame = requestAnimationFrame(subir);
+    const despues = window.setTimeout(subir, 0);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(despues);
+    };
+  }, [pathname]);
 
   return (
     <main
