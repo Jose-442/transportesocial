@@ -149,6 +149,34 @@ export async function crearRuta(formData: FormData) {
 
   const origen = etiquetaMunicipio(origenResuelto.municipio!);
   const destino = etiquetaMunicipio(destinoResuelto.municipio!);
+  const fechaSalida = String(formData.get("fecha_salida"));
+  const fechaLlegada = String(formData.get("fecha_llegada_prevista"));
+
+  async function viajesIgualesRecientes() {
+    const { data: iguales } = await supabase
+      .from("rutas_conductores")
+      .select("id, created_at")
+      .eq("user_id", user.id)
+      .eq("origen", origen)
+      .eq("destino", destino)
+      .eq("fecha_salida", fechaSalida)
+      .eq("fecha_llegada_prevista", fechaLlegada)
+      .eq("estado", "activa")
+      .order("created_at", { ascending: true })
+      .order("id", { ascending: true });
+    const ahora = Date.now();
+    return (iguales ?? []).filter((viaje) => {
+      const creado = new Date(viaje.created_at).getTime();
+      return Number.isFinite(creado) && ahora - creado < 2 * 60 * 1000;
+    });
+  }
+
+  const yaPublicado = await viajesIgualesRecientes();
+  if (yaPublicado[0]) {
+    revalidatePath("/rutas");
+    return { id: yaPublicado[0].id };
+  }
+
   const preciosVisibles = [
     ...(conBulto ? [precioPublicado] : []),
     ...(conPasajeros ? [precioPublicadoPlaza] : []),
@@ -167,8 +195,8 @@ export async function crearRuta(formData: FormData) {
       origen,
       destino,
       ...columnasCoordenadas(origen, destino),
-      fecha_salida: String(formData.get("fecha_salida")),
-      fecha_llegada_prevista: String(formData.get("fecha_llegada_prevista")),
+      fecha_salida: fechaSalida,
+      fecha_llegada_prevista: fechaLlegada,
       espacio_disponible: espacioDisponible,
       precio_neto: precioNeto,
       precio_publicado: precioPublicado,
@@ -178,6 +206,14 @@ export async function crearRuta(formData: FormData) {
     .single();
 
   if (error) return { error: supabaseErrorMessage(error) };
+
+  const repetidos = await viajesIgualesRecientes();
+  const primero = repetidos[0];
+  if (primero && primero.id !== data.id) {
+    await supabase.from("rutas_conductores").delete().eq("id", data.id);
+    revalidatePath("/rutas");
+    return { id: primero.id };
+  }
 
   if (conPasajeros) {
     const { error: ofertaError } = await supabase.from("ofertas_capacidad").insert({

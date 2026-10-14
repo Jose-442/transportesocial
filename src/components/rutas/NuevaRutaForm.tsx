@@ -110,6 +110,7 @@ export function NuevaRutaForm({
   const [form, setForm] = useState<NuevaRutaDraft>(EMPTY_NUEVA_RUTA_DRAFT);
   const uidRef = useRef("");
   const formRef = useRef<HTMLFormElement>(null);
+  const enviando = useRef(false);
   const [faltaIdentidad, setFaltaIdentidad] = useState(mostrarAvisoIdentidad);
   const {
     form: identidad,
@@ -402,19 +403,26 @@ export function NuevaRutaForm({
     router.refresh();
   }
 
+  function soltarEnvio() {
+    enviando.current = false;
+    setLoading(false);
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (enviando.current) return;
+    enviando.current = true;
     setLoading(true);
     setError("");
 
     if (faltaIdentidad) {
       setError("Indica tu teléfono y DNI/NIE antes de publicar.");
-      setLoading(false);
+      soltarEnvio();
       return;
     }
     if (mostrarAvisoVehiculo) {
       setError('Pulsa abajo en: "Datos del vehículo" y complétalos antes de continuar');
-      setLoading(false);
+      soltarEnvio();
       return;
     }
 
@@ -425,12 +433,12 @@ export function NuevaRutaForm({
     if (bajoPlaza) validationErrors.precio_neto_plaza = bajoPlaza;
     if (minimoCarretera.cargando) {
       setError("Espera un momento: se están calculando los kilómetros.");
-      setLoading(false);
+      soltarEnvio();
       return;
     }
     if (minimoCarretera.error) {
       setError(minimoCarretera.error);
-      setLoading(false);
+      soltarEnvio();
       return;
     }
     if (
@@ -442,13 +450,13 @@ export function NuevaRutaForm({
       setError(
         "No se han podido calcular los kilómetros por carretera. Prueba otra vez."
       );
-      setLoading(false);
+      soltarEnvio();
       return;
     }
     if (Object.keys(validationErrors).length > 0) {
       setFieldErrors(validationErrors);
       setError("Completa los campos marcados en rojo.");
-      setLoading(false);
+      soltarEnvio();
       return;
     }
     setFieldErrors({});
@@ -458,12 +466,12 @@ export function NuevaRutaForm({
       form.hora_salida
     );
     if (!fechaLlegadaPrevista) {
-      setLoading(false);
       setFieldErrors({
         fecha_salida: "Fecha no válida.",
         hora_salida: "Hora no válida.",
       });
       setError("Completa los campos marcados en rojo.");
+      soltarEnvio();
       return;
     }
 
@@ -479,11 +487,18 @@ export function NuevaRutaForm({
     formData.set("precio_neto", form.precio_neto);
     formData.set("acepta_mascotas", form.acepta_mascotas);
 
-    const result = await crearRuta(formData);
+    let result: Awaited<ReturnType<typeof crearRuta>>;
+    try {
+      result = await crearRuta(formData);
+    } catch {
+      setError("No se pudo publicar la ruta.");
+      soltarEnvio();
+      return;
+    }
 
-    setLoading(false);
     if ("error" in result) {
       setError(result.error ?? "No se pudo publicar la ruta.");
+      soltarEnvio();
       return;
     }
 
