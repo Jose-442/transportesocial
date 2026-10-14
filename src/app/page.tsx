@@ -137,7 +137,7 @@ export default async function HomePage() {
                 alt="Portes para todos… o casi todos"
                 className="portada-nevera-hero"
               />
-              <p className="mt-4 text-left text-base font-semibold leading-snug text-white md:text-lg">
+              <p className="mt-8 text-left text-lg font-semibold leading-snug text-white md:text-xl">
                 Si tu envío es más pequeño que el espacio publicado, la App le
                 da al conductor la opción de ajustar el precio. ¡Y la diferencia
                 vuelve a tu bolsillo!
