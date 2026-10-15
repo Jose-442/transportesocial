@@ -9,7 +9,7 @@ export function HomeSofaHighlight() {
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
         ¡¡Aprovechando los viajes!!
         <br />
-        más economico, más eficiente, más rapido, viaja, envia lo que necesites, puedes acompañar a tu envío
+        más económico, más eficiente, más rápido, viaja, envía lo que necesites, puedes acompañar a tu envío
       </p>
       <div className="mx-auto flex w-full max-w-[19rem] shrink-0 justify-center leading-none sm:max-w-[22rem] lg:max-w-[36rem]">
         {/* eslint-disable-next-line @next/next/no-img-element */}

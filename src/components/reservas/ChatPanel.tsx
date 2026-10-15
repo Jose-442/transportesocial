@@ -44,6 +44,7 @@ export function ChatPanel({
   const [textoEdicion, setTextoEdicion] = useState("");
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const ocupado = useRef(false);
 
   const ultimoDelChat =
     mensajes.length > 0 ? mensajes[mensajes.length - 1] : null;
@@ -99,12 +100,19 @@ export function ChatPanel({
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (ocupado.current) return;
+    ocupado.current = true;
     setError(null);
     setAviso(null);
     setLoading(true);
     const textoEnviado = form.cuerpo;
-    const result = await enviarMensajeChat(reservaId, textoEnviado);
-    setLoading(false);
+    let result: Awaited<ReturnType<typeof enviarMensajeChat>>;
+    try {
+      result = await enviarMensajeChat(reservaId, textoEnviado);
+    } finally {
+      ocupado.current = false;
+      setLoading(false);
+    }
     if (result.error) {
       setError(result.error);
       return;
@@ -137,11 +145,18 @@ export function ChatPanel({
   }
 
   async function guardarEdicion() {
+    if (ocupado.current) return;
+    ocupado.current = true;
     setError(null);
     setAviso(null);
     setCargandoAccion(true);
-    const result = await editarUltimoMensajeChat(reservaId, textoEdicion);
-    setCargandoAccion(false);
+    let result: Awaited<ReturnType<typeof editarUltimoMensajeChat>>;
+    try {
+      result = await editarUltimoMensajeChat(reservaId, textoEdicion);
+    } finally {
+      ocupado.current = false;
+      setCargandoAccion(false);
+    }
     if (result.error) {
       setError(result.error);
       return;
@@ -168,12 +183,18 @@ export function ChatPanel({
   }
 
   async function anularUltimo() {
-    if (!ultimoDelChat) return;
+    if (!ultimoDelChat || ocupado.current) return;
+    ocupado.current = true;
     const idAnular = ultimoDelChat.id;
     setError(null);
     setCargandoAccion(true);
-    const result = await eliminarUltimoMensajeChat(reservaId);
-    setCargandoAccion(false);
+    let result: Awaited<ReturnType<typeof eliminarUltimoMensajeChat>>;
+    try {
+      result = await eliminarUltimoMensajeChat(reservaId);
+    } finally {
+      ocupado.current = false;
+      setCargandoAccion(false);
+    }
     if (result.error) {
       setError(result.error);
       return;

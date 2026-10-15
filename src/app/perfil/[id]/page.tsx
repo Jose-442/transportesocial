@@ -98,7 +98,9 @@ export default async function PerfilPublicoPage({
               </p>
               <p className="mt-1 text-sm text-zinc-700">{r.comentario}</p>
               <p className="mt-1 text-xs text-zinc-400">
-                {new Date(r.created_at).toLocaleDateString("es-ES")}
+                {new Date(r.created_at).toLocaleDateString("es-ES", {
+                  timeZone: "Europe/Madrid",
+                })}
               </p>
             </div>
           ))
