@@ -110,11 +110,14 @@ export async function aplicarCancelacionPagada(
   const ids = filas.map((fila) => fila.id);
   const reparto = repartoCancelacion(filas, opts.tipo);
 
-  const { data: txs } = await admin
+  const { data: txs, error: errorCobro } = await admin
     .from("transacciones")
     .select("id, reserva_id, stripe_payment_intent_id, estado_escrow, monto")
     .in("reserva_id", ids)
     .eq("tipo", "cobro_viaje");
+  if (errorCobro) {
+    console.error("[reembolso] lectura cobro", errorCobro.message);
+  }
 
   const porIntent = new Map<
     string,
@@ -142,7 +145,31 @@ export async function aplicarCancelacionPagada(
     porIntent.set(intent, previa);
   }
 
-  const hayCobro = (txs ?? []).some((tx) => tx.stripe_payment_intent_id);
+  const sinFilasDeCobro = Boolean(errorCobro) || (txs ?? []).length === 0;
+  if (
+    porIntent.size === 0 &&
+    sinFilasDeCobro &&
+    opts.tipo === "total" &&
+    reparto.reembolsoCents > 0
+  ) {
+    const { cobroDeEstasReservas } = await import("@/lib/stripe/cobro-reserva");
+    const { getStripeServer } = await import("@/lib/stripe/server");
+    const stripe = getStripeServer();
+    const lista = await stripe.paymentIntents.list({ limit: 100 });
+    for (const pi of lista.data) {
+      if (!cobroDeEstasReservas(pi, ids) || porIntent.has(pi.id)) continue;
+      const centimos = pi.amount_received > 0 ? pi.amount_received : pi.amount;
+      porIntent.set(pi.id, {
+        txIds: [],
+        reservaIds: [...ids],
+        cobradoCents: centimos,
+        reembolsoCents: centimos,
+      });
+    }
+  }
+
+  const hayCobro =
+    (txs ?? []).some((tx) => tx.stripe_payment_intent_id) || porIntent.size > 0;
   if (reparto.reembolsoCents > 0 && !hayCobro) {
     throw new Error("No se ha encontrado el cobro para devolver el dinero.");
   }
@@ -158,7 +185,7 @@ export async function aplicarCancelacionPagada(
     try {
       await reembolsarPaymentIntent(intent, {
         ...(esTotal ? {} : { amountCents }),
-        idempotencyKey: `cancelacion-${[...grupo.reservaIds].sort().join("-")}-${opts.tipo}`,
+        idempotencyKey: `cancelacion-${intent}-${opts.tipo}`,
       });
     } catch (err) {
       if (!reembolsoYaHecho(err)) throw err;
@@ -194,6 +221,13 @@ export async function aplicarCancelacionPagada(
       .from("transacciones")
       .update({ estado_escrow: escrow })
       .in("id", txIds);
+  }
+  const intentIds = [...porIntent.keys()];
+  if (intentIds.length > 0) {
+    await admin
+      .from("transacciones")
+      .update({ estado_escrow: escrow })
+      .in("stripe_payment_intent_id", intentIds);
   }
 
   const ahora = new Date().toISOString();
