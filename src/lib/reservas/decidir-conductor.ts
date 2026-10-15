@@ -1,13 +1,14 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { formatEur } from "@/lib/pricing";
+import { aplicarCancelacionPagada } from "@/lib/reservas/aplicar-cancelacion";
 import {
   avisarReservaAceptada,
   persistirAceptacionReserva,
   persistirRechazoReserva,
 } from "@/lib/reservas/cron";
 import { crearNotificacion } from "@/lib/reservas/notify";
-import { reembolsarReserva } from "@/lib/reservas/payment";
 import type { Reserva } from "@/types/database";
 
 async function filasPendientes(
@@ -27,6 +28,50 @@ async function filasPendientes(
   const filas = (data as Reserva[] | null) ?? [];
   if (filas.length > 0) return filas;
   return reserva.estado === "pendiente_aprobacion" ? [reserva] : [];
+}
+
+async function filasCanceladasDelViaje(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reserva: Reserva
+): Promise<Reserva[]> {
+  if (!reserva.ruta_conductor_id) return [reserva];
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id)
+    .eq("estado", "cancelado");
+  const filas = (data as Reserva[] | null) ?? [];
+  return filas.length > 0 ? filas : [reserva];
+}
+
+async function devolverEntero(
+  filas: Reserva[],
+  motivo: string
+): Promise<{ ok: true; reembolsoEur: number } | { ok: false; error: string }> {
+  const admin = createAdminClient();
+  if (!admin) {
+    return {
+      ok: false,
+      error: "No se ha podido devolver el dinero. Prueba otra vez.",
+    };
+  }
+  try {
+    const dinero = await aplicarCancelacionPagada(admin, filas, {
+      motivo,
+      tipo: "total",
+      pagarAlConductor: false,
+    });
+    return { ok: true, reembolsoEur: dinero.reembolsoEur };
+  } catch (err) {
+    console.error("[rechazar] reembolso", err);
+    return {
+      ok: false,
+      error:
+        "El viaje se ha cancelado, pero no se ha podido devolver el dinero. Prueba otra vez.",
+    };
+  }
 }
 
 export async function ejecutarDecisionConductor(opts: {
@@ -71,6 +116,12 @@ export async function ejecutarDecisionConductor(opts: {
         return { ok: true };
       }
       if (decision === "rechazar" && reserva.estado === "cancelado") {
+        const grupo = await filasCanceladasDelViaje(supabase, reserva);
+        const dinero = await devolverEntero(
+          grupo,
+          reserva.motivo_cancelacion || "Rechazada por el conductor."
+        );
+        if (!dinero.ok) return { error: dinero.error };
         return { ok: true };
       }
       return { error: "Esta reserva ya no está esperando tu respuesta." };
@@ -110,20 +161,19 @@ export async function ejecutarDecisionConductor(opts: {
         console.error("[aceptar] aviso", err)
       );
     } else {
-      const admin = createAdminClient();
-      if (admin) {
-        void reembolsarReserva(admin, principal.id, motivo).catch((err) =>
-          console.error("[rechazar] reembolso", err)
-        );
+      const dinero = await devolverEntero(filas, motivo);
+      if (!dinero.ok) return { error: dinero.error };
+      try {
+        await crearNotificacion(supabase, {
+          user_id: reserva.cliente_id,
+          tipo: "reserva_rechazada",
+          titulo: "Reserva rechazada",
+          mensaje: `El conductor ha rechazado tu solicitud. Reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) en curso.`,
+          enlace: `/reservas/${principal.id}`,
+        });
+      } catch (err) {
+        console.error("[rechazar] aviso", err);
       }
-      void crearNotificacion(supabase, {
-        user_id: reserva.cliente_id,
-        tipo: "reserva_rechazada",
-        titulo: "Reserva rechazada",
-        mensaje:
-          "El conductor ha rechazado tu solicitud. Reembolso del 100 % en curso.",
-        enlace: `/reservas/${principal.id}`,
-      }).catch((err) => console.error("[rechazar] aviso", err));
     }
 
     for (const fila of filas) {
