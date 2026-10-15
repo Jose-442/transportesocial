@@ -46,6 +46,24 @@ async function filasCanceladasDelViaje(
   return filas.length > 0 ? filas : [reserva];
 }
 
+async function avisarRechazo(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  reserva: Reserva,
+  reembolsoEur: number
+) {
+  try {
+    await crearNotificacion(supabase, {
+      user_id: reserva.cliente_id,
+      tipo: "reserva_rechazada",
+      titulo: "Reserva rechazada",
+      mensaje: `El conductor ha rechazado tu solicitud. Reembolso del 100 % (${formatEur(reembolsoEur)}) en curso.`,
+      enlace: `/reservas/${reserva.id}`,
+    });
+  } catch (err) {
+    console.error("[rechazar] aviso", err);
+  }
+}
+
 async function devolverEntero(
   filas: Reserva[],
   motivo: string
@@ -122,6 +140,7 @@ export async function ejecutarDecisionConductor(opts: {
           reserva.motivo_cancelacion || "Rechazada por el conductor."
         );
         if (!dinero.ok) return { error: dinero.error };
+        await avisarRechazo(supabase, reserva, dinero.reembolsoEur);
         return { ok: true };
       }
       return { error: "Esta reserva ya no está esperando tu respuesta." };
@@ -163,17 +182,7 @@ export async function ejecutarDecisionConductor(opts: {
     } else {
       const dinero = await devolverEntero(filas, motivo);
       if (!dinero.ok) return { error: dinero.error };
-      try {
-        await crearNotificacion(supabase, {
-          user_id: reserva.cliente_id,
-          tipo: "reserva_rechazada",
-          titulo: "Reserva rechazada",
-          mensaje: `El conductor ha rechazado tu solicitud. Reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) en curso.`,
-          enlace: `/reservas/${principal.id}`,
-        });
-      } catch (err) {
-        console.error("[rechazar] aviso", err);
-      }
+      await avisarRechazo(supabase, principal, dinero.reembolsoEur);
     }
 
     for (const fila of filas) {
