@@ -100,7 +100,7 @@ export function repartoCancelacion(
 }
 
 export function textoBotonCancelacion(tipo: TipoRepartoCancelacion): string {
-  if (tipo === "total") return "Cancelar y solicitar reembolso";
+  if (tipo === "total") return "Cancelar";
   return "Cancelar reserva";
 }
 
@@ -109,7 +109,7 @@ export function fraseAyudaCancelacionCliente(
   reembolsoEur: string
 ): string {
   if (tipo === "total") {
-    return `Te devolvemos el 100 % (${reembolsoEur}).`;
+    return `Te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
   }
   if (tipo === "viaje_sin_gastos") {
     return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;

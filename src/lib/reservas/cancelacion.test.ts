@@ -135,7 +135,9 @@ describe("repartoCancelacion", () => {
 
 describe("frases de cancelación", () => {
   it("dicen el reembolso sin rodeos", () => {
-    expect(fraseAyudaCancelacionCliente("total", "118,00 €")).toContain("100 %");
+    expect(fraseAyudaCancelacionCliente("total", "118,00 €")).toBe(
+      "Te devolvemos el 100 % (118,00 €). El reembolso, lo que tarde tu banco."
+    );
     expect(fraseAyudaCancelacionCliente("viaje_sin_gastos", "70,00 €")).toBe(
       "Te devolvemos el viaje (70,00 €). Los gastos ocasionados por la gestión no se devuelven."
     );
