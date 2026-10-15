@@ -134,7 +134,7 @@ export async function resolverDisputaFavorCliente(
       user_id: uid,
       tipo: "reserva_actualizada",
       titulo: "Disputa cerrada",
-      mensaje: "La disputa se resolvió a favor del cliente. Reembolso en curso.",
+      mensaje: "La disputa se resolvió a favor del cliente. El reembolso ya está hecho. Lo que tarde tu banco.",
       enlace: `/reservas/${reserva.id}`,
     });
   }

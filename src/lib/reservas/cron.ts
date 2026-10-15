@@ -30,7 +30,7 @@ export async function procesarCronsReservas(admin: AdminClient) {
       user_id: r.cliente_id,
       tipo: "reserva_expirada",
       titulo: "Reserva expirada",
-      mensaje: "El conductor no respondió a tiempo. Reembolso del 100 % en curso.",
+      mensaje: "El conductor no respondió a tiempo. El reembolso del 100 % ya está hecho. Lo que tarde tu banco.",
       enlace: `/reservas/${r.id}`,
     });
     await crearNotificacion(admin, {

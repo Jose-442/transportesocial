@@ -121,7 +121,7 @@ export async function ejecutarCancelacionReserva(opts: {
         titulo: "Reserva cancelada",
         mensaje:
           dinero.reembolsoEur > 0
-            ? `Has cancelado. Reembolso de ${formatEur(dinero.reembolsoEur)} en curso.`
+            ? `Has cancelado. El reembolso de ${formatEur(dinero.reembolsoEur)} ya está hecho. Lo que tarde tu banco.`
             : "Has cancelado la reserva.",
         enlace,
       });
@@ -140,7 +140,7 @@ export async function ejecutarCancelacionReserva(opts: {
         user_id: reserva.cliente_id,
         tipo: "reserva_rechazada",
         titulo: "El conductor ha cancelado",
-        mensaje: `Reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) en curso.`,
+        mensaje: `El reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) ya está hecho. Lo que tarde tu banco.`,
         enlace,
       });
       await crearNotificacion(admin, {

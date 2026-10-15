@@ -263,7 +263,7 @@ export async function rechazarRecogida(
       user_id: reserva.cliente_id,
       tipo: "reserva_rechazada",
       titulo: "Recogida rechazada",
-      mensaje: `El conductor no ha podido cargar el porte (${labelMotivoRechazoRecogida(motivo)}). Reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) en curso.`,
+      mensaje: `El conductor no ha podido cargar el porte (${labelMotivoRechazoRecogida(motivo)}). El reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) ya está hecho. Lo que tarde tu banco.`,
       enlace,
     });
 

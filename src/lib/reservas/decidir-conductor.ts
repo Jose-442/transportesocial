@@ -56,7 +56,7 @@ async function avisarRechazo(
       user_id: reserva.cliente_id,
       tipo: "reserva_rechazada",
       titulo: "Reserva rechazada",
-      mensaje: `El conductor ha rechazado tu solicitud. Reembolso del 100 % (${formatEur(reembolsoEur)}) en curso.`,
+      mensaje: `El conductor ha rechazado tu solicitud. El reembolso del 100 % (${formatEur(reembolsoEur)}) ya está hecho. Lo que tarde tu banco.`,
       enlace: `/reservas/${reserva.id}`,
     });
   } catch (err) {
