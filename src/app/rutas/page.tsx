@@ -11,12 +11,11 @@ import {
 } from "@/lib/listado-filters";
 import { listarRutasConCapacidad } from "@/lib/capacidad/rutas-listado";
 import type { RutaListadoItem } from "@/lib/capacidad/rutas-listado";
+import { Paginacion } from "@/components/listados/Paginacion";
 import {
   POR_PAGINA_LISTADO,
-  Paginacion,
-  hrefPagina,
   paginaPedida,
-} from "@/components/listados/Paginacion";
+} from "@/lib/listado-paginacion";
 
 export const dynamic = "force-dynamic";
 
@@ -118,7 +117,8 @@ export default async function RutasPage({
               <Paginacion
                 pagina={paginaRutas}
                 totalPaginas={totalPaginasRutas}
-                hrefDe={(n) => hrefPagina("/rutas", listadoSearch, n)}
+                base="/rutas"
+                busqueda={listadoSearch}
               />
             </>
           )}

@@ -11,12 +11,11 @@ import {
   tieneFiltrosActivos,
 } from "@/lib/listado-filters";
 import type { AnuncioBulto } from "@/types/database";
+import { Paginacion } from "@/components/listados/Paginacion";
 import {
   POR_PAGINA_LISTADO,
-  Paginacion,
-  hrefPagina,
   paginaPedida,
-} from "@/components/listados/Paginacion";
+} from "@/lib/listado-paginacion";
 
 export const dynamic = "force-dynamic";
 
@@ -134,7 +133,8 @@ export default async function BultosPage({
               <Paginacion
                 pagina={paginaBultos}
                 totalPaginas={totalPaginasBultos}
-                hrefDe={(n) => hrefPagina("/bultos", listadoSearch, n)}
+                base="/bultos"
+                busqueda={listadoSearch}
               />
             </>
           )}

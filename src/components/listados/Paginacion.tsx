@@ -1,36 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
-export const POR_PAGINA_LISTADO = 12;
-
-export function paginaPedida(
-  searchParams: Record<string, string | string[] | undefined>
-): number {
-  const raw = searchParams.pagina;
-  const n = Number.parseInt(typeof raw === "string" ? raw : "", 10);
-  return Number.isFinite(n) && n > 0 ? n : 1;
-}
-
-export function hrefPagina(
-  base: "/rutas" | "/bultos",
-  search: string | null,
-  pagina: number
-): string {
-  const params = new URLSearchParams(search ?? "");
-  if (pagina <= 1) params.delete("pagina");
-  else params.set("pagina", String(pagina));
-  const qs = params.toString();
-  return qs ? `${base}?${qs}` : base;
-}
-
-export function numerosDePagina(pagina: number, total: number): number[] {
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-  const visibles = new Set<number>([1, total, pagina - 1, pagina, pagina + 1]);
-  return [...visibles].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
-}
+import { hrefPagina, numerosDePagina } from "@/lib/listado-paginacion";
 
 const boton =
   "inline-flex h-11 min-w-11 items-center justify-center rounded-full px-2 text-sm font-semibold disabled:opacity-60";
@@ -38,13 +9,15 @@ const boton =
 export function Paginacion({
   pagina,
   totalPaginas,
-  hrefDe,
+  base,
+  busqueda = null,
   onPagina,
   deshabilitado = false,
 }: {
   pagina: number;
   totalPaginas: number;
-  hrefDe?: (pagina: number) => string;
+  base?: "/rutas" | "/bultos";
+  busqueda?: string | null;
   onPagina?: (pagina: number) => void;
   deshabilitado?: boolean;
 }) {
@@ -72,7 +45,7 @@ export function Paginacion({
         onClick={() => {
           if (actual || deshabilitado) return;
           onPagina?.(n);
-          if (hrefDe) router.push(hrefDe(n));
+          if (base) router.push(hrefPagina(base, busqueda, n));
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
         className={clase}

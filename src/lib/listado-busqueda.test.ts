@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { numerosDePagina } from "@/components/listados/Paginacion";
+import { numerosDePagina } from "@/lib/listado-paginacion";
 import { fechasCercanasAlDia, limitesBusqueda } from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
 
