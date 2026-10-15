@@ -9,7 +9,7 @@ export function HomeSubscriptionBanner() {
       </p>
       <p className="mt-1">
         Solo se paga para reservar un viaje: la App custodia el importe hasta
-        confirmar que el viaje o el porte ha ido bien.
+        confirmar que el viaje ha ido bien.
       </p>
     </div>
   );
