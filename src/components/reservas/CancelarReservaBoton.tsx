@@ -63,7 +63,7 @@ export function CancelarReservaBoton({
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium text-zinc-800">
-        ¿Seguro? Esta cancelación no se puede deshacer.
+        ¿Seguro? Una vez cancelado no se puede deshacer.
       </p>
       {textoAyuda ? (
         <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
