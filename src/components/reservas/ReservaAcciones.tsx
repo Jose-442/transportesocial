@@ -30,6 +30,25 @@ import { formatEur } from "@/lib/pricing";
 import { DisputaForm } from "@/components/reservas/DisputaForm";
 import type { Disputa, Reserva } from "@/types/database";
 
+function fraseReembolsoEnViaje(reserva: Reserva, fechaSalida: string): string {
+  const cuando = reserva.cancelada_en
+    ? new Date(reserva.cancelada_en)
+    : new Date();
+  const motivo = reserva.motivo_cancelacion ?? "";
+  const tipo =
+    !reserva.aceptada_en || /conductor/i.test(motivo)
+      ? "total"
+      : politicaCancelacionCliente("confirmada", fechaSalida, cuando).tipo;
+  if (!tipo) {
+    return "El reembolso ya está hecho. Lo que tarde tu banco.";
+  }
+  const reparto = repartoCancelacion([reserva], tipo);
+  if (reparto.reembolsoCents < 1) {
+    return "El reembolso ya está hecho. Lo que tarde tu banco.";
+  }
+  return `El reembolso de ${formatEur(centimosAEuros(reparto.reembolsoCents))} ya está hecho. Lo que tarde tu banco.`;
+}
+
 export function ReservaAcciones({
   reserva,
   relacionadas,
@@ -94,6 +113,12 @@ export function ReservaAcciones({
           </span>
         ) : null}
       </div>
+
+      {estado === "cancelado" && esCliente && reserva.pagada_en ? (
+        <p className="text-sm font-medium text-zinc-900">
+          {fraseReembolsoEnViaje(reserva, fechaSalida)}
+        </p>
+      ) : null}
 
       {chatPermitido(estado) ? (
         <ButtonLink href={`/reservas/${reserva.id}/chat`} fullWidth>
