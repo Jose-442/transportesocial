@@ -380,45 +380,15 @@ export function TimePickerInput({
   required,
   name,
 }: TimePickerInputProps) {
-  const parsed = parseTime(value);
-  const [hour, setHour] = useState(parsed.hour);
-  const [minute, setMinute] = useState(parsed.minute);
-  const minutosRef = useRef<HTMLSelectElement>(null);
-  const pedirMinutos = useRef(false);
-
-  useEffect(() => {
-    const siguiente = parseTime(value);
-    if (siguiente.hour && siguiente.minute) {
-      setHour(siguiente.hour);
-      setMinute(siguiente.minute);
-    } else if (!value) {
-      setHour("");
-      setMinute("");
-    }
-  }, [value]);
-
-  useEffect(() => {
-    if (!pedirMinutos.current || !hour || minute) return;
-    pedirMinutos.current = false;
-    const el = minutosRef.current;
-    if (!el || el.disabled) return;
-    el.focus();
-    try {
-      el.showPicker();
-    } catch {
-      // El navegador solo abre la lista si el gesto del usuario sigue activo.
-    }
-  }, [hour, minute]);
+  const { hour, minute } = parseTime(value);
 
   function updateHour(nextHour: string) {
-    setHour(nextHour);
-    if (minute) onChange(formatTime(nextHour, minute));
-    else pedirMinutos.current = true;
+    onChange(formatTime(nextHour, minute || "00"));
   }
 
   function updateMinute(nextMinute: string) {
-    setMinute(nextMinute);
-    if (hour) onChange(formatTime(hour, nextMinute));
+    if (!hour) return;
+    onChange(formatTime(hour, nextMinute));
   }
 
   return (
@@ -449,16 +419,13 @@ export function TimePickerInput({
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Minutos</span>
           <select
-            ref={minutosRef}
             aria-label="Minutos"
             className={selectClasses(!!error)}
             value={minute}
-            required={required}
-            disabled={!hour}
             onChange={(e) => updateMinute(e.target.value)}
           >
             <option value="" disabled hidden>
-              {hour ? "Elige minutos" : "Elige la hora primero"}
+              Elige minutos
             </option>
             {MINUTE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
