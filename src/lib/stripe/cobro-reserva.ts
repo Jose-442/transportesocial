@@ -25,3 +25,16 @@ export function cobroDeEstasReservas(
   }
   return true;
 }
+
+/** Si el cobro solo está en Stripe: el total se devuelve entero; el resto, solo lo que toca. */
+export function reembolsoDesdeCobroStripe(
+  tipo: "total" | "viaje_sin_gastos" | "mitad",
+  cobradoCents: number,
+  pedidoCents: number
+): number {
+  const cobrado = Math.max(0, Math.round(cobradoCents));
+  const pedido = Math.max(0, Math.round(pedidoCents));
+  if (cobrado < 1 || pedido < 1) return 0;
+  if (tipo === "total") return cobrado;
+  return Math.min(pedido, cobrado);
+}

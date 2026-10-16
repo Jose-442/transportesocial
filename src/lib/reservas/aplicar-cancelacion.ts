@@ -145,26 +145,29 @@ export async function aplicarCancelacionPagada(
     porIntent.set(intent, previa);
   }
 
-  const sinFilasDeCobro = Boolean(errorCobro) || (txs ?? []).length === 0;
-  if (
-    porIntent.size === 0 &&
-    sinFilasDeCobro &&
-    opts.tipo === "total" &&
-    reparto.reembolsoCents > 0
-  ) {
-    const { cobroDeEstasReservas } = await import("@/lib/stripe/cobro-reserva");
+  const hayIntentGuardado = (txs ?? []).some((tx) =>
+    String(tx.stripe_payment_intent_id ?? "").trim()
+  );
+  if (porIntent.size === 0 && !hayIntentGuardado && reparto.reembolsoCents > 0) {
+    const { cobroDeEstasReservas, reembolsoDesdeCobroStripe } = await import(
+      "@/lib/stripe/cobro-reserva"
+    );
     const { getStripeServer } = await import("@/lib/stripe/server");
     const stripe = getStripeServer();
     const lista = await stripe.paymentIntents.list({ limit: 100 });
+    let pendiente = reparto.reembolsoCents;
     for (const pi of lista.data) {
       if (!cobroDeEstasReservas(pi, ids) || porIntent.has(pi.id)) continue;
       const centimos = pi.amount_received > 0 ? pi.amount_received : pi.amount;
+      const devolver = reembolsoDesdeCobroStripe(opts.tipo, centimos, pendiente);
+      if (devolver < 1) continue;
       porIntent.set(pi.id, {
         txIds: [],
         reservaIds: [...ids],
         cobradoCents: centimos,
-        reembolsoCents: centimos,
+        reembolsoCents: devolver,
       });
+      if (opts.tipo !== "total") pendiente -= devolver;
     }
   }
 
