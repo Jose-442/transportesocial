@@ -1,3 +1,6 @@
+import { formatEur } from "@/lib/pricing";
+import { centimosAEuros } from "@/lib/reservas/cancelacion";
+
 export type MovimientoStripe = {
   type: string;
   amount: number;
@@ -77,4 +80,15 @@ export function partesDelPago(input: {
     webCents: saldoCents - conductorCents,
     saldoCents,
   };
+}
+
+/** Texto que Stripe muestra en la descripción cuando el pago queda en tres partes. */
+export function textoTresPartes(input: {
+  devueltoCents: number;
+  stripeCents: number;
+  webCents: number;
+}): string {
+  const eur = (centimos: number) =>
+    formatEur(centimosAEuros(centimos)).replaceAll("\u00a0", " ");
+  return `${eur(input.devueltoCents)} vuelven a quien pagó. ${eur(input.stripeCents)} se los queda Stripe. ${eur(input.webCents)} para la web.`;
 }

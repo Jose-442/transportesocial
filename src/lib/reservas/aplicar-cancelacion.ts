@@ -193,6 +193,16 @@ export async function aplicarCancelacionPagada(
     } catch (err) {
       if (!reembolsoYaHecho(err)) throw err;
     }
+    if (opts.tipo === "viaje_sin_gastos" && !esTotal) {
+      try {
+        const { anotarTresPartesEnStripe } = await import(
+          "@/lib/stripe/anotar-partes"
+        );
+        await anotarTresPartesEnStripe(intent);
+      } catch (err) {
+        console.error("[reembolso] anotar partes", err);
+      }
+    }
   }
 
   if (

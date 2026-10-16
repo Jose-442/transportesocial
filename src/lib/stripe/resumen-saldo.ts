@@ -131,6 +131,22 @@ export async function loadSaldoStripe(): Promise<SaldoStripe | null> {
     await Promise.all(intents.data.map((pi) => pagoDeIntent(stripe, pi)))
   ).filter((pago): pago is PagoConPartes => pago != null);
 
+  const { anotarTresPartesEnStripe } = await import("@/lib/stripe/anotar-partes");
+  await Promise.all(
+    pagos
+      .filter(
+        (pago) =>
+          pago.devueltoCents > 0 &&
+          pago.conductorCents === 0 &&
+          pago.webCents != null
+      )
+      .map((pago) =>
+        anotarTresPartesEnStripe(pago.id).catch((err) => {
+          console.error("[admin-pagos] anotar partes", err);
+        })
+      )
+  );
+
   return {
     ...totales,
     disponibleCents: eurosDe(balance.available),

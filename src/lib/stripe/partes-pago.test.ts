@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { partesDelPago, totalesMovimientos } from "@/lib/stripe/partes-pago";
+import {
+  partesDelPago,
+  textoTresPartes,
+  totalesMovimientos,
+} from "@/lib/stripe/partes-pago";
 
 describe("totalesMovimientos", () => {
   it("suma cobros, devoluciones y lo que Stripe se queda", () => {
@@ -42,6 +46,18 @@ describe("partesDelPago", () => {
       conductorCents: 0,
       webCents: 546,
     });
+  });
+
+  it("el texto de Stripe dice las tres partes", () => {
+    expect(
+      textoTresPartes({
+        devueltoCents: 4000,
+        stripeCents: 174,
+        webCents: 546,
+      })
+    ).toBe(
+      "40,00 € vuelven a quien pagó. 1,74 € se los queda Stripe. 5,46 € para la web."
+    );
   });
 
   it("si nadie cancela, el viaje es del conductor y los gastos, de la web", () => {
