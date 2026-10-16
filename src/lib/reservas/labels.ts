@@ -1,5 +1,6 @@
 import type { EstadoReserva, MotivoDisputa, Reserva } from "@/types/database";
 import type { OfertaDesglose } from "@/lib/solicitud-viaje";
+import { MOTIVO_CANCELACION_CLIENTE } from "@/lib/reservas/segunda-cancelacion";
 
 export const ESTADO_RESERVA_LABELS: Record<EstadoReserva, string> = {
   pendiente_pago: "Pendiente de pago",
@@ -33,6 +34,24 @@ export const MOTIVOS_DISPUTA_CONDUCTOR: MotivoDisputa[] = [
   "problema_viaje",
   "otro",
 ];
+
+/** Quien reservó canceló su hueco. El viaje del conductor sigue publicado. */
+export function estadoSiCanceloQuienReservo(opts: {
+  estado: EstadoReserva;
+  motivo: string | null | undefined;
+  esCliente: boolean;
+  nombreCliente?: string | null;
+}): { etiqueta: string; aclaracion: string } | null {
+  if (opts.estado !== "cancelado") return null;
+  if (opts.motivo !== MOTIVO_CANCELACION_CLIENTE) return null;
+  const nombre = (opts.nombreCliente ?? "").trim() || "este usuario";
+  return {
+    etiqueta: opts.esCliente
+      ? "Cancelado solo para ti"
+      : `Cancelado solo para ${nombre}`,
+    aclaracion: "El viaje sigue publicado.",
+  };
+}
 
 export function chatPermitido(estado: EstadoReserva): boolean {
   return ["confirmada", "en_transito", "entregado", "disputa"].includes(estado);

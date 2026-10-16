@@ -364,6 +364,7 @@ export default async function ReservaDetallePage({
         fechaSalida={ruta?.fecha_salida ?? reserva.fecha_llegada_prevista}
         esCliente={esCliente}
         esConductor={esConductor}
+        nombreCliente={perfiles[reserva.cliente_id]?.display_name}
         disputa={disputa}
         yaPagadoEnStripe={Boolean(sessionId || errorPago || pagoComprobado)}
         puedeAnadirVersion={puedeAnadirVersion}

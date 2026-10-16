@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { chatPermitido, fraseQueHasReservado, fraseQueIncluyeReservas, resumenChatViaje } from "@/lib/reservas/labels";
+import { chatPermitido, estadoSiCanceloQuienReservo, fraseQueHasReservado, fraseQueIncluyeReservas, resumenChatViaje } from "@/lib/reservas/labels";
+import { MOTIVO_CANCELACION_CLIENTE } from "@/lib/reservas/segunda-cancelacion";
 
 describe("fraseQueHasReservado", () => {
   it("una plaza no dice bulto", () => {
@@ -160,6 +161,44 @@ describe("resumenChatViaje", () => {
         { origen: "Burgos", destino: "Madrid" }
       )
     ).toBe("Burgos → Madrid, 1 bulto 2 plazas");
+  });
+});
+
+describe("estadoSiCanceloQuienReservo", () => {
+  it("si canceló quien reservó, el viaje sigue publicado", () => {
+    expect(
+      estadoSiCanceloQuienReservo({
+        estado: "cancelado",
+        motivo: MOTIVO_CANCELACION_CLIENTE,
+        esCliente: false,
+        nombreCliente: "Tir",
+      })
+    ).toEqual({
+      etiqueta: "Cancelado solo para Tir",
+      aclaracion: "El viaje sigue publicado.",
+    });
+  });
+
+  it("quien reservó lo ve como cancelado solo para él", () => {
+    expect(
+      estadoSiCanceloQuienReservo({
+        estado: "cancelado",
+        motivo: MOTIVO_CANCELACION_CLIENTE,
+        esCliente: true,
+        nombreCliente: "Tir",
+      })?.etiqueta
+    ).toBe("Cancelado solo para ti");
+  });
+
+  it("si canceló el conductor, el estado sigue siendo el de la reserva", () => {
+    expect(
+      estadoSiCanceloQuienReservo({
+        estado: "cancelado",
+        motivo: "Cancelada por el conductor.",
+        esCliente: false,
+        nombreCliente: "Tir",
+      })
+    ).toBeNull();
   });
 });
 

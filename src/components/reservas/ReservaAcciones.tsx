@@ -14,6 +14,7 @@ import { RechazarRecogidaBoton } from "@/components/reservas/RechazarRecogidaBot
 import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import {
   chatPermitido,
+  estadoSiCanceloQuienReservo,
   ESTADO_RESERVA_LABELS,
   puedeReclamar,
 } from "@/lib/reservas/labels";
@@ -55,6 +56,7 @@ export function ReservaAcciones({
   fechaSalida,
   esCliente,
   esConductor,
+  nombreCliente,
   disputa,
   yaPagadoEnStripe = false,
   puedeAnadirVersion = false,
@@ -65,6 +67,7 @@ export function ReservaAcciones({
   fechaSalida: string;
   esCliente: boolean;
   esConductor: boolean;
+  nombreCliente?: string | null;
   disputa: Disputa | null;
   yaPagadoEnStripe?: boolean;
   puedeAnadirVersion?: boolean;
@@ -72,8 +75,15 @@ export function ReservaAcciones({
   tienePorte?: boolean;
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
-  const etiquetaEstado =
-    estado === "confirmada"
+  const canceloQuienReservo = estadoSiCanceloQuienReservo({
+    estado,
+    motivo: reserva.motivo_cancelacion,
+    esCliente,
+    nombreCliente,
+  });
+  const etiquetaEstado = canceloQuienReservo
+    ? canceloQuienReservo.etiqueta
+    : estado === "confirmada"
       ? "Confirmado"
       : estado === "pendiente_aprobacion" && esConductor
         ? "Me toca aceptar o rechazar"
@@ -113,6 +123,12 @@ export function ReservaAcciones({
           </span>
         ) : null}
       </div>
+
+      {canceloQuienReservo ? (
+        <p className="text-sm font-medium text-zinc-900">
+          {canceloQuienReservo.aclaracion}
+        </p>
+      ) : null}
 
       {estado === "cancelado" && esCliente && reserva.pagada_en ? (
         <p className="text-sm font-medium text-zinc-900">
