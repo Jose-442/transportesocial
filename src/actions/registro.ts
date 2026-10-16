@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { traducirErrorAuth } from "@/lib/auth-errors";
+import { avisoEspacioContrasena } from "@/lib/contrasena";
 import { sendWelcomeEmail } from "@/lib/email/welcome";
 
 const MENSAJE_EMAIL_EXISTE =
@@ -37,6 +38,8 @@ export async function registrarUsuario(input: {
   const email = input.email.trim();
   const password = input.password;
   const displayName = input.displayName.trim();
+  const espacio = avisoEspacioContrasena(password);
+  if (espacio) return { error: espacio };
 
   if (!email || !password || !displayName) {
     return { error: "Completa todos los campos obligatorios." };

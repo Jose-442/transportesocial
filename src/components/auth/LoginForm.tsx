@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { traducirErrorAuth } from "@/lib/auth-errors";
+import { avisoEspacioContrasena } from "@/lib/contrasena";
 import { parseSafeInternalRedirect } from "@/lib/safe-redirect";
 import { clearDraft, DRAFT_KEYS } from "@/lib/form-draft";
 import { Input } from "@/components/ui/Input";
@@ -34,6 +35,13 @@ export function LoginForm() {
     const passwordVal = String(datos.get("password") ?? "");
     setEmail(emailVal);
     setPassword(passwordVal);
+
+    const espacio = avisoEspacioContrasena(passwordVal);
+    if (espacio) {
+      setLoading(false);
+      setError(espacio);
+      return;
+    }
 
     if (!emailVal || !passwordVal) {
       setLoading(false);

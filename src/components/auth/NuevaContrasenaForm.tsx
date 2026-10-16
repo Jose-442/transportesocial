@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { traducirErrorAuth } from "@/lib/auth-errors";
+import { avisoEspacioContrasena } from "@/lib/contrasena";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
 
@@ -17,6 +18,13 @@ export function NuevaContrasenaForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    const espacio = avisoEspacioContrasena(password);
+    if (espacio) {
+      setLoading(false);
+      setError(espacio);
+      return;
+    }
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.updateUser({ password });
