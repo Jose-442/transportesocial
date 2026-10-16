@@ -2,10 +2,19 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
+import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { createClient } from "@/lib/supabase/server";
+import { formatEur } from "@/lib/pricing";
+import {
+  centimosAEuros,
+  fraseAyudaCancelacionCliente,
+  politicaCancelacionCliente,
+  repartoCancelacion,
+  textoBotonCancelacion,
+} from "@/lib/reservas/cancelacion";
 import { chatPermitido, resumenChatViaje } from "@/lib/reservas/labels";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { loadPerfilesPublicos } from "@/lib/profile";
@@ -120,15 +129,20 @@ export default async function ReservaChatPage({
 
   let origen = "";
   let destino = "";
+  let fechaSalida = reserva.fecha_llegada_prevista;
   if (reserva.ruta_conductor_id) {
     const { data: rutaData } = await supabase
       .from("rutas_conductores")
-      .select("origen, destino")
+      .select("origen, destino, fecha_salida")
       .eq("id", reserva.ruta_conductor_id)
       .maybeSingle();
-    const ruta = rutaData as Pick<RutaConductor, "origen" | "destino"> | null;
+    const ruta = rutaData as Pick<
+      RutaConductor,
+      "origen" | "destino" | "fecha_salida"
+    > | null;
     origen = formatCiudad(ruta?.origen ?? "");
     destino = formatCiudad(ruta?.destino ?? "");
+    if (ruta?.fecha_salida) fechaSalida = ruta.fecha_salida;
   } else if (reserva.anuncio_bulto_id) {
     const { data: bultoData } = await supabase
       .from("anuncios_bultos")
@@ -140,6 +154,21 @@ export default async function ReservaChatPage({
   }
   const tituloViaje =
     resumenChatViaje(relacionadas, { origen, destino }) || "Chat del viaje";
+  const esCliente = reserva.cliente_id === user.id;
+  const politica = esCliente
+    ? politicaCancelacionCliente(reserva.estado, fechaSalida)
+    : null;
+  const reparto =
+    politica?.puede && politica.tipo
+      ? repartoCancelacion(relacionadas, politica.tipo)
+      : null;
+  const textoAyudaCancelar =
+    politica?.tipo && reparto
+      ? fraseAyudaCancelacionCliente(
+          politica.tipo,
+          formatEur(centimosAEuros(reparto.reembolsoCents))
+        )
+      : "";
 
   return (
     <div className="space-y-4">
@@ -183,6 +212,13 @@ export default async function ReservaChatPage({
           <span className="shrink-0">Ver</span>
         </ButtonLink>
       </div>
+      {esCliente && politica?.puede && politica.tipo && textoAyudaCancelar ? (
+        <CancelarReservaBoton
+          reservaId={id}
+          textoBoton={textoBotonCancelacion(politica.tipo)}
+          textoAyuda={textoAyudaCancelar}
+        />
+      ) : null}
       <Card>
         <ChatPanel
           reservaId={id}
