@@ -231,14 +231,54 @@ export async function aplicarCancelacionPagada(
   }
 
   const ahora = new Date().toISOString();
-  await admin
+  const cambios = {
+    estado: "cancelado" as const,
+    cancelada_en: ahora,
+    motivo_cancelacion: opts.motivo,
+  };
+  const { error: errorAdmin } = await admin
     .from("reservas")
-    .update({
-      estado: "cancelado",
-      cancelada_en: ahora,
-      motivo_cancelacion: opts.motivo,
-    })
+    .update(cambios)
     .in("id", ids);
+  if (errorAdmin) {
+    console.error("[cancelar] guardar", errorAdmin.message);
+  }
+
+  const { createClient } = await import("@/lib/supabase/server");
+  const usuario = await createClient();
+  const { data: vistas } = await usuario
+    .from("reservas")
+    .select("id, estado")
+    .in("id", ids);
+  const faltan = ids.filter(
+    (id) =>
+      !(vistas ?? []).some(
+        (fila) => fila.id === id && fila.estado === "cancelado"
+      )
+  );
+  if (faltan.length > 0) {
+    const { error: errorUsuario } = await usuario
+      .from("reservas")
+      .update(cambios)
+      .in("id", faltan);
+    if (errorUsuario) {
+      console.error("[cancelar] guardar usuario", errorUsuario.message);
+    }
+  }
+
+  const { data: despues } = await usuario
+    .from("reservas")
+    .select("id, estado")
+    .in("id", ids);
+  const sinCancelar = ids.filter(
+    (id) =>
+      !(despues ?? []).some(
+        (fila) => fila.id === id && fila.estado === "cancelado"
+      )
+  );
+  if (sinCancelar.length > 0) {
+    throw new Error("No se ha podido cancelar la reserva. Prueba otra vez.");
+  }
 
   for (const fila of filas) {
     await liberarPlazasOferta(admin, fila);

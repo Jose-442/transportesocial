@@ -33,7 +33,7 @@ export function CancelarReservaBoton({
         setPendiente(false);
         return;
       }
-      window.location.reload();
+      window.location.replace(window.location.pathname);
     } catch {
       setAviso("No se ha podido cancelar. Prueba otra vez.");
       setPendiente(false);

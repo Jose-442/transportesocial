@@ -85,6 +85,18 @@ export default async function ReservaDetallePage({
 
   let errorPago: string | undefined;
   if (sessionId) {
+    const { data: previa } = await supabase
+      .from("reservas")
+      .select("estado, cliente_id")
+      .eq("id", id)
+      .maybeSingle();
+    if (
+      previa &&
+      previa.cliente_id === user.id &&
+      previa.estado !== "pendiente_pago"
+    ) {
+      redirect(`/reservas/${id}`);
+    }
     const result = await completeTripCheckout(sessionId, id);
     if (!result.error) {
       redirect(`/reservas/${id}`);
