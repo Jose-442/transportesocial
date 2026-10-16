@@ -137,7 +137,7 @@ export async function ejecutarCancelacionReserva(opts: {
         mensaje:
           dinero.conductorEur > 0
             ? `Quien reservó ha cancelado. Se te ha apuntado ${formatEur(dinero.conductorEur)} en el saldo.`
-            : "Quien reservó ha cancelado. El hueco ha quedado libre.",
+            : "Quien reservó ha cancelado. El viaje sigue publicado.",
         enlace,
       });
     } else {
