@@ -6,10 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
-import {
-  CamposIdentidadPago,
-  guardarIdentidadParaPagar,
-} from "@/components/cuenta/CamposIdentidadPago";
+import { CamposIdentidadPago } from "@/components/cuenta/CamposIdentidadPago";
+import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
 import { DeclaracionPorteCampos } from "@/components/reservas/DeclaracionPorteCampos";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
@@ -158,7 +156,20 @@ export function OfertasCapacidadReserva({
       setPedirIdentidad(false);
     }
 
-    const result = await solicitarReservaCapacidad(formData);
+    let result: Awaited<ReturnType<typeof solicitarReservaCapacidad>>;
+    try {
+      result = await Promise.race([
+        solicitarReservaCapacidad(formData),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error("tiempo")), 45000);
+        }),
+      ]);
+    } catch {
+      setError("No se ha podido preparar el pago. Prueba otra vez.");
+      enviando.current = false;
+      setLoading(false);
+      return;
+    }
 
     if (result.error) {
       setError(result.error);

@@ -266,7 +266,7 @@ export async function solicitarReservaViaje(formData: FormData) {
   if (conBulto) {
     const { data: activa } = await supabase
       .from("reservas")
-      .select("id")
+      .select("id, cliente_id, estado")
       .eq("ruta_conductor_id", rutaId)
       .eq("tipo", "ruta_directa")
       .in("estado", [
@@ -280,10 +280,17 @@ export async function solicitarReservaViaje(formData: FormData) {
       ])
       .maybeSingle();
 
-    if (activa) {
+    if (
+      activa &&
+      activa.cliente_id === user.id &&
+      activa.estado === "pendiente_pago"
+    ) {
+      reservaPrincipalId = activa.id;
+    } else if (activa) {
       return { error: "Este viaje ya tiene una reserva de bulto activa." };
     }
 
+    if (!reservaPrincipalId) {
     const porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
     if ("error" in porte) return { error: porte.error };
 
@@ -332,6 +339,7 @@ export async function solicitarReservaViaje(formData: FormData) {
       return { error: supabaseErrorMessage(error) };
     }
     reservaPrincipalId = reserva.id;
+    }
   }
 
   if (cantidadPlazas >= 1) {

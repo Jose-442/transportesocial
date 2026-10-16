@@ -131,24 +131,33 @@ export async function createTripCheckoutSession(
     tipo: "cobro_viaje",
   };
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    payment_method_types: ["card"],
-    line_items: lineas.map((linea) => ({
-      quantity: 1,
-      price_data: {
-        currency: "eur",
-        unit_amount: linea.centimos,
-        product_data: {
-          name: linea.concepto,
+  let session;
+  try {
+    session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: lineas.map((linea) => ({
+        quantity: 1,
+        price_data: {
+          currency: "eur",
+          unit_amount: linea.centimos,
+          product_data: {
+            name: linea.concepto,
+          },
         },
-      },
-    })),
-    metadata,
-    payment_intent_data: { metadata },
-    success_url: `${origin}/reservas/${reservaId}?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/reservas/${reservaId}?cancelado=1`,
-  });
+      })),
+      metadata,
+      payment_intent_data: { metadata },
+      success_url: `${origin}/reservas/${reservaId}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/reservas/${reservaId}?cancelado=1`,
+    });
+  } catch (err) {
+    console.error("[checkout] sesion", err);
+    return {
+      ok: false,
+      error: "No se pudo abrir la página de la tarjeta. Prueba otra vez.",
+    };
+  }
 
   if (!session.url) {
     return { ok: false, error: "No se pudo iniciar el pago." };
