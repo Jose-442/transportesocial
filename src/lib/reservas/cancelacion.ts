@@ -1,4 +1,7 @@
-import { CANCELACION_ANTICIPADA_HORAS } from "@/lib/constants";
+import {
+  CANCELACION_ANTICIPADA_HORAS,
+  CANCELACION_ERROR_HORAS,
+} from "@/lib/constants";
 import type { EstadoReserva } from "@/types/database";
 
 export type TipoRepartoCancelacion =
@@ -24,25 +27,39 @@ export function horasHasta(fechaIso: string, ahora = new Date()): number {
   return (new Date(fechaIso).getTime() - ahora.getTime()) / (60 * 60 * 1000);
 }
 
+/** True si aún no ha pasado una hora desde que se cobró la tarjeta. */
+export function dentroDeLaHoraDelPago(
+  pagadaEnIso: string | null | undefined,
+  ahora: Date
+): boolean {
+  if (!pagadaEnIso) return false;
+  const pagada = new Date(pagadaEnIso).getTime();
+  if (Number.isNaN(pagada)) return false;
+  const pasadas = ahora.getTime() - pagada;
+  const hora = CANCELACION_ERROR_HORAS * 60 * 60 * 1000;
+  return pasadas >= 0 && pasadas <= hora;
+}
+
 export function politicaCancelacionCliente(
   estado: EstadoReserva,
   fechaSalidaIso: string,
-  ahora = new Date()
+  ahora = new Date(),
+  pagadaEnIso?: string | null
 ): { puede: boolean; tipo?: TipoRepartoCancelacion } {
+  const enHora = dentroDeLaHoraDelPago(pagadaEnIso, ahora);
   if (estado === "pendiente_aprobacion") {
-    return { puede: true, tipo: "total" };
+    return { puede: true, tipo: enHora ? "total" : "viaje_sin_gastos" };
   }
   if (estado !== "confirmada") {
     return { puede: false };
   }
   const horas = horasHasta(fechaSalidaIso, ahora);
+  if (horas <= 0) return { puede: false };
+  if (enHora) return { puede: true, tipo: "total" };
   if (horas > CANCELACION_ANTICIPADA_HORAS) {
     return { puede: true, tipo: "viaje_sin_gastos" };
   }
-  if (horas > 0) {
-    return { puede: true, tipo: "mitad" };
-  }
-  return { puede: false };
+  return { puede: true, tipo: "mitad" };
 }
 
 export function politicaCancelacionConductor(
@@ -106,7 +123,7 @@ export function fraseAyudaCancelacionCliente(
   reembolsoEur: string
 ): string {
   if (tipo === "total") {
-    return `Te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
+    return `En la primera hora desde el pago te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
   }
   if (tipo === "viaje_sin_gastos") {
     return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;

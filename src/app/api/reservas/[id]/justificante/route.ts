@@ -187,6 +187,8 @@ export async function GET(
       bulto_descripcion: item.bulto_descripcion,
       motivo_cancelacion: item.motivo_cancelacion,
       cancelada_en: item.cancelada_en,
+      pagada_en: item.pagada_en,
+      aceptada_en: item.aceptada_en,
       fechaSalida,
       ruta_conductor_id: item.ruta_conductor_id,
       anuncio_bulto_id: item.anuncio_bulto_id,

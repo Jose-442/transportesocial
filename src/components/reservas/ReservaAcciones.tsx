@@ -31,15 +31,26 @@ import { formatEur } from "@/lib/pricing";
 import { DisputaForm } from "@/components/reservas/DisputaForm";
 import type { Disputa, Reserva } from "@/types/database";
 
-function fraseReembolsoEnViaje(reserva: Reserva, fechaSalida: string): string {
+function fraseReembolsoEnViaje(
+  reserva: Reserva,
+  fechaSalida: string,
+  reembolsoEntero: boolean
+): string {
   const cuando = reserva.cancelada_en
     ? new Date(reserva.cancelada_en)
     : new Date();
   const motivo = reserva.motivo_cancelacion ?? "";
+  const loDevolvioElConductor =
+    /conductor/i.test(motivo) || motivo.startsWith("Rechazo en recogida");
   const tipo =
-    !reserva.aceptada_en || /conductor/i.test(motivo)
+    reembolsoEntero || loDevolvioElConductor
       ? "total"
-      : politicaCancelacionCliente("confirmada", fechaSalida, cuando).tipo;
+      : politicaCancelacionCliente(
+          reserva.aceptada_en ? "confirmada" : "pendiente_aprobacion",
+          fechaSalida,
+          cuando,
+          reserva.pagada_en
+        ).tipo;
   if (!tipo) {
     return "El reembolso ya está hecho. Lo que tarde tu banco.";
   }
@@ -61,6 +72,7 @@ export function ReservaAcciones({
   yaPagadoEnStripe = false,
   puedeAnadirVersion = false,
   tienePorte = false,
+  reembolsoEntero = false,
 }: {
   reserva: Reserva;
   relacionadas: Reserva[];
@@ -73,6 +85,8 @@ export function ReservaAcciones({
   puedeAnadirVersion?: boolean;
   /** Hay bulto: confirmar/rechazar recogida en lugar del cancelar genérico. */
   tienePorte?: boolean;
+  /** El cobro figura reembolsado entero. Los viajes ya devueltos no cambian de cifra. */
+  reembolsoEntero?: boolean;
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
   const canceloQuienReservo = estadoSiCanceloQuienReservo({
@@ -90,7 +104,12 @@ export function ReservaAcciones({
         : ESTADO_RESERVA_LABELS[estado];
   const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];
   const politica = esCliente
-    ? politicaCancelacionCliente(estado, fechaSalida)
+    ? politicaCancelacionCliente(
+        estado,
+        fechaSalida,
+        new Date(),
+        reserva.pagada_en
+      )
     : politicaCancelacionConductor(estado, fechaSalida);
   const reparto =
     politica.puede && politica.tipo
@@ -132,7 +151,7 @@ export function ReservaAcciones({
 
       {estado === "cancelado" && esCliente && reserva.pagada_en ? (
         <p className="text-sm font-medium text-zinc-900">
-          {fraseReembolsoEnViaje(reserva, fechaSalida)}
+          {fraseReembolsoEnViaje(reserva, fechaSalida, reembolsoEntero)}
         </p>
       ) : null}
 

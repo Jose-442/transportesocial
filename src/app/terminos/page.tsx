@@ -16,7 +16,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "14 de octubre de 2026";
+  const fechaActualizacion = "16 de octubre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -325,14 +325,18 @@ export default function TerminosPage() {
             <li>
               Si el Conductor no tiene activada la aceptación automática,
               dispone de <strong>{CONDUCTOR_APPROVAL_HOURS} horas</strong> para
-              aceptar o rechazar la solicitud desde el pago. Mientras esté
-              pendiente de aprobación, el Cliente puede cancelar con reembolso
-              del <strong>100 %</strong>. Si el Conductor rechaza o no responde
-              a tiempo, también se reembolsa el 100 %.
+              aceptar o rechazar la solicitud desde el pago. En la primera
+              hora desde el pago, el Cliente puede cancelar con reembolso del{" "}
+              <strong>100 %</strong>. Pasada esa hora, si cancela quien reservó,
+              se le devuelve el viaje y la Plataforma se queda los gastos de
+              gestión del {COMMISSION_PERCENT_LABEL}. Si el Conductor rechaza o
+              no responde a tiempo, se reembolsa el 100 %.
             </li>
             <li>
-              Cuando la reserva ya está confirmada: si cancela quien reservó con
-              más de <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
+              Cuando la reserva ya está confirmada: si aún no ha pasado una
+              hora desde el pago y cancela quien reservó, se reembolsa el{" "}
+              <strong>100 %</strong>. Pasada esa hora, si cancela con más de{" "}
+              <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
               antelación, se le devuelve el viaje y la Plataforma se queda los
               gastos de gestión del {COMMISSION_PERCENT_LABEL}; el Conductor no
               cobra. Si cancela a menos de{" "}

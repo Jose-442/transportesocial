@@ -15,33 +15,60 @@ const fila = {
 
 const salida = "2026-09-22T10:00:00.000Z";
 
+const pago = "2026-09-20T09:00:00.000Z";
+
 describe("politicaCancelacionCliente", () => {
-  it("antes de que acepte el conductor, siempre el 100 %", () => {
+  it("en la primera hora desde el pago se devuelve todo, aunque el conductor no haya aceptado", () => {
     expect(
       politicaCancelacionCliente(
         "pendiente_aprobacion",
         salida,
-        new Date("2026-09-22T09:00:00.000Z")
+        new Date("2026-09-20T09:30:00.000Z"),
+        pago
       )
     ).toEqual({ puede: true, tipo: "total" });
   });
 
-  it("más de 24 h antes de salir: el viaje, sin gastos de gestión", () => {
+  it("en la primera hora se devuelve todo aunque falten menos de 24 h", () => {
     expect(
       politicaCancelacionCliente(
         "confirmada",
         salida,
-        new Date("2026-09-21T09:00:00.000Z")
+        new Date("2026-09-21T10:00:00.000Z"),
+        "2026-09-21T09:20:00.000Z"
+      )
+    ).toEqual({ puede: true, tipo: "total" });
+  });
+
+  it("pasada la hora, antes de que acepte el conductor, se queda el 18 %", () => {
+    expect(
+      politicaCancelacionCliente(
+        "pendiente_aprobacion",
+        salida,
+        new Date("2026-09-20T10:00:01.000Z"),
+        pago
       )
     ).toEqual({ puede: true, tipo: "viaje_sin_gastos" });
   });
 
-  it("menos de 24 h y aún no ha salido: la mitad", () => {
+  it("pasada la hora y más de 24 h antes de salir: el viaje, sin gastos de gestión", () => {
     expect(
       politicaCancelacionCliente(
         "confirmada",
         salida,
-        new Date("2026-09-22T02:00:00.000Z")
+        new Date("2026-09-21T09:00:00.000Z"),
+        pago
+      )
+    ).toEqual({ puede: true, tipo: "viaje_sin_gastos" });
+  });
+
+  it("pasada la hora, menos de 24 h y aún no ha salido: la mitad", () => {
+    expect(
+      politicaCancelacionCliente(
+        "confirmada",
+        salida,
+        new Date("2026-09-22T02:00:00.000Z"),
+        pago
       )
     ).toEqual({ puede: true, tipo: "mitad" });
   });
@@ -136,7 +163,7 @@ describe("repartoCancelacion", () => {
 describe("frases de cancelación", () => {
   it("dicen el reembolso sin rodeos", () => {
     expect(fraseAyudaCancelacionCliente("total", "118,00 €")).toBe(
-      "Te devolvemos el 100 % (118,00 €). El reembolso, lo que tarde tu banco."
+      "En la primera hora desde el pago te devolvemos el 100 % (118,00 €). El reembolso, lo que tarde tu banco."
     );
     expect(fraseAyudaCancelacionCliente("viaje_sin_gastos", "70,00 €")).toBe(
       "Te devolvemos el viaje (70,00 €). Los gastos ocasionados por la gestión no se devuelven."

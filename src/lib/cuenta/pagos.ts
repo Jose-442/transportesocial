@@ -27,6 +27,8 @@ export type FilaPago = PrecioCancelacion & {
   estado: EstadoReserva;
   motivo_cancelacion: string | null;
   cancelada_en: string | null;
+  pagada_en: string | null;
+  aceptada_en: string | null;
   fechaSalida: string;
   ruta_conductor_id: string | null;
   anuncio_bulto_id: string | null;
@@ -71,9 +73,10 @@ export function importeDevuelto(
 
   if (principal.motivo_cancelacion === MOTIVO_CANCELACION_CLIENTE) {
     const politica = politicaCancelacionCliente(
-      "confirmada",
+      principal.aceptada_en ? "confirmada" : "pendiente_aprobacion",
       principal.fechaSalida,
-      new Date(principal.cancelada_en)
+      new Date(principal.cancelada_en),
+      principal.pagada_en
     );
     if (!politica.tipo) return null;
     return centimosAEuros(repartoCancelacion(filas, politica.tipo).reembolsoCents);
@@ -110,7 +113,7 @@ export async function loadPagosCuenta(
   const { data: reservasRaw } = await supabase
     .from("reservas")
     .select(
-      "id, tipo, estado, precio_neto, precio_total, comision_plataforma, cantidad, bulto_descripcion, motivo_cancelacion, cancelada_en, fecha_llegada_prevista, ruta_conductor_id, anuncio_bulto_id, created_at, cliente_id"
+      "id, tipo, estado, precio_neto, precio_total, comision_plataforma, cantidad, bulto_descripcion, motivo_cancelacion, cancelada_en, pagada_en, aceptada_en, fecha_llegada_prevista, ruta_conductor_id, anuncio_bulto_id, created_at, cliente_id"
     )
     .in("id", reservaIds)
     .eq("cliente_id", userId);
@@ -128,6 +131,8 @@ export async function loadPagosCuenta(
       | "bulto_descripcion"
       | "motivo_cancelacion"
       | "cancelada_en"
+      | "pagada_en"
+      | "aceptada_en"
       | "fecha_llegada_prevista"
       | "ruta_conductor_id"
       | "anuncio_bulto_id"
@@ -239,6 +244,8 @@ export async function loadPagosCuenta(
       bulto_descripcion: item.bulto_descripcion,
       motivo_cancelacion: item.motivo_cancelacion,
       cancelada_en: item.cancelada_en,
+      pagada_en: item.pagada_en,
+      aceptada_en: item.aceptada_en,
       fechaSalida,
       ruta_conductor_id: item.ruta_conductor_id,
       anuncio_bulto_id: item.anuncio_bulto_id,

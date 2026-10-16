@@ -17,6 +17,8 @@ function fila(parcial: Partial<FilaPago> = {}): FilaPago {
     bulto_descripcion: "maleta",
     motivo_cancelacion: null,
     cancelada_en: null,
+    pagada_en: null,
+    aceptada_en: null,
     fechaSalida: "2026-10-20T09:00:00.000Z",
     ruta_conductor_id: "ruta",
     anuncio_bulto_id: null,
@@ -82,6 +84,41 @@ describe("importeDevuelto", () => {
             estado: "cancelado",
             motivo_cancelacion: MOTIVO_CANCELACION_CLIENTE,
             cancelada_en: "2026-10-12T10:00:00.000Z",
+            aceptada_en: "2026-10-11T12:00:00.000Z",
+            pagada_en: "2026-10-11T11:00:00.000Z",
+          }),
+        ],
+        [{ monto: 47.2, estado_escrow: "liberado" }]
+      )
+    ).toBe(40);
+  });
+
+  it("en la primera hora desde el pago se devuelve también el 18 %", () => {
+    expect(
+      importeDevuelto(
+        [
+          fila({
+            estado: "cancelado",
+            motivo_cancelacion: MOTIVO_CANCELACION_CLIENTE,
+            pagada_en: "2026-10-12T09:30:00.000Z",
+            cancelada_en: "2026-10-12T10:00:00.000Z",
+          }),
+        ],
+        [{ monto: 47.2, estado_escrow: "liberado" }]
+      )
+    ).toBe(47.2);
+  });
+
+  it("pasada la hora, si aún no había aceptado el conductor, no se parte el viaje", () => {
+    expect(
+      importeDevuelto(
+        [
+          fila({
+            estado: "cancelado",
+            motivo_cancelacion: MOTIVO_CANCELACION_CLIENTE,
+            pagada_en: "2026-10-19T08:00:00.000Z",
+            cancelada_en: "2026-10-19T12:00:00.000Z",
+            fechaSalida: "2026-10-20T09:00:00.000Z",
           }),
         ],
         [{ monto: 47.2, estado_escrow: "liberado" }]

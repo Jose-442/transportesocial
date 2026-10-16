@@ -156,7 +156,12 @@ export default async function ReservaChatPage({
     resumenChatViaje(relacionadas, { origen, destino }) || "Chat del viaje";
   const esCliente = reserva.cliente_id === user.id;
   const politica = esCliente
-    ? politicaCancelacionCliente(reserva.estado, fechaSalida)
+    ? politicaCancelacionCliente(
+        reserva.estado,
+        fechaSalida,
+        new Date(),
+        reserva.pagada_en
+      )
     : null;
   const reparto =
     politica?.puede && politica.tipo

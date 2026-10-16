@@ -103,13 +103,15 @@ export default function QuienesSomosPage() {
               rechazar la solicitud.
             </li>
             <li>
-              Mientras esperas su respuesta, puedes{" "}
-              <strong>cancelar en cualquier momento</strong> con reembolso del
-              100 %. Si el conductor rechaza o no responde en plazo, también se
-              reembolsa el 100 %.
+              Mientras esperas su respuesta puedes cancelar. En la primera
+              hora desde el pago te devolvemos el 100 %. Pasada esa hora te
+              devolvemos el viaje y nos quedamos el {COMMISSION_PERCENT_LABEL}{" "}
+              de gastos de gestión. Si el conductor rechaza o no responde en
+              plazo, se reembolsa el 100 %.
             </li>
             <li>
-              Cuando ya está confirmada, las reglas son las mismas para todos:
+              Cuando ya está confirmada, si aún no ha pasado una hora desde
+              el pago y cancelas tú, te devolvemos el 100 %. Pasada esa hora,
               si cancelas con más de{" "}
               <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
               antelación, te devolvemos el viaje y nos quedamos el{" "}

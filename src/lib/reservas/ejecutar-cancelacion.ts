@@ -88,7 +88,12 @@ export async function ejecutarCancelacionReserva(opts: {
 
     const fechaSalida = await fechaSalidaDeReserva(supabase, reserva);
     const politica = esCliente
-      ? politicaCancelacionCliente(reserva.estado, fechaSalida)
+      ? politicaCancelacionCliente(
+          reserva.estado,
+          fechaSalida,
+          new Date(),
+          reserva.pagada_en
+        )
       : politicaCancelacionConductor(reserva.estado, fechaSalida);
 
     if (!politica.puede || !politica.tipo) {

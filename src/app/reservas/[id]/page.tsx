@@ -123,15 +123,19 @@ export default async function ReservaDetallePage({
   const esCliente = reserva.cliente_id === user.id;
   const esConductor = reserva.transportista_id === user.id;
   let huboCobro = false;
+  let reembolsoEntero = false;
   if (esCliente && reserva.estado === "cancelado") {
     const { data: cobro } = await supabase
       .from("transacciones")
-      .select("id")
+      .select("estado_escrow")
       .eq("reserva_id", reserva.id)
       .eq("user_id", user.id)
       .eq("tipo", "cobro_viaje")
-      .limit(1);
-    huboCobro = (cobro ?? []).length > 0;
+      .limit(5);
+    const cobros = (cobro ?? []) as { estado_escrow: string }[];
+    huboCobro = cobros.length > 0;
+    reembolsoEntero =
+      huboCobro && cobros.every((fila) => fila.estado_escrow === "reembolsado");
   }
 
   // El conductor no debe ver reservas aún sin pagar (ni el estado «pendiente de pago»).
@@ -369,6 +373,7 @@ export default async function ReservaDetallePage({
         yaPagadoEnStripe={Boolean(sessionId || errorPago || pagoComprobado)}
         puedeAnadirVersion={puedeAnadirVersion}
         tienePorte={tienePorte}
+        reembolsoEntero={reembolsoEntero}
       />
 
       {esConductor &&
