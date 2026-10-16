@@ -63,9 +63,46 @@ export function scrollAlCampo(el: HTMLElement) {
   }, 60);
 }
 
+function primerControlVisible(campo: HTMLElement): HTMLElement | null {
+  const lista = campo.querySelectorAll<HTMLElement>(
+    "input, select, textarea, button"
+  );
+  for (const el of lista) {
+    if (el instanceof HTMLInputElement && el.type === "hidden") continue;
+    if ("disabled" in el && Boolean((el as HTMLInputElement).disabled)) continue;
+    if (el.getClientRects().length === 0) continue;
+    return el;
+  }
+  return null;
+}
+
+function enfocarControl(campo: HTMLElement) {
+  const control = primerControlVisible(campo);
+  if (!control) return;
+  control.focus({ preventScroll: true });
+  if (
+    control instanceof HTMLSelectElement &&
+    typeof control.showPicker === "function"
+  ) {
+    try {
+      control.showPicker();
+    } catch {
+      // El navegador solo abre la lista si el gesto del usuario sigue activo.
+    }
+    return;
+  }
+  if (
+    control.getAttribute("aria-haspopup") === "listbox" &&
+    control.getAttribute("aria-expanded") !== "true"
+  ) {
+    control.click();
+  }
+}
+
 export function scrollAlSiguienteVacio(
   raiz: ParentNode | null,
-  despuesDe?: HTMLElement | null
+  despuesDe?: HTMLElement | null,
+  enfocar = false
 ) {
   if (!raiz) return;
   let vacios = [...raiz.querySelectorAll<HTMLElement>("[data-campo-vacio]")];
@@ -81,6 +118,7 @@ export function scrollAlSiguienteVacio(
   for (const vacio of vacios) {
     if (vacio.getClientRects().length === 0) continue;
     scrollAlCampo(vacio);
+    if (enfocar) enfocarControl(vacio);
     return;
   }
   const form =

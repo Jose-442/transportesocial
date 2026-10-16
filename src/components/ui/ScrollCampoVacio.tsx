@@ -23,10 +23,10 @@ function escribiendo(campo: HTMLElement): boolean {
 
 export function ScrollCampoVacio() {
   useEffect(() => {
-    function alRellenar(campo: HTMLElement) {
+    function alRellenar(campo: HTMLElement, ponerCursor = false) {
       if (escribiendo(campo)) return;
       const form = campo.closest("form");
-      scrollAlSiguienteVacio(form ?? document);
+      scrollAlSiguienteVacio(form ?? document, ponerCursor ? campo : null, ponerCursor);
     }
 
     function alError(el: HTMLElement) {
@@ -64,7 +64,7 @@ export function ScrollCampoVacio() {
         }
       }
       const ultimo = rellenos[rellenos.length - 1];
-      if (ultimo) alRellenar(ultimo);
+      if (ultimo) alRellenar(ultimo, true);
     }
 
     function alInvalid(event: Event) {

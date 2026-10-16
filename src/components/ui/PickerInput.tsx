@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   daysInMonth,
   formatDateFromMonthDay,
@@ -50,31 +57,40 @@ function selectClasses(hasError?: boolean) {
     : selectClassName;
 }
 
-function GridSelectField({
-  error,
-  disabled,
-  value,
-  options,
-  onChange,
-  ariaLabel,
-  listLabel,
-  placeholder,
-  disabledPlaceholder,
-  columns = 4,
-}: {
-  error?: boolean;
-  disabled?: boolean;
-  value: string;
-  options: { value: string; label: string }[];
-  onChange: (value: string) => void;
-  ariaLabel: string;
-  listLabel: string;
-  placeholder: string;
-  disabledPlaceholder?: string;
-  columns?: 3 | 4 | 6 | 7;
-}) {
+type GridSelectHandle = { abrir: () => void };
+
+const GridSelectField = forwardRef<
+  GridSelectHandle,
+  {
+    error?: boolean;
+    disabled?: boolean;
+    value: string;
+    options: { value: string; label: string }[];
+    onChange: (value: string) => void;
+    ariaLabel: string;
+    listLabel: string;
+    placeholder: string;
+    disabledPlaceholder?: string;
+    columns?: 3 | 4 | 6 | 7;
+  }
+>(function GridSelectField(
+  {
+    error,
+    disabled,
+    value,
+    options,
+    onChange,
+    ariaLabel,
+    listLabel,
+    placeholder,
+    disabledPlaceholder,
+    columns = 4,
+  },
+  ref
+) {
   const [open, setOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const raizRef = useRef<HTMLDivElement>(null);
   const texto = disabled
     ? disabledPlaceholder ?? placeholder
     : value
@@ -103,8 +119,35 @@ function GridSelectField({
     if (disabled) setOpen(false);
   }, [disabled]);
 
+  useImperativeHandle(ref, () => ({
+    abrir() {
+      if (disabled) return;
+      const raiz = raizRef.current;
+      if (!raiz) return;
+      const select = raiz.querySelector("select");
+      const boton = raiz.querySelector("button");
+      const visible =
+        select && select.getClientRects().length > 0
+          ? select
+          : boton && boton.getClientRects().length > 0
+            ? boton
+            : null;
+      if (visible instanceof HTMLSelectElement) {
+        visible.focus();
+        try {
+          visible.showPicker();
+        } catch {
+          // El navegador solo abre la lista si el gesto del usuario sigue activo.
+        }
+      } else if (visible instanceof HTMLButtonElement) {
+        visible.focus();
+        setOpen(true);
+      }
+    },
+  }));
+
   return (
-    <>
+    <div ref={raizRef}>
       <select
         aria-label={ariaLabel}
         className={`${selectClasses(error)} md:hidden`}
@@ -189,9 +232,9 @@ function GridSelectField({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
-}
+});
 
 type MonthDayParts = { month: string; day: string };
 
@@ -218,6 +261,8 @@ export function DatePickerInput({
   name,
 }: DatePickerInputProps) {
   const [parts, setParts] = useState<MonthDayParts>(() => parseMonthDay(value));
+  const diaRef = useRef<GridSelectHandle>(null);
+  const abrirDia = useRef(false);
 
   useEffect(() => {
     const parsed = parseMonthDay(value);
@@ -227,6 +272,12 @@ export function DatePickerInput({
       setParts({ month: "", day: "" });
     }
   }, [value]);
+
+  useEffect(() => {
+    if (!abrirDia.current || !parts.month || parts.day) return;
+    abrirDia.current = false;
+    diaRef.current?.abrir();
+  }, [parts.month, parts.day]);
 
   const dayOptions = useMemo(() => {
     if (!parts.month) return [];
@@ -258,6 +309,7 @@ export function DatePickerInput({
     const newParts = { month: nextMonth, day: nextDay };
     setParts(newParts);
     onChange(formatDateFromMonthDay(nextMonth, nextDay));
+    if (part === "month" && nextMonth && !nextDay) abrirDia.current = true;
   }
 
   return (
@@ -292,6 +344,7 @@ export function DatePickerInput({
         <label className="block space-y-1">
           <span className="text-sm font-medium text-zinc-900">Día</span>
           <GridSelectField
+            ref={diaRef}
             error={!!error}
             disabled={!parts.month}
             value={parts.day}
@@ -327,14 +380,45 @@ export function TimePickerInput({
   required,
   name,
 }: TimePickerInputProps) {
-  const { hour, minute } = parseTime(value);
+  const parsed = parseTime(value);
+  const [hour, setHour] = useState(parsed.hour);
+  const [minute, setMinute] = useState(parsed.minute);
+  const minutosRef = useRef<HTMLSelectElement>(null);
+  const pedirMinutos = useRef(false);
+
+  useEffect(() => {
+    const siguiente = parseTime(value);
+    if (siguiente.hour && siguiente.minute) {
+      setHour(siguiente.hour);
+      setMinute(siguiente.minute);
+    } else if (!value) {
+      setHour("");
+      setMinute("");
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (!pedirMinutos.current || !hour || minute) return;
+    pedirMinutos.current = false;
+    const el = minutosRef.current;
+    if (!el || el.disabled) return;
+    el.focus();
+    try {
+      el.showPicker();
+    } catch {
+      // El navegador solo abre la lista si el gesto del usuario sigue activo.
+    }
+  }, [hour, minute]);
 
   function updateHour(nextHour: string) {
-    onChange(formatTime(nextHour, minute || MINUTE_OPTIONS[0].value));
+    setHour(nextHour);
+    if (minute) onChange(formatTime(nextHour, minute));
+    else pedirMinutos.current = true;
   }
 
   function updateMinute(nextMinute: string) {
-    onChange(formatTime(hour || HOUR_OPTIONS[0].value, nextMinute));
+    setMinute(nextMinute);
+    if (hour) onChange(formatTime(hour, nextMinute));
   }
 
   return (
@@ -365,14 +449,16 @@ export function TimePickerInput({
         <label className="block space-y-1">
           <span className="text-xs text-zinc-500">Minutos</span>
           <select
+            ref={minutosRef}
             aria-label="Minutos"
             className={selectClasses(!!error)}
             value={minute}
             required={required}
+            disabled={!hour}
             onChange={(e) => updateMinute(e.target.value)}
           >
             <option value="" disabled hidden>
-              Elige minutos
+              {hour ? "Elige minutos" : "Elige la hora primero"}
             </option>
             {MINUTE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
