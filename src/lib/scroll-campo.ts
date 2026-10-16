@@ -79,24 +79,28 @@ function primerControlVisible(campo: HTMLElement): HTMLElement | null {
 function enfocarControl(campo: HTMLElement) {
   const control = primerControlVisible(campo);
   if (!control) return;
-  control.focus({ preventScroll: true });
-  if (
-    control instanceof HTMLSelectElement &&
-    typeof control.showPicker === "function"
-  ) {
-    try {
-      control.showPicker();
-    } catch {
-      // El navegador solo abre la lista si el gesto del usuario sigue activo.
+  // En Firefox el foco a veces no pega si se pide en el mismo instante.
+  window.setTimeout(() => {
+    if (!control.isConnected) return;
+    control.focus({ preventScroll: true });
+    if (
+      control instanceof HTMLSelectElement &&
+      typeof control.showPicker === "function"
+    ) {
+      try {
+        control.showPicker();
+      } catch {
+        // El navegador solo abre la lista si el gesto del usuario sigue activo.
+      }
+      return;
     }
-    return;
-  }
-  if (
-    control.getAttribute("aria-haspopup") === "listbox" &&
-    control.getAttribute("aria-expanded") !== "true"
-  ) {
-    control.click();
-  }
+    if (
+      control.getAttribute("aria-haspopup") === "listbox" &&
+      control.getAttribute("aria-expanded") !== "true"
+    ) {
+      control.click();
+    }
+  }, 0);
 }
 
 export function scrollAlSiguienteVacio(

@@ -33,8 +33,11 @@ export function ScrollCampoVacio() {
       scrollAlCampo(el);
     }
 
+    let esperaRelleno = 0;
+
     function alMutacion(cambios: MutationRecord[]) {
       const rellenos: HTMLElement[] = [];
+      let camposNuevos = false;
       for (const cambio of cambios) {
         if (
           cambio.type === "attributes" &&
@@ -56,6 +59,13 @@ export function ScrollCampoVacio() {
         if (cambio.type === "childList") {
           for (const nodo of cambio.addedNodes) {
             if (!(nodo instanceof HTMLElement)) continue;
+            if (
+              (nodo.hasAttribute("data-campo") &&
+                nodo.hasAttribute("data-campo-vacio")) ||
+              nodo.querySelector("[data-campo][data-campo-vacio]")
+            ) {
+              camposNuevos = true;
+            }
             const marcado = nodo.hasAttribute("data-campo-error")
               ? nodo
               : nodo.querySelector("[data-campo-error]");
@@ -64,7 +74,28 @@ export function ScrollCampoVacio() {
         }
       }
       const ultimo = rellenos[rellenos.length - 1];
-      if (ultimo) alRellenar(ultimo, true);
+      if (!ultimo && !camposNuevos) return;
+      // Tras elegir un botón (p. ej. «Solo para bulto») React monta el precio
+      // después; el foco en el mismo instante del observador a veces no pega.
+      window.clearTimeout(esperaRelleno);
+      esperaRelleno = window.setTimeout(() => {
+        if (ultimo?.isConnected) {
+          alRellenar(ultimo, true);
+          return;
+        }
+        const activo = document.activeElement;
+        const campoActivo =
+          activo instanceof HTMLElement
+            ? activo.closest("[data-campo]")
+            : null;
+        if (
+          campoActivo instanceof HTMLElement &&
+          campoActivo.isConnected &&
+          !campoActivo.hasAttribute("data-campo-vacio")
+        ) {
+          alRellenar(campoActivo, true);
+        }
+      }, 50);
     }
 
     function alInvalid(event: Event) {
@@ -131,6 +162,7 @@ export function ScrollCampoVacio() {
       document.removeEventListener("input", alTecleo, true);
       document.removeEventListener("focusout", alSalir, true);
       window.clearTimeout(esperaTecleo);
+      window.clearTimeout(esperaRelleno);
       observador.disconnect();
     };
   }, []);
