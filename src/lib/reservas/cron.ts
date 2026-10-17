@@ -184,6 +184,19 @@ export async function avisarReservaAceptada(
 
   await abrirChatReserva(db, reserva.id);
 
+  // El aviso viejo de «8 horas…» no debe seguir pidiendo aceptar.
+  const enlaceReserva = `/reservas/${reserva.id}`;
+  await db
+    .from("notificaciones")
+    .update({
+      titulo: "Reserva aceptada",
+      mensaje: "Ya has aceptado esta reserva.",
+      tipo: "reserva_confirmada",
+    })
+    .eq("user_id", reserva.transportista_id)
+    .eq("tipo", "reserva_pendiente_aprobacion")
+    .in("enlace", [enlaceReserva, `${enlaceReserva}/chat`]);
+
   if (!opts?.omitirAvisos) {
     await crearNotificacion(db, {
       user_id: reserva.cliente_id,

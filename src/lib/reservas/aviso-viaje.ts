@@ -59,6 +59,43 @@ export function reservaIdDesdeEnlace(enlace: string | null): string | null {
   return id;
 }
 
+const ESTADOS_YA_ACEPTADA: Reserva["estado"][] = [
+  "confirmada",
+  "pagado_escrow",
+  "en_transito",
+  "entregado",
+  "liberado",
+  "disputa",
+];
+
+/**
+ * El aviso de «8 horas para aceptar» no debe seguir diciendo eso
+ * si el conductor ya respondió (aunque el aviso esté marcado como leído).
+ */
+export function avisoPendienteAlDia<
+  T extends { tipo: string; titulo: string; mensaje: string },
+>(n: T, estado: Reserva["estado"] | undefined): T {
+  if (n.tipo !== "reserva_pendiente_aprobacion") return n;
+  if (!estado || estado === "pendiente_aprobacion" || estado === "pendiente_pago") {
+    return n;
+  }
+  if (ESTADOS_YA_ACEPTADA.includes(estado)) {
+    return {
+      ...n,
+      titulo: "Reserva aceptada",
+      mensaje: "Ya has aceptado esta reserva.",
+    };
+  }
+  if (estado === "cancelado") {
+    return {
+      ...n,
+      titulo: "Solicitud cerrada",
+      mensaje: "Esta reserva ya no está pendiente de tu respuesta.",
+    };
+  }
+  return n;
+}
+
 /** Un pago de bulto + plaza: el aviso lo lanza el bulto, no la plaza. */
 export function omitirAvisoPlazaEnLote(
   reservas: Pick<Reserva, "tipo">[],

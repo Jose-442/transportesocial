@@ -5,6 +5,7 @@ import { NotificacionesLista } from "@/components/notifications/NotificacionesLi
 import { NotificacionesMarcarTodasLeidas } from "@/components/notifications/NotificacionesMarcarTodasLeidas";
 import {
   agruparReservasMismoCobro,
+  avisoPendienteAlDia,
   avisosSinAceptarYRechazarALaVez,
   idReservaDelAviso,
   reservaIdDesdeEnlace,
@@ -68,26 +69,38 @@ export default async function NotificacionesPage() {
   ];
   let reservas: Pick<
     Reserva,
-    "id" | "tipo" | "cliente_id" | "ruta_conductor_id" | "created_at"
+    | "id"
+    | "tipo"
+    | "estado"
+    | "cliente_id"
+    | "ruta_conductor_id"
+    | "created_at"
   >[] = [];
   if (reservaIds.length > 0) {
     const { data: filas } = await supabase
       .from("reservas")
-      .select("id, tipo, cliente_id, ruta_conductor_id, created_at")
+      .select("id, tipo, estado, cliente_id, ruta_conductor_id, created_at")
       .in("id", reservaIds);
     reservas = (filas as typeof reservas) ?? [];
   }
+
+  const estadoPorId = new Map(reservas.map((r) => [r.id, r.estado]));
+  const avisos = avisosSinAceptarYRechazarALaVez(
+    unAvisoPorCobro(notificaciones, reservas),
+    reservas
+  ).map((n) => {
+    const reservaId = reservaIdDesdeEnlace(n.enlace);
+    return avisoPendienteAlDia(
+      n,
+      reservaId ? estadoPorId.get(reservaId) : undefined
+    );
+  });
 
   return (
     <div className="space-y-4">
       <NotificacionesMarcarTodasLeidas />
       <h1 className="text-2xl font-bold text-zinc-900">Notificaciones</h1>
-      <NotificacionesLista
-        notificaciones={avisosSinAceptarYRechazarALaVez(
-          unAvisoPorCobro(notificaciones, reservas),
-          reservas
-        )}
-      />
+      <NotificacionesLista notificaciones={avisos} />
     </div>
   );
 }
