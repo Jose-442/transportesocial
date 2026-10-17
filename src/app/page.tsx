@@ -150,22 +150,27 @@ export default async function HomePage() {
             <HomeSubscriptionBanner />
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:gap-5">
-            <ButtonLink
-              href="/rutas/nueva"
-              variant="primary"
-              fullWidth
-              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
-            >
-              <span className="flex items-center gap-2 text-sm font-semibold text-amber-200 sm:text-base">
-                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
-                  🚚
+            <div className="space-y-2">
+              <ButtonLink
+                href="/rutas/nueva"
+                variant="primary"
+                fullWidth
+                className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
+              >
+                <span className="flex items-center gap-2 text-sm font-semibold text-amber-200 sm:text-base">
+                  <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
+                    🚚
+                  </span>
+                  (Soy Conductor)
                 </span>
-                (Soy Conductor)
-              </span>
-              <span className="text-base font-semibold leading-snug sm:text-lg">
-                PUBLICAR mi ruta con el espacio y asientos libres
-              </span>
-            </ButtonLink>
+                <span className="text-base font-semibold leading-snug sm:text-lg">
+                  PUBLICAR mi ruta con el espacio y asientos libres
+                </span>
+              </ButtonLink>
+              <p className="px-1 text-center text-sm text-emerald-900 sm:text-left">
+                Después puedes editar el viaje mientras no haya reservas.
+              </p>
+            </div>
             <ButtonLink
               href="/bultos/nuevo?entrada=portada"
               variant="secondary"
@@ -183,6 +188,10 @@ export default async function HomePage() {
               </span>
             </ButtonLink>
           </div>
+          <p className="mt-6 text-center text-sm font-medium leading-snug text-emerald-900 sm:mt-8 sm:text-base">
+            Iniciativa de movilidad con el respaldo institucional de la Cámara
+            de Comercio de Burgos.
+          </p>
         </section>
       </div>
     </div>
