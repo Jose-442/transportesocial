@@ -42,12 +42,17 @@ function TextoEstado({
             : " Se ha devuelto la diferencia."}
         </p>
         {esConductor && rutaId ? (
-          <Link
-            href={`/rutas/${rutaId}`}
-            className="inline-flex text-sm font-semibold text-emerald-700"
-          >
-            Si quieres volver a publicar el hueco que queda, hazlo en el viaje.
-          </Link>
+          <p className="text-base text-zinc-700">
+            Si quieres volver a publicar el hueco que queda, hazlo en el viaje
+            pulsando{" "}
+            <Link
+              href={`/rutas/${rutaId}`}
+              className="font-semibold text-emerald-700 underline"
+            >
+              AQUÍ
+            </Link>
+            .
+          </p>
         ) : null}
       </div>
     );
@@ -190,10 +195,14 @@ function Formulario({
         {loading ? "Guardando…" : "Guardar precio nuevo"}
       </Button>
       {rutaId ? (
-        <p className="text-sm text-zinc-600">
-          Si lo guardas y quieres publicar el hueco que queda, lo haces en el{" "}
-          <Link href={`/rutas/${rutaId}`} className="font-semibold text-emerald-700">
-            viaje
+        <p className="text-base text-zinc-700">
+          Si lo guardas y quieres publicar el hueco que queda, hazlo en el viaje
+          pulsando{" "}
+          <Link
+            href={`/rutas/${rutaId}`}
+            className="font-semibold text-emerald-700 underline"
+          >
+            AQUÍ
           </Link>
           .
         </p>
