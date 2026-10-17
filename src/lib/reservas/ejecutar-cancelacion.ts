@@ -137,7 +137,7 @@ export async function ejecutarCancelacionReserva(opts: {
         titulo: "Han cancelado una reserva",
         mensaje:
           dinero.conductorEur > 0
-            ? `Canceló a menos de 24 h. Te llevas la mitad (${formatEur(dinero.conductorEur)}), aunque no hayas hecho el viaje.`
+            ? `Canceló a menos de 24 h. Te llevas la mitad (${formatEur(dinero.conductorEur)}), aunque no hayas hecho el viaje. El viaje sigue publicado.`
             : "Quien reservó ha cancelado. El viaje sigue publicado.",
         enlace,
       });
