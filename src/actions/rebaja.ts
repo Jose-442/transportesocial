@@ -90,14 +90,65 @@ export async function guardarRebajaReserva(formData: FormData) {
   const admin = createAdminClient();
   if (!admin) return { error: "No se ha podido devolver la diferencia." };
 
-  const { data: tx } = await admin
+  // Mismo viaje / mismo cobro: a veces el payment intent está en otra fila.
+  const idsCobro = new Set<string>([reserva.id]);
+  if (reserva.ruta_conductor_id) {
+    const { data: hermanas } = await admin
+      .from("reservas")
+      .select("id")
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+      .eq("cliente_id", reserva.cliente_id)
+      .eq("transportista_id", reserva.transportista_id);
+    for (const h of hermanas ?? []) idsCobro.add(h.id);
+  }
+
+  const { data: txs } = await admin
     .from("transacciones")
-    .select("id, stripe_payment_intent_id, estado_escrow, monto, metadata")
-    .eq("reserva_id", reserva.id)
-    .eq("tipo", "cobro_viaje")
-    .maybeSingle();
-  const intent = String(tx?.stripe_payment_intent_id ?? "").trim();
-  if (!intent || tx?.estado_escrow !== "retenido") {
+    .select("id, reserva_id, stripe_payment_intent_id, estado_escrow, monto, metadata")
+    .in("reserva_id", [...idsCobro])
+    .eq("tipo", "cobro_viaje");
+
+  type TxRebaja = {
+    id: string;
+    reserva_id: string | null;
+    stripe_payment_intent_id: string | null;
+    estado_escrow: string | null;
+    monto: number | null;
+    metadata: unknown;
+  };
+  let tx =
+    ((txs ?? []) as TxRebaja[]).find(
+      (fila) =>
+        fila.reserva_id === reserva.id &&
+        fila.estado_escrow === "retenido" &&
+        String(fila.stripe_payment_intent_id ?? "").trim()
+    ) ??
+    ((txs ?? []) as TxRebaja[]).find(
+      (fila) =>
+        fila.estado_escrow === "retenido" &&
+        String(fila.stripe_payment_intent_id ?? "").trim()
+    ) ??
+    null;
+
+  let intent = String(tx?.stripe_payment_intent_id ?? "").trim();
+
+  // Si en la BD no hay cobro retenido, buscar el pago en Stripe (como al cancelar).
+  if (!intent) {
+    try {
+      const { cobroDeEstasReservas } = await import("@/lib/stripe/cobro-reserva");
+      const { getStripeServer } = await import("@/lib/stripe/server");
+      const stripe = getStripeServer();
+      const lista = await stripe.paymentIntents.list({ limit: 100 });
+      const hallado = lista.data.find((pi) =>
+        cobroDeEstasReservas(pi, [...idsCobro])
+      );
+      if (hallado?.id) intent = hallado.id;
+    } catch (err) {
+      console.error("[rebaja] buscar cobro en Stripe", err);
+    }
+  }
+
+  if (!intent) {
     return { error: "No se ha encontrado el cobro para devolver la diferencia." };
   }
 
@@ -129,20 +180,22 @@ export async function guardarRebajaReserva(formData: FormData) {
     return { error: "El precio nuevo ya está guardado." };
   }
 
-  const metadata =
-    tx.metadata && typeof tx.metadata === "object" && !Array.isArray(tx.metadata)
-      ? (tx.metadata as Record<string, unknown>)
-      : {};
-  await admin
-    .from("transacciones")
-    .update({
-      metadata: {
-        ...metadata,
-        rebaja_precio_total_antes: actual,
-        rebaja_comision_antes: Number(reserva.comision_plataforma),
-      },
-    })
-    .eq("id", tx.id);
+  if (tx?.id) {
+    const metadata =
+      tx.metadata && typeof tx.metadata === "object" && !Array.isArray(tx.metadata)
+        ? (tx.metadata as Record<string, unknown>)
+        : {};
+    await admin
+      .from("transacciones")
+      .update({
+        metadata: {
+          ...metadata,
+          rebaja_precio_total_antes: actual,
+          rebaja_comision_antes: Number(reserva.comision_plataforma),
+        },
+      })
+      .eq("id", tx.id);
+  }
 
   try {
     const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
