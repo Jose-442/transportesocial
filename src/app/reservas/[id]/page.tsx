@@ -392,11 +392,12 @@ export default async function ReservaDetallePage({
           </span>
         </p>
         <p className="text-sm text-zinc-700">{fraseReserva}</p>
-        {detalleBulto?.bulto_descripcion && (
+        {detalleBulto?.bulto_descripcion &&
+        !(esConductor && porteFicha) ? (
           <p className="text-sm text-zinc-600">
             {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
           </p>
-        )}
+        ) : null}
         <p className="text-sm text-zinc-600">
           Para el día:{" "}
           {new Date(reserva.fecha_llegada_prevista).toLocaleDateString("es-ES", {
