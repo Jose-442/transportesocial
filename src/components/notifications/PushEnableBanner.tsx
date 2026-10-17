@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { APP_NAME } from "@/lib/constants";
 import {
   isIOSDevice,
+  isMobileBrowser,
   isPushApiSupported,
   isStandaloneDisplay,
   subscribeUserToPush,
@@ -44,6 +45,10 @@ export function PushEnableBanner({ userId }: { userId: string | null }) {
 
   useEffect(() => {
     if (!userId) {
+      setVisible(false);
+      return;
+    }
+    if (!isMobileBrowser()) {
       setVisible(false);
       return;
     }

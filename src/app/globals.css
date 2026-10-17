@@ -129,6 +129,13 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 46;
 }
 
+/* Avisos push: solo móvil (en PC no debe verse) */
+@media (min-width: 768px) {
+  .ts-pwa-banner.ts-push-banner {
+    display: none !important;
+  }
+}
+
 .ts-pwa-banner .ts-pwa-close {
   width: 32px;
   height: 32px;

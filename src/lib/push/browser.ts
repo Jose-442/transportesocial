@@ -14,6 +14,28 @@ export function isIOSDevice(): boolean {
   return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 }
 
+function isAndroidDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /Android/i.test(ua) && !/iPad|iPhone|iPod/i.test(ua);
+}
+
+/** Solo móvil / tablet táctil: el aviso de push no debe salir en PC. */
+export function isMobileBrowser(): boolean {
+  if (typeof navigator === "undefined" || typeof window === "undefined") {
+    return false;
+  }
+  if (isIOSDevice() || isAndroidDevice()) return true;
+  const ua = navigator.userAgent || "";
+  if (/Mobi|EdgiOS|CriOS|FxiOS|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+    return true;
+  }
+  const isNarrow = window.matchMedia("(max-width: 767px)").matches;
+  if (isNarrow && navigator.maxTouchPoints > 0) return true;
+  if (/Windows NT|Macintosh|X11; Linux x86/i.test(ua) && !isNarrow) return false;
+  return isNarrow;
+}
+
 export function isPushApiSupported(): boolean {
   return (
     typeof window !== "undefined" &&
