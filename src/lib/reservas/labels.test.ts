@@ -179,15 +179,18 @@ describe("estadoSiCanceloQuienReservo", () => {
     });
   });
 
-  it("quien reservó lo ve como cancelado solo para él", () => {
+  it("quien reservó lo ve como cancelado solo para él, sin lo del viaje publicado", () => {
     expect(
       estadoSiCanceloQuienReservo({
         estado: "cancelado",
         motivo: MOTIVO_CANCELACION_CLIENTE,
         esCliente: true,
         nombreCliente: "Tir",
-      })?.etiqueta
-    ).toBe("Cancelado solo para ti");
+      })
+    ).toEqual({
+      etiqueta: "Cancelado solo para ti",
+      aclaracion: "",
+    });
   });
 
   it("si canceló el conductor, el estado sigue siendo el de la reserva", () => {

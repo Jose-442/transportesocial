@@ -10,10 +10,12 @@ import {
 } from "@/components/reservas/VolverRecogida";
 import { FichaPorteConductor } from "@/components/reservas/FichaPorteConductor";
 import { RebajaReservas } from "@/components/reservas/GuardarRebaja";
+import { ModificarMiReserva } from "@/components/reservas/ModificarMiReserva";
 import { DisputaForm } from "@/components/reservas/DisputaForm";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
+import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { createClient } from "@/lib/supabase/server";
 import { completeTripCheckout } from "@/lib/stripe/trip-checkout";
 import { getEstadoResenas } from "@/actions/resenas";
@@ -201,19 +203,27 @@ export default async function ReservaDetallePage({
   );
 
   let plazasLibres: number | undefined;
-  if (!esCliente && reserva.ruta_conductor_id) {
+  let ofertasAmpliar: OfertaCapacidad[] = [];
+  let ofreceBultoOriginalLibre = false;
+  if (reserva.ruta_conductor_id) {
     const ocupacion = await cargarOcupacionRuta(reserva.ruta_conductor_id);
     const { data: ofertasData } = await supabase
       .from("ofertas_capacidad")
       .select("*")
       .eq("ruta_conductor_id", reserva.ruta_conductor_id);
-    const ofertas = aplicarOcupacionAOfertas(
+    ofertasAmpliar = aplicarOcupacionAOfertas(
       (ofertasData as OfertaCapacidad[]) ?? [],
       ocupacion
     );
-    const { ofrecidas, ocupadas } = resumenAsientosRuta(ofertas);
-    if (ofrecidas > 0) {
-      plazasLibres = Math.max(0, ofrecidas - ocupadas);
+    if (ruta) {
+      ofreceBultoOriginalLibre =
+        rutaOfreceBulto(ruta.espacio_disponible) && !ocupacion.bultoOcupado;
+    }
+    if (!esCliente) {
+      const { ofrecidas, ocupadas } = resumenAsientosRuta(ofertasAmpliar);
+      if (ofrecidas > 0) {
+        plazasLibres = Math.max(0, ofrecidas - ocupadas);
+      }
     }
   }
   const fraseReserva = fraseQueHasReservado(relacionadas, {
@@ -362,6 +372,16 @@ export default async function ReservaDetallePage({
           )}
         </div>
       </div>
+
+      {esCliente && ruta && !disputa ? (
+        <ModificarMiReserva
+          rutaId={ruta.id}
+          estado={estadoMostrar}
+          relacionadas={relacionadas}
+          ofertas={ofertasAmpliar}
+          ofreceBultoOriginalLibre={ofreceBultoOriginalLibre}
+        />
+      ) : null}
 
       <ReservaAcciones
         reserva={reservaVista}

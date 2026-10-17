@@ -85,6 +85,14 @@ export default async function RutaDetallePage({
 }) {
   const { id } = await params;
   const resolvedSearchParams = await searchParams;
+  const ampliarRaw = resolvedSearchParams.ampliar;
+  const ampliar =
+    typeof ampliarRaw === "string" &&
+    ["plaza", "bulto", "ambos", "1"].includes(ampliarRaw)
+      ? ampliarRaw === "1"
+        ? "ambos"
+        : ampliarRaw
+      : null;
   const volverHref = hrefVolverListado("/rutas", resolvedSearchParams);
   const listadoQs = filtrosToSearchQuery(parseFiltros(resolvedSearchParams));
   const loginHref = hrefLoginConVuelta(
@@ -217,6 +225,19 @@ export default async function RutaDetallePage({
     Boolean(!esPropio && user && !reservaMiaId) &&
     ruta.estado === "activa" &&
     (ofreceBulto || plazasAsientoLibres);
+
+  const ampliarMuestraPlaza =
+    (ampliar === "plaza" || ampliar === "ambos") &&
+    ofertasDisponibles.some((o) => o.tipo === "asiento");
+  const ampliarMuestraBultoOferta =
+    (ampliar === "bulto" || ampliar === "ambos") &&
+    ofertasDisponibles.some((o) => o.tipo === "bulto");
+  const ampliarMuestraBultoOriginal =
+    (ampliar === "bulto" || ampliar === "ambos") && ofreceBultoOriginal;
+  const ampliarTieneHueco =
+    ampliarMuestraPlaza ||
+    ampliarMuestraBultoOferta ||
+    ampliarMuestraBultoOriginal;
 
   const origen = formatCiudad(ruta.origen);
   const destino = formatCiudad(ruta.destino);
@@ -531,7 +552,11 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {!esPropio && user && reservaMiaId && !reservaPendienteId && (
+      {!esPropio &&
+        user &&
+        reservaMiaId &&
+        !reservaPendienteId &&
+        !ampliar && (
         <Card className="space-y-3">
           <p className="text-center text-sm text-zinc-600">
             Ya tienes una reserva en este viaje.
@@ -544,6 +569,64 @@ export default async function RutaDetallePage({
           </Link>
         </Card>
       )}
+
+      {ampliar &&
+      !esPropio &&
+      user &&
+      reservaMiaId &&
+      !reservaPendienteId ? (
+        <Card className="space-y-4 bg-zinc-50 p-3 md:p-4">
+          <p className="text-base font-semibold text-zinc-900">
+            Modificar mi reserva
+          </p>
+          <p className="text-sm text-zinc-600">
+            Amplía lo que ya pediste. Se cobra por la App.
+          </p>
+          {ampliarMuestraPlaza ? (
+            <OfertasCapacidadReserva
+              ofertas={ofertas}
+              rutaEstado={ruta.estado === "activa" ? "activa" : "reservada"}
+              faltaIdentidad={faltaIdentidad}
+              identidadInicial={identidadInicial}
+              salidaIso={ruta.fecha_llegada_prevista}
+              soloTipo="asiento"
+            />
+          ) : null}
+          {ampliarMuestraBultoOferta ? (
+            <OfertasCapacidadReserva
+              ofertas={ofertas}
+              rutaEstado="reservada"
+              faltaIdentidad={faltaIdentidad}
+              identidadInicial={identidadInicial}
+              salidaIso={ruta.fecha_llegada_prevista}
+              soloTipo="bulto"
+            />
+          ) : null}
+          {ampliarMuestraBultoOriginal ? (
+            <ReservarRutaForm
+              rutaId={ruta.id}
+              ofreceBulto
+              precioBulto={Number(ruta.precio_publicado)}
+              precioNetoBulto={Number(ruta.precio_neto)}
+              ofertas={[]}
+              faltaIdentidad={faltaIdentidad}
+              identidadInicial={identidadInicial}
+              salidaIso={ruta.fecha_llegada_prevista}
+            />
+          ) : null}
+          {!ampliarTieneHueco ? (
+            <p className="text-sm text-zinc-600">
+              Ya no queda hueco para ampliar. Vuelve a tu reserva.
+            </p>
+          ) : null}
+          <Link
+            href={`/reservas/${reservaMiaId}`}
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800"
+          >
+            Volver a mi reserva
+          </Link>
+        </Card>
+      ) : null}
 
       {mostrarFormulario && (
         <ReservarRutaForm

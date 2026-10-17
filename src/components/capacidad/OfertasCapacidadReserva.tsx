@@ -42,17 +42,23 @@ export function OfertasCapacidadReserva({
   faltaIdentidad = false,
   identidadInicial,
   salidaIso = "",
+  soloTipo,
 }: {
   ofertas: OfertaCapacidad[];
   rutaEstado?: "activa" | "reservada";
   faltaIdentidad?: boolean;
   identidadInicial?: { telefono: string; documento: string };
   salidaIso?: string;
+  /** Al ampliar una reserva ya hecha: solo plaza o solo bulto de capacidad extra. */
+  soloTipo?: "asiento" | "bulto";
 }) {
   const router = useRouter();
   const disponibles = ofertas.filter((o) => {
     if (o.estado !== "disponible" || plazasLibresOferta(o) <= 0) return false;
-    if (rutaEstado === "activa" && o.tipo !== "asiento") return false;
+    if (soloTipo && o.tipo !== soloTipo) return false;
+    if (rutaEstado === "activa" && o.tipo !== "asiento" && !soloTipo) {
+      return false;
+    }
     return true;
   });
   const rutaId = ofertas[0]?.ruta_conductor_id ?? "sin-ruta";

@@ -143,7 +143,7 @@ export function ReservaAcciones({
         ) : null}
       </div>
 
-      {canceloQuienReservo ? (
+      {canceloQuienReservo?.aclaracion ? (
         <p className="text-sm font-medium text-zinc-900">
           {canceloQuienReservo.aclaracion}
         </p>

@@ -49,7 +49,8 @@ export function estadoSiCanceloQuienReservo(opts: {
     etiqueta: opts.esCliente
       ? "Cancelado solo para ti"
       : `Cancelado solo para ${nombre}`,
-    aclaracion: "El viaje sigue publicado.",
+    // Solo al conductor: a quien cancela no le importa.
+    aclaracion: opts.esCliente ? "" : "El viaje sigue publicado.",
   };
 }
 

@@ -16,7 +16,7 @@ export const metadata = { title: "Términos y privacidad" };
 
 export default function TerminosPage() {
   const { nombre, nif, domicilio, email } = LEGAL_TITULAR;
-  const fechaActualizacion = "16 de octubre de 2026";
+  const fechaActualizacion = "17 de octubre de 2026";
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-4 py-8 text-zinc-900">
@@ -321,6 +321,14 @@ export default function TerminosPage() {
               Los fondos quedan retenidos de forma segura hasta que se cumplan
               las condiciones de liberación al Conductor (entrega o plazo sin
               incidencia, según estas Condiciones).
+            </li>
+            <li>
+              Si ya hay una reserva hecha y el viaje aún tiene hueco (plaza o
+              bulto), quien reservó puede <strong>ampliarla</strong> desde la
+              propia reserva («Modificar mi reserva»). Lo añadido se paga por
+              adelantado en la Plataforma, aparte de lo ya cobrado. Las reglas
+              de cancelación y reembolso de este apartado se aplican a cada
+              cobro por su cuenta.
             </li>
             <li>
               Si el Conductor no tiene activada la aceptación automática,
