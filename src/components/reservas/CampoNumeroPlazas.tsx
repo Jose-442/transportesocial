@@ -21,7 +21,7 @@ export function CampoNumeroPlazas({
   const eligiendo =
     Number.isInteger(parsed) && parsed >= 1 && parsed <= plazasLibres;
   // No decir «Elige 1»: parece que ya hay una plaza marcada.
-  const labelVacio = "Sin plazas de pasajero";
+  const labelVacio = "Elige opción o continúa al siguiente";
 
   return (
     <Select
