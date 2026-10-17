@@ -191,14 +191,21 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">
-          <ConfirmarRecogidaBoton reservaId={reserva.id} />
-          <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
-            {tienePorte
-              ? "Pulsa cuando hayas cargado el bulto en el vehículo."
-              : "Pulsa cuando los pasajeros estén a bordo y salgas."}
-          </p>
+          <div className="space-y-1.5">
+            <p className="text-sm text-zinc-700">
+              {tienePorte
+                ? "Pulsa cuando hayas cargado el bulto en el vehículo."
+                : "Pulsa cuando los pasajeros estén a bordo y salgas."}
+            </p>
+            <ConfirmarRecogidaBoton reservaId={reserva.id} />
+          </div>
           {tienePorte ? (
-            <RechazarRecogidaBoton reservaId={reserva.id} />
+            <div className="space-y-1.5">
+              <p className="text-sm text-zinc-700">
+                Pulsa si no te convence la carga
+              </p>
+              <RechazarRecogidaBoton reservaId={reserva.id} />
+            </div>
           ) : politica.puede && politica.tipo ? (
             <CancelarReservaBoton
               reservaId={reserva.id}
@@ -210,11 +217,11 @@ export function ReservaAcciones({
       )}
 
       {estado === "en_transito" && esConductor && (
-        <div className="space-y-2">
-          <PorteEntregadoBoton reservaId={reserva.id} />
-          <p className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
+        <div className="space-y-1.5">
+          <p className="text-sm text-zinc-700">
             Pulsa cuando hayas entregado el bulto o llegado a destino
           </p>
+          <PorteEntregadoBoton reservaId={reserva.id} />
         </div>
       )}
 
@@ -246,12 +253,6 @@ export function ReservaAcciones({
             </p>
             <DisputaForm reservaId={reserva.id} esConductor={false} />
           </>
-        )}
-
-      {["confirmada", "en_transito", "entregado"].includes(estado) &&
-        esConductor &&
-        !disputa && (
-          <DisputaForm reservaId={reserva.id} esConductor={true} />
         )}
 
       {disputa && (

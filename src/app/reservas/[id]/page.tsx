@@ -10,6 +10,7 @@ import {
 } from "@/components/reservas/VolverRecogida";
 import { FichaPorteConductor } from "@/components/reservas/FichaPorteConductor";
 import { RebajaReservas } from "@/components/reservas/GuardarRebaja";
+import { DisputaForm } from "@/components/reservas/DisputaForm";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { ResenaSection } from "@/components/resenas/ResenaSection";
 import { VersionDisputaForm } from "@/components/reservas/VersionDisputaForm";
@@ -394,6 +395,12 @@ export default async function ReservaDetallePage({
         destino={ruta?.destino ?? ""}
         rutaId={ruta?.id ?? null}
       />
+
+      {esConductor &&
+      !disputa &&
+      ["confirmada", "en_transito", "entregado"].includes(estadoMostrar) ? (
+        <DisputaForm reservaId={id} esConductor />
+      ) : null}
 
       {esConductor &&
       porteFicha &&
