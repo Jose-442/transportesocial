@@ -72,17 +72,15 @@ function TextoEstado({
 
   if (porte.estado === "confirmada") {
     return (
-      <p className="text-sm font-medium text-emerald-900">
-        Hay una solicitud de rebaja. Puedes guardar un precio más bajo
-        debajo.
+      <p className="text-base text-emerald-900">
+        Puedes guardar un precio más bajo debajo.
       </p>
     );
   }
 
   return (
-    <p className="text-sm font-medium text-emerald-900">
-      Hay una solicitud de rebaja. Cuando aceptes la reserva, podrás guardar
-      un precio más bajo.
+    <p className="text-base text-emerald-900">
+      Cuando aceptes la reserva, podrás guardar un precio más bajo.
     </p>
   );
 }
@@ -233,7 +231,7 @@ export function RebajaReservas({
             key={porte.id}
             className="space-y-2 border-emerald-200 bg-emerald-50/40"
           >
-            <p className="text-sm font-semibold text-emerald-950">
+            <p className="text-base font-semibold text-emerald-950">
               {porte.rebajaEn
                 ? "Rebaja aplicada"
                 : "Hay una solicitud de rebaja"}
