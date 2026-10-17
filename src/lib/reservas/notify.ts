@@ -96,7 +96,7 @@ export async function asegurarAvisosConductor(
       tipo: pendiente ? "reserva_pendiente_aprobacion" : "reserva_confirmada",
       titulo: pendiente
         ? pideRebaja
-          ? "Nueva solicitud con rebaja"
+          ? "Hay una solicitud de rebaja"
           : "Nueva solicitud de reserva"
         : "Nueva reserva confirmada",
       mensaje: pendiente

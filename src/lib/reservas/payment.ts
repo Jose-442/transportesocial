@@ -412,7 +412,7 @@ async function avisarReservaRuta(
       user_id: r.transportista_id,
       tipo: "reserva_pendiente_aprobacion",
       titulo: Boolean(r.pide_rebaja)
-        ? "Nueva solicitud con rebaja"
+        ? "Hay una solicitud de rebaja"
         : "Nueva solicitud de reserva",
       mensaje: mensajeAvisoConductorPendiente(Boolean(r.pide_rebaja)),
       enlace: `/reservas/${r.id}`,
