@@ -376,6 +376,25 @@ export default async function ReservaDetallePage({
         reembolsoEntero={reembolsoEntero}
       />
 
+      <RebajaReservas
+        portes={relacionadas
+          .filter((item) => esPorteParaRebaja(item))
+          .map((item) => ({
+            id: item.id,
+            precioTotal: Number(item.precio_total),
+            pideRebaja: Boolean(item.pide_rebaja),
+            rebajaEn: item.rebaja_en ?? null,
+            rebajaEur: item.rebaja_eur == null ? null : Number(item.rebaja_eur),
+            estado: item.estado,
+            salida: item.fecha_llegada_prevista,
+            descripcion: separarHoraOculta(item.bulto_descripcion ?? "").texto,
+          }))}
+        esConductor={esConductor}
+        origen={ruta?.origen ?? ""}
+        destino={ruta?.destino ?? ""}
+        rutaId={ruta?.id ?? null}
+      />
+
       {esConductor &&
       porteFicha &&
       ["confirmada", "en_transito", "pendiente_aprobacion"].includes(
@@ -422,25 +441,6 @@ export default async function ReservaDetallePage({
           </a>
         ) : null}
       </Card>
-
-      <RebajaReservas
-        portes={relacionadas
-          .filter((item) => esPorteParaRebaja(item))
-          .map((item) => ({
-            id: item.id,
-            precioTotal: Number(item.precio_total),
-            pideRebaja: Boolean(item.pide_rebaja),
-            rebajaEn: item.rebaja_en ?? null,
-            rebajaEur: item.rebaja_eur == null ? null : Number(item.rebaja_eur),
-            estado: item.estado,
-            salida: item.fecha_llegada_prevista,
-            descripcion: separarHoraOculta(item.bulto_descripcion ?? "").texto,
-          }))}
-        esConductor={esConductor}
-        origen={ruta?.origen ?? ""}
-        destino={ruta?.destino ?? ""}
-        rutaId={ruta?.id ?? null}
-      />
 
       {estadoResenas && (
         <Card>
