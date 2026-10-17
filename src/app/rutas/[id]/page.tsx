@@ -485,7 +485,7 @@ export default async function RutaDetallePage({
                   {formatEur(precioBultoMostrar)}
                 </p>
                 <p className="text-xs leading-tight text-zinc-500">
-                  Gastos de gestión incluidos.
+                  Gastos de gestión, IVA y banco todo incluido.
                 </p>
               </div>
             </div>
