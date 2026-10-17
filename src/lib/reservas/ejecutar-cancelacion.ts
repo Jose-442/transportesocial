@@ -7,6 +7,7 @@ import {
   politicaCancelacionCliente,
   politicaCancelacionConductor,
 } from "@/lib/reservas/cancelacion";
+import { avisarClienteCancelacionHecha } from "@/lib/email/avisar-cliente-reserva";
 import { avisarAdminSiSegundaCancelacion } from "@/lib/reservas/avisar-segunda-cancelacion";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import type { Reserva } from "@/types/database";
@@ -156,6 +157,13 @@ export async function ejecutarCancelacionReserva(opts: {
         enlace,
       });
     }
+
+    void avisarClienteCancelacionHecha(admin, {
+      clienteId: reserva.cliente_id,
+      reservaId: principal.id,
+      reembolsoEur: dinero.reembolsoEur,
+      quienCancelo: esCliente ? "cliente" : "conductor",
+    }).catch((err) => console.error("[cancelacion-hecha-email]", err));
 
     try {
       await avisarAdminSiSegundaCancelacion(admin, {

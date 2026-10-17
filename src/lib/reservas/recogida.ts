@@ -9,6 +9,7 @@ import { formatEur } from "@/lib/pricing";
 import { aplicarCancelacionPagada } from "@/lib/reservas/aplicar-cancelacion";
 import { politicaCancelacionConductor } from "@/lib/reservas/cancelacion";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { avisarClienteCancelacionHecha } from "@/lib/email/avisar-cliente-reserva";
 import { sendAlertaRecogidaAdminEmail } from "@/lib/email/alerta-recogida-admin";
 import {
   isMotivoRechazoRecogida,
@@ -266,6 +267,13 @@ export async function rechazarRecogida(
       mensaje: `El conductor no ha podido cargar el porte (${labelMotivoRechazoRecogida(motivo)}). El reembolso del 100 % (${formatEur(dinero.reembolsoEur)}) ya está hecho. Lo que tarde tu banco.`,
       enlace,
     });
+
+    void avisarClienteCancelacionHecha(admin, {
+      clienteId: reserva.cliente_id,
+      reservaId: principal.id,
+      reembolsoEur: dinero.reembolsoEur,
+      quienCancelo: "conductor",
+    }).catch((err) => console.error("[cancelacion-hecha-email]", err));
 
     const { data: perfil } = await admin
       .from("profiles")

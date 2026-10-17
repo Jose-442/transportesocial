@@ -8,6 +8,7 @@ import {
   persistirAceptacionReserva,
   persistirRechazoReserva,
 } from "@/lib/reservas/cron";
+import { avisarClienteCancelacionHecha } from "@/lib/email/avisar-cliente-reserva";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import type { Reserva } from "@/types/database";
 
@@ -62,6 +63,15 @@ async function avisarRechazo(
   } catch (err) {
     console.error("[rechazar] aviso", err);
   }
+
+  const admin = createAdminClient();
+  if (!admin) return;
+  void avisarClienteCancelacionHecha(admin, {
+    clienteId: reserva.cliente_id,
+    reservaId: reserva.id,
+    reembolsoEur,
+    quienCancelo: "conductor",
+  }).catch((err) => console.error("[cancelacion-hecha-email]", err));
 }
 
 async function devolverEntero(

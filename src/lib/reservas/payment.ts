@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { CONDUCTOR_APPROVAL_HOURS, REVIEW_WINDOW_DAYS } from "@/lib/constants";
+import { avisarClientePagoHecho } from "@/lib/email/avisar-cliente-reserva";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { mismoCobroViaje, omitirAvisoPlazaEnLote } from "@/lib/reservas/aviso-viaje";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
@@ -122,6 +123,11 @@ export async function confirmarPagoReservas(
     }
     if (aviso.error) return aviso;
   }
+
+  void avisarClientePagoHecho(admin, actualizadas).catch((err) =>
+    console.error("[pago-hecho-email]", err)
+  );
+
   return {};
 }
 
@@ -222,6 +228,10 @@ export async function confirmarPagoViajeDesdeIntent(
     }
     if (aviso.error) return aviso;
   }
+
+  void avisarClientePagoHecho(dbAvisos, actualizadas).catch((err) =>
+    console.error("[pago-hecho-email]", err)
+  );
 
   if (principal.ruta_conductor_id) {
     await sincronizarOcupacionRuta(supabase, principal.ruta_conductor_id);
