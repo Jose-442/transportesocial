@@ -107,22 +107,24 @@ export function ScrollCampoVacio() {
 
     function alTecleo(event: Event) {
       const el = event.target;
+      // En un texto largo (descripción del bulto, etc.) no hay que bajar
+      // a cada palabra: el usuario sigue escribiendo. Solo al salir del campo.
+      if (el instanceof HTMLTextAreaElement) return;
       const esCaja =
-        el instanceof HTMLTextAreaElement ||
-        (el instanceof HTMLInputElement &&
-          (el.type === "text" ||
-            el.type === "search" ||
-            el.type === "tel" ||
-            el.type === "email" ||
-            el.type === "password" ||
-            el.type === "number" ||
-            el.type === ""));
+        el instanceof HTMLInputElement &&
+        (el.type === "text" ||
+          el.type === "search" ||
+          el.type === "tel" ||
+          el.type === "email" ||
+          el.type === "password" ||
+          el.type === "number" ||
+          el.type === "");
       if (!esCaja || el.getAttribute("role") === "combobox") return;
       const campo = el.closest("[data-campo]");
       if (!(campo instanceof HTMLElement)) return;
       window.clearTimeout(esperaTecleo);
       esperaTecleo = window.setTimeout(() => {
-        if (el instanceof HTMLInputElement && el.type === "number") {
+        if (el.type === "number") {
           const importe = parseFloat(el.value);
           if (!Number.isFinite(importe) || importe <= 0) return;
         } else if (el.value.trim() === "") {
