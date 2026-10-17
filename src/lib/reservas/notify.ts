@@ -6,6 +6,10 @@ import {
   agruparReservasMismoCobro,
   idReservaDelAviso,
 } from "@/lib/reservas/aviso-viaje";
+import {
+  mensajeAvisoConductorConfirmada,
+  mensajeAvisoConductorPendiente,
+} from "@/lib/reservas/rebaja";
 
 type DbClient = SupabaseClient;
 
@@ -86,15 +90,18 @@ export async function asegurarAvisosConductor(
     if (!r) continue;
     const enlace = `/reservas/${idAviso}`;
     const pendiente = r.estado === "pendiente_aprobacion";
+    const pideRebaja = Boolean(r.pide_rebaja);
     await crearNotificacion(db, {
       user_id: userId,
       tipo: pendiente ? "reserva_pendiente_aprobacion" : "reserva_confirmada",
       titulo: pendiente
-        ? "Nueva solicitud de reserva"
+        ? pideRebaja
+          ? "Nueva solicitud con rebaja"
+          : "Nueva solicitud de reserva"
         : "Nueva reserva confirmada",
       mensaje: pendiente
-        ? "Tienes 8 horas para aceptar o rechazar esta reserva."
-        : "Un usuario ha reservado tu viaje. Revisa el chat.",
+        ? mensajeAvisoConductorPendiente(pideRebaja)
+        : mensajeAvisoConductorConfirmada(pideRebaja),
       enlace: pendiente ? enlace : `/reservas/${idAviso}/chat`,
     });
     for (const item of grupo) vistos.add(`/reservas/${item.id}`);

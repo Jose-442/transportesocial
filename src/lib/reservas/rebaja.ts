@@ -13,6 +13,21 @@ export const TEXTO_PUEDE_PEDIR_REBAJA =
 
 export const TEXTO_PLAZO_REBAJA = "Solo hasta 48 horas antes del viaje.";
 
+/** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
+export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {
+  if (pideRebaja) {
+    return "Tienes 8 horas para aceptar o rechazar. Quien reservó ha solicitado una rebaja.";
+  }
+  return "Tienes 8 horas para aceptar o rechazar esta reserva.";
+}
+
+export function mensajeAvisoConductorConfirmada(pideRebaja: boolean): string {
+  if (pideRebaja) {
+    return "Un usuario ha reservado tu viaje y ha solicitado una rebaja. Revisa el chat.";
+  }
+  return "Un usuario ha reservado tu viaje. Revisa el chat.";
+}
+
 /** Hasta 48 horas antes de la salida, incluida esa hora. */
 export function cabeRebaja(salidaIso: string, ahora = new Date()): boolean {
   const horas = horasHasta(salidaIso, ahora);

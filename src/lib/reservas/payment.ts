@@ -6,6 +6,10 @@ import { CONDUCTOR_APPROVAL_HOURS, REVIEW_WINDOW_DAYS } from "@/lib/constants";
 import { avisarClientePagoHecho } from "@/lib/email/avisar-cliente-reserva";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { mismoCobroViaje, omitirAvisoPlazaEnLote } from "@/lib/reservas/aviso-viaje";
+import {
+  mensajeAvisoConductorConfirmada,
+  mensajeAvisoConductorPendiente,
+} from "@/lib/reservas/rebaja";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { getStripeServer } from "@/lib/stripe/server";
 import { sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
@@ -393,7 +397,7 @@ async function avisarReservaRuta(
       user_id: r.transportista_id,
       tipo: "reserva_confirmada",
       titulo: "Nueva reserva confirmada",
-      mensaje: "Un usuario ha reservado tu viaje. Revisa el chat.",
+      mensaje: mensajeAvisoConductorConfirmada(Boolean(r.pide_rebaja)),
       enlace: `/reservas/${r.id}/chat`,
     });
     await crearNotificacion(admin, {
@@ -407,8 +411,10 @@ async function avisarReservaRuta(
     await crearNotificacion(admin, {
       user_id: r.transportista_id,
       tipo: "reserva_pendiente_aprobacion",
-      titulo: "Nueva solicitud de reserva",
-      mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+      titulo: Boolean(r.pide_rebaja)
+        ? "Nueva solicitud con rebaja"
+        : "Nueva solicitud de reserva",
+      mensaje: mensajeAvisoConductorPendiente(Boolean(r.pide_rebaja)),
       enlace: `/reservas/${r.id}`,
     });
     await crearNotificacion(admin, {
