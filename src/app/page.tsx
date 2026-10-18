@@ -189,7 +189,7 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
           <p
-            className="mt-6 text-center text-lg italic leading-snug text-orange-500 sm:mt-8 sm:text-xl"
+            className="mt-6 text-center text-lg font-medium leading-snug text-orange-500 sm:mt-8 sm:text-xl"
           >
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
