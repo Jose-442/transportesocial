@@ -228,80 +228,111 @@ export function OfertasCapacidadReserva({
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-600">
-        {rutaEstado === "activa"
-          ? "Reserva una o más plazas de acompañante y paga por adelantado."
-          : "Elige lo que necesites y paga por adelantado."}
+        {ampliarPlaza
+          ? "Reserva una o más plazas de pasajero y paga por adelantado."
+          : rutaEstado === "activa"
+            ? "Reserva una o más plazas de acompañante y paga por adelantado."
+            : "Elige lo que necesites y paga por adelantado."}
       </p>
 
-      <label className="block space-y-1.5">
-        <span className="text-sm font-medium text-zinc-800">Oferta</span>
-        <select
-          value={ofertaId}
-          onChange={(e) =>
-            setForm((prev) => ({
-              ...prev,
-              ofertaId: e.target.value,
-              cantidad: "",
-            }))
-          }
-          className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
-          required
-        >
-          {disponibles.map((o) => (
-            <option key={o.id} value={o.id}>
-              {ampliarPlaza && o.tipo === "asiento"
-                ? `${etiquetaOferta(o, { pasajero: true })}, ${formatEur(Number(o.precio_publicado))}`
-                : `${etiquetaOferta(o)} — ${formatEur(Number(o.precio_publicado))}${
-                    o.tipo === "asiento" ? "/plaza" : ""
+      {ampliarPlaza && ofertaSel ? (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-zinc-800">
+            Oferta:{" "}
+            {etiquetaOferta(ofertaSel, { pasajero: true })},{" "}
+            {formatEur(Number(ofertaSel.precio_publicado))}
+          </p>
+
+          {preguntarSiNoPlaza ? (
+            <div
+              className="space-y-1.5"
+              data-campo=""
+              {...(cantidad !== "1" && cantidad !== "0"
+                ? { "data-campo-vacio": "" }
+                : {})}
+            >
+              <p className="text-sm font-medium text-zinc-800">
+                ¿Quieres reservar esta plaza?
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({ ...prev, cantidad: "1" }))
+                  }
+                  className={`min-h-11 rounded-xl border px-3 py-2 text-base font-semibold ${
+                    cantidad === "1"
+                      ? "border-emerald-600 bg-emerald-50 text-emerald-900"
+                      : "border-zinc-200 bg-white text-zinc-800"
                   }`}
-            </option>
-          ))}
-        </select>
-      </label>
+                >
+                  Sí
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((prev) => ({ ...prev, cantidad: "0" }))
+                  }
+                  className={`min-h-11 rounded-xl border px-3 py-2 text-base font-semibold ${
+                    cantidad === "0"
+                      ? "border-zinc-500 bg-zinc-100 text-zinc-900"
+                      : "border-zinc-200 bg-white text-zinc-800"
+                  }`}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          ) : (
+            <CampoNumeroPlazas
+              plazasLibres={maxCantidad}
+              plazasTotales={ofertaSel.plazas_totales}
+              plazasOcupadas={ofertaSel.plazas_ocupadas}
+              value={cantidad}
+              onChange={(value) =>
+                setForm((prev) => ({ ...prev, cantidad: value }))
+              }
+              label="¿Cuántas plazas quieres?"
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <label className="block space-y-1.5">
+            <span className="text-sm font-medium text-zinc-800">Oferta</span>
+            <select
+              value={ofertaId}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  ofertaId: e.target.value,
+                  cantidad: "",
+                }))
+              }
+              className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
+              required
+            >
+              {disponibles.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {etiquetaOferta(o)} — {formatEur(Number(o.precio_publicado))}
+                  {o.tipo === "asiento" ? "/plaza" : ""}
+                </option>
+              ))}
+            </select>
+          </label>
 
-      {preguntarSiNoPlaza ? (
-        <label className="block space-y-1.5">
-          <span className="text-sm font-medium text-zinc-800">
-            ¿Quieres reservar esta plaza?
-          </span>
-          <select
-            value={cantidad === "1" ? "si" : cantidad === "0" ? "no" : ""}
-            onChange={(e) => {
-              const v = e.target.value;
-              setForm((prev) => ({
-                ...prev,
-                cantidad: v === "si" ? "1" : v === "no" ? "0" : "",
-              }));
-            }}
-            className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
-            required
-            data-campo=""
-            {...(cantidad !== "1" && cantidad !== "0"
-              ? { "data-campo-vacio": "" }
-              : {})}
-          >
-            <option value="">Elige Sí o No</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-          </select>
-        </label>
-      ) : null}
-
-      {esAsiento && ofertaSel && maxCantidad > 1 && (
-        <CampoNumeroPlazas
-          plazasLibres={maxCantidad}
-          plazasTotales={ofertaSel.plazas_totales}
-          plazasOcupadas={ofertaSel.plazas_ocupadas}
-          value={cantidad}
-          onChange={(value) =>
-            setForm((prev) => ({ ...prev, cantidad: value }))
-          }
-          label={
-            ampliarPlaza
-              ? "¿Cuántas plazas quieres?"
-              : undefined
-          }
-        />
+          {esAsiento && ofertaSel && maxCantidad >= 1 && (
+            <CampoNumeroPlazas
+              plazasLibres={maxCantidad}
+              plazasTotales={ofertaSel.plazas_totales}
+              plazasOcupadas={ofertaSel.plazas_ocupadas}
+              value={cantidad}
+              onChange={(value) =>
+                setForm((prev) => ({ ...prev, cantidad: value }))
+              }
+            />
+          )}
+        </>
       )}
 
       {!esAsiento && (
