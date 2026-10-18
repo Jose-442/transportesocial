@@ -16,7 +16,7 @@ export function ResumenAsientosViaje({
 
   return (
     <Card className="space-y-2 p-3 md:space-y-3 md:p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 md:gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-2 md:gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
             Nº de acompañantes
@@ -25,13 +25,8 @@ export function ResumenAsientosViaje({
             {libres} {libres === 1 ? "plaza libre" : "plazas libres"}
           </p>
         </div>
-        <div className="text-right">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-            Asientos libres
-          </p>
-          <div className="mt-1 flex justify-end">
-            <AsientosLibresDots ofrecidas={ofrecidas} ocupadas={ocupadas} />
-          </div>
+        <div className="flex justify-end pb-0.5">
+          <AsientosLibresDots ofrecidas={ofrecidas} ocupadas={ocupadas} />
         </div>
       </div>
       {ofertas
