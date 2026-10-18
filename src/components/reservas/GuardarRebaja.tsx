@@ -14,6 +14,7 @@ import {
   agruparPortesRebajaTramo,
   cabeRebaja,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
+  TEXTO_REBAJA_TRAMO_CONDUCTOR,
 } from "@/lib/reservas/rebaja";
 
 export type PorteRebaja = {
@@ -367,6 +368,15 @@ export function RebajaReservas({
                     ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
                     : "Hay una solicitud de rebaja"}
             </p>
+            {esConductor &&
+            porteVista.esTramo &&
+            pendienteGrupo &&
+            !porteVista.rebajaEn &&
+            !porteVista.rebajaRechazadaEn ? (
+              <p className="text-sm text-emerald-950">
+                {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+              </p>
+            ) : null}
             {cuantasPlazas > 1 && pendienteGrupo ? (
               <ul className="list-inside list-disc text-sm text-zinc-700">
                 {grupo.map((p) => (

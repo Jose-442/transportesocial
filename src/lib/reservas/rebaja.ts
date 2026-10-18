@@ -26,17 +26,21 @@ export const TEXTO_CANCELAR_TRAMO_SIN_REBAJA =
 export const TEXTO_NOTA_TRAMO_FICHA =
   "Debes pagar el total para reservar tu plaza. Después puedes pedir al conductor una rebaja por ese tramo; si acepta, se te devuelve la diferencia. Si no acepta, tú eliges si cancelas: al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta.";
 
+/** Explicación al conductor en la tarjeta de rebaja por tramo. */
+export const TEXTO_REBAJA_TRAMO_CONDUCTOR =
+  "Quien reservó ha pagado el precio del viaje completo, pero solo necesita un tramo (una parte del recorrido), no de punta a punta. Por eso pide una rebaja. Tú decides si bajas el precio o no.";
+
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
 export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {
   if (pideRebaja) {
-    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó ha solicitado una rebaja.`;
+    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó solo usa un tramo de tu viaje y ha pedido una rebaja.`;
   }
   return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar esta reserva.`;
 }
 
 export function mensajeAvisoConductorConfirmada(pideRebaja: boolean): string {
   if (pideRebaja) {
-    return "Un usuario ha reservado tu viaje y ha solicitado una rebaja. Revisa el chat.";
+    return "Un usuario ha reservado un tramo de tu viaje y ha pedido una rebaja. Revisa la reserva.";
   }
   return "Un usuario ha reservado tu viaje. Revisa el chat.";
 }
