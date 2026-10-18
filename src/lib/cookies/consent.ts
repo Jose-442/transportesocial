@@ -27,7 +27,7 @@ export function hasConsentChoice(): boolean {
   return getConsent() !== null;
 }
 
-/** Solo true tras «Aceptar todo»; uso futuro para scripts analíticos. */
+/** Solo true tras «Aceptar todo» (Google Analytics). */
 export function canUseAnalytics(): boolean {
   return getConsent() === "accepted";
 }

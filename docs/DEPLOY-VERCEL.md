@@ -26,6 +26,7 @@ Copia `.env.local.example` → `.env.local` (local) y añade **las mismas** en V
 | `RESEND_API_KEY` | **Sí (emails)** | [Resend](https://resend.com) → API Keys → `re_...` |
 | `RESEND_FROM_EMAIL` | **Sí (emails)** | `Transporte Social <onboarding@resend.dev>` (prueba) o `noreply@tu-dominio` (prod) |
 | `NEXT_PUBLIC_SITE_URL` | Recomendada | `https://transportesocial.es` (enlaces de avisos push) |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Opcional (visitas) | Google Analytics → ID de medición `G-…` (solo tras aceptar cookies) |
 | `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Sí (avisos push) | `npx web-push generate-vapid-keys` → clave pública |
 | `VAPID_PRIVATE_KEY` | Sí (avisos push) | La clave privada de ese mismo comando (nunca al cliente) |
 | `VAPID_SUBJECT` | Opcional | `mailto:jemartarrero@gmail.com` |

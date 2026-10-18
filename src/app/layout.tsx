@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { AppShell } from "@/components/layout/AppShell";
 import { ScrollCampoVacio } from "@/components/ui/ScrollCampoVacio";
 import { CookieBanner } from "@/components/legal/CookieBanner";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { AddToHomeScreenBanner } from "@/components/pwa/AddToHomeScreenBanner";
 import { ServiceWorkerRegistrar } from "@/components/pwa/ServiceWorkerRegistrar";
 import { APP_NAME } from "@/lib/constants";
@@ -52,6 +53,7 @@ export default function RootLayout({
         <ServiceWorkerRegistrar />
         <AddToHomeScreenBanner />
         <CookieBanner />
+        <GoogleAnalytics />
       </body>
     </html>
   );
