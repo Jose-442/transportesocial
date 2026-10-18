@@ -7,6 +7,7 @@ import { BRAND } from "@/lib/brand";
 
 const camaraFont = Libre_Baskerville({
   weight: "400",
+  style: "italic",
   subsets: ["latin"],
 });
 
@@ -195,7 +196,7 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
           <p
-            className={`${camaraFont.className} mt-6 text-center text-base leading-snug text-emerald-900 sm:mt-8 sm:text-lg`}
+            className={`${camaraFont.className} mt-6 text-center text-base italic leading-snug text-orange-500 sm:mt-8 sm:text-lg`}
           >
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
