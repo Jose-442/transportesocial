@@ -11,12 +11,14 @@ export function CampoNumeroPlazas({
   plazasOcupadas,
   value,
   onChange,
+  error,
 }: {
   plazasLibres: number;
   plazasTotales: number;
   plazasOcupadas: number;
   value: string;
   onChange: (value: string) => void;
+  error?: string;
 }) {
   // Solo 1 plaza libre: no hay elección; se apunta 1 y se omite el desplegable.
   useEffect(() => {
@@ -46,7 +48,7 @@ export function CampoNumeroPlazas({
       name="cantidad_ui"
       value={eligiendo ? value : ""}
       onChange={(e) => onChange(e.target.value)}
-      required
+      error={error}
       options={Array.from({ length: plazasLibres }, (_, i) => {
         const n = i + 1;
         return {
@@ -55,7 +57,7 @@ export function CampoNumeroPlazas({
         };
       })}
       placeholder="Elige cuántas plazas"
-      hint={`Plazas libres ahora: ${libresAhora}.`}
+      hint={error ? undefined : `Plazas libres ahora: ${libresAhora}.`}
     />
   );
 }

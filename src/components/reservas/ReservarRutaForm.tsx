@@ -73,11 +73,13 @@ export function ReservarRutaForm({
     documento: identidadInicial?.documento ?? "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [errorPlazas, setErrorPlazas] = useState<string | null>(null);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const enviando = useRef(false);
   const [pedirIdentidad, setPedirIdentidad] = useState(faltaIdentidad);
+  const plazasCardRef = useRef<HTMLDivElement>(null);
 
   const cantidad = Math.min(
     plazasLibres,
@@ -114,7 +116,27 @@ export function ReservarRutaForm({
     if (enviando.current) return;
     enviando.current = true;
     setError(null);
+    setErrorPlazas(null);
     setLoading(true);
+
+    if (plazasLibres > 1 && cantidad < 1) {
+      setErrorPlazas("Elige cuántas plazas quieres.");
+      setError("Elige cuántas plazas quieres.");
+      plazasCardRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      enviando.current = false;
+      setLoading(false);
+      return;
+    }
+
+    if (plazasLibres > 0 && cantidad < 1 && !llevaBulto) {
+      setError("Elige al menos una plaza.");
+      enviando.current = false;
+      setLoading(false);
+      return;
+    }
 
     const formData = new FormData(e.currentTarget);
     formData.set("ruta_id", rutaId);
@@ -192,7 +214,7 @@ export function ReservarRutaForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} noValidate className="space-y-4">
       {resumenAsientos && (
         <ResumenAsientosViaje
           ofrecidas={resumenAsientos.ofrecidas}
@@ -208,7 +230,6 @@ export function ReservarRutaForm({
           <Textarea
             label="Descripción del bulto que deseas enviar"
             name="bulto_descripcion"
-            required={cantidad < 1}
             placeholder="Ej. caja mediana con ropa, frágil"
             value={form.bulto_descripcion}
             onChange={(e) =>
@@ -240,15 +261,22 @@ export function ReservarRutaForm({
         </Card>
       )}
       {plazasLibres > 1 && ofertaAsiento ? (
-        <Card className="bg-zinc-50">
-          <CampoNumeroPlazas
-            plazasLibres={plazasLibres}
-            plazasTotales={ofertaAsiento.plazas_totales}
-            plazasOcupadas={ofertaAsiento.plazas_ocupadas}
-            value={form.plazas}
-            onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
-          />
-        </Card>
+        <div ref={plazasCardRef}>
+          <Card className="bg-zinc-50">
+            <CampoNumeroPlazas
+              plazasLibres={plazasLibres}
+              plazasTotales={ofertaAsiento.plazas_totales}
+              plazasOcupadas={ofertaAsiento.plazas_ocupadas}
+              value={form.plazas}
+              error={errorPlazas ?? undefined}
+              onChange={(plazas) => {
+                setForm((prev) => ({ ...prev, plazas }));
+                if (errorPlazas) setErrorPlazas(null);
+                if (error === "Elige cuántas plazas quieres.") setError(null);
+              }}
+            />
+          </Card>
+        </div>
       ) : plazasLibres === 1 && ofertaAsiento ? (
         <CampoNumeroPlazas
           plazasLibres={plazasLibres}
