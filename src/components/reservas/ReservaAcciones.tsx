@@ -18,6 +18,7 @@ import {
   ESTADO_RESERVA_LABELS,
   puedeReclamar,
 } from "@/lib/reservas/labels";
+import { TEXTO_REBAJA_TRAMO_CONDUCTOR } from "@/lib/reservas/rebaja";
 import {
   centimosAEuros,
   fraseAyudaCancelacionCliente,
@@ -189,10 +190,20 @@ export function ReservaAcciones({
       )}
 
       {estado === "pendiente_aprobacion" && esConductor && (
-        <AceptarRechazarBotones
-          reservaId={reserva.id}
-          soloRechazar={reserva.tipo === "bulto_oferta"}
-        />
+        <div className="space-y-2">
+          {(Boolean(reserva.es_tramo) ||
+            relacionadas.some((r) => r.es_tramo)) &&
+          (Boolean(reserva.pide_rebaja) ||
+            relacionadas.some((r) => r.pide_rebaja)) ? (
+            <p className="text-sm font-medium text-emerald-950">
+              {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+            </p>
+          ) : null}
+          <AceptarRechazarBotones
+            reservaId={reserva.id}
+            soloRechazar={reserva.tipo === "bulto_oferta"}
+          />
+        </div>
       )}
 
       {estado === "confirmada" && esConductor && !disputa && (

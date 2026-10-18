@@ -91,17 +91,21 @@ export async function asegurarAvisosConductor(
     const enlace = `/reservas/${idAviso}`;
     const pendiente = r.estado === "pendiente_aprobacion";
     const pideRebaja = Boolean(r.pide_rebaja);
+    const esTramo =
+      Boolean(r.es_tramo) || grupo.some((item) => Boolean(item.es_tramo));
     await crearNotificacion(db, {
       user_id: userId,
       tipo: pendiente ? "reserva_pendiente_aprobacion" : "reserva_confirmada",
       titulo: pendiente
         ? pideRebaja
-          ? "Hay una solicitud de rebaja"
+          ? esTramo
+            ? "Hay una solicitud de rebaja (tramo)"
+            : "Hay una solicitud de rebaja"
           : "Nueva solicitud de reserva"
         : "Nueva reserva confirmada",
       mensaje: pendiente
-        ? mensajeAvisoConductorPendiente(pideRebaja)
-        : mensajeAvisoConductorConfirmada(pideRebaja),
+        ? mensajeAvisoConductorPendiente(pideRebaja, esTramo)
+        : mensajeAvisoConductorConfirmada(pideRebaja, esTramo),
       enlace: pendiente ? enlace : `/reservas/${idAviso}/chat`,
     });
     for (const item of grupo) vistos.add(`/reservas/${item.id}`);

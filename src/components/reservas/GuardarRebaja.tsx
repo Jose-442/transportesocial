@@ -101,7 +101,7 @@ function TextoEstado({
       <p className="text-base text-emerald-900">
         {cuantasPlazas > 1
           ? `Puedes guardar un precio más bajo para las ${cuantasPlazas} plazas juntas.`
-          : "Puedes guardar un precio más bajo debajo."}
+          : "Puedes guardar un precio más bajo."}
       </p>
     );
   }
@@ -369,11 +369,11 @@ export function RebajaReservas({
                     : "Hay una solicitud de rebaja"}
             </p>
             {esConductor &&
-            porteVista.esTramo &&
+            (porteVista.esTramo || grupo.some((p) => p.esTramo)) &&
             pendienteGrupo &&
             !porteVista.rebajaEn &&
             !porteVista.rebajaRechazadaEn ? (
-              <p className="text-sm text-emerald-950">
+              <p className="text-sm font-medium text-emerald-950">
                 {TEXTO_REBAJA_TRAMO_CONDUCTOR}
               </p>
             ) : null}

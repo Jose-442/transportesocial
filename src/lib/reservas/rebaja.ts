@@ -31,16 +31,28 @@ export const TEXTO_REBAJA_TRAMO_CONDUCTOR =
   "Quien reservó ha pagado el precio del viaje completo, pero solo necesita un tramo (una parte del recorrido), no de punta a punta. Por eso pide una rebaja. Tú decides si bajas el precio o no.";
 
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
-export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {
+export function mensajeAvisoConductorPendiente(
+  pideRebaja: boolean,
+  esTramo = false
+): string {
+  if (pideRebaja && esTramo) {
+    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó solo usa un tramo de tu viaje (no el recorrido completo) y ha pedido una rebaja.`;
+  }
   if (pideRebaja) {
-    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó solo usa un tramo de tu viaje y ha pedido una rebaja.`;
+    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó ha solicitado una rebaja.`;
   }
   return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar esta reserva.`;
 }
 
-export function mensajeAvisoConductorConfirmada(pideRebaja: boolean): string {
+export function mensajeAvisoConductorConfirmada(
+  pideRebaja: boolean,
+  esTramo = false
+): string {
+  if (pideRebaja && esTramo) {
+    return "Un usuario ha reservado un tramo de tu viaje (no el recorrido completo) y ha pedido una rebaja. Revisa la reserva.";
+  }
   if (pideRebaja) {
-    return "Un usuario ha reservado un tramo de tu viaje y ha pedido una rebaja. Revisa la reserva.";
+    return "Un usuario ha reservado tu viaje y ha solicitado una rebaja. Revisa la reserva.";
   }
   return "Un usuario ha reservado tu viaje. Revisa el chat.";
 }

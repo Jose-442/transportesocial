@@ -437,10 +437,15 @@ async function avisarReservaRuta(
       tipo: "reserva_confirmada",
       titulo: ampliaRebajaTramo
         ? `Solicitud de rebaja ampliada (${plazasRebaja} plazas)`
-        : "Nueva reserva confirmada",
+        : Boolean(r.pide_rebaja) && Boolean(r.es_tramo)
+          ? "Hay una solicitud de rebaja (tramo)"
+          : "Nueva reserva confirmada",
       mensaje: ampliaRebajaTramo
-        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas.`
-        : mensajeAvisoConductorConfirmada(Boolean(r.pide_rebaja)),
+        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas. Solo usan una parte del recorrido, no de punta a punta.`
+        : mensajeAvisoConductorConfirmada(
+            Boolean(r.pide_rebaja),
+            Boolean(r.es_tramo)
+          ),
       enlace: `/reservas/${r.id}/chat`,
     });
     await crearNotificacion(admin, {
@@ -456,12 +461,17 @@ async function avisarReservaRuta(
       tipo: "reserva_pendiente_aprobacion",
       titulo: ampliaRebajaTramo
         ? `Solicitud de rebaja ampliada (${plazasRebaja} plazas)`
-        : Boolean(r.pide_rebaja)
-          ? "Hay una solicitud de rebaja"
-          : "Nueva solicitud de reserva",
+        : Boolean(r.pide_rebaja) && Boolean(r.es_tramo)
+          ? "Hay una solicitud de rebaja (tramo)"
+          : Boolean(r.pide_rebaja)
+            ? "Hay una solicitud de rebaja"
+            : "Nueva solicitud de reserva",
       mensaje: ampliaRebajaTramo
-        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas.`
-        : mensajeAvisoConductorPendiente(Boolean(r.pide_rebaja)),
+        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas. Solo usan una parte del recorrido, no de punta a punta.`
+        : mensajeAvisoConductorPendiente(
+            Boolean(r.pide_rebaja),
+            Boolean(r.es_tramo)
+          ),
       enlace: `/reservas/${r.id}`,
     });
     await crearNotificacion(admin, {
