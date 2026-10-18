@@ -77,7 +77,9 @@ export function RutaCard({
             <div className="mt-1 space-y-0.5 text-sm font-medium text-amber-800">
               <p>Pasa por el tramo que solicitas</p>
               <p className="font-normal">
-                Primero pagas el total; luego puedes pedir rebaja por el tramo
+                Primero debes pagar el total para reservar tu plaza. Después
+                puedes pedir al conductor una rebaja por ese tramo; si acepta, te
+                devuelve la diferencia.
               </p>
             </div>
           )}
