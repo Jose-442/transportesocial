@@ -576,6 +576,17 @@ export function NuevaRutaForm({
     (error !== "Completa los campos marcados en rojo." ||
       Object.keys(fieldErrors).length > 0);
 
+  const avisoMinimoKm =
+    minimoCarretera.cargando ? (
+      <p className="text-sm text-zinc-600">
+        Calculando los kilómetros por carretera…
+      </p>
+    ) : minimoCarretera.texto ? (
+      <p className="text-sm text-zinc-700">{minimoCarretera.texto}</p>
+    ) : minimoCarretera.error ? (
+      <p className="text-sm text-red-700">{minimoCarretera.error}</p>
+    ) : null;
+
   const botonPublicar = (
     <div className="space-y-2">
       <Button
@@ -693,15 +704,6 @@ export function NuevaRutaForm({
         )}
       </div>
 
-      {minimoCarretera.cargando ? (
-        <p className="text-sm text-zinc-600">
-          Calculando los kilómetros por carretera…
-        </p>
-      ) : minimoCarretera.texto ? (
-        <p className="text-sm text-zinc-700">{minimoCarretera.texto}</p>
-      ) : minimoCarretera.error ? (
-        <p className="text-sm text-red-700">{minimoCarretera.error}</p>
-      ) : null}
       <DatePickerInput
         name="fecha_salida"
         label="Fecha de salida"
@@ -757,6 +759,7 @@ export function NuevaRutaForm({
             error={fieldErrors.espacio_tamano}
             onChange={(e) => updateField("espacio_tamano", e.target.value)}
           />
+          {avisoMinimoKm}
           <Input
             name="precio_neto"
             label="PRECIO POR EL PORTE DEL BULTO"
@@ -819,6 +822,7 @@ export function NuevaRutaForm({
 
           {plazasOfrecidas > 0 && (
             <>
+              {!llevaBulto ? avisoMinimoKm : null}
               <Input
                 name="precio_neto_plaza"
                 label="PRECIO POR ACOMPAÑANTE"
