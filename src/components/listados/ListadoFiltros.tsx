@@ -99,8 +99,11 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     );
   }, [ready, draftKey, origen, destino, fecha, semana, desde]);
 
-  function aplicar(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function navegarBusqueda(opciones: {
+    fecha?: string;
+    semana?: boolean;
+    desde?: string;
+  }) {
     setErrorOrigen("");
     setErrorDestino("");
 
@@ -109,23 +112,36 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
 
     if (!origenValido) {
       setErrorOrigen("Selecciona una población de la lista");
-      return;
+      return false;
     }
     if (!destinoValido) {
       setErrorDestino("Selecciona una población de la lista");
-      return;
+      return false;
     }
 
     const params = new URLSearchParams();
     params.set("origen", etiquetaMunicipio(origenValido));
     params.set("destino", etiquetaMunicipio(destinoValido));
-    if (semana) {
+    if (opciones.semana) {
       params.set("semana", "1");
-      params.set("desde", (desde.trim() || hoyIsoMadrid()).slice(0, 10));
-    } else if (fecha.trim()) {
-      params.set("fecha", fecha.trim());
+      params.set(
+        "desde",
+        (opciones.desde?.trim() || hoyIsoMadrid()).slice(0, 10)
+      );
+    } else if (opciones.fecha?.trim()) {
+      params.set("fecha", opciones.fecha.trim());
     }
     router.push(`${pathname}?${params.toString()}`);
+    return true;
+  }
+
+  function aplicar(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    navegarBusqueda({
+      fecha,
+      semana,
+      desde,
+    });
   }
 
   function limpiar() {
@@ -205,12 +221,16 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
             onChange={(value) => {
               setFecha(value);
               if (value.trim()) setSemana(false);
+              // Al elegir mes+día, busca solo (el botón Buscar sigue ahí).
+              if (/^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+                navegarBusqueda({ fecha: value.trim(), semana: false });
+              }
             }}
           />
           <p className="text-base leading-snug text-zinc-600">
-            Si eliges un día, verás los {palabra} de ese día. Si no eliges día,
-            verás los {palabra} de esa ruta ordenados por fecha de salida (los
-            que salen antes).
+            Si eliges un día, verás los {palabra} de ese día (busca al
+            elegirlo). Si no eliges día, verás los {palabra} de esa ruta
+            ordenados por fecha de salida (los que salen antes).
           </p>
         </>
       ) : (
