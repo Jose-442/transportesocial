@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -95,6 +95,13 @@ export function OfertasCapacidadReserva({
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
   const esAsiento = ofertaSel?.tipo === "asiento";
+
+  useEffect(() => {
+    if (esAsiento && maxCantidad === 1 && cantidad !== "1") {
+      setForm((prev) => ({ ...prev, cantidad: "1" }));
+    }
+  }, [esAsiento, maxCantidad, cantidad, setForm]);
+
   const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const desglose =
     ofertaSel && plazasElegidas > 0

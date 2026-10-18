@@ -239,7 +239,7 @@ export function ReservarRutaForm({
           ) : null}
         </Card>
       )}
-      {plazasLibres > 0 && ofertaAsiento && (
+      {plazasLibres > 1 && ofertaAsiento ? (
         <Card className="bg-zinc-50">
           <CampoNumeroPlazas
             plazasLibres={plazasLibres}
@@ -249,7 +249,15 @@ export function ReservarRutaForm({
             onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
           />
         </Card>
-      )}
+      ) : plazasLibres === 1 && ofertaAsiento ? (
+        <CampoNumeroPlazas
+          plazasLibres={plazasLibres}
+          plazasTotales={ofertaAsiento.plazas_totales}
+          plazasOcupadas={ofertaAsiento.plazas_ocupadas}
+          value={form.plazas}
+          onChange={(plazas) => setForm((prev) => ({ ...prev, plazas }))}
+        />
+      ) : null}
       {total > 0 && (
         <DesglosePrecio
           lineas={desglose.lineas}
