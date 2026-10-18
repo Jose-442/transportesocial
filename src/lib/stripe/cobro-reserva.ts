@@ -28,7 +28,7 @@ export function cobroDeEstasReservas(
 
 /** Si el cobro solo está en Stripe: el total se devuelve entero; el resto, solo lo que toca. */
 export function reembolsoDesdeCobroStripe(
-  tipo: "total" | "viaje_sin_gastos" | "mitad",
+  tipo: "total" | "viaje_sin_gastos" | "mitad" | "viaje_menos_banco",
   cobradoCents: number,
   pedidoCents: number
 ): number {

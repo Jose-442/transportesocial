@@ -98,6 +98,23 @@ function escrowTrasCancelacion(
   return tipo === "total" ? "reembolsado" : "liberado";
 }
 
+async function comisionStripeDelIntent(intentId: string): Promise<number> {
+  const { getStripeServer } = await import("@/lib/stripe/server");
+  const stripe = getStripeServer();
+  const pi = await stripe.paymentIntents.retrieve(intentId);
+  const chargeId =
+    typeof pi.latest_charge === "string"
+      ? pi.latest_charge
+      : pi.latest_charge?.id;
+  if (!chargeId) return 0;
+  const cargo = await stripe.charges.retrieve(chargeId, {
+    expand: ["balance_transaction"],
+  });
+  const bt = cargo.balance_transaction;
+  if (!bt || typeof bt === "string") return 0;
+  return Math.max(0, bt.fee ?? 0);
+}
+
 export async function aplicarCancelacionPagada(
   admin: AdminClient,
   filas: Reserva[],
@@ -171,9 +188,21 @@ export async function aplicarCancelacionPagada(
     }
   }
 
+  if (opts.tipo === "viaje_menos_banco") {
+    for (const [intent, grupo] of porIntent) {
+      const fee = await comisionStripeDelIntent(intent);
+      grupo.reembolsoCents = Math.max(0, grupo.cobradoCents - fee);
+      porIntent.set(intent, grupo);
+    }
+  }
+
   const hayCobro =
     (txs ?? []).some((tx) => tx.stripe_payment_intent_id) || porIntent.size > 0;
-  if (reparto.reembolsoCents > 0 && !hayCobro) {
+  const reembolsoPedido =
+    opts.tipo === "viaje_menos_banco"
+      ? [...porIntent.values()].reduce((s, g) => s + g.reembolsoCents, 0)
+      : reparto.reembolsoCents;
+  if (reembolsoPedido > 0 && !hayCobro) {
     throw new Error("No se ha encontrado el cobro para devolver el dinero.");
   }
 
@@ -181,6 +210,7 @@ export async function aplicarCancelacionPagada(
     "@/lib/stripe/refund"
   );
 
+  let reembolsoHechoCents = 0;
   for (const [intent, grupo] of porIntent) {
     const amountCents = Math.min(grupo.reembolsoCents, grupo.cobradoCents);
     if (amountCents < 1) continue;
@@ -190,10 +220,15 @@ export async function aplicarCancelacionPagada(
         ...(esTotal ? {} : { amountCents }),
         idempotencyKey: `cancelacion-${intent}-${opts.tipo}`,
       });
+      reembolsoHechoCents += amountCents;
     } catch (err) {
       if (!reembolsoYaHecho(err)) throw err;
+      reembolsoHechoCents += amountCents;
     }
-    if (opts.tipo === "viaje_sin_gastos" && !esTotal) {
+    if (
+      (opts.tipo === "viaje_sin_gastos" || opts.tipo === "viaje_menos_banco") &&
+      !esTotal
+    ) {
       try {
         const { anotarTresPartesEnStripe } = await import(
           "@/lib/stripe/anotar-partes"
@@ -306,7 +341,11 @@ export async function aplicarCancelacionPagada(
   await cerrarChatsReservas(admin, ids);
 
   return {
-    reembolsoEur: centimosAEuros(reparto.reembolsoCents),
+    reembolsoEur: centimosAEuros(
+      opts.tipo === "viaje_menos_banco"
+        ? reembolsoHechoCents
+        : reparto.reembolsoCents
+    ),
     conductorEur: centimosAEuros(reparto.conductorCents),
   };
 }

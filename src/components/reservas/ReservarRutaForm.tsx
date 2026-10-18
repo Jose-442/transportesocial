@@ -120,6 +120,8 @@ export function ReservarRutaForm({
     formData.set("ruta_id", rutaId);
     formData.set("cantidad", String(cantidad));
     if (ofertaAsiento) formData.set("oferta_id", ofertaAsiento.id);
+    if (esTramo) formData.set("es_tramo", "1");
+    if (form.pide_rebaja) formData.set("pide_rebaja", "1");
 
     if (llevaBulto) {
       const foto = formData.get("foto");
@@ -254,18 +256,13 @@ export function ReservarRutaForm({
           totalCentimos={desglose.totalCentimos}
         />
       )}
-      {llevaBulto && cabeRebaja(salidaIso) ? (
+      {(llevaBulto || (esTramo && cantidad >= 1)) &&
+      cabeRebaja(salidaIso) ? (
         <SolicitarRebaja
           marcado={Boolean(form.pide_rebaja)}
           onMarcado={(pide_rebaja) => setForm((prev) => ({ ...prev, pide_rebaja }))}
           esTramo={esTramo}
         />
-      ) : null}
-      {esTramo && !llevaBulto && cantidad >= 1 ? (
-        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
-          El precio es el del viaje completo. Si solo usas un tramo, puedes pedir
-          una rebaja al conductor en el chat tras reservar.
-        </p>
       ) : null}
       {pedirIdentidad ? (
         <CamposIdentidadPago

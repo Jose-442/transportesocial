@@ -409,6 +409,8 @@ export default async function ReservaDetallePage({
             estado: item.estado,
             salida: item.fecha_llegada_prevista,
             descripcion: separarHoraOculta(item.bulto_descripcion ?? "").texto,
+            esTramo: Boolean(item.es_tramo),
+            rebajaRechazadaEn: item.rebaja_rechazada_en ?? null,
           }))}
         esConductor={esConductor}
         origen={ruta?.origen ?? ""}

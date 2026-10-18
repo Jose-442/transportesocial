@@ -51,6 +51,40 @@ describe("politicaCancelacionCliente", () => {
     ).toEqual({ puede: true, tipo: "viaje_sin_gastos" });
   });
 
+  it("tramo sin rebaja aceptada: casi todo menos el banco", () => {
+    expect(
+      politicaCancelacionCliente(
+        "confirmada",
+        salida,
+        new Date("2026-09-20T10:00:01.000Z"),
+        pago,
+        {
+          esTramo: true,
+          pideRebaja: true,
+          rebajaRechazada: true,
+          rebajaHecha: false,
+        }
+      )
+    ).toEqual({ puede: true, tipo: "viaje_menos_banco" });
+  });
+
+  it("tramo sin rebaja: en la primera hora sigue siendo 100 %", () => {
+    expect(
+      politicaCancelacionCliente(
+        "confirmada",
+        salida,
+        new Date("2026-09-20T09:30:00.000Z"),
+        pago,
+        {
+          esTramo: true,
+          pideRebaja: true,
+          rebajaRechazada: true,
+          rebajaHecha: false,
+        }
+      )
+    ).toEqual({ puede: true, tipo: "total" });
+  });
+
   it("pasada la hora y más de 24 h antes de salir: el viaje, sin gastos de gestión", () => {
     expect(
       politicaCancelacionCliente(
@@ -173,6 +207,9 @@ describe("frases de cancelación", () => {
     );
     expect(fraseAyudaCancelacionCliente("mitad", "50,00 €")).toBe(
       "Faltan menos de 24 horas. Te devolvemos la mitad del viaje (50,00 €). El conductor se queda la otra mitad. El gasto de gestión no se devuelve."
+    );
+    expect(fraseAyudaCancelacionCliente("viaje_menos_banco", "59,00 €")).toBe(
+      "Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta."
     );
     expect(fraseAyudaCancelacionConductor("118,00 €")).toContain("100 %");
   });

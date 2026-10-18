@@ -125,6 +125,10 @@ export type Reserva = {
   pide_rebaja?: boolean;
   rebaja_en?: string | null;
   rebaja_eur?: number | null;
+  /** Búsqueda de un tramo dentro de una ruta más larga. */
+  es_tramo?: boolean;
+  /** Conductor no aceptó la rebaja del tramo. */
+  rebaja_rechazada_en?: string | null;
   created_at: string;
   updated_at: string;
 };

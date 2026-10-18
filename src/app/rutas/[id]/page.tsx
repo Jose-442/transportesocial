@@ -504,7 +504,9 @@ export default async function RutaDetallePage({
             <p>
               Primero debes pagar el total para reservar tu plaza. Después
               puedes pedir al conductor una rebaja por ese tramo; si acepta, se
-              te devuelve la diferencia.
+              te devuelve la diferencia. Si no acepta, el viaje sigue y tú
+              eliges si cancelas: al cancelar te devolvemos el viaje menos lo
+              que el banco ya nos cobró por la tarjeta.
             </p>
           </div>
         )}

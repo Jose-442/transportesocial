@@ -93,7 +93,13 @@ export async function ejecutarCancelacionReserva(opts: {
           reserva.estado,
           fechaSalida,
           new Date(),
-          reserva.pagada_en
+          reserva.pagada_en,
+          {
+            esTramo: Boolean(reserva.es_tramo),
+            pideRebaja: Boolean(reserva.pide_rebaja),
+            rebajaRechazada: Boolean(reserva.rebaja_rechazada_en),
+            rebajaHecha: Boolean(reserva.rebaja_en),
+          }
         )
       : politicaCancelacionConductor(reserva.estado, fechaSalida);
 

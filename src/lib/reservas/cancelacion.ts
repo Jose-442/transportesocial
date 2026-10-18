@@ -7,7 +7,16 @@ import type { EstadoReserva } from "@/types/database";
 export type TipoRepartoCancelacion =
   | "total"
   | "viaje_sin_gastos"
-  | "mitad";
+  | "mitad"
+  /** Tramo: conductor rechazó rebaja; se devuelve casi todo menos Stripe. */
+  | "viaje_menos_banco";
+
+export type OpcionesCancelacionCliente = {
+  esTramo?: boolean;
+  pideRebaja?: boolean;
+  rebajaRechazada?: boolean;
+  rebajaHecha?: boolean;
+};
 
 export type PrecioCancelacion = {
   precio_neto: number;
@@ -44,11 +53,20 @@ export function politicaCancelacionCliente(
   estado: EstadoReserva,
   fechaSalidaIso: string,
   ahora = new Date(),
-  pagadaEnIso?: string | null
+  pagadaEnIso?: string | null,
+  opts?: OpcionesCancelacionCliente
 ): { puede: boolean; tipo?: TipoRepartoCancelacion } {
   const enHora = dentroDeLaHoraDelPago(pagadaEnIso, ahora);
+  const tramoSinRebaja =
+    Boolean(opts?.esTramo) &&
+    Boolean(opts?.pideRebaja) &&
+    Boolean(opts?.rebajaRechazada) &&
+    !opts?.rebajaHecha;
+
   if (estado === "pendiente_aprobacion") {
-    return { puede: true, tipo: enHora ? "total" : "viaje_sin_gastos" };
+    if (enHora) return { puede: true, tipo: "total" };
+    if (tramoSinRebaja) return { puede: true, tipo: "viaje_menos_banco" };
+    return { puede: true, tipo: "viaje_sin_gastos" };
   }
   if (estado !== "confirmada") {
     return { puede: false };
@@ -56,6 +74,7 @@ export function politicaCancelacionCliente(
   const horas = horasHasta(fechaSalidaIso, ahora);
   if (horas <= 0) return { puede: false };
   if (enHora) return { puede: true, tipo: "total" };
+  if (tramoSinRebaja) return { puede: true, tipo: "viaje_menos_banco" };
   if (horas > CANCELACION_ANTICIPADA_HORAS) {
     return { puede: true, tipo: "viaje_sin_gastos" };
   }
@@ -98,6 +117,11 @@ export function repartoCancelacion(
   if (tipo === "total") {
     return { reembolsoCents: totalCents, conductorCents: 0, comisionCents: 0 };
   }
+  if (tipo === "viaje_menos_banco") {
+    // La comisión Stripe real se resta al devolver (aplicar-cancelacion).
+    // Aquí el tope es el total pagado (estimación alta para la UI).
+    return { reembolsoCents: totalCents, conductorCents: 0, comisionCents: 0 };
+  }
   if (tipo === "viaje_sin_gastos") {
     return {
       reembolsoCents: netoCents,
@@ -124,6 +148,9 @@ export function fraseAyudaCancelacionCliente(
 ): string {
   if (tipo === "total") {
     return `En la primera hora desde el pago te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
+  }
+  if (tipo === "viaje_menos_banco") {
+    return `Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta.`;
   }
   if (tipo === "viaje_sin_gastos") {
     return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;

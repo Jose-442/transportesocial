@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import { guardarRebajaReserva } from "@/actions/rebaja";
+import { guardarRebajaReserva, rechazarRebajaTramo } from "@/actions/rebaja";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { mensajePrecioPorDebajo, precioVisiblePorDebajo } from "@/lib/precio-minimo";
-import { cabeRebaja } from "@/lib/reservas/rebaja";
+import {
+  cabeRebaja,
+  TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
+} from "@/lib/reservas/rebaja";
 
 export type PorteRebaja = {
   id: string;
@@ -21,6 +24,8 @@ export type PorteRebaja = {
   estado: string;
   salida: string;
   descripcion: string | null;
+  esTramo?: boolean;
+  rebajaRechazadaEn?: string | null;
 };
 
 function TextoEstado({
@@ -58,6 +63,16 @@ function TextoEstado({
     );
   }
 
+  if (porte.rebajaRechazadaEn) {
+    return (
+      <p className="text-sm text-zinc-700">
+        {esConductor
+          ? "Has indicado que no aceptas la rebaja. El viaje sigue. Quien reservó puede cancelar si quiere."
+          : `El conductor no ha aceptado la rebaja. El viaje sigue. ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`}
+      </p>
+    );
+  }
+
   if (!cabeRebaja(porte.salida)) {
     return (
       <p className="text-sm text-zinc-700">
@@ -70,7 +85,7 @@ function TextoEstado({
     return (
       <p className="text-sm text-zinc-700">
         Has pedido una rebaja. El precio no cambia hasta que el conductor
-        guarde el precio nuevo.
+        guarde el precio nuevo o diga que no la acepta.
       </p>
     );
   }
@@ -211,6 +226,49 @@ function Formulario({
   );
 }
 
+function BotonRechazarTramo({ reservaId }: { reservaId: string }) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const enviando = useRef(false);
+
+  async function onClick() {
+    if (enviando.current) return;
+    enviando.current = true;
+    setLoading(true);
+    setError(null);
+    const fd = new FormData();
+    fd.set("reserva_id", reservaId);
+    const result = await rechazarRebajaTramo(fd);
+    if (result.error) {
+      setError(result.error);
+      enviando.current = false;
+      setLoading(false);
+      return;
+    }
+    router.refresh();
+  }
+
+  return (
+    <div className="space-y-2">
+      <Button
+        type="button"
+        variant="secondary"
+        fullWidth
+        disabled={loading}
+        onClick={() => void onClick()}
+      >
+        {loading ? "Guardando…" : "No acepto la rebaja"}
+      </Button>
+      <p className="text-xs text-zinc-600">
+        El viaje sigue. Quien reservó podrá cancelar y recuperar casi todo lo
+        pagado (menos lo del banco por la tarjeta).
+      </p>
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
+    </div>
+  );
+}
+
 export function RebajaReservas({
   portes,
   esConductor,
@@ -233,7 +291,16 @@ export function RebajaReservas({
         const puedeGuardar =
           esConductor &&
           !porte.rebajaEn &&
+          !porte.rebajaRechazadaEn &&
           porte.estado === "confirmada" &&
+          cabeRebaja(porte.salida);
+        const puedeRechazar =
+          esConductor &&
+          Boolean(porte.esTramo) &&
+          !porte.rebajaEn &&
+          !porte.rebajaRechazadaEn &&
+          (porte.estado === "confirmada" ||
+            porte.estado === "pendiente_aprobacion") &&
           cabeRebaja(porte.salida);
         return (
           <Card
@@ -243,7 +310,9 @@ export function RebajaReservas({
             <p className="text-base font-semibold text-emerald-950">
               {porte.rebajaEn
                 ? "Rebaja aplicada"
-                : "Hay una solicitud de rebaja"}
+                : porte.rebajaRechazadaEn
+                  ? "Rebaja no aceptada"
+                  : "Hay una solicitud de rebaja"}
             </p>
             <TextoEstado porte={porte} esConductor={esConductor} rutaId={rutaId} />
             {puedeGuardar ? (
@@ -254,6 +323,7 @@ export function RebajaReservas({
                 rutaId={rutaId}
               />
             ) : null}
+            {puedeRechazar ? <BotonRechazarTramo reservaId={porte.id} /> : null}
           </Card>
         );
       })}

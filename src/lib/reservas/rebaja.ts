@@ -18,6 +18,10 @@ export const TEXTO_PUEDE_PEDIR_REBAJA_TRAMO =
 
 export const TEXTO_PLAZO_REBAJA = "Solo hasta 48 horas antes del viaje.";
 
+/** Cancelación tras rechazar rebaja de tramo. */
+export const TEXTO_CANCELAR_TRAMO_SIN_REBAJA =
+  "Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta.";
+
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
 export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {
   if (pideRebaja) {
@@ -44,16 +48,56 @@ export function marcoPideRebaja(valor: FormDataEntryValue | null): boolean {
   return texto === "1" || texto === "on" || texto === "true";
 }
 
-/** Porte de un viaje publicado por el conductor. Una plaza no. */
+/** Porte de un viaje publicado por el conductor. Una plaza no, salvo tramo con rebaja. */
 export function esPorteParaRebaja(
-  reserva: Pick<Reserva, "tipo" | "bulto_descripcion" | "cantidad">
+  reserva: Pick<
+    Reserva,
+    "tipo" | "bulto_descripcion" | "cantidad" | "es_tramo" | "pide_rebaja"
+  >
 ): boolean {
   if (reserva.tipo === "bulto_oferta") return false;
+  if (reserva.es_tramo && reserva.pide_rebaja) return true;
   return !esReservaDePlazas(reserva);
 }
 
+/** Tramo con rebaja pedida y aún sin precio nuevo ni rechazo. */
+export function puedeRechazarRebajaTramo(
+  reserva: Pick<
+    Reserva,
+    | "es_tramo"
+    | "pide_rebaja"
+    | "rebaja_en"
+    | "rebaja_rechazada_en"
+    | "estado"
+  >
+): boolean {
+  if (!reserva.es_tramo || !reserva.pide_rebaja) return false;
+  if (reserva.rebaja_en || reserva.rebaja_rechazada_en) return false;
+  return (
+    reserva.estado === "pendiente_aprobacion" ||
+    reserva.estado === "confirmada"
+  );
+}
+
+/** Quien reservó puede cancelar con reembolso casi total (menos Stripe). */
+export function cabeCancelacionTramoSinRebaja(
+  reserva: Pick<
+    Reserva,
+    "es_tramo" | "pide_rebaja" | "rebaja_en" | "rebaja_rechazada_en"
+  >
+): boolean {
+  return Boolean(
+    reserva.es_tramo &&
+      reserva.pide_rebaja &&
+      reserva.rebaja_rechazada_en &&
+      !reserva.rebaja_en
+  );
+}
+
 export function faltaColumnaRebaja(mensaje: string): boolean {
-  return /pide_rebaja|rebaja_eur|rebaja_en/i.test(mensaje);
+  return /pide_rebaja|rebaja_eur|rebaja_en|es_tramo|rebaja_rechazada/i.test(
+    mensaje
+  );
 }
 
 /** Suma la rebaja ya devuelta sin pasar de lo pagado ni contarla dos veces. */

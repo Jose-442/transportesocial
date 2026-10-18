@@ -10,8 +10,11 @@ import {
   cabeRebaja,
   esPorteParaRebaja,
   faltaColumnaRebaja,
+  puedeRechazarRebajaTramo,
+  TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
 } from "@/lib/reservas/rebaja";
 import { eurosACentimos } from "@/lib/reservas/cancelacion";
+import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import type { Reserva } from "@/types/database";
 
 const ERROR_SQL =
@@ -233,5 +236,64 @@ export async function guardarRebajaReserva(formData: FormData) {
   revalidatePath(`/reservas/${reserva.id}`);
   revalidatePath(`/rutas/${reserva.ruta_conductor_id}`);
   revalidatePath("/cuenta");
+  return { ok: true };
+}
+
+/** Conductor no acepta la rebaja de un tramo; quien reservó decide si cancela. */
+export async function rechazarRebajaTramo(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Debes iniciar sesión." };
+
+  const reservaId = String(formData.get("reserva_id") ?? "").trim();
+  if (!reservaId) return { error: "No se ha encontrado la reserva." };
+
+  const { data: fila, error: errorFila } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("id", reservaId)
+    .maybeSingle();
+  if (errorFila) {
+    return {
+      error: faltaColumnaRebaja(errorFila.message)
+        ? ERROR_SQL
+        : "No se ha podido leer la reserva.",
+    };
+  }
+  const reserva = fila as Reserva | null;
+  if (!reserva || reserva.transportista_id !== user.id) {
+    return { error: "No autorizado." };
+  }
+  if (!puedeRechazarRebajaTramo(reserva)) {
+    return { error: "Esta rebaja ya no se puede rechazar." };
+  }
+
+  const ahora = new Date().toISOString();
+  const { error } = await supabase
+    .from("reservas")
+    .update({ rebaja_rechazada_en: ahora })
+    .eq("id", reserva.id)
+    .is("rebaja_rechazada_en", null)
+    .is("rebaja_en", null);
+  if (error) {
+    return {
+      error: faltaColumnaRebaja(error.message)
+        ? ERROR_SQL
+        : supabaseErrorMessage(error),
+    };
+  }
+
+  await crearNotificacion(supabase, {
+    user_id: reserva.cliente_id,
+    tipo: "reserva_actualizada",
+    titulo: "Rebaja no aceptada",
+    mensaje: `El conductor no ha aceptado la rebaja del tramo. El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
+    enlace: `/reservas/${reserva.id}`,
+  });
+
+  revalidatePath(`/reservas/${reserva.id}`);
+  revalidatePath(`/reservas/${reserva.id}/chat`);
   return { ok: true };
 }
