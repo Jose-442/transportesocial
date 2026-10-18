@@ -1,8 +1,14 @@
+import { Libre_Baskerville } from "next/font/google";
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { HomeSofaHighlight } from "@/components/home/HomeSofaHighlight";
 import { HomeSubscriptionBanner } from "@/components/home/HomeSubscriptionBanner";
 import { BRAND } from "@/lib/brand";
+
+const camaraFont = Libre_Baskerville({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default async function HomePage() {
   return (
@@ -167,8 +173,8 @@ export default async function HomePage() {
                   PUBLICAR mi ruta con el espacio y asientos libres
                 </span>
               </ButtonLink>
-              <p className="px-1 text-center text-sm text-emerald-900 sm:text-left">
-                Después puedes editar el viaje mientras no haya reservas.
+              <p className="px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
+                Podrás editar el viaje mientras no haya reservas.
               </p>
             </div>
             <ButtonLink
@@ -188,7 +194,9 @@ export default async function HomePage() {
               </span>
             </ButtonLink>
           </div>
-          <p className="mt-6 text-center text-sm font-medium leading-snug text-emerald-900 sm:mt-8 sm:text-base">
+          <p
+            className={`${camaraFont.className} mt-6 text-center text-base leading-snug text-emerald-900 sm:mt-8 sm:text-lg`}
+          >
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
           </p>
