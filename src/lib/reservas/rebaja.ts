@@ -20,7 +20,11 @@ export const TEXTO_PLAZO_REBAJA = "Solo hasta 48 horas antes del viaje.";
 
 /** Cancelación tras rechazar rebaja de tramo. */
 export const TEXTO_CANCELAR_TRAMO_SIN_REBAJA =
-  "Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta.";
+  "Al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta.";
+
+/** Nota en la ficha cuando la búsqueda es un tramo. */
+export const TEXTO_NOTA_TRAMO_FICHA =
+  "Debes pagar el total para reservar tu plaza. Después puedes pedir al conductor una rebaja por ese tramo; si acepta, se te devuelve la diferencia. Si no acepta, tú eliges si cancelas: al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta.";
 
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
 export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {

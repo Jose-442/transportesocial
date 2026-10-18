@@ -150,7 +150,7 @@ export function fraseAyudaCancelacionCliente(
     return `En la primera hora desde el pago te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
   }
   if (tipo === "viaje_menos_banco") {
-    return `Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta.`;
+    return `Al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta.`;
   }
   if (tipo === "viaje_sin_gastos") {
     return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;

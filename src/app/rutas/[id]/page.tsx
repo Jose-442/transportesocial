@@ -43,6 +43,7 @@ import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import { esBusquedaDeTramo } from "@/lib/rutas/paradas";
+import { TEXTO_NOTA_TRAMO_FICHA } from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 import type { VehiculoEdicion } from "@/components/rutas/EditarViajePublicado";
 
@@ -501,13 +502,7 @@ export default async function RutaDetallePage({
         {esTramo && (
           <div className="space-y-1 rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
             <p>Pasa por el tramo que solicitas</p>
-            <p>
-              Primero debes pagar el total para reservar tu plaza. Después
-              puedes pedir al conductor una rebaja por ese tramo; si acepta, se
-              te devuelve la diferencia. Si no acepta, el viaje sigue y tú
-              eliges si cancelas: al cancelar te devolvemos el viaje menos lo
-              que el banco ya nos cobró por la tarjeta.
-            </p>
+            <p>{TEXTO_NOTA_TRAMO_FICHA}</p>
           </div>
         )}
         <p className="text-xs leading-tight text-zinc-500 md:hidden">

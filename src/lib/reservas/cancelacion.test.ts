@@ -209,7 +209,7 @@ describe("frases de cancelación", () => {
       "Faltan menos de 24 horas. Te devolvemos la mitad del viaje (50,00 €). El conductor se queda la otra mitad. El gasto de gestión no se devuelve."
     );
     expect(fraseAyudaCancelacionCliente("viaje_menos_banco", "59,00 €")).toBe(
-      "Al cancelar te devolvemos el viaje menos lo que el banco ya nos cobró por la tarjeta."
+      "Al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta."
     );
     expect(fraseAyudaCancelacionConductor("118,00 €")).toContain("100 %");
   });
