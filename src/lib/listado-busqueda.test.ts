@@ -4,6 +4,7 @@ import {
   coincideFechaListado,
   fechasCercanasAlDia,
   fechasDeLaSemana,
+  fechasProximosDias,
   limitesBusqueda,
 } from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
@@ -57,7 +58,7 @@ describe("limitesBusqueda", () => {
     expect(limites?.origenes).toContain("Burgos (Burgos)");
   });
 
-  it("con semana acota lunes a domingo de la semana de hoy (ignora fecha)", () => {
+  it("con semana acota los próximos 7 días desde hoy", () => {
     const limites = limitesBusqueda(
       {
         origen: "Burgos (Burgos)",
@@ -65,16 +66,16 @@ describe("limitesBusqueda", () => {
         fecha: "2026-11-01",
         semana: true,
       },
-      new Date("2026-10-17T12:00:00+02:00")
+      new Date("2026-10-18T12:00:00+02:00")
     );
     expect(limites?.fechas).toEqual([
-      "2026-10-12",
-      "2026-10-13",
-      "2026-10-14",
-      "2026-10-15",
-      "2026-10-16",
-      "2026-10-17",
       "2026-10-18",
+      "2026-10-19",
+      "2026-10-20",
+      "2026-10-21",
+      "2026-10-22",
+      "2026-10-23",
+      "2026-10-24",
     ]);
   });
 });
@@ -93,13 +94,27 @@ describe("fechasDeLaSemana", () => {
   });
 });
 
+describe("fechasProximosDias", () => {
+  it("incluye el 22 si hoy es el 18", () => {
+    expect(fechasProximosDias("2026-10-18", 7)).toEqual([
+      "2026-10-18",
+      "2026-10-19",
+      "2026-10-20",
+      "2026-10-21",
+      "2026-10-22",
+      "2026-10-23",
+      "2026-10-24",
+    ]);
+  });
+});
+
 describe("coincideFechaListado", () => {
-  it("en modo semana acepta cualquier día de la semana de hoy", () => {
-    const ahora = new Date("2026-10-17T12:00:00+02:00");
+  it("en modo semana acepta un viaje dentro de los próximos 7 días", () => {
+    const ahora = new Date("2026-10-18T12:00:00+02:00");
     const filtros = { semana: true };
-    expect(coincideFechaListado("2026-10-12", filtros, ahora)).toBe(true);
+    expect(coincideFechaListado("2026-10-22", filtros, ahora)).toBe(true);
     expect(coincideFechaListado("2026-10-18", filtros, ahora)).toBe(true);
-    expect(coincideFechaListado("2026-10-19", filtros, ahora)).toBe(false);
+    expect(coincideFechaListado("2026-10-25", filtros, ahora)).toBe(false);
   });
 
   it("con día concreto solo ese día", () => {

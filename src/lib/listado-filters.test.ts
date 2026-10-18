@@ -49,7 +49,7 @@ describe("coincideFiltrosRuta — provincia y radio 50 km", () => {
     ).toBe(false);
   });
 
-  it("con semana acepta otro día de la semana de hoy", () => {
+  it("con próximos 7 días acepta un viaje de dentro de esa ventana", () => {
     const ahora = new Date("2026-06-24T12:00:00+02:00");
     expect(
       coincideFiltrosRuta(

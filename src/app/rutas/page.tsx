@@ -93,17 +93,17 @@ export default async function RutasPage({
           <p className="text-sm font-medium text-zinc-700">
             {rutas.length === 1
               ? filtros.semana
-                ? "1 viaje encontrado esa semana"
+                ? "1 viaje en los próximos 7 días"
                 : "1 viaje encontrado"
               : filtros.semana
-                ? `${rutas.length} viajes encontrados esa semana`
+                ? `${rutas.length} viajes en los próximos 7 días`
                 : `${rutas.length} viajes encontrados`}
           </p>
           {rutas.length === 0 ? (
             filtros.semana ? (
               <p className="text-sm text-zinc-500">
-                No hay viajes esta semana. Prueba un día concreto o mira más
-                adelante.
+                No hay viajes en los próximos 7 días. Prueba un día concreto o
+                mira más adelante.
               </p>
             ) : filtros.fecha ? (
               <AlertaViajeBusqueda
@@ -115,8 +115,8 @@ export default async function RutasPage({
               />
             ) : (
               <p className="text-sm text-zinc-500">
-                No hay viajes en esta ruta. Prueba con otro día, marca «Me da
-                igual el día (esta semana)» o mira más adelante.
+                No hay viajes próximos en esta ruta. Prueba con un día, marca
+                «próximos 7 días» o mira más adelante.
               </p>
             )
           ) : (

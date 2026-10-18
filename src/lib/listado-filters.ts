@@ -9,7 +9,7 @@ export type FiltrosListado = {
   origen?: string;
   destino?: string;
   fecha?: string;
-  /** Si true: busca todos los días de la semana (lun–dom) del día de referencia. */
+  /** Si true: busca los próximos 7 días desde hoy (no un día concreto). */
   semana?: boolean;
 };
 
@@ -42,7 +42,7 @@ export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
   const params = new URLSearchParams();
   params.set("origen", filtros.origen!);
   params.set("destino", filtros.destino!);
-  // Día y semana no se mezclan: un día = ese día; semana = lun–dom de hoy.
+  // Día y «próximos 7 días» no se mezclan.
   if (filtros.semana) {
     params.set("semana", "1");
   } else if (filtros.fecha) {
@@ -149,19 +149,34 @@ export function fechasDeLaSemana(refIso: string): string[] {
   return out;
 }
 
-/** Semana de búsqueda: siempre la de hoy en España (lun–dom). */
-export function referenciaSemanaBusqueda(ahora = new Date()): string {
-  return hoyIsoMadrid(ahora);
+/** Hoy y los 6 días siguientes (7 en total), en YYYY-MM-DD. */
+export function fechasProximosDias(
+  desdeIso: string,
+  cuantos = 7
+): string[] {
+  const dia = desdeIso.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || !fechaCalendarioValida(dia)) {
+    return [];
+  }
+  const [year, month, day] = dia.split("-").map(Number);
+  const utc = new Date(Date.UTC(year, month - 1, day));
+  const out: string[] = [];
+  for (let i = 0; i < cuantos; i++) {
+    const x = new Date(utc);
+    x.setUTCDate(utc.getUTCDate() + i);
+    out.push(x.toISOString().slice(0, 10));
+  }
+  return out;
 }
 
-/** ¿La fecha del anuncio encaja con el filtro (día concreto o semana)? */
+/** ¿La fecha del anuncio encaja con el filtro (día concreto o próximos 7 días)? */
 export function coincideFechaListado(
   fechaAlmacenada: string | null | undefined,
   filtros: FiltrosListado,
   ahora = new Date()
 ): boolean {
   if (filtros.semana) {
-    const dias = fechasDeLaSemana(referenciaSemanaBusqueda(ahora));
+    const dias = fechasProximosDias(hoyIsoMadrid(ahora), 7);
     const dia = fechaAlmacenada?.slice(0, 10) ?? "";
     return Boolean(dia && dias.includes(dia));
   }
@@ -187,7 +202,7 @@ export function limitesBusqueda(
   if (!filtros.origen || !filtros.destino) return null;
   let fechas: string[] | null = null;
   if (filtros.semana) {
-    fechas = fechasDeLaSemana(referenciaSemanaBusqueda(ahora));
+    fechas = fechasProximosDias(hoyIsoMadrid(ahora), 7);
     if (fechas.length === 0) return null;
   } else if (filtros.fecha) {
     fechas = fechasCercanasAlDia(filtros.fecha);

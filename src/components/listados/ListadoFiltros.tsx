@@ -166,12 +166,12 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           />
           <p className="text-base leading-snug text-zinc-600">
             Si eliges un día, verás los {palabra} de ese día. Si no eliges día,
-            verás todos los {palabra} de esa ruta.
+            verás los próximos {palabra} de esa ruta (los más cercanos).
           </p>
         </>
       ) : (
         <p className="text-base leading-snug text-zinc-600">
-          Verás todos los {palabra} de lunes a domingo de esta semana.
+          Verás los {palabra} de los próximos 7 días, contando desde hoy.
         </p>
       )}
       <label className="flex cursor-pointer items-start gap-2.5 text-base font-semibold text-zinc-800">
@@ -187,9 +187,9 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           className="mt-1 h-5 w-5 shrink-0 rounded border-zinc-300"
         />
         <span>
-          Me da igual el día (esta semana)
+          Me da igual el día (próximos 7 días)
           <span className="mt-1 block text-base font-normal leading-snug text-zinc-600">
-            Busca de lunes a domingo esta semana. Útil si hay pocos {palabra}.
+            Desde hoy hacia delante. Útil si hay pocos {palabra}.
           </span>
         </span>
       </label>
