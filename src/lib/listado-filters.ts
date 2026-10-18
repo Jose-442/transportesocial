@@ -42,8 +42,12 @@ export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
   const params = new URLSearchParams();
   params.set("origen", filtros.origen!);
   params.set("destino", filtros.destino!);
-  if (filtros.fecha) params.set("fecha", filtros.fecha);
-  if (filtros.semana) params.set("semana", "1");
+  // Día y semana no se mezclan: un día = ese día; semana = lun–dom de hoy.
+  if (filtros.semana) {
+    params.set("semana", "1");
+  } else if (filtros.fecha) {
+    params.set("fecha", filtros.fecha);
+  }
   return params.toString();
 }
 
@@ -145,25 +149,19 @@ export function fechasDeLaSemana(refIso: string): string[] {
   return out;
 }
 
-/** Día de referencia para la semana: la fecha elegida, o hoy en España. */
-export function referenciaSemanaBusqueda(
-  filtros: FiltrosListado,
-  ahora = new Date()
-): string {
-  const elegida = filtros.fecha?.slice(0, 10) ?? "";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(elegida) && fechaCalendarioValida(elegida)) {
-    return elegida;
-  }
+/** Semana de búsqueda: siempre la de hoy en España (lun–dom). */
+export function referenciaSemanaBusqueda(ahora = new Date()): string {
   return hoyIsoMadrid(ahora);
 }
 
 /** ¿La fecha del anuncio encaja con el filtro (día concreto o semana)? */
 export function coincideFechaListado(
   fechaAlmacenada: string | null | undefined,
-  filtros: FiltrosListado
+  filtros: FiltrosListado,
+  ahora = new Date()
 ): boolean {
   if (filtros.semana) {
-    const dias = fechasDeLaSemana(referenciaSemanaBusqueda(filtros));
+    const dias = fechasDeLaSemana(referenciaSemanaBusqueda(ahora));
     const dia = fechaAlmacenada?.slice(0, 10) ?? "";
     return Boolean(dia && dias.includes(dia));
   }
@@ -178,7 +176,10 @@ export function coincideFechaListado(
  * origenes o destinos a null: no acotar ese lado (la lista fina sigue en memoria).
  * fechas a null: no acotar por día (salida + destino bastan).
  */
-export function limitesBusqueda(filtros: FiltrosListado): {
+export function limitesBusqueda(
+  filtros: FiltrosListado,
+  ahora = new Date()
+): {
   origenes: string[] | null;
   destinos: string[] | null;
   fechas: string[] | null;
@@ -186,7 +187,7 @@ export function limitesBusqueda(filtros: FiltrosListado): {
   if (!filtros.origen || !filtros.destino) return null;
   let fechas: string[] | null = null;
   if (filtros.semana) {
-    fechas = fechasDeLaSemana(referenciaSemanaBusqueda(filtros));
+    fechas = fechasDeLaSemana(referenciaSemanaBusqueda(ahora));
     if (fechas.length === 0) return null;
   } else if (filtros.fecha) {
     fechas = fechasCercanasAlDia(filtros.fecha);
@@ -200,7 +201,8 @@ export function limitesBusqueda(filtros: FiltrosListado): {
 
 export function coincideFiltrosBulto(
   bulto: { origen: string; destino: string; fecha_limite: string | null },
-  filtros: FiltrosListado
+  filtros: FiltrosListado,
+  ahora = new Date()
 ): boolean {
   if (
     filtros.origen &&
@@ -214,7 +216,7 @@ export function coincideFiltrosBulto(
   ) {
     return false;
   }
-  if (!coincideFechaListado(bulto.fecha_limite, filtros)) {
+  if (!coincideFechaListado(bulto.fecha_limite, filtros, ahora)) {
     return false;
   }
   return true;
@@ -222,7 +224,8 @@ export function coincideFiltrosBulto(
 
 export function coincideFiltrosRuta(
   ruta: { origen: string; destino: string; fecha_salida: string },
-  filtros: FiltrosListado
+  filtros: FiltrosListado,
+  ahora = new Date()
 ): boolean {
   if (
     filtros.origen &&
@@ -236,7 +239,7 @@ export function coincideFiltrosRuta(
   ) {
     return false;
   }
-  if (!coincideFechaListado(ruta.fecha_salida, filtros)) {
+  if (!coincideFechaListado(ruta.fecha_salida, filtros, ahora)) {
     return false;
   }
   return true;

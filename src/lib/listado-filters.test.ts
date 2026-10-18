@@ -49,11 +49,13 @@ describe("coincideFiltrosRuta — provincia y radio 50 km", () => {
     ).toBe(false);
   });
 
-  it("con semana acepta otro día de la misma semana", () => {
+  it("con semana acepta otro día de la semana de hoy", () => {
+    const ahora = new Date("2026-06-24T12:00:00+02:00");
     expect(
       coincideFiltrosRuta(
         { ...ruta("Burgos", "Madrid"), fecha_salida: "2026-06-25T10:00:00.000Z" },
-        { ...filtros, semana: true }
+        { origen: "Burgos", destino: "Madrid", semana: true },
+        ahora
       )
     ).toBe(true);
   });

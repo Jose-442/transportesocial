@@ -103,8 +103,11 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     const params = new URLSearchParams();
     params.set("origen", etiquetaMunicipio(origenValido));
     params.set("destino", etiquetaMunicipio(destinoValido));
-    if (fecha.trim()) params.set("fecha", fecha.trim());
-    if (semana) params.set("semana", "1");
+    if (semana) {
+      params.set("semana", "1");
+    } else if (fecha.trim()) {
+      params.set("fecha", fecha.trim());
+    }
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -146,37 +149,47 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           incluirFrontera
         />
       </div>
-      <DatePickerInput
-        name="fecha"
-        label={
-          semana
-            ? tipo === "viajes"
-              ? "Semana del día (opcional)"
-              : "Semana del día del porte (opcional)"
-            : tipo === "viajes"
-              ? "Día del viaje (opcional)"
-              : "Día del porte (opcional)"
-        }
-        value={fecha}
-        onChange={setFecha}
-      />
-      <p className="text-base leading-snug text-zinc-600">
-        {semana
-          ? `Si eliges un día, verás todos los ${palabra} de lunes a domingo de esa semana. Si no eliges día, usa la semana de hoy.`
-          : `Si no eliges día, verás todos los ${palabra} de esa ruta.`}
-      </p>
+      {!semana ? (
+        <>
+          <DatePickerInput
+            name="fecha"
+            label={
+              tipo === "viajes"
+                ? "Día del viaje (opcional)"
+                : "Día del porte (opcional)"
+            }
+            value={fecha}
+            onChange={(value) => {
+              setFecha(value);
+              if (value.trim()) setSemana(false);
+            }}
+          />
+          <p className="text-base leading-snug text-zinc-600">
+            Si eliges un día, verás los {palabra} de ese día. Si no eliges día,
+            verás todos los {palabra} de esa ruta.
+          </p>
+        </>
+      ) : (
+        <p className="text-base leading-snug text-zinc-600">
+          Verás todos los {palabra} de lunes a domingo de esta semana.
+        </p>
+      )}
       <label className="flex cursor-pointer items-start gap-2.5 text-base font-semibold text-zinc-800">
         <input
           type="checkbox"
           name="semana"
           checked={semana}
-          onChange={(e) => setSemana(e.target.checked)}
+          onChange={(e) => {
+            const on = e.target.checked;
+            setSemana(on);
+            if (on) setFecha("");
+          }}
           className="mt-1 h-5 w-5 shrink-0 rounded border-zinc-300"
         />
         <span>
           Me da igual el día (esta semana)
           <span className="mt-1 block text-base font-normal leading-snug text-zinc-600">
-            Busca de lunes a domingo. Útil si hay pocos {palabra}.
+            Busca de lunes a domingo esta semana. Útil si hay pocos {palabra}.
           </span>
         </span>
       </label>

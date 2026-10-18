@@ -102,8 +102,8 @@ export default async function RutasPage({
           {rutas.length === 0 ? (
             filtros.semana ? (
               <p className="text-sm text-zinc-500">
-                No hay viajes esa semana. Prueba otra semana, un día concreto, o
-                mira más adelante.
+                No hay viajes esta semana. Prueba un día concreto o mira más
+                adelante.
               </p>
             ) : filtros.fecha ? (
               <AlertaViajeBusqueda

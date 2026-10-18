@@ -57,13 +57,16 @@ describe("limitesBusqueda", () => {
     expect(limites?.origenes).toContain("Burgos (Burgos)");
   });
 
-  it("con semana acota lunes a domingo", () => {
-    const limites = limitesBusqueda({
-      origen: "Burgos (Burgos)",
-      destino: "Madrid (Madrid)",
-      fecha: "2026-10-17", // sábado
-      semana: true,
-    });
+  it("con semana acota lunes a domingo de la semana de hoy (ignora fecha)", () => {
+    const limites = limitesBusqueda(
+      {
+        origen: "Burgos (Burgos)",
+        destino: "Madrid (Madrid)",
+        fecha: "2026-11-01",
+        semana: true,
+      },
+      new Date("2026-10-17T12:00:00+02:00")
+    );
     expect(limites?.fechas).toEqual([
       "2026-10-12",
       "2026-10-13",
@@ -91,10 +94,20 @@ describe("fechasDeLaSemana", () => {
 });
 
 describe("coincideFechaListado", () => {
-  it("en modo semana acepta cualquier día de esa semana", () => {
-    const filtros = { fecha: "2026-10-15", semana: true };
-    expect(coincideFechaListado("2026-10-12", filtros)).toBe(true);
-    expect(coincideFechaListado("2026-10-18", filtros)).toBe(true);
-    expect(coincideFechaListado("2026-10-19", filtros)).toBe(false);
+  it("en modo semana acepta cualquier día de la semana de hoy", () => {
+    const ahora = new Date("2026-10-17T12:00:00+02:00");
+    const filtros = { semana: true };
+    expect(coincideFechaListado("2026-10-12", filtros, ahora)).toBe(true);
+    expect(coincideFechaListado("2026-10-18", filtros, ahora)).toBe(true);
+    expect(coincideFechaListado("2026-10-19", filtros, ahora)).toBe(false);
+  });
+
+  it("con día concreto solo ese día", () => {
+    expect(
+      coincideFechaListado("2026-10-17", { fecha: "2026-10-17" })
+    ).toBe(true);
+    expect(
+      coincideFechaListado("2026-10-18", { fecha: "2026-10-17" })
+    ).toBe(false);
   });
 });
