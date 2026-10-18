@@ -35,7 +35,7 @@ export const TEXTO_REBAJA_TRAMO_CONDUCTOR =
  * si otro quiere otro tramo, puede añadir otra plaza.
  */
 export const TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR =
-  "Importante: aunque solo use un tramo, la web cuenta esa plaza como ocupada en todo el viaje. Si se baja en una parada y otra persona quiere subir ahí (u otro tramo), añade otra plaza en tu viaje («Añadir más capacidad»).";
+  "Aunque 1 pasajero solo use un tramo, la web cuenta esa plaza como ocupada en todo el viaje. Si se baja en una parada y otra persona quiere subir, añade otra plaza («Añadir más capacidad»).";
 
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
 export function mensajeAvisoConductorPendiente(
