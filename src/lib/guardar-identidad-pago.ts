@@ -1,4 +1,3 @@
-import { actualizarIdentidad } from "@/actions/cuenta";
 import {
   documentoIdentidadValido,
   telefonoEsValido,
@@ -26,14 +25,35 @@ export async function guardarIdentidadParaPagar(
   if (!documentoIdentidadValido(documento)) {
     return { ok: false, errorDocumento: ERROR_DOCUMENTO };
   }
-  const result = await actualizarIdentidad({ telefono, documento });
-  if (result.errorTelefono || result.errorDocumento || result.error) {
+
+  // API (no server action): así Next no recarga la página y no corta el pago.
+  let res: Response;
+  try {
+    res = await fetch("/api/cuenta/identidad", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ telefono, documento }),
+    });
+  } catch {
+    return { ok: false, error: "No se ha podido guardar. Prueba otra vez." };
+  }
+
+  const json = (await res.json().catch(() => ({}))) as {
+    ok?: boolean;
+    error?: string;
+    errorTelefono?: string;
+    errorDocumento?: string;
+  };
+
+  if (!res.ok || json.error || json.errorTelefono || json.errorDocumento) {
     return {
       ok: false,
-      errorTelefono: result.errorTelefono,
-      errorDocumento: result.errorDocumento,
-      error: result.error,
+      errorTelefono: json.errorTelefono,
+      errorDocumento: json.errorDocumento,
+      error: json.error,
     };
   }
+
   return { ok: true };
 }

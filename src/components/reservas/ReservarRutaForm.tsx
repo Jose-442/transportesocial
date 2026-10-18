@@ -177,8 +177,8 @@ export function ReservarRutaForm({
         setLoading(false);
         return;
       }
-      clearIdentidad();
-      setPedirIdentidad(false);
+      // No ocultar ni limpiar aún: si lo hacemos, Next/React mueven el scroll
+      // y puede cortar el paso al pago. Tras el checkout se abandona la página.
     }
 
     let result: Awaited<ReturnType<typeof solicitarReservaViaje>>;
@@ -204,6 +204,7 @@ export function ReservarRutaForm({
     }
 
     if (result.checkoutUrl) {
+      clearIdentidad();
       window.location.replace(result.checkoutUrl);
       return;
     }

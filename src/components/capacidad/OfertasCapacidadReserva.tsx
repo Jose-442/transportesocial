@@ -165,8 +165,6 @@ export function OfertasCapacidadReserva({
         setLoading(false);
         return;
       }
-      clearIdentidad();
-      setPedirIdentidad(false);
     }
 
     let result: Awaited<ReturnType<typeof solicitarReservaCapacidad>>;
@@ -192,11 +190,13 @@ export function OfertasCapacidadReserva({
     }
 
     if (result.checkoutUrl) {
+      clearIdentidad();
       window.location.replace(result.checkoutUrl);
       return;
     }
 
     clear();
+    clearIdentidad();
 
     if (result.reservaId) {
       router.push(`/reservas/${result.reservaId}`);
