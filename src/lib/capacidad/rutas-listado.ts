@@ -109,8 +109,8 @@ export async function listarRutasConCapacidad(
       .from("rutas_conductores")
       .select("*")
       .eq("estado", estado)
-      .gte("fecha_llegada_prevista", ahoraIso)
-      .in("fecha_salida", limites.fechas);
+      .gte("fecha_llegada_prevista", ahoraIso);
+    if (limites.fechas) query = query.in("fecha_salida", limites.fechas);
     if (limites.origenes) query = query.in("origen", limites.origenes);
     if (limites.destinos) query = query.in("destino", limites.destinos);
     return query.order("fecha_llegada_prevista", { ascending: true });

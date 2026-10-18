@@ -30,7 +30,7 @@ export function tieneFiltrosActivos(filtros: FiltrosListado): boolean {
 }
 
 export function tieneBusquedaCompleta(filtros: FiltrosListado): boolean {
-  return !!(filtros.origen && filtros.destino && filtros.fecha);
+  return !!(filtros.origen && filtros.destino);
 }
 
 export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
@@ -38,7 +38,7 @@ export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
   const params = new URLSearchParams();
   params.set("origen", filtros.origen!);
   params.set("destino", filtros.destino!);
-  params.set("fecha", filtros.fecha!);
+  if (filtros.fecha) params.set("fecha", filtros.fecha);
   return params.toString();
 }
 
@@ -109,15 +109,19 @@ export function fechasCercanasAlDia(fecha: string): string[] {
 /**
  * Zona y días que hay que pedir. Null: la búsqueda no puede dar resultados.
  * origenes o destinos a null: no acotar ese lado (la lista fina sigue en memoria).
+ * fechas a null: no acotar por día (salida + destino bastan).
  */
 export function limitesBusqueda(filtros: FiltrosListado): {
   origenes: string[] | null;
   destinos: string[] | null;
-  fechas: string[];
+  fechas: string[] | null;
 } | null {
-  if (!filtros.origen || !filtros.destino || !filtros.fecha) return null;
-  const fechas = fechasCercanasAlDia(filtros.fecha);
-  if (fechas.length === 0) return null;
+  if (!filtros.origen || !filtros.destino) return null;
+  let fechas: string[] | null = null;
+  if (filtros.fecha) {
+    fechas = fechasCercanasAlDia(filtros.fecha);
+    if (fechas.length === 0) return null;
+  }
   const origenes = etiquetasMunicipiosCercanos(filtros.origen);
   const destinos = etiquetasMunicipiosCercanos(filtros.destino);
   if (origenes?.length === 0 || destinos?.length === 0) return null;

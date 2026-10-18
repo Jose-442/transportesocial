@@ -42,4 +42,13 @@ describe("limitesBusqueda", () => {
     expect(limites?.origenes).toContain("Burgos (Burgos)");
     expect(limites?.destinos).toContain("Madrid (Madrid)");
   });
+
+  it("sin día no acota fechas", () => {
+    const limites = limitesBusqueda({
+      origen: "Burgos (Burgos)",
+      destino: "Madrid (Madrid)",
+    });
+    expect(limites?.fechas).toBeNull();
+    expect(limites?.origenes).toContain("Burgos (Burgos)");
+  });
 });

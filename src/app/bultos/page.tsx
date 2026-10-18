@@ -47,14 +47,19 @@ export default async function BultosPage({
       let consulta = supabase
         .from("anuncios_bultos")
         .select("*")
-        .eq("estado", "activo")
-        .in("fecha_limite", limites.fechas);
+        .eq("estado", "activo");
+      if (limites.fechas) {
+        consulta = consulta.in("fecha_limite", limites.fechas);
+      } else {
+        const hoy = new Date().toISOString().slice(0, 10);
+        consulta = consulta.gte("fecha_limite", hoy);
+      }
       if (limites.origenes) consulta = consulta.in("origen", limites.origenes);
       if (limites.destinos) {
         consulta = consulta.in("destino", limites.destinos);
       }
-      const resultado = await consulta.order("created_at", {
-        ascending: false,
+      const resultado = await consulta.order("fecha_limite", {
+        ascending: true,
       });
       data = resultado.data as AnuncioBulto[] | null;
     }
@@ -109,7 +114,7 @@ export default async function BultosPage({
       {!busquedaCompleta ? (
         hayFiltros ? (
           <p className="text-sm text-zinc-500">
-            Completa salida, destino, mes y día para ver los bultos.
+            Completa salida y destino para ver los portes. El día es opcional.
           </p>
         ) : null
       ) : (

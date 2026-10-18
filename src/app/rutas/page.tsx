@@ -47,14 +47,14 @@ export default async function RutasPage({
     if (user) {
       rutas = rutas.filter((ruta) => ruta.user_id !== user.id);
     }
-    if (user && rutas.length === 0) {
+    if (user && rutas.length === 0 && filtros.fecha) {
       const { data: alerta } = await supabase
         .from("alertas_viaje")
         .select("id")
         .eq("user_id", user.id)
         .eq("origen", filtros.origen!)
         .eq("destino", filtros.destino!)
-        .eq("fecha", filtros.fecha!.slice(0, 10))
+        .eq("fecha", filtros.fecha.slice(0, 10))
         .maybeSingle();
       tieneAlerta = !!alerta;
     }
@@ -85,7 +85,7 @@ export default async function RutasPage({
       {!busquedaCompleta ? (
         hayFiltros ? (
           <p className="text-sm text-zinc-500">
-            Completa salida, destino, mes y día para ver los viajes.
+            Completa salida y destino para ver los viajes. El día es opcional.
           </p>
         ) : null
       ) : (
@@ -96,13 +96,20 @@ export default async function RutasPage({
               : `${rutas.length} viajes encontrados`}
           </p>
           {rutas.length === 0 ? (
-            <AlertaViajeBusqueda
-              origen={filtros.origen!}
-              destino={filtros.destino!}
-              fecha={filtros.fecha!.slice(0, 10)}
-              sesion={sesion}
-              tieneAlerta={tieneAlerta}
-            />
+            filtros.fecha ? (
+              <AlertaViajeBusqueda
+                origen={filtros.origen!}
+                destino={filtros.destino!}
+                fecha={filtros.fecha.slice(0, 10)}
+                sesion={sesion}
+                tieneAlerta={tieneAlerta}
+              />
+            ) : (
+              <p className="text-sm text-zinc-500">
+                No hay viajes en esta ruta. Prueba con otro día o mira más
+                adelante.
+              </p>
+            )
           ) : (
             <>
               <div className="space-y-3">

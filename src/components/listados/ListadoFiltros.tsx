@@ -87,12 +87,11 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       setErrorDestino("Selecciona una población de la lista");
       return;
     }
-    if (!fecha.trim()) return;
 
     const params = new URLSearchParams();
     params.set("origen", etiquetaMunicipio(origenValido));
     params.set("destino", etiquetaMunicipio(destinoValido));
-    params.set("fecha", fecha.trim());
+    if (fecha.trim()) params.set("fecha", fecha.trim());
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -134,10 +133,18 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       </div>
       <DatePickerInput
         name="fecha"
-        label={tipo === "viajes" ? "Día del viaje" : undefined}
+        label={
+          tipo === "viajes"
+            ? "Día del viaje (opcional)"
+            : "Día del porte (opcional)"
+        }
+        hint={
+          tipo === "viajes"
+            ? "Si no eliges día, verás todos los viajes de esa ruta."
+            : "Si no eliges día, verás todos los portes de esa ruta."
+        }
         value={fecha}
         onChange={setFecha}
-        required
       />
       <div className="flex gap-2">
         <Button type="submit" fullWidth>
