@@ -503,8 +503,8 @@ export default async function RutaDetallePage({
             <p>Pasa por el tramo que solicitas</p>
             <p>
               Primero debes pagar el total para reservar tu plaza. Después
-              puedes pedir al conductor una rebaja por ese tramo; si acepta, te
-              devuelve la diferencia.
+              puedes pedir al conductor una rebaja por ese tramo; si acepta, se
+              te devuelve la diferencia.
             </p>
           </div>
         )}
