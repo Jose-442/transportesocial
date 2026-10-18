@@ -14,6 +14,7 @@ import {
   agruparPortesRebajaTramo,
   cabeRebaja,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
+  TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR,
   TEXTO_REBAJA_TRAMO_CONDUCTOR,
 } from "@/lib/reservas/rebaja";
 
@@ -373,9 +374,14 @@ export function RebajaReservas({
             pendienteGrupo &&
             !porteVista.rebajaEn &&
             !porteVista.rebajaRechazadaEn ? (
-              <p className="text-sm font-medium text-emerald-950">
-                {TEXTO_REBAJA_TRAMO_CONDUCTOR}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-emerald-950">
+                  {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+                </p>
+                <p className="text-sm font-medium text-emerald-950">
+                  {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
+                </p>
+              </div>
             ) : null}
             {cuantasPlazas > 1 && pendienteGrupo ? (
               <ul className="list-inside list-disc text-sm text-zinc-700">

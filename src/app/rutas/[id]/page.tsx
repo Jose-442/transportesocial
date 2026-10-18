@@ -46,6 +46,7 @@ import { esBusquedaDeTramo } from "@/lib/rutas/paradas";
 import {
   rebajaTramoPendiente,
   TEXTO_NOTA_TRAMO_FICHA,
+  TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR,
 } from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 import type { VehiculoEdicion } from "@/components/rutas/EditarViajePublicado";
@@ -209,15 +210,19 @@ export default async function RutaDetallePage({
   const datosVehiculo = proponente ? datosVehiculoVisibles(proponente) : [];
 
   let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
+  let hayReservaTramoEnViaje = false;
   if (esPropio) {
     const { data: reservasRuta } = await supabase
       .from("reservas")
-      .select("id, estado")
+      .select("id, estado, es_tramo")
       .eq("ruta_conductor_id", id)
       .eq("transportista_id", user!.id)
       .order("created_at", { ascending: false });
-    reservasConChat = ((reservasRuta as Pick<Reserva, "id" | "estado">[]) ?? []).filter(
-      (r) => chatPermitido(r.estado)
+    const listaRuta =
+      (reservasRuta as Pick<Reserva, "id" | "estado" | "es_tramo">[]) ?? [];
+    reservasConChat = listaRuta.filter((r) => chatPermitido(r.estado));
+    hayReservaTramoEnViaje = listaRuta.some(
+      (r) => Boolean(r.es_tramo) && r.estado !== "cancelado"
     );
   }
 
@@ -728,6 +733,11 @@ export default async function RutaDetallePage({
           <p className="mb-3 text-sm font-semibold text-zinc-800">
             Añadir más capacidad
           </p>
+          {hayReservaTramoEnViaje ? (
+            <p className="mb-3 text-sm font-medium text-emerald-950">
+              {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
+            </p>
+          ) : null}
           <AnadirCapacidadForm rutaId={ruta.id} ofertasExistentes={ofertas} />
           {ofertas.length > 0 && (
             <div className="mt-4 border-t border-zinc-200 pt-4">

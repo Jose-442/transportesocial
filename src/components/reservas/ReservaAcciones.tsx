@@ -18,7 +18,10 @@ import {
   ESTADO_RESERVA_LABELS,
   puedeReclamar,
 } from "@/lib/reservas/labels";
-import { TEXTO_REBAJA_TRAMO_CONDUCTOR } from "@/lib/reservas/rebaja";
+import {
+  TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR,
+  TEXTO_REBAJA_TRAMO_CONDUCTOR,
+} from "@/lib/reservas/rebaja";
 import {
   centimosAEuros,
   fraseAyudaCancelacionCliente,
@@ -134,6 +137,12 @@ export function ReservaAcciones({
           )
       : "";
 
+  const hayTramo =
+    Boolean(reserva.es_tramo) || relacionadas.some((r) => r.es_tramo);
+  const hayRebajaTramo =
+    hayTramo &&
+    (Boolean(reserva.pide_rebaja) || relacionadas.some((r) => r.pide_rebaja));
+
   return (
     <Card className="space-y-1.5 p-2 md:space-y-2 md:p-3">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 md:gap-x-4 md:gap-y-1">
@@ -191,12 +200,14 @@ export function ReservaAcciones({
 
       {estado === "pendiente_aprobacion" && esConductor && (
         <div className="space-y-2">
-          {(Boolean(reserva.es_tramo) ||
-            relacionadas.some((r) => r.es_tramo)) &&
-          (Boolean(reserva.pide_rebaja) ||
-            relacionadas.some((r) => r.pide_rebaja)) ? (
+          {hayRebajaTramo ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+            </p>
+          ) : null}
+          {hayTramo ? (
+            <p className="text-sm font-medium text-emerald-950">
+              {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
           ) : null}
           <AceptarRechazarBotones
@@ -208,6 +219,11 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">
+          {hayTramo ? (
+            <p className="text-sm font-medium text-emerald-950">
+              {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
+            </p>
+          ) : null}
           <div className="space-y-1.5">
             <p className="text-sm text-zinc-700">
               {tienePorte
