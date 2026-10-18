@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { cabeRebaja, conRebajaDevuelta } from "@/lib/reservas/rebaja";
+import {
+  agruparPortesRebajaTramo,
+  cabeRebaja,
+  conRebajaDevuelta,
+  rebajaTramoPendiente,
+  rebajaTramoRespondida,
+} from "@/lib/reservas/rebaja";
 
 describe("cabeRebaja", () => {
   const ahora = new Date("2026-10-13T18:00:00.000Z");
@@ -14,6 +20,77 @@ describe("cabeRebaja", () => {
 
   it("no cabe si la salida ya pasó", () => {
     expect(cabeRebaja("2026-10-13T10:00:00.000Z", ahora)).toBe(false);
+  });
+});
+
+describe("rebajaTramoPendiente / respondida", () => {
+  it("pendiente si pedida y sin respuesta", () => {
+    expect(
+      rebajaTramoPendiente({
+        es_tramo: true,
+        pide_rebaja: true,
+        rebaja_en: null,
+        rebaja_rechazada_en: null,
+      })
+    ).toBe(true);
+    expect(
+      rebajaTramoRespondida({
+        es_tramo: true,
+        pide_rebaja: true,
+        rebaja_en: null,
+        rebaja_rechazada_en: null,
+      })
+    ).toBe(false);
+  });
+
+  it("respondida si aceptó o rechazó", () => {
+    expect(
+      rebajaTramoRespondida({
+        es_tramo: true,
+        pide_rebaja: true,
+        rebaja_en: "2026-10-18",
+        rebaja_rechazada_en: null,
+      })
+    ).toBe(true);
+    expect(
+      rebajaTramoPendiente({
+        es_tramo: true,
+        pide_rebaja: true,
+        rebaja_en: null,
+        rebaja_rechazada_en: "2026-10-18",
+      })
+    ).toBe(false);
+  });
+});
+
+describe("agruparPortesRebajaTramo", () => {
+  it("junta tramos pendientes en una sola tarjeta", () => {
+    const grupos = agruparPortesRebajaTramo([
+      {
+        id: "a",
+        pideRebaja: true,
+        esTramo: true,
+        rebajaEn: null,
+        rebajaRechazadaEn: null,
+      },
+      {
+        id: "b",
+        pideRebaja: true,
+        esTramo: true,
+        rebajaEn: null,
+        rebajaRechazadaEn: null,
+      },
+      {
+        id: "c",
+        pideRebaja: true,
+        esTramo: true,
+        rebajaEn: "ya",
+        rebajaRechazadaEn: null,
+      },
+    ]);
+    expect(grupos).toHaveLength(2);
+    expect(grupos[0].map((p) => p.id)).toEqual(["a", "b"]);
+    expect(grupos[1].map((p) => p.id)).toEqual(["c"]);
   });
 });
 

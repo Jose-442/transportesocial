@@ -50,6 +50,9 @@ export function OfertasCapacidadReserva({
   identidadInicial,
   salidaIso = "",
   soloTipo,
+  esTramo = false,
+  /** Ya hay rebaja de tramo pedida y el conductor aún no contestó. */
+  rebajaTramoPendiente = false,
 }: {
   ofertas: OfertaCapacidad[];
   rutaEstado?: "activa" | "reservada";
@@ -58,6 +61,8 @@ export function OfertasCapacidadReserva({
   salidaIso?: string;
   /** Al ampliar una reserva ya hecha: solo plaza o solo bulto de capacidad extra. */
   soloTipo?: "asiento" | "bulto";
+  esTramo?: boolean;
+  rebajaTramoPendiente?: boolean;
 }) {
   const router = useRouter();
   const disponibles = ofertas.filter((o) => {
@@ -147,6 +152,14 @@ export function OfertasCapacidadReserva({
     const formData = new FormData(e.currentTarget);
     formData.set("oferta_id", ofertaSel.id);
     formData.set("cantidad", esAsiento ? String(plazasElegidas) : "1");
+    if (esTramo) formData.set("es_tramo", "1");
+    // Misma solicitud pendiente: la plaza nueva entra en la misma rebaja.
+    if (
+      esTramo &&
+      (rebajaTramoPendiente || form.pide_rebaja)
+    ) {
+      formData.set("pide_rebaja", "1");
+    }
 
     if (!esAsiento) {
       const foto = formData.get("foto");
@@ -376,6 +389,27 @@ export function OfertasCapacidadReserva({
           totalCentimos={desglose.totalCentimos}
         />
       )}
+      {ampliarPlaza && esTramo && rebajaTramoPendiente && plazasElegidas > 0 ? (
+        <p className="text-sm text-zinc-700">
+          La rebaja que ya pediste en este viaje vale también para esta plaza.
+          El conductor verá las plazas juntas en la misma solicitud.
+        </p>
+      ) : null}
+
+      {ampliarPlaza &&
+      esTramo &&
+      !rebajaTramoPendiente &&
+      plazasElegidas > 0 &&
+      cabeRebaja(salidaIso) ? (
+        <SolicitarRebaja
+          marcado={Boolean(form.pide_rebaja)}
+          onMarcado={(pide_rebaja) =>
+            setForm((prev) => ({ ...prev, pide_rebaja }))
+          }
+          esTramo
+        />
+      ) : null}
+
       {!esAsiento && descripcion.trim() && cabeRebaja(salidaIso) ? (
         <SolicitarRebaja
           marcado={Boolean(form.pide_rebaja)}

@@ -43,7 +43,10 @@ import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import { esBusquedaDeTramo } from "@/lib/rutas/paradas";
-import { TEXTO_NOTA_TRAMO_FICHA } from "@/lib/reservas/rebaja";
+import {
+  rebajaTramoPendiente,
+  TEXTO_NOTA_TRAMO_FICHA,
+} from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 import type { VehiculoEdicion } from "@/components/rutas/EditarViajePublicado";
 
@@ -111,6 +114,8 @@ export default async function RutaDetallePage({
   let reservaMiaId: string | null = null;
   let faltaIdentidad = false;
   let identidadInicial = { telefono: "", documento: "" };
+  let reservaMiaEsTramo = false;
+  let rebajaTramoPendienteMia = false;
   if (user) {
     const { data: perfil } = await supabase
       .from("profiles")
@@ -122,18 +127,31 @@ export default async function RutaDetallePage({
       telefono: perfil?.phone ?? "",
       documento: perfil?.documento_identidad ?? "",
     };
-    const { data: reservaMia } = await supabase
+    const { data: reservasMias } = await supabase
       .from("reservas")
-      .select("id, estado")
+      .select(
+        "id, estado, es_tramo, pide_rebaja, rebaja_en, rebaja_rechazada_en"
+      )
       .eq("ruta_conductor_id", id)
       .eq("cliente_id", user.id)
       .in("estado", ESTADOS_RESERVA_OCUPAN)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .order("created_at", { ascending: false });
+    const listaMias =
+      (reservasMias as Pick<
+        Reserva,
+        | "id"
+        | "estado"
+        | "es_tramo"
+        | "pide_rebaja"
+        | "rebaja_en"
+        | "rebaja_rechazada_en"
+      >[]) ?? [];
+    const reservaMia = listaMias[0] ?? null;
     reservaMiaId = reservaMia?.id ?? null;
     reservaPendienteId =
       reservaMia?.estado === "pendiente_pago" ? reservaMia.id : null;
+    reservaMiaEsTramo = listaMias.some((r) => Boolean(r.es_tramo));
+    rebajaTramoPendienteMia = listaMias.some((r) => rebajaTramoPendiente(r));
   }
 
   let formInicial:
@@ -175,7 +193,7 @@ export default async function RutaDetallePage({
   const ruta = data as RutaConductor;
   const paradasMap = await cargarParadasPorRutas(supabase, [ruta.id]);
   const paradas = paradasMap.get(ruta.id) ?? [];
-  const esTramo =
+  const esTramoBusqueda =
     Boolean(filtrosListado.origen && filtrosListado.destino) &&
     esBusquedaDeTramo(
       ruta,
@@ -183,6 +201,7 @@ export default async function RutaDetallePage({
       filtrosListado.origen ?? "",
       filtrosListado.destino ?? ""
     );
+  const esTramo = esTramoBusqueda || reservaMiaEsTramo;
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
@@ -627,6 +646,8 @@ export default async function RutaDetallePage({
               identidadInicial={identidadInicial}
               salidaIso={ruta.fecha_llegada_prevista}
               soloTipo="asiento"
+              esTramo={esTramo}
+              rebajaTramoPendiente={rebajaTramoPendienteMia}
             />
           ) : null}
           {ampliarMuestraBultoOferta ? (

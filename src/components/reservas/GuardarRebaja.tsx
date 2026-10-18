@@ -11,6 +11,7 @@ import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarr
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { mensajePrecioPorDebajo, precioVisiblePorDebajo } from "@/lib/precio-minimo";
 import {
+  agruparPortesRebajaTramo,
   cabeRebaja,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
 } from "@/lib/reservas/rebaja";
@@ -32,10 +33,12 @@ function TextoEstado({
   porte,
   esConductor,
   rutaId,
+  cuantasPlazas,
 }: {
   porte: PorteRebaja;
   esConductor: boolean;
   rutaId: string | null;
+  cuantasPlazas: number;
 }) {
   if (porte.rebajaEn) {
     return (
@@ -84,8 +87,10 @@ function TextoEstado({
   if (!esConductor) {
     return (
       <p className="text-sm text-zinc-700">
-        Has pedido una rebaja. El precio no cambia hasta que el conductor
-        guarde el precio nuevo o diga que no la acepta.
+        Has pedido una rebaja
+        {cuantasPlazas > 1 ? ` para ${cuantasPlazas} plazas de este viaje` : ""}.
+        El precio no cambia hasta que el conductor guarde el precio nuevo o diga
+        que no la acepta.
       </p>
     );
   }
@@ -93,14 +98,17 @@ function TextoEstado({
   if (porte.estado === "confirmada") {
     return (
       <p className="text-base text-emerald-900">
-        Puedes guardar un precio más bajo debajo.
+        {cuantasPlazas > 1
+          ? `Puedes guardar un precio más bajo para las ${cuantasPlazas} plazas juntas.`
+          : "Puedes guardar un precio más bajo debajo."}
       </p>
     );
   }
 
   return (
     <p className="text-base text-emerald-900">
-      Cuando aceptes la reserva, podrás guardar un precio más bajo.
+      Cuando aceptes la reserva, podrás guardar un precio más bajo
+      {cuantasPlazas > 1 ? " para todas las plazas de esta solicitud" : ""}.
     </p>
   );
 }
@@ -110,11 +118,15 @@ function Formulario({
   origen,
   destino,
   rutaId,
+  cuantasPlazas,
+  precioPagadoTotal,
 }: {
   porte: PorteRebaja;
   origen: string;
   destino: string;
   rutaId: string | null;
+  cuantasPlazas: number;
+  precioPagadoTotal: number;
 }) {
   const router = useRouter();
   const minimo = usePrecioMinimoCarretera(origen, destino);
@@ -124,7 +136,7 @@ function Formulario({
   const enviando = useRef(false);
   const neto = Number(netoTexto.replace(",", "."));
   const visible = Number.isFinite(neto) && neto > 0 ? calcPrecioConComision(neto) : 0;
-  const diferencia = porte.precioTotal - visible;
+  const diferencia = precioPagadoTotal - visible;
   const bajoMinimo =
     minimo.precioMinimo != null &&
     visible > 0 &&
@@ -156,8 +168,10 @@ function Formulario({
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-700">
-        Precio pagado: {formatEur(porte.precioTotal)}. El precio no cambia
-        hasta que guardes uno más bajo.
+        Precio pagado
+        {cuantasPlazas > 1 ? ` (todas las plazas)` : ""}:{" "}
+        {formatEur(precioPagadoTotal)}. El precio no cambia hasta que guardes
+        uno más bajo.
       </p>
       {minimo.texto ? (
         <p className="text-sm text-zinc-600">{minimo.texto}</p>
@@ -166,7 +180,11 @@ function Formulario({
         <p className="text-sm text-red-600">{minimo.error}</p>
       ) : null}
       <Input
-        label="Precio neto (€)"
+        label={
+          cuantasPlazas > 1
+            ? "Precio neto total (€)"
+            : "Precio neto (€)"
+        }
         name="precio_neto"
         type="number"
         step="0.01"
@@ -174,7 +192,11 @@ function Formulario({
         value={netoTexto}
         onChange={(e) => setNetoTexto(e.target.value)}
         required
-        hint="Sin los gastos de gestión. Al guardar se devuelve la diferencia."
+        hint={
+          cuantasPlazas > 1
+            ? "Sin gastos de gestión. Es el total de todas las plazas de esta solicitud."
+            : "Sin los gastos de gestión. Al guardar se devuelve la diferencia."
+        }
       />
       {visible > 0 ? (
         <p className="text-sm text-zinc-700">
@@ -282,45 +304,92 @@ export function RebajaReservas({
   destino: string;
   rutaId: string | null;
 }) {
-  const pedidos = portes.filter((porte) => porte.pideRebaja);
-  if (pedidos.length === 0) return null;
+  const grupos = agruparPortesRebajaTramo(portes);
+  if (grupos.length === 0) return null;
 
   return (
     <div className="space-y-2">
-      {pedidos.map((porte) => {
+      {grupos.map((grupo) => {
+        const porte = grupo[0];
+        const cuantasPlazas = grupo.length;
+        const precioPagadoTotal = grupo.reduce(
+          (sum, p) => sum + p.precioTotal,
+          0
+        );
+        const rebajaEurSuma = grupo.reduce(
+          (sum, p) => sum + (p.rebajaEur == null ? 0 : p.rebajaEur),
+          0
+        );
+        const porteVista: PorteRebaja = {
+          ...porte,
+          precioTotal: precioPagadoTotal,
+          rebajaEur:
+            porte.rebajaEn || grupo.some((p) => p.rebajaEur != null)
+              ? rebajaEurSuma
+              : porte.rebajaEur,
+          // Si alguna del grupo sigue pendiente de aceptar reserva, el formulario espera.
+          estado: grupo.every((p) => p.estado === "confirmada")
+            ? "confirmada"
+            : grupo.some((p) => p.estado === "pendiente_aprobacion")
+              ? "pendiente_aprobacion"
+              : porte.estado,
+        };
+        const pendienteGrupo = grupo.every(
+          (p) => !p.rebajaEn && !p.rebajaRechazadaEn
+        );
         const puedeGuardar =
           esConductor &&
-          !porte.rebajaEn &&
-          !porte.rebajaRechazadaEn &&
-          porte.estado === "confirmada" &&
-          cabeRebaja(porte.salida);
+          pendienteGrupo &&
+          !porteVista.rebajaEn &&
+          !porteVista.rebajaRechazadaEn &&
+          porteVista.estado === "confirmada" &&
+          cabeRebaja(porteVista.salida);
         const puedeRechazar =
           esConductor &&
-          Boolean(porte.esTramo) &&
-          !porte.rebajaEn &&
-          !porte.rebajaRechazadaEn &&
-          (porte.estado === "confirmada" ||
-            porte.estado === "pendiente_aprobacion") &&
-          cabeRebaja(porte.salida);
+          Boolean(porteVista.esTramo) &&
+          pendienteGrupo &&
+          !porteVista.rebajaEn &&
+          !porteVista.rebajaRechazadaEn &&
+          (porteVista.estado === "confirmada" ||
+            porteVista.estado === "pendiente_aprobacion") &&
+          cabeRebaja(porteVista.salida);
         return (
           <Card
-            key={porte.id}
+            key={grupo.map((p) => p.id).join("-")}
             className="space-y-2 border-emerald-200 bg-emerald-50/40"
           >
             <p className="text-base font-semibold text-emerald-950">
-              {porte.rebajaEn
+              {porteVista.rebajaEn
                 ? "Rebaja aplicada"
-                : porte.rebajaRechazadaEn
+                : porteVista.rebajaRechazadaEn
                   ? "Rebaja no aceptada"
-                  : "Hay una solicitud de rebaja"}
+                  : cuantasPlazas > 1
+                    ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
+                    : "Hay una solicitud de rebaja"}
             </p>
-            <TextoEstado porte={porte} esConductor={esConductor} rutaId={rutaId} />
+            {cuantasPlazas > 1 && pendienteGrupo ? (
+              <ul className="list-inside list-disc text-sm text-zinc-700">
+                {grupo.map((p) => (
+                  <li key={p.id}>
+                    {p.descripcion?.trim() || "Plaza"} · {formatEur(p.precioTotal)}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <TextoEstado
+              porte={porteVista}
+              esConductor={esConductor}
+              rutaId={rutaId}
+              cuantasPlazas={cuantasPlazas}
+            />
             {puedeGuardar ? (
               <Formulario
                 porte={porte}
                 origen={origen}
                 destino={destino}
                 rutaId={rutaId}
+                cuantasPlazas={cuantasPlazas}
+                precioPagadoTotal={precioPagadoTotal}
               />
             ) : null}
             {puedeRechazar ? <BotonRechazarTramo reservaId={porte.id} /> : null}

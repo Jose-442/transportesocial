@@ -398,6 +398,30 @@ async function avisarReservaRuta(
   admin: AdminClient,
   r: Reserva
 ): Promise<{ error?: string }> {
+  let hermanasRebajaPendiente = 0;
+  if (r.pide_rebaja && r.es_tramo && r.ruta_conductor_id) {
+    const { data: hermanas } = await admin
+      .from("reservas")
+      .select("id, es_tramo, pide_rebaja, rebaja_en, rebaja_rechazada_en")
+      .eq("ruta_conductor_id", r.ruta_conductor_id)
+      .eq("cliente_id", r.cliente_id)
+      .neq("id", r.id);
+    hermanasRebajaPendiente = (
+      (hermanas as Pick<
+        Reserva,
+        "es_tramo" | "pide_rebaja" | "rebaja_en" | "rebaja_rechazada_en"
+      >[]) ?? []
+    ).filter(
+      (h) =>
+        h.es_tramo &&
+        h.pide_rebaja &&
+        !h.rebaja_en &&
+        !h.rebaja_rechazada_en
+    ).length;
+  }
+  const plazasRebaja = hermanasRebajaPendiente + (r.pide_rebaja ? 1 : 0);
+  const ampliaRebajaTramo = hermanasRebajaPendiente > 0 && Boolean(r.pide_rebaja);
+
   if (r.estado === "confirmada") {
     if (r.ruta_conductor_id) {
       await sincronizarOcupacionRuta(admin, r.ruta_conductor_id);
@@ -405,8 +429,12 @@ async function avisarReservaRuta(
     await crearNotificacion(admin, {
       user_id: r.transportista_id,
       tipo: "reserva_confirmada",
-      titulo: "Nueva reserva confirmada",
-      mensaje: mensajeAvisoConductorConfirmada(Boolean(r.pide_rebaja)),
+      titulo: ampliaRebajaTramo
+        ? `Solicitud de rebaja ampliada (${plazasRebaja} plazas)`
+        : "Nueva reserva confirmada",
+      mensaje: ampliaRebajaTramo
+        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas.`
+        : mensajeAvisoConductorConfirmada(Boolean(r.pide_rebaja)),
       enlace: `/reservas/${r.id}/chat`,
     });
     await crearNotificacion(admin, {
@@ -420,10 +448,14 @@ async function avisarReservaRuta(
     await crearNotificacion(admin, {
       user_id: r.transportista_id,
       tipo: "reserva_pendiente_aprobacion",
-      titulo: Boolean(r.pide_rebaja)
-        ? "Hay una solicitud de rebaja"
-        : "Nueva solicitud de reserva",
-      mensaje: mensajeAvisoConductorPendiente(Boolean(r.pide_rebaja)),
+      titulo: ampliaRebajaTramo
+        ? `Solicitud de rebaja ampliada (${plazasRebaja} plazas)`
+        : Boolean(r.pide_rebaja)
+          ? "Hay una solicitud de rebaja"
+          : "Nueva solicitud de reserva",
+      mensaje: ampliaRebajaTramo
+        ? `Quien reservó ha añadido otra plaza. La solicitud de rebaja del tramo incluye ahora ${plazasRebaja} plazas.`
+        : mensajeAvisoConductorPendiente(Boolean(r.pide_rebaja)),
       enlace: `/reservas/${r.id}`,
     });
     await crearNotificacion(admin, {

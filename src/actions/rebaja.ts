@@ -11,9 +11,10 @@ import {
   esPorteParaRebaja,
   faltaColumnaRebaja,
   puedeRechazarRebajaTramo,
+  rebajaTramoPendiente,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
 } from "@/lib/reservas/rebaja";
-import { eurosACentimos } from "@/lib/reservas/cancelacion";
+import { centimosAEuros, eurosACentimos } from "@/lib/reservas/cancelacion";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import type { Reserva } from "@/types/database";
 
@@ -69,8 +70,33 @@ export async function guardarRebajaReserva(formData: FormData) {
     return { error: "Indica un precio válido." };
   }
   const visible = calcPrecioConComision(neto);
-  const actual = Number(reserva.precio_total);
-  const diferenciaCents = eurosACentimos(actual) - eurosACentimos(visible);
+
+  const admin = createAdminClient();
+  if (!admin) return { error: "No se ha podido devolver la diferencia." };
+
+  // Tramos del mismo usuario con rebaja pendiente → un solo precio total.
+  const { data: hermanasRaw } = await admin
+    .from("reservas")
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id)
+    .eq("estado", "confirmada");
+  const objetivo = rebajaTramoPendiente(reserva)
+    ? ((hermanasRaw as Reserva[]) ?? []).filter((h) =>
+        rebajaTramoPendiente(h)
+      )
+    : [reserva];
+  if (objetivo.length === 0) {
+    return { error: "Este porte no tiene una rebaja pedida." };
+  }
+  if (!objetivo.every((h) => h.estado === "confirmada" && !h.rebaja_en)) {
+    return { error: "El precio solo se puede bajar con el viaje confirmado." };
+  }
+
+  const actualTotal = objetivo.reduce((s, h) => s + Number(h.precio_total), 0);
+  const diferenciaCents =
+    eurosACentimos(actualTotal) - eurosACentimos(visible);
   if (diferenciaCents < 1) {
     return { error: "El precio nuevo tiene que ser más bajo." };
   }
@@ -90,25 +116,11 @@ export async function guardarRebajaReserva(formData: FormData) {
   });
   if (bajoMinimo) return { error: bajoMinimo };
 
-  const admin = createAdminClient();
-  if (!admin) return { error: "No se ha podido devolver la diferencia." };
-
-  // Mismo viaje / mismo cobro: a veces el payment intent está en otra fila.
-  const idsCobro = new Set<string>([reserva.id]);
-  if (reserva.ruta_conductor_id) {
-    const { data: hermanas } = await admin
-      .from("reservas")
-      .select("id")
-      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
-      .eq("cliente_id", reserva.cliente_id)
-      .eq("transportista_id", reserva.transportista_id);
-    for (const h of hermanas ?? []) idsCobro.add(h.id);
-  }
-
+  const idsCobro = objetivo.map((h) => h.id);
   const { data: txs } = await admin
     .from("transacciones")
     .select("id, reserva_id, stripe_payment_intent_id, estado_escrow, monto, metadata")
-    .in("reserva_id", [...idsCobro])
+    .in("reserva_id", idsCobro)
     .eq("tipo", "cobro_viaje");
 
   type TxRebaja = {
@@ -119,106 +131,166 @@ export async function guardarRebajaReserva(formData: FormData) {
     monto: number | null;
     metadata: unknown;
   };
-  const tx =
-    ((txs ?? []) as TxRebaja[]).find(
-      (fila) =>
-        fila.reserva_id === reserva.id &&
-        fila.estado_escrow === "retenido" &&
-        String(fila.stripe_payment_intent_id ?? "").trim()
-    ) ??
-    ((txs ?? []) as TxRebaja[]).find(
-      (fila) =>
-        fila.estado_escrow === "retenido" &&
-        String(fila.stripe_payment_intent_id ?? "").trim()
-    ) ??
-    null;
+  const txsLista = (txs ?? []) as TxRebaja[];
 
-  let intent = String(tx?.stripe_payment_intent_id ?? "").trim();
+  async function intentDeReserva(reservaId: string): Promise<{
+    intent: string;
+    tx: TxRebaja | null;
+  }> {
+    const tx =
+      txsLista.find(
+        (fila) =>
+          fila.reserva_id === reservaId &&
+          fila.estado_escrow === "retenido" &&
+          String(fila.stripe_payment_intent_id ?? "").trim()
+      ) ?? null;
+    let intent = String(tx?.stripe_payment_intent_id ?? "").trim();
+    if (!intent) {
+      try {
+        const { cobroDeEstasReservas } = await import(
+          "@/lib/stripe/cobro-reserva"
+        );
+        const { getStripeServer } = await import("@/lib/stripe/server");
+        const stripe = getStripeServer();
+        const lista = await stripe.paymentIntents.list({ limit: 100 });
+        const hallado = lista.data.find((pi) =>
+          cobroDeEstasReservas(pi, [reservaId, ...idsCobro])
+        );
+        if (hallado?.id) intent = hallado.id;
+      } catch (err) {
+        console.error("[rebaja] buscar cobro en Stripe", err);
+      }
+    }
+    return { intent, tx };
+  }
 
-  // Si en la BD no hay cobro retenido, buscar el pago en Stripe (como al cancelar).
-  if (!intent) {
-    try {
-      const { cobroDeEstasReservas } = await import("@/lib/stripe/cobro-reserva");
-      const { getStripeServer } = await import("@/lib/stripe/server");
-      const stripe = getStripeServer();
-      const lista = await stripe.paymentIntents.list({ limit: 100 });
-      const hallado = lista.data.find((pi) =>
-        cobroDeEstasReservas(pi, [...idsCobro])
-      );
-      if (hallado?.id) intent = hallado.id;
-    } catch (err) {
-      console.error("[rebaja] buscar cobro en Stripe", err);
+  // Reparte neto/visible a partes proporcionales (último se lleva el resto).
+  const totalActualCents = eurosACentimos(actualTotal);
+  const netoTotalCents = eurosACentimos(neto);
+  const visibleTotalCents = eurosACentimos(visible);
+  let netoAsignado = 0;
+  let visibleAsignado = 0;
+  const partes = objetivo.map((h, i) => {
+    const peso = eurosACentimos(Number(h.precio_total));
+    const ultima = i === objetivo.length - 1;
+    const netoCents = ultima
+      ? netoTotalCents - netoAsignado
+      : Math.floor((netoTotalCents * peso) / totalActualCents);
+    const visibleCents = ultima
+      ? visibleTotalCents - visibleAsignado
+      : Math.floor((visibleTotalCents * peso) / totalActualCents);
+    netoAsignado += netoCents;
+    visibleAsignado += visibleCents;
+    const netoParte = centimosAEuros(netoCents);
+    const visibleParte = centimosAEuros(visibleCents);
+    const diffCents = peso - visibleCents;
+    return { reserva: h, netoParte, visibleParte, diffCents };
+  });
+
+  for (const parte of partes) {
+    if (parte.diffCents < 0) {
+      return { error: "El precio nuevo tiene que ser más bajo." };
+    }
+    const { intent } = await intentDeReserva(parte.reserva.id);
+    if (!intent && parte.diffCents > 0) {
+      return {
+        error: "No se ha encontrado el cobro para devolver la diferencia.",
+      };
     }
   }
 
-  if (!intent) {
-    return { error: "No se ha encontrado el cobro para devolver la diferencia." };
-  }
-
-  const diferenciaEur = diferenciaCents / 100;
   const ahora = new Date().toISOString();
-  const { data: guardada, error: errorGuardar } = await supabase
-    .from("reservas")
-    .update({
-      precio_neto: neto,
-      precio_total: visible,
-      comision_plataforma: calcComision(neto),
-      rebaja_en: ahora,
-      rebaja_eur: diferenciaEur,
-    })
-    .eq("id", reserva.id)
-    .eq("transportista_id", user.id)
-    .eq("estado", "confirmada")
-    .is("rebaja_en", null)
-    .select("id");
+  const previos = partes.map((p) => ({
+    id: p.reserva.id,
+    precio_neto: p.reserva.precio_neto,
+    precio_total: p.reserva.precio_total,
+    comision_plataforma: p.reserva.comision_plataforma,
+  }));
 
-  if (errorGuardar) {
-    return {
-      error: faltaColumnaRebaja(errorGuardar.message)
-        ? ERROR_SQL
-        : "No se ha guardado el precio nuevo. Prueba otra vez.",
-    };
-  }
-  if (!guardada || guardada.length === 0) {
-    return { error: "El precio nuevo ya está guardado." };
-  }
-
-  if (tx?.id) {
-    const metadata =
-      tx.metadata && typeof tx.metadata === "object" && !Array.isArray(tx.metadata)
-        ? (tx.metadata as Record<string, unknown>)
-        : {};
-    await admin
-      .from("transacciones")
+  for (const parte of partes) {
+    const { data: guardada, error: errorGuardar } = await supabase
+      .from("reservas")
       .update({
-        metadata: {
-          ...metadata,
-          rebaja_precio_total_antes: actual,
-          rebaja_comision_antes: Number(reserva.comision_plataforma),
-        },
+        precio_neto: parte.netoParte,
+        precio_total: parte.visibleParte,
+        comision_plataforma: calcComision(parte.netoParte),
+        rebaja_en: ahora,
+        rebaja_eur: parte.diffCents / 100,
       })
-      .eq("id", tx.id);
+      .eq("id", parte.reserva.id)
+      .eq("transportista_id", user.id)
+      .eq("estado", "confirmada")
+      .is("rebaja_en", null)
+      .select("id");
+
+    if (errorGuardar) {
+      for (const prev of previos) {
+        await supabase
+          .from("reservas")
+          .update({
+            precio_neto: prev.precio_neto,
+            precio_total: prev.precio_total,
+            comision_plataforma: prev.comision_plataforma,
+            rebaja_en: null,
+            rebaja_eur: null,
+          })
+          .eq("id", prev.id)
+          .eq("transportista_id", user.id);
+      }
+      return {
+        error: faltaColumnaRebaja(errorGuardar.message)
+          ? ERROR_SQL
+          : "No se ha guardado el precio nuevo. Prueba otra vez.",
+      };
+    }
+    if (!guardada || guardada.length === 0) {
+      return { error: "El precio nuevo ya está guardado." };
+    }
   }
 
   try {
     const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
-    await reembolsarPaymentIntent(intent, {
-      amountCents: diferenciaCents,
-      idempotencyKey: `rebaja-${reserva.id}-${eurosACentimos(visible)}`,
-    });
+    for (const parte of partes) {
+      if (parte.diffCents < 1) continue;
+      const { intent, tx } = await intentDeReserva(parte.reserva.id);
+      if (tx?.id) {
+        const metadata =
+          tx.metadata &&
+          typeof tx.metadata === "object" &&
+          !Array.isArray(tx.metadata)
+            ? (tx.metadata as Record<string, unknown>)
+            : {};
+        await admin
+          .from("transacciones")
+          .update({
+            metadata: {
+              ...metadata,
+              rebaja_precio_total_antes: Number(parte.reserva.precio_total),
+              rebaja_comision_antes: Number(parte.reserva.comision_plataforma),
+            },
+          })
+          .eq("id", tx.id);
+      }
+      await reembolsarPaymentIntent(intent, {
+        amountCents: parte.diffCents,
+        idempotencyKey: `rebaja-${parte.reserva.id}-${eurosACentimos(parte.visibleParte)}`,
+      });
+    }
   } catch (error) {
     console.error("[rebaja] reembolso", error);
-    await supabase
-      .from("reservas")
-      .update({
-        precio_neto: reserva.precio_neto,
-        precio_total: reserva.precio_total,
-        comision_plataforma: reserva.comision_plataforma,
-        rebaja_en: null,
-        rebaja_eur: null,
-      })
-      .eq("id", reserva.id)
-      .eq("transportista_id", user.id);
+    for (const prev of previos) {
+      await supabase
+        .from("reservas")
+        .update({
+          precio_neto: prev.precio_neto,
+          precio_total: prev.precio_total,
+          comision_plataforma: prev.comision_plataforma,
+          rebaja_en: null,
+          rebaja_eur: null,
+        })
+        .eq("id", prev.id)
+        .eq("transportista_id", user.id);
+    }
     return {
       error: "No se ha podido devolver la diferencia. El precio no ha cambiado.",
     };
@@ -229,11 +301,15 @@ export async function guardarRebajaReserva(formData: FormData) {
     tipo: "reserva_actualizada",
     titulo: "Rebaja del precio",
     mensaje:
-      "El conductor ha guardado un precio más bajo. Se te devuelve la diferencia.",
+      objetivo.length > 1
+        ? "El conductor ha guardado un precio más bajo para tus plazas. Se te devuelve la diferencia."
+        : "El conductor ha guardado un precio más bajo. Se te devuelve la diferencia.",
     enlace: `/reservas/${reserva.id}`,
   });
 
-  revalidatePath(`/reservas/${reserva.id}`);
+  for (const h of objetivo) {
+    revalidatePath(`/reservas/${h.id}`);
+  }
   revalidatePath(`/rutas/${reserva.ruta_conductor_id}`);
   revalidatePath("/cuenta");
   return { ok: true };
@@ -270,30 +346,49 @@ export async function rechazarRebajaTramo(formData: FormData) {
     return { error: "Esta rebaja ya no se puede rechazar." };
   }
 
-  const ahora = new Date().toISOString();
-  const { error } = await supabase
+  const admin = createAdminClient();
+  const cliente = admin ?? supabase;
+  const { data: hermanasRaw } = await cliente
     .from("reservas")
-    .update({ rebaja_rechazada_en: ahora })
-    .eq("id", reserva.id)
-    .is("rebaja_rechazada_en", null)
-    .is("rebaja_en", null);
-  if (error) {
-    return {
-      error: faltaColumnaRebaja(error.message)
-        ? ERROR_SQL
-        : supabaseErrorMessage(error),
-    };
+    .select("*")
+    .eq("ruta_conductor_id", reserva.ruta_conductor_id ?? "")
+    .eq("cliente_id", reserva.cliente_id)
+    .eq("transportista_id", reserva.transportista_id);
+  const aRechazar = ((hermanasRaw as Reserva[]) ?? []).filter(
+    (h) => h.id === reserva.id || puedeRechazarRebajaTramo(h)
+  );
+
+  const ahora = new Date().toISOString();
+  for (const h of aRechazar) {
+    const { error } = await supabase
+      .from("reservas")
+      .update({ rebaja_rechazada_en: ahora })
+      .eq("id", h.id)
+      .is("rebaja_rechazada_en", null)
+      .is("rebaja_en", null);
+    if (error) {
+      return {
+        error: faltaColumnaRebaja(error.message)
+          ? ERROR_SQL
+          : supabaseErrorMessage(error),
+      };
+    }
   }
 
   await crearNotificacion(supabase, {
     user_id: reserva.cliente_id,
     tipo: "reserva_actualizada",
     titulo: "Rebaja no aceptada",
-    mensaje: `El conductor no ha aceptado la rebaja del tramo. El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
+    mensaje:
+      aRechazar.length > 1
+        ? `El conductor no ha aceptado la rebaja del tramo (todas tus plazas). El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`
+        : `El conductor no ha aceptado la rebaja del tramo. El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
     enlace: `/reservas/${reserva.id}`,
   });
 
-  revalidatePath(`/reservas/${reserva.id}`);
-  revalidatePath(`/reservas/${reserva.id}/chat`);
+  for (const h of aRechazar) {
+    revalidatePath(`/reservas/${h.id}`);
+    revalidatePath(`/reservas/${h.id}/chat`);
+  }
   return { ok: true };
 }

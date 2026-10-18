@@ -104,6 +104,68 @@ export function faltaColumnaRebaja(mensaje: string): boolean {
   );
 }
 
+/** Rebaja de tramo pedida y aún sin respuesta del conductor. */
+export function rebajaTramoPendiente(
+  reserva: Pick<
+    Reserva,
+    "es_tramo" | "pide_rebaja" | "rebaja_en" | "rebaja_rechazada_en"
+  >
+): boolean {
+  return Boolean(
+    reserva.es_tramo &&
+      reserva.pide_rebaja &&
+      !reserva.rebaja_en &&
+      !reserva.rebaja_rechazada_en
+  );
+}
+
+/** El conductor ya aceptó o rechazó la rebaja de ese tramo. */
+export function rebajaTramoRespondida(
+  reserva: Pick<
+    Reserva,
+    "es_tramo" | "pide_rebaja" | "rebaja_en" | "rebaja_rechazada_en"
+  >
+): boolean {
+  return Boolean(
+    reserva.es_tramo &&
+      reserva.pide_rebaja &&
+      (reserva.rebaja_en || reserva.rebaja_rechazada_en)
+  );
+}
+
+/**
+ * Agrupa solicitudes de rebaja de tramo pendientes del mismo usuario
+ * en un solo bloque; el resto va cada una aparte.
+ */
+export function agruparPortesRebajaTramo<
+  T extends {
+    id: string;
+    pideRebaja: boolean;
+    esTramo?: boolean;
+    rebajaEn: string | null;
+    rebajaRechazadaEn?: string | null;
+  },
+>(portes: T[]): T[][] {
+  const pedidos = portes.filter((p) => p.pideRebaja);
+  const pendientes: T[] = [];
+  const resto: T[] = [];
+  for (const p of pedidos) {
+    if (
+      p.esTramo &&
+      !p.rebajaEn &&
+      !p.rebajaRechazadaEn
+    ) {
+      pendientes.push(p);
+    } else {
+      resto.push(p);
+    }
+  }
+  const grupos: T[][] = [];
+  if (pendientes.length > 0) grupos.push(pendientes);
+  for (const p of resto) grupos.push([p]);
+  return grupos;
+}
+
 /** Suma la rebaja ya devuelta sin pasar de lo pagado ni contarla dos veces. */
 export function conRebajaDevuelta(
   devueltoEur: number | null,
