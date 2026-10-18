@@ -157,25 +157,25 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
               ? "Día del viaje (opcional)"
               : "Día del porte (opcional)"
         }
-        hint={
-          semana
-            ? `Si eliges un día, verás todos los ${palabra} de lunes a domingo de esa semana. Si no eliges día, usa la semana de hoy.`
-            : `Si no eliges día, verás todos los ${palabra} de esa ruta.`
-        }
         value={fecha}
         onChange={setFecha}
       />
-      <label className="flex cursor-pointer items-start gap-2 text-sm text-zinc-800">
+      <p className="text-base leading-snug text-zinc-600">
+        {semana
+          ? `Si eliges un día, verás todos los ${palabra} de lunes a domingo de esa semana. Si no eliges día, usa la semana de hoy.`
+          : `Si no eliges día, verás todos los ${palabra} de esa ruta.`}
+      </p>
+      <label className="flex cursor-pointer items-start gap-2.5 text-base font-semibold text-zinc-800">
         <input
           type="checkbox"
           name="semana"
           checked={semana}
           onChange={(e) => setSemana(e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300"
+          className="mt-1 h-5 w-5 shrink-0 rounded border-zinc-300"
         />
         <span>
           Me da igual el día (esta semana)
-          <span className="mt-0.5 block text-xs font-normal text-zinc-500">
+          <span className="mt-1 block text-base font-normal leading-snug text-zinc-600">
             Busca de lunes a domingo. Útil si hay pocos {palabra}.
           </span>
         </span>
