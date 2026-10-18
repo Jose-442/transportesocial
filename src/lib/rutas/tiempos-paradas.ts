@@ -22,7 +22,7 @@ export function tiempoTramoEsBurrada(
 }
 
 /**
- * Aviso amable: el tiempo va un poco justo (p. ej. 30–40 min menos).
+ * Aviso amable: el tiempo va un poco justo (p. ej. 25+ min menos).
  * Se puede confirmar y publicar.
  */
 export function tiempoTramoMereceAvisoSuave(
@@ -108,7 +108,7 @@ export type AvisoTiempoParada = {
 
 /**
  * Compara horas puestas (salida → paradas) con tiempo estimado por carretera.
- * Destino final no tiene hora de llegada en el formulario; solo se miran tramos con hora.
+ * Devuelve un aviso por cada tramo problemático (cada uno bajo su parada).
  */
 export async function avisoTiemposParadas(opts: {
   origen: string;
@@ -116,16 +116,16 @@ export async function avisoTiemposParadas(opts: {
   fechaSalida: string;
   horaSalida: string;
   paradas: ParadaFormulario[];
-}): Promise<AvisoTiempoParada | null> {
+}): Promise<AvisoTiempoParada[]> {
   const indicesConDatos: number[] = [];
   for (let i = 0; i < opts.paradas.length; i++) {
     const p = opts.paradas[i];
     if (p.municipio.trim() && p.hora.trim()) indicesConDatos.push(i);
   }
-  if (indicesConDatos.length === 0) return null;
+  if (indicesConDatos.length === 0) return [];
 
   const salidaIso = combineDateAndTime(opts.fechaSalida, opts.horaSalida);
-  if (!salidaIso) return null;
+  if (!salidaIso) return [];
 
   const paradasConDatos = indicesConDatos.map((i) => opts.paradas[i]);
   const puntos = [
@@ -134,7 +134,7 @@ export async function avisoTiemposParadas(opts: {
     opts.destino,
   ];
   const ruta = await tramosPorCarretera(puntos);
-  if (!ruta.ok) return null;
+  if (!ruta.ok) return [];
 
   const horasIso = [
     salidaIso,
@@ -142,9 +142,9 @@ export async function avisoTiemposParadas(opts: {
       combineDateAndTime(opts.fechaSalida, p.hora)
     ),
   ];
-  if (horasIso.some((h) => !h)) return null;
+  if (horasIso.some((h) => !h)) return [];
 
-  let avisoSuave: AvisoTiempoParada | null = null;
+  const avisos: AvisoTiempoParada[] = [];
 
   for (let i = 0; i < paradasConDatos.length; i++) {
     const desde = horasIso[i]!;
@@ -159,23 +159,21 @@ export async function avisoTiemposParadas(opts: {
       minutosEstimados: tramo.minutos,
     };
     if (tiempoTramoEsBurrada(minutosUsuario, tramo.minutos)) {
-      return {
+      avisos.push({
         aviso: mensajeTiempoParadaBurrada(args),
         paradaIndex: indicesConDatos[i],
         nivel: "duro",
-      };
+      });
+      continue;
     }
-    if (
-      !avisoSuave &&
-      tiempoTramoMereceAvisoSuave(minutosUsuario, tramo.minutos)
-    ) {
-      avisoSuave = {
+    if (tiempoTramoMereceAvisoSuave(minutosUsuario, tramo.minutos)) {
+      avisos.push({
         aviso: mensajeTiempoParadaSuave(args),
         paradaIndex: indicesConDatos[i],
         nivel: "suave",
-      };
+      });
     }
   }
 
-  return avisoSuave;
+  return avisos;
 }

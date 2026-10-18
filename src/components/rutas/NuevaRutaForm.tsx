@@ -131,8 +131,10 @@ export function NuevaRutaForm({
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [errorIdentidad, setErrorIdentidad] = useState<string | null>(null);
   const [mensajeIdentidad, setMensajeIdentidad] = useState<string | null>(null);
-  /** Aviso suave de tiempos: el usuario confirma que la hora es correcta. */
-  const [horaParadaConfirmada, setHoraParadaConfirmada] = useState(false);
+  /** Avisos suaves: índices de parada cuya hora el usuario confirma. */
+  const [horasParadaConfirmadas, setHorasParadaConfirmadas] = useState<
+    Record<number, boolean>
+  >({});
 
   useEffect(() => {
     setFaltaIdentidad(mostrarAvisoIdentidad);
@@ -230,16 +232,35 @@ export function NuevaRutaForm({
     horaSalida: form.hora_salida,
     paradas: form.paradas,
   });
+  const avisoPorParada = new Map(
+    avisoTiempos.avisos.map((a) => [a.paradaIndex, a])
+  );
+  const avisoDuro = avisoTiempos.avisos.find((a) => a.nivel === "duro");
+  const suavesSinConfirmar = avisoTiempos.avisos.filter(
+    (a) => a.nivel === "suave" && !horasParadaConfirmadas[a.paradaIndex]
+  );
+  const avisosSuavesKey = avisoTiempos.avisos
+    .filter((a) => a.nivel === "suave")
+    .map((a) => a.paradaIndex)
+    .join(",");
+
+  // Si desaparece un aviso suave, se limpia solo esa marca (las demás se mantienen).
+  useEffect(() => {
+    const indicesSuaves = new Set(
+      avisosSuavesKey ? avisosSuavesKey.split(",").map(Number) : []
+    );
+    setHorasParadaConfirmadas((prev) => {
+      const next: Record<number, boolean> = {};
+      for (const idx of indicesSuaves) {
+        if (prev[idx]) next[idx] = true;
+      }
+      return next;
+    });
+  }, [avisosSuavesKey]);
 
   useEffect(() => {
-    setHoraParadaConfirmada(false);
-  }, [
-    avisoTiempos.aviso,
-    avisoTiempos.paradaIndex,
-    avisoTiempos.nivel,
-    form.hora_salida,
-    form.fecha_salida,
-  ]);
+    setHorasParadaConfirmadas({});
+  }, [form.hora_salida, form.fecha_salida]);
 
   function avisoPrecioBajo(publicadoPrecio: number): string | null {
     if (
@@ -499,16 +520,12 @@ export function NuevaRutaForm({
       soltarEnvio();
       return;
     }
-    if (avisoTiempos.aviso && avisoTiempos.nivel === "duro") {
-      setError(avisoTiempos.aviso);
+    if (avisoDuro) {
+      setError(avisoDuro.aviso);
       soltarEnvio();
       return;
     }
-    if (
-      avisoTiempos.aviso &&
-      avisoTiempos.nivel === "suave" &&
-      !horaParadaConfirmada
-    ) {
+    if (suavesSinConfirmar.length > 0) {
       setError(
         "Revisa la hora de la parada o marca debajo que es correcta."
       );
@@ -748,28 +765,35 @@ export function NuevaRutaForm({
               name={`parada_hora_${index}`}
               value={parada.hora}
               error={
-                avisoTiempos.paradaIndex === index &&
-                avisoTiempos.nivel === "duro"
-                  ? avisoTiempos.aviso ?? undefined
+                avisoPorParada.get(index)?.nivel === "duro"
+                  ? avisoPorParada.get(index)?.aviso
                   : undefined
               }
               onChange={(value) => {
-                setHoraParadaConfirmada(false);
+                setHorasParadaConfirmadas((prev) => {
+                  if (!prev[index]) return prev;
+                  const next = { ...prev };
+                  delete next[index];
+                  return next;
+                });
                 updateParada(index, "hora", value);
               }}
             />
-            {avisoTiempos.paradaIndex === index &&
-            avisoTiempos.nivel === "suave" &&
-            avisoTiempos.aviso ? (
+            {avisoPorParada.get(index)?.nivel === "suave" ? (
               <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50/80 p-3">
-                <p className="text-sm text-amber-950">{avisoTiempos.aviso}</p>
+                <p className="text-sm text-amber-950">
+                  {avisoPorParada.get(index)?.aviso}
+                </p>
                 <label className="flex cursor-pointer items-start gap-2 text-sm text-zinc-800">
                   <input
                     type="checkbox"
                     className="mt-1 h-4 w-4 rounded border-zinc-300"
-                    checked={horaParadaConfirmada}
+                    checked={Boolean(horasParadaConfirmadas[index])}
                     onChange={(e) =>
-                      setHoraParadaConfirmada(e.target.checked)
+                      setHorasParadaConfirmadas((prev) => ({
+                        ...prev,
+                        [index]: e.target.checked,
+                      }))
                     }
                   />
                   <span>La hora es correcta; no me he equivocado.</span>

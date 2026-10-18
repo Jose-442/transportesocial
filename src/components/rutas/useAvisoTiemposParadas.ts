@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { ParadaFormulario } from "@/lib/rutas/paradas";
+import type { AvisoTiempoParada } from "@/lib/rutas/tiempos-paradas";
 import { etiquetasDeViaje } from "@/lib/km-carretera";
 
 export function useAvisoTiemposParadas(opts: {
@@ -12,14 +13,10 @@ export function useAvisoTiemposParadas(opts: {
   paradas: ParadaFormulario[];
   activo?: boolean;
 }): {
-  aviso: string | null;
-  paradaIndex: number | null;
-  nivel: "suave" | "duro" | null;
+  avisos: AvisoTiempoParada[];
   cargando: boolean;
 } {
-  const [aviso, setAviso] = useState<string | null>(null);
-  const [paradaIndex, setParadaIndex] = useState<number | null>(null);
-  const [nivel, setNivel] = useState<"suave" | "duro" | null>(null);
+  const [avisos, setAvisos] = useState<AvisoTiempoParada[]>([]);
   const [cargando, setCargando] = useState(false);
   const activo = opts.activo !== false;
   const paradasKey = JSON.stringify(
@@ -31,9 +28,7 @@ export function useAvisoTiemposParadas(opts: {
 
   useEffect(() => {
     if (!activo) {
-      setAviso(null);
-      setParadaIndex(null);
-      setNivel(null);
+      setAvisos([]);
       setCargando(false);
       return;
     }
@@ -46,9 +41,7 @@ export function useAvisoTiemposParadas(opts: {
       !opts.horaSalida ||
       !hayAlguna
     ) {
-      setAviso(null);
-      setParadaIndex(null);
-      setNivel(null);
+      setAvisos([]);
       setCargando(false);
       return;
     }
@@ -72,30 +65,15 @@ export function useAvisoTiemposParadas(opts: {
       })
         .then(async (respuesta) => {
           const json = (await respuesta.json()) as {
-            aviso?: string | null;
-            paradaIndex?: number | null;
-            nivel?: "suave" | "duro" | null;
+            avisos?: AvisoTiempoParada[];
           };
           if (cancelado) return;
-          const texto = json.aviso?.trim() ? json.aviso : null;
-          setAviso(texto);
-          setParadaIndex(
-            texto != null && typeof json.paradaIndex === "number"
-              ? json.paradaIndex
-              : null
-          );
-          setNivel(
-            texto != null && (json.nivel === "suave" || json.nivel === "duro")
-              ? json.nivel
-              : null
-          );
+          setAvisos(Array.isArray(json.avisos) ? json.avisos : []);
           setCargando(false);
         })
         .catch(() => {
           if (cancelado) return;
-          setAviso(null);
-          setParadaIndex(null);
-          setNivel(null);
+          setAvisos([]);
           setCargando(false);
         });
     }, 500);
@@ -113,5 +91,5 @@ export function useAvisoTiemposParadas(opts: {
     paradasKey,
   ]);
 
-  return { aviso, paradaIndex, nivel, cargando };
+  return { avisos, cargando };
 }

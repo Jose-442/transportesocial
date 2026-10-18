@@ -172,7 +172,7 @@ export async function crearRuta(formData: FormData) {
 
   if (paradasPrep.paradas.length > 0) {
     const { avisoTiemposParadas } = await import("@/lib/rutas/tiempos-paradas");
-    const avisoTiempo = await avisoTiemposParadas({
+    const avisosTiempo = await avisoTiemposParadas({
       origen,
       destino,
       fechaSalida,
@@ -180,7 +180,8 @@ export async function crearRuta(formData: FormData) {
       paradas: parseParadasJson(formData.get("paradas")),
     });
     // Solo bloquea burradas; el aviso suave se confirma en el formulario.
-    if (avisoTiempo?.nivel === "duro") return { error: avisoTiempo.aviso };
+    const duro = avisosTiempo.find((a) => a.nivel === "duro");
+    if (duro) return { error: duro.aviso };
   }
 
   const usuarioId = user.id;
