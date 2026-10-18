@@ -75,7 +75,7 @@ export function RutaCard({
           </p>
           {item.busquedaEsTramo && (
             <div className="mt-1 space-y-0.5 text-sm font-medium text-amber-800">
-              <p>Incluye el tramo que solicitas</p>
+              <p>Pasa por el tramo que solicitas</p>
               <p className="font-normal">
                 Puedes solicitar rebaja al conductor por ese tramo
               </p>

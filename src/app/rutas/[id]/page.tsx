@@ -500,7 +500,7 @@ export default async function RutaDetallePage({
         )}
         {esTramo && (
           <div className="space-y-1 rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
-            <p>Incluye el tramo que solicitas</p>
+            <p>Pasa por el tramo que solicitas</p>
             <p>
               El precio es el del viaje completo ({origen} → {destino}). Puedes
               solicitar rebaja al conductor por ese tramo.
