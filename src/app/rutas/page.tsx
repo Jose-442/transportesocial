@@ -4,6 +4,7 @@ import { RutaCard } from "@/components/rutas/RutaCard";
 import { ListadoFiltros } from "@/components/listados/ListadoFiltros";
 import { createClient } from "@/lib/supabase/server";
 import {
+  etiquetaTramo7Dias,
   filtrosToSearchQuery,
   parseFiltros,
   tieneBusquedaCompleta,
@@ -93,17 +94,17 @@ export default async function RutasPage({
           <p className="text-sm font-medium text-zinc-700">
             {rutas.length === 1
               ? filtros.semana
-                ? "1 viaje en los próximos 7 días"
+                ? `1 viaje en el tramo ${etiquetaTramo7Dias(filtros)}`
                 : "1 viaje encontrado"
               : filtros.semana
-                ? `${rutas.length} viajes en los próximos 7 días`
+                ? `${rutas.length} viajes en el tramo ${etiquetaTramo7Dias(filtros)}`
                 : `${rutas.length} viajes encontrados`}
           </p>
           {rutas.length === 0 ? (
             filtros.semana ? (
               <p className="text-sm text-zinc-500">
-                No hay viajes en los próximos 7 días. Prueba un día concreto o
-                mira más adelante.
+                No hay viajes en el tramo {etiquetaTramo7Dias(filtros)}. Prueba
+                «7 días después», un día concreto, o mira más adelante.
               </p>
             ) : filtros.fecha ? (
               <AlertaViajeBusqueda
@@ -116,7 +117,7 @@ export default async function RutasPage({
             ) : (
               <p className="text-sm text-zinc-500">
                 No hay viajes próximos en esta ruta. Prueba con un día, marca
-                «próximos 7 días» o mira más adelante.
+                «tramo de 7 días» o mira más adelante.
               </p>
             )
           ) : (

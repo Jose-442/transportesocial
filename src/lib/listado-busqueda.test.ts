@@ -6,6 +6,7 @@ import {
   fechasDeLaSemana,
   fechasProximosDias,
   limitesBusqueda,
+  sumarDiasIso,
 } from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
 
@@ -58,12 +59,11 @@ describe("limitesBusqueda", () => {
     expect(limites?.origenes).toContain("Burgos (Burgos)");
   });
 
-  it("con semana acota los próximos 7 días desde hoy", () => {
+  it("con semana acota 7 días desde hoy si no hay desde", () => {
     const limites = limitesBusqueda(
       {
         origen: "Burgos (Burgos)",
         destino: "Madrid (Madrid)",
-        fecha: "2026-11-01",
         semana: true,
       },
       new Date("2026-10-18T12:00:00+02:00")
@@ -77,6 +77,30 @@ describe("limitesBusqueda", () => {
       "2026-10-23",
       "2026-10-24",
     ]);
+  });
+
+  it("con desde acota el tramo siguiente de 7 días", () => {
+    const limites = limitesBusqueda({
+      origen: "Burgos (Burgos)",
+      destino: "Madrid (Madrid)",
+      semana: true,
+      desde: "2026-10-25",
+    });
+    expect(limites?.fechas).toEqual([
+      "2026-10-25",
+      "2026-10-26",
+      "2026-10-27",
+      "2026-10-28",
+      "2026-10-29",
+      "2026-10-30",
+      "2026-10-31",
+    ]);
+  });
+});
+
+describe("sumarDiasIso", () => {
+  it("avanza una semana", () => {
+    expect(sumarDiasIso("2026-10-18", 7)).toBe("2026-10-25");
   });
 });
 
@@ -109,12 +133,18 @@ describe("fechasProximosDias", () => {
 });
 
 describe("coincideFechaListado", () => {
-  it("en modo semana acepta un viaje dentro de los próximos 7 días", () => {
+  it("en modo semana acepta un viaje dentro del tramo de 7 días", () => {
     const ahora = new Date("2026-10-18T12:00:00+02:00");
     const filtros = { semana: true };
     expect(coincideFechaListado("2026-10-22", filtros, ahora)).toBe(true);
     expect(coincideFechaListado("2026-10-18", filtros, ahora)).toBe(true);
     expect(coincideFechaListado("2026-10-25", filtros, ahora)).toBe(false);
+  });
+
+  it("con desde mira ese tramo, no el de hoy", () => {
+    const filtros = { semana: true, desde: "2026-10-25" };
+    expect(coincideFechaListado("2026-10-22", filtros)).toBe(false);
+    expect(coincideFechaListado("2026-10-28", filtros)).toBe(true);
   });
 
   it("con día concreto solo ese día", () => {

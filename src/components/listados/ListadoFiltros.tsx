@@ -13,6 +13,12 @@ import {
   loadOwnedDraft,
   saveOwnedDraft,
 } from "@/lib/form-draft";
+import {
+  etiquetaTramo7Dias,
+  hoyIsoMadrid,
+  inicioTramo7Dias,
+  sumarDiasIso,
+} from "@/lib/listado-filters";
 
 type Props = {
   tipo?: "viajes" | "bultos";
@@ -26,6 +32,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const origenParam = searchParams.get("origen") ?? "";
   const destinoParam = searchParams.get("destino") ?? "";
   const fechaParam = searchParams.get("fecha") ?? "";
+  const desdeParam = searchParams.get("desde") ?? "";
   const semanaParam =
     searchParams.get("semana") === "1" ||
     searchParams.get("semana") === "true" ||
@@ -36,6 +43,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const [origen, setOrigen] = useState(origenParam);
   const [destino, setDestino] = useState(destinoParam);
   const [fecha, setFecha] = useState(fechaParam);
+  const [desde, setDesde] = useState(desdeParam || hoyIsoMadrid());
   const [semana, setSemana] = useState(semanaParam);
   const [errorOrigen, setErrorOrigen] = useState("");
   const [errorDestino, setErrorDestino] = useState("");
@@ -52,6 +60,12 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         setDestino(destinoParam);
         setFecha(fechaParam);
         setSemana(semanaParam);
+        setDesde(
+          inicioTramo7Dias({
+            semana: semanaParam,
+            desde: desdeParam,
+          })
+        );
         setReady(true);
         return;
       }
@@ -60,28 +74,30 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         destino?: string;
         fecha?: string;
         semana?: boolean;
+        desde?: string;
       }>(draftKey, uid);
       if (draft) {
         setOrigen(draft.origen ?? "");
         setDestino(draft.destino ?? "");
         setFecha(draft.fecha ?? "");
         setSemana(Boolean(draft.semana));
+        setDesde(draft.desde || hoyIsoMadrid());
       }
       setReady(true);
     });
     return () => {
       cancelled = true;
     };
-  }, [draftKey, origenParam, destinoParam, fechaParam, semanaParam]);
+  }, [draftKey, origenParam, destinoParam, fechaParam, semanaParam, desdeParam]);
 
   useEffect(() => {
     if (!ready) return;
     saveOwnedDraft(
       draftKey,
-      { origen, destino, fecha, semana },
+      { origen, destino, fecha, semana, desde },
       uidRef.current
     );
-  }, [ready, draftKey, origen, destino, fecha, semana]);
+  }, [ready, draftKey, origen, destino, fecha, semana, desde]);
 
   function aplicar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -105,6 +121,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     params.set("destino", etiquetaMunicipio(destinoValido));
     if (semana) {
       params.set("semana", "1");
+      params.set("desde", (desde.trim() || hoyIsoMadrid()).slice(0, 10));
     } else if (fecha.trim()) {
       params.set("fecha", fecha.trim());
     }
@@ -115,6 +132,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     setOrigen("");
     setDestino("");
     setFecha("");
+    setDesde(hoyIsoMadrid());
     setSemana(false);
     setErrorOrigen("");
     setErrorDestino("");
@@ -122,8 +140,33 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     router.push(pathname);
   }
 
+  function irTramo(deltaSemanas: number) {
+    const origenValido = resolverMunicipio(origen);
+    const destinoValido = resolverMunicipio(destino, { incluirFrontera: true });
+    if (!origenValido || !destinoValido) {
+      if (!origenValido) setErrorOrigen("Selecciona una población de la lista");
+      if (!destinoValido) {
+        setErrorDestino("Selecciona una población de la lista");
+      }
+      return;
+    }
+    const inicio = (desde.trim() || hoyIsoMadrid()).slice(0, 10);
+    const nuevo = sumarDiasIso(inicio, deltaSemanas * 7);
+    if (!nuevo) return;
+    setDesde(nuevo);
+    setSemana(true);
+    setFecha("");
+    const params = new URLSearchParams();
+    params.set("origen", etiquetaMunicipio(origenValido));
+    params.set("destino", etiquetaMunicipio(destinoValido));
+    params.set("semana", "1");
+    params.set("desde", nuevo);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   const hayFiltros = !!(origen || destino || fecha || semana);
   const palabra = tipo === "viajes" ? "viajes" : "portes";
+  const tramoTexto = etiquetaTramo7Dias({ semana: true, desde });
 
   return (
     <form
@@ -166,13 +209,32 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           />
           <p className="text-base leading-snug text-zinc-600">
             Si eliges un día, verás los {palabra} de ese día. Si no eliges día,
-            verás los próximos {palabra} de esa ruta (los más cercanos).
+            verás los {palabra} de esa ruta ordenados por fecha de salida (los
+            que salen antes).
           </p>
         </>
       ) : (
-        <p className="text-base leading-snug text-zinc-600">
-          Verás los {palabra} de los próximos 7 días, contando desde hoy.
-        </p>
+        <div className="space-y-2">
+          <p className="text-base leading-snug text-zinc-600">
+            Tramo de 7 días: <span className="font-semibold text-zinc-800">{tramoTexto}</span>
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => irTramo(-1)}
+            >
+              7 días antes
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => irTramo(1)}
+            >
+              7 días después
+            </Button>
+          </div>
+        </div>
       )}
       <label className="flex cursor-pointer items-start gap-2.5 text-base font-semibold text-zinc-800">
         <input
@@ -182,14 +244,18 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           onChange={(e) => {
             const on = e.target.checked;
             setSemana(on);
-            if (on) setFecha("");
+            if (on) {
+              setFecha("");
+              setDesde(hoyIsoMadrid());
+            }
           }}
           className="mt-1 h-5 w-5 shrink-0 rounded border-zinc-300"
         />
         <span>
-          Me da igual el día (próximos 7 días)
+          Me da igual el día (tramo de 7 días)
           <span className="mt-1 block text-base font-normal leading-snug text-zinc-600">
-            Desde hoy hacia delante. Útil si hay pocos {palabra}.
+            Empieza en hoy. Luego puedes pasar al siguiente tramo o al
+            anterior. Útil si hay pocos {palabra}.
           </span>
         </span>
       </label>
