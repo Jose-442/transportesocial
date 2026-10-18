@@ -11,8 +11,9 @@ export function useAvisoTiemposParadas(opts: {
   horaSalida: string;
   paradas: ParadaFormulario[];
   activo?: boolean;
-}): { aviso: string | null; cargando: boolean } {
+}): { aviso: string | null; paradaIndex: number | null; cargando: boolean } {
   const [aviso, setAviso] = useState<string | null>(null);
+  const [paradaIndex, setParadaIndex] = useState<number | null>(null);
   const [cargando, setCargando] = useState(false);
   const activo = opts.activo !== false;
   const paradasKey = JSON.stringify(
@@ -25,20 +26,21 @@ export function useAvisoTiemposParadas(opts: {
   useEffect(() => {
     if (!activo) {
       setAviso(null);
+      setParadaIndex(null);
       setCargando(false);
       return;
     }
     const puntos = etiquetasDeViaje(opts.origen, opts.destino);
-    const paradas = (
-      JSON.parse(paradasKey) as { m: string; h: string }[]
-    ).filter((p) => p.m && p.h);
+    const paradasRaw = JSON.parse(paradasKey) as { m: string; h: string }[];
+    const hayAlguna = paradasRaw.some((p) => p.m && p.h);
     if (
       !puntos ||
       !opts.fechaSalida ||
       !opts.horaSalida ||
-      paradas.length === 0
+      !hayAlguna
     ) {
       setAviso(null);
+      setParadaIndex(null);
       setCargando(false);
       return;
     }
@@ -54,21 +56,32 @@ export function useAvisoTiemposParadas(opts: {
           destino: puntos.destino,
           fechaSalida: opts.fechaSalida,
           horaSalida: opts.horaSalida,
-          paradas: paradas.map((p) => ({
+          // Misma longitud/índices que el formulario.
+          paradas: paradasRaw.map((p) => ({
             municipio: p.m,
             hora: p.h,
           })),
         }),
       })
         .then(async (respuesta) => {
-          const json = (await respuesta.json()) as { aviso?: string | null };
+          const json = (await respuesta.json()) as {
+            aviso?: string | null;
+            paradaIndex?: number | null;
+          };
           if (cancelado) return;
-          setAviso(json.aviso?.trim() ? json.aviso : null);
+          const texto = json.aviso?.trim() ? json.aviso : null;
+          setAviso(texto);
+          setParadaIndex(
+            texto != null && typeof json.paradaIndex === "number"
+              ? json.paradaIndex
+              : null
+          );
           setCargando(false);
         })
         .catch(() => {
           if (cancelado) return;
           setAviso(null);
+          setParadaIndex(null);
           setCargando(false);
         });
     }, 500);
@@ -86,5 +99,5 @@ export function useAvisoTiemposParadas(opts: {
     paradasKey,
   ]);
 
-  return { aviso, cargando };
+  return { aviso, paradaIndex, cargando };
 }

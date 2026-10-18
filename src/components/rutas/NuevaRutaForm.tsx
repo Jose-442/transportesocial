@@ -723,6 +723,11 @@ export function NuevaRutaForm({
               label="Hora aproximada de paso"
               name={`parada_hora_${index}`}
               value={parada.hora}
+              error={
+                avisoTiempos.paradaIndex === index
+                  ? avisoTiempos.aviso ?? undefined
+                  : undefined
+              }
               onChange={(value) => updateParada(index, "hora", value)}
             />
           </div>
@@ -739,11 +744,6 @@ export function NuevaRutaForm({
         {avisoTiempos.cargando ? (
           <p className="text-sm text-zinc-600">
             Revisando si las horas de las paradas son posibles…
-          </p>
-        ) : null}
-        {avisoTiempos.aviso ? (
-          <p className="text-sm font-medium text-red-700" data-campo-error="">
-            {avisoTiempos.aviso}
           </p>
         ) : null}
       </div>

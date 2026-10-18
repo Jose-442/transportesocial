@@ -179,7 +179,7 @@ export async function crearRuta(formData: FormData) {
       horaSalida: horaSalidaForm,
       paradas: parseParadasJson(formData.get("paradas")),
     });
-    if (avisoTiempo) return { error: avisoTiempo };
+    if (avisoTiempo) return { error: avisoTiempo.aviso };
   }
 
   const usuarioId = user.id;

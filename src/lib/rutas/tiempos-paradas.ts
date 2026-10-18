@@ -49,7 +49,7 @@ export function mensajeTiempoParadaBurrada(opts: {
   return (
     `Entre ${opts.origen} y ${opts.destino} has puesto ${puesto}; ` +
     `en coche suelen hacer falta ${formatDuracionAprox(opts.minutosEstimados)}. ` +
-    `Revisa las horas de las paradas.`
+    `Revisa esta hora.`
   );
 }
 
@@ -58,6 +58,12 @@ function minutosEntreIso(desdeIso: string, hastaIso: string): number {
     (new Date(hastaIso).getTime() - new Date(desdeIso).getTime()) / 60000
   );
 }
+
+export type AvisoTiempoParada = {
+  aviso: string;
+  /** Índice de la parada en el formulario (bajo su casilla de hora). */
+  paradaIndex: number;
+};
 
 /**
  * Compara horas puestas (salida → paradas) con tiempo estimado por carretera.
@@ -69,15 +75,18 @@ export async function avisoTiemposParadas(opts: {
   fechaSalida: string;
   horaSalida: string;
   paradas: ParadaFormulario[];
-}): Promise<string | null> {
-  const paradasConDatos = opts.paradas.filter(
-    (p) => p.municipio.trim() && p.hora.trim()
-  );
-  if (paradasConDatos.length === 0) return null;
+}): Promise<AvisoTiempoParada | null> {
+  const indicesConDatos: number[] = [];
+  for (let i = 0; i < opts.paradas.length; i++) {
+    const p = opts.paradas[i];
+    if (p.municipio.trim() && p.hora.trim()) indicesConDatos.push(i);
+  }
+  if (indicesConDatos.length === 0) return null;
 
   const salidaIso = combineDateAndTime(opts.fechaSalida, opts.horaSalida);
   if (!salidaIso) return null;
 
+  const paradasConDatos = indicesConDatos.map((i) => opts.paradas[i]);
   const puntos = [
     opts.origen,
     ...paradasConDatos.map((p) => p.municipio),
@@ -86,7 +95,6 @@ export async function avisoTiemposParadas(opts: {
   const ruta = await tramosPorCarretera(puntos);
   if (!ruta.ok) return null;
 
-  // Tramos con hora de usuario: salida→p1, p1→p2, ... (no el último a destino).
   const horasIso = [
     salidaIso,
     ...paradasConDatos.map((p) =>
@@ -102,12 +110,15 @@ export async function avisoTiemposParadas(opts: {
     const tramo = ruta.tramos[i];
     if (!tramo) continue;
     if (tiempoTramoEsBurrada(minutosUsuario, tramo.minutos)) {
-      return mensajeTiempoParadaBurrada({
-        origen: tramo.origen,
-        destino: tramo.destino,
-        minutosUsuario,
-        minutosEstimados: tramo.minutos,
-      });
+      return {
+        aviso: mensajeTiempoParadaBurrada({
+          origen: tramo.origen,
+          destino: tramo.destino,
+          minutosUsuario,
+          minutosEstimados: tramo.minutos,
+        }),
+        paradaIndex: indicesConDatos[i],
+      };
     }
   }
 

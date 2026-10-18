@@ -40,5 +40,6 @@ describe("mensajeTiempoParadaBurrada", () => {
     expect(texto).toContain("Zaragoza");
     expect(texto).toContain("15 minutos");
     expect(texto).toMatch(/3 h/);
+    expect(texto).toContain("Revisa esta hora");
   });
 });
