@@ -11,9 +11,15 @@ export function useAvisoTiemposParadas(opts: {
   horaSalida: string;
   paradas: ParadaFormulario[];
   activo?: boolean;
-}): { aviso: string | null; paradaIndex: number | null; cargando: boolean } {
+}): {
+  aviso: string | null;
+  paradaIndex: number | null;
+  nivel: "suave" | "duro" | null;
+  cargando: boolean;
+} {
   const [aviso, setAviso] = useState<string | null>(null);
   const [paradaIndex, setParadaIndex] = useState<number | null>(null);
+  const [nivel, setNivel] = useState<"suave" | "duro" | null>(null);
   const [cargando, setCargando] = useState(false);
   const activo = opts.activo !== false;
   const paradasKey = JSON.stringify(
@@ -27,6 +33,7 @@ export function useAvisoTiemposParadas(opts: {
     if (!activo) {
       setAviso(null);
       setParadaIndex(null);
+      setNivel(null);
       setCargando(false);
       return;
     }
@@ -41,6 +48,7 @@ export function useAvisoTiemposParadas(opts: {
     ) {
       setAviso(null);
       setParadaIndex(null);
+      setNivel(null);
       setCargando(false);
       return;
     }
@@ -56,7 +64,6 @@ export function useAvisoTiemposParadas(opts: {
           destino: puntos.destino,
           fechaSalida: opts.fechaSalida,
           horaSalida: opts.horaSalida,
-          // Misma longitud/índices que el formulario.
           paradas: paradasRaw.map((p) => ({
             municipio: p.m,
             hora: p.h,
@@ -67,6 +74,7 @@ export function useAvisoTiemposParadas(opts: {
           const json = (await respuesta.json()) as {
             aviso?: string | null;
             paradaIndex?: number | null;
+            nivel?: "suave" | "duro" | null;
           };
           if (cancelado) return;
           const texto = json.aviso?.trim() ? json.aviso : null;
@@ -76,12 +84,18 @@ export function useAvisoTiemposParadas(opts: {
               ? json.paradaIndex
               : null
           );
+          setNivel(
+            texto != null && (json.nivel === "suave" || json.nivel === "duro")
+              ? json.nivel
+              : null
+          );
           setCargando(false);
         })
         .catch(() => {
           if (cancelado) return;
           setAviso(null);
           setParadaIndex(null);
+          setNivel(null);
           setCargando(false);
         });
     }, 500);
@@ -99,5 +113,5 @@ export function useAvisoTiemposParadas(opts: {
     paradasKey,
   ]);
 
-  return { aviso, paradaIndex, cargando };
+  return { aviso, paradaIndex, nivel, cargando };
 }

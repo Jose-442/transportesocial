@@ -2,7 +2,7 @@ import { combineDateAndTime } from "@/lib/datetime-form";
 import { tramosPorCarretera } from "@/lib/km-carretera";
 import type { ParadaFormulario } from "@/lib/rutas/paradas";
 
-/** Si el tiempo puesto es mucho menor que el de carretera, es una burrada. */
+/** Burrada: mucho menos de la mitad del tiempo normal (no se puede publicar). */
 export function tiempoTramoEsBurrada(
   minutosUsuario: number,
   minutosEstimados: number
@@ -21,6 +21,29 @@ export function tiempoTramoEsBurrada(
   return minutosUsuario < minutosEstimados * 0.55;
 }
 
+/**
+ * Aviso amable: el tiempo va un poco justo (p. ej. 30–40 min menos).
+ * Se puede confirmar y publicar.
+ */
+export function tiempoTramoMereceAvisoSuave(
+  minutosUsuario: number,
+  minutosEstimados: number
+): boolean {
+  if (tiempoTramoEsBurrada(minutosUsuario, minutosEstimados)) return false;
+  if (
+    !Number.isFinite(minutosUsuario) ||
+    !Number.isFinite(minutosEstimados) ||
+    minutosUsuario < 0 ||
+    minutosEstimados < 1
+  ) {
+    return false;
+  }
+  const falta = minutosEstimados - minutosUsuario;
+  if (falta < 20) return false;
+  if (minutosEstimados <= 45) return falta >= 15;
+  return falta >= 25;
+}
+
 export function formatDuracionAprox(minutos: number): string {
   const m = Math.max(1, Math.round(minutos));
   if (m < 60) return `unos ${m} minutos`;
@@ -36,20 +59,36 @@ export function formatDuracionAprox(minutos: number): string {
     : `unas ${h} h y ${rest} min`;
 }
 
+function textoTiempoPuesto(minutosUsuario: number): string {
+  return minutosUsuario < 60
+    ? `${Math.round(minutosUsuario)} minutos`
+    : formatDuracionAprox(minutosUsuario).replace(/^unas?\s+/i, "");
+}
+
+export function mensajeTiempoParadaSuave(opts: {
+  origen: string;
+  destino: string;
+  minutosUsuario: number;
+  minutosEstimados: number;
+}): string {
+  return (
+    `Entre ${opts.origen} y ${opts.destino} el tiempo parece un poco justo ` +
+    `(has puesto ${textoTiempoPuesto(opts.minutosUsuario)}; ` +
+    `en coche suelen hacer falta ${formatDuracionAprox(opts.minutosEstimados)}). ` +
+    `Revisa por si te equivocaste. Si la hora es correcta, márcalo debajo.`
+  );
+}
+
 export function mensajeTiempoParadaBurrada(opts: {
   origen: string;
   destino: string;
   minutosUsuario: number;
   minutosEstimados: number;
 }): string {
-  const puesto =
-    opts.minutosUsuario < 60
-      ? `${Math.round(opts.minutosUsuario)} minutos`
-      : formatDuracionAprox(opts.minutosUsuario).replace(/^unas?\s+/i, "");
   return (
-    `Entre ${opts.origen} y ${opts.destino} has puesto ${puesto}; ` +
+    `Entre ${opts.origen} y ${opts.destino} has puesto ${textoTiempoPuesto(opts.minutosUsuario)}; ` +
     `en coche suelen hacer falta ${formatDuracionAprox(opts.minutosEstimados)}. ` +
-    `Revisa esta hora.`
+    `Esa hora parece imposible: corrígela, por favor.`
   );
 }
 
@@ -63,6 +102,8 @@ export type AvisoTiempoParada = {
   aviso: string;
   /** Índice de la parada en el formulario (bajo su casilla de hora). */
   paradaIndex: number;
+  /** suave = se puede confirmar; duro = hay que corregir. */
+  nivel: "suave" | "duro";
 };
 
 /**
@@ -103,24 +144,38 @@ export async function avisoTiemposParadas(opts: {
   ];
   if (horasIso.some((h) => !h)) return null;
 
+  let avisoSuave: AvisoTiempoParada | null = null;
+
   for (let i = 0; i < paradasConDatos.length; i++) {
     const desde = horasIso[i]!;
     const hasta = horasIso[i + 1]!;
     const minutosUsuario = minutosEntreIso(desde, hasta);
     const tramo = ruta.tramos[i];
     if (!tramo) continue;
+    const args = {
+      origen: tramo.origen,
+      destino: tramo.destino,
+      minutosUsuario,
+      minutosEstimados: tramo.minutos,
+    };
     if (tiempoTramoEsBurrada(minutosUsuario, tramo.minutos)) {
       return {
-        aviso: mensajeTiempoParadaBurrada({
-          origen: tramo.origen,
-          destino: tramo.destino,
-          minutosUsuario,
-          minutosEstimados: tramo.minutos,
-        }),
+        aviso: mensajeTiempoParadaBurrada(args),
         paradaIndex: indicesConDatos[i],
+        nivel: "duro",
+      };
+    }
+    if (
+      !avisoSuave &&
+      tiempoTramoMereceAvisoSuave(minutosUsuario, tramo.minutos)
+    ) {
+      avisoSuave = {
+        aviso: mensajeTiempoParadaSuave(args),
+        paradaIndex: indicesConDatos[i],
+        nivel: "suave",
       };
     }
   }
 
-  return null;
+  return avisoSuave;
 }

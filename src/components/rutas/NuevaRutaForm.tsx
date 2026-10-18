@@ -131,6 +131,8 @@ export function NuevaRutaForm({
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [errorIdentidad, setErrorIdentidad] = useState<string | null>(null);
   const [mensajeIdentidad, setMensajeIdentidad] = useState<string | null>(null);
+  /** Aviso suave de tiempos: el usuario confirma que la hora es correcta. */
+  const [horaParadaConfirmada, setHoraParadaConfirmada] = useState(false);
 
   useEffect(() => {
     setFaltaIdentidad(mostrarAvisoIdentidad);
@@ -228,6 +230,17 @@ export function NuevaRutaForm({
     horaSalida: form.hora_salida,
     paradas: form.paradas,
   });
+
+  useEffect(() => {
+    setHoraParadaConfirmada(false);
+  }, [
+    avisoTiempos.aviso,
+    avisoTiempos.paradaIndex,
+    avisoTiempos.nivel,
+    form.hora_salida,
+    form.fecha_salida,
+  ]);
+
   function avisoPrecioBajo(publicadoPrecio: number): string | null {
     if (
       minimoVisible == null ||
@@ -486,8 +499,19 @@ export function NuevaRutaForm({
       soltarEnvio();
       return;
     }
-    if (avisoTiempos.aviso) {
+    if (avisoTiempos.aviso && avisoTiempos.nivel === "duro") {
       setError(avisoTiempos.aviso);
+      soltarEnvio();
+      return;
+    }
+    if (
+      avisoTiempos.aviso &&
+      avisoTiempos.nivel === "suave" &&
+      !horaParadaConfirmada
+    ) {
+      setError(
+        "Revisa la hora de la parada o marca debajo que es correcta."
+      );
       soltarEnvio();
       return;
     }
@@ -724,12 +748,34 @@ export function NuevaRutaForm({
               name={`parada_hora_${index}`}
               value={parada.hora}
               error={
-                avisoTiempos.paradaIndex === index
+                avisoTiempos.paradaIndex === index &&
+                avisoTiempos.nivel === "duro"
                   ? avisoTiempos.aviso ?? undefined
                   : undefined
               }
-              onChange={(value) => updateParada(index, "hora", value)}
+              onChange={(value) => {
+                setHoraParadaConfirmada(false);
+                updateParada(index, "hora", value);
+              }}
             />
+            {avisoTiempos.paradaIndex === index &&
+            avisoTiempos.nivel === "suave" &&
+            avisoTiempos.aviso ? (
+              <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50/80 p-3">
+                <p className="text-sm text-amber-950">{avisoTiempos.aviso}</p>
+                <label className="flex cursor-pointer items-start gap-2 text-sm text-zinc-800">
+                  <input
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 rounded border-zinc-300"
+                    checked={horaParadaConfirmada}
+                    onChange={(e) =>
+                      setHoraParadaConfirmada(e.target.checked)
+                    }
+                  />
+                  <span>La hora es correcta; no me he equivocado.</span>
+                </label>
+              </div>
+            ) : null}
           </div>
         ))}
         {form.paradas.length < MAX_PARADAS_INTERMEDIAS ? (

@@ -179,7 +179,8 @@ export async function crearRuta(formData: FormData) {
       horaSalida: horaSalidaForm,
       paradas: parseParadasJson(formData.get("paradas")),
     });
-    if (avisoTiempo) return { error: avisoTiempo.aviso };
+    // Solo bloquea burradas; el aviso suave se confirma en el formulario.
+    if (avisoTiempo?.nivel === "duro") return { error: avisoTiempo.aviso };
   }
 
   const usuarioId = user.id;

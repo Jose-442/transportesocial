@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   formatDuracionAprox,
-  mensajeTiempoParadaBurrada,
+  mensajeTiempoParadaSuave,
   tiempoTramoEsBurrada,
+  tiempoTramoMereceAvisoSuave,
 } from "@/lib/rutas/tiempos-paradas";
 
 describe("tiempoTramoEsBurrada", () => {
@@ -10,14 +11,22 @@ describe("tiempoTramoEsBurrada", () => {
     expect(tiempoTramoEsBurrada(15, 180)).toBe(true);
   });
 
-  it("acepta un margen razonable", () => {
-    expect(tiempoTramoEsBurrada(120, 180)).toBe(false);
-    expect(tiempoTramoEsBurrada(100, 180)).toBe(false);
+  it("no trata 3 h como burrada si hacen falta 3 h 37", () => {
+    expect(tiempoTramoEsBurrada(180, 217)).toBe(false);
+  });
+});
+
+describe("tiempoTramoMereceAvisoSuave", () => {
+  it("avisa si faltan unos 37 minutos", () => {
+    expect(tiempoTramoMereceAvisoSuave(180, 217)).toBe(true);
   });
 
-  it("en tramos cortos solo marca extremos", () => {
-    expect(tiempoTramoEsBurrada(3, 20)).toBe(true);
-    expect(tiempoTramoEsBurrada(12, 20)).toBe(false);
+  it("no avisa con poco margen", () => {
+    expect(tiempoTramoMereceAvisoSuave(205, 217)).toBe(false);
+  });
+
+  it("no solapa con burrada", () => {
+    expect(tiempoTramoMereceAvisoSuave(15, 180)).toBe(false);
   });
 });
 
@@ -28,18 +37,17 @@ describe("formatDuracionAprox", () => {
   });
 });
 
-describe("mensajeTiempoParadaBurrada", () => {
-  it("explica origen, destino y tiempos", () => {
-    const texto = mensajeTiempoParadaBurrada({
+describe("mensajeTiempoParadaSuave", () => {
+  it("pide revisar y confirmar", () => {
+    const texto = mensajeTiempoParadaSuave({
       origen: "Madrid",
       destino: "Zaragoza",
-      minutosUsuario: 15,
-      minutosEstimados: 180,
+      minutosUsuario: 180,
+      minutosEstimados: 217,
     });
     expect(texto).toContain("Madrid");
-    expect(texto).toContain("Zaragoza");
-    expect(texto).toContain("15 minutos");
-    expect(texto).toMatch(/3 h/);
-    expect(texto).toContain("Revisa esta hora");
+    expect(texto).toContain("un poco justo");
+    expect(texto).toContain("Revisa por si te equivocaste");
+    expect(texto).toContain("márcalo debajo");
   });
 });

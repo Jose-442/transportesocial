@@ -31,5 +31,6 @@ export async function POST(request: Request) {
   return NextResponse.json({
     aviso: resultado?.aviso ?? null,
     paradaIndex: resultado?.paradaIndex ?? null,
+    nivel: resultado?.nivel ?? null,
   });
 }
