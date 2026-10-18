@@ -42,7 +42,7 @@ export function ModificarMiReserva({
         Modificar mi reserva
       </p>
       <p className="mt-1 text-sm text-emerald-900">
-        Solo para ampliar lo que ya pediste. Se cobra por la App.
+        Solo para ampliar lo que ya pediste.
       </p>
       <ButtonLink
         href={`/rutas/${rutaId}?ampliar=${query}`}

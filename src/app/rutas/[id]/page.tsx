@@ -617,7 +617,7 @@ export default async function RutaDetallePage({
             Modificar mi reserva
           </p>
           <p className="text-sm text-zinc-600">
-            Amplía lo que ya pediste. Se cobra por la App.
+            Amplía lo que ya pediste.
           </p>
           {ampliarMuestraPlaza ? (
             <OfertasCapacidadReserva
