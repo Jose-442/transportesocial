@@ -10,6 +10,7 @@ import {
   mensajeAvisoConductorConfirmada,
   mensajeAvisoConductorPendiente,
 } from "@/lib/reservas/rebaja";
+import { horasAprobacionConductor } from "@/lib/reservas/timing";
 import { plazoResenaDesde } from "@/lib/resenas/visibility";
 import { getStripeServer } from "@/lib/stripe/server";
 import { sincronizarOcupacionRuta } from "@/lib/capacidad/ocupacion";
@@ -35,7 +36,8 @@ function sumaEurosToCents(values: number[]): number {
 async function aplicarConfirmarPagoViaje(
   db: SupabaseClient,
   reservaIds: string[],
-  paymentIntentId: string
+  paymentIntentId: string,
+  horasAprobacion: number = CONDUCTOR_APPROVAL_HOURS
 ): Promise<{ filas: FilaPagoViaje[]; error?: string }> {
   const ids = [...new Set(reservaIds.filter(Boolean))];
   if (ids.length === 0) {
@@ -45,7 +47,7 @@ async function aplicarConfirmarPagoViaje(
   const { data, error } = await db.rpc("confirmar_pago_viaje", {
     p_reserva_ids: ids,
     p_payment_intent_id: paymentIntentId,
-    p_horas_aprobacion: CONDUCTOR_APPROVAL_HOURS,
+    p_horas_aprobacion: horasAprobacion,
   });
 
   if (error) {
@@ -99,10 +101,16 @@ export async function confirmarPagoReservas(
     }
   }
 
+  const horasAprobacion = Math.min(
+    ...pendientes.map((item) =>
+      horasAprobacionConductor(item.fecha_llegada_prevista)
+    )
+  );
   const aplicado = await aplicarConfirmarPagoViaje(
     admin,
     pendientes.map((item) => item.id),
-    paymentIntentId
+    paymentIntentId,
+    horasAprobacion
   );
   if (aplicado.error) return { error: aplicado.error };
 
@@ -209,7 +217,8 @@ export async function confirmarPagoViajeDesdeIntent(
   const aplicado = await aplicarConfirmarPagoViaje(
     supabase,
     idsGrupo,
-    paymentIntentId
+    paymentIntentId,
+    horasAprobacionConductor(principal.fecha_llegada_prevista)
   );
   if (aplicado.error) return { error: aplicado.error };
 
@@ -370,7 +379,7 @@ async function avisarReservaCapacidad(
       user_id: r.transportista_id,
       tipo: "reserva_pendiente_aprobacion",
       titulo: "Solicitud de capacidad extra",
-      mensaje: "Tienes 8 horas para aceptar o rechazar esta reserva.",
+      mensaje: mensajeAvisoConductorPendiente(false),
       enlace: `/reservas/${r.id}`,
     });
     await crearNotificacion(admin, {

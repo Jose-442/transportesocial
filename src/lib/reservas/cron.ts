@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { CONDUCTOR_APPROVAL_HOURS } from "@/lib/constants";
 import { abrirChatReserva } from "@/lib/reservas/chat";
 import { liberarPagoConductor, reembolsarReserva } from "@/lib/reservas/payment";
 import { crearNotificacion } from "@/lib/reservas/notify";
@@ -25,7 +26,11 @@ export async function procesarCronsReservas(admin: AdminClient) {
     .lte("expira_aprobacion_en", ahora);
 
   for (const r of expiradas ?? []) {
-    await reembolsarReserva(admin, r.id, "Conductor no respondió en el plazo de 8 horas.");
+    await reembolsarReserva(
+      admin,
+      r.id,
+      `Conductor no respondió en el plazo de ${CONDUCTOR_APPROVAL_HOURS} horas.`
+    );
     await crearNotificacion(admin, {
       user_id: r.cliente_id,
       tipo: "reserva_expirada",

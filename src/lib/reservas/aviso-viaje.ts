@@ -69,7 +69,7 @@ const ESTADOS_YA_ACEPTADA: Reserva["estado"][] = [
 ];
 
 /**
- * El aviso de «8 horas para aceptar» no debe seguir diciendo eso
+ * El aviso de «N horas para aceptar» no debe seguir diciendo eso
  * si el conductor ya respondió (aunque el aviso esté marcado como leído).
  */
 export function avisoPendienteAlDia<

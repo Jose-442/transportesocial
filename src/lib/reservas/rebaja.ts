@@ -1,3 +1,4 @@
+import { CONDUCTOR_APPROVAL_HOURS } from "@/lib/constants";
 import {
   centimosAEuros,
   eurosACentimos,
@@ -16,9 +17,9 @@ export const TEXTO_PLAZO_REBAJA = "Solo hasta 48 horas antes del viaje.";
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */
 export function mensajeAvisoConductorPendiente(pideRebaja: boolean): string {
   if (pideRebaja) {
-    return "Tienes 8 horas para aceptar o rechazar. Quien reservó ha solicitado una rebaja.";
+    return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar. Quien reservó ha solicitado una rebaja.`;
   }
-  return "Tienes 8 horas para aceptar o rechazar esta reserva.";
+  return `Tienes ${CONDUCTOR_APPROVAL_HOURS} horas para aceptar o rechazar esta reserva.`;
 }
 
 export function mensajeAvisoConductorConfirmada(pideRebaja: boolean): string {

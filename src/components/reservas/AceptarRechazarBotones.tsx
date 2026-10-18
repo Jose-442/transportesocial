@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { CONDUCTOR_APPROVAL_HOURS } from "@/lib/constants";
 
 export function AceptarRechazarBotones({
   reservaId,
@@ -46,8 +47,8 @@ export function AceptarRechazarBotones({
         <>
           <p className="text-sm text-zinc-600">
             Al poner precio ya aceptaste el viaje. Si no puedes hacerlo, rechaza
-            en las próximas 8 horas (el otro recibirá aviso y reembolso). Si no
-            rechazas, el viaje queda confirmado.
+            en las próximas {CONDUCTOR_APPROVAL_HOURS} horas (el otro recibirá
+            aviso y reembolso). Si no rechazas, el viaje queda confirmado.
           </p>
           <Button
             type="button"
