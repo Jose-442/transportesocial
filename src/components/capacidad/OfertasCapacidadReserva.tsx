@@ -20,10 +20,17 @@ import { SolicitarRebaja } from "@/components/reservas/SolicitarRebaja";
 import { cabeRebaja } from "@/lib/reservas/rebaja";
 import type { OfertaCapacidad } from "@/types/database";
 
-function etiquetaOferta(oferta: OfertaCapacidad): string {
+function etiquetaOferta(
+  oferta: OfertaCapacidad,
+  { pasajero = false }: { pasajero?: boolean } = {}
+): string {
   if (oferta.tipo === "asiento") {
     const libres = plazasLibresOferta(oferta);
-    return `Plaza de acompañante · ${libres} disponible${libres !== 1 ? "s" : ""}`;
+    const nombre = pasajero ? "Plaza de pasajero" : "Plaza de acompañante";
+    if (pasajero) {
+      return `${nombre} - ${libres} disponible${libres !== 1 ? "s" : ""}`;
+    }
+    return `${nombre} · ${libres} disponible${libres !== 1 ? "s" : ""}`;
   }
   const espacio = [
     oferta.espacio_tamano
@@ -95,12 +102,16 @@ export function OfertasCapacidadReserva({
   const ofertaSel = disponibles.find((o) => o.id === ofertaId);
   const maxCantidad = ofertaSel ? plazasLibresOferta(ofertaSel) : 1;
   const esAsiento = ofertaSel?.tipo === "asiento";
+  const ampliarPlaza = soloTipo === "asiento";
+  const preguntarSiNoPlaza = ampliarPlaza && esAsiento && maxCantidad === 1;
 
   useEffect(() => {
+    // Ampliar con 1 plaza: espera Sí/No; no marcar sola.
+    if (preguntarSiNoPlaza) return;
     if (esAsiento && maxCantidad === 1 && cantidad !== "1") {
       setForm((prev) => ({ ...prev, cantidad: "1" }));
     }
-  }, [esAsiento, maxCantidad, cantidad, setForm]);
+  }, [preguntarSiNoPlaza, esAsiento, maxCantidad, cantidad, setForm]);
 
   const plazasElegidas = Math.max(0, Number.parseInt(cantidad, 10) || 0);
   const desglose =
@@ -112,9 +123,13 @@ export function OfertasCapacidadReserva({
             precio_total: Number(ofertaSel.precio_publicado) * plazasElegidas,
             cantidad: plazasElegidas,
             bulto_descripcion: esAsiento
-              ? plazasElegidas > 1
-                ? `Plazas de acompañante (×${plazasElegidas})`
-                : "Plaza de acompañante (×1)"
+              ? ampliarPlaza
+                ? plazasElegidas > 1
+                  ? `Plazas de pasajero (×${plazasElegidas})`
+                  : "Plaza de pasajero (×1)"
+                : plazasElegidas > 1
+                  ? `Plazas de acompañante (×${plazasElegidas})`
+                  : "Plaza de acompañante (×1)"
               : "bulto",
           },
         ])
@@ -234,14 +249,45 @@ export function OfertasCapacidadReserva({
         >
           {disponibles.map((o) => (
             <option key={o.id} value={o.id}>
-              {etiquetaOferta(o)} — {formatEur(Number(o.precio_publicado))}
-              {o.tipo === "asiento" ? "/plaza" : ""}
+              {ampliarPlaza && o.tipo === "asiento"
+                ? `${etiquetaOferta(o, { pasajero: true })}, ${formatEur(Number(o.precio_publicado))}`
+                : `${etiquetaOferta(o)} — ${formatEur(Number(o.precio_publicado))}${
+                    o.tipo === "asiento" ? "/plaza" : ""
+                  }`}
             </option>
           ))}
         </select>
       </label>
 
-      {esAsiento && ofertaSel && maxCantidad >= 1 && (
+      {preguntarSiNoPlaza ? (
+        <label className="block space-y-1.5">
+          <span className="text-sm font-medium text-zinc-800">
+            ¿Quieres reservar esta plaza?
+          </span>
+          <select
+            value={cantidad === "1" ? "si" : cantidad === "0" ? "no" : ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              setForm((prev) => ({
+                ...prev,
+                cantidad: v === "si" ? "1" : v === "no" ? "0" : "",
+              }));
+            }}
+            className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900"
+            required
+            data-campo=""
+            {...(cantidad !== "1" && cantidad !== "0"
+              ? { "data-campo-vacio": "" }
+              : {})}
+          >
+            <option value="">Elige Sí o No</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+      ) : null}
+
+      {esAsiento && ofertaSel && maxCantidad > 1 && (
         <CampoNumeroPlazas
           plazasLibres={maxCantidad}
           plazasTotales={ofertaSel.plazas_totales}
@@ -249,6 +295,11 @@ export function OfertasCapacidadReserva({
           value={cantidad}
           onChange={(value) =>
             setForm((prev) => ({ ...prev, cantidad: value }))
+          }
+          label={
+            ampliarPlaza
+              ? "¿Cuántas plazas quieres?"
+              : undefined
           }
         />
       )}
@@ -324,7 +375,16 @@ export function OfertasCapacidadReserva({
           {error}
         </p>
       )}
-      <Button type="submit" fullWidth disabled={loading || !ofertaSel}>
+      <Button
+        type="submit"
+        fullWidth
+        disabled={
+          loading ||
+          !ofertaSel ||
+          (preguntarSiNoPlaza && cantidad !== "1") ||
+          (esAsiento && plazasElegidas < 1)
+        }
+      >
         {loading ? "Preparando pago…" : "Pagar y reservar"}
       </Button>
     </form>

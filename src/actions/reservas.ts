@@ -886,24 +886,28 @@ export async function solicitarReservaCapacidad(
     if ("error" in porte) return { error: porte.error };
   }
 
-  const { data: reservaActiva } = await supabase
-    .from("reservas")
-    .select("id")
-    .eq("oferta_capacidad_id", ofertaId)
-    .eq("cliente_id", user.id)
-    .in("estado", [
-      "pendiente_pago",
-      "pendiente_aprobacion",
-      "confirmada",
-      "pagado_escrow",
-      "en_transito",
-      "entregado",
-      "disputa",
-    ])
-    .maybeSingle();
+  // Asiento: se puede ampliar con otra reserva si aún hay plazas libres.
+  // Bulto: solo una reserva activa por oferta.
+  if (oferta.tipo !== "asiento") {
+    const { data: reservaActiva } = await supabase
+      .from("reservas")
+      .select("id")
+      .eq("oferta_capacidad_id", ofertaId)
+      .eq("cliente_id", user.id)
+      .in("estado", [
+        "pendiente_pago",
+        "pendiente_aprobacion",
+        "confirmada",
+        "pagado_escrow",
+        "en_transito",
+        "entregado",
+        "disputa",
+      ])
+      .maybeSingle();
 
-  if (reservaActiva) {
-    return { error: "Ya tienes una reserva activa para esta oferta." };
+    if (reservaActiva) {
+      return { error: "Ya tienes una reserva activa para esta oferta." };
+    }
   }
 
   if (opts?.conPago !== false) {

@@ -12,6 +12,7 @@ export function CampoNumeroPlazas({
   value,
   onChange,
   error,
+  label = "Número de plazas para pasajeros en este viaje",
 }: {
   plazasLibres: number;
   plazasTotales: number;
@@ -19,6 +20,7 @@ export function CampoNumeroPlazas({
   value: string;
   onChange: (value: string) => void;
   error?: string;
+  label?: string;
 }) {
   // Solo 1 plaza libre: no hay elección; se apunta 1 y se omite el desplegable.
   useEffect(() => {
@@ -38,7 +40,7 @@ export function CampoNumeroPlazas({
 
   return (
     <Select
-      label="Número de plazas para pasajeros en este viaje"
+      label={label}
       labelRight={
         <AsientosLibresDots
           ofrecidas={plazasTotales}
