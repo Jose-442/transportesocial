@@ -2,6 +2,8 @@
 -- Pegar en Supabase → SQL Editor → Run.
 -- NO borra la estructura de la web; solo los datos de prueba.
 -- Irreversible: después hay que volver a registrarse.
+-- Las fotos no se pueden borrar desde aquí.
+-- Después del Run: Storage → avatars y bultos-fotos → borrar los archivos.
 
 DO $$
 DECLARE
@@ -19,6 +21,7 @@ DECLARE
     'anuncios_bultos',
     'rutas_conductores',
     'notificaciones',
+    'alertas_viaje',
     'profiles'
   ];
 BEGIN
@@ -35,9 +38,6 @@ BEGIN
 END $$;
 
 DELETE FROM auth.users;
-
--- Las fotos no se pueden borrar aquí (Supabase obliga a usar Storage).
--- Dashboard → Storage → buckets avatars y bultos-fotos → borrar archivos.
 
 -- Comprobar que todo quedó a cero (todas las filas deben decir 0):
 SELECT 'auth.users' AS tabla, count(*)::bigint AS filas FROM auth.users

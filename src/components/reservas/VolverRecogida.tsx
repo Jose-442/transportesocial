@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { deshacerConfirmacionRecogida } from "@/lib/reservas/recogida";
-
-export function claveDeshacerRecogida(reservaId: string): string {
-  return `ts-deshacer-recogida:${reservaId}`;
-}
+import { claveDeshacerRecogida } from "@/lib/reservas/clave-deshacer-recogida";
 
 function esVueltaAtras(): boolean {
   const nav = performance.getEntriesByType("navigation")[0] as

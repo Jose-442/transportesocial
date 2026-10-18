@@ -3,10 +3,8 @@
 import { useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
-import {
-  CamposIdentidadPago,
-  guardarIdentidadParaPagar,
-} from "@/components/cuenta/CamposIdentidadPago";
+import { CamposIdentidadPago } from "@/components/cuenta/CamposIdentidadPago";
+import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
 import { iniciarPagoReserva } from "@/actions/reservas";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";

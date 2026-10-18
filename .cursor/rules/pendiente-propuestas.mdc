@@ -11,14 +11,71 @@ alwaysApply: true
 2. Web vaciada de datos de prueba (todo a 0).
 3. Conductor no ve ni recibe aviso de reservas en «pendiente de pago» (solo quien paga).
 
-## Sigue pendiente de probar
+## Hecho (16-oct-2026)
 
-**Conductor rechaza un viaje YA PAGADO por quien necesitaba el porte.**
+1. Conductor rechaza un viaje ya pagado: llegó el aviso y Stripe devolvió los 64,90 € enteros. Ese aviso aún decía «en curso».
+2. Buscar conductor y buscar portes vuelven a abrir.
+3. Si la contraseña lleva un espacio al principio o al final, sale un aviso rojo.
+4. Si preparar el pago falla, el botón no se queda en «Preparando pago...».
 
-Comprobar:
-1. El conductor puede pulsar rechazar/cancelar hasta la hora del viaje.
-2. Al otro le llega aviso.
-3. Se inicia el reembolso del 100 % (también gastos de gestión).
+## Hecho esta noche (16-oct-2026)
+
+1. Regla de cancelación: si cancela el conductor, se devuelve todo y la comisión de Stripe la paga la web. Si cancela quien reservó en la primera hora desde el pago, también se devuelve todo. Pasada esa hora, quien reservó pierde el 18 % en todos los casos. Si además faltan menos de 24 horas y el conductor ya había aceptado, el conductor se queda la mitad del viaje. Escrito en Términos y Quiénes somos.
+2. En el chat, quien reservó ve el botón para cancelar.
+3. Cancelar con conductor ya aceptado y más de 24 h: reembolso parcial 40 € de 47,20 € en Stripe.
+4. Aviso al conductor: «El viaje sigue publicado» (los avisos viejos no cambian solos).
+5. Al rellenar un campo, el cursor pasa al siguiente; los minutos de la hora se dejan en punto si no los tocas.
+
+## Hecho esta mañana (16-oct-2026)
+
+1. Quien reservó canceló el viaje de 47,20 € (Burgos → Madrid, 17/10 a las 13:00) mientras esperaba al conductor. En Stripe está Reembolsado. El aviso dice que el reembolso ya está hecho. En el viaje, debajo de Cancelado, también. El estado dice «Cancelado solo para Tir» y «El viaje sigue publicado.» Ese viaje no se vuelve a usar.
+
+## Hecho (17-oct-2026, mañana)
+
+1. Stripe: cancelación primera hora (47,20 €) → Reembolsado entero; neto −1,74 € (comisión la paga la web).
+2. Aviso push «Avisos en el móvil» oculto en PC.
+3. Correos: pago hecho y cancelación hecha (a quien pagó).
+4. Frase precio: «Gastos de gestión, IVA y banco todo incluido.»
+5. Scroll al escribir descripción del bulto: ya no baja solo.
+6. Aviso de rebaja al conductor: título «Hay una solicitud de rebaja»; recuadro junto a aceptar; textos recogida reordenados; botón rojo debajo de la rebaja.
+7. Rebaja de precio: se guardó neto más bajo y se devolvió diferencia (59 € en un caso). Enlace «pulsando AQUÍ» para republicar hueco.
+8. Avisos «8 horas…» si ya aceptaste → pasan a «Ya has aceptado esta reserva.»
+9. Inicio: nota de editar bajo publicar ruta + frase Cámara de Comercio.
+10. Cancelación mitad: quien reservó, confirmado, &lt;24 h (frigorífico 47,20 €, 17/10 13:00). Web ~20 €. Stripe: reembolso parcial **-20,00 €** (cobro 47,20 €; neto 25,46 €). Hecho.
+
+## Hecho (17-oct-2026, noche)
+
+1. Cancelación **pasada la primera hora**, conductor **sin aceptar** (59 €): Stripe reembolso parcial **50 €** (viaje); el 18 % se queda (nota: Stripe 2,11 € + web 6,89 €). Hecho.
+2. Subido: **Modificar mi reserva** (recuadro verde arriba en la ficha); ampliar en el viaje; párrafo en Términos; quien cancela **ya no** ve «El viaje sigue publicado» (el conductor sí).
+
+## Comprobar (18-oct-2026)
+
+**Avisos al móvil (push):** el código está; **aún no está comprobado** que lleguen bien en el móvil.
+
+## Hecho (18-oct-2026)
+
+1. Terminado el arreglo a medias de identidad/pago/recogida (misma lógica, archivos bien separados) y subido.
+
+## Para mañana (18-oct-2026)
+
+**1. Segunda cancelación después de usar el chat.**
+
+La misma persona cancela dos viajes. En los dos, quien reservó y el conductor han **escrito** en el chat (abrirlo no basta). Al cancelar el segundo, a José le llega «Segunda cancelación». Al pulsarlo se abre el chat de ese viaje. También sale en la campanita y, en administración, el recuadro amarillo.
+
+**2. Comprobar avisos nuevos de cancelación.**
+
+Que digan «El viaje sigue publicado» (al conductor / en el aviso). Los avisos viejos se quedan. Y en la ficha de quien canceló: que **no** salga esa frase.
+
+**3. Probar Modificar mi reserva (ya en la web).**
+
+Con hueco libre: botón según caso (plaza / bulto / ambos). Ampliar, pagar solo lo nuevo en Stripe, y que se vea junto a la reserva anterior.
+
+**4. Solo si José lo pide.**
+
+- Cobro 35,40 € del 15-oct sin devolver.
+- Aviso viejo 64,90 € «en curso».
+- No tocar el cron de Vercel.
+- Recordatorio al conductor si olvida confirmar recogida (más adelante).
 
 ## Hecho (27-sep-2026)
 

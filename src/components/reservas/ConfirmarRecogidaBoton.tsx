@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { confirmarRecogida } from "@/lib/reservas/recogida";
-import { claveDeshacerRecogida } from "@/components/reservas/VolverRecogida";
+import { claveDeshacerRecogida } from "@/lib/reservas/clave-deshacer-recogida";
 
 export function ConfirmarRecogidaBoton({ reservaId }: { reservaId: string }) {
   const [pide, setPide] = useState(false);

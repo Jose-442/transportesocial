@@ -13,10 +13,10 @@ SELECT
   vehiculo_marca,
   vehiculo_modelo,
   vehiculo_anio,
-  vehiculo_tipo,
   distintivo_ambiental,
   rating_promedio,
-  rating_cantidad
+  rating_cantidad,
+  vehiculo_tipo
 FROM public.profiles;
 
 GRANT SELECT ON public.perfiles_publicos TO anon, authenticated;
