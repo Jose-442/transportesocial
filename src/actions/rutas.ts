@@ -170,6 +170,18 @@ export async function crearRuta(formData: FormData) {
   );
   if (!paradasPrep.ok) return { error: paradasPrep.error };
 
+  if (paradasPrep.paradas.length > 0) {
+    const { avisoTiemposParadas } = await import("@/lib/rutas/tiempos-paradas");
+    const avisoTiempo = await avisoTiemposParadas({
+      origen,
+      destino,
+      fechaSalida,
+      horaSalida: horaSalidaForm,
+      paradas: parseParadasJson(formData.get("paradas")),
+    });
+    if (avisoTiempo) return { error: avisoTiempo };
+  }
+
   const usuarioId = user.id;
   async function viajesIgualesRecientes() {
     const { data: iguales } = await supabase

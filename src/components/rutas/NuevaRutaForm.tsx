@@ -27,6 +27,7 @@ import {
   precioVisiblePorDebajo,
 } from "@/lib/precio-minimo";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
+import { useAvisoTiemposParadas } from "@/components/rutas/useAvisoTiemposParadas";
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
 import {
@@ -220,6 +221,13 @@ export function NuevaRutaForm({
     netoPlaza > 0 ? calcPrecioConComision(netoPlaza) : 0;
   const minimoCarretera = usePrecioMinimoCarretera(form.origen, form.destino);
   const minimoVisible = minimoCarretera.precioMinimo;
+  const avisoTiempos = useAvisoTiemposParadas({
+    origen: form.origen,
+    destino: form.destino,
+    fechaSalida: form.fecha_salida,
+    horaSalida: form.hora_salida,
+    paradas: form.paradas,
+  });
   function avisoPrecioBajo(publicadoPrecio: number): string | null {
     if (
       minimoVisible == null ||
@@ -469,8 +477,17 @@ export function NuevaRutaForm({
     const bajoPlaza = llevaPasajeros ? avisoPrecioBajo(publicadoPlaza) : null;
     if (bajoBulto) validationErrors.precio_neto = bajoBulto;
     if (bajoPlaza) validationErrors.precio_neto_plaza = bajoPlaza;
-    if (minimoCarretera.cargando) {
-      setError("Espera un momento: se están calculando los kilómetros.");
+    if (minimoCarretera.cargando || avisoTiempos.cargando) {
+      setError(
+        avisoTiempos.cargando
+          ? "Espera un momento: se están revisando las horas de las paradas."
+          : "Espera un momento: se están calculando los kilómetros."
+      );
+      soltarEnvio();
+      return;
+    }
+    if (avisoTiempos.aviso) {
+      setError(avisoTiempos.aviso);
       soltarEnvio();
       return;
     }
@@ -702,6 +719,16 @@ export function NuevaRutaForm({
             Máximo {MAX_PARADAS_INTERMEDIAS} paradas.
           </p>
         )}
+        {avisoTiempos.cargando ? (
+          <p className="text-sm text-zinc-600">
+            Revisando si las horas de las paradas son posibles…
+          </p>
+        ) : null}
+        {avisoTiempos.aviso ? (
+          <p className="text-sm font-medium text-red-700" data-campo-error="">
+            {avisoTiempos.aviso}
+          </p>
+        ) : null}
       </div>
 
       <DatePickerInput
