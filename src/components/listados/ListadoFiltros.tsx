@@ -26,12 +26,17 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const origenParam = searchParams.get("origen") ?? "";
   const destinoParam = searchParams.get("destino") ?? "";
   const fechaParam = searchParams.get("fecha") ?? "";
+  const semanaParam =
+    searchParams.get("semana") === "1" ||
+    searchParams.get("semana") === "true" ||
+    searchParams.get("semana") === "on";
 
   const draftKey =
     tipo === "bultos" ? DRAFT_KEYS.filtrosBultos : DRAFT_KEYS.filtrosViajes;
   const [origen, setOrigen] = useState(origenParam);
   const [destino, setDestino] = useState(destinoParam);
   const [fecha, setFecha] = useState(fechaParam);
+  const [semana, setSemana] = useState(semanaParam);
   const [errorOrigen, setErrorOrigen] = useState("");
   const [errorDestino, setErrorDestino] = useState("");
   const [ready, setReady] = useState(false);
@@ -42,10 +47,11 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     void sincronizarCuentaBorradores().then((uid) => {
       if (cancelled) return;
       uidRef.current = uid;
-      if (origenParam || destinoParam || fechaParam) {
+      if (origenParam || destinoParam || fechaParam || semanaParam) {
         setOrigen(origenParam);
         setDestino(destinoParam);
         setFecha(fechaParam);
+        setSemana(semanaParam);
         setReady(true);
         return;
       }
@@ -53,23 +59,29 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         origen?: string;
         destino?: string;
         fecha?: string;
+        semana?: boolean;
       }>(draftKey, uid);
       if (draft) {
         setOrigen(draft.origen ?? "");
         setDestino(draft.destino ?? "");
         setFecha(draft.fecha ?? "");
+        setSemana(Boolean(draft.semana));
       }
       setReady(true);
     });
     return () => {
       cancelled = true;
     };
-  }, [draftKey, origenParam, destinoParam, fechaParam]);
+  }, [draftKey, origenParam, destinoParam, fechaParam, semanaParam]);
 
   useEffect(() => {
     if (!ready) return;
-    saveOwnedDraft(draftKey, { origen, destino, fecha }, uidRef.current);
-  }, [ready, draftKey, origen, destino, fecha]);
+    saveOwnedDraft(
+      draftKey,
+      { origen, destino, fecha, semana },
+      uidRef.current
+    );
+  }, [ready, draftKey, origen, destino, fecha, semana]);
 
   function aplicar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -92,6 +104,7 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     params.set("origen", etiquetaMunicipio(origenValido));
     params.set("destino", etiquetaMunicipio(destinoValido));
     if (fecha.trim()) params.set("fecha", fecha.trim());
+    if (semana) params.set("semana", "1");
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -99,13 +112,15 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     setOrigen("");
     setDestino("");
     setFecha("");
+    setSemana(false);
     setErrorOrigen("");
     setErrorDestino("");
     clearDraft(draftKey);
     router.push(pathname);
   }
 
-  const hayFiltros = !!(origen || destino || fecha);
+  const hayFiltros = !!(origen || destino || fecha || semana);
+  const palabra = tipo === "viajes" ? "viajes" : "portes";
 
   return (
     <form
@@ -134,18 +149,37 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       <DatePickerInput
         name="fecha"
         label={
-          tipo === "viajes"
-            ? "Día del viaje (opcional)"
-            : "Día del porte (opcional)"
+          semana
+            ? tipo === "viajes"
+              ? "Semana del día (opcional)"
+              : "Semana del día del porte (opcional)"
+            : tipo === "viajes"
+              ? "Día del viaje (opcional)"
+              : "Día del porte (opcional)"
         }
         hint={
-          tipo === "viajes"
-            ? "Si no eliges día, verás todos los viajes de esa ruta."
-            : "Si no eliges día, verás todos los portes de esa ruta."
+          semana
+            ? `Si eliges un día, verás todos los ${palabra} de lunes a domingo de esa semana. Si no eliges día, usa la semana de hoy.`
+            : `Si no eliges día, verás todos los ${palabra} de esa ruta.`
         }
         value={fecha}
         onChange={setFecha}
       />
+      <label className="flex cursor-pointer items-start gap-2 text-sm text-zinc-800">
+        <input
+          type="checkbox"
+          name="semana"
+          checked={semana}
+          onChange={(e) => setSemana(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-zinc-300"
+        />
+        <span>
+          Me da igual el día (esta semana)
+          <span className="mt-0.5 block text-xs font-normal text-zinc-500">
+            Busca de lunes a domingo. Útil si hay pocos {palabra}.
+          </span>
+        </span>
+      </label>
       <div className="flex gap-2">
         <Button type="submit" fullWidth>
           Buscar

@@ -47,7 +47,7 @@ export default async function RutasPage({
     if (user) {
       rutas = rutas.filter((ruta) => ruta.user_id !== user.id);
     }
-    if (user && rutas.length === 0 && filtros.fecha) {
+    if (user && rutas.length === 0 && filtros.fecha && !filtros.semana) {
       const { data: alerta } = await supabase
         .from("alertas_viaje")
         .select("id")
@@ -92,11 +92,20 @@ export default async function RutasPage({
         <>
           <p className="text-sm font-medium text-zinc-700">
             {rutas.length === 1
-              ? "1 viaje encontrado"
-              : `${rutas.length} viajes encontrados`}
+              ? filtros.semana
+                ? "1 viaje encontrado esa semana"
+                : "1 viaje encontrado"
+              : filtros.semana
+                ? `${rutas.length} viajes encontrados esa semana`
+                : `${rutas.length} viajes encontrados`}
           </p>
           {rutas.length === 0 ? (
-            filtros.fecha ? (
+            filtros.semana ? (
+              <p className="text-sm text-zinc-500">
+                No hay viajes esa semana. Prueba otra semana, un día concreto, o
+                mira más adelante.
+              </p>
+            ) : filtros.fecha ? (
               <AlertaViajeBusqueda
                 origen={filtros.origen!}
                 destino={filtros.destino!}
@@ -106,8 +115,8 @@ export default async function RutasPage({
               />
             ) : (
               <p className="text-sm text-zinc-500">
-                No hay viajes en esta ruta. Prueba con otro día o mira más
-                adelante.
+                No hay viajes en esta ruta. Prueba con otro día, marca «Me da
+                igual el día (esta semana)» o mira más adelante.
               </p>
             )
           ) : (

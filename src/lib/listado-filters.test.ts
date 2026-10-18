@@ -48,6 +48,15 @@ describe("coincideFiltrosRuta — provincia y radio 50 km", () => {
       )
     ).toBe(false);
   });
+
+  it("con semana acepta otro día de la misma semana", () => {
+    expect(
+      coincideFiltrosRuta(
+        { ...ruta("Burgos", "Madrid"), fecha_salida: "2026-06-25T10:00:00.000Z" },
+        { ...filtros, semana: true }
+      )
+    ).toBe(true);
+  });
 });
 
 function bulto(origen: string, destino: string) {

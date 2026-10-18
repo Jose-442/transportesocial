@@ -9,6 +9,8 @@ export type FiltrosListado = {
   origen?: string;
   destino?: string;
   fecha?: string;
+  /** Si true: busca todos los días de la semana (lun–dom) del día de referencia. */
+  semana?: boolean;
 };
 
 export function parseFiltros(
@@ -18,15 +20,17 @@ export function parseFiltros(
     const v = searchParams[key];
     return typeof v === "string" ? v.trim() : "";
   };
+  const semanaRaw = pick("semana");
   return {
     origen: pick("origen"),
     destino: pick("destino"),
     fecha: pick("fecha"),
+    semana: semanaRaw === "1" || semanaRaw === "true" || semanaRaw === "on",
   };
 }
 
 export function tieneFiltrosActivos(filtros: FiltrosListado): boolean {
-  return !!(filtros.origen || filtros.destino || filtros.fecha);
+  return !!(filtros.origen || filtros.destino || filtros.fecha || filtros.semana);
 }
 
 export function tieneBusquedaCompleta(filtros: FiltrosListado): boolean {
@@ -39,6 +43,7 @@ export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
   params.set("origen", filtros.origen!);
   params.set("destino", filtros.destino!);
   if (filtros.fecha) params.set("fecha", filtros.fecha);
+  if (filtros.semana) params.set("semana", "1");
   return params.toString();
 }
 
@@ -106,6 +111,68 @@ export function fechasCercanasAlDia(fecha: string): string[] {
     .filter(fechaCalendarioValida);
 }
 
+/** Hoy (YYYY-MM-DD) en hora de España. */
+export function hoyIsoMadrid(ahora = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Madrid",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(ahora);
+}
+
+/**
+ * Lunes a domingo de la semana que contiene `refIso` (calendario civil UTC del día).
+ * En España la semana empieza en lunes.
+ */
+export function fechasDeLaSemana(refIso: string): string[] {
+  const dia = refIso.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || !fechaCalendarioValida(dia)) {
+    return [];
+  }
+  const [year, month, day] = dia.split("-").map(Number);
+  const utc = new Date(Date.UTC(year, month - 1, day));
+  const dow = utc.getUTCDay(); // 0 domingo … 6 sábado
+  const aLunes = dow === 0 ? -6 : 1 - dow;
+  const lunes = new Date(utc);
+  lunes.setUTCDate(utc.getUTCDate() + aLunes);
+  const out: string[] = [];
+  for (let i = 0; i < 7; i++) {
+    const x = new Date(lunes);
+    x.setUTCDate(lunes.getUTCDate() + i);
+    out.push(x.toISOString().slice(0, 10));
+  }
+  return out;
+}
+
+/** Día de referencia para la semana: la fecha elegida, o hoy en España. */
+export function referenciaSemanaBusqueda(
+  filtros: FiltrosListado,
+  ahora = new Date()
+): string {
+  const elegida = filtros.fecha?.slice(0, 10) ?? "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(elegida) && fechaCalendarioValida(elegida)) {
+    return elegida;
+  }
+  return hoyIsoMadrid(ahora);
+}
+
+/** ¿La fecha del anuncio encaja con el filtro (día concreto o semana)? */
+export function coincideFechaListado(
+  fechaAlmacenada: string | null | undefined,
+  filtros: FiltrosListado
+): boolean {
+  if (filtros.semana) {
+    const dias = fechasDeLaSemana(referenciaSemanaBusqueda(filtros));
+    const dia = fechaAlmacenada?.slice(0, 10) ?? "";
+    return Boolean(dia && dias.includes(dia));
+  }
+  if (filtros.fecha) {
+    return mismaFechaMesDia(fechaAlmacenada ?? null, filtros.fecha);
+  }
+  return true;
+}
+
 /**
  * Zona y días que hay que pedir. Null: la búsqueda no puede dar resultados.
  * origenes o destinos a null: no acotar ese lado (la lista fina sigue en memoria).
@@ -118,7 +185,10 @@ export function limitesBusqueda(filtros: FiltrosListado): {
 } | null {
   if (!filtros.origen || !filtros.destino) return null;
   let fechas: string[] | null = null;
-  if (filtros.fecha) {
+  if (filtros.semana) {
+    fechas = fechasDeLaSemana(referenciaSemanaBusqueda(filtros));
+    if (fechas.length === 0) return null;
+  } else if (filtros.fecha) {
     fechas = fechasCercanasAlDia(filtros.fecha);
     if (fechas.length === 0) return null;
   }
@@ -144,7 +214,7 @@ export function coincideFiltrosBulto(
   ) {
     return false;
   }
-  if (filtros.fecha && !mismaFechaMesDia(bulto.fecha_limite, filtros.fecha)) {
+  if (!coincideFechaListado(bulto.fecha_limite, filtros)) {
     return false;
   }
   return true;
@@ -166,7 +236,7 @@ export function coincideFiltrosRuta(
   ) {
     return false;
   }
-  if (filtros.fecha && !mismaFechaMesDia(ruta.fecha_salida, filtros.fecha)) {
+  if (!coincideFechaListado(ruta.fecha_salida, filtros)) {
     return false;
   }
   return true;

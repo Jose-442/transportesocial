@@ -55,6 +55,10 @@ alwaysApply: true
 ## Hecho (18-oct-2026)
 
 1. Terminado el arreglo a medias de identidad/pago/recogida (misma lógica, archivos bien separados) y subido.
+2. Web vaciada otra vez: SQL + Storage (avatars y bultos-fotos vacíos).
+3. Botón «Publicar ruta» arriba tras volver del vehículo: José lo confirma — así tiene que estar (no es fallo).
+4. Buscar por semana: casilla «Me da igual el día (esta semana)» (lun–dom). Mañana: probar con el resto de lo de hoy.
+5. Cabecera: Quiénes somos y Términos con enlace normal del navegador (antes a veces hacía falta pulsar varias veces si el servidor iba lento).
 
 ## Para mañana (18-oct-2026)
 

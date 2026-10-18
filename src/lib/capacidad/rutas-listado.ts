@@ -1,7 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   limitesBusqueda,
-  mismaFechaMesDia,
   type FiltrosListado,
 } from "@/lib/listado-filters";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -147,12 +146,7 @@ export async function listarRutasConCapacidad(
         return false;
       }
       const paradas = paradasPorRuta.get(r.id) ?? [];
-      return coincideFiltrosRutaConParadas(
-        r,
-        paradas,
-        filtros,
-        mismaFechaMesDia
-      );
+      return coincideFiltrosRutaConParadas(r, paradas, filtros);
     });
 
   const activas = filtrarPorFiltros((activasRaw as RutaConductor[]) ?? []);

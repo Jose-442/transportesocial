@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { numerosDePagina } from "@/lib/listado-paginacion";
-import { fechasCercanasAlDia, limitesBusqueda } from "@/lib/listado-filters";
+import {
+  coincideFechaListado,
+  fechasCercanasAlDia,
+  fechasDeLaSemana,
+  limitesBusqueda,
+} from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
 
 describe("numerosDePagina", () => {
@@ -50,5 +55,46 @@ describe("limitesBusqueda", () => {
     });
     expect(limites?.fechas).toBeNull();
     expect(limites?.origenes).toContain("Burgos (Burgos)");
+  });
+
+  it("con semana acota lunes a domingo", () => {
+    const limites = limitesBusqueda({
+      origen: "Burgos (Burgos)",
+      destino: "Madrid (Madrid)",
+      fecha: "2026-10-17", // sábado
+      semana: true,
+    });
+    expect(limites?.fechas).toEqual([
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+    ]);
+  });
+});
+
+describe("fechasDeLaSemana", () => {
+  it("un domingo cierra la semana del lunes anterior", () => {
+    expect(fechasDeLaSemana("2026-10-18")).toEqual([
+      "2026-10-12",
+      "2026-10-13",
+      "2026-10-14",
+      "2026-10-15",
+      "2026-10-16",
+      "2026-10-17",
+      "2026-10-18",
+    ]);
+  });
+});
+
+describe("coincideFechaListado", () => {
+  it("en modo semana acepta cualquier día de esa semana", () => {
+    const filtros = { fecha: "2026-10-15", semana: true };
+    expect(coincideFechaListado("2026-10-12", filtros)).toBe(true);
+    expect(coincideFechaListado("2026-10-18", filtros)).toBe(true);
+    expect(coincideFechaListado("2026-10-19", filtros)).toBe(false);
   });
 });

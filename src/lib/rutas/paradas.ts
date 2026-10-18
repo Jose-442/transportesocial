@@ -1,5 +1,9 @@
 import { combineDateAndTime } from "@/lib/datetime-form";
 import {
+  coincideFechaListado,
+  type FiltrosListado,
+} from "@/lib/listado-filters";
+import {
   coincideMunicipioBusqueda,
   etiquetaMunicipio,
   resolverMunicipio,
@@ -71,10 +75,9 @@ export function rutaCubreTrayecto(
 export function coincideFiltrosRutaConParadas(
   ruta: { origen: string; destino: string; fecha_salida: string },
   paradas: Pick<ParadaRuta, "orden" | "municipio">[],
-  filtros: { origen?: string; destino?: string; fecha?: string },
-  mismaFecha: (fechaRuta: string, fechaFiltro: string) => boolean
+  filtros: FiltrosListado
 ): boolean {
-  if (filtros.fecha && !mismaFecha(ruta.fecha_salida, filtros.fecha)) {
+  if (!coincideFechaListado(ruta.fecha_salida, filtros)) {
     return false;
   }
   if (!filtros.origen || !filtros.destino) {
