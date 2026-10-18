@@ -154,9 +154,6 @@ for (const t of tests) {
   console.log("");
 }
 
-  console.log("");
-}
-
 console.log("---");
 console.log(
   "OK si algún GET/HEAD con solo apikey devuelve 200 y content-range con total."

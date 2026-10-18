@@ -116,7 +116,7 @@ export async function guardarRebajaReserva(formData: FormData) {
     monto: number | null;
     metadata: unknown;
   };
-  let tx =
+  const tx =
     ((txs ?? []) as TxRebaja[]).find(
       (fila) =>
         fila.reserva_id === reserva.id &&
