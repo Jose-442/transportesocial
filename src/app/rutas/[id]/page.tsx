@@ -499,11 +499,13 @@ export default async function RutaDetallePage({
           </div>
         )}
         {esTramo && (
-          <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
-            Este anuncio cubre el tramo que buscas. El precio es el del viaje
-            completo ({origen} → {destino}). Si solo usas un tramo, puedes pedir
-            una rebaja al conductor.
-          </p>
+          <div className="space-y-1 rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
+            <p>Incluye el tramo que solicitas</p>
+            <p>
+              El precio es el del viaje completo ({origen} → {destino}). Puedes
+              solicitar rebaja al conductor por ese tramo.
+            </p>
+          </div>
         )}
         <p className="text-xs leading-tight text-zinc-500 md:hidden">
           El punto exacto lo concretareis por el chat interno al aceptar la

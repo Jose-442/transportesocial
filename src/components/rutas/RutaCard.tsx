@@ -74,9 +74,12 @@ export function RutaCard({
             {fecha} · {horaSalida}
           </p>
           {item.busquedaEsTramo && (
-            <p className="mt-1 text-sm font-medium text-amber-800">
-              Incluye tu tramo · precio del viaje completo
-            </p>
+            <div className="mt-1 space-y-0.5 text-sm font-medium text-amber-800">
+              <p>Incluye el tramo que solicitas</p>
+              <p className="font-normal">
+                Puedes solicitar rebaja al conductor por ese tramo
+              </p>
+            </div>
           )}
           {(item.paradas?.length ?? 0) > 0 && (
             <p className="mt-1 text-xs text-zinc-500">
