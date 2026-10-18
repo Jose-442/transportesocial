@@ -1,8 +1,15 @@
+import { Libre_Baskerville } from "next/font/google";
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { HomeSofaHighlight } from "@/components/home/HomeSofaHighlight";
 import { HomeSubscriptionBanner } from "@/components/home/HomeSubscriptionBanner";
 import { BRAND } from "@/lib/brand";
+
+const camaraFont = Libre_Baskerville({
+  weight: "400",
+  style: "italic",
+  subsets: ["latin"],
+});
 
 export default async function HomePage() {
   return (
@@ -189,7 +196,7 @@ export default async function HomePage() {
             </ButtonLink>
           </div>
           <p
-            className="mt-6 text-center text-lg font-medium leading-snug text-orange-500 sm:mt-8 sm:text-xl"
+            className={`${camaraFont.className} mt-6 text-center text-lg italic leading-snug text-orange-500 sm:mt-8 sm:text-xl`}
           >
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
