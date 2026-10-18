@@ -402,17 +402,23 @@ async function avisarReservaRuta(
   if (r.pide_rebaja && r.es_tramo && r.ruta_conductor_id) {
     const { data: hermanas } = await admin
       .from("reservas")
-      .select("id, es_tramo, pide_rebaja, rebaja_en, rebaja_rechazada_en")
+      .select("id, estado, es_tramo, pide_rebaja, rebaja_en, rebaja_rechazada_en")
       .eq("ruta_conductor_id", r.ruta_conductor_id)
       .eq("cliente_id", r.cliente_id)
-      .neq("id", r.id);
+      .neq("id", r.id)
+      .neq("estado", "cancelado");
     hermanasRebajaPendiente = (
       (hermanas as Pick<
         Reserva,
-        "es_tramo" | "pide_rebaja" | "rebaja_en" | "rebaja_rechazada_en"
+        | "estado"
+        | "es_tramo"
+        | "pide_rebaja"
+        | "rebaja_en"
+        | "rebaja_rechazada_en"
       >[]) ?? []
     ).filter(
       (h) =>
+        h.estado !== "pendiente_pago" &&
         h.es_tramo &&
         h.pide_rebaja &&
         !h.rebaja_en &&

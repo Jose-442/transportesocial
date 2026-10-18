@@ -74,17 +74,19 @@ export async function guardarRebajaReserva(formData: FormData) {
   const admin = createAdminClient();
   if (!admin) return { error: "No se ha podido devolver la diferencia." };
 
-  // Tramos del mismo usuario con rebaja pendiente → un solo precio total.
+  // Hermanas del mismo viaje (para cobro compartido bulto+plaza, etc.).
   const { data: hermanasRaw } = await admin
     .from("reservas")
     .select("*")
     .eq("ruta_conductor_id", reserva.ruta_conductor_id)
     .eq("cliente_id", reserva.cliente_id)
     .eq("transportista_id", reserva.transportista_id)
-    .eq("estado", "confirmada");
+    .neq("estado", "cancelado");
+  const hermanas = (hermanasRaw as Reserva[]) ?? [];
+  // Tramos con rebaja pendiente → un solo precio total.
   const objetivo = rebajaTramoPendiente(reserva)
-    ? ((hermanasRaw as Reserva[]) ?? []).filter((h) =>
-        rebajaTramoPendiente(h)
+    ? hermanas.filter(
+        (h) => rebajaTramoPendiente(h) && h.estado === "confirmada"
       )
     : [reserva];
   if (objetivo.length === 0) {
@@ -116,11 +118,14 @@ export async function guardarRebajaReserva(formData: FormData) {
   });
   if (bajoMinimo) return { error: bajoMinimo };
 
-  const idsCobro = objetivo.map((h) => h.id);
+  // Todas las hermanas: un PaymentIntent puede llevar bulto+plaza juntas.
+  const idsParaCobro = [
+    ...new Set([reserva.id, ...hermanas.map((h) => h.id), ...objetivo.map((h) => h.id)]),
+  ];
   const { data: txs } = await admin
     .from("transacciones")
     .select("id, reserva_id, stripe_payment_intent_id, estado_escrow, monto, metadata")
-    .in("reserva_id", idsCobro)
+    .in("reserva_id", idsParaCobro)
     .eq("tipo", "cobro_viaje");
 
   type TxRebaja = {
@@ -143,7 +148,13 @@ export async function guardarRebajaReserva(formData: FormData) {
           fila.reserva_id === reservaId &&
           fila.estado_escrow === "retenido" &&
           String(fila.stripe_payment_intent_id ?? "").trim()
-      ) ?? null;
+      ) ??
+      txsLista.find(
+        (fila) =>
+          fila.estado_escrow === "retenido" &&
+          String(fila.stripe_payment_intent_id ?? "").trim()
+      ) ??
+      null;
     let intent = String(tx?.stripe_payment_intent_id ?? "").trim();
     if (!intent) {
       try {
@@ -154,7 +165,7 @@ export async function guardarRebajaReserva(formData: FormData) {
         const stripe = getStripeServer();
         const lista = await stripe.paymentIntents.list({ limit: 100 });
         const hallado = lista.data.find((pi) =>
-          cobroDeEstasReservas(pi, [reservaId, ...idsCobro])
+          cobroDeEstasReservas(pi, idsParaCobro)
         );
         if (hallado?.id) intent = hallado.id;
       } catch (err) {
@@ -250,9 +261,26 @@ export async function guardarRebajaReserva(formData: FormData) {
 
   try {
     const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
+    // Un mismo PaymentIntent (p. ej. bulto+plaza) se reembolsa una sola vez.
+    const porIntent = new Map<
+      string,
+      { amountCents: number; keys: string[]; tx: TxRebaja | null }
+    >();
     for (const parte of partes) {
       if (parte.diffCents < 1) continue;
       const { intent, tx } = await intentDeReserva(parte.reserva.id);
+      if (!intent) {
+        throw new Error("sin_cobro");
+      }
+      const actual = porIntent.get(intent) ?? {
+        amountCents: 0,
+        keys: [],
+        tx,
+      };
+      actual.amountCents += parte.diffCents;
+      actual.keys.push(parte.reserva.id);
+      if (!actual.tx && tx) actual.tx = tx;
+      porIntent.set(intent, actual);
       if (tx?.id) {
         const metadata =
           tx.metadata &&
@@ -271,9 +299,11 @@ export async function guardarRebajaReserva(formData: FormData) {
           })
           .eq("id", tx.id);
       }
+    }
+    for (const [intent, grupo] of porIntent) {
       await reembolsarPaymentIntent(intent, {
-        amountCents: parte.diffCents,
-        idempotencyKey: `rebaja-${parte.reserva.id}-${eurosACentimos(parte.visibleParte)}`,
+        amountCents: grupo.amountCents,
+        idempotencyKey: `rebaja-grupo-${grupo.keys.sort().join("-")}-${grupo.amountCents}`,
       });
     }
   } catch (error) {
