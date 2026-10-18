@@ -667,6 +667,23 @@ export function NuevaRutaForm({
         incluirFrontera
       />
 
+      <DatePickerInput
+        name="fecha_salida"
+        label="Fecha de salida"
+        required
+        value={form.fecha_salida}
+        error={fieldErrors.fecha_salida}
+        onChange={(value) => updateField("fecha_salida", value)}
+      />
+      <TimePickerInput
+        label="Hora de salida"
+        name="hora_salida"
+        required
+        value={form.hora_salida}
+        error={fieldErrors.hora_salida}
+        onChange={(value) => updateField("hora_salida", value)}
+      />
+
       <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
         <div className="space-y-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
@@ -730,23 +747,6 @@ export function NuevaRutaForm({
           </p>
         ) : null}
       </div>
-
-      <DatePickerInput
-        name="fecha_salida"
-        label="Fecha de salida"
-        required
-        value={form.fecha_salida}
-        error={fieldErrors.fecha_salida}
-        onChange={(value) => updateField("fecha_salida", value)}
-      />
-      <TimePickerInput
-        label="Hora de salida"
-        name="hora_salida"
-        required
-        value={form.hora_salida}
-        error={fieldErrors.hora_salida}
-        onChange={(value) => updateField("hora_salida", value)}
-      />
 
       <div
         className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4"
