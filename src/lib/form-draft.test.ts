@@ -89,4 +89,14 @@ describe("normalizeNuevaRutaDraft plazas", () => {
     ).toBe("no");
     expect(normalizeNuevaRutaDraft({}).acepta_mascotas).toBe("");
   });
+
+  it("conserva paradas del borrador", () => {
+    const draft = normalizeNuevaRutaDraft({
+      paradas: [{ municipio: "Zaragoza", hora: "11:00" }],
+    });
+    expect(draft.paradas).toEqual([
+      { municipio: "Zaragoza", hora: "11:00" },
+    ]);
+    expect(normalizeNuevaRutaDraft({}).paradas).toEqual([]);
+  });
 });

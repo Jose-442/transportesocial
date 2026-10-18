@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
-import { resolverMunicipio } from "@/lib/municipios-espana";
+import { etiquetaMunicipio, resolverMunicipio } from "@/lib/municipios-espana";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -44,6 +44,10 @@ import {
   tipoOfertaLlevaPasajeros,
   type TipoOfertaRuta,
 } from "@/lib/ruta-oferta";
+import {
+  MAX_PARADAS_INTERMEDIAS,
+  prepararParadasParaGuardar,
+} from "@/lib/rutas/paradas";
 
 type RutaFieldKey =
   | "origen"
@@ -347,7 +351,41 @@ export function NuevaRutaForm({
     if (draft.acepta_mascotas !== "si" && draft.acepta_mascotas !== "no") {
       errors.acepta_mascotas = "Indica si aceptas mascotas en este viaje.";
     }
+
+    for (const parada of draft.paradas) {
+      if (!parada.municipio.trim() && !parada.hora.trim()) continue;
+      if (parada.municipio.trim() && !resolverMunicipio(parada.municipio, { incluirFrontera: true })) {
+        errors.destino = errors.destino ?? "Revisa las paradas intermedias.";
+        break;
+      }
+    }
     return errors;
+  }
+
+  function updateParada(
+    index: number,
+    field: "municipio" | "hora",
+    value: string
+  ) {
+    const paradas = form.paradas.map((p, i) =>
+      i === index ? { ...p, [field]: value } : p
+    );
+    setForm({ ...form, paradas });
+  }
+
+  function anadirParada() {
+    if (form.paradas.length >= MAX_PARADAS_INTERMEDIAS) return;
+    setForm({
+      ...form,
+      paradas: [...form.paradas, { municipio: "", hora: "" }],
+    });
+  }
+
+  function quitarParada(index: number) {
+    setForm({
+      ...form,
+      paradas: form.paradas.filter((_, i) => i !== index),
+    });
   }
 
   const botonArriba =
@@ -475,11 +513,36 @@ export function NuevaRutaForm({
       return;
     }
 
+    const origenMuni = resolverMunicipio(form.origen);
+    const destinoMuni = resolverMunicipio(form.destino, {
+      incluirFrontera: true,
+    });
+    if (origenMuni && destinoMuni) {
+      const paradasOk = prepararParadasParaGuardar(form.paradas, {
+        origen: etiquetaMunicipio(origenMuni),
+        destino: etiquetaMunicipio(destinoMuni),
+        fechaSalida: form.fecha_salida,
+        horaSalida: form.hora_salida,
+      });
+      if (!paradasOk.ok) {
+        setError(paradasOk.error);
+        soltarEnvio();
+        return;
+      }
+    }
+
     const formData = new FormData();
     formData.set("origen", form.origen);
     formData.set("destino", form.destino);
     formData.set("fecha_salida", form.fecha_salida);
+    formData.set("hora_salida", form.hora_salida);
     formData.set("fecha_llegada_prevista", fechaLlegadaPrevista);
+    formData.set(
+      "paradas",
+      JSON.stringify(
+        form.paradas.filter((p) => p.municipio.trim() || p.hora.trim())
+      )
+    );
     formData.set("tipo_oferta", form.tipo_oferta);
     formData.set("espacio_tamano", form.espacio_tamano);
     formData.set("plazas_acompanante", form.plazas_acompanante);
@@ -575,6 +638,61 @@ export function NuevaRutaForm({
         onChange={(value) => updateField("destino", value)}
         incluirFrontera
       />
+
+      <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/80 p-4">
+        <div className="space-y-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-800">
+            Paradas intermedias (opcional)
+          </p>
+          <p className="text-sm text-zinc-600">
+            Si pasas por pueblos o ciudades de camino, añádelos. El precio es el
+            del viaje completo; quien reserve solo un tramo puede pedirte una
+            rebaja. El punto exacto de recogida se concreta en el chat.
+          </p>
+        </div>
+        {form.paradas.map((parada, index) => (
+          <div
+            key={`parada-${index}`}
+            className="space-y-2 rounded-xl border border-zinc-200 bg-white p-3"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-medium text-zinc-800">
+                Parada {index + 1}
+              </p>
+              <button
+                type="button"
+                onClick={() => quitarParada(index)}
+                className="text-sm font-semibold text-red-700 hover:text-red-800"
+              >
+                Quitar
+              </button>
+            </div>
+            <MunicipioAutocomplete
+              name={`parada_municipio_${index}`}
+              label="Municipio"
+              value={parada.municipio}
+              onChange={(value) => updateParada(index, "municipio", value)}
+              incluirFrontera
+            />
+            <TimePickerInput
+              label="Hora aproximada de paso"
+              name={`parada_hora_${index}`}
+              value={parada.hora}
+              onChange={(value) => updateParada(index, "hora", value)}
+            />
+          </div>
+        ))}
+        {form.paradas.length < MAX_PARADAS_INTERMEDIAS ? (
+          <Button type="button" variant="secondary" onClick={anadirParada}>
+            Añadir parada
+          </Button>
+        ) : (
+          <p className="text-xs text-zinc-500">
+            Máximo {MAX_PARADAS_INTERMEDIAS} paradas.
+          </p>
+        )}
+      </div>
+
       {minimoCarretera.cargando ? (
         <p className="text-sm text-zinc-600">
           Calculando los kilómetros por carretera…

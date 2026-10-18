@@ -30,6 +30,7 @@ export function ReservarRutaForm({
   faltaIdentidad = false,
   identidadInicial,
   salidaIso,
+  esTramo = false,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
@@ -45,6 +46,8 @@ export function ReservarRutaForm({
   resumenAsientos?: { ofrecidas: number; ocupadas: number };
   faltaIdentidad?: boolean;
   identidadInicial?: { telefono: string; documento: string };
+  /** La búsqueda pedía un tramo de esta ruta. */
+  esTramo?: boolean;
 }) {
   const ofertaAsiento = ofertas.find(
     (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
@@ -255,7 +258,14 @@ export function ReservarRutaForm({
         <SolicitarRebaja
           marcado={Boolean(form.pide_rebaja)}
           onMarcado={(pide_rebaja) => setForm((prev) => ({ ...prev, pide_rebaja }))}
+          esTramo={esTramo}
         />
+      ) : null}
+      {esTramo && !llevaBulto && cantidad >= 1 ? (
+        <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          El precio es el del viaje completo. Si solo usas un tramo, puedes pedir
+          una rebaja al conductor en el chat tras reservar.
+        </p>
       ) : null}
       {pedirIdentidad ? (
         <CamposIdentidadPago

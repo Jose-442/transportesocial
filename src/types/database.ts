@@ -210,6 +210,16 @@ export type RutaConductor = {
   updated_at: string;
 };
 
+/** Parada intermedia de una ruta del conductor. */
+export type RutaParada = {
+  id: string;
+  ruta_conductor_id: string;
+  orden: number;
+  municipio: string;
+  hora_paso: string;
+  created_at: string;
+};
+
 export type AnuncioBulto = {
   id: string;
   user_id: string;

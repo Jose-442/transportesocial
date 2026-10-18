@@ -12,6 +12,10 @@ export const HORAS_LIMITE_REBAJA = 48;
 export const TEXTO_PUEDE_PEDIR_REBAJA =
   "Solo en caso de que al final el porte sea más pequeño de lo que ofrecía el conductor, puede solicitar a este una rebaja, que queda supeditada a que el conductor acceda.";
 
+/** Cuando la búsqueda es un tramo de una ruta más larga. */
+export const TEXTO_PUEDE_PEDIR_REBAJA_TRAMO =
+  "El precio es el del viaje completo. Si solo usas un tramo (o el porte es más pequeño), puedes pedir una rebaja al conductor; queda a su criterio.";
+
 export const TEXTO_PLAZO_REBAJA = "Solo hasta 48 horas antes del viaje.";
 
 /** Texto del aviso al conductor si quien reservó marcó «Solicitar rebaja». */

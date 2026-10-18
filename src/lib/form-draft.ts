@@ -273,11 +273,18 @@ export type LoginDraft = {
   email: string;
 };
 
+export type ParadaRutaDraft = {
+  municipio: string;
+  hora: string;
+};
+
 export type NuevaRutaDraft = {
   origen: string;
   destino: string;
   fecha_salida: string;
   hora_salida: string;
+  /** Paradas entre salida y destino (opcional, máx. 5). */
+  paradas: ParadaRutaDraft[];
   tipo_oferta: import("@/lib/ruta-oferta").TipoOfertaRuta | "";
   espacio_tamano: string;
   espacio_detalle: string;
@@ -319,6 +326,7 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
   destino: "",
   fecha_salida: "",
   hora_salida: "",
+  paradas: [],
   tipo_oferta: "",
   espacio_tamano: "",
   espacio_detalle: "",
@@ -328,6 +336,19 @@ export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
   precio_neto: "",
   acepta_mascotas: "",
 };
+
+function normalizeParadasDraft(raw: Record<string, unknown>): ParadaRutaDraft[] {
+  const lista = Array.isArray(raw.paradas) ? raw.paradas : [];
+  return lista
+    .slice(0, 5)
+    .map((item) => ({
+      municipio: String(
+        (item as { municipio?: unknown })?.municipio ?? ""
+      ).trim(),
+      hora: String((item as { hora?: unknown })?.hora ?? "").trim(),
+    }))
+    .filter((p) => p.municipio || p.hora);
+}
 
 export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
   tipo_solicitud: "",
@@ -427,6 +448,7 @@ export function normalizeNuevaRutaDraft(
     destino: String(raw.destino ?? ""),
     fecha_salida,
     hora_salida,
+    paradas: normalizeParadasDraft(raw),
     tipo_oferta,
     espacio_tamano: String(raw.espacio_tamano ?? ""),
     espacio_detalle: String(raw.espacio_detalle ?? ""),

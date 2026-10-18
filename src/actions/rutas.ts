@@ -27,6 +27,11 @@ import {
   shouldConsumePublicationCredit,
 } from "@/actions/publication-fee";
 import { avisarAlertasDeRuta } from "@/lib/alertas-viaje-avisar";
+import { horaEnMadrid } from "@/lib/datetime-form";
+import {
+  parseParadasJson,
+  prepararParadasParaGuardar,
+} from "@/lib/rutas/paradas";
 
 async function rollbackRutaTrasFallo(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -151,6 +156,19 @@ export async function crearRuta(formData: FormData) {
   const destino = etiquetaMunicipio(destinoResuelto.municipio!);
   const fechaSalida = String(formData.get("fecha_salida"));
   const fechaLlegada = String(formData.get("fecha_llegada_prevista"));
+  const horaSalidaForm =
+    String(formData.get("hora_salida") ?? "").trim() ||
+    horaEnMadrid(fechaLlegada);
+  const paradasPrep = prepararParadasParaGuardar(
+    parseParadasJson(formData.get("paradas")),
+    {
+      origen,
+      destino,
+      fechaSalida,
+      horaSalida: horaSalidaForm,
+    }
+  );
+  if (!paradasPrep.ok) return { error: paradasPrep.error };
 
   const usuarioId = user.id;
   async function viajesIgualesRecientes() {
@@ -232,6 +250,24 @@ export async function crearRuta(formData: FormData) {
         supabase,
         data.id,
         supabaseErrorMessage(ofertaError)
+      );
+    }
+  }
+
+  if (paradasPrep.paradas.length > 0) {
+    const { error: paradasError } = await supabase.from("ruta_paradas").insert(
+      paradasPrep.paradas.map((p) => ({
+        ruta_conductor_id: data.id,
+        orden: p.orden,
+        municipio: p.municipio,
+        hora_paso: p.hora_paso,
+      }))
+    );
+    if (paradasError) {
+      return rollbackRutaTrasFallo(
+        supabase,
+        data.id,
+        supabaseErrorMessage(paradasError)
       );
     }
   }

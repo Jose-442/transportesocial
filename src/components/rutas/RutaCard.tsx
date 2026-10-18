@@ -73,6 +73,19 @@ export function RutaCard({
           <p className="mt-1 text-sm text-zinc-600">
             {fecha} · {horaSalida}
           </p>
+          {item.busquedaEsTramo && (
+            <p className="mt-1 text-sm font-medium text-amber-800">
+              Incluye tu tramo · precio del viaje completo
+            </p>
+          )}
+          {(item.paradas?.length ?? 0) > 0 && (
+            <p className="mt-1 text-xs text-zinc-500">
+              Paradas:{" "}
+              {item.paradas!
+                .map((p) => formatCiudad(p.municipio))
+                .join(" · ")}
+            </p>
+          )}
           {ruta.acepta_mascotas === true && (
             <div className="mt-1 flex flex-nowrap items-center gap-x-2">
               <Badge

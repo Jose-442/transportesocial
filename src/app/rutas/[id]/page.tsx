@@ -41,6 +41,8 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
+import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
+import { esBusquedaDeTramo } from "@/lib/rutas/paradas";
 import type { OfertaCapacidad, Reserva, RutaConductor } from "@/types/database";
 import type { VehiculoEdicion } from "@/components/rutas/EditarViajePublicado";
 
@@ -93,8 +95,9 @@ export default async function RutaDetallePage({
         ? "ambos"
         : ampliarRaw
       : null;
+  const filtrosListado = parseFiltros(resolvedSearchParams);
   const volverHref = hrefVolverListado("/rutas", resolvedSearchParams);
-  const listadoQs = filtrosToSearchQuery(parseFiltros(resolvedSearchParams));
+  const listadoQs = filtrosToSearchQuery(filtrosListado);
   const loginHref = hrefLoginConVuelta(
     listadoQs ? `/rutas/${id}?${listadoQs}` : `/rutas/${id}`
   );
@@ -169,6 +172,16 @@ export default async function RutaDetallePage({
     notFound();
   }
   const ruta = data as RutaConductor;
+  const paradasMap = await cargarParadasPorRutas(supabase, [ruta.id]);
+  const paradas = paradasMap.get(ruta.id) ?? [];
+  const esTramo =
+    Boolean(filtrosListado.origen && filtrosListado.destino) &&
+    esBusquedaDeTramo(
+      ruta,
+      paradas,
+      filtrosListado.origen ?? "",
+      filtrosListado.destino ?? ""
+    );
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
@@ -468,6 +481,30 @@ export default async function RutaDetallePage({
             </p>
           </div>
         </div>
+        {paradas.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+              Paradas intermedias
+            </p>
+            <ul className="mt-1 space-y-1 text-sm text-zinc-800">
+              {paradas.map((p) => (
+                <li key={`${p.orden}-${p.municipio}`}>
+                  {formatCiudad(p.municipio)}
+                  {p.hora_paso
+                    ? ` · ${formatHoraEs(String(p.hora_paso))}`
+                    : ""}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {esTramo && (
+          <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-950">
+            Este anuncio cubre el tramo que buscas. El precio es el del viaje
+            completo ({origen} → {destino}). Si solo usas un tramo, puedes pedir
+            una rebaja al conductor.
+          </p>
+        )}
         <p className="text-xs leading-tight text-zinc-500 md:hidden">
           El punto exacto lo concretareis por el chat interno al aceptar la
           propuesta.
@@ -612,6 +649,7 @@ export default async function RutaDetallePage({
               faltaIdentidad={faltaIdentidad}
               identidadInicial={identidadInicial}
               salidaIso={ruta.fecha_llegada_prevista}
+              esTramo={esTramo}
             />
           ) : null}
           {!ampliarTieneHueco ? (
@@ -644,6 +682,7 @@ export default async function RutaDetallePage({
           faltaIdentidad={faltaIdentidad}
           identidadInicial={identidadInicial}
           salidaIso={ruta.fecha_llegada_prevista}
+          esTramo={esTramo}
         />
       )}
 

@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
-  coincideFiltrosRuta,
   limitesBusqueda,
+  mismaFechaMesDia,
   type FiltrosListado,
 } from "@/lib/listado-filters";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
@@ -11,6 +11,12 @@ import {
 } from "@/lib/capacidad/ocupacion";
 import { salidaYaPasada } from "@/lib/cuenta/salida-pasada";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
+import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
+import {
+  coincideFiltrosRutaConParadas,
+  esBusquedaDeTramo,
+  type ParadaRuta,
+} from "@/lib/rutas/paradas";
 import type { OfertaCapacidad, RutaConductor } from "@/types/database";
 
 export type RutaListadoItem = RutaConductor & {
@@ -24,6 +30,9 @@ export type RutaListadoItem = RutaConductor & {
   precioBultoPublicado?: number | null;
   /** Tamaño del bulto libre a mostrar en el listado. */
   espacioBultoListado?: string | null;
+  paradas?: ParadaRuta[];
+  /** La búsqueda pedía un tramo de esta ruta (no solo extremos). */
+  busquedaEsTramo?: boolean;
 };
 
 export function quedaSitioEnRuta(item: RutaListadoItem): boolean {
@@ -104,6 +113,8 @@ export async function listarRutasConCapacidad(
   if (!limites) return [];
   const ahoraIso = new Date().toISOString();
 
+  // Sin filtrar origen/destino en SQL: así salen también los tramos
+  // (p. ej. Zaragoza→Lleida dentro de Madrid→Barcelona).
   const consulta = (estado: "activa" | "reservada") => {
     let query = supabase
       .from("rutas_conductores")
@@ -111,9 +122,9 @@ export async function listarRutasConCapacidad(
       .eq("estado", estado)
       .gte("fecha_llegada_prevista", ahoraIso);
     if (limites.fechas) query = query.in("fecha_salida", limites.fechas);
-    if (limites.origenes) query = query.in("origen", limites.origenes);
-    if (limites.destinos) query = query.in("destino", limites.destinos);
-    return query.order("fecha_llegada_prevista", { ascending: true });
+    return query
+      .order("fecha_llegada_prevista", { ascending: true })
+      .limit(400);
   };
 
   const [{ data: activasRaw }, { data: reservadasRaw }] = await Promise.all([
@@ -121,22 +132,52 @@ export async function listarRutasConCapacidad(
     consulta("reservada"),
   ]);
 
+  const candidatas = [
+    ...((activasRaw as RutaConductor[]) ?? []),
+    ...((reservadasRaw as RutaConductor[]) ?? []),
+  ];
+  const paradasPorRuta = await cargarParadasPorRutas(
+    supabase,
+    candidatas.map((r) => r.id)
+  );
+
   const filtrarPorFiltros = (rutas: RutaConductor[]) =>
-    rutas.filter(
-      (r) =>
-        coincideFiltrosRuta(r, filtros) &&
-        !salidaYaPasada(r.fecha_llegada_prevista || r.fecha_salida)
-    );
+    rutas.filter((r) => {
+      if (salidaYaPasada(r.fecha_llegada_prevista || r.fecha_salida)) {
+        return false;
+      }
+      const paradas = paradasPorRuta.get(r.id) ?? [];
+      return coincideFiltrosRutaConParadas(
+        r,
+        paradas,
+        filtros,
+        mismaFechaMesDia
+      );
+    });
 
   const activas = filtrarPorFiltros((activasRaw as RutaConductor[]) ?? []);
-  const reservadas = filtrarPorFiltros((reservadasRaw as RutaConductor[]) ?? []);
+  const reservadas = filtrarPorFiltros(
+    (reservadasRaw as RutaConductor[]) ?? []
+  );
 
   const todasLasRutas = [...activas, ...reservadas];
   const enriquecidas = await enriquecerRutasConDisponibilidad(
     supabase,
     todasLasRutas
   );
-  const porId = new Map(enriquecidas.map((item) => [item.id, item]));
+  const porId = new Map<string, RutaListadoItem>();
+  for (const item of enriquecidas) {
+    const paradas = paradasPorRuta.get(item.id) ?? [];
+    const tramo =
+      Boolean(filtros.origen && filtros.destino) &&
+      esBusquedaDeTramo(
+        item,
+        paradas,
+        filtros.origen ?? "",
+        filtros.destino ?? ""
+      );
+    porId.set(item.id, { ...item, paradas, busquedaEsTramo: tramo });
+  }
 
   const activasItems = activas
     .map((ruta) => porId.get(ruta.id))
