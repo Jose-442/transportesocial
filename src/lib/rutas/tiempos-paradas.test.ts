@@ -48,6 +48,7 @@ describe("mensajeTiempoParadaSuave", () => {
     expect(texto).toContain("Madrid");
     expect(texto).toContain("un poco justo");
     expect(texto).toContain("Revisa por si te equivocaste");
-    expect(texto).toContain("márcalo debajo");
+    expect(texto).toContain("márcalo");
+    expect(texto).not.toContain("debajo");
   });
 });

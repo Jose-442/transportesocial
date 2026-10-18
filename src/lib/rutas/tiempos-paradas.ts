@@ -75,7 +75,7 @@ export function mensajeTiempoParadaSuave(opts: {
     `Entre ${opts.origen} y ${opts.destino} el tiempo parece un poco justo ` +
     `(has puesto ${textoTiempoPuesto(opts.minutosUsuario)}; ` +
     `en coche suelen hacer falta ${formatDuracionAprox(opts.minutosEstimados)}). ` +
-    `Revisa por si te equivocaste. Si la hora es correcta, márcalo debajo.`
+    `Revisa por si te equivocaste. Si la hora es correcta, márcalo.`
   );
 }
 
