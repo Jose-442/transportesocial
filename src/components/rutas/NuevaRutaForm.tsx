@@ -496,7 +496,7 @@ export function NuevaRutaForm({
     setError("");
 
     if (faltaIdentidad) {
-      setError("Indica tu teléfono y DNI/NIE antes de publicar.");
+      setError("Pulsa guardar");
       soltarEnvio();
       return;
     }
@@ -647,6 +647,9 @@ export function NuevaRutaForm({
 
   const botonPublicar = (
     <div className="space-y-2">
+      {faltaIdentidad ? (
+        <p className="text-base font-semibold text-red-600">Pulsa guardar</p>
+      ) : null}
       <Button
         type="submit"
         fullWidth
@@ -993,9 +996,7 @@ export function NuevaRutaForm({
       {faltaIdentidad && (
         <div
           className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5"
-          {...(error === "Indica tu teléfono y DNI/NIE antes de publicar."
-            ? { "data-campo-error": "" }
-            : {})}
+          {...(error === "Pulsa guardar" ? { "data-campo-error": "" } : {})}
         >
           <p className="text-base text-zinc-600">
             Por normativa legal necesitamos pedirte tu DNI/NIE y tu teléfono
@@ -1041,6 +1042,7 @@ export function NuevaRutaForm({
           {errorIdentidad ? (
             <p className="text-sm text-red-600">{errorIdentidad}</p>
           ) : null}
+          <p className="text-base font-semibold text-red-600">Pulsa guardar</p>
           <Button
             type="button"
             variant="secondary"
