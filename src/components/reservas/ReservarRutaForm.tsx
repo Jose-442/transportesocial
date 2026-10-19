@@ -284,6 +284,22 @@ export function ReservarRutaForm({
       <p className="text-base font-semibold uppercase text-zinc-800">
         Rellena lo que necesites de este viaje
       </p>
+      {pideTramo ? (
+        <CampoTramoReserva
+          puntos={puntosRuta}
+          origen={form.tramo_origen}
+          destino={form.tramo_destino}
+          error={errorTramo}
+          onOrigen={(tramo_origen) => {
+            setForm((prev) => ({ ...prev, tramo_origen }));
+            if (errorTramo) setErrorTramo(null);
+          }}
+          onDestino={(tramo_destino) => {
+            setForm((prev) => ({ ...prev, tramo_destino }));
+            if (errorTramo) setErrorTramo(null);
+          }}
+        />
+      ) : null}
       {ofreceBulto && (
         <Card className="space-y-3 bg-zinc-50">
           <div className="space-y-1.5" data-campo="">
@@ -372,22 +388,6 @@ export function ReservarRutaForm({
           totalCentimos={desglose.totalCentimos}
         />
       )}
-      {pideTramo ? (
-        <CampoTramoReserva
-          puntos={puntosRuta}
-          origen={form.tramo_origen}
-          destino={form.tramo_destino}
-          error={errorTramo}
-          onOrigen={(tramo_origen) => {
-            setForm((prev) => ({ ...prev, tramo_origen }));
-            if (errorTramo) setErrorTramo(null);
-          }}
-          onDestino={(tramo_destino) => {
-            setForm((prev) => ({ ...prev, tramo_destino }));
-            if (errorTramo) setErrorTramo(null);
-          }}
-        />
-      ) : null}
       {mostrarRebaja ? (
         <SolicitarRebaja
           marcado={Boolean(form.pide_rebaja)}
