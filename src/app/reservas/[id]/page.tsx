@@ -356,7 +356,7 @@ export default async function ReservaDetallePage({
       <div>
         <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">{titulo}</h1>
         {relacionadas.some((r) => r.tramo_origen && r.tramo_destino) ? (
-          <p className="mt-1 text-sm font-medium text-emerald-800 md:mt-1.5">
+          <p className="mt-2 text-base font-bold text-emerald-800 md:mt-2.5 md:text-xl">
             Tramo:{" "}
             {formatCiudad(
               relacionadas.find((r) => r.tramo_origen)?.tramo_origen ?? ""
