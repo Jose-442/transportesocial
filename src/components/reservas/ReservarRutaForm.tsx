@@ -243,7 +243,7 @@ export function ReservarRutaForm({
         <Card className="space-y-3 bg-zinc-50">
           <div className="space-y-1.5" data-campo="">
             <p className="text-sm font-medium text-zinc-800">
-              ¿También envías un bulto?
+              ¿Necesitas enviar un bulto?
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
