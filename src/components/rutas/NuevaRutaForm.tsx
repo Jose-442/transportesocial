@@ -262,6 +262,68 @@ export function NuevaRutaForm({
     setHorasParadaConfirmadas({});
   }, [form.hora_salida, form.fecha_salida]);
 
+  // Si corriges paradas/horas, quita el aviso rojo del intento anterior
+  // sin tener que pulsar otra vez «Publicar».
+  useEffect(() => {
+    if (!error) return;
+    if (
+      error === "Pulsa guardar" ||
+      error.includes("Datos del vehículo") ||
+      error.includes("Espera un momento")
+    ) {
+      return;
+    }
+
+    const origenMuni = resolverMunicipio(form.origen);
+    const destinoMuni = resolverMunicipio(form.destino, {
+      incluirFrontera: true,
+    });
+    if (!origenMuni || !destinoMuni) return;
+    if (!form.fecha_salida || !form.hora_salida) return;
+    if (avisoTiempos.cargando) return;
+
+    if (avisoDuro) {
+      if (error !== avisoDuro.aviso) setError(avisoDuro.aviso);
+      return;
+    }
+
+    const paradasOk = prepararParadasParaGuardar(form.paradas, {
+      origen: etiquetaMunicipio(origenMuni),
+      destino: etiquetaMunicipio(destinoMuni),
+      fechaSalida: form.fecha_salida,
+      horaSalida: form.hora_salida,
+    });
+    if (!paradasOk.ok) {
+      if (error !== paradasOk.error) setError(paradasOk.error);
+      return;
+    }
+
+    if (suavesSinConfirmar.length > 0) {
+      const msg =
+        "Revisa la hora de la parada o marca debajo que es correcta.";
+      if (error !== msg) setError(msg);
+      return;
+    }
+
+    if (
+      /parada/i.test(error) ||
+      /hora/i.test(error) ||
+      error.includes("kilómetros")
+    ) {
+      setError("");
+    }
+  }, [
+    error,
+    form.paradas,
+    form.origen,
+    form.destino,
+    form.fecha_salida,
+    form.hora_salida,
+    avisoTiempos.cargando,
+    avisoDuro,
+    suavesSinConfirmar.length,
+  ]);
+
   function avisoPrecioBajo(publicadoPrecio: number): string | null {
     if (
       minimoVisible == null ||
@@ -413,6 +475,12 @@ export function NuevaRutaForm({
       i === index ? { ...p, [field]: value } : p
     );
     setForm({ ...form, paradas });
+    setFieldErrors((prev) => {
+      if (!prev.destino?.includes("paradas")) return prev;
+      const next = { ...prev };
+      delete next.destino;
+      return next;
+    });
   }
 
   function anadirParada() {
