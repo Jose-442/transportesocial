@@ -472,44 +472,59 @@ export default async function ReservaDetallePage({
         <FichaPorteConductor porte={porteFicha} />
       ) : null}
 
-      <Card className="space-y-1 p-2 md:space-y-1.5 md:p-3">
-        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
-          <span className="text-sm font-semibold text-zinc-900">Precio:</span>
-          <span className="text-lg font-bold text-emerald-700 md:text-2xl">
-            {formatEur(precioMostrar)}
-          </span>
-        </p>
-        <p className="text-sm text-zinc-700">{fraseReserva}</p>
-        {detalleBulto?.bulto_descripcion &&
-        !(esConductor && porteFicha) ? (
-          <p className="text-sm text-zinc-600">
-            {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
+      {estadoMostrar !== "cancelado" ? (
+        <Card className="space-y-1 p-2 md:space-y-1.5 md:p-3">
+          <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0 text-zinc-700">
+            <span className="text-sm font-semibold text-zinc-900">Precio:</span>
+            <span className="text-lg font-bold text-emerald-700 md:text-2xl">
+              {formatEur(precioMostrar)}
+            </span>
           </p>
-        ) : null}
-        <p className="text-sm text-zinc-600">
-          Para el día:{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleDateString("es-ES", {
-            timeZone: "Europe/Madrid",
-            day: "numeric",
-            month: "numeric",
-          })}{" "}
-          a las{" "}
-          {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString("es-ES", {
-            timeZone: "Europe/Madrid",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
-        {esCliente &&
-        (puedeDescargarJustificante(estadoMostrar) || huboCobro) ? (
-          <a
-            href={`/api/reservas/${reserva.id}/justificante`}
-            className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
-          >
-            Descargar justificante de pago
-          </a>
-        ) : null}
-      </Card>
+          <p className="text-sm text-zinc-700">{fraseReserva}</p>
+          {detalleBulto?.bulto_descripcion &&
+          !(esConductor && porteFicha) ? (
+            <p className="text-sm text-zinc-600">
+              {separarHoraOculta(detalleBulto.bulto_descripcion).texto}
+            </p>
+          ) : null}
+          <p className="text-sm text-zinc-600">
+            Para el día:{" "}
+            {new Date(reserva.fecha_llegada_prevista).toLocaleDateString(
+              "es-ES",
+              {
+                timeZone: "Europe/Madrid",
+                day: "numeric",
+                month: "numeric",
+              }
+            )}{" "}
+            a las{" "}
+            {new Date(reserva.fecha_llegada_prevista).toLocaleTimeString(
+              "es-ES",
+              {
+                timeZone: "Europe/Madrid",
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            )}
+          </p>
+          {esCliente &&
+          (puedeDescargarJustificante(estadoMostrar) || huboCobro) ? (
+            <a
+              href={`/api/reservas/${reserva.id}/justificante`}
+              className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
+            >
+              Descargar justificante de pago
+            </a>
+          ) : null}
+        </Card>
+      ) : esCliente && huboCobro ? (
+        <a
+          href={`/api/reservas/${reserva.id}/justificante`}
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
+        >
+          Descargar justificante de pago
+        </a>
+      ) : null}
 
       {estadoResenas && (
         <Card>
