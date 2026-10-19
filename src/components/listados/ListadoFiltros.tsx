@@ -24,6 +24,12 @@ type Props = {
   tipo?: "viajes" | "bultos";
 };
 
+type OpcionesBusqueda = {
+  fecha?: string;
+  semana?: boolean;
+  desde?: string;
+};
+
 export function ListadoFiltros({ tipo = "viajes" }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -99,25 +105,10 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     );
   }, [ready, draftKey, origen, destino, fecha, semana, desde]);
 
-  function navegarBusqueda(opciones: {
-    fecha?: string;
-    semana?: boolean;
-    desde?: string;
-  }) {
-    setErrorOrigen("");
-    setErrorDestino("");
-
+  function armarQuery(opciones: OpcionesBusqueda): string | null {
     const origenValido = resolverMunicipio(origen);
     const destinoValido = resolverMunicipio(destino, { incluirFrontera: true });
-
-    if (!origenValido) {
-      setErrorOrigen("Selecciona una población de la lista");
-      return false;
-    }
-    if (!destinoValido) {
-      setErrorDestino("Selecciona una población de la lista");
-      return false;
-    }
+    if (!origenValido || !destinoValido) return null;
 
     const params = new URLSearchParams();
     params.set("origen", etiquetaMunicipio(origenValido));
@@ -131,17 +122,65 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     } else if (opciones.fecha?.trim()) {
       params.set("fecha", opciones.fecha.trim());
     }
-    router.push(`${pathname}?${params.toString()}`);
+    return params.toString();
+  }
+
+  function navegarBusqueda(
+    opciones: OpcionesBusqueda,
+    { mostrarErrores = false }: { mostrarErrores?: boolean } = {}
+  ) {
+    if (mostrarErrores) {
+      setErrorOrigen("");
+      setErrorDestino("");
+    }
+
+    const origenValido = resolverMunicipio(origen);
+    const destinoValido = resolverMunicipio(destino, { incluirFrontera: true });
+
+    if (!origenValido) {
+      if (mostrarErrores) {
+        setErrorOrigen("Selecciona una población de la lista");
+      }
+      return false;
+    }
+    if (!destinoValido) {
+      if (mostrarErrores) {
+        setErrorDestino("Selecciona una población de la lista");
+      }
+      return false;
+    }
+
+    const qs = armarQuery(opciones);
+    if (!qs) return false;
+    if (searchParams.toString() === qs) return true;
+    router.push(`${pathname}?${qs}`);
     return true;
   }
 
+  // Busca solo en cuanto hay salida y destino válidos (y al cambiar día/tramo).
+  useEffect(() => {
+    if (!ready) return;
+    const origenValido = resolverMunicipio(origen);
+    const destinoValido = resolverMunicipio(destino, { incluirFrontera: true });
+    if (!origenValido || !destinoValido) return;
+
+    const espera = window.setTimeout(() => {
+      navegarBusqueda({ fecha, semana, desde });
+    }, 350);
+    return () => window.clearTimeout(espera);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- navegar usa estado actual
+  }, [ready, origen, destino, fecha, semana, desde, pathname]);
+
   function aplicar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    navegarBusqueda({
-      fecha,
-      semana,
-      desde,
-    });
+    navegarBusqueda(
+      {
+        fecha,
+        semana,
+        desde,
+      },
+      { mostrarErrores: true }
+    );
   }
 
   function limpiar() {
@@ -172,12 +211,6 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
     setDesde(nuevo);
     setSemana(true);
     setFecha("");
-    const params = new URLSearchParams();
-    params.set("origen", etiquetaMunicipio(origenValido));
-    params.set("destino", etiquetaMunicipio(destinoValido));
-    params.set("semana", "1");
-    params.set("desde", nuevo);
-    router.push(`${pathname}?${params.toString()}`);
   }
 
   const hayFiltros = !!(origen || destino || fecha || semana);
@@ -194,7 +227,10 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           name="origen"
           label="Salida"
           value={origen}
-          onChange={setOrigen}
+          onChange={(value) => {
+            setOrigen(value);
+            if (errorOrigen) setErrorOrigen("");
+          }}
           required
           error={errorOrigen}
         />
@@ -202,7 +238,10 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
           name="destino"
           label="Destino"
           value={destino}
-          onChange={setDestino}
+          onChange={(value) => {
+            setDestino(value);
+            if (errorDestino) setErrorDestino("");
+          }}
           required
           error={errorDestino}
           incluirFrontera
@@ -221,22 +260,18 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
             onChange={(value) => {
               setFecha(value);
               if (value.trim()) setSemana(false);
-              // Al elegir mes+día, busca solo (el botón Buscar sigue ahí).
-              if (/^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
-                navegarBusqueda({ fecha: value.trim(), semana: false });
-              }
             }}
           />
           <p className="text-base leading-snug text-zinc-600">
-            Si eliges un día, verás los {palabra} de ese día (busca al
-            elegirlo). Si no eliges día, verás los {palabra} de esa ruta
-            ordenados por fecha de salida (los que salen antes).
+            Busca solo al elegir salida y destino. Si pones un día, filtra ese
+            día; si no, muestra los {palabra} que salen antes.
           </p>
         </>
       ) : (
         <div className="space-y-2">
           <p className="text-base leading-snug text-zinc-600">
-            Tramo de 7 días: <span className="font-semibold text-zinc-800">{tramoTexto}</span>
+            Tramo de 7 días:{" "}
+            <span className="font-semibold text-zinc-800">{tramoTexto}</span>
           </p>
           <div className="flex flex-wrap gap-2">
             <Button
