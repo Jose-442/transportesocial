@@ -37,17 +37,17 @@ export function ModificarMiReserva({
   if (!etiqueta || !query) return null;
 
   return (
-    <div className="rounded-xl border border-emerald-300 bg-emerald-50/70 px-3 py-2.5">
-      <p className="text-lg font-bold text-emerald-950 md:text-xl">
+    <div className="rounded-2xl border-2 border-emerald-600 bg-emerald-50 p-4 shadow-sm md:p-5">
+      <p className="text-base font-bold text-emerald-950 md:text-lg">
         Modificar mi reserva
       </p>
-      <p className="mt-0.5 text-sm text-emerald-900">
+      <p className="mt-1 text-sm text-emerald-900">
         Solo para ampliar lo que ya pediste.
       </p>
       <ButtonLink
         href={`/rutas/${rutaId}?ampliar=${query}`}
         fullWidth
-        className="mt-2"
+        className="mt-3"
       >
         {etiqueta}
       </ButtonLink>
