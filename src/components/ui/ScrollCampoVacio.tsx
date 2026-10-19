@@ -132,7 +132,7 @@ export function ScrollCampoVacio() {
         }
         if (campo.hasAttribute("data-campo-vacio")) return;
         const form = campo.closest("form");
-        scrollAlSiguienteVacio(form ?? document, campo);
+        scrollAlSiguienteVacio(form ?? document, campo, true);
       }, 450);
     }
 
