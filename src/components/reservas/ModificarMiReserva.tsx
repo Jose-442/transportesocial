@@ -38,7 +38,7 @@ export function ModificarMiReserva({
 
   return (
     <div className="rounded-2xl border-2 border-emerald-600 bg-emerald-50 p-4 shadow-sm md:p-5">
-      <p className="text-sm font-semibold text-emerald-950">
+      <p className="text-base font-bold text-emerald-950 md:text-lg">
         Modificar mi reserva
       </p>
       <p className="mt-1 text-sm text-emerald-900">
