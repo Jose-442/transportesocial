@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { importeDevuelto, type FilaPago } from "@/lib/cuenta/pagos";
+import {
+  importeDevuelto,
+  importeResultante,
+  type FilaPago,
+} from "@/lib/cuenta/pagos";
 import {
   MOTIVO_CANCELACION_CLIENTE,
   MOTIVO_CANCELACION_CONDUCTOR,
@@ -93,7 +97,7 @@ describe("importeDevuelto", () => {
     ).toBe(40);
   });
 
-  it("en la primera hora desde el pago se devuelve también el 18 %", () => {
+  it("si hay reembolso_eur guardado, usa esa cifra (p. ej. menos tarifa del banco)", () => {
     expect(
       importeDevuelto(
         [
@@ -102,11 +106,18 @@ describe("importeDevuelto", () => {
             motivo_cancelacion: MOTIVO_CANCELACION_CLIENTE,
             pagada_en: "2026-10-12T09:30:00.000Z",
             cancelada_en: "2026-10-12T10:00:00.000Z",
+            reembolso_eur: 45.09,
           }),
         ],
         [{ monto: 47.2, estado_escrow: "liberado" }]
       )
-    ).toBe(47.2);
+    ).toBe(45.09);
+  });
+
+  it("cantidad resultante es pagado menos devuelto", () => {
+    expect(importeResultante(59, 56.89)).toBe(2.11);
+    expect(importeResultante(59, 59)).toBeNull();
+    expect(importeResultante(47.2, 40)).toBe(7.2);
   });
 
   it("pasada la hora, si aún no había aceptado el conductor, no se parte el viaje", () => {

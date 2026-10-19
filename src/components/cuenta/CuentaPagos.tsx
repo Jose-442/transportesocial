@@ -37,6 +37,11 @@ export async function CuentaPagos({ userId }: { userId: string }) {
                   Devuelto: {formatEur(pago.devueltoEur)}
                 </p>
               ) : null}
+              {pago.resultanteEur != null && pago.resultanteEur > 0 ? (
+                <p className="text-sm font-medium text-zinc-700">
+                  Cantidad resultante: {formatEur(pago.resultanteEur)}
+                </p>
+              ) : null}
               {pago.puedeJustificante ? (
                 <a
                   href={`/api/reservas/${pago.id}/justificante`}

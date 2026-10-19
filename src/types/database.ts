@@ -133,6 +133,8 @@ export type Reserva = {
   tramo_destino?: string | null;
   /** Conductor no aceptó la rebaja del tramo. */
   rebaja_rechazada_en?: string | null;
+  /** Euros reembolsados al cancelar (lo que se devolvió de verdad). */
+  reembolso_eur?: number | null;
   created_at: string;
   updated_at: string;
 };

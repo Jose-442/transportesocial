@@ -278,6 +278,11 @@ export async function aplicarCancelacionPagada(
       .in("stripe_payment_intent_id", intentIds);
   }
 
+  const reembolsoEurGuardar = centimosAEuros(
+    opts.tipo === "viaje_menos_banco"
+      ? reembolsoHechoCents
+      : reparto.reembolsoCents
+  );
   const ahora = new Date().toISOString();
   const cambios = {
     estado: "cancelado" as const,
@@ -290,6 +295,17 @@ export async function aplicarCancelacionPagada(
     .in("id", ids);
   if (errorAdmin) {
     console.error("[cancelar] guardar", errorAdmin.message);
+  }
+  // Una sola cifra en la reserva principal (si no, Pagos sumaría dos veces).
+  const idReembolso = ids[0];
+  if (idReembolso && reembolsoEurGuardar > 0) {
+    const { error: errorReembolso } = await admin
+      .from("reservas")
+      .update({ reembolso_eur: reembolsoEurGuardar })
+      .eq("id", idReembolso);
+    if (errorReembolso) {
+      console.error("[cancelar] guardar reembolso", errorReembolso.message);
+    }
   }
 
   const { createClient } = await import("@/lib/supabase/server");

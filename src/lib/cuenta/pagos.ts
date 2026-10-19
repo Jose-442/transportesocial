@@ -36,6 +36,8 @@ export type FilaPago = PrecioCancelacion & {
   cantidad: number;
   bulto_descripcion: string | null;
   created_at: string;
+  /** Si ya se guardó al cancelar, es lo que Stripe devolvió de verdad. */
+  reembolso_eur?: number | null;
 };
 
 const MOTIVO_RECHAZO_CONDUCTOR = "Rechazada por el conductor.";
@@ -55,6 +57,15 @@ export function importeDevuelto(
   if (filas.length === 0 || txs.length === 0) return null;
   const pagadoCents = txs.reduce((sum, tx) => sum + eurosACentimos(tx.monto), 0);
   if (pagadoCents < 1) return null;
+
+  const guardadoCents = filas.reduce((sum, fila) => {
+    const euros = Number(fila.reembolso_eur ?? 0);
+    return euros > 0 ? sum + eurosACentimos(euros) : sum;
+  }, 0);
+  if (guardadoCents > 0) {
+    return centimosAEuros(Math.min(guardadoCents, pagadoCents));
+  }
+
   if (txs.every((tx) => tx.estado_escrow === "reembolsado")) {
     return centimosAEuros(pagadoCents);
   }
@@ -79,10 +90,25 @@ export function importeDevuelto(
       principal.pagada_en
     );
     if (!politica.tipo) return null;
+    // viaje_menos_banco: sin cifra guardada no inventamos la tarifa Stripe.
+    if (politica.tipo === "viaje_menos_banco") {
+      return centimosAEuros(pagadoCents);
+    }
     return centimosAEuros(repartoCancelacion(filas, politica.tipo).reembolsoCents);
   }
 
   return null;
+}
+
+/** Lo que no se devolvió (tarifa del banco, gastos de gestión, etc.). */
+export function importeResultante(
+  pagadoEur: number,
+  devueltoEur: number | null
+): number | null {
+  if (devueltoEur == null || devueltoEur < 0) return null;
+  const cents = eurosACentimos(pagadoEur) - eurosACentimos(devueltoEur);
+  if (cents < 1) return null;
+  return centimosAEuros(cents);
 }
 
 export type PagoCuenta = {
@@ -91,6 +117,8 @@ export type PagoCuenta = {
   detalle: string;
   pagadoEur: number;
   devueltoEur: number | null;
+  /** Pagado − Devuelto (tarifa banco, gastos de gestión…). */
+  resultanteEur: number | null;
   puedeJustificante: boolean;
   fecha: string;
 };
@@ -113,7 +141,7 @@ export async function loadPagosCuenta(
   const { data: reservasRaw } = await supabase
     .from("reservas")
     .select(
-      "id, tipo, estado, precio_neto, precio_total, comision_plataforma, cantidad, bulto_descripcion, motivo_cancelacion, cancelada_en, pagada_en, aceptada_en, fecha_llegada_prevista, ruta_conductor_id, anuncio_bulto_id, created_at, cliente_id"
+      "id, tipo, estado, precio_neto, precio_total, comision_plataforma, cantidad, bulto_descripcion, motivo_cancelacion, cancelada_en, pagada_en, aceptada_en, fecha_llegada_prevista, ruta_conductor_id, anuncio_bulto_id, created_at, cliente_id, reembolso_eur"
     )
     .in("id", reservaIds)
     .eq("cliente_id", userId);
@@ -137,6 +165,7 @@ export async function loadPagosCuenta(
       | "ruta_conductor_id"
       | "anuncio_bulto_id"
       | "created_at"
+      | "reembolso_eur"
     >
   >;
   if (reservas.length === 0) return [];
@@ -250,11 +279,19 @@ export async function loadPagosCuenta(
       ruta_conductor_id: item.ruta_conductor_id,
       anuncio_bulto_id: item.anuncio_bulto_id,
       created_at: item.created_at,
+      reembolso_eur: item.reembolso_eur,
     }));
 
     const fecha = txsGrupo.reduce(
       (max, tx) => (tx.created_at > max ? tx.created_at : max),
       txsGrupo[0]?.created_at ?? principal.created_at
+    );
+
+    const pagadoEur = centimosAEuros(pagadoCents);
+    const devueltoEur = conRebajaDevuelta(
+      importeDevuelto(filas, txsGrupo),
+      grupo.reduce((sum, item) => sum + (rebajas.get(item.id) ?? 0), 0),
+      pagadoEur
     );
 
     pagos.push({
@@ -264,12 +301,9 @@ export async function loadPagosCuenta(
           ? `${formatCiudad(origen)} → ${formatCiudad(destino)}`
           : "Viaje",
       detalle: fraseQueIncluyeReservas(filas),
-      pagadoEur: centimosAEuros(pagadoCents),
-      devueltoEur: conRebajaDevuelta(
-        importeDevuelto(filas, txsGrupo),
-        grupo.reduce((sum, item) => sum + (rebajas.get(item.id) ?? 0), 0),
-        centimosAEuros(pagadoCents)
-      ),
+      pagadoEur,
+      devueltoEur,
+      resultanteEur: importeResultante(pagadoEur, devueltoEur),
       puedeJustificante: true,
       fecha,
     });
