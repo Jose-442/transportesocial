@@ -167,8 +167,10 @@ export default async function ReservaDetallePage({
 
   const disputa = (disputaData as Disputa | null) ?? null;
 
+  // Si abres una cancelada, no sustituirla por otra reserva activa del mismo viaje
+  // (si no, el aviso «Han cancelado» abre la reserva nueva de rebaja).
   let relacionadas: Reserva[] = [reserva];
-  if (reserva.ruta_conductor_id) {
+  if (reserva.ruta_conductor_id && reserva.estado !== "cancelado") {
     const { data: hermanas } = await supabase
       .from("reservas")
       .select("*")
