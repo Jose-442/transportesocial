@@ -355,6 +355,18 @@ export default async function ReservaDetallePage({
 
       <div>
         <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">{titulo}</h1>
+        {relacionadas.some((r) => r.tramo_origen && r.tramo_destino) ? (
+          <p className="mt-1 text-sm font-medium text-emerald-800 md:mt-1.5">
+            Tramo:{" "}
+            {formatCiudad(
+              relacionadas.find((r) => r.tramo_origen)?.tramo_origen ?? ""
+            )}{" "}
+            →{" "}
+            {formatCiudad(
+              relacionadas.find((r) => r.tramo_destino)?.tramo_destino ?? ""
+            )}
+          </p>
+        ) : null}
         <div className="mt-1 flex flex-wrap items-center gap-2 md:mt-2">
           <ButtonLink
             href={`/perfil/${otroPerfil?.id ?? (esCliente ? reserva.transportista_id : reserva.cliente_id)}`}

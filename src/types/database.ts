@@ -127,6 +127,10 @@ export type Reserva = {
   rebaja_eur?: number | null;
   /** Búsqueda de un tramo dentro de una ruta más larga. */
   es_tramo?: boolean;
+  /** Municipio de subida / recogida del tramo. */
+  tramo_origen?: string | null;
+  /** Municipio de bajada / entrega del tramo. */
+  tramo_destino?: string | null;
   /** Conductor no aceptó la rebaja del tramo. */
   rebaja_rechazada_en?: string | null;
   created_at: string;

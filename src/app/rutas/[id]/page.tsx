@@ -42,7 +42,7 @@ import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
-import { esBusquedaDeTramo } from "@/lib/rutas/paradas";
+import { esBusquedaDeTramo, puntosRuta } from "@/lib/rutas/paradas";
 import {
   rebajaTramoPendiente,
   TEXTO_NOTA_TRAMO_FICHA,
@@ -675,7 +675,15 @@ export default async function RutaDetallePage({
               faltaIdentidad={faltaIdentidad}
               identidadInicial={identidadInicial}
               salidaIso={ruta.fecha_llegada_prevista}
-              esTramo={esTramo}
+              puntosRuta={puntosRuta(ruta.origen, ruta.destino, paradas)}
+              tramoBusqueda={
+                filtrosListado.origen && filtrosListado.destino
+                  ? {
+                      origen: filtrosListado.origen,
+                      destino: filtrosListado.destino,
+                    }
+                  : null
+              }
             />
           ) : null}
           {!ampliarTieneHueco ? (
@@ -708,7 +716,15 @@ export default async function RutaDetallePage({
           faltaIdentidad={faltaIdentidad}
           identidadInicial={identidadInicial}
           salidaIso={ruta.fecha_llegada_prevista}
-          esTramo={esTramo}
+          puntosRuta={puntosRuta(ruta.origen, ruta.destino, paradas)}
+          tramoBusqueda={
+            filtrosListado.origen && filtrosListado.destino
+              ? {
+                  origen: filtrosListado.origen,
+                  destino: filtrosListado.destino,
+                }
+              : null
+          }
         />
       )}
 

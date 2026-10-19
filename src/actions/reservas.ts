@@ -35,6 +35,57 @@ import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
 import { leerDeclaracionPorteReserva } from "@/lib/porte-reserva";
 import { textoDescripcionBulto } from "@/lib/reservas/labels";
 import { identidadListaParaPagar } from "@/lib/identidad-pago";
+import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
+import { esTramoElegido, puntosRuta } from "@/lib/rutas/paradas";
+
+async function leerTramoDelFormulario(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  ruta: { id: string; origen: string; destino: string },
+  formData: FormData,
+  { obligatorio }: { obligatorio: boolean }
+): Promise<
+  | { error: string }
+  | {
+      tramo_origen: string | null;
+      tramo_destino: string | null;
+      es_tramo: boolean;
+    }
+> {
+  const tramoOrigen = String(formData.get("tramo_origen") ?? "").trim();
+  const tramoDestino = String(formData.get("tramo_destino") ?? "").trim();
+  const paradasMap = await cargarParadasPorRutas(supabase, [ruta.id]);
+  const puntos = puntosRuta(
+    ruta.origen,
+    ruta.destino,
+    paradasMap.get(ruta.id) ?? []
+  );
+  if (puntos.length < 3) {
+    return { tramo_origen: null, tramo_destino: null, es_tramo: false };
+  }
+  if (!tramoOrigen && !tramoDestino) {
+    if (obligatorio) {
+      return { error: "Elige el tramo que necesitas (subida y bajada)." };
+    }
+    return {
+      tramo_origen: null,
+      tramo_destino: null,
+      es_tramo: String(formData.get("es_tramo") ?? "").trim() === "1",
+    };
+  }
+  if (!tramoOrigen || !tramoDestino) {
+    return { error: "Elige el tramo que necesitas (subida y bajada)." };
+  }
+  const i0 = puntos.indexOf(tramoOrigen);
+  const i1 = puntos.indexOf(tramoDestino);
+  if (i0 < 0 || i1 < 0 || i1 <= i0) {
+    return { error: "La bajada tiene que ser después de la subida." };
+  }
+  return {
+    tramo_origen: tramoOrigen,
+    tramo_destino: tramoDestino,
+    es_tramo: esTramoElegido(puntos, tramoOrigen, tramoDestino),
+  };
+}
 
 async function errorSiFaltaIdentidadParaPagar(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -228,7 +279,6 @@ export async function solicitarReservaViaje(formData: FormData) {
   const cantidadPlazas =
     Number.isInteger(cantidadRaw) && cantidadRaw > 0 ? cantidadRaw : 0;
   const ofertaId = String(formData.get("oferta_id") ?? "");
-  const esTramo = String(formData.get("es_tramo") ?? "").trim() === "1";
   const pideRebajaForm = marcoPideRebaja(formData.get("pide_rebaja"));
 
   const { data: ruta } = await supabase
@@ -254,6 +304,12 @@ export async function solicitarReservaViaje(formData: FormData) {
         : "Elige al menos una plaza.",
     };
   }
+
+  const tramo = await leerTramoDelFormulario(supabase, ruta, formData, {
+    obligatorio: true,
+  });
+  if ("error" in tramo) return { error: tramo.error };
+  const esTramo = tramo.es_tramo;
 
   const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
   if (faltaIdentidad) return { error: faltaIdentidad };
@@ -315,6 +371,12 @@ export async function solicitarReservaViaje(formData: FormData) {
         bulto_medidas: medidas || null,
         ...(pideRebajaForm ? { pide_rebaja: true } : {}),
         ...(esTramo ? { es_tramo: true } : {}),
+        ...(tramo.tramo_origen
+          ? {
+              tramo_origen: tramo.tramo_origen,
+              tramo_destino: tramo.tramo_destino,
+            }
+          : {}),
         ...porte,
         ...datosCaeAlCrearReserva({
           origen: ruta.origen,
@@ -344,6 +406,10 @@ export async function solicitarReservaViaje(formData: FormData) {
     plazaForm.set("oferta_id", ofertaId);
     plazaForm.set("cantidad", String(cantidadPlazas));
     if (esTramo) plazaForm.set("es_tramo", "1");
+    if (tramo.tramo_origen) {
+      plazaForm.set("tramo_origen", tramo.tramo_origen);
+      plazaForm.set("tramo_destino", tramo.tramo_destino ?? "");
+    }
     if (!conBulto && pideRebajaForm) plazaForm.set("pide_rebaja", "1");
     const plaza = await solicitarReservaCapacidadSinCheckout(plazaForm);
     if ("error" in plaza) {
@@ -914,7 +980,11 @@ export async function solicitarReservaCapacidad(
   const precioTotalUnit = Number(oferta.precio_publicado);
   const precioNeto = precioNetoUnit * cantidad;
   const precioTotal = precioTotalUnit * cantidad;
-  const esTramo = String(formData.get("es_tramo") ?? "").trim() === "1";
+  const tramoCapacidad = await leerTramoDelFormulario(supabase, ruta, formData, {
+    obligatorio: false,
+  });
+  if ("error" in tramoCapacidad) return { error: tramoCapacidad.error };
+  const esTramo = tramoCapacidad.es_tramo;
   const pideRebajaMarcado = marcoPideRebaja(formData.get("pide_rebaja"));
   const pideRebaja =
     pideRebajaMarcado && (oferta.tipo === "bulto" || esTramo);
@@ -945,6 +1015,12 @@ export async function solicitarReservaCapacidad(
       bulto_medidas: oferta.tipo === "bulto" ? medidas || null : null,
       ...(pideRebaja ? { pide_rebaja: true } : {}),
       ...(esTramo ? { es_tramo: true } : {}),
+      ...(tramoCapacidad.tramo_origen
+        ? {
+            tramo_origen: tramoCapacidad.tramo_origen,
+            tramo_destino: tramoCapacidad.tramo_destino,
+          }
+        : {}),
       ...(porte ?? {}),
       ...datosCaeAlCrearReserva({
         origen: ruta.origen,

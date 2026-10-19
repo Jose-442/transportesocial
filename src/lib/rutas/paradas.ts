@@ -103,6 +103,38 @@ export function esBusquedaDeTramo(
   return rutaCubreTrayecto(puntos, origenFiltro, destinoFiltro);
 }
 
+/** Índice del punto que coincide con el municipio (o -1). */
+export function indicePuntoRuta(puntos: string[], municipio: string): number {
+  if (!municipio.trim()) return -1;
+  return puntos.findIndex((p) => coincideMunicipioBusqueda(p, municipio));
+}
+
+/**
+ * ¿Subida→bajada es solo una parte del recorrido (no punta a punta)?
+ * Los valores deben ser puntos exactos de la lista.
+ */
+export function esTramoElegido(
+  puntos: string[],
+  tramoOrigen: string,
+  tramoDestino: string
+): boolean {
+  if (puntos.length < 2 || !tramoOrigen || !tramoDestino) return false;
+  const i0 = puntos.indexOf(tramoOrigen);
+  const i1 = puntos.indexOf(tramoDestino);
+  if (i0 < 0 || i1 < 0 || i1 <= i0) return false;
+  return !(i0 === 0 && i1 === puntos.length - 1);
+}
+
+/** Empareja un filtro de búsqueda con el punto exacto de la ruta. */
+export function puntoDesdeFiltro(
+  puntos: string[],
+  filtro: string
+): string {
+  if (!filtro.trim()) return "";
+  const i = indicePuntoRuta(puntos, filtro);
+  return i >= 0 ? puntos[i] : "";
+}
+
 export function parseParadasJson(
   raw: FormDataEntryValue | null
 ): ParadaFormulario[] {

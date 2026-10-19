@@ -10,6 +10,12 @@ import {
   mensajeAvisoConductorConfirmada,
   mensajeAvisoConductorPendiente,
 } from "@/lib/reservas/rebaja";
+import { formatCiudad } from "@/lib/format-ciudad";
+
+function sufijoTramo(r: Pick<Reserva, "tramo_origen" | "tramo_destino">): string {
+  if (!r.tramo_origen || !r.tramo_destino) return "";
+  return ` Tramo: ${formatCiudad(r.tramo_origen)} → ${formatCiudad(r.tramo_destino)}.`;
+}
 
 type DbClient = SupabaseClient;
 
@@ -103,9 +109,11 @@ export async function asegurarAvisosConductor(
             : "Hay una solicitud de rebaja"
           : "Nueva solicitud de reserva"
         : "Nueva reserva confirmada",
-      mensaje: pendiente
-        ? mensajeAvisoConductorPendiente(pideRebaja, esTramo)
-        : mensajeAvisoConductorConfirmada(pideRebaja, esTramo),
+      mensaje: `${
+        pendiente
+          ? mensajeAvisoConductorPendiente(pideRebaja, esTramo)
+          : mensajeAvisoConductorConfirmada(pideRebaja, esTramo)
+      }${sufijoTramo(r)}`,
       enlace: pendiente ? enlace : `/reservas/${idAviso}/chat`,
     });
     for (const item of grupo) vistos.add(`/reservas/${item.id}`);

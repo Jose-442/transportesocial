@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   esBusquedaDeTramo,
+  esTramoElegido,
   prepararParadasParaGuardar,
   puntosRuta,
   rutaCubreTrayecto,
@@ -114,5 +115,26 @@ describe("prepararParadasParaGuardar", () => {
     expect(r.paradas).toHaveLength(1);
     expect(r.paradas[0].orden).toBe(1);
     expect(r.paradas[0].municipio).toContain("Zaragoza");
+  });
+});
+
+describe("esTramoElegido", () => {
+  const puntos = [
+    "Madrid (Madrid)",
+    "Zaragoza (Zaragoza)",
+    "Lleida (Lleida)",
+    "Barcelona (Barcelona)",
+  ];
+
+  it("punta a punta no es tramo", () => {
+    expect(
+      esTramoElegido(puntos, "Madrid (Madrid)", "Barcelona (Barcelona)")
+    ).toBe(false);
+  });
+
+  it("parte del recorrido sí es tramo", () => {
+    expect(
+      esTramoElegido(puntos, "Zaragoza (Zaragoza)", "Lleida (Lleida)")
+    ).toBe(true);
   });
 });

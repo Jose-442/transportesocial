@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
+import { CampoTramoReserva } from "@/components/reservas/CampoTramoReserva";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
 import { CamposIdentidadPago } from "@/components/cuenta/CamposIdentidadPago";
@@ -17,6 +18,10 @@ import { plazasLibresOferta } from "@/lib/capacidad/asientos";
 import { SolicitarRebaja } from "@/components/reservas/SolicitarRebaja";
 import { cabeRebaja } from "@/lib/reservas/rebaja";
 import { textoDescripcionBulto } from "@/lib/reservas/labels";
+import {
+  esTramoElegido,
+  puntoDesdeFiltro,
+} from "@/lib/rutas/paradas";
 import type { OfertaCapacidad } from "@/types/database";
 
 function botonSiNo(activo: boolean, variante: "si" | "no"): string {
@@ -37,7 +42,8 @@ export function ReservarRutaForm({
   faltaIdentidad = false,
   identidadInicial,
   salidaIso,
-  esTramo = false,
+  puntosRuta = [],
+  tramoBusqueda = null,
 }: {
   rutaId: string;
   ofreceBulto: boolean;
@@ -53,8 +59,10 @@ export function ReservarRutaForm({
   resumenAsientos?: { ofrecidas: number; ocupadas: number };
   faltaIdentidad?: boolean;
   identidadInicial?: { telefono: string; documento: string };
-  /** La búsqueda pedía un tramo de esta ruta. */
-  esTramo?: boolean;
+  /** Salida + paradas + destino. Si hay paradas, se pide el tramo. */
+  puntosRuta?: string[];
+  /** Origen/destino de la búsqueda (para precargar el tramo). */
+  tramoBusqueda?: { origen: string; destino: string } | null;
 }) {
   const ofertaAsiento = ofertas.find(
     (o) => o.tipo === "asiento" && plazasLibresOferta(o) > 0
@@ -63,12 +71,21 @@ export function ReservarRutaForm({
   const precioPlaza = ofertaAsiento
     ? Number(ofertaAsiento.precio_publicado)
     : null;
+  const pideTramo = puntosRuta.length >= 3;
+  const tramoInicialOrigen = tramoBusqueda
+    ? puntoDesdeFiltro(puntosRuta, tramoBusqueda.origen)
+    : "";
+  const tramoInicialDestino = tramoBusqueda
+    ? puntoDesdeFiltro(puntosRuta, tramoBusqueda.destino)
+    : "";
 
   const { form, setForm } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
     lleva_bulto: null as boolean | null,
     bulto_descripcion: inicial?.bulto_descripcion ?? "",
     bulto_medidas: inicial?.bulto_medidas ?? "",
     plazas: inicial?.plazas ?? "",
+    tramo_origen: tramoInicialOrigen,
+    tramo_destino: tramoInicialDestino,
     declaracion_aceptada: false,
     pide_rebaja: false,
   });
@@ -82,6 +99,7 @@ export function ReservarRutaForm({
   });
   const [error, setError] = useState<string | null>(null);
   const [errorPlazas, setErrorPlazas] = useState<string | null>(null);
+  const [errorTramo, setErrorTramo] = useState<string | null>(null);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -94,6 +112,9 @@ export function ReservarRutaForm({
     Math.max(0, Number.parseInt(form.plazas, 10) || 0)
   );
   const llevaBulto = ofreceBulto && form.lleva_bulto === true;
+  const esTramo =
+    pideTramo &&
+    esTramoElegido(puntosRuta, form.tramo_origen, form.tramo_destino);
   const filasPrecio = [];
   if (llevaBulto && precioBulto != null && precioNetoBulto != null) {
     filasPrecio.push({
@@ -118,6 +139,8 @@ export function ReservarRutaForm({
   }
   const desglose = desglosePago(filasPrecio);
   const total = desglose.totalCentimos / 100;
+  const mostrarRebaja =
+    (llevaBulto || (esTramo && cantidad >= 1)) && cabeRebaja(salidaIso);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -125,6 +148,7 @@ export function ReservarRutaForm({
     enviando.current = true;
     setError(null);
     setErrorPlazas(null);
+    setErrorTramo(null);
     setLoading(true);
 
     if (plazasLibres > 1 && cantidad < 1) {
@@ -150,11 +174,34 @@ export function ReservarRutaForm({
       return;
     }
 
+    if (pideTramo) {
+      if (!form.tramo_origen || !form.tramo_destino) {
+        setErrorTramo("Elige el tramo que necesitas (subida y bajada).");
+        setError("Elige el tramo que necesitas (subida y bajada).");
+        enviando.current = false;
+        setLoading(false);
+        return;
+      }
+      const i0 = puntosRuta.indexOf(form.tramo_origen);
+      const i1 = puntosRuta.indexOf(form.tramo_destino);
+      if (i0 < 0 || i1 < 0 || i1 <= i0) {
+        setErrorTramo("La bajada tiene que ser después de la subida.");
+        setError("La bajada tiene que ser después de la subida.");
+        enviando.current = false;
+        setLoading(false);
+        return;
+      }
+    }
+
     const formData = new FormData(e.currentTarget);
     formData.set("ruta_id", rutaId);
     formData.set("cantidad", String(cantidad));
     if (ofertaAsiento) formData.set("oferta_id", ofertaAsiento.id);
-    if (esTramo) formData.set("es_tramo", "1");
+    if (pideTramo) {
+      formData.set("tramo_origen", form.tramo_origen);
+      formData.set("tramo_destino", form.tramo_destino);
+      if (esTramo) formData.set("es_tramo", "1");
+    }
     if (form.pide_rebaja) formData.set("pide_rebaja", "1");
 
     if (llevaBulto) {
@@ -190,8 +237,6 @@ export function ReservarRutaForm({
         setLoading(false);
         return;
       }
-      // No ocultar ni limpiar aún: si lo hacemos, Next/React mueven el scroll
-      // y puede cortar el paso al pago. Tras el checkout se abandona la página.
     }
 
     let result: Awaited<ReturnType<typeof solicitarReservaViaje>>;
@@ -327,11 +372,28 @@ export function ReservarRutaForm({
           totalCentimos={desglose.totalCentimos}
         />
       )}
-      {(llevaBulto || (esTramo && cantidad >= 1)) &&
-      cabeRebaja(salidaIso) ? (
+      {pideTramo ? (
+        <CampoTramoReserva
+          puntos={puntosRuta}
+          origen={form.tramo_origen}
+          destino={form.tramo_destino}
+          error={errorTramo}
+          onOrigen={(tramo_origen) => {
+            setForm((prev) => ({ ...prev, tramo_origen }));
+            if (errorTramo) setErrorTramo(null);
+          }}
+          onDestino={(tramo_destino) => {
+            setForm((prev) => ({ ...prev, tramo_destino }));
+            if (errorTramo) setErrorTramo(null);
+          }}
+        />
+      ) : null}
+      {mostrarRebaja ? (
         <SolicitarRebaja
           marcado={Boolean(form.pide_rebaja)}
-          onMarcado={(pide_rebaja) => setForm((prev) => ({ ...prev, pide_rebaja }))}
+          onMarcado={(pide_rebaja) =>
+            setForm((prev) => ({ ...prev, pide_rebaja }))
+          }
           esTramo={esTramo}
         />
       ) : null}
