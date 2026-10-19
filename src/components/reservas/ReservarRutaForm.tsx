@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
 import { solicitarReservaViaje } from "@/actions/reservas";
@@ -17,7 +16,15 @@ import { desglosePago } from "@/lib/precios/desglose-pago";
 import { plazasLibresOferta } from "@/lib/capacidad/asientos";
 import { SolicitarRebaja } from "@/components/reservas/SolicitarRebaja";
 import { cabeRebaja } from "@/lib/reservas/rebaja";
+import { textoDescripcionBulto } from "@/lib/reservas/labels";
 import type { OfertaCapacidad } from "@/types/database";
+
+function botonSiNo(activo: boolean, variante: "si" | "no"): string {
+  if (!activo) return "border-zinc-200 bg-white text-zinc-800";
+  return variante === "si"
+    ? "border-emerald-600 bg-emerald-50 text-emerald-900"
+    : "border-zinc-500 bg-zinc-100 text-zinc-900";
+}
 
 export function ReservarRutaForm({
   rutaId,
@@ -58,6 +65,7 @@ export function ReservarRutaForm({
     : null;
 
   const { form, setForm } = useFormDraft(DRAFT_KEYS.reservarRuta(rutaId), {
+    lleva_bulto: null as boolean | null,
     bulto_descripcion: inicial?.bulto_descripcion ?? "",
     bulto_medidas: inicial?.bulto_medidas ?? "",
     plazas: inicial?.plazas ?? "",
@@ -85,7 +93,7 @@ export function ReservarRutaForm({
     plazasLibres,
     Math.max(0, Number.parseInt(form.plazas, 10) || 0)
   );
-  const llevaBulto = ofreceBulto && form.bulto_descripcion.trim().length > 0;
+  const llevaBulto = ofreceBulto && form.lleva_bulto === true;
   const filasPrecio = [];
   if (llevaBulto && precioBulto != null && precioNetoBulto != null) {
     filasPrecio.push({
@@ -93,7 +101,7 @@ export function ReservarRutaForm({
       precio_neto: precioNetoBulto,
       precio_total: precioBulto,
       cantidad: 1,
-      bulto_descripcion: form.bulto_descripcion,
+      bulto_descripcion: textoDescripcionBulto(form.bulto_descripcion),
     });
   }
   if (cantidad >= 1 && ofertaAsiento && precioPlaza != null) {
@@ -132,7 +140,11 @@ export function ReservarRutaForm({
     }
 
     if (plazasLibres > 0 && cantidad < 1 && !llevaBulto) {
-      setError("Elige al menos una plaza.");
+      setError(
+        ofreceBulto
+          ? "Indica si envías un bulto o elige al menos una plaza."
+          : "Elige al menos una plaza."
+      );
       enviando.current = false;
       setLoading(false);
       return;
@@ -146,6 +158,7 @@ export function ReservarRutaForm({
     if (form.pide_rebaja) formData.set("pide_rebaja", "1");
 
     if (llevaBulto) {
+      formData.set("lleva_bulto", "1");
       const foto = formData.get("foto");
       const declaracion = String(formData.get("declaracion_aceptada") ?? "");
       if (!(foto instanceof File) || foto.size <= 0) {
@@ -228,24 +241,37 @@ export function ReservarRutaForm({
       </p>
       {ofreceBulto && (
         <Card className="space-y-3 bg-zinc-50">
-          <Textarea
-            label="Si necesitas enviar un bulto, descríbelo"
-            name="bulto_descripcion"
-            placeholder="Ej. caja mediana con ropa, frágil"
-            value={form.bulto_descripcion}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, bulto_descripcion: e.target.value }))
-            }
-          />
-          <Input
-            label="Medidas aproximadas (opcional)"
-            name="bulto_medidas"
-            placeholder="Ej. 40×30×25 cm"
-            value={form.bulto_medidas}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, bulto_medidas: e.target.value }))
-            }
-          />
+          <div className="space-y-1.5" data-campo="">
+            <p className="text-sm font-medium text-zinc-800">
+              ¿También envías un bulto?
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setForm((prev) => ({ ...prev, lleva_bulto: true }))
+                }
+                className={`min-h-11 rounded-xl border px-3 py-2 text-base font-semibold ${botonSiNo(form.lleva_bulto === true, "si")}`}
+              >
+                Sí
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    lleva_bulto: false,
+                    bulto_descripcion: "",
+                    bulto_medidas: "",
+                    declaracion_aceptada: false,
+                  }))
+                }
+                className={`min-h-11 rounded-xl border px-3 py-2 text-base font-semibold ${botonSiNo(form.lleva_bulto === false, "no")}`}
+              >
+                No
+              </button>
+            </div>
+          </div>
           {llevaBulto ? (
             <DeclaracionPorteCampos
               declaracionAceptada={form.declaracion_aceptada}
@@ -253,6 +279,14 @@ export function ReservarRutaForm({
               faltaDeclaracion={
                 error ===
                 "Debes aceptar la declaración de responsabilidad del porte."
+              }
+              descripcion={form.bulto_descripcion}
+              medidas={form.bulto_medidas}
+              onDescripcion={(bulto_descripcion) =>
+                setForm((prev) => ({ ...prev, bulto_descripcion }))
+              }
+              onMedidas={(bulto_medidas) =>
+                setForm((prev) => ({ ...prev, bulto_medidas }))
               }
               onDeclaracion={(declaracion_aceptada) =>
                 setForm((prev) => ({ ...prev, declaracion_aceptada }))

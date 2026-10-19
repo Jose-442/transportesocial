@@ -1,6 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { chatPermitido, estadoSiCanceloQuienReservo, fraseQueHasReservado, fraseQueIncluyeReservas, resumenChatViaje } from "@/lib/reservas/labels";
+import {
+  chatPermitido,
+  estadoSiCanceloQuienReservo,
+  fraseQueHasReservado,
+  fraseQueIncluyeReservas,
+  resumenChatViaje,
+  textoDescripcionBulto,
+} from "@/lib/reservas/labels";
 import { MOTIVO_CANCELACION_CLIENTE } from "@/lib/reservas/segunda-cancelacion";
+
+describe("textoDescripcionBulto", () => {
+  it("guarda el texto si lo escriben", () => {
+    expect(textoDescripcionBulto("  frágil  ")).toBe("frágil");
+  });
+
+  it("si no hay texto, guarda bulto", () => {
+    expect(textoDescripcionBulto("")).toBe("bulto");
+    expect(textoDescripcionBulto("   ")).toBe("bulto");
+  });
+});
 
 describe("fraseQueHasReservado", () => {
   it("una plaza no dice bulto", () => {

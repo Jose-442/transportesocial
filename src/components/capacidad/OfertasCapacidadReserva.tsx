@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Input, Textarea } from "@/components/ui/Input";
 import { CampoNumeroPlazas } from "@/components/reservas/CampoNumeroPlazas";
 import { solicitarReservaCapacidad } from "@/actions/reservas";
 import { CamposIdentidadPago } from "@/components/cuenta/CamposIdentidadPago";
@@ -349,38 +348,25 @@ export function OfertasCapacidadReserva({
       )}
 
       {!esAsiento && (
-        <>
-          <Textarea
-            label="Si necesitas enviar un bulto, descríbelo"
-            name="bulto_descripcion"
-            required
-            placeholder="Ej. caja mediana con ropa"
-            value={descripcion}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, descripcion: e.target.value }))
-            }
-          />
-          <Input
-            label="Medidas aproximadas (opcional)"
-            name="bulto_medidas"
-            placeholder="Ej. 40×30×25 cm"
-            value={medidas}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, medidas: e.target.value }))
-            }
-          />
-          <DeclaracionPorteCampos
-            declaracionAceptada={form.declaracion_aceptada}
-            faltaFoto={error === "Añade al menos una foto de la carga."}
-            faltaDeclaracion={
-              error ===
-              "Debes aceptar la declaración de responsabilidad del porte."
-            }
-            onDeclaracion={(declaracion_aceptada) =>
-              setForm((prev) => ({ ...prev, declaracion_aceptada }))
-            }
-          />
-        </>
+        <DeclaracionPorteCampos
+          declaracionAceptada={form.declaracion_aceptada}
+          faltaFoto={error === "Añade al menos una foto de la carga."}
+          faltaDeclaracion={
+            error ===
+            "Debes aceptar la declaración de responsabilidad del porte."
+          }
+          descripcion={descripcion}
+          medidas={medidas}
+          onDescripcion={(value) =>
+            setForm((prev) => ({ ...prev, descripcion: value }))
+          }
+          onMedidas={(value) =>
+            setForm((prev) => ({ ...prev, medidas: value }))
+          }
+          onDeclaracion={(declaracion_aceptada) =>
+            setForm((prev) => ({ ...prev, declaracion_aceptada }))
+          }
+        />
       )}
 
       {desglose && total > 0 && (

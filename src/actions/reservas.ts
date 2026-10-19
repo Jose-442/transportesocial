@@ -33,6 +33,7 @@ import {
 import type { AnuncioBulto, OfertaPrecio, Reserva } from "@/types/database";
 import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
 import { leerDeclaracionPorteReserva } from "@/lib/porte-reserva";
+import { textoDescripcionBulto } from "@/lib/reservas/labels";
 import { identidadListaParaPagar } from "@/lib/identidad-pago";
 
 async function errorSiFaltaIdentidadParaPagar(
@@ -127,10 +128,6 @@ export async function solicitarReservaRuta(formData: FormData) {
   const descripcion = String(formData.get("bulto_descripcion") ?? "").trim();
   const medidas = String(formData.get("bulto_medidas") ?? "").trim();
 
-  if (!descripcion) {
-    return { error: "Describe el bulto que quieres enviar." };
-  }
-
   const { data: ruta } = await supabase
     .from("rutas_conductores")
     .select("*")
@@ -189,7 +186,7 @@ export async function solicitarReservaRuta(formData: FormData) {
       comision_plataforma: calcComision(precioNeto),
       estado: "pendiente_pago",
       fecha_llegada_prevista: ruta.fecha_llegada_prevista,
-      bulto_descripcion: descripcion,
+      bulto_descripcion: textoDescripcionBulto(descripcion),
       bulto_medidas: medidas || null,
       ...porte,
       ...datosCaeAlCrearReserva({
@@ -226,6 +223,7 @@ export async function solicitarReservaViaje(formData: FormData) {
   const rutaId = String(formData.get("ruta_id"));
   const descripcion = String(formData.get("bulto_descripcion") ?? "").trim();
   const medidas = String(formData.get("bulto_medidas") ?? "").trim();
+  const quiereBulto = String(formData.get("lleva_bulto") ?? "").trim() === "1";
   const cantidadRaw = Number(formData.get("cantidad") ?? 0);
   const cantidadPlazas =
     Number.isInteger(cantidadRaw) && cantidadRaw > 0 ? cantidadRaw : 0;
@@ -247,17 +245,14 @@ export async function solicitarReservaViaje(formData: FormData) {
     return { error: "No puedes reservar tu propio viaje." };
   }
 
-  const conBulto = rutaOfreceBulto(ruta.espacio_disponible) && descripcion.length > 0;
+  const ofreceBulto = rutaOfreceBulto(ruta.espacio_disponible);
+  const conBulto = ofreceBulto && quiereBulto;
   if (!conBulto && cantidadPlazas < 1) {
     return {
-      error: rutaOfreceBulto(ruta.espacio_disponible)
-        ? "Describe el bulto o elige al menos una plaza."
+      error: ofreceBulto
+        ? "Indica si envías un bulto o elige al menos una plaza."
         : "Elige al menos una plaza.",
     };
-  }
-
-  if (rutaOfreceBulto(ruta.espacio_disponible) && !descripcion && cantidadPlazas < 1) {
-    return { error: "Describe el bulto o elige al menos una plaza." };
   }
 
   const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
@@ -316,7 +311,7 @@ export async function solicitarReservaViaje(formData: FormData) {
         comision_plataforma: calcComision(precioNeto),
         estado: "pendiente_pago",
         fecha_llegada_prevista: ruta.fecha_llegada_prevista,
-        bulto_descripcion: descripcion,
+        bulto_descripcion: textoDescripcionBulto(descripcion),
         bulto_medidas: medidas || null,
         ...(pideRebajaForm ? { pide_rebaja: true } : {}),
         ...(esTramo ? { es_tramo: true } : {}),
@@ -879,9 +874,6 @@ export async function solicitarReservaCapacidad(
     if (cantidad !== 1) {
       return { error: "Solo puedes reservar un bulto por oferta." };
     }
-    if (!descripcion) {
-      return { error: "Describe el bulto que quieres enviar." };
-    }
     porte = await leerDeclaracionPorteReserva(supabase, user.id, formData);
     if ("error" in porte) return { error: porte.error };
   }
@@ -948,7 +940,7 @@ export async function solicitarReservaCapacidad(
       fecha_llegada_prevista: ruta.fecha_llegada_prevista,
       bulto_descripcion:
         oferta.tipo === "bulto"
-          ? descripcion
+          ? textoDescripcionBulto(descripcion)
           : `Plaza${cantidad > 1 ? "s" : ""} de acompañante (×${cantidad})`,
       bulto_medidas: oferta.tipo === "bulto" ? medidas || null : null,
       ...(pideRebaja ? { pide_rebaja: true } : {}),

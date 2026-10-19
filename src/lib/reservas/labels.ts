@@ -2,6 +2,12 @@ import type { EstadoReserva, MotivoDisputa, Reserva } from "@/types/database";
 import type { OfertaDesglose } from "@/lib/solicitud-viaje";
 import { MOTIVO_CANCELACION_CLIENTE } from "@/lib/reservas/segunda-cancelacion";
 
+/** Si no escriben descripción, la foto basta: guardamos un texto mínimo. */
+export function textoDescripcionBulto(raw: string): string {
+  const texto = raw.trim();
+  return texto || "bulto";
+}
+
 export const ESTADO_RESERVA_LABELS: Record<EstadoReserva, string> = {
   pendiente_pago: "Pendiente de pago",
   pendiente_aprobacion: "Esperando al conductor",

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { Input, Textarea } from "@/components/ui/Input";
 import { TEXTO_DECLARACION_PORTE } from "@/lib/porte-legal";
 
 const FOTO_MAX_BYTES = 5 * 1024 * 1024;
@@ -129,14 +130,23 @@ function FotoCarga({
   );
 }
 
+/** Fotos (obligatorias) → descripción/medidas opcionales → declaración. */
 export function DeclaracionPorteCampos({
   declaracionAceptada,
   onDeclaracion,
+  descripcion,
+  onDescripcion,
+  medidas,
+  onMedidas,
   faltaFoto = false,
   faltaDeclaracion = false,
 }: {
   declaracionAceptada: boolean;
   onDeclaracion: (value: boolean) => void;
+  descripcion: string;
+  onDescripcion: (value: string) => void;
+  medidas: string;
+  onMedidas: (value: string) => void;
   faltaFoto?: boolean;
   faltaDeclaracion?: boolean;
 }) {
@@ -159,6 +169,21 @@ export function DeclaracionPorteCampos({
           WebP. Máx. 5 MB cada una.
         </p>
       </div>
+
+      <Textarea
+        label="¿Necesitas describirlo? (opcional)"
+        name="bulto_descripcion"
+        placeholder="Ej. frágil, no poner de lado"
+        value={descripcion}
+        onChange={(e) => onDescripcion(e.target.value)}
+      />
+      <Input
+        label="Medidas aproximadas (opcional)"
+        name="bulto_medidas"
+        placeholder="Ej. 40×30×25 cm"
+        value={medidas}
+        onChange={(e) => onMedidas(e.target.value)}
+      />
 
       <label
         className="flex cursor-pointer items-start gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 text-sm"
