@@ -334,16 +334,18 @@ export default function TerminosPage() {
               Si el Conductor no tiene activada la aceptación automática,
               dispone de <strong>{CONDUCTOR_APPROVAL_HOURS} horas</strong> para
               aceptar o rechazar la solicitud desde el pago. En la primera
-              hora desde el pago, el Cliente puede cancelar con reembolso del{" "}
-              <strong>100 %</strong>. Pasada esa hora, si cancela quien reservó,
-              se le devuelve el viaje y la Plataforma se queda los gastos de
-              gestión del {COMMISSION_PERCENT_LABEL}. Si el Conductor rechaza o
-              no responde a tiempo, se reembolsa el 100 %.
+              hora desde el pago, el Cliente puede cancelar y se le devuelve el
+              viaje menos <strong>la pequeña tarifa del banco por la tarjeta</strong>{" "}
+              (comisión de pago que el banco ya cobró). Pasada esa hora, si
+              cancela quien reservó, se le devuelve el viaje y la Plataforma se
+              queda los gastos de gestión del {COMMISSION_PERCENT_LABEL}. Si el
+              Conductor rechaza o no responde a tiempo, se reembolsa el 100 %.
             </li>
             <li>
               Cuando la reserva ya está confirmada: si aún no ha pasado una
-              hora desde el pago y cancela quien reservó, se reembolsa el{" "}
-              <strong>100 %</strong>. Pasada esa hora, si cancela con más de{" "}
+              hora desde el pago y cancela quien reservó, se le devuelve el
+              viaje menos <strong>la pequeña tarifa del banco por la tarjeta</strong>.
+              Pasada esa hora, si cancela con más de{" "}
               <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
               antelación, se le devuelve el viaje y la Plataforma se queda los
               gastos de gestión del {COMMISSION_PERCENT_LABEL}; el Conductor no

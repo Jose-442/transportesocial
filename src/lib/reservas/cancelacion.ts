@@ -64,7 +64,8 @@ export function politicaCancelacionCliente(
     !opts?.rebajaHecha;
 
   if (estado === "pendiente_aprobacion") {
-    if (enHora) return { puede: true, tipo: "total" };
+    // Primera hora: se resta la tarifa del banco (Stripe); no es 100 % neto.
+    if (enHora) return { puede: true, tipo: "viaje_menos_banco" };
     if (tramoSinRebaja) return { puede: true, tipo: "viaje_menos_banco" };
     return { puede: true, tipo: "viaje_sin_gastos" };
   }
@@ -73,7 +74,7 @@ export function politicaCancelacionCliente(
   }
   const horas = horasHasta(fechaSalidaIso, ahora);
   if (horas <= 0) return { puede: false };
-  if (enHora) return { puede: true, tipo: "total" };
+  if (enHora) return { puede: true, tipo: "viaje_menos_banco" };
   if (tramoSinRebaja) return { puede: true, tipo: "viaje_menos_banco" };
   if (horas > CANCELACION_ANTICIPADA_HORAS) {
     return { puede: true, tipo: "viaje_sin_gastos" };
@@ -142,15 +143,19 @@ export function textoBotonCancelacion(tipo: TipoRepartoCancelacion): string {
   return "Cancelar reserva";
 }
 
+/** Texto fijo: la comisión real de Stripe no se devuelve si cancela quien reservó. */
+export const TEXTO_TARIFA_BANCO_TARJETA =
+  "la pequeña tarifa del banco por la tarjeta";
+
 export function fraseAyudaCancelacionCliente(
   tipo: TipoRepartoCancelacion,
   reembolsoEur: string
 ): string {
   if (tipo === "total") {
-    return `En la primera hora desde el pago te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
+    return `Te devolvemos el 100 % (${reembolsoEur}). El reembolso, lo que tarde tu banco.`;
   }
   if (tipo === "viaje_menos_banco") {
-    return `Al cancelar te devolvemos el viaje menos la pequeña comisión que el banco ya nos cobró por la tarjeta.`;
+    return `Te devolvemos el viaje menos ${TEXTO_TARIFA_BANCO_TARJETA}.`;
   }
   if (tipo === "viaje_sin_gastos") {
     return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;

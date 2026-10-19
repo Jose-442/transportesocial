@@ -104,15 +104,16 @@ export default function QuienesSomosPage() {
             </li>
             <li>
               Mientras esperas su respuesta puedes cancelar. En la primera
-              hora desde el pago te devolvemos el 100 %. Pasada esa hora te
-              devolvemos el viaje y nos quedamos el {COMMISSION_PERCENT_LABEL}{" "}
-              de gastos de gestión. Si el conductor rechaza o no responde en
-              plazo, se reembolsa el 100 %.
+              hora desde el pago te devolvemos el viaje menos la pequeña tarifa
+              del banco por la tarjeta. Pasada esa hora te devolvemos el viaje
+              y nos quedamos el {COMMISSION_PERCENT_LABEL} de gastos de
+              gestión. Si el conductor rechaza o no responde en plazo, se
+              reembolsa el 100 %.
             </li>
             <li>
-              Cuando ya está confirmada, si aún no ha pasado una hora desde
-              el pago y cancelas tú, te devolvemos el 100 %. Pasada esa hora,
-              si cancelas con más de{" "}
+              Cuando ya está confirmada, si aún no ha pasado una hora desde el
+              pago y cancelas tú, te devolvemos el viaje menos la pequeña tarifa
+              del banco por la tarjeta. Pasada esa hora, si cancelas con más de{" "}
               <strong>{CANCELACION_ANTICIPADA_HORAS} horas</strong> de
               antelación, te devolvemos el viaje y nos quedamos el{" "}
               {COMMISSION_PERCENT_LABEL} de gastos de gestión; el conductor no
