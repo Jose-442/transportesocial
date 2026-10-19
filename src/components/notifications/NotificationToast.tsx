@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import type { Notificacion } from "@/types/database";
 
 export function NotificationToast({
@@ -21,13 +20,13 @@ export function NotificationToast({
         <p className="mt-1 text-sm text-zinc-600">{notification.mensaje}</p>
         <div className="mt-3 flex gap-2">
           {notification.enlace ? (
-            <Link
+            <a
               href={notification.enlace}
               onClick={onOpen}
               className="inline-flex min-h-11 flex-1 items-center justify-center rounded-xl bg-emerald-600 px-3 text-sm font-semibold text-white"
             >
               Ver
-            </Link>
+            </a>
           ) : (
             <button
               type="button"

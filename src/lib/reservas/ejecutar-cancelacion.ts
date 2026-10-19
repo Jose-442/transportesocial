@@ -125,7 +125,8 @@ export async function ejecutarCancelacionReserva(opts: {
       pagarAlConductor: esCliente && politica.tipo === "mitad",
     });
 
-    const enlace = `/reservas/${principal.id}`;
+    // Query distinta para no mezclar con el aviso de rebaja del mismo viaje.
+    const enlace = `/reservas/${principal.id}?aviso=cancelacion`;
     if (esCliente) {
       await crearNotificacion(admin, {
         user_id: reserva.cliente_id,

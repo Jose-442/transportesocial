@@ -44,6 +44,10 @@ import type {
   RutaConductor,
 } from "@/types/database";
 
+/** Sin caché: el aviso de cancelación no debe reutilizar la ficha de otra reserva. */
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function generateMetadata({
   params,
 }: {
@@ -167,10 +171,18 @@ export default async function ReservaDetallePage({
 
   const disputa = (disputaData as Disputa | null) ?? null;
 
-  // Si abres una cancelada, no sustituirla por otra reserva activa del mismo viaje
-  // (si no, el aviso «Han cancelado» abre la reserva nueva de rebaja).
+  // Si abres una cancelada (o el aviso de cancelación), no mezclar con otra
+  // reserva activa del mismo viaje (rebaja nueva, ampliar, etc.).
+  const avisoCancelacion =
+    query.aviso === "cancelacion" ||
+    query.aviso === "true" ||
+    reserva.estado === "cancelado";
   let relacionadas: Reserva[] = [reserva];
-  if (reserva.ruta_conductor_id && reserva.estado !== "cancelado") {
+  if (
+    reserva.ruta_conductor_id &&
+    !avisoCancelacion &&
+    reserva.estado !== "cancelado"
+  ) {
     const { data: hermanas } = await supabase
       .from("reservas")
       .select("*")
@@ -281,13 +293,13 @@ export default async function ReservaDetallePage({
     (sum, item) => sum + Number(item.precio_total),
     0
   );
-  const estadoMostrar = relacionadas.some(
-    (item) => item.estado === "pendiente_pago"
-  )
-    ? "pendiente_pago"
-    : relacionadas.some((item) => item.estado === "pendiente_aprobacion")
-      ? "pendiente_aprobacion"
-      : reserva.estado;
+  const estadoMostrar = avisoCancelacion
+    ? reserva.estado
+    : relacionadas.some((item) => item.estado === "pendiente_pago")
+      ? "pendiente_pago"
+      : relacionadas.some((item) => item.estado === "pendiente_aprobacion")
+        ? "pendiente_aprobacion"
+        : reserva.estado;
   const reservaVista = { ...reserva, estado: estadoMostrar };
 
   const estadoResenas =
@@ -313,7 +325,14 @@ export default async function ReservaDetallePage({
   return (
     <div className="space-y-2 md:space-y-3">
       <MarcarNotificacionesEnlaceLeida
-        enlaces={relacionadas.map((item) => `/reservas/${item.id}`)}
+        enlaces={
+          avisoCancelacion
+            ? [
+                `/reservas/${id}`,
+                `/reservas/${id}?aviso=cancelacion`,
+              ]
+            : relacionadas.map((item) => `/reservas/${item.id}`)
+        }
       />
       {esConductor ? <DeshacerRecogidaAlVolver reservaId={id} /> : null}
       {puedeVolverRecogida ? <VolverRecogidaBoton reservaId={id} /> : null}
@@ -387,7 +406,7 @@ export default async function ReservaDetallePage({
         </div>
       </div>
 
-      {esCliente && ruta && !disputa ? (
+      {esCliente && ruta && !disputa && !avisoCancelacion ? (
         <ModificarMiReserva
           rutaId={ruta.id}
           estado={estadoMostrar}
@@ -411,26 +430,33 @@ export default async function ReservaDetallePage({
         reembolsoEntero={reembolsoEntero}
       />
 
-      <RebajaReservas
-        portes={relacionadas
-          .filter((item) => esPorteParaRebaja(item))
-          .map((item) => ({
-            id: item.id,
-            precioTotal: Number(item.precio_total),
-            pideRebaja: Boolean(item.pide_rebaja),
-            rebajaEn: item.rebaja_en ?? null,
-            rebajaEur: item.rebaja_eur == null ? null : Number(item.rebaja_eur),
-            estado: item.estado,
-            salida: item.fecha_llegada_prevista,
-            descripcion: separarHoraOculta(item.bulto_descripcion ?? "").texto,
-            esTramo: Boolean(item.es_tramo),
-            rebajaRechazadaEn: item.rebaja_rechazada_en ?? null,
-          }))}
-        esConductor={esConductor}
-        origen={ruta?.origen ?? ""}
-        destino={ruta?.destino ?? ""}
-        rutaId={ruta?.id ?? null}
-      />
+      {!avisoCancelacion ? (
+        <RebajaReservas
+          portes={relacionadas
+            .filter(
+              (item) =>
+                item.estado !== "cancelado" && esPorteParaRebaja(item)
+            )
+            .map((item) => ({
+              id: item.id,
+              precioTotal: Number(item.precio_total),
+              pideRebaja: Boolean(item.pide_rebaja),
+              rebajaEn: item.rebaja_en ?? null,
+              rebajaEur:
+                item.rebaja_eur == null ? null : Number(item.rebaja_eur),
+              estado: item.estado,
+              salida: item.fecha_llegada_prevista,
+              descripcion: separarHoraOculta(item.bulto_descripcion ?? "")
+                .texto,
+              esTramo: Boolean(item.es_tramo),
+              rebajaRechazadaEn: item.rebaja_rechazada_en ?? null,
+            }))}
+          esConductor={esConductor}
+          origen={ruta?.origen ?? ""}
+          destino={ruta?.destino ?? ""}
+          rutaId={ruta?.id ?? null}
+        />
+      ) : null}
 
       {esConductor &&
       !disputa &&

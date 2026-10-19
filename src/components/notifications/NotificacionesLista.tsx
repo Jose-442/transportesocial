@@ -1,13 +1,13 @@
 "use client";
 
-import { Card, CardLink } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import type { Notificacion } from "@/types/database";
 import { useNotifications } from "./NotificationProvider";
 
 function hrefDelAviso(n: Notificacion): string {
   const href = (n.enlace ?? "").trim();
   if (!href) return "";
-  const soloReserva = href.match(/^\/reservas\/([^/]+)$/);
+  const soloReserva = href.match(/^\/reservas\/([^/?#]+)\/?$/);
   if (
     soloReserva &&
     /chat/i.test(`${n.titulo ?? ""} ${n.mensaje ?? ""}`)
@@ -57,14 +57,17 @@ export function NotificacionesLista({
 
         if (href) {
           return (
-            <CardLink
+            <a
               key={n.id}
               href={href}
               onClick={() => void markAsRead(n.id)}
-              className={tono}
+              className={[
+                "block cursor-pointer rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-colors hover:border-emerald-300 hover:bg-emerald-50/40 active:bg-emerald-50",
+                tono,
+              ].join(" ")}
             >
               {cuerpo}
-            </CardLink>
+            </a>
           );
         }
 
