@@ -37,7 +37,7 @@ export function detectaAcuerdoFueraWeb(texto: string): boolean {
 export const TITULO_AVISO_REVISION_CHAT = "Revisión del chat";
 
 export const MENSAJE_CANCELACION_BLOQUEADA =
-  "No se puede cancelar todavía. El equipo está revisando el chat de este viaje.";
+  "No se puede cancelar todavía. El equipo está revisando este viaje.";
 
 export function cancelacionBloqueadaPorRevisionFueraWeb(reserva: {
   fuera_web_revision_en?: string | null;
