@@ -211,6 +211,8 @@ describe("frases de cancelación", () => {
     expect(fraseAyudaCancelacionCliente("viaje_menos_banco", "59,00 €")).toBe(
       "Te devolvemos el viaje menos la pequeña tarifa del banco por la tarjeta."
     );
-    expect(fraseAyudaCancelacionConductor("118,00 €")).toContain("100 %");
+    expect(fraseAyudaCancelacionConductor("118,00 €")).toBe(
+      "Puedes rechazar hasta la hora del viaje. Al otro usuario le llegará un aviso."
+    );
   });
 });

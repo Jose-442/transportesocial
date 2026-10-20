@@ -163,6 +163,6 @@ export function fraseAyudaCancelacionCliente(
   return `Faltan menos de ${CANCELACION_ANTICIPADA_HORAS} horas. Te devolvemos la mitad del viaje (${reembolsoEur}). El conductor se queda la otra mitad. El gasto de gestión no se devuelve.`;
 }
 
-export function fraseAyudaCancelacionConductor(reembolsoEur: string): string {
-  return `Puedes rechazar hasta la hora del viaje. Si lo haces, se le avisa al otro y se le devuelve el 100 % (${reembolsoEur}), también los gastos de gestión.`;
+export function fraseAyudaCancelacionConductor(_reembolsoEur?: string): string {
+  return "Puedes rechazar hasta la hora del viaje. Al otro usuario le llegará un aviso.";
 }
