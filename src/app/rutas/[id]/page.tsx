@@ -778,7 +778,11 @@ export default async function RutaDetallePage({
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
           ) : null}
-          <AnadirCapacidadForm rutaId={ruta.id} ofertasExistentes={ofertas} />
+          <AnadirCapacidadForm
+            rutaId={ruta.id}
+            ofertasExistentes={ofertas}
+            bultoPrincipalReservado={ocupacion.bultoOcupado}
+          />
           {ofertas.length > 0 && (
             <div className="mt-4 border-t border-zinc-200 pt-4">
               <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">

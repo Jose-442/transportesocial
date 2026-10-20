@@ -17,9 +17,12 @@ import { useFormDraft } from "@/lib/use-form-draft";
 export function AnadirCapacidadForm({
   rutaId,
   ofertasExistentes,
+  bultoPrincipalReservado = false,
 }: {
   rutaId: string;
   ofertasExistentes: OfertaCapacidad[];
+  /** Solo true si hay reserva de bulto (ruta_directa), no de plazas. */
+  bultoPrincipalReservado?: boolean;
 }) {
   const router = useRouter();
   const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.capacidad(rutaId), {
@@ -87,8 +90,9 @@ export function AnadirCapacidadForm({
   return (
     <form ref={formRef} onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-zinc-600">
-        El bulto principal ya está reservado. Puedes ofrecer espacio adicional
-        en el mismo viaje.
+        {bultoPrincipalReservado
+          ? "El bulto principal ya está reservado. Puedes ofrecer espacio adicional en el mismo viaje."
+          : "Puedes ofrecer más espacio en este viaje (bulto extra o más plazas)."}
       </p>
 
       <div
