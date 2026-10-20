@@ -380,7 +380,12 @@ export async function guardarRebajaReserva(formData: FormData) {
   return { ok: true };
 }
 
-/** Conductor no acepta la rebaja de un tramo; quien reservó decide si cancela. */
+/**
+ * Conductor no acepta la rebaja.
+ * Si viene aceptar_reserva=1 (o la reserva ya está confirmada), deja la reserva
+ * aceptada por el precio pagado. Si sigue pendiente y no pide aceptar, solo
+ * marca la rebaja rechazada.
+ */
 export async function rechazarRebajaTramo(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -390,6 +395,8 @@ export async function rechazarRebajaTramo(formData: FormData) {
 
   const reservaId = String(formData.get("reserva_id") ?? "").trim();
   if (!reservaId) return { error: "No se ha encontrado la reserva." };
+  const aceptarReserva =
+    String(formData.get("aceptar_reserva") ?? "").trim() === "1";
 
   const { data: fila, error: errorFila } = await supabase
     .from("reservas")
@@ -411,9 +418,11 @@ export async function rechazarRebajaTramo(formData: FormData) {
     return { error: "Esta rebaja ya no se puede rechazar." };
   }
 
-  const aceptada = await aceptarReservaSiPendiente(reserva);
-  if (aceptada.error) return { error: aceptada.error };
-  reserva = aceptada.reserva;
+  if (aceptarReserva || reserva.estado === "confirmada") {
+    const aceptada = await aceptarReservaSiPendiente(reserva);
+    if (aceptada.error) return { error: aceptada.error };
+    reserva = aceptada.reserva;
+  }
 
   const admin = createAdminClient();
   const cliente = admin ?? supabase;
@@ -444,14 +453,19 @@ export async function rechazarRebajaTramo(formData: FormData) {
     }
   }
 
+  const reservaSigue =
+    aceptarReserva || reserva.estado === "confirmada";
   await crearNotificacion(supabase, {
     user_id: reserva.cliente_id,
     tipo: "reserva_actualizada",
     titulo: "Rebaja no aceptada",
-    mensaje:
-      aRechazar.length > 1
+    mensaje: reservaSigue
+      ? aRechazar.length > 1
         ? `El conductor no ha aceptado la rebaja del tramo (todas tus plazas). La reserva sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`
-        : `El conductor no ha aceptado la rebaja. La reserva sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
+        : `El conductor no ha aceptado la rebaja. La reserva sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`
+      : aRechazar.length > 1
+        ? "El conductor no ha aceptado la rebaja del tramo (todas tus plazas)."
+        : "El conductor no ha aceptado la rebaja.",
     enlace: `/reservas/${reserva.id}`,
   });
 

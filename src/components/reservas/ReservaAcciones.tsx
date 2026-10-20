@@ -100,14 +100,19 @@ export function ReservaAcciones({
   });
   const hayTramo =
     Boolean(reserva.es_tramo) || relacionadas.some((r) => r.es_tramo);
-  const hayRebajaTramo =
+  const pideRebajaPendiente =
     hayTramo &&
-    (Boolean(reserva.pide_rebaja) || relacionadas.some((r) => r.pide_rebaja));
+    [reserva, ...relacionadas].some(
+      (r) =>
+        Boolean(r.pide_rebaja) &&
+        !r.rebaja_en &&
+        !r.rebaja_rechazada_en
+    );
   const etiquetaEstado = canceloQuienReservo
     ? canceloQuienReservo.etiqueta
     : estado === "confirmada"
       ? "Confirmado"
-      : estado === "pendiente_aprobacion" && esConductor && hayRebajaTramo
+      : estado === "pendiente_aprobacion" && esConductor && pideRebajaPendiente
         ? "Solicitud de rebaja"
         : estado === "pendiente_aprobacion" && esConductor
           ? "Me toca aceptar o rechazar"
@@ -198,7 +203,9 @@ export function ReservaAcciones({
         </div>
       )}
 
-      {estado === "pendiente_aprobacion" && esConductor && !hayRebajaTramo ? (
+      {estado === "pendiente_aprobacion" &&
+      esConductor &&
+      !pideRebajaPendiente ? (
         <div className="space-y-2">
           {hayTramo ? (
             <p className="text-sm font-medium text-emerald-950">
@@ -214,7 +221,7 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">
-          {hayTramo && !hayRebajaTramo ? (
+          {hayTramo && !pideRebajaPendiente ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>

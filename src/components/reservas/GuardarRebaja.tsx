@@ -6,7 +6,28 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBotones";
 import { guardarRebajaReserva, rechazarRebajaTramo } from "@/actions/rebaja";
+
+async function rechazarReservaEntera(reservaId: string): Promise<string | null> {
+  try {
+    const res = await fetch("/api/reservas/decidir", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(45000),
+      body: JSON.stringify({ reservaId, decision: "rechazar" }),
+    });
+    const json = (await res.json().catch(() => ({}))) as { error?: string };
+    if (!res.ok || json.error) {
+      return json.error || "No se ha podido guardar. Prueba otra vez.";
+    }
+    window.location.reload();
+    return null;
+  } catch {
+    return "No se ha podido guardar. Prueba otra vez.";
+  }
+}
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { mensajePrecioPorDebajo, precioVisiblePorDebajo } from "@/lib/precio-minimo";
@@ -71,7 +92,7 @@ function TextoEstado({
     return (
       <p className="text-sm text-zinc-700">
         {esConductor
-          ? "Has indicado que no aceptas la rebaja. La reserva sigue. Quien reservó puede cancelar si quiere."
+          ? "Has indicado que no aceptas la rebaja."
           : `El conductor no ha aceptado la rebaja. La reserva sigue. ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`}
       </p>
     );
@@ -88,13 +109,7 @@ function TextoEstado({
     );
   }
 
-  return (
-    <p className="text-base text-emerald-900">
-      {cuantasPlazas > 1
-        ? `Si aceptas la rebaja, guarda un precio más bajo para las ${cuantasPlazas} plazas juntas. Si no la aceptas, la reserva sigue por lo pagado.`
-        : "Si aceptas la rebaja, guarda un precio más bajo. Si no la aceptas, la reserva sigue por lo pagado."}
-    </p>
-  );
+  return null;
 }
 
 function Formulario({
@@ -105,6 +120,7 @@ function Formulario({
   cuantasPlazas,
   precioPagadoTotal,
   etiquetaBoton,
+  onVolver,
 }: {
   porte: PorteRebaja;
   origen: string;
@@ -113,6 +129,7 @@ function Formulario({
   cuantasPlazas: number;
   precioPagadoTotal: number;
   etiquetaBoton: string;
+  onVolver?: () => void;
 }) {
   const router = useRouter();
   const minimo = usePrecioMinimoCarretera(origen, destino);
@@ -153,42 +170,21 @@ function Formulario({
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
-      <p className="text-sm text-zinc-700">
-        Precio pagado
-        {cuantasPlazas > 1 ? ` (todas las plazas)` : ""}:{" "}
-        {formatEur(precioPagadoTotal)}. El precio no cambia hasta que guardes
-        uno más bajo.
-      </p>
-      {minimo.texto ? (
-        <p className="text-sm text-zinc-600">{minimo.texto}</p>
-      ) : null}
-      {minimo.error ? (
-        <p className="text-sm text-red-600">{minimo.error}</p>
-      ) : null}
       <Input
-        label={
-          cuantasPlazas > 1
-            ? "Precio neto total (€)"
-            : "Precio neto (€)"
-        }
         name="precio_neto"
-        type="number"
-        step="0.01"
-        min="0.01"
+        label="Precio nuevo (neto, sin gastos)"
+        type="text"
+        inputMode="decimal"
         value={netoTexto}
         onChange={(e) => setNetoTexto(e.target.value)}
+        placeholder="Ej. 40"
         required
-        hint={
-          cuantasPlazas > 1
-            ? "Sin gastos de gestión. Es el total de todas las plazas de esta solicitud."
-            : "Sin los gastos de gestión. Al guardar se devuelve la diferencia."
-        }
       />
       {visible > 0 ? (
         <p className="text-sm text-zinc-700">
-          El otro pagaría {formatEur(visible)}.
+          Quien reservó verá {formatEur(visible)}.
           {diferencia >= 0.01
-            ? ` Se le devuelven ${formatEur(diferencia)}.`
+            ? ` Se le devolverán ${formatEur(diferencia)}.`
             : ""}
         </p>
       ) : null}
@@ -217,6 +213,17 @@ function Formulario({
       >
         {loading ? "Guardando…" : etiquetaBoton}
       </Button>
+      {onVolver ? (
+        <Button
+          type="button"
+          variant="ghost"
+          fullWidth
+          disabled={loading}
+          onClick={onVolver}
+        >
+          Volver
+        </Button>
+      ) : null}
       {rutaId ? (
         <p className="text-base text-zinc-700">
           Si lo guardas y quieres publicar el hueco que queda, hazlo en el viaje
@@ -234,45 +241,202 @@ function Formulario({
   );
 }
 
-function BotonRechazarTramo({ reservaId }: { reservaId: string }) {
+function TarjetaConductorRebaja({
+  porte,
+  porteVista,
+  cuantasPlazas,
+  precioPagadoTotal,
+  origen,
+  destino,
+  rutaId,
+  grupo,
+}: {
+  porte: PorteRebaja;
+  porteVista: PorteRebaja;
+  cuantasPlazas: number;
+  precioPagadoTotal: number;
+  origen: string;
+  destino: string;
+  rutaId: string | null;
+  grupo: PorteRebaja[];
+}) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const enviando = useRef(false);
+  const pendienteDecision =
+    !porteVista.rebajaEn && !porteVista.rebajaRechazadaEn;
+  const reservaPendiente = porteVista.estado === "pendiente_aprobacion";
+  const [paso, setPaso] = useState<"elegir" | "precio" | "reserva">("elegir");
+  const [guardandoNo, setGuardandoNo] = useState(false);
+  const [errorNo, setErrorNo] = useState<string | null>(null);
+  const enviandoNo = useRef(false);
 
-  async function onClick() {
-    if (enviando.current) return;
-    enviando.current = true;
-    setLoading(true);
-    setError(null);
+  const titulo = porteVista.rebajaEn
+    ? "Rebaja aplicada"
+    : porteVista.rebajaRechazadaEn
+      ? "Rebaja no aceptada"
+      : cuantasPlazas > 1
+        ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
+        : "Hay una solicitud de rebaja";
+
+  async function noAceptoRebaja() {
+    if (reservaPendiente) {
+      setPaso("reserva");
+      return;
+    }
+    if (enviandoNo.current) return;
+    enviandoNo.current = true;
+    setGuardandoNo(true);
+    setErrorNo(null);
     const fd = new FormData();
-    fd.set("reserva_id", reservaId);
+    fd.set("reserva_id", porte.id);
     const result = await rechazarRebajaTramo(fd);
+    enviandoNo.current = false;
+    setGuardandoNo(false);
     if (result.error) {
-      setError(result.error);
-      enviando.current = false;
-      setLoading(false);
+      setErrorNo(result.error);
+      return;
+    }
+    router.refresh();
+  }
+
+  async function aceptarReservaPrecioPagado() {
+    if (enviandoNo.current) return;
+    enviandoNo.current = true;
+    setGuardandoNo(true);
+    setErrorNo(null);
+    const fd = new FormData();
+    fd.set("reserva_id", porte.id);
+    fd.set("aceptar_reserva", "1");
+    const result = await rechazarRebajaTramo(fd);
+    enviandoNo.current = false;
+    setGuardandoNo(false);
+    if (result.error) {
+      setErrorNo(result.error);
       return;
     }
     router.refresh();
   }
 
   return (
-    <div className="space-y-2">
-      <Button
-        type="button"
-        variant="secondary"
-        fullWidth
-        disabled={loading}
-        onClick={() => void onClick()}
-      >
-        {loading ? "Guardando…" : "No acepto la rebaja"}
-      </Button>
-      <p className="text-xs text-zinc-600">
-        La reserva queda aceptada por lo pagado. Quien reservó podrá cancelar
-      </p>
-      {error ? <p className="text-sm text-red-700">{error}</p> : null}
-    </div>
+    <Card className="space-y-2 border-emerald-200 bg-emerald-50/40">
+      <p className="text-base font-semibold text-emerald-950">{titulo}</p>
+
+      {pendienteDecision && (porteVista.esTramo || grupo.some((p) => p.esTramo)) ? (
+        <p className="text-sm font-medium text-emerald-950">
+          {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+        </p>
+      ) : null}
+
+      {cuantasPlazas > 1 && pendienteDecision ? (
+        <ul className="list-inside list-disc text-sm text-zinc-700">
+          {grupo.map((p) => (
+            <li key={p.id}>
+              {p.descripcion?.trim() || "Plaza"} · {formatEur(p.precioTotal)}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {!pendienteDecision ? (
+        <TextoEstado
+          porte={porteVista}
+          esConductor
+          rutaId={rutaId}
+          cuantasPlazas={cuantasPlazas}
+        />
+      ) : null}
+
+      {pendienteDecision && paso === "elegir" ? (
+        <div className="space-y-2">
+          <Button type="button" fullWidth onClick={() => setPaso("precio")}>
+            Acepto la rebaja
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            fullWidth
+            disabled={guardandoNo}
+            onClick={() => void noAceptoRebaja()}
+          >
+            {guardandoNo ? "Guardando…" : "No acepto la rebaja"}
+          </Button>
+          {errorNo ? <p className="text-sm text-red-700">{errorNo}</p> : null}
+        </div>
+      ) : null}
+
+      {pendienteDecision && paso === "precio" ? (
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-emerald-950">
+            {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
+          </p>
+          <Formulario
+            porte={porte}
+            origen={origen}
+            destino={destino}
+            rutaId={rutaId}
+            cuantasPlazas={cuantasPlazas}
+            precioPagadoTotal={precioPagadoTotal}
+            etiquetaBoton="Guardar precio nuevo"
+            onVolver={() => setPaso("elegir")}
+          />
+        </div>
+      ) : null}
+
+      {pendienteDecision && paso === "reserva" ? (
+        <div className="space-y-2">
+          <p className="text-sm text-zinc-700">
+            No aceptas la rebaja. Ahora decide si aceptas la reserva por el
+            precio pagado o la rechazas.
+          </p>
+          <Button
+            type="button"
+            fullWidth
+            disabled={guardandoNo}
+            onClick={() => void aceptarReservaPrecioPagado()}
+          >
+            {guardandoNo ? "Guardando…" : "Aceptar reserva (precio pagado)"}
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            fullWidth
+            disabled={guardandoNo}
+            onClick={() => {
+              void (async () => {
+                setGuardandoNo(true);
+                setErrorNo(null);
+                const err = await rechazarReservaEntera(porte.id);
+                if (err) {
+                  setErrorNo(err);
+                  setGuardandoNo(false);
+                }
+              })();
+            }}
+          >
+            {guardandoNo ? "Guardando…" : "Rechazar reserva"}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            fullWidth
+            disabled={guardandoNo}
+            onClick={() => setPaso("elegir")}
+          >
+            Volver
+          </Button>
+          {errorNo ? <p className="text-sm text-red-700">{errorNo}</p> : null}
+        </div>
+      ) : null}
+
+      {porteVista.rebajaRechazadaEn &&
+      porteVista.estado === "pendiente_aprobacion" ? (
+        <div className="space-y-2">
+          <p className="text-sm text-zinc-700">
+            Decide si aceptas la reserva por el precio pagado o la rechazas.
+          </p>
+          <AceptarRechazarBotones reservaId={porte.id} />
+        </div>
+      ) : null}
+    </Card>
   );
 }
 
@@ -312,23 +476,29 @@ export function RebajaReservas({
             porte.rebajaEn || grupo.some((p) => p.rebajaEur != null)
               ? rebajaEurSuma
               : porte.rebajaEur,
-          // Si alguna del grupo sigue pendiente de aceptar reserva, el formulario espera.
           estado: grupo.every((p) => p.estado === "confirmada")
             ? "confirmada"
             : grupo.some((p) => p.estado === "pendiente_aprobacion")
               ? "pendiente_aprobacion"
               : porte.estado,
         };
-        const pendienteGrupo = grupo.every(
-          (p) => !p.rebajaEn && !p.rebajaRechazadaEn
-        );
-        const puedeDecidirRebaja =
-          esConductor &&
-          pendienteGrupo &&
-          !porteVista.rebajaEn &&
-          !porteVista.rebajaRechazadaEn &&
-          (porteVista.estado === "confirmada" ||
-            porteVista.estado === "pendiente_aprobacion");
+
+        if (esConductor) {
+          return (
+            <TarjetaConductorRebaja
+              key={grupo.map((p) => p.id).join("-")}
+              porte={porte}
+              porteVista={porteVista}
+              cuantasPlazas={cuantasPlazas}
+              precioPagadoTotal={precioPagadoTotal}
+              origen={origen}
+              destino={destino}
+              rutaId={rutaId}
+              grupo={grupo}
+            />
+          );
+        }
+
         const titulo = porteVista.rebajaEn
           ? "Rebaja aplicada"
           : porteVista.rebajaRechazadaEn
@@ -336,61 +506,19 @@ export function RebajaReservas({
             : cuantasPlazas > 1
               ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
               : "Hay una solicitud de rebaja";
+
         return (
           <Card
             key={grupo.map((p) => p.id).join("-")}
             className="space-y-2 border-emerald-200 bg-emerald-50/40"
           >
-            <p className="text-base font-semibold text-emerald-950">
-              {titulo}
-            </p>
-            {esConductor &&
-            (porteVista.esTramo || grupo.some((p) => p.esTramo)) &&
-            pendienteGrupo &&
-            !porteVista.rebajaEn &&
-            !porteVista.rebajaRechazadaEn ? (
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-emerald-950">
-                  {TEXTO_REBAJA_TRAMO_CONDUCTOR}
-                </p>
-                <p className="text-sm font-medium text-emerald-950">
-                  {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
-                </p>
-              </div>
-            ) : null}
-            {cuantasPlazas > 1 && pendienteGrupo ? (
-              <ul className="list-inside list-disc text-sm text-zinc-700">
-                {grupo.map((p) => (
-                  <li key={p.id}>
-                    {p.descripcion?.trim() || "Plaza"} · {formatEur(p.precioTotal)}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <p className="text-base font-semibold text-emerald-950">{titulo}</p>
             <TextoEstado
               porte={porteVista}
-              esConductor={esConductor}
+              esConductor={false}
               rutaId={rutaId}
               cuantasPlazas={cuantasPlazas}
             />
-            {puedeDecidirRebaja ? (
-              <Formulario
-                porte={porte}
-                origen={origen}
-                destino={destino}
-                rutaId={rutaId}
-                cuantasPlazas={cuantasPlazas}
-                precioPagadoTotal={precioPagadoTotal}
-                etiquetaBoton={
-                  porteVista.estado === "pendiente_aprobacion"
-                    ? "Aceptar rebaja"
-                    : "Guardar precio nuevo"
-                }
-              />
-            ) : null}
-            {puedeDecidirRebaja && Boolean(porteVista.esTramo) ? (
-              <BotonRechazarTramo reservaId={porte.id} />
-            ) : null}
           </Card>
         );
       })}
