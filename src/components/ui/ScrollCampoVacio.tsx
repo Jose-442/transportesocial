@@ -110,19 +110,13 @@ export function ScrollCampoVacio() {
       // En un texto largo (descripción del bulto, etc.) no hay que bajar
       // a cada palabra: el usuario sigue escribiendo. Solo al salir del campo.
       if (el instanceof HTMLTextAreaElement) return;
-      // Email y contraseña: no saltar a mitad de escribir (login/registro).
-      // El paso al siguiente campo es al salir (Tab o clic).
-      if (
-        el instanceof HTMLInputElement &&
-        (el.type === "email" || el.type === "password")
-      ) {
-        return;
-      }
       const esCaja =
         el instanceof HTMLInputElement &&
         (el.type === "text" ||
           el.type === "search" ||
           el.type === "tel" ||
+          el.type === "email" ||
+          el.type === "password" ||
           el.type === "number" ||
           el.type === "");
       if (!esCaja || el.getAttribute("role") === "combobox") return;
@@ -130,11 +124,18 @@ export function ScrollCampoVacio() {
       if (!(campo instanceof HTMLElement)) return;
       window.clearTimeout(esperaTecleo);
       esperaTecleo = window.setTimeout(() => {
+        const valor = el.value.trim();
         if (el.type === "number") {
           const importe = parseFloat(el.value);
           if (!Number.isFinite(importe) || importe <= 0) return;
-        } else if (el.value.trim() === "") {
+        } else if (valor === "") {
           return;
+        } else if (el.type === "email") {
+          // Solo cuando el email parece completo (no a mitad: tir@hotma…).
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) return;
+        } else if (el.type === "password") {
+          // Contraseña: al menos unos caracteres, no al primer toque.
+          if (valor.length < 6) return;
         }
         if (campo.hasAttribute("data-campo-vacio")) return;
         const form = campo.closest("form");
