@@ -12,17 +12,20 @@ export async function sendRevisionChatEmail({
   chatAdminUrl,
 }: {
   chatAdminUrl: string;
-}) {
+}): Promise<boolean> {
   const resend = getResendClient();
   if (!resend) {
     logResendSkipped("revision-chat-email");
-    return;
+    return false;
   }
 
-  const destinatarios = [...ADMIN_EMAILS];
-  if (destinatarios.length === 0) return;
+  const destinatarios = [...ADMIN_EMAILS].filter(Boolean);
+  if (destinatarios.length === 0) {
+    console.error("[revision-chat-email] ADMIN_EMAILS vacío");
+    return false;
+  }
 
-  const { error } = await resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: getResendFromEmail(),
     to: destinatarios,
     subject: `Revisión del chat — ${APP_NAME}`,
@@ -36,5 +39,13 @@ export async function sendRevisionChatEmail({
 
   if (error) {
     logResendError("revision-chat-email", error);
+    return false;
   }
+  console.info(
+    "[revision-chat-email] enviado",
+    data?.id ?? "",
+    "→",
+    destinatarios.join(", ")
+  );
+  return true;
 }

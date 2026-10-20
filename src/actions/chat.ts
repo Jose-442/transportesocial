@@ -126,8 +126,12 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       enlace: `/reservas/${reservaId}/chat`,
     });
   }
+  let marcadoFueraWeb = false;
   if (detectaAcuerdoFueraWeb(texto) || detectaAcuerdoFueraWeb(cuerpo)) {
-    await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
+    marcadoFueraWeb = await marcarRevisionFueraWebSiHaceFalta(
+      supabase,
+      reserva
+    );
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
@@ -135,6 +139,7 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
   return {
     ok: true,
     oculto: Boolean(validado.oculto),
+    marcadoFueraWeb,
     mensaje: {
       ...insertado,
       eliminado: insertado.eliminado ?? false,
@@ -192,8 +197,12 @@ export async function editarUltimoMensajeChat(
     if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
   }
 
+  let marcadoFueraWeb = false;
   if (detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo)) {
-    await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
+    marcadoFueraWeb = await marcarRevisionFueraWebSiHaceFalta(
+      supabase,
+      reserva
+    );
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
@@ -201,6 +210,7 @@ export async function editarUltimoMensajeChat(
   return {
     ok: true,
     oculto: Boolean(validado.oculto),
+    marcadoFueraWeb,
     cuerpo: validado.texto,
     mensajeId: ultimo.id,
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
 import {
@@ -44,7 +45,9 @@ export function ChatPanel({
   const [textoEdicion, setTextoEdicion] = useState("");
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const listaRef = useRef<HTMLDivElement>(null);
   const ocupado = useRef(false);
+  const router = useRouter();
 
   const ultimoDelChat =
     mensajes.length > 0 ? mensajes[mensajes.length - 1] : null;
@@ -54,6 +57,11 @@ export function ChatPanel({
     ultimoDelChat!.remitente_id === userId;
 
   useEffect(() => {
+    const lista = listaRef.current;
+    if (lista) {
+      lista.scrollTop = lista.scrollHeight;
+      return;
+    }
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
 
@@ -98,14 +106,14 @@ export function ChatPanel({
     };
   }, [canalId]);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function enviarTexto() {
     if (ocupado.current) return;
+    const textoEnviado = form.cuerpo.trim();
+    if (!textoEnviado) return;
     ocupado.current = true;
     setError(null);
     setAviso(null);
     setLoading(true);
-    const textoEnviado = form.cuerpo;
     let result: Awaited<ReturnType<typeof enviarMensajeChat>>;
     try {
       result = await enviarMensajeChat(reservaId, textoEnviado);
@@ -131,6 +139,19 @@ export function ChatPanel({
     }
     clear();
     setForm({ cuerpo: "" });
+    // Baja al último mensaje (Enviar o Enter).
+    requestAnimationFrame(() => {
+      const lista = listaRef.current;
+      if (lista) lista.scrollTop = lista.scrollHeight;
+    });
+    if (result.marcadoFueraWeb) {
+      router.refresh();
+    }
+  }
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await enviarTexto();
   }
 
   function empezarEdicion(m: ChatMensaje) {
@@ -180,6 +201,9 @@ export function ChatPanel({
       );
     }
     cancelarEdicion();
+    if (result.marcadoFueraWeb) {
+      router.refresh();
+    }
   }
 
   async function anularUltimo() {
@@ -212,7 +236,10 @@ export function ChatPanel({
         compartir ni teléfonos ni correos; el chat es solo para eso.
       </p>
       {mensajes.length > 0 ? (
-        <div className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+        <div
+          ref={listaRef}
+          className="max-h-80 space-y-2 overflow-y-auto rounded-xl border border-zinc-200 bg-zinc-50 p-3"
+        >
           {mensajes.map((m) => {
             const propio = m.remitente_id === userId;
             const nombre =
@@ -320,6 +347,13 @@ export function ChatPanel({
           onChange={(e) =>
             setForm((prev) => ({ ...prev, cuerpo: e.target.value }))
           }
+          onKeyDown={(e) => {
+            // Enter envía; Shift+Enter hace salto de línea.
+            if (e.key !== "Enter" || e.shiftKey) return;
+            e.preventDefault();
+            if (loading || cargandoAccion || ocupado.current) return;
+            void enviarTexto();
+          }}
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         {aviso && <p className="text-sm text-amber-800">{aviso}</p>}

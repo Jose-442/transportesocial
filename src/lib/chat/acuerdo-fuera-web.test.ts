@@ -20,6 +20,11 @@ describe("detectaAcuerdoFueraWeb", () => {
     ).toBe(true);
   });
 
+  it("pago en mano", () => {
+    expect(detectaAcuerdoFueraWeb("te lo pago en mano")).toBe(true);
+    expect(detectaAcuerdoFueraWeb("en mano")).toBe(true);
+  });
+
   it("mensaje normal de coordinación", () => {
     expect(
       detectaAcuerdoFueraWeb("Quedamos a las 10 en la estación, ¿vale?")

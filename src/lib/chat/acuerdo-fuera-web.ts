@@ -23,8 +23,12 @@ const PATRONES: RegExp[] = [
   /\bhacerlo\s+(?:fuera|clandestin)/,
   /\banular\s+(?:el\s+)?viaje\b.*\b(?:sin\s+la\s+web|clandestin|por\s+fuera)/,
   /\b(?:sin\s+la\s+web|clandestin|por\s+fuera).*\banular\b/,
-  /\bpagar\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
-  /\bcobrar\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
+  // «pagar / pago / pagarlo en mano», bizum, efectivo…
+  /\bpag(?:o|ar|arlo|amos|as)\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
+  /\bcobr(?:o|ar|arlo|amos|as)\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
+  /\ben\s+mano\b/,
+  /\ben\s+efectivo\b/,
+  /\bbizum\b/,
   /\bdirecto\s+sin\s+(?:la\s+)?(?:web|app|plataforma)\b/,
   // «lo hacemos entre nosotros» / «si anulamos … entre nosotros»
   /\bentre\s+nos(?:otros)?\b/,
