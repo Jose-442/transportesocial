@@ -14,6 +14,7 @@ import {
   cargarOcupacionesPorRutas,
   type OcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
+import { notaTramoRebajaReserva } from "@/lib/cuenta/nota-tramo-rebaja";
 import {
   badgeOfertaRuta,
   fraseQuedaLibre,
