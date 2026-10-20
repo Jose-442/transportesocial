@@ -28,7 +28,7 @@ export const TEXTO_NOTA_TRAMO_FICHA =
 
 /** Explicación al conductor en la tarjeta de rebaja por tramo. */
 export const TEXTO_REBAJA_TRAMO_CONDUCTOR =
-  "Quien reservó ha pagado el precio del viaje completo, pero solo necesita un tramo (una parte del recorrido), no de punta a punta. Por eso pide una rebaja. Tú decides si bajas el precio o no.";
+  "Quien reservó solo necesita una parte del recorrido. Por eso pide una rebaja. Tú decides si bajas el precio o no.";
 
 /**
  * Aviso al conductor: la plaza de un tramo ocupa el viaje entero;
