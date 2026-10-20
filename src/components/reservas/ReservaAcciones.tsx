@@ -110,12 +110,14 @@ export function ReservaAcciones({
         !r.rebaja_rechazada_en
     );
   const filasEspacio = relacionadas.length > 0 ? relacionadas : [reserva];
+  const mostrarGloboRebaja =
+    estado === "pendiente_aprobacion" && esConductor && pideRebajaPendiente;
   const etiquetaEstado = canceloQuienReservo
     ? canceloQuienReservo.etiqueta
     : estado === "confirmada"
       ? "Confirmado"
-      : estado === "pendiente_aprobacion" && esConductor && pideRebajaPendiente
-        ? `${fraseEspacioReservado(filasEspacio)} · Solicitud de rebaja`
+      : mostrarGloboRebaja
+        ? fraseEspacioReservado(filasEspacio)
         : estado === "pendiente_aprobacion" && esConductor
           ? "Me toca aceptar o rechazar"
           : ESTADO_RESERVA_LABELS[estado];
@@ -156,6 +158,9 @@ export function ReservaAcciones({
         <span className="inline-flex flex-wrap items-center gap-2 text-sm text-zinc-900">
           <span className="font-semibold">Estado del viaje:</span>
           <Badge tone="green">{etiquetaEstado}</Badge>
+          {mostrarGloboRebaja ? (
+            <Badge tone="green">Solicitud de rebaja</Badge>
+          ) : null}
         </span>
         {chatPermitido(estado) ? (
           <span className="text-xs leading-tight text-zinc-600 md:text-sm md:leading-snug">
