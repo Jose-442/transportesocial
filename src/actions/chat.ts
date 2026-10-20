@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
@@ -122,28 +123,30 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       ? reserva.transportista_id
       : reserva.cliente_id;
 
-  const admin = createAdminClient();
-  if (admin) {
-    await crearNotificacion(admin, {
-      user_id: otroId,
-      tipo: "nuevo_mensaje_chat",
-      titulo: "Nuevo mensaje",
-      mensaje: texto.slice(0, 80),
-      enlace: `/reservas/${reservaId}/chat`,
-    });
-  }
-  let marcadoFueraWeb = false;
-  // Siempre mirar el texto original (el filtrado ya no tiene «en mano», etc.).
-  if (
+  // Texto original: el filtrado ya no tiene «en mano», etc.
+  const marcadoFueraWeb =
     detectaAcuerdoFueraWeb(cuerpo) ||
     detectaAcuerdoFueraWeb(texto) ||
-    Boolean(validado.oculto && detectaAcuerdoFueraWeb(cuerpo))
-  ) {
-    marcadoFueraWeb = await marcarRevisionFueraWebSiHaceFalta(
-      supabase,
-      reserva
-    );
-  }
+    Boolean(validado.oculto && detectaAcuerdoFueraWeb(cuerpo));
+
+  // Avisos, marca y correo en segundo plano: el chat no debe esperarlos.
+  after(async () => {
+    const admin = createAdminClient();
+    if (admin) {
+      await crearNotificacion(admin, {
+        user_id: otroId,
+        tipo: "nuevo_mensaje_chat",
+        titulo: "Nuevo mensaje",
+        mensaje: texto.slice(0, 80),
+        enlace: `/reservas/${reservaId}/chat`,
+      });
+    }
+    if (marcadoFueraWeb) {
+      await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
+      revalidatePath(`/reservas/${reservaId}/chat`);
+      revalidatePath(`/reservas/${reservaId}`);
+    }
+  });
 
   revalidatePath(`/reservas/${reservaId}/chat`);
   revalidatePath(`/reservas/${reservaId}`);
@@ -208,12 +211,15 @@ export async function editarUltimoMensajeChat(
     if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
   }
 
-  let marcadoFueraWeb = false;
-  if (detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo)) {
-    marcadoFueraWeb = await marcarRevisionFueraWebSiHaceFalta(
-      supabase,
-      reserva
-    );
+  const marcadoFueraWeb =
+    detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo);
+
+  if (marcadoFueraWeb) {
+    after(async () => {
+      await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
+      revalidatePath(`/reservas/${reservaId}/chat`);
+      revalidatePath(`/reservas/${reservaId}`);
+    });
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);

@@ -147,7 +147,9 @@ export function ChatPanel({
       if (lista) lista.scrollTop = lista.scrollHeight;
     });
     if (result.marcadoFueraWeb || detectaAcuerdoFueraWeb(textoEnviado)) {
+      // La marca va en segundo plano: refrescar ya y otra vez al poco.
       router.refresh();
+      window.setTimeout(() => router.refresh(), 2000);
     }
   }
 

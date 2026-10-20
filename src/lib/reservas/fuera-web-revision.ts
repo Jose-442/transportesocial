@@ -38,16 +38,17 @@ async function marcarPorPatchServicio(reservaId: string): Promise<boolean> {
     fuera_web_revision_en: ahora,
     fuera_web_ok_en: null,
   });
+  // Solo apikey primero (Bearer en tablas suele fallar y hace perder tiempo).
   const intentos: Record<string, string>[] = [
     {
       apikey: serviceRole,
-      Authorization: `Bearer ${serviceRole}`,
       "Content-Type": "application/json",
       Prefer: "return=representation",
       Accept: "application/json",
     },
     {
       apikey: serviceRole,
+      Authorization: `Bearer ${serviceRole}`,
       "Content-Type": "application/json",
       Prefer: "return=representation",
       Accept: "application/json",
