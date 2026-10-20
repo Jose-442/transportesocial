@@ -63,15 +63,21 @@ function TextoEstado({
   cuantasPlazas: number;
 }) {
   if (porte.rebajaEn) {
+    const importe =
+      porte.rebajaEur != null && porte.rebajaEur > 0
+        ? ` Se ha devuelto ${formatEur(porte.rebajaEur)}.`
+        : " Se ha devuelto la diferencia.";
+    // «Publicar el hueco» solo en portes (bulto), no en plazas/tramo.
+    const mostrarHuecoBulto =
+      esConductor && Boolean(rutaId) && !porte.esTramo && cuantasPlazas < 1;
     return (
       <div className="space-y-2">
         <p className="text-sm text-zinc-700">
-          El conductor ha guardado un precio más bajo.
-          {porte.rebajaEur != null && porte.rebajaEur > 0
-            ? ` Se ha devuelto ${formatEur(porte.rebajaEur)}.`
-            : " Se ha devuelto la diferencia."}
+          {esConductor
+            ? `Has guardado un precio más bajo.${importe}`
+            : `El conductor ha guardado un precio más bajo.${importe}`}
         </p>
-        {esConductor && rutaId ? (
+        {mostrarHuecoBulto ? (
           <p className="text-base text-zinc-700">
             Si quieres volver a publicar el hueco que queda, hazlo en el viaje
             pulsando{" "}
@@ -148,6 +154,7 @@ function Formulario({
   etiquetaBoton,
   onVolver,
   mostrarNotaTramo,
+  mostrarHuecoBulto = false,
 }: {
   porte: PorteRebaja;
   origen: string;
@@ -158,6 +165,8 @@ function Formulario({
   etiquetaBoton: string;
   onVolver?: () => void;
   mostrarNotaTramo?: boolean;
+  /** Solo portes (bulto): avisar de republicar hueco. */
+  mostrarHuecoBulto?: boolean;
 }) {
   const minimo = usePrecioMinimoCarretera(origen, destino);
   const [netoTexto, setNetoTexto] = useState("");
@@ -267,7 +276,7 @@ function Formulario({
           Volver
         </Button>
       ) : null}
-      {rutaId ? (
+      {mostrarHuecoBulto && rutaId ? (
         <p className="text-base text-zinc-700">
           Si lo guardas y quieres publicar el hueco que queda, hazlo en el viaje
           pulsando{" "}
@@ -419,6 +428,7 @@ function TarjetaConductorRebaja({
           etiquetaBoton="Guardar precio nuevo"
           onVolver={() => setPaso("elegir")}
           mostrarNotaTramo={avisoBajaYSube}
+          mostrarHuecoBulto={!porte.esTramo && cuantasPlazas < 1}
         />
       ) : null}
 
