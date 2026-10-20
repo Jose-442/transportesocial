@@ -150,9 +150,7 @@ export function ReservaAcciones({
             politica.tipo,
             formatEur(centimosAEuros(reparto.reembolsoCents))
           )
-        : fraseAyudaCancelacionConductor(
-            formatEur(centimosAEuros(reparto.reembolsoCents))
-          )
+        : fraseAyudaCancelacionConductor()
       : "";
 
   return (
