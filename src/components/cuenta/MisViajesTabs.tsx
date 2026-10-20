@@ -22,6 +22,8 @@ export type ReservaViajeItem = {
   esCliente: boolean;
   queIncluye: string;
   fecha: string;
+  /** Ej. «Tramo del viaje · Rebaja de precio aceptada». */
+  notaTramoRebaja?: string | null;
 };
 
 export type OfertaViajeItem = {
@@ -74,6 +76,11 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
             {item.queIncluye} ·{" "}
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
+          {item.notaTramoRebaja ? (
+            <p className="mt-1 text-sm font-medium text-zinc-800">
+              {item.notaTramoRebaja}
+            </p>
+          ) : null}
         </div>
         <Badge tone={item.estado === "pendiente_pago" ? "amber" : "green"}>
           {item.estado === "pendiente_aprobacion" && !item.esCliente

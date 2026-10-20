@@ -321,6 +321,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       esCliente,
       queIncluye: fraseQueIncluyeReservas(grupo),
       fecha: principal.created_at,
+      notaTramoRebaja: notaTramoRebajaReserva(grupo),
     };
 
     if (apartado === "propuestos") propuestos.push(item);
