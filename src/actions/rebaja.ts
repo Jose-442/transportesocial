@@ -6,6 +6,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { calcComision, calcPrecioConComision } from "@/lib/pricing";
 import { errorSiPrecioBajoMinimo } from "@/lib/km-carretera";
 import { crearNotificacion } from "@/lib/reservas/notify";
+import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
 import {
   esPorteParaRebaja,
   faltaColumnaRebaja,
@@ -19,6 +20,37 @@ import type { Reserva } from "@/types/database";
 
 const ERROR_SQL =
   "La rebaja todavía no se puede guardar. Falta un paso en la base de datos.";
+
+/** Con rebaja pedida, al decidir se acepta la reserva si aún estaba pendiente. */
+async function aceptarReservaSiPendiente(
+  reserva: Reserva
+): Promise<{ error?: string; reserva: Reserva }> {
+  if (reserva.estado === "confirmada") return { reserva };
+  if (reserva.estado !== "pendiente_aprobacion") {
+    return {
+      error: "Esta reserva ya no admite rebaja.",
+      reserva,
+    };
+  }
+  const decision = await ejecutarDecisionConductor({
+    reservaId: reserva.id,
+    decision: "aceptar",
+    omitirAvisos: true,
+  });
+  if (decision.error) return { error: decision.error, reserva };
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("reservas")
+    .select("*")
+    .eq("id", reserva.id)
+    .maybeSingle();
+  const actualizada = (data as Reserva | null) ?? reserva;
+  if (actualizada.estado !== "confirmada") {
+    return { error: "No se ha podido aceptar la reserva.", reserva };
+  }
+  return { reserva: actualizada };
+}
 
 export async function guardarRebajaReserva(formData: FormData) {
   const supabase = await createClient();
@@ -42,7 +74,7 @@ export async function guardarRebajaReserva(formData: FormData) {
         : "No se ha podido leer el porte.",
     };
   }
-  const reserva = fila as Reserva | null;
+  let reserva = fila as Reserva | null;
   if (!reserva || reserva.transportista_id !== user.id) {
     return { error: "No autorizado." };
   }
@@ -52,9 +84,18 @@ export async function guardarRebajaReserva(formData: FormData) {
   if (reserva.rebaja_en) {
     return { error: "El precio nuevo ya está guardado." };
   }
-  if (reserva.estado !== "confirmada") {
-    return { error: "El precio solo se puede bajar con el viaje confirmado." };
+  if (reserva.rebaja_rechazada_en) {
+    return { error: "La rebaja ya fue rechazada." };
   }
+  if (
+    reserva.estado !== "confirmada" &&
+    reserva.estado !== "pendiente_aprobacion"
+  ) {
+    return { error: "Esta reserva ya no admite rebaja." };
+  }
+  const aceptada = await aceptarReservaSiPendiente(reserva);
+  if (aceptada.error) return { error: aceptada.error };
+  reserva = aceptada.reserva;
   if (!reserva.ruta_conductor_id) {
     return { error: "No se ha encontrado el viaje." };
   }
@@ -362,13 +403,17 @@ export async function rechazarRebajaTramo(formData: FormData) {
         : "No se ha podido leer la reserva.",
     };
   }
-  const reserva = fila as Reserva | null;
+  let reserva = fila as Reserva | null;
   if (!reserva || reserva.transportista_id !== user.id) {
     return { error: "No autorizado." };
   }
   if (!puedeRechazarRebajaTramo(reserva)) {
     return { error: "Esta rebaja ya no se puede rechazar." };
   }
+
+  const aceptada = await aceptarReservaSiPendiente(reserva);
+  if (aceptada.error) return { error: aceptada.error };
+  reserva = aceptada.reserva;
 
   const admin = createAdminClient();
   const cliente = admin ?? supabase;
@@ -405,8 +450,8 @@ export async function rechazarRebajaTramo(formData: FormData) {
     titulo: "Rebaja no aceptada",
     mensaje:
       aRechazar.length > 1
-        ? `El conductor no ha aceptado la rebaja del tramo (todas tus plazas). El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`
-        : `El conductor no ha aceptado la rebaja del tramo. El viaje sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
+        ? `El conductor no ha aceptado la rebaja del tramo (todas tus plazas). La reserva sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`
+        : `El conductor no ha aceptado la rebaja. La reserva sigue. Si cancelas: ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`,
     enlace: `/reservas/${reserva.id}`,
   });
 
@@ -414,5 +459,6 @@ export async function rechazarRebajaTramo(formData: FormData) {
     revalidatePath(`/reservas/${h.id}`);
     revalidatePath(`/reservas/${h.id}/chat`);
   }
+  revalidatePath("/cuenta/viajes");
   return { ok: true };
 }

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
-import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBotones";
 import { guardarRebajaReserva, rechazarRebajaTramo } from "@/actions/rebaja";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
@@ -72,8 +71,8 @@ function TextoEstado({
     return (
       <p className="text-sm text-zinc-700">
         {esConductor
-          ? "Has indicado que no aceptas la rebaja. El viaje sigue. Quien reservó puede cancelar si quiere."
-          : `El conductor no ha aceptado la rebaja. El viaje sigue. ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`}
+          ? "Has indicado que no aceptas la rebaja. La reserva sigue. Quien reservó puede cancelar si quiere."
+          : `El conductor no ha aceptado la rebaja. La reserva sigue. ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`}
       </p>
     );
   }
@@ -89,20 +88,11 @@ function TextoEstado({
     );
   }
 
-  if (porte.estado === "confirmada") {
-    return (
-      <p className="text-base text-emerald-900">
-        {cuantasPlazas > 1
-          ? `Puedes guardar un precio más bajo para las ${cuantasPlazas} plazas juntas.`
-          : "Puedes guardar un precio más bajo."}
-      </p>
-    );
-  }
-
   return (
     <p className="text-base text-emerald-900">
-      Cuando aceptes la reserva, podrás guardar un precio más bajo
-      {cuantasPlazas > 1 ? " para todas las plazas de esta solicitud" : ""}.
+      {cuantasPlazas > 1
+        ? `Si aceptas la rebaja, guarda un precio más bajo para las ${cuantasPlazas} plazas juntas. Si no la aceptas, la reserva sigue por lo pagado.`
+        : "Si aceptas la rebaja, guarda un precio más bajo. Si no la aceptas, la reserva sigue por lo pagado."}
     </p>
   );
 }
@@ -114,6 +104,7 @@ function Formulario({
   rutaId,
   cuantasPlazas,
   precioPagadoTotal,
+  etiquetaBoton,
 }: {
   porte: PorteRebaja;
   origen: string;
@@ -121,6 +112,7 @@ function Formulario({
   rutaId: string | null;
   cuantasPlazas: number;
   precioPagadoTotal: number;
+  etiquetaBoton: string;
 }) {
   const router = useRouter();
   const minimo = usePrecioMinimoCarretera(origen, destino);
@@ -223,7 +215,7 @@ function Formulario({
           visible <= 0
         }
       >
-        {loading ? "Guardando…" : "Guardar precio nuevo"}
+        {loading ? "Guardando…" : etiquetaBoton}
       </Button>
       {rutaId ? (
         <p className="text-base text-zinc-700">
@@ -277,8 +269,8 @@ function BotonRechazarTramo({ reservaId }: { reservaId: string }) {
         {loading ? "Guardando…" : "No acepto la rebaja"}
       </Button>
       <p className="text-xs text-zinc-600">
-        El viaje sigue. Quien reservó podrá cancelar y recuperar casi todo lo
-        pagado (menos lo del banco por la tarjeta).
+        La reserva queda aceptada por lo pagado. Quien reservó podrá cancelar y
+        recuperar casi todo (menos lo del banco por la tarjeta).
       </p>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
     </div>
@@ -331,35 +323,20 @@ export function RebajaReservas({
         const pendienteGrupo = grupo.every(
           (p) => !p.rebajaEn && !p.rebajaRechazadaEn
         );
-        const puedeGuardar =
+        const puedeDecidirRebaja =
           esConductor &&
-          pendienteGrupo &&
-          !porteVista.rebajaEn &&
-          !porteVista.rebajaRechazadaEn &&
-          porteVista.estado === "confirmada";
-        const puedeRechazar =
-          esConductor &&
-          Boolean(porteVista.esTramo) &&
           pendienteGrupo &&
           !porteVista.rebajaEn &&
           !porteVista.rebajaRechazadaEn &&
           (porteVista.estado === "confirmada" ||
             porteVista.estado === "pendiente_aprobacion");
-        const esperaAceptar =
-          esConductor &&
-          pendienteGrupo &&
-          porteVista.estado === "pendiente_aprobacion";
         const titulo = porteVista.rebajaEn
           ? "Rebaja aplicada"
           : porteVista.rebajaRechazadaEn
             ? "Rebaja no aceptada"
-            : esperaAceptar
-              ? cuantasPlazas > 1
-                ? `Hay una solicitud de reserva (${cuantasPlazas} plazas)`
-                : "Hay una solicitud de reserva"
-              : cuantasPlazas > 1
-                ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
-                : "Hay una solicitud de rebaja";
+            : cuantasPlazas > 1
+              ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
+              : "Hay una solicitud de rebaja";
         return (
           <Card
             key={grupo.map((p) => p.id).join("-")}
@@ -368,9 +345,6 @@ export function RebajaReservas({
             <p className="text-base font-semibold text-emerald-950">
               {titulo}
             </p>
-            {esperaAceptar ? (
-              <AceptarRechazarBotones reservaId={porte.id} />
-            ) : null}
             {esConductor &&
             (porteVista.esTramo || grupo.some((p) => p.esTramo)) &&
             pendienteGrupo &&
@@ -400,7 +374,7 @@ export function RebajaReservas({
               rutaId={rutaId}
               cuantasPlazas={cuantasPlazas}
             />
-            {puedeGuardar ? (
+            {puedeDecidirRebaja ? (
               <Formulario
                 porte={porte}
                 origen={origen}
@@ -408,9 +382,16 @@ export function RebajaReservas({
                 rutaId={rutaId}
                 cuantasPlazas={cuantasPlazas}
                 precioPagadoTotal={precioPagadoTotal}
+                etiquetaBoton={
+                  porteVista.estado === "pendiente_aprobacion"
+                    ? "Aceptar rebaja"
+                    : "Guardar precio nuevo"
+                }
               />
             ) : null}
-            {puedeRechazar ? <BotonRechazarTramo reservaId={porte.id} /> : null}
+            {puedeDecidirRebaja && Boolean(porteVista.esTramo) ? (
+              <BotonRechazarTramo reservaId={porte.id} />
+            ) : null}
           </Card>
         );
       })}

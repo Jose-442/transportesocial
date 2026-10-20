@@ -98,13 +98,20 @@ export function ReservaAcciones({
     esCliente,
     nombreCliente,
   });
+  const hayTramo =
+    Boolean(reserva.es_tramo) || relacionadas.some((r) => r.es_tramo);
+  const hayRebajaTramo =
+    hayTramo &&
+    (Boolean(reserva.pide_rebaja) || relacionadas.some((r) => r.pide_rebaja));
   const etiquetaEstado = canceloQuienReservo
     ? canceloQuienReservo.etiqueta
     : estado === "confirmada"
       ? "Confirmado"
-      : estado === "pendiente_aprobacion" && esConductor
-        ? "Me toca aceptar o rechazar"
-        : ESTADO_RESERVA_LABELS[estado];
+      : estado === "pendiente_aprobacion" && esConductor && hayRebajaTramo
+        ? "Solicitud de rebaja"
+        : estado === "pendiente_aprobacion" && esConductor
+          ? "Me toca aceptar o rechazar"
+          : ESTADO_RESERVA_LABELS[estado];
   const filasPrecio = relacionadas.length > 0 ? relacionadas : [reserva];
   const politica = esCliente
     ? politicaCancelacionCliente(
@@ -135,12 +142,6 @@ export function ReservaAcciones({
             formatEur(centimosAEuros(reparto.reembolsoCents))
           )
       : "";
-
-  const hayTramo =
-    Boolean(reserva.es_tramo) || relacionadas.some((r) => r.es_tramo);
-  const hayRebajaTramo =
-    hayTramo &&
-    (Boolean(reserva.pide_rebaja) || relacionadas.some((r) => r.pide_rebaja));
 
   return (
     <Card className="space-y-1.5 p-2 md:space-y-2 md:p-3">

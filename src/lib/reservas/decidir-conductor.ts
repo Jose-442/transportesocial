@@ -105,9 +105,11 @@ async function devolverEntero(
 export async function ejecutarDecisionConductor(opts: {
   reservaId: string;
   decision: "aceptar" | "rechazar";
+  /** No avisa al cliente (p. ej. al aceptar al decidir una rebaja). */
+  omitirAvisos?: boolean;
 }): Promise<{ ok?: boolean; error?: string }> {
   try {
-    const { reservaId, decision } = opts;
+    const { reservaId, decision, omitirAvisos } = opts;
     if (!reservaId) {
       return { error: "Falta la reserva." };
     }
@@ -186,9 +188,9 @@ export async function ejecutarDecisionConductor(opts: {
     const principal =
       filas.find((item) => item.tipo === "ruta_directa") ?? reserva;
     if (decision === "aceptar") {
-      void avisarReservaAceptada(supabase, principal).catch((err) =>
-        console.error("[aceptar] aviso", err)
-      );
+      void avisarReservaAceptada(supabase, principal, {
+        omitirAvisos: Boolean(omitirAvisos),
+      }).catch((err) => console.error("[aceptar] aviso", err));
     } else {
       const dinero = await devolverEntero(filas, motivo);
       if (!dinero.ok) return { error: dinero.error };
