@@ -71,3 +71,29 @@ export function badgeOfertaRuta(input: OfertaRutaInput): string {
   if (plazas === 1) return "Bulto + 1 plaza";
   return `Bulto + ${plazas} plazas`;
 }
+
+/**
+ * Lo que aún se puede reservar (además del anuncio original).
+ * Una sola frase: bulto y/o plazas libres.
+ */
+export function fraseQuedaLibre(opts: {
+  ofreceBulto: boolean;
+  bultoOcupado: boolean;
+  plazasOfrecidas: number;
+  plazasOcupadas: number;
+}): string | null {
+  const ofrecidas = Math.max(0, Math.floor(opts.plazasOfrecidas));
+  const ocupadas = Math.max(0, Math.floor(opts.plazasOcupadas));
+  if (!opts.ofreceBulto && ofrecidas < 1) return null;
+
+  const bultoLibre = opts.ofreceBulto && !opts.bultoOcupado;
+  const plazasLibres = Math.max(0, ofrecidas - ocupadas);
+  const partes: string[] = [];
+  if (bultoLibre) partes.push("el bulto");
+  if (plazasLibres > 0) {
+    partes.push(plazasLibres === 1 ? "1 plaza" : `${plazasLibres} plazas`);
+  }
+  if (partes.length === 0) return "No queda nada libre";
+  if (partes.length === 1) return `Queda libre: ${partes[0]}`;
+  return `Queda libre: ${partes.join(" y ")}`;
+}

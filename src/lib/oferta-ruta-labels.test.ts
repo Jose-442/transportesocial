@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import {
   badgeOfertaRuta,
+  fraseQuedaLibre,
   lineasOfertaRuta,
   ofertaOriginalRuta,
 } from "@/lib/oferta-ruta-labels";
@@ -115,5 +116,40 @@ describe("ofertaOriginalRuta", () => {
       "Bulto (Tamaño Pequeño (Maleta))",
       "+ 2 acompañantes",
     ]);
+  });
+});
+
+describe("fraseQuedaLibre", () => {
+  it("dice bulto y plazas que quedan", () => {
+    expect(
+      fraseQuedaLibre({
+        ofreceBulto: true,
+        bultoOcupado: false,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 1,
+      })
+    ).toBe("Queda libre: el bulto y 2 plazas");
+  });
+
+  it("si el bulto está ocupado, solo plazas", () => {
+    expect(
+      fraseQuedaLibre({
+        ofreceBulto: true,
+        bultoOcupado: true,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 1,
+      })
+    ).toBe("Queda libre: 2 plazas");
+  });
+
+  it("si no queda nada, lo dice claro", () => {
+    expect(
+      fraseQuedaLibre({
+        ofreceBulto: true,
+        bultoOcupado: true,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 3,
+      })
+    ).toBe("No queda nada libre");
   });
 });

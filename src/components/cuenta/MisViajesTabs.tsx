@@ -45,6 +45,8 @@ export type PublicacionViajeItem = {
   estado: "publicado" | "cancelado";
   badge?: string;
   lineas?: string[];
+  /** Lo que aún se puede reservar (bulto / plazas). */
+  quedaLibre?: string | null;
   precioBulto?: number | null;
   precioPlaza?: number | null;
 };
@@ -174,6 +176,9 @@ function PublicacionCard({ item }: { item: PublicacionViajeItem }) {
           ))}
         </div>
       )}
+      {item.quedaLibre ? (
+        <p className="text-sm font-semibold text-zinc-800">{item.quedaLibre}</p>
+      ) : null}
       {tienePrecios && (
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-emerald-700">
           {item.precioBulto != null && item.precioBulto > 0 && (

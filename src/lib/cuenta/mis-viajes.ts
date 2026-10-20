@@ -11,7 +11,12 @@ import { salidaYaPasada } from "@/lib/cuenta/salida-pasada";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
+  cargarOcupacionesPorRutas,
+  type OcupacionRuta,
+} from "@/lib/capacidad/ocupacion";
+import {
   badgeOfertaRuta,
+  fraseQuedaLibre,
   lineasOfertaRuta,
   ofertaOriginalRuta,
 } from "@/lib/oferta-ruta-labels";
@@ -125,11 +130,16 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
   const misRutaIds = rutas.map((r) => r.id);
 
   const ofertasPorRuta = new Map<string, OfertaCapacidad[]>();
+  let ocupacionesPorRuta = new Map<string, OcupacionRuta>();
   if (misRutaIds.length > 0) {
-    const { data: ofertasRuta } = await supabase
-      .from("ofertas_capacidad")
-      .select("ruta_conductor_id, tipo, plazas_totales, precio_publicado")
-      .in("ruta_conductor_id", misRutaIds);
+    const [{ data: ofertasRuta }, ocupaciones] = await Promise.all([
+      supabase
+        .from("ofertas_capacidad")
+        .select("ruta_conductor_id, tipo, plazas_totales, precio_publicado")
+        .in("ruta_conductor_id", misRutaIds),
+      cargarOcupacionesPorRutas(misRutaIds, supabase),
+    ]);
+    ocupacionesPorRuta = ocupaciones;
     for (const o of (ofertasRuta as OfertaCapacidad[] | null) ?? []) {
       const listaOfertas = ofertasPorRuta.get(o.ruta_conductor_id) ?? [];
       listaOfertas.push(o);
@@ -170,6 +180,8 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       espacio_disponible: ruta.espacio_disponible,
       plazasTotales,
     });
+    const ofreceBulto = rutaOfreceBulto(ruta.espacio_disponible);
+    const ocupacion = ocupacionesPorRuta.get(ruta.id);
     const item: PublicacionViajeItem = {
       kind: "publicacion",
       id: ruta.id,
@@ -180,9 +192,13 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       estado: "publicado",
       badge: badgeOfertaRuta(original),
       lineas: lineasOfertaRuta(original),
-      precioBulto: rutaOfreceBulto(ruta.espacio_disponible)
-        ? Number(ruta.precio_publicado)
-        : null,
+      quedaLibre: fraseQuedaLibre({
+        ofreceBulto,
+        bultoOcupado: Boolean(ocupacion?.bultoOcupado),
+        plazasOfrecidas: plazasTotales,
+        plazasOcupadas: ocupacion?.plazasOcupadas ?? 0,
+      }),
+      precioBulto: ofreceBulto ? Number(ruta.precio_publicado) : null,
       precioPlaza: asiento ? Number(asiento.precio_publicado) : null,
     };
     const salida = ruta.fecha_llegada_prevista || ruta.fecha_salida;
