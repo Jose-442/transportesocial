@@ -3,6 +3,10 @@ import { notFound, redirect } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
+import {
+  cancelacionBloqueadaPorRevisionFueraWeb,
+  MENSAJE_CANCELACION_BLOQUEADA,
+} from "@/lib/chat/acuerdo-fuera-web";
 import { ChatPanel } from "@/components/reservas/ChatPanel";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
@@ -180,6 +184,9 @@ export default async function ReservaChatPage({
           formatEur(centimosAEuros(reparto.reembolsoCents))
         )
       : "";
+  const revisionFueraWeb = relacionadas.some((r) =>
+    cancelacionBloqueadaPorRevisionFueraWeb(r)
+  );
 
   return (
     <div className="space-y-4">
@@ -223,7 +230,12 @@ export default async function ReservaChatPage({
           <span className="shrink-0">Ver</span>
         </ButtonLink>
       </div>
-      {esCliente && politica?.puede && politica.tipo && textoAyudaCancelar ? (
+      {esCliente && revisionFueraWeb ? (
+        <p className="text-sm text-amber-950">{MENSAJE_CANCELACION_BLOQUEADA}</p>
+      ) : esCliente &&
+        politica?.puede &&
+        politica.tipo &&
+        textoAyudaCancelar ? (
         <CancelarReservaBoton
           reservaId={id}
           textoBoton={textoBotonCancelacion(politica.tipo)}

@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
+import { detectaAcuerdoFueraWeb } from "@/lib/chat/acuerdo-fuera-web";
 import { chatPermitido } from "@/lib/reservas/labels";
+import { marcarRevisionFueraWebSiHaceFalta } from "@/lib/reservas/fuera-web-revision";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import type { ChatCanal, Reserva } from "@/types/database";
@@ -123,9 +125,13 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       mensaje: texto.slice(0, 80),
       enlace: `/reservas/${reservaId}/chat`,
     });
+    if (detectaAcuerdoFueraWeb(texto) || detectaAcuerdoFueraWeb(cuerpo)) {
+      await marcarRevisionFueraWebSiHaceFalta(admin, reserva);
+    }
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
+  revalidatePath(`/reservas/${reservaId}`);
   return {
     ok: true,
     oculto: Boolean(validado.oculto),
@@ -147,7 +153,7 @@ export async function editarUltimoMensajeChat(
   const validado = validarCuerpo(cuerpo);
   if (validado.error || !validado.texto) return { error: validado.error };
 
-  const { supabase, user, canal } = acceso;
+  const { supabase, user, reserva, canal } = acceso;
   const ultimo = await obtenerUltimoMensajeCanal(supabase, canal.id);
 
   if (!ultimo || ultimo.remitente_id !== user.id || ultimo.eliminado) {
@@ -171,8 +177,8 @@ export async function editarUltimoMensajeChat(
     .select("cuerpo")
     .eq("id", ultimo.id)
     .maybeSingle();
+  const admin = createAdminClient();
   if (comprobado && comprobado.cuerpo !== validado.texto) {
-    const admin = createAdminClient();
     if (!admin) {
       return { error: "No se ha podido guardar el mensaje editado." };
     }
@@ -186,7 +192,15 @@ export async function editarUltimoMensajeChat(
     if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
   }
 
+  if (
+    admin &&
+    (detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo))
+  ) {
+    await marcarRevisionFueraWebSiHaceFalta(admin, reserva);
+  }
+
   revalidatePath(`/reservas/${reservaId}/chat`);
+  revalidatePath(`/reservas/${reservaId}`);
   return {
     ok: true,
     oculto: Boolean(validado.oculto),

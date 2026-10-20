@@ -9,6 +9,10 @@ import {
 } from "@/lib/reservas/cancelacion";
 import { avisarClienteCancelacionHecha } from "@/lib/email/avisar-cliente-reserva";
 import { avisarAdminSiSegundaCancelacion } from "@/lib/reservas/avisar-segunda-cancelacion";
+import {
+  cancelacionBloqueadaPorRevisionFueraWeb,
+  MENSAJE_CANCELACION_BLOQUEADA,
+} from "@/lib/reservas/fuera-web-revision";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import type { Reserva } from "@/types/database";
 
@@ -85,6 +89,10 @@ export async function ejecutarCancelacionReserva(opts: {
       .maybeSingle();
     if (disputaAbierta) {
       return { error: "Hay una disputa abierta. El equipo la está revisando." };
+    }
+
+    if (cancelacionBloqueadaPorRevisionFueraWeb(reserva)) {
+      return { error: MENSAJE_CANCELACION_BLOQUEADA };
     }
 
     const fechaSalida = await fechaSalidaDeReserva(supabase, reserva);

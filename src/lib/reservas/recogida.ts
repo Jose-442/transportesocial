@@ -236,6 +236,16 @@ export async function rechazarRecogida(
       return { error: "Hay una disputa abierta. El equipo la está revisando." };
     }
 
+    {
+      const {
+        cancelacionBloqueadaPorRevisionFueraWeb,
+        MENSAJE_CANCELACION_BLOQUEADA,
+      } = await import("@/lib/reservas/fuera-web-revision");
+      if (cancelacionBloqueadaPorRevisionFueraWeb(reserva)) {
+        return { error: MENSAJE_CANCELACION_BLOQUEADA };
+      }
+    }
+
     const salida = await fechaSalida(supabase, reserva);
     const politica = politicaCancelacionConductor(reserva.estado, salida);
     if (!politica.puede || politica.tipo !== "total") {

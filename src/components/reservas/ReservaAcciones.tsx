@@ -12,6 +12,10 @@ import { PorteEntregadoBoton } from "@/components/reservas/PorteEntregadoBoton";
 import { RechazarRecogidaBoton } from "@/components/reservas/RechazarRecogidaBoton";
 import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import {
+  cancelacionBloqueadaPorRevisionFueraWeb,
+  MENSAJE_CANCELACION_BLOQUEADA,
+} from "@/lib/chat/acuerdo-fuera-web";
+import {
   chatPermitido,
   estadoSiCanceloQuienReservo,
   ESTADO_RESERVA_LABELS,
@@ -151,6 +155,11 @@ export function ReservaAcciones({
           )
         : fraseAyudaCancelacionConductor()
       : "";
+  const revisionFueraWeb = [reserva, ...relacionadas].some((r) =>
+    cancelacionBloqueadaPorRevisionFueraWeb(r)
+  );
+  const puedeMostrarCancelar =
+    politica.puede && politica.tipo && !revisionFueraWeb;
 
   return (
     <Card className="space-y-1.5 p-2 md:space-y-2 md:p-3">
@@ -233,14 +242,16 @@ export function ReservaAcciones({
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
           ) : null}
-          {tienePorte ? (
+          {revisionFueraWeb ? (
+            <p className="text-sm text-amber-950">{MENSAJE_CANCELACION_BLOQUEADA}</p>
+          ) : tienePorte ? (
             <div className="space-y-1.5">
               <p className="text-sm text-zinc-700">
                 Pulsa si no te convence la carga
               </p>
               <RechazarRecogidaBoton reservaId={reserva.id} />
             </div>
-          ) : politica.puede && politica.tipo ? (
+          ) : puedeMostrarCancelar ? (
             <CancelarReservaBoton
               reservaId={reserva.id}
               textoBoton="Cancelar reserva"
@@ -261,15 +272,18 @@ export function ReservaAcciones({
 
       {esCliente &&
         !disputa &&
-        politica.puede &&
-        politica.tipo &&
-        textoAyudaCancelar && (
-          <CancelarReservaBoton
-            reservaId={reserva.id}
-            textoBoton={textoBotonCancelacion(politica.tipo)}
-            textoAyuda={textoAyudaCancelar}
-          />
-        )}
+        (revisionFueraWeb ? (
+          <p className="text-sm text-amber-950">{MENSAJE_CANCELACION_BLOQUEADA}</p>
+        ) : (
+          puedeMostrarCancelar &&
+          textoAyudaCancelar && (
+            <CancelarReservaBoton
+              reservaId={reserva.id}
+              textoBoton={textoBotonCancelacion(politica.tipo!)}
+              textoAyuda={textoAyudaCancelar}
+            />
+          )
+        ))}
 
       {estado === "entregado" &&
         esCliente &&

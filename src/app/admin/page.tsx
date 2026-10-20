@@ -1,17 +1,25 @@
 import Link from "next/link";
-import { loadAlertasSegundaCancelacion } from "@/actions/admin-chat";
+import {
+  loadAlertasRevisionChat,
+  loadAlertasSegundaCancelacion,
+} from "@/actions/admin-chat";
 import { loadAlertasRechazoRecogida } from "@/actions/admin-alertas-recogida";
 import { loadAdminDashboardStats } from "@/actions/admin-dashboard";
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
 
 export default async function AdminHomePage() {
-  const [{ stats, avisoServidor }, alertasCancelacion, alertasRecogida] =
-    await Promise.all([
-      loadAdminDashboardStats(),
-      loadAlertasSegundaCancelacion(),
-      loadAlertasRechazoRecogida(),
-    ]);
+  const [
+    { stats, avisoServidor },
+    alertasCancelacion,
+    alertasRecogida,
+    alertasRevisionChat,
+  ] = await Promise.all([
+    loadAdminDashboardStats(),
+    loadAlertasSegundaCancelacion(),
+    loadAlertasRechazoRecogida(),
+    loadAlertasRevisionChat(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -34,6 +42,26 @@ export default async function AdminHomePage() {
             Alertas de seguridad — rechazo en recogida
           </h2>
           {alertasRecogida.map((a) => (
+            <Link
+              key={a.id}
+              href={a.enlace}
+              className="block rounded-xl bg-white px-3 py-2 text-sm text-zinc-800"
+            >
+              <p className="font-semibold">{a.mensaje}</p>
+              <p className="mt-1 text-xs text-zinc-500">
+                {new Date(a.created_at).toLocaleString("es-ES")}
+              </p>
+            </Link>
+          ))}
+        </Card>
+      ) : null}
+
+      {alertasRevisionChat.length > 0 ? (
+        <Card className="space-y-3 border-amber-300 bg-amber-50">
+          <h2 className="font-semibold text-amber-950">
+            Revisión del chat — posible acuerdo fuera de la web
+          </h2>
+          {alertasRevisionChat.map((a) => (
             <Link
               key={a.id}
               href={a.enlace}

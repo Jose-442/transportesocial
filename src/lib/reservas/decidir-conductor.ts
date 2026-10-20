@@ -140,6 +140,16 @@ export async function ejecutarDecisionConductor(opts: {
       return { error: "Solo el conductor puede responder a esta reserva." };
     }
 
+    if (decision === "rechazar") {
+      const {
+        cancelacionBloqueadaPorRevisionFueraWeb,
+        MENSAJE_CANCELACION_BLOQUEADA,
+      } = await import("@/lib/reservas/fuera-web-revision");
+      if (cancelacionBloqueadaPorRevisionFueraWeb(reserva)) {
+        return { error: MENSAJE_CANCELACION_BLOQUEADA };
+      }
+    }
+
     const filas = await filasPendientes(supabase, reserva);
     if (filas.length === 0) {
       if (decision === "aceptar" && reserva.estado === "confirmada") {

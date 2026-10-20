@@ -1,9 +1,12 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
 import { createClient } from "@/lib/supabase/server";
+import { TITULO_AVISO_REVISION_CHAT } from "@/lib/chat/acuerdo-fuera-web";
+import { liberarRevisionFueraWeb } from "@/lib/reservas/fuera-web-revision";
 import { TITULO_AVISO_SEGUNDA_CANCELACION } from "@/lib/reservas/segunda-cancelacion";
-import type { EstadoReserva } from "@/types/database";
+import type { EstadoReserva, Reserva } from "@/types/database";
 
 export type AlertaSegundaCancelacion = {
   id: string;
@@ -12,9 +15,9 @@ export type AlertaSegundaCancelacion = {
   created_at: string;
 };
 
-export async function loadAlertasSegundaCancelacion(): Promise<
-  AlertaSegundaCancelacion[]
-> {
+async function loadAlertasPorTitulo(
+  titulo: string
+): Promise<AlertaSegundaCancelacion[]> {
   await requireAdminUser();
   const admin = getAdminDb();
   if (!admin) return [];
@@ -22,7 +25,7 @@ export async function loadAlertasSegundaCancelacion(): Promise<
   const { data } = await admin
     .from("notificaciones")
     .select("id, mensaje, enlace, created_at, leida")
-    .eq("titulo", TITULO_AVISO_SEGUNDA_CANCELACION)
+    .eq("titulo", titulo)
     .eq("leida", false)
     .order("created_at", { ascending: false })
     .limit(20);
@@ -42,6 +45,67 @@ export async function loadAlertasSegundaCancelacion(): Promise<
     }));
 }
 
+export async function loadAlertasSegundaCancelacion(): Promise<
+  AlertaSegundaCancelacion[]
+> {
+  return loadAlertasPorTitulo(TITULO_AVISO_SEGUNDA_CANCELACION);
+}
+
+export async function loadAlertasRevisionChat(): Promise<
+  AlertaSegundaCancelacion[]
+> {
+  return loadAlertasPorTitulo(TITULO_AVISO_REVISION_CHAT);
+}
+
+export async function liberarCancelacionTrasRevisionChat(reservaId: string) {
+  await requireAdminUser();
+  const admin = getAdminDb();
+  if (!admin) return { error: "No se ha podido guardar." };
+
+  const { data } = await admin
+    .from("reservas")
+    .select("id, ruta_conductor_id, cliente_id, transportista_id, fuera_web_revision_en, fuera_web_ok_en")
+    .eq("id", reservaId)
+    .maybeSingle();
+  if (!data) return { error: "No se ha encontrado la reserva." };
+
+  const reserva = data as Pick<
+    Reserva,
+    | "id"
+    | "ruta_conductor_id"
+    | "cliente_id"
+    | "transportista_id"
+    | "fuera_web_revision_en"
+    | "fuera_web_ok_en"
+  >;
+  if (!reserva.fuera_web_revision_en) {
+    return { error: "Este viaje no tiene revisión pendiente." };
+  }
+  if (reserva.fuera_web_ok_en) {
+    return { ok: true };
+  }
+
+  await liberarRevisionFueraWeb(admin, reserva);
+
+  const { data: avisos } = await admin
+    .from("notificaciones")
+    .select("id")
+    .eq("titulo", TITULO_AVISO_REVISION_CHAT)
+    .eq("enlace", `/admin/reservas/${reservaId}/chat`)
+    .eq("leida", false);
+  for (const aviso of avisos ?? []) {
+    await admin
+      .from("notificaciones")
+      .update({ leida: true })
+      .eq("id", aviso.id);
+  }
+
+  revalidatePath(`/admin/reservas/${reservaId}/chat`);
+  revalidatePath("/admin");
+  revalidatePath(`/reservas/${reservaId}`);
+  return { ok: true };
+}
+
 export type AdminChatMensaje = {
   id: string;
   remitente_id: string;
@@ -58,6 +122,7 @@ export type AdminChatVista = {
   clienteNombre: string;
   conductorNombre: string;
   quienCancelo: string | null;
+  revisionFueraWebPendiente: boolean;
   mensajes: AdminChatMensaje[];
   aviso: string | null;
 };
@@ -81,7 +146,9 @@ export async function loadAdminChat(
 
   const { data: reserva } = await lector
     .from("reservas")
-    .select("id, estado, cliente_id, transportista_id, motivo_cancelacion")
+    .select(
+      "id, estado, cliente_id, transportista_id, motivo_cancelacion, fuera_web_revision_en, fuera_web_ok_en"
+    )
     .eq("id", reservaId)
     .maybeSingle();
 
@@ -135,6 +202,10 @@ export async function loadAdminChat(
     quienCancelo = `Canceló el conductor: ${nombres.get(reserva.transportista_id) ?? "Usuario"}`;
   }
 
+  const revisionFueraWebPendiente = Boolean(
+    reserva?.fuera_web_revision_en && !reserva?.fuera_web_ok_en
+  );
+
   return {
     reservaId,
     estado: (reserva?.estado as EstadoReserva | undefined) ?? null,
@@ -145,6 +216,7 @@ export async function loadAdminChat(
       ? (nombres.get(reserva.transportista_id) ?? "Usuario")
       : "Usuario",
     quienCancelo,
+    revisionFueraWebPendiente,
     mensajes: filas.map((f) => ({
       id: f.mensaje_id,
       remitente_id: f.remitente_id,

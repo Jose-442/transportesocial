@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadAdminChat } from "@/actions/admin-chat";
+import { LiberarRevisionChatBoton } from "@/components/admin/LiberarRevisionChatBoton";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
 import { Card } from "@/components/ui/Card";
 import { ESTADO_RESERVA_LABELS } from "@/lib/admin/labels";
@@ -53,6 +54,13 @@ export default async function AdminReservaChatPage({
       {vista.aviso ? (
         <Card>
           <p className="text-sm text-zinc-700">{vista.aviso}</p>
+        </Card>
+      ) : null}
+
+      {vista.revisionFueraWebPendiente ? (
+        <Card className="space-y-2 border-amber-300 bg-amber-50">
+          <p className="font-semibold text-amber-950">Revisión del chat</p>
+          <LiberarRevisionChatBoton reservaId={vista.reservaId} />
         </Card>
       ) : null}
 

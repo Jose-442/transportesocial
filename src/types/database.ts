@@ -135,6 +135,10 @@ export type Reserva = {
   rebaja_rechazada_en?: string | null;
   /** Euros reembolsados al cancelar (lo que se devolvió de verdad). */
   reembolso_eur?: number | null;
+  /** Chat: posible acuerdo fuera de la web; pendiente de revisión. */
+  fuera_web_revision_en?: string | null;
+  /** El equipo liberó cancelar/devolver tras revisar el chat. */
+  fuera_web_ok_en?: string | null;
   created_at: string;
   updated_at: string;
 };
