@@ -43,15 +43,22 @@ export async function marcarRevisionFueraWebSiHaceFalta(
 
   const ids = await idsHermanasViaje(admin, reserva);
   const ahora = new Date().toISOString();
-  await admin
+  const { error: errorMarca } = await admin
     .from("reservas")
     .update({
       fuera_web_revision_en: ahora,
       fuera_web_ok_en: null,
     })
     .in("id", ids);
+  if (errorMarca) {
+    console.error("[fuera-web] marcar reserva", errorMarca.message);
+    return;
+  }
 
   const admins = await idsUsuariosAdmin(admin);
+  if (admins.length === 0) {
+    console.error("[fuera-web] no hay cuentas de administración para avisar");
+  }
   const principalId = reserva.id;
   const enlace = enlaceChatAdmin(principalId);
   for (const userId of admins) {

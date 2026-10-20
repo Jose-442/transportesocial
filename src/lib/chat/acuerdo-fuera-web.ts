@@ -26,6 +26,10 @@ const PATRONES: RegExp[] = [
   /\bpagar\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
   /\bcobrar\s+(?:fuera|en\s+mano|en\s+efectivo|por\s+bizum)\b/,
   /\bdirecto\s+sin\s+(?:la\s+)?(?:web|app|plataforma)\b/,
+  // «lo hacemos entre nosotros» / «si anulamos … entre nosotros»
+  /\bentre\s+nos(?:otros)?\b/,
+  /\b(?:anular|anulamos|cancelar|cancelamos)\b.{0,80}\bentre\s+nos(?:otros)?\b/,
+  /\blo\s+hacemos\s+(?:fuera|directo|solo)\b/,
 ];
 
 export function detectaAcuerdoFueraWeb(texto: string): boolean {

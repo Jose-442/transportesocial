@@ -14,6 +14,12 @@ describe("detectaAcuerdoFueraWeb", () => {
     expect(detectaAcuerdoFueraWeb("lo hacemos fuera de la web")).toBe(true);
   });
 
+  it("entre nosotros", () => {
+    expect(
+      detectaAcuerdoFueraWeb("si anulamos y lo hacemos entre nosotros")
+    ).toBe(true);
+  });
+
   it("mensaje normal de coordinación", () => {
     expect(
       detectaAcuerdoFueraWeb("Quedamos a las 10 en la estación, ¿vale?")
