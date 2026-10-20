@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Textarea } from "@/components/ui/Input";
 import {
   editarUltimoMensajeChat,
   eliminarUltimoMensajeChat,
   enviarMensajeChat,
 } from "@/actions/chat";
+import { detectaAcuerdoFueraWeb } from "@/lib/chat/acuerdo-fuera-web";
 import { createClient } from "@/lib/supabase/client";
 import type { ChatMensaje, PerfilPublico } from "@/types/database";
 import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
 import { DRAFT_KEYS } from "@/lib/form-draft";
 import { useFormDraft } from "@/lib/use-form-draft";
+
+const AVISO_OCULTO = "Se ha ocultado por seguridad.";
 
 export function ChatPanel({
   reservaId,
@@ -46,8 +48,10 @@ export function ChatPanel({
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const listaRef = useRef<HTMLDivElement>(null);
+  const cuerpoRef = useRef(form.cuerpo);
   const ocupado = useRef(false);
   const router = useRouter();
+  cuerpoRef.current = form.cuerpo;
 
   const ultimoDelChat =
     mensajes.length > 0 ? mensajes[mensajes.length - 1] : null;
@@ -108,7 +112,7 @@ export function ChatPanel({
 
   async function enviarTexto() {
     if (ocupado.current) return;
-    const textoEnviado = form.cuerpo.trim();
+    const textoEnviado = cuerpoRef.current.trim();
     if (!textoEnviado) return;
     ocupado.current = true;
     setError(null);
@@ -133,20 +137,27 @@ export function ChatPanel({
       );
     }
     if (result.oculto) {
-      setAviso(
-        "Se ha ocultado un teléfono, correo o dato de contacto por seguridad."
-      );
+      setAviso(AVISO_OCULTO);
     }
     clear();
     setForm({ cuerpo: "" });
-    // Baja al último mensaje (Enviar o Enter).
+    cuerpoRef.current = "";
     requestAnimationFrame(() => {
       const lista = listaRef.current;
       if (lista) lista.scrollTop = lista.scrollHeight;
     });
-    if (result.marcadoFueraWeb) {
+    if (result.marcadoFueraWeb || detectaAcuerdoFueraWeb(textoEnviado)) {
       router.refresh();
     }
+  }
+
+  function onEnterEnviar(e: React.KeyboardEvent) {
+    const esEnter = e.key === "Enter" || e.code === "Enter" || e.key === "NumpadEnter";
+    if (!esEnter || e.shiftKey) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (loading || cargandoAccion || ocupado.current) return;
+    void enviarTexto();
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -196,12 +207,10 @@ export function ChatPanel({
       );
     }
     if (result.oculto) {
-      setAviso(
-        "Se ha ocultado un teléfono, correo o dato de contacto por seguridad."
-      );
+      setAviso(AVISO_OCULTO);
     }
     cancelarEdicion();
-    if (result.marcadoFueraWeb) {
+    if (result.marcadoFueraWeb || detectaAcuerdoFueraWeb(textoEdicion)) {
       router.refresh();
     }
   }
@@ -336,25 +345,23 @@ export function ChatPanel({
           <div ref={bottomRef} />
         </div>
       ) : null}
-      <form onSubmit={onSubmit} className="space-y-2">
-        <Textarea
-          label="Mensaje"
-          name="cuerpo"
-          required
-          rows={2}
-          placeholder="Escribe tu mensaje…"
-          value={form.cuerpo}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, cuerpo: e.target.value }))
-          }
-          onKeyDown={(e) => {
-            // Enter envía; Shift+Enter hace salto de línea.
-            if (e.key !== "Enter" || e.shiftKey) return;
-            e.preventDefault();
-            if (loading || cargandoAccion || ocupado.current) return;
-            void enviarTexto();
-          }}
-        />
+      <form onSubmit={onSubmit} className="space-y-2" onKeyDown={onEnterEnviar}>
+        <label className="block space-y-1.5" data-campo="">
+          <span className="text-sm font-medium text-zinc-800">Mensaje</span>
+          <textarea
+            name="cuerpo"
+            required
+            rows={2}
+            placeholder="Escribe tu mensaje…"
+            value={form.cuerpo}
+            onChange={(e) => {
+              cuerpoRef.current = e.target.value;
+              setForm((prev) => ({ ...prev, cuerpo: e.target.value }));
+            }}
+            onKeyDown={onEnterEnviar}
+            className="w-full min-h-24 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </label>
         {error && <p className="text-sm text-red-600">{error}</p>}
         {aviso && <p className="text-sm text-amber-800">{aviso}</p>}
         <Button type="submit" disabled={loading || cargandoAccion} fullWidth>

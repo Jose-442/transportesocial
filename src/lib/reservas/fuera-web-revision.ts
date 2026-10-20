@@ -24,73 +24,87 @@ function rpcOk(data: unknown): boolean {
 }
 
 /**
- * PATCH directo a reservas.
- * En este proyecto PostgREST rechaza Bearer en tablas: solo apikey (service_role).
+ * Misma estrategia que el pago: probar Bearer y solo apikey.
+ * En este proyecto a veces uno falla y el otro funciona.
  */
-async function marcarPorPatchApikey(reservaId: string): Promise<boolean> {
+async function marcarPorPatchServicio(reservaId: string): Promise<boolean> {
   const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const supabaseUrl = getSupabaseServerUrl();
   if (!serviceRole || !supabaseUrl) return false;
 
   const ahora = new Date().toISOString();
   const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/reservas?id=eq.${encodeURIComponent(reservaId)}`;
-  try {
-    const res = await fetch(endpoint, {
-      method: "PATCH",
-      headers: {
-        apikey: serviceRole,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        fuera_web_revision_en: ahora,
-        fuera_web_ok_en: null,
-      }),
-    });
-    const text = (await res.text()).trim();
-    if (!res.ok) {
-      console.error("[fuera-web] patch", res.status, text.slice(0, 200));
-      return false;
+  const body = JSON.stringify({
+    fuera_web_revision_en: ahora,
+    fuera_web_ok_en: null,
+  });
+  const intentos: Record<string, string>[] = [
+    {
+      apikey: serviceRole,
+      Authorization: `Bearer ${serviceRole}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/json",
+    },
+    {
+      apikey: serviceRole,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/json",
+    },
+  ];
+
+  for (const headers of intentos) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "PATCH",
+        headers,
+        body,
+      });
+      const text = (await res.text()).trim();
+      if (!res.ok) {
+        console.error("[fuera-web] patch", res.status, text.slice(0, 200));
+        continue;
+      }
+      if (!text) {
+        if (res.status === 200 || res.status === 204) return true;
+        continue;
+      }
+      if (text.includes("fuera_web_revision_en")) return true;
+    } catch (err) {
+      console.error("[fuera-web] patch", err);
     }
-    if (!text) return res.status === 200 || res.status === 204;
-    return text.includes("fuera_web_revision_en");
-  } catch (err) {
-    console.error("[fuera-web] patch", err);
-    return false;
   }
+  return false;
 }
 
-/** Correo + campanita. Solo una vez por viaje (si ya hay aviso sin leer, no repite). */
+/**
+ * Correo siempre (si no, a veces la campanita existía y se saltaba el correo).
+ * Campanita: una por admin y viaje.
+ */
 async function avisarEquipo(reservaId: string): Promise<void> {
   const enlace = enlaceChatAdmin(reservaId);
   const chatAdminUrl = `${getAppOrigin().replace(/\/$/, "")}${enlace}`;
-  const admin = createAdminClient();
-
-  if (admin) {
-    const { count } = await admin
-      .from("notificaciones")
-      .select("id", { count: "exact", head: true })
-      .eq("titulo", TITULO_AVISO_REVISION_CHAT)
-      .eq("enlace", enlace)
-      .eq("leida", false);
-    if ((count ?? 0) > 0) {
-      return;
-    }
-  }
 
   try {
-    await sendRevisionChatEmail({ chatAdminUrl });
+    const enviado = await sendRevisionChatEmail({ chatAdminUrl });
+    if (!enviado) {
+      console.error("[fuera-web] correo no enviado", reservaId);
+    }
   } catch (err) {
     console.error("[fuera-web] correo", err);
   }
 
+  const admin = createAdminClient();
   if (!admin) {
     console.error("[fuera-web] sin admin para campanita");
     return;
   }
 
   const admins = await idsUsuariosAdmin(admin);
+  if (admins.length === 0) {
+    console.error("[fuera-web] ningún admin en Auth para campanita");
+  }
   for (const userId of admins) {
     const { data: ya } = await admin
       .from("notificaciones")
@@ -115,7 +129,7 @@ async function avisarEquipo(reservaId: string): Promise<void> {
 /**
  * Marca el viaje y avisa al equipo.
  * Devuelve true si la marca quedó guardada.
- * El correo se intenta aunque falle la marca (si no, José no se entera).
+ * El correo se intenta aunque falle la marca.
  */
 export async function marcarRevisionFueraWebSiHaceFalta(
   supabaseUsuario: SupabaseClient,
@@ -125,18 +139,25 @@ export async function marcarRevisionFueraWebSiHaceFalta(
 
   let marcado = false;
 
-  const admin = createAdminClient();
-  if (admin) {
-    const { data, error } = await admin.rpc("marcar_revision_fuera_web", {
-      p_reserva_id: reserva.id,
-    });
-    if (!error && rpcOk(data)) {
-      marcado = true;
-    } else {
-      console.error("[fuera-web] admin rpc", error?.message, data);
+  // 1) PATCH directo (como el pago): lo más fiable en este proyecto
+  marcado = await marcarPorPatchServicio(reserva.id);
+
+  // 2) RPC admin
+  if (!marcado) {
+    const admin = createAdminClient();
+    if (admin) {
+      const { data, error } = await admin.rpc("marcar_revision_fuera_web", {
+        p_reserva_id: reserva.id,
+      });
+      if (!error && rpcOk(data)) {
+        marcado = true;
+      } else {
+        console.error("[fuera-web] admin rpc", error?.message, data);
+      }
     }
   }
 
+  // 3) RPC del usuario autenticado
   if (!marcado) {
     const { data, error } = await supabaseUsuario.rpc(
       "marcar_revision_fuera_web",
@@ -147,10 +168,6 @@ export async function marcarRevisionFueraWebSiHaceFalta(
     } else {
       console.error("[fuera-web] user rpc", error?.message, data);
     }
-  }
-
-  if (!marcado) {
-    marcado = await marcarPorPatchApikey(reserva.id);
   }
 
   // Aviso siempre (correo + campanita), aunque la marca falle.
@@ -173,26 +190,46 @@ export async function liberarRevisionFueraWeb(
   });
   if (error) {
     console.error("[fuera-web] liberar", error.message);
-    const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-    const supabaseUrl = getSupabaseServerUrl();
-    if (serviceRole && supabaseUrl) {
-      const ahora = new Date().toISOString();
-      const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/reservas?id=eq.${encodeURIComponent(reserva.id)}`;
-      const res = await fetch(endpoint, {
-        method: "PATCH",
-        headers: {
-          apikey: serviceRole,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({ fuera_web_ok_en: ahora }),
-      });
-      if (res.ok) return { ok: true };
-    }
+    const okPatch = await marcarPorPatchServicioLiberar(reserva.id);
+    if (okPatch) return { ok: true };
     return { error: "No se ha podido liberar. Prueba otra vez." };
   }
   if (!rpcOk(data)) {
     return { error: "Este viaje no tiene revisión pendiente." };
   }
   return { ok: true };
+}
+
+async function marcarPorPatchServicioLiberar(
+  reservaId: string
+): Promise<boolean> {
+  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const supabaseUrl = getSupabaseServerUrl();
+  if (!serviceRole || !supabaseUrl) return false;
+
+  const ahora = new Date().toISOString();
+  const endpoint = `${supabaseUrl.replace(/\/$/, "")}/rest/v1/reservas?id=eq.${encodeURIComponent(reservaId)}`;
+  const body = JSON.stringify({ fuera_web_ok_en: ahora });
+  const intentos: Record<string, string>[] = [
+    {
+      apikey: serviceRole,
+      Authorization: `Bearer ${serviceRole}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    {
+      apikey: serviceRole,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+  ];
+  for (const headers of intentos) {
+    try {
+      const res = await fetch(endpoint, { method: "PATCH", headers, body });
+      if (res.ok) return true;
+    } catch {
+      // siguiente
+    }
+  }
+  return false;
 }

@@ -3,7 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { filtrarContactoEnMensaje } from "@/lib/chat-filtro";
+import {
+  filtrarContactoEnMensaje,
+  MASCARA_CONTACTO,
+} from "@/lib/chat-filtro";
 import { detectaAcuerdoFueraWeb } from "@/lib/chat/acuerdo-fuera-web";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { marcarRevisionFueraWebSiHaceFalta } from "@/lib/reservas/fuera-web-revision";
@@ -81,11 +84,14 @@ function validarCuerpo(cuerpo: string): {
   error?: string;
 } {
   const original = cuerpo.trim();
-  const texto = filtrarContactoEnMensaje(original);
-  if (!texto || texto.length > 2000) {
+  if (!original || original.length > 2000) {
     return { error: "Mensaje no válido." };
   }
-  return { texto, oculto: texto !== original };
+  const filtrado = filtrarContactoEnMensaje(original);
+  const oculto = filtrado !== original;
+  // Si hay que ocultar, se oculta el mensaje entero (no solo un trozo).
+  const texto = oculto ? MASCARA_CONTACTO : filtrado;
+  return { texto, oculto };
 }
 
 export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
@@ -127,7 +133,12 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
     });
   }
   let marcadoFueraWeb = false;
-  if (detectaAcuerdoFueraWeb(texto) || detectaAcuerdoFueraWeb(cuerpo)) {
+  // Siempre mirar el texto original (el filtrado ya no tiene «en mano», etc.).
+  if (
+    detectaAcuerdoFueraWeb(cuerpo) ||
+    detectaAcuerdoFueraWeb(texto) ||
+    Boolean(validado.oculto && detectaAcuerdoFueraWeb(cuerpo))
+  ) {
     marcadoFueraWeb = await marcarRevisionFueraWebSiHaceFalta(
       supabase,
       reserva
