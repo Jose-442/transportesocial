@@ -197,10 +197,9 @@ export function ReservaAcciones({
         </div>
       )}
 
-      {estado === "pendiente_aprobacion" && esConductor && (
+      {estado === "pendiente_aprobacion" && esConductor && !hayRebajaTramo ? (
         <div className="space-y-2">
-          {/* Si hay rebaja de tramo, los textos van solo en el recuadro de abajo. */}
-          {hayTramo && !hayRebajaTramo ? (
+          {hayTramo ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
@@ -210,7 +209,7 @@ export function ReservaAcciones({
             soloRechazar={reserva.tipo === "bulto_oferta"}
           />
         </div>
-      )}
+      ) : null}
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { AceptarRechazarBotones } from "@/components/reservas/AceptarRechazarBotones";
 import { guardarRebajaReserva, rechazarRebajaTramo } from "@/actions/rebaja";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
@@ -344,20 +345,32 @@ export function RebajaReservas({
           !porteVista.rebajaRechazadaEn &&
           (porteVista.estado === "confirmada" ||
             porteVista.estado === "pendiente_aprobacion");
+        const esperaAceptar =
+          esConductor &&
+          pendienteGrupo &&
+          porteVista.estado === "pendiente_aprobacion";
+        const titulo = porteVista.rebajaEn
+          ? "Rebaja aplicada"
+          : porteVista.rebajaRechazadaEn
+            ? "Rebaja no aceptada"
+            : esperaAceptar
+              ? cuantasPlazas > 1
+                ? `Hay una solicitud de reserva (${cuantasPlazas} plazas)`
+                : "Hay una solicitud de reserva"
+              : cuantasPlazas > 1
+                ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
+                : "Hay una solicitud de rebaja";
         return (
           <Card
             key={grupo.map((p) => p.id).join("-")}
             className="space-y-2 border-emerald-200 bg-emerald-50/40"
           >
             <p className="text-base font-semibold text-emerald-950">
-              {porteVista.rebajaEn
-                ? "Rebaja aplicada"
-                : porteVista.rebajaRechazadaEn
-                  ? "Rebaja no aceptada"
-                  : cuantasPlazas > 1
-                    ? `Hay una solicitud de rebaja (${cuantasPlazas} plazas)`
-                    : "Hay una solicitud de rebaja"}
+              {titulo}
             </p>
+            {esperaAceptar ? (
+              <AceptarRechazarBotones reservaId={porte.id} />
+            ) : null}
             {esConductor &&
             (porteVista.esTramo || grupo.some((p) => p.esTramo)) &&
             pendienteGrupo &&

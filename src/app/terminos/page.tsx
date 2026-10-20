@@ -398,9 +398,10 @@ export default function TerminosPage() {
               Entonces se devuelve la diferencia a quien pagó.
             </p>
             <p>
-              Ese precio solo se puede pedir y guardar hasta 48 horas antes de
-              la hora de salida. Si faltan menos de 48 horas, ya no se puede. A
-              partir de ese momento, el precio queda como esté.
+              Pedir la rebaja solo se puede hasta 48 horas antes de la hora de
+              salida. Si faltan menos de 48 horas, quien reserva ya no puede
+              pedirla. Si la rebaja ya estaba pedida, el Conductor puede
+              guardar un precio más bajo aunque falten menos de 48 horas.
             </p>
             <p>
               El precio nuevo no puede bajar del mínimo de la Plataforma: 0,07
