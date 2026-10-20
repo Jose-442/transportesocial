@@ -9,7 +9,6 @@ import {
   editarReservaPendiente,
 } from "@/actions/reservas";
 import { PorteEntregadoBoton } from "@/components/reservas/PorteEntregadoBoton";
-import { ConfirmarRecogidaBoton } from "@/components/reservas/ConfirmarRecogidaBoton";
 import { RechazarRecogidaBoton } from "@/components/reservas/RechazarRecogidaBoton";
 import { CancelarReservaBoton } from "@/components/reservas/CancelarReservaBoton";
 import {
@@ -234,14 +233,6 @@ export function ReservaAcciones({
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
           ) : null}
-          <div className="space-y-1.5">
-            <p className="text-sm text-zinc-700">
-              {tienePorte
-                ? "Pulsa cuando hayas cargado el bulto en el vehículo."
-                : "Pulsa cuando los pasajeros estén a bordo y salgas."}
-            </p>
-            <ConfirmarRecogidaBoton reservaId={reserva.id} />
-          </div>
           {tienePorte ? (
             <div className="space-y-1.5">
               <p className="text-sm text-zinc-700">
