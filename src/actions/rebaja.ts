@@ -95,10 +95,11 @@ export async function guardarRebajaReserva(formData: FormData) {
   }
   const aceptada = await aceptarReservaSiPendiente(reserva);
   if (aceptada.error) return { error: aceptada.error };
-  reserva = aceptada.reserva;
-  if (!reserva.ruta_conductor_id) {
+  let reservaOk = aceptada.reserva;
+  if (!reservaOk.ruta_conductor_id) {
     return { error: "No se ha encontrado el viaje." };
   }
+  const rutaId = reservaOk.ruta_conductor_id;
 
   const neto = Number(String(formData.get("precio_neto") ?? "").replace(",", "."));
   if (!Number.isFinite(neto) || neto <= 0) {
@@ -114,9 +115,9 @@ export async function guardarRebajaReserva(formData: FormData) {
     const { data } = await admin!
       .from("reservas")
       .select("*")
-      .eq("ruta_conductor_id", reserva!.ruta_conductor_id!)
-      .eq("cliente_id", reserva!.cliente_id)
-      .eq("transportista_id", reserva!.transportista_id)
+      .eq("ruta_conductor_id", rutaId)
+      .eq("cliente_id", reservaOk.cliente_id)
+      .eq("transportista_id", reservaOk.transportista_id)
       .neq("estado", "cancelado");
     return (data as Reserva[]) ?? [];
   }
@@ -130,17 +131,17 @@ export async function guardarRebajaReserva(formData: FormData) {
     }
   }
   hermanas = await leerHermanas();
-  const actualizada = hermanas.find((h) => h.id === reserva.id);
-  if (actualizada) reserva = actualizada;
+  const actualizada = hermanas.find((h) => h.id === reservaOk.id);
+  if (actualizada) reservaOk = actualizada;
 
   // Tramos con rebaja pendiente → un solo precio total.
-  let objetivo = rebajaTramoPendiente(reserva)
+  let objetivo = rebajaTramoPendiente(reservaOk)
     ? hermanas.filter(
         (h) => rebajaTramoPendiente(h) && h.estado === "confirmada"
       )
-    : [reserva];
-  if (objetivo.length === 0 && reserva.estado === "confirmada") {
-    objetivo = [reserva];
+    : [reservaOk];
+  if (objetivo.length === 0 && reservaOk.estado === "confirmada") {
+    objetivo = [reservaOk];
   }
   if (objetivo.length === 0) {
     return { error: "No se ha podido preparar la rebaja. Prueba otra vez." };
@@ -159,7 +160,7 @@ export async function guardarRebajaReserva(formData: FormData) {
   const { data: ruta } = await supabase
     .from("rutas_conductores")
     .select("origen, destino")
-    .eq("id", reserva.ruta_conductor_id)
+    .eq("id", rutaId)
     .maybeSingle();
   if (!ruta?.origen || !ruta.destino) {
     return { error: "No se ha encontrado el viaje." };
@@ -173,7 +174,11 @@ export async function guardarRebajaReserva(formData: FormData) {
 
   // Todas las hermanas: un PaymentIntent puede llevar bulto+plaza juntas.
   const idsParaCobro = [
-    ...new Set([reserva.id, ...hermanas.map((h) => h.id), ...objetivo.map((h) => h.id)]),
+    ...new Set([
+      reservaOk.id,
+      ...hermanas.map((h) => h.id),
+      ...objetivo.map((h) => h.id),
+    ]),
   ];
   const { data: txs } = await admin
     .from("transacciones")
@@ -380,20 +385,20 @@ export async function guardarRebajaReserva(formData: FormData) {
   }
 
   await crearNotificacion(supabase, {
-    user_id: reserva.cliente_id,
+    user_id: reservaOk.cliente_id,
     tipo: "reserva_actualizada",
     titulo: "Rebaja del precio",
     mensaje:
       objetivo.length > 1
         ? "El conductor ha guardado un precio más bajo para tus plazas. Se te devuelve la diferencia."
         : "El conductor ha guardado un precio más bajo. Se te devuelve la diferencia.",
-    enlace: `/reservas/${reserva.id}`,
+    enlace: `/reservas/${reservaOk.id}`,
   });
 
   for (const h of objetivo) {
     revalidatePath(`/reservas/${h.id}`);
   }
-  revalidatePath(`/rutas/${reserva.ruta_conductor_id}`);
+  revalidatePath(`/rutas/${rutaId}`);
   revalidatePath("/cuenta");
   return { ok: true };
 }
