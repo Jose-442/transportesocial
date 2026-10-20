@@ -81,7 +81,9 @@ function TextoEstado({
   if (!cabeRebaja(porte.salida)) {
     return (
       <p className="text-sm text-zinc-700">
-        Ya no se puede bajar el precio. El viaje sigue por lo pagado.
+        {porte.estado === "pendiente_aprobacion"
+          ? "Faltan menos de 48 horas para el viaje: ya no se puede bajar el precio. Acepta o rechaza la reserva arriba; el viaje sigue por lo pagado."
+          : "Faltan menos de 48 horas para el viaje: ya no se puede bajar el precio. El viaje sigue por lo pagado."}
       </p>
     );
   }
@@ -375,9 +377,11 @@ export function RebajaReservas({
             !porteVista.rebajaEn &&
             !porteVista.rebajaRechazadaEn ? (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-emerald-950">
-                  {TEXTO_REBAJA_TRAMO_CONDUCTOR}
-                </p>
+                {cabeRebaja(porteVista.salida) ? (
+                  <p className="text-sm font-medium text-emerald-950">
+                    {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+                  </p>
+                ) : null}
                 <p className="text-sm font-medium text-emerald-950">
                   {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
                 </p>

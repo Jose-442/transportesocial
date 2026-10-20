@@ -20,7 +20,6 @@ import {
 } from "@/lib/reservas/labels";
 import {
   TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR,
-  TEXTO_REBAJA_TRAMO_CONDUCTOR,
 } from "@/lib/reservas/rebaja";
 import {
   centimosAEuros,
@@ -200,12 +199,8 @@ export function ReservaAcciones({
 
       {estado === "pendiente_aprobacion" && esConductor && (
         <div className="space-y-2">
-          {hayRebajaTramo ? (
-            <p className="text-sm font-medium text-emerald-950">
-              {TEXTO_REBAJA_TRAMO_CONDUCTOR}
-            </p>
-          ) : null}
-          {hayTramo ? (
+          {/* Si hay rebaja de tramo, los textos van solo en el recuadro de abajo. */}
+          {hayTramo && !hayRebajaTramo ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
@@ -219,7 +214,7 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">
-          {hayTramo ? (
+          {hayTramo && !hayRebajaTramo ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
