@@ -16,6 +16,7 @@ import {
   chatPermitido,
   estadoSiCanceloQuienReservo,
   ESTADO_RESERVA_LABELS,
+  fraseEspacioReservado,
   puedeReclamar,
 } from "@/lib/reservas/labels";
 import {
@@ -108,12 +109,13 @@ export function ReservaAcciones({
         !r.rebaja_en &&
         !r.rebaja_rechazada_en
     );
+  const filasEspacio = relacionadas.length > 0 ? relacionadas : [reserva];
   const etiquetaEstado = canceloQuienReservo
     ? canceloQuienReservo.etiqueta
     : estado === "confirmada"
       ? "Confirmado"
       : estado === "pendiente_aprobacion" && esConductor && pideRebajaPendiente
-        ? "Solicitud de rebaja"
+        ? `${fraseEspacioReservado(filasEspacio)} · Solicitud de rebaja`
         : estado === "pendiente_aprobacion" && esConductor
           ? "Me toca aceptar o rechazar"
           : ESTADO_RESERVA_LABELS[estado];

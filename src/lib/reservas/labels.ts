@@ -153,6 +153,23 @@ export function fraseQueIncluyeReservas(reservas: ReservaResumen[]): string {
   return "Porte de bulto";
 }
 
+/** Ej.: «1 plaza reservada», «1 bulto reservado», «1 bulto y 2 plazas reservados». */
+export function fraseEspacioReservado(
+  reservas: ReservaResumen | ReservaResumen[]
+): string {
+  const lista = Array.isArray(reservas) ? reservas : [reservas];
+  const { bultos, plazas } = sumarEspacio(lista);
+  const partes = partesEspacio(bultos, plazas);
+  if (partes.length === 0) return "Reserva hecha";
+  if (bultos > 0 && plazas === 0) {
+    return `${partes[0]} reservado${bultos === 1 ? "" : "s"}`;
+  }
+  if (plazas > 0 && bultos === 0) {
+    return `${partes[0]} reservada${plazas === 1 ? "" : "s"}`;
+  }
+  return `${partes.join(" y ")} reservados`;
+}
+
 function espacioReservado(
   reservas: ReservaResumen | ReservaResumen[]
 ): string {
