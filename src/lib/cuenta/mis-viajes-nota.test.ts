@@ -13,7 +13,7 @@ describe("notaTramoRebajaReserva", () => {
         },
       ])
     ).toBe(
-      "Tramo Zaragoza → Barcelona · Rebaja de precio aceptada"
+      "Tramo Zaragoza (Zaragoza) → Barcelona (Barcelona) · Rebaja de precio aceptada"
     );
   });
 
@@ -27,7 +27,7 @@ describe("notaTramoRebajaReserva", () => {
           tramo_destino: "Zaragoza (Zaragoza)",
         },
       ])
-    ).toBe("Tramo Madrid → Zaragoza");
+    ).toBe("Tramo Madrid (Madrid) → Zaragoza (Zaragoza)");
   });
 
   it("tramo sin ciudades guardadas", () => {
