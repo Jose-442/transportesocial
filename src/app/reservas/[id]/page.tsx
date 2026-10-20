@@ -36,6 +36,11 @@ import {
   cargarOcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
 import { loadPerfilesPublicos } from "@/lib/profile";
+import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
+import {
+  hayCoincidenciaBajaYSube,
+  puntosRuta,
+} from "@/lib/rutas/paradas";
 import type {
   Disputa,
   OfertaCapacidad,
@@ -154,6 +159,7 @@ export default async function ReservaDetallePage({
   const perfiles = await loadPerfilesPublicos(supabase, ids);
 
   let ruta: RutaConductor | null = null;
+  let avisoBajaYSube = false;
   if (reserva.ruta_conductor_id) {
     const { data } = await supabase
       .from("rutas_conductores")
@@ -161,6 +167,21 @@ export default async function ReservaDetallePage({
       .eq("id", reserva.ruta_conductor_id)
       .single();
     ruta = data as RutaConductor | null;
+    if (ruta) {
+      const paradasMap = await cargarParadasPorRutas(supabase, [ruta.id]);
+      const paradas = paradasMap.get(ruta.id) ?? [];
+      const { data: reservasRuta } = await supabase
+        .from("reservas")
+        .select("estado, es_tramo, tramo_origen, tramo_destino")
+        .eq("ruta_conductor_id", ruta.id);
+      avisoBajaYSube = hayCoincidenciaBajaYSube(
+        puntosRuta(ruta.origen, ruta.destino, paradas),
+        (reservasRuta as Pick<
+          Reserva,
+          "estado" | "es_tramo" | "tramo_origen" | "tramo_destino"
+        >[]) ?? []
+      );
+    }
   }
 
   const { data: disputaData } = await supabase
@@ -428,6 +449,7 @@ export default async function ReservaDetallePage({
         puedeAnadirVersion={puedeAnadirVersion}
         tienePorte={tienePorte}
         reembolsoEntero={reembolsoEntero}
+        avisoBajaYSube={avisoBajaYSube}
       />
 
       {!avisoCancelacion ? (
@@ -455,6 +477,7 @@ export default async function ReservaDetallePage({
           origen={ruta?.origen ?? ""}
           destino={ruta?.destino ?? ""}
           rutaId={ruta?.id ?? null}
+          avisoBajaYSube={avisoBajaYSube}
         />
       ) : null}
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   esBusquedaDeTramo,
   esTramoElegido,
+  hayCoincidenciaBajaYSube,
   prepararParadasParaGuardar,
   puntosRuta,
   rutaCubreTrayecto,
@@ -136,5 +137,65 @@ describe("esTramoElegido", () => {
     expect(
       esTramoElegido(puntos, "Zaragoza (Zaragoza)", "Lleida (Lleida)")
     ).toBe(true);
+  });
+});
+
+describe("hayCoincidenciaBajaYSube", () => {
+  const puntos = [
+    "Madrid (Madrid)",
+    "Zaragoza (Zaragoza)",
+    "Lleida (Lleida)",
+    "Barcelona (Barcelona)",
+  ];
+
+  it("un solo tramo no basta", () => {
+    expect(
+      hayCoincidenciaBajaYSube(puntos, [
+        {
+          es_tramo: true,
+          tramo_origen: "Madrid (Madrid)",
+          tramo_destino: "Zaragoza (Zaragoza)",
+          estado: "confirmada",
+        },
+      ])
+    ).toBe(false);
+  });
+
+  it("dos tramos encadenados sí", () => {
+    expect(
+      hayCoincidenciaBajaYSube(puntos, [
+        {
+          es_tramo: true,
+          tramo_origen: "Madrid (Madrid)",
+          tramo_destino: "Zaragoza (Zaragoza)",
+          estado: "confirmada",
+        },
+        {
+          es_tramo: true,
+          tramo_origen: "Zaragoza (Zaragoza)",
+          tramo_destino: "Barcelona (Barcelona)",
+          estado: "pendiente_aprobacion",
+        },
+      ])
+    ).toBe(true);
+  });
+
+  it("dos tramos que se solapan no", () => {
+    expect(
+      hayCoincidenciaBajaYSube(puntos, [
+        {
+          es_tramo: true,
+          tramo_origen: "Madrid (Madrid)",
+          tramo_destino: "Lleida (Lleida)",
+          estado: "confirmada",
+        },
+        {
+          es_tramo: true,
+          tramo_origen: "Zaragoza (Zaragoza)",
+          tramo_destino: "Barcelona (Barcelona)",
+          estado: "confirmada",
+        },
+      ])
+    ).toBe(false);
   });
 });

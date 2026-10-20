@@ -77,6 +77,7 @@ export function ReservaAcciones({
   puedeAnadirVersion = false,
   tienePorte = false,
   reembolsoEntero = false,
+  avisoBajaYSube = false,
 }: {
   reserva: Reserva;
   relacionadas: Reserva[];
@@ -91,6 +92,8 @@ export function ReservaAcciones({
   tienePorte?: boolean;
   /** El cobro figura reembolsado entero. Los viajes ya devueltos no cambian de cifra. */
   reembolsoEntero?: boolean;
+  /** Un pasajero baja y otro sube en tramos encadenados: aviso de añadir plaza. */
+  avisoBajaYSube?: boolean;
 }) {
   const estado = disputa ? "disputa" : reserva.estado;
   const canceloQuienReservo = estadoSiCanceloQuienReservo({
@@ -214,7 +217,7 @@ export function ReservaAcciones({
       esConductor &&
       !pideRebajaPendiente ? (
         <div className="space-y-2">
-          {hayTramo ? (
+          {avisoBajaYSube ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
@@ -228,7 +231,7 @@ export function ReservaAcciones({
 
       {estado === "confirmada" && esConductor && !disputa && (
         <div className="space-y-2">
-          {hayTramo && !pideRebajaPendiente ? (
+          {avisoBajaYSube && !pideRebajaPendiente ? (
             <p className="text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>

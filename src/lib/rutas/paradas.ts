@@ -109,6 +109,47 @@ export function indicePuntoRuta(puntos: string[], municipio: string): number {
   return puntos.findIndex((p) => coincideMunicipioBusqueda(p, municipio));
 }
 
+export type ReservaTramoBajaSube = {
+  es_tramo?: boolean | null;
+  tramo_origen?: string | null;
+  tramo_destino?: string | null;
+  estado?: string | null;
+};
+
+/**
+ * ¿Hay en el viaje un pasajero que se baja en una parada y otro que sube
+ * (tramos encadenados, no el mismo tramo)?
+ * Solo entonces tiene sentido avisar de «Añadir más capacidad».
+ */
+export function hayCoincidenciaBajaYSube(
+  puntos: string[],
+  reservas: ReservaTramoBajaSube[]
+): boolean {
+  if (puntos.length < 2) return false;
+  const tramos: { i0: number; i1: number }[] = [];
+  for (const r of reservas) {
+    if (r.estado === "cancelado" || r.estado === "pendiente_pago") continue;
+    if (!r.es_tramo) continue;
+    const origen = (r.tramo_origen ?? "").trim();
+    const destino = (r.tramo_destino ?? "").trim();
+    if (!origen || !destino) continue;
+    const i0 = indicePuntoRuta(puntos, origen);
+    const i1 = indicePuntoRuta(puntos, destino);
+    if (i0 < 0 || i1 < 0 || i1 <= i0) continue;
+    tramos.push({ i0, i1 });
+  }
+  if (tramos.length < 2) return false;
+  for (let a = 0; a < tramos.length; a++) {
+    for (let b = a + 1; b < tramos.length; b++) {
+      const x = tramos[a];
+      const y = tramos[b];
+      // Uno termina donde (o antes de donde) empieza el otro.
+      if (x.i1 <= y.i0 || y.i1 <= x.i0) return true;
+    }
+  }
+  return false;
+}
+
 /**
  * ¿Subida→bajada es solo una parte del recorrido (no punta a punta)?
  * Los valores deben ser puntos exactos de la lista.

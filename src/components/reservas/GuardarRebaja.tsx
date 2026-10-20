@@ -281,6 +281,7 @@ function TarjetaConductorRebaja({
   destino,
   rutaId,
   grupo,
+  avisoBajaYSube,
 }: {
   porte: PorteRebaja;
   porteVista: PorteRebaja;
@@ -290,6 +291,7 @@ function TarjetaConductorRebaja({
   destino: string;
   rutaId: string | null;
   grupo: PorteRebaja[];
+  avisoBajaYSube: boolean;
 }) {
   const router = useRouter();
   const pendienteDecision =
@@ -404,9 +406,7 @@ function TarjetaConductorRebaja({
           precioPagadoTotal={precioPagadoTotal}
           etiquetaBoton="Guardar precio nuevo"
           onVolver={() => setPaso("elegir")}
-          mostrarNotaTramo={
-            Boolean(porteVista.esTramo || grupo.some((p) => p.esTramo))
-          }
+          mostrarNotaTramo={avisoBajaYSube}
         />
       ) : null}
 
@@ -475,12 +475,15 @@ export function RebajaReservas({
   origen,
   destino,
   rutaId,
+  avisoBajaYSube = false,
 }: {
   portes: PorteRebaja[];
   esConductor: boolean;
   origen: string;
   destino: string;
   rutaId: string | null;
+  /** Solo si en el viaje alguien baja y otro sube en tramos encadenados. */
+  avisoBajaYSube?: boolean;
 }) {
   const grupos = agruparPortesRebajaTramo(portes);
   if (grupos.length === 0) return null;
@@ -524,6 +527,7 @@ export function RebajaReservas({
               destino={destino}
               rutaId={rutaId}
               grupo={grupo}
+              avisoBajaYSube={avisoBajaYSube}
             />
           );
         }

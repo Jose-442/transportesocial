@@ -43,7 +43,11 @@ import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
-import { esBusquedaDeTramo, puntosRuta } from "@/lib/rutas/paradas";
+import {
+  esBusquedaDeTramo,
+  hayCoincidenciaBajaYSube,
+  puntosRuta,
+} from "@/lib/rutas/paradas";
 import {
   rebajaTramoPendiente,
   TEXTO_NOTA_TRAMO_FICHA,
@@ -211,20 +215,24 @@ export default async function RutaDetallePage({
   const datosVehiculo = proponente ? datosVehiculoVisibles(proponente) : [];
 
   let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
-  let hayReservaTramoEnViaje = false;
+  let hayBajaYSubeEnViaje = false;
   let puedeAnadirCapacidad = false;
   if (esPropio) {
     const { data: reservasRuta } = await supabase
       .from("reservas")
-      .select("id, estado, es_tramo")
+      .select("id, estado, es_tramo, tramo_origen, tramo_destino")
       .eq("ruta_conductor_id", id)
       .eq("transportista_id", user!.id)
       .order("created_at", { ascending: false });
     const listaRuta =
-      (reservasRuta as Pick<Reserva, "id" | "estado" | "es_tramo">[]) ?? [];
+      (reservasRuta as Pick<
+        Reserva,
+        "id" | "estado" | "es_tramo" | "tramo_origen" | "tramo_destino"
+      >[]) ?? [];
     reservasConChat = listaRuta.filter((r) => chatPermitido(r.estado));
-    hayReservaTramoEnViaje = listaRuta.some(
-      (r) => Boolean(r.es_tramo) && r.estado !== "cancelado"
+    hayBajaYSubeEnViaje = hayCoincidenciaBajaYSube(
+      puntosRuta(ruta.origen, ruta.destino, paradas),
+      listaRuta
     );
     // También con reserva ya pagada esperando respuesta (aún no «reservada»).
     puedeAnadirCapacidad =
@@ -765,7 +773,7 @@ export default async function RutaDetallePage({
           <p className="mb-3 text-sm font-semibold text-zinc-800">
             Añadir más capacidad
           </p>
-          {hayReservaTramoEnViaje ? (
+          {hayBajaYSubeEnViaje ? (
             <p className="mb-3 text-sm font-medium text-emerald-950">
               {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
             </p>
