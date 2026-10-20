@@ -16,7 +16,7 @@ export function LiberarRevisionChatBoton({ reservaId }: { reservaId: string }) {
     setError(null);
     try {
       const r = await liberarCancelacionTrasRevisionChat(reservaId);
-      if (r.error) {
+      if ("error" in r) {
         setError(r.error);
         return;
       }
