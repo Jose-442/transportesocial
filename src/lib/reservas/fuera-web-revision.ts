@@ -6,6 +6,8 @@ import {
   MENSAJE_CANCELACION_BLOQUEADA,
   TITULO_AVISO_REVISION_CHAT,
 } from "@/lib/chat/acuerdo-fuera-web";
+import { sendRevisionChatEmail } from "@/lib/email/revision-chat";
+import { getAppOrigin } from "@/lib/push/origin";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { enlaceChatAdmin } from "@/lib/reservas/segunda-cancelacion";
 import type { Reserva } from "@/types/database";
@@ -55,12 +57,22 @@ export async function marcarRevisionFueraWebSiHaceFalta(
     return;
   }
 
-  const admins = await idsUsuariosAdmin(admin);
-  if (admins.length === 0) {
-    console.error("[fuera-web] no hay cuentas de administración para avisar");
-  }
   const principalId = reserva.id;
   const enlace = enlaceChatAdmin(principalId);
+  const origen = getAppOrigin().replace(/\/$/, "");
+  const chatAdminUrl = `${origen}${enlace}`;
+
+  // Correo al equipo (no hace falta tener administración abierta).
+  try {
+    await sendRevisionChatEmail({ chatAdminUrl });
+  } catch (err) {
+    console.error("[fuera-web] correo", err);
+  }
+
+  const admins = await idsUsuariosAdmin(admin);
+  if (admins.length === 0) {
+    console.error("[fuera-web] no hay cuentas de administración para la campanita");
+  }
   for (const userId of admins) {
     const { data: ya } = await admin
       .from("notificaciones")
@@ -76,7 +88,7 @@ export async function marcarRevisionFueraWebSiHaceFalta(
       tipo: "sistema",
       titulo: TITULO_AVISO_REVISION_CHAT,
       mensaje:
-        "En el chat de un viaje puede haber un acuerdo fuera de la web. Revisa el chat antes de permitir cancelar o devolver.",
+        "En un viaje puede haber un acuerdo fuera de la web. Revisa antes de permitir cancelar o devolver.",
       enlace,
     });
   }

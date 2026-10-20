@@ -117,7 +117,9 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       : reserva.cliente_id;
 
   const admin = createAdminClient();
-  if (admin) {
+  if (!admin) {
+    console.error("[chat] sin cliente admin: no se puede marcar revisión fuera web");
+  } else {
     await crearNotificacion(admin, {
       user_id: otroId,
       tipo: "nuevo_mensaje_chat",
