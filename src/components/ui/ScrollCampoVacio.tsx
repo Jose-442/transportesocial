@@ -110,13 +110,19 @@ export function ScrollCampoVacio() {
       // En un texto largo (descripción del bulto, etc.) no hay que bajar
       // a cada palabra: el usuario sigue escribiendo. Solo al salir del campo.
       if (el instanceof HTMLTextAreaElement) return;
+      // Email y contraseña: no saltar a mitad de escribir (login/registro).
+      // El paso al siguiente campo es al salir (Tab o clic).
+      if (
+        el instanceof HTMLInputElement &&
+        (el.type === "email" || el.type === "password")
+      ) {
+        return;
+      }
       const esCaja =
         el instanceof HTMLInputElement &&
         (el.type === "text" ||
           el.type === "search" ||
           el.type === "tel" ||
-          el.type === "email" ||
-          el.type === "password" ||
           el.type === "number" ||
           el.type === "");
       if (!esCaja || el.getAttribute("role") === "combobox") return;
