@@ -85,7 +85,8 @@ export async function liberarCancelacionTrasRevisionChat(reservaId: string) {
     return { ok: true };
   }
 
-  await liberarRevisionFueraWeb(admin, reserva);
+  const liberada = await liberarRevisionFueraWeb(admin, reserva);
+  if ("error" in liberada) return liberada;
 
   const { data: avisos } = await admin
     .from("notificaciones")

@@ -10,6 +10,7 @@ import { sendRevisionChatEmail } from "@/lib/email/revision-chat";
 import { getAppOrigin } from "@/lib/push/origin";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { enlaceChatAdmin } from "@/lib/reservas/segunda-cancelacion";
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { Reserva } from "@/types/database";
 
 export {
@@ -17,62 +18,55 @@ export {
   MENSAJE_CANCELACION_BLOQUEADA,
 };
 
-async function idsHermanasViaje(
-  admin: SupabaseClient,
-  reserva: Pick<
-    Reserva,
-    "id" | "ruta_conductor_id" | "cliente_id" | "transportista_id"
-  >
-): Promise<string[]> {
-  if (!reserva.ruta_conductor_id) return [reserva.id];
-  const { data } = await admin
-    .from("reservas")
-    .select("id")
-    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
-    .eq("cliente_id", reserva.cliente_id)
-    .eq("transportista_id", reserva.transportista_id)
-    .neq("estado", "cancelado");
-  const ids = ((data as { id: string }[]) ?? []).map((r) => r.id);
-  return ids.length > 0 ? ids : [reserva.id];
-}
-
-/** Marca el viaje y avisa al equipo (una sola vez mientras siga pendiente). */
+/** Marca el viaje (RPC) y avisa al equipo por correo + campanita. */
 export async function marcarRevisionFueraWebSiHaceFalta(
-  admin: SupabaseClient,
+  supabaseUsuario: SupabaseClient,
   reserva: Reserva
 ): Promise<void> {
   if (cancelacionBloqueadaPorRevisionFueraWeb(reserva)) return;
 
-  const ids = await idsHermanasViaje(admin, reserva);
-  const ahora = new Date().toISOString();
-  const { error: errorMarca } = await admin
-    .from("reservas")
-    .update({
-      fuera_web_revision_en: ahora,
-      fuera_web_ok_en: null,
-    })
-    .in("id", ids);
-  if (errorMarca) {
-    console.error("[fuera-web] marcar reserva", errorMarca.message);
-    return;
+  const { data: okUsuario, error: errorUsuario } = await supabaseUsuario.rpc(
+    "marcar_revision_fuera_web",
+    { p_reserva_id: reserva.id }
+  );
+  if (errorUsuario || okUsuario !== true) {
+    const admin = createAdminClient();
+    if (!admin) {
+      console.error(
+        "[fuera-web] marcar falló y no hay admin",
+        errorUsuario?.message
+      );
+      return;
+    }
+    const { data: okAdmin, error: errorAdmin } = await admin.rpc(
+      "marcar_revision_fuera_web",
+      { p_reserva_id: reserva.id }
+    );
+    if (errorAdmin || okAdmin !== true) {
+      console.error(
+        "[fuera-web] marcar rpc",
+        errorUsuario?.message,
+        errorAdmin?.message
+      );
+      return;
+    }
   }
 
-  const principalId = reserva.id;
-  const enlace = enlaceChatAdmin(principalId);
-  const origen = getAppOrigin().replace(/\/$/, "");
-  const chatAdminUrl = `${origen}${enlace}`;
+  const enlace = enlaceChatAdmin(reserva.id);
+  const chatAdminUrl = `${getAppOrigin().replace(/\/$/, "")}${enlace}`;
 
-  // Correo al equipo (no hace falta tener administración abierta).
   try {
     await sendRevisionChatEmail({ chatAdminUrl });
   } catch (err) {
     console.error("[fuera-web] correo", err);
   }
 
-  const admins = await idsUsuariosAdmin(admin);
-  if (admins.length === 0) {
-    console.error("[fuera-web] no hay cuentas de administración para la campanita");
+  const admin = createAdminClient();
+  if (!admin) {
+    console.error("[fuera-web] sin admin para campanita");
+    return;
   }
+  const admins = await idsUsuariosAdmin(admin);
   for (const userId of admins) {
     const { data: ya } = await admin
       .from("notificaciones")
@@ -96,15 +90,17 @@ export async function marcarRevisionFueraWebSiHaceFalta(
 
 export async function liberarRevisionFueraWeb(
   admin: SupabaseClient,
-  reserva: Pick<
-    Reserva,
-    "id" | "ruta_conductor_id" | "cliente_id" | "transportista_id"
-  >
-): Promise<void> {
-  const ids = await idsHermanasViaje(admin, reserva);
-  const ahora = new Date().toISOString();
-  await admin
-    .from("reservas")
-    .update({ fuera_web_ok_en: ahora })
-    .in("id", ids);
+  reserva: Pick<Reserva, "id">
+): Promise<{ ok: true } | { error: string }> {
+  const { data, error } = await admin.rpc("liberar_revision_fuera_web", {
+    p_reserva_id: reserva.id,
+  });
+  if (error) {
+    console.error("[fuera-web] liberar", error.message);
+    return { error: "No se ha podido liberar. Prueba otra vez." };
+  }
+  if (data !== true) {
+    return { error: "Este viaje no tiene revisión pendiente." };
+  }
+  return { ok: true };
 }

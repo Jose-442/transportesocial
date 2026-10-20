@@ -117,9 +117,7 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       : reserva.cliente_id;
 
   const admin = createAdminClient();
-  if (!admin) {
-    console.error("[chat] sin cliente admin: no se puede marcar revisión fuera web");
-  } else {
+  if (admin) {
     await crearNotificacion(admin, {
       user_id: otroId,
       tipo: "nuevo_mensaje_chat",
@@ -127,9 +125,9 @@ export async function enviarMensajeChat(reservaId: string, cuerpo: string) {
       mensaje: texto.slice(0, 80),
       enlace: `/reservas/${reservaId}/chat`,
     });
-    if (detectaAcuerdoFueraWeb(texto) || detectaAcuerdoFueraWeb(cuerpo)) {
-      await marcarRevisionFueraWebSiHaceFalta(admin, reserva);
-    }
+  }
+  if (detectaAcuerdoFueraWeb(texto) || detectaAcuerdoFueraWeb(cuerpo)) {
+    await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
@@ -194,11 +192,8 @@ export async function editarUltimoMensajeChat(
     if (errAdmin) return { error: supabaseErrorMessage(errAdmin) };
   }
 
-  if (
-    admin &&
-    (detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo))
-  ) {
-    await marcarRevisionFueraWebSiHaceFalta(admin, reserva);
+  if (detectaAcuerdoFueraWeb(validado.texto) || detectaAcuerdoFueraWeb(cuerpo)) {
+    await marcarRevisionFueraWebSiHaceFalta(supabase, reserva);
   }
 
   revalidatePath(`/reservas/${reservaId}/chat`);
