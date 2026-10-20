@@ -159,7 +159,6 @@ function Formulario({
   onVolver?: () => void;
   mostrarNotaTramo?: boolean;
 }) {
-  const router = useRouter();
   const minimo = usePrecioMinimoCarretera(origen, destino);
   const [netoTexto, setNetoTexto] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -182,18 +181,31 @@ function Formulario({
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     formData.set("reserva_id", porte.id);
-    let result: Awaited<ReturnType<typeof guardarRebajaReserva>>;
     try {
-      result = await guardarRebajaReserva(formData);
+      const result = await Promise.race([
+        guardarRebajaReserva(formData),
+        new Promise<{ error: string }>((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                error:
+                  "Está tardando demasiado. Prueba otra vez o recarga la página.",
+              }),
+            40000
+          )
+        ),
+      ]);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      window.location.reload();
+    } catch {
+      setError("No se ha podido guardar. Prueba otra vez.");
     } finally {
       enviando.current = false;
       setLoading(false);
     }
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    router.refresh();
   }
 
   return (

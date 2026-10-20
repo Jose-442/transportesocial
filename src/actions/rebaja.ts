@@ -196,10 +196,13 @@ export async function guardarRebajaReserva(formData: FormData) {
   };
   const txsLista = (txs ?? []) as TxRebaja[];
 
+  const cacheIntent = new Map<string, { intent: string; tx: TxRebaja | null }>();
   async function intentDeReserva(reservaId: string): Promise<{
     intent: string;
     tx: TxRebaja | null;
   }> {
+    const cached = cacheIntent.get(reservaId);
+    if (cached) return cached;
     const tx =
       txsLista.find(
         (fila) =>
@@ -213,24 +216,11 @@ export async function guardarRebajaReserva(formData: FormData) {
           String(fila.stripe_payment_intent_id ?? "").trim()
       ) ??
       null;
-    let intent = String(tx?.stripe_payment_intent_id ?? "").trim();
-    if (!intent) {
-      try {
-        const { cobroDeEstasReservas } = await import(
-          "@/lib/stripe/cobro-reserva"
-        );
-        const { getStripeServer } = await import("@/lib/stripe/server");
-        const stripe = getStripeServer();
-        const lista = await stripe.paymentIntents.list({ limit: 100 });
-        const hallado = lista.data.find((pi) =>
-          cobroDeEstasReservas(pi, idsParaCobro)
-        );
-        if (hallado?.id) intent = hallado.id;
-      } catch (err) {
-        console.error("[rebaja] buscar cobro en Stripe", err);
-      }
-    }
-    return { intent, tx };
+    const intent = String(tx?.stripe_payment_intent_id ?? "").trim();
+    // Sin buscar en Stripe 100 cobros (eso colgaba el botón «Guardando…»).
+    const out = { intent, tx };
+    cacheIntent.set(reservaId, out);
+    return out;
   }
 
   // Reparte neto/visible a partes proporcionales (último se lleva el resto).
