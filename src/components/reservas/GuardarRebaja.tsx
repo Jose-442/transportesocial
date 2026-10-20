@@ -12,7 +12,6 @@ import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import { mensajePrecioPorDebajo, precioVisiblePorDebajo } from "@/lib/precio-minimo";
 import {
   agruparPortesRebajaTramo,
-  cabeRebaja,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
   TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR,
   TEXTO_REBAJA_TRAMO_CONDUCTOR,
@@ -74,16 +73,6 @@ function TextoEstado({
         {esConductor
           ? "Has indicado que no aceptas la rebaja. El viaje sigue. Quien reservó puede cancelar si quiere."
           : `El conductor no ha aceptado la rebaja. El viaje sigue. ${TEXTO_CANCELAR_TRAMO_SIN_REBAJA}`}
-      </p>
-    );
-  }
-
-  if (!cabeRebaja(porte.salida)) {
-    return (
-      <p className="text-sm text-zinc-700">
-        {porte.estado === "pendiente_aprobacion"
-          ? "Faltan menos de 48 horas para el viaje: ya no se puede bajar el precio. Acepta o rechaza la reserva arriba; el viaje sigue por lo pagado."
-          : "Faltan menos de 48 horas para el viaje: ya no se puede bajar el precio. El viaje sigue por lo pagado."}
       </p>
     );
   }
@@ -346,8 +335,7 @@ export function RebajaReservas({
           pendienteGrupo &&
           !porteVista.rebajaEn &&
           !porteVista.rebajaRechazadaEn &&
-          porteVista.estado === "confirmada" &&
-          cabeRebaja(porteVista.salida);
+          porteVista.estado === "confirmada";
         const puedeRechazar =
           esConductor &&
           Boolean(porteVista.esTramo) &&
@@ -355,8 +343,7 @@ export function RebajaReservas({
           !porteVista.rebajaEn &&
           !porteVista.rebajaRechazadaEn &&
           (porteVista.estado === "confirmada" ||
-            porteVista.estado === "pendiente_aprobacion") &&
-          cabeRebaja(porteVista.salida);
+            porteVista.estado === "pendiente_aprobacion");
         return (
           <Card
             key={grupo.map((p) => p.id).join("-")}
@@ -377,11 +364,9 @@ export function RebajaReservas({
             !porteVista.rebajaEn &&
             !porteVista.rebajaRechazadaEn ? (
               <div className="space-y-2">
-                {cabeRebaja(porteVista.salida) ? (
-                  <p className="text-sm font-medium text-emerald-950">
-                    {TEXTO_REBAJA_TRAMO_CONDUCTOR}
-                  </p>
-                ) : null}
+                <p className="text-sm font-medium text-emerald-950">
+                  {TEXTO_REBAJA_TRAMO_CONDUCTOR}
+                </p>
                 <p className="text-sm font-medium text-emerald-950">
                   {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
                 </p>

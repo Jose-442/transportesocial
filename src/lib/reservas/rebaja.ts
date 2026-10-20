@@ -64,7 +64,10 @@ export function mensajeAvisoConductorConfirmada(
   return "Un usuario ha reservado tu viaje. Revisa el chat.";
 }
 
-/** Hasta 48 horas antes de la salida, incluida esa hora. */
+/**
+ * Solo para pedir rebaja al reservar.
+ * El conductor puede bajar el precio después aunque falten menos de 48 h.
+ */
 export function cabeRebaja(salidaIso: string, ahora = new Date()): boolean {
   const horas = horasHasta(salidaIso, ahora);
   return Number.isFinite(horas) && horas >= HORAS_LIMITE_REBAJA;

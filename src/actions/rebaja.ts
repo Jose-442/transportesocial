@@ -7,7 +7,6 @@ import { calcComision, calcPrecioConComision } from "@/lib/pricing";
 import { errorSiPrecioBajoMinimo } from "@/lib/km-carretera";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import {
-  cabeRebaja,
   esPorteParaRebaja,
   faltaColumnaRebaja,
   puedeRechazarRebajaTramo,
@@ -55,11 +54,6 @@ export async function guardarRebajaReserva(formData: FormData) {
   }
   if (reserva.estado !== "confirmada") {
     return { error: "El precio solo se puede bajar con el viaje confirmado." };
-  }
-  if (!cabeRebaja(reserva.fecha_llegada_prevista)) {
-    return {
-      error: "Ya no se puede bajar el precio. Faltan menos de 48 horas.",
-    };
   }
   if (!reserva.ruta_conductor_id) {
     return { error: "No se ha encontrado el viaje." };
