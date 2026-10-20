@@ -350,6 +350,29 @@ function TarjetaConductorRebaja({
           <Button type="button" fullWidth onClick={() => setPaso("precio")}>
             Acepto la rebaja
           </Button>
+          {(porteVista.esTramo || grupo.some((p) => p.esTramo)) ? (
+            <p className="text-sm font-medium text-emerald-950">
+              Aunque 1 pasajero solo use un tramo, la web cuenta esa plaza como
+              ocupada en todo el viaje. Si se baja en una parada y otra persona
+              quiere subir, añade otra plaza
+              {rutaId ? (
+                <>
+                  {" "}
+                  (
+                  <Link
+                    href={`/rutas/${rutaId}`}
+                    className="font-semibold text-emerald-700 underline"
+                  >
+                    Añadir más capacidad
+                  </Link>
+                  )
+                </>
+              ) : (
+                " («Añadir más capacidad»)"
+              )}
+              .
+            </p>
+          ) : null}
           <Button
             type="button"
             variant="secondary"
@@ -366,7 +389,25 @@ function TarjetaConductorRebaja({
       {pendienteDecision && paso === "precio" ? (
         <div className="space-y-2">
           <p className="text-sm font-medium text-emerald-950">
-            {TEXTO_PLAZA_TRAMO_ANADIR_CONDUCTOR}
+            Aunque 1 pasajero solo use un tramo, la web cuenta esa plaza como
+            ocupada en todo el viaje. Si se baja en una parada y otra persona
+            quiere subir, añade otra plaza
+            {rutaId ? (
+              <>
+                {" "}
+                (
+                <Link
+                  href={`/rutas/${rutaId}`}
+                  className="font-semibold text-emerald-700 underline"
+                >
+                  Añadir más capacidad
+                </Link>
+                )
+              </>
+            ) : (
+              " («Añadir más capacidad»)"
+            )}
+            .
           </p>
           <Formulario
             porte={porte}
