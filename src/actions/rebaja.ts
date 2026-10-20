@@ -110,22 +110,40 @@ export async function guardarRebajaReserva(formData: FormData) {
   if (!admin) return { error: "No se ha podido devolver la diferencia." };
 
   // Hermanas del mismo viaje (para cobro compartido bulto+plaza, etc.).
-  const { data: hermanasRaw } = await admin
-    .from("reservas")
-    .select("*")
-    .eq("ruta_conductor_id", reserva.ruta_conductor_id)
-    .eq("cliente_id", reserva.cliente_id)
-    .eq("transportista_id", reserva.transportista_id)
-    .neq("estado", "cancelado");
-  const hermanas = (hermanasRaw as Reserva[]) ?? [];
+  async function leerHermanas(): Promise<Reserva[]> {
+    const { data } = await admin!
+      .from("reservas")
+      .select("*")
+      .eq("ruta_conductor_id", reserva!.ruta_conductor_id!)
+      .eq("cliente_id", reserva!.cliente_id)
+      .eq("transportista_id", reserva!.transportista_id)
+      .neq("estado", "cancelado");
+    return (data as Reserva[]) ?? [];
+  }
+
+  let hermanas = await leerHermanas();
+  // Aceptar todas las del mismo cobro con rebaja de tramo pendiente.
+  for (const h of hermanas) {
+    if (rebajaTramoPendiente(h) && h.estado === "pendiente_aprobacion") {
+      const r = await aceptarReservaSiPendiente(h);
+      if (r.error) return { error: r.error };
+    }
+  }
+  hermanas = await leerHermanas();
+  const actualizada = hermanas.find((h) => h.id === reserva.id);
+  if (actualizada) reserva = actualizada;
+
   // Tramos con rebaja pendiente → un solo precio total.
-  const objetivo = rebajaTramoPendiente(reserva)
+  let objetivo = rebajaTramoPendiente(reserva)
     ? hermanas.filter(
         (h) => rebajaTramoPendiente(h) && h.estado === "confirmada"
       )
     : [reserva];
+  if (objetivo.length === 0 && reserva.estado === "confirmada") {
+    objetivo = [reserva];
+  }
   if (objetivo.length === 0) {
-    return { error: "Este porte no tiene una rebaja pedida." };
+    return { error: "No se ha podido preparar la rebaja. Prueba otra vez." };
   }
   if (!objetivo.every((h) => h.estado === "confirmada" && !h.rebaja_en)) {
     return { error: "El precio solo se puede bajar con el viaje confirmado." };

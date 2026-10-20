@@ -10,6 +10,7 @@ import { ReservarRutaForm } from "@/components/reservas/ReservarRutaForm";
 import { AnadirCapacidadForm } from "@/components/capacidad/AnadirCapacidadForm";
 import { OfertasCapacidadReserva } from "@/components/capacidad/OfertasCapacidadReserva";
 import { ResumenAsientosViaje } from "@/components/capacidad/ResumenAsientosViaje";
+import { ScrollToHash } from "@/components/ScrollToHash";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { EDITAR_RESERVA_COOKIE } from "@/lib/form-draft";
@@ -211,6 +212,7 @@ export default async function RutaDetallePage({
 
   let reservasConChat: Pick<Reserva, "id" | "estado">[] = [];
   let hayReservaTramoEnViaje = false;
+  let puedeAnadirCapacidad = false;
   if (esPropio) {
     const { data: reservasRuta } = await supabase
       .from("reservas")
@@ -224,6 +226,19 @@ export default async function RutaDetallePage({
     hayReservaTramoEnViaje = listaRuta.some(
       (r) => Boolean(r.es_tramo) && r.estado !== "cancelado"
     );
+    // También con reserva ya pagada esperando respuesta (aún no «reservada»).
+    puedeAnadirCapacidad =
+      ruta.estado === "reservada" ||
+      listaRuta.some((r) =>
+        [
+          "pendiente_aprobacion",
+          "confirmada",
+          "pagado_escrow",
+          "en_transito",
+          "entregado",
+          "disputa",
+        ].includes(r.estado)
+      );
   }
 
   await sincronizarOcupacionRuta(supabase, id);
@@ -390,6 +405,7 @@ export default async function RutaDetallePage({
 
   return (
     <div className="space-y-2 md:space-y-4">
+      <ScrollToHash />
       <Link
         href={volverHref}
         className="inline-flex min-h-9 items-center text-sm font-semibold text-emerald-700 md:min-h-11"
@@ -744,8 +760,8 @@ export default async function RutaDetallePage({
         </Card>
       )}
 
-      {esPropio && ruta.estado === "reservada" && (
-        <Card className="bg-zinc-50">
+      {esPropio && puedeAnadirCapacidad && (
+        <Card id="anadir-capacidad" className="scroll-mt-24 bg-zinc-50">
           <p className="mb-3 text-sm font-semibold text-zinc-800">
             Añadir más capacidad
           </p>

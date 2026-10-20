@@ -123,7 +123,7 @@ function NotaPlazaTramo({ rutaId }: { rutaId: string | null }) {
           {" "}
           (
           <Link
-            href={`/rutas/${rutaId}`}
+            href={`/rutas/${rutaId}#anadir-capacidad`}
             className="font-semibold text-emerald-700 underline"
           >
             Añadir más capacidad
@@ -197,50 +197,52 @@ function Formulario({
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
-      <Input
-        name="precio_neto"
-        label="Precio nuevo (neto, sin gastos)"
-        type="text"
-        inputMode="decimal"
-        value={netoTexto}
-        onChange={(e) => setNetoTexto(e.target.value)}
-        placeholder="Ej. 40"
-        required
-      />
-      {visible > 0 ? (
-        <p className="text-sm text-zinc-700">
-          Quien reservó verá {formatEur(visible)}.
-          {diferencia >= 0.01
-            ? ` Se le devolverán ${formatEur(diferencia)}.`
-            : ""}
-        </p>
-      ) : null}
-      {bajoMinimo && minimo.precioMinimo != null ? (
-        <p className="text-sm text-red-600">
-          {mensajePrecioPorDebajo(minimo.precioMinimo)}
-        </p>
-      ) : null}
-      {noBaja ? (
-        <p className="text-sm text-red-600">
-          El precio nuevo tiene que ser más bajo.
-        </p>
-      ) : null}
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <Button
-        type="submit"
-        fullWidth
-        disabled={
-          loading ||
-          minimo.cargando ||
-          Boolean(minimo.error) ||
-          bajoMinimo ||
-          noBaja ||
-          visible <= 0
-        }
-      >
-        {loading ? "Guardando…" : etiquetaBoton}
-      </Button>
+    <div className="space-y-3">
+      <form onSubmit={onSubmit} className="space-y-3">
+        <Input
+          name="precio_neto"
+          label="Precio nuevo (neto, sin gastos)"
+          type="text"
+          inputMode="decimal"
+          value={netoTexto}
+          onChange={(e) => setNetoTexto(e.target.value)}
+          placeholder="Ej. 40"
+          required
+        />
+        {visible > 0 ? (
+          <p className="text-sm text-zinc-700">
+            Quien reservó verá {formatEur(visible)}.
+            {diferencia >= 0.01
+              ? ` Se le devolverán ${formatEur(diferencia)}.`
+              : ""}
+          </p>
+        ) : null}
+        {bajoMinimo && minimo.precioMinimo != null ? (
+          <p className="text-sm text-red-600">
+            {mensajePrecioPorDebajo(minimo.precioMinimo)}
+          </p>
+        ) : null}
+        {noBaja ? (
+          <p className="text-sm text-red-600">
+            El precio nuevo tiene que ser más bajo.
+          </p>
+        ) : null}
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        <Button
+          type="submit"
+          fullWidth
+          disabled={
+            loading ||
+            minimo.cargando ||
+            Boolean(minimo.error) ||
+            bajoMinimo ||
+            noBaja ||
+            visible <= 0
+          }
+        >
+          {loading ? "Guardando…" : etiquetaBoton}
+        </Button>
+      </form>
       {mostrarNotaTramo ? <NotaPlazaTramo rutaId={rutaId} /> : null}
       {onVolver ? (
         <Button
@@ -258,7 +260,7 @@ function Formulario({
           Si lo guardas y quieres publicar el hueco que queda, hazlo en el viaje
           pulsando{" "}
           <Link
-            href={`/rutas/${rutaId}`}
+            href={`/rutas/${rutaId}#anadir-capacidad`}
             className="font-semibold text-emerald-700 underline"
           >
             AQUÍ
@@ -266,7 +268,7 @@ function Formulario({
           .
         </p>
       ) : null}
-    </form>
+    </div>
   );
 }
 
