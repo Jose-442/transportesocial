@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { notaTramoRebajaReserva } from "@/lib/cuenta/nota-tramo-rebaja";
+import { partesNotaTramoRebaja } from "@/lib/cuenta/nota-tramo-rebaja";
 
-describe("notaTramoRebajaReserva", () => {
-  it("tramo concreto con rebaja aceptada", () => {
+describe("partesNotaTramoRebaja", () => {
+  it("tramo concreto con rebaja", () => {
     expect(
-      notaTramoRebajaReserva([
+      partesNotaTramoRebaja([
         {
           es_tramo: true,
           rebaja_en: "2026-10-19T18:00:00Z",
@@ -12,14 +12,15 @@ describe("notaTramoRebajaReserva", () => {
           tramo_destino: "Barcelona (Barcelona)",
         },
       ])
-    ).toBe(
-      "Tramo Zaragoza (Zaragoza) → Barcelona (Barcelona) · Rebaja de precio aceptada"
-    );
+    ).toEqual({
+      tramo: "Zaragoza (Zaragoza) → Barcelona (Barcelona)",
+      rebajaHecha: true,
+    });
   });
 
-  it("solo tramo con ciudades", () => {
+  it("solo tramo", () => {
     expect(
-      notaTramoRebajaReserva([
+      partesNotaTramoRebaja([
         {
           es_tramo: true,
           rebaja_en: null,
@@ -27,25 +28,15 @@ describe("notaTramoRebajaReserva", () => {
           tramo_destino: "Zaragoza (Zaragoza)",
         },
       ])
-    ).toBe("Tramo Madrid (Madrid) → Zaragoza (Zaragoza)");
-  });
-
-  it("tramo sin ciudades guardadas", () => {
-    expect(
-      notaTramoRebajaReserva([
-        {
-          es_tramo: true,
-          rebaja_en: null,
-          tramo_origen: null,
-          tramo_destino: null,
-        },
-      ])
-    ).toBe("Tramo del viaje (no el recorrido completo)");
+    ).toEqual({
+      tramo: "Madrid (Madrid) → Zaragoza (Zaragoza)",
+      rebajaHecha: false,
+    });
   });
 
   it("solo rebaja", () => {
     expect(
-      notaTramoRebajaReserva([
+      partesNotaTramoRebaja([
         {
           es_tramo: false,
           rebaja_en: "2026-10-19T18:00:00Z",
@@ -53,12 +44,12 @@ describe("notaTramoRebajaReserva", () => {
           tramo_destino: null,
         },
       ])
-    ).toBe("Rebaja de precio aceptada");
+    ).toEqual({ tramo: null, rebajaHecha: true });
   });
 
-  it("sin nada especial", () => {
+  it("sin nada", () => {
     expect(
-      notaTramoRebajaReserva([
+      partesNotaTramoRebaja([
         {
           es_tramo: false,
           rebaja_en: null,

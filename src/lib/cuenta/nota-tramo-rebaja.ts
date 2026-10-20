@@ -6,7 +6,13 @@ type ReservaNota = Pick<
   "es_tramo" | "rebaja_en" | "tramo_origen" | "tramo_destino"
 >;
 
-function etiquetaTramo(reservas: ReservaNota[]): string | null {
+export type PartesNotaTramoRebaja = {
+  /** Ciudades del tramo, o texto genérico; sin la palabra «Tramo». */
+  tramo: string | null;
+  rebajaHecha: boolean;
+};
+
+function textoTramo(reservas: ReservaNota[]): string | null {
   const conTramo = reservas.find(
     (r) =>
       Boolean(r.es_tramo) &&
@@ -14,20 +20,20 @@ function etiquetaTramo(reservas: ReservaNota[]): string | null {
       String(r.tramo_destino ?? "").trim()
   );
   if (conTramo) {
-    return `Tramo ${formatCiudad(conTramo.tramo_origen ?? "")} → ${formatCiudad(conTramo.tramo_destino ?? "")}`;
+    return `${formatCiudad(conTramo.tramo_origen ?? "")} → ${formatCiudad(conTramo.tramo_destino ?? "")}`;
   }
   if (reservas.some((r) => Boolean(r.es_tramo))) {
-    return "Tramo del viaje (no el recorrido completo)";
+    return "no el recorrido completo";
   }
   return null;
 }
 
-/** Aclara en la lista si es tramo (cuál) y/o hay rebaja ya guardada. */
-export function notaTramoRebajaReserva(reservas: ReservaNota[]): string | null {
-  const tramo = etiquetaTramo(reservas);
+/** Partes para pintar «Tramo:» en verde y el resto. */
+export function partesNotaTramoRebaja(
+  reservas: ReservaNota[]
+): PartesNotaTramoRebaja | null {
+  const tramo = textoTramo(reservas);
   const rebajaHecha = reservas.some((r) => Boolean(r.rebaja_en));
-  if (tramo && rebajaHecha) return `${tramo} · Rebaja de precio aceptada`;
-  if (tramo) return tramo;
-  if (rebajaHecha) return "Rebaja de precio aceptada";
-  return null;
+  if (!tramo && !rebajaHecha) return null;
+  return { tramo, rebajaHecha };
 }

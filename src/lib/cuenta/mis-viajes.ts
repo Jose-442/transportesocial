@@ -14,7 +14,7 @@ import {
   cargarOcupacionesPorRutas,
   type OcupacionRuta,
 } from "@/lib/capacidad/ocupacion";
-import { notaTramoRebajaReserva } from "@/lib/cuenta/nota-tramo-rebaja";
+import { partesNotaTramoRebaja } from "@/lib/cuenta/nota-tramo-rebaja";
 import {
   badgeOfertaRuta,
   fraseQuedaLibre,
@@ -311,6 +311,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     const apartado = apartadoReserva(principal.estado, esCliente);
     if (!apartado) continue;
 
+    const nota = partesNotaTramoRebaja(grupo);
     const item: ReservaViajeItem = {
       kind: "reserva",
       id: principal.id,
@@ -322,7 +323,8 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       esCliente,
       queIncluye: fraseQueIncluyeReservas(grupo),
       fecha: principal.created_at,
-      notaTramoRebaja: notaTramoRebajaReserva(grupo),
+      notaTramo: nota?.tramo ?? null,
+      notaRebajaHecha: nota?.rebajaHecha ?? false,
     };
 
     if (apartado === "propuestos") propuestos.push(item);

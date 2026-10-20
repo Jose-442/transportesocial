@@ -22,8 +22,9 @@ export type ReservaViajeItem = {
   esCliente: boolean;
   queIncluye: string;
   fecha: string;
-  /** Ej. «Tramo del viaje · Rebaja de precio aceptada». */
-  notaTramoRebaja?: string | null;
+  /** «Tramo:» en verde + ciudades; y/o rebaja aceptada. */
+  notaTramo?: string | null;
+  notaRebajaHecha?: boolean;
 };
 
 export type OfertaViajeItem = {
@@ -76,9 +77,16 @@ function ReservaCard({ item }: { item: ReservaViajeItem }) {
             {item.queIncluye} ·{" "}
             {new Date(item.fecha).toLocaleDateString("es-ES")}
           </p>
-          {item.notaTramoRebaja ? (
+          {item.notaTramo || item.notaRebajaHecha ? (
             <p className="mt-1 text-sm font-medium text-zinc-800">
-              {item.notaTramoRebaja}
+              {item.notaTramo ? (
+                <>
+                  <span className="font-semibold text-emerald-700">Tramo:</span>{" "}
+                  {item.notaTramo}
+                </>
+              ) : null}
+              {item.notaTramo && item.notaRebajaHecha ? " · " : null}
+              {item.notaRebajaHecha ? "Rebaja de precio aceptada" : null}
             </p>
           ) : null}
         </div>
