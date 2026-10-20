@@ -21,10 +21,24 @@ function escribiendo(campo: HTMLElement): boolean {
   );
 }
 
+function emailCompleto(valor: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor.trim());
+}
+
+/** Email ya completo: hay que saltar aunque el cursor siga ahí. */
+function emailListoParaSaltar(campo: HTMLElement): boolean {
+  const input = campo.querySelector("input");
+  return (
+    input instanceof HTMLInputElement &&
+    input.type === "email" &&
+    emailCompleto(input.value)
+  );
+}
+
 export function ScrollCampoVacio() {
   useEffect(() => {
     function alRellenar(campo: HTMLElement, ponerCursor = false) {
-      if (escribiendo(campo)) return;
+      if (escribiendo(campo) && !emailListoParaSaltar(campo)) return;
       const form = campo.closest("form");
       scrollAlSiguienteVacio(form ?? document, ponerCursor ? campo : null, ponerCursor);
     }
@@ -132,15 +146,20 @@ export function ScrollCampoVacio() {
           return;
         } else if (el.type === "email") {
           // Solo cuando el email parece completo (no a mitad: tir@hotma…).
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) return;
+          if (!emailCompleto(valor)) return;
         } else if (el.type === "password") {
           // Contraseña: al menos unos caracteres, no al primer toque.
           if (valor.length < 6) return;
         }
-        if (campo.hasAttribute("data-campo-vacio")) return;
+        if (
+          campo.hasAttribute("data-campo-vacio") &&
+          el.type !== "email"
+        ) {
+          return;
+        }
         const form = campo.closest("form");
         scrollAlSiguienteVacio(form ?? document, campo, true);
-      }, 450);
+      }, 400);
     }
 
     function alSalir(event: FocusEvent) {
