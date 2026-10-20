@@ -269,8 +269,7 @@ function BotonRechazarTramo({ reservaId }: { reservaId: string }) {
         {loading ? "Guardando…" : "No acepto la rebaja"}
       </Button>
       <p className="text-xs text-zinc-600">
-        La reserva queda aceptada por lo pagado. Quien reservó podrá cancelar y
-        recuperar casi todo (menos lo del banco por la tarjeta).
+        La reserva queda aceptada por lo pagado. Quien reservó podrá cancelar
       </p>
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
     </div>
