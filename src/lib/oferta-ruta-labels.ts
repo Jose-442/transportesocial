@@ -72,16 +72,33 @@ export function badgeOfertaRuta(input: OfertaRutaInput): string {
   return `Bulto + ${plazas} plazas`;
 }
 
-/**
- * Lo que aún se puede reservar (además del anuncio original).
- * Una sola frase: bulto y/o plazas libres.
- */
-export function fraseQuedaLibre(opts: {
+type OcupacionOferta = {
   ofreceBulto: boolean;
   bultoOcupado: boolean;
   plazasOfrecidas: number;
   plazasOcupadas: number;
-}): string | null {
+};
+
+/**
+ * Lo ya cogido del anuncio (globo corto).
+ * Ej.: «Reservada 1 plaza», «Reservado el bulto».
+ */
+export function fraseReservado(opts: OcupacionOferta): string | null {
+  const bultoReservado = opts.ofreceBulto && opts.bultoOcupado;
+  const plazas = Math.max(0, Math.floor(opts.plazasOcupadas));
+  if (!bultoReservado && plazas <= 0) return null;
+  if (bultoReservado && plazas <= 0) return "Reservado el bulto";
+  if (!bultoReservado && plazas === 1) return "Reservada 1 plaza";
+  if (!bultoReservado && plazas > 1) return `Reservadas ${plazas} plazas`;
+  if (bultoReservado && plazas === 1) return "Reservados el bulto y 1 plaza";
+  return `Reservados el bulto y ${plazas} plazas`;
+}
+
+/**
+ * Lo que aún se puede reservar (además del anuncio original).
+ * Una sola frase: bulto y/o plazas libres.
+ */
+export function fraseQuedaLibre(opts: OcupacionOferta): string | null {
   const ofrecidas = Math.max(0, Math.floor(opts.plazasOfrecidas));
   const ocupadas = Math.max(0, Math.floor(opts.plazasOcupadas));
   if (!opts.ofreceBulto && ofrecidas < 1) return null;

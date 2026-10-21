@@ -42,7 +42,7 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
-import { fraseQuedaLibre } from "@/lib/oferta-ruta-labels";
+import { fraseQuedaLibre, fraseReservado } from "@/lib/oferta-ruta-labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import {
   esBusquedaDeTramo,
@@ -395,7 +395,7 @@ export default async function RutaDetallePage({
       />
     ) : null;
 
-  const quedaLibreBadge = fraseQuedaLibre({
+  const ocupacionBadge = {
     ofreceBulto:
       rutaOfreceBulto(ruta.espacio_disponible) ||
       Boolean(ofertaBultoLibre) ||
@@ -403,12 +403,14 @@ export default async function RutaDetallePage({
     bultoOcupado: !(ofreceBultoOriginal || Boolean(ofertaBultoLibre)),
     plazasOfrecidas: asientoOfrecidas,
     plazasOcupadas: asientoOcupadas,
-  });
+  };
+  const reservadoBadge = fraseReservado(ocupacionBadge);
+  const quedaLibreBadge = fraseQuedaLibre(ocupacionBadge);
   const badgeLabel =
     ruta.estado === "activa"
       ? "ACTIVO"
       : ruta.estado === "reservada"
-        ? "RESERVADO"
+        ? reservadoBadge ?? "RESERVADO"
         : ruta.estado === "completada"
           ? "COMPLETADO"
           : "CANCELADO";

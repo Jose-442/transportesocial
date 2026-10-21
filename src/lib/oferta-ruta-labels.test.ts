@@ -3,6 +3,7 @@ import { formatEspacioDisponibleListado } from "@/lib/espacio-opciones";
 import {
   badgeOfertaRuta,
   fraseQuedaLibre,
+  fraseReservado,
   lineasOfertaRuta,
   ofertaOriginalRuta,
 } from "@/lib/oferta-ruta-labels";
@@ -116,6 +117,41 @@ describe("ofertaOriginalRuta", () => {
       "Bulto (Tamaño Pequeño (Maleta))",
       "+ 2 acompañantes",
     ]);
+  });
+});
+
+describe("fraseReservado", () => {
+  it("dice plaza reservada", () => {
+    expect(
+      fraseReservado({
+        ofreceBulto: true,
+        bultoOcupado: false,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 1,
+      })
+    ).toBe("Reservada 1 plaza");
+  });
+
+  it("dice bulto reservado", () => {
+    expect(
+      fraseReservado({
+        ofreceBulto: true,
+        bultoOcupado: true,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 0,
+      })
+    ).toBe("Reservado el bulto");
+  });
+
+  it("dice bulto y plazas reservados", () => {
+    expect(
+      fraseReservado({
+        ofreceBulto: true,
+        bultoOcupado: true,
+        plazasOfrecidas: 3,
+        plazasOcupadas: 2,
+      })
+    ).toBe("Reservados el bulto y 2 plazas");
   });
 });
 
