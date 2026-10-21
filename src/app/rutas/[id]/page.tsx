@@ -408,9 +408,7 @@ export default async function RutaDetallePage({
     ruta.estado === "activa"
       ? "ACTIVO"
       : ruta.estado === "reservada"
-        ? quedaLibreBadge
-          ? `RESERVADO · ${quedaLibreBadge}`
-          : "RESERVADO"
+        ? "RESERVADO"
         : ruta.estado === "completada"
           ? "COMPLETADO"
           : "CANCELADO";
@@ -420,6 +418,8 @@ export default async function RutaDetallePage({
       : ruta.estado === "reservada"
         ? "amber"
         : "zinc";
+  const mostrarQuedaLibre =
+    ruta.estado === "reservada" && Boolean(quedaLibreBadge);
 
   return (
     <div className="space-y-2 md:space-y-4">
@@ -462,18 +462,25 @@ export default async function RutaDetallePage({
           <p className="text-sm font-semibold text-zinc-800">
             Detalle del viaje
           </p>
-          <span
-            className={[
-              "inline-flex max-w-[14rem] shrink-0 items-center rounded-full px-2 py-0.5 text-right text-xs font-bold leading-snug md:max-w-xs md:px-3 md:py-1.5 md:text-sm",
-              badgeTone === "green"
-                ? "bg-emerald-100 text-emerald-800"
-                : badgeTone === "amber"
-                  ? "bg-amber-100 text-amber-800"
-                  : "bg-zinc-100 text-zinc-700",
-            ].join(" ")}
-          >
-            {badgeLabel}
-          </span>
+          <div className="flex max-w-[15rem] shrink-0 flex-col items-end gap-1 md:max-w-xs">
+            <span
+              className={[
+                "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold md:px-3 md:py-1.5 md:text-sm",
+                badgeTone === "green"
+                  ? "bg-emerald-100 text-emerald-800"
+                  : badgeTone === "amber"
+                    ? "bg-amber-100 text-amber-800"
+                    : "bg-zinc-100 text-zinc-700",
+              ].join(" ")}
+            >
+              {badgeLabel}
+            </span>
+            {mostrarQuedaLibre ? (
+              <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-right text-xs font-bold leading-snug text-emerald-800 md:px-3 md:py-1.5 md:text-sm">
+                {quedaLibreBadge}
+              </span>
+            ) : null}
+          </div>
         </div>
         <div className="flex items-start gap-3">
           <Link href={`/perfil/${ruta.user_id}`} className="shrink-0">
