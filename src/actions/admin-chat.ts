@@ -153,23 +153,36 @@ export async function loadAdminChat(
     .eq("id", reservaId)
     .maybeSingle();
 
-  const { data: rpcFilas, error: rpcError } = await supabase.rpc(
-    "admin_leer_chat",
-    { p_reserva_id: reservaId }
-  );
-  let filas = !rpcError && Array.isArray(rpcFilas) ? (rpcFilas as FilaRpc[]) : [];
-  let falloLectura = Boolean(rpcError);
+  // Primero service_role (no depende del correo de la sesión).
+  let filas: FilaRpc[] = [];
+  let falloLectura = false;
+  let errorLectura: string | null = null;
 
-  if (filas.length === 0 && admin) {
+  if (admin) {
     const { data: otras, error: otrasError } = await admin.rpc(
       "admin_leer_chat",
       { p_reserva_id: reservaId }
     );
     if (!otrasError && Array.isArray(otras)) {
       filas = otras as FilaRpc[];
-      falloLectura = false;
-    } else if (otrasError) {
+    } else {
       falloLectura = true;
+      errorLectura = otrasError?.message ?? null;
+    }
+  }
+
+  if (filas.length === 0) {
+    const { data: rpcFilas, error: rpcError } = await supabase.rpc(
+      "admin_leer_chat",
+      { p_reserva_id: reservaId }
+    );
+    if (!rpcError && Array.isArray(rpcFilas)) {
+      filas = rpcFilas as FilaRpc[];
+      falloLectura = false;
+      errorLectura = null;
+    } else if (rpcError) {
+      falloLectura = true;
+      errorLectura = rpcError.message;
     }
   }
 
@@ -229,7 +242,9 @@ export async function loadAdminChat(
     })),
     aviso:
       falloLectura && filas.length === 0
-        ? "Aún no se pueden leer. Pega en Supabase el SQL 039_admin_leer_chat (una vez, vale para todos los chats)."
+        ? errorLectura?.toLowerCase().includes("no autorizado")
+          ? "No autorizado a leer este chat con esta cuenta. Usa el correo de administración o pega el SQL 076_admin_leer_chat_ambos_correos."
+          : "Aún no se pueden leer. Pega en Supabase el SQL 076_admin_leer_chat_ambos_correos (o 039 si aún no lo pegaste)."
         : null,
   };
 }

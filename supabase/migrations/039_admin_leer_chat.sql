@@ -16,7 +16,10 @@ SET search_path = public
 AS $$
 BEGIN
   IF auth.role() <> 'service_role' THEN
-    IF lower(coalesce(auth.jwt() ->> 'email', '')) <> 'jemartarrero@gmail.com' THEN
+    IF lower(coalesce(auth.jwt() ->> 'email', '')) NOT IN (
+      'jemartarrero@gmail.com',
+      'randyroad@hotmail.es'
+    ) THEN
       RAISE EXCEPTION 'no autorizado';
     END IF;
   END IF;

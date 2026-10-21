@@ -42,6 +42,7 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
+import { fraseQuedaLibre } from "@/lib/oferta-ruta-labels";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import {
   esBusquedaDeTramo,
@@ -394,18 +395,27 @@ export default async function RutaDetallePage({
       />
     ) : null;
 
+  const quedaLibreBadge = fraseQuedaLibre({
+    ofreceBulto:
+      rutaOfreceBulto(ruta.espacio_disponible) ||
+      Boolean(ofertaBultoLibre) ||
+      ocupacion.bultoOcupado,
+    bultoOcupado: !(ofreceBultoOriginal || Boolean(ofertaBultoLibre)),
+    plazasOfrecidas: asientoOfrecidas,
+    plazasOcupadas: asientoOcupadas,
+  });
   const badgeLabel =
-    ruta.estado === "activa" ||
-    (ruta.estado === "reservada" && tieneCapacidadExtra)
+    ruta.estado === "activa"
       ? "ACTIVO"
       : ruta.estado === "reservada"
-        ? "RESERVADO"
+        ? quedaLibreBadge
+          ? `RESERVADO · ${quedaLibreBadge}`
+          : "RESERVADO"
         : ruta.estado === "completada"
           ? "COMPLETADO"
           : "CANCELADO";
   const badgeTone =
-    ruta.estado === "activa" ||
-    (ruta.estado === "reservada" && tieneCapacidadExtra)
+    ruta.estado === "activa"
       ? "green"
       : ruta.estado === "reservada"
         ? "amber"
@@ -454,7 +464,7 @@ export default async function RutaDetallePage({
           </p>
           <span
             className={[
-              "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-bold md:px-3 md:py-1.5 md:text-sm",
+              "inline-flex max-w-[14rem] shrink-0 items-center rounded-full px-2 py-0.5 text-right text-xs font-bold leading-snug md:max-w-xs md:px-3 md:py-1.5 md:text-sm",
               badgeTone === "green"
                 ? "bg-emerald-100 text-emerald-800"
                 : badgeTone === "amber"
