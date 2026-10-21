@@ -268,6 +268,8 @@ export function DatePickerInput({
     const parsed = parseMonthDay(value);
     if (parsed.month && parsed.day) {
       setParts(parsed);
+    } else if (parsed.month) {
+      setParts({ month: parsed.month, day: "" });
     } else if (!value) {
       setParts({ month: "", day: "" });
     }

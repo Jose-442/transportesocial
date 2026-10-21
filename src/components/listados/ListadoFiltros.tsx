@@ -263,8 +263,9 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
             }}
           />
           <p className="text-base leading-snug text-zinc-600">
-            Busca solo al elegir salida y destino. Si pones un día, filtra ese
-            día; si no, muestra los {palabra} que salen antes.
+            Busca solo al elegir salida y destino. Si pones mes y día, filtra
+            ese día; si solo el mes, ese mes; si no pones fecha, muestra los{" "}
+            {palabra} que salen antes.
           </p>
         </>
       ) : (

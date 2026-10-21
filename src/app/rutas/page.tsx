@@ -37,6 +37,10 @@ export default async function RutasPage({
   let rutas: RutaListadoItem[] = [];
   let sesion = false;
   let tieneAlerta = false;
+  const fechaDia =
+    filtros.fecha && /^\d{4}-\d{2}-\d{2}$/.test(filtros.fecha.slice(0, 10))
+      ? filtros.fecha.slice(0, 10)
+      : "";
 
   if (busquedaCompleta) {
     const supabase = await createClient();
@@ -48,14 +52,14 @@ export default async function RutasPage({
     if (user) {
       rutas = rutas.filter((ruta) => ruta.user_id !== user.id);
     }
-    if (user && rutas.length === 0 && filtros.fecha && !filtros.semana) {
+    if (user && rutas.length === 0 && fechaDia && !filtros.semana) {
       const { data: alerta } = await supabase
         .from("alertas_viaje")
         .select("id")
         .eq("user_id", user.id)
         .eq("origen", filtros.origen!)
         .eq("destino", filtros.destino!)
-        .eq("fecha", filtros.fecha.slice(0, 10))
+        .eq("fecha", fechaDia)
         .maybeSingle();
       tieneAlerta = !!alerta;
     }
@@ -106,14 +110,19 @@ export default async function RutasPage({
                 No hay viajes en el tramo {etiquetaTramo7Dias(filtros)}. Prueba
                 «7 días después», un día concreto, o mira más adelante.
               </p>
-            ) : filtros.fecha ? (
+            ) : fechaDia ? (
               <AlertaViajeBusqueda
                 origen={filtros.origen!}
                 destino={filtros.destino!}
-                fecha={filtros.fecha.slice(0, 10)}
+                fecha={fechaDia}
                 sesion={sesion}
                 tieneAlerta={tieneAlerta}
               />
+            ) : filtros.fecha ? (
+              <p className="text-sm text-zinc-500">
+                No hay viajes en ese mes. Prueba otro mes, un día concreto o
+                «tramo de 7 días».
+              </p>
             ) : (
               <p className="text-sm text-zinc-500">
                 No hay viajes próximos en esta ruta. Prueba con un día, marca

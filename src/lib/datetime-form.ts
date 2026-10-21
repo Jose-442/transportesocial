@@ -8,15 +8,17 @@ export function formatDate(
   return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 }
 
-/** Separa YYYY-MM-DD en año, mes y día. */
+/** Separa YYYY-MM-DD (o solo YYYY-MM) en año, mes y día. */
 export function parseDate(value: string): {
   year: string;
   month: string;
   day: string;
 } {
   const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (!match) return { year: "", month: "", day: "" };
-  return { year: match[1], month: match[2], day: match[3] };
+  if (match) return { year: match[1], month: match[2], day: match[3] };
+  const soloMes = value.match(/^(\d{4})-(\d{2})$/);
+  if (soloMes) return { year: soloMes[1], month: soloMes[2], day: "" };
+  return { year: "", month: "", day: "" };
 }
 
 export function daysInMonth(year: number, month: number): number {
@@ -41,7 +43,12 @@ export function resolveYearForMonthDay(month: string, day: string): string {
 }
 
 export function formatDateFromMonthDay(month: string, day: string): string {
-  if (!month || !day) return "";
+  if (!month) return "";
+  // Solo mes: filtra ese mes entero (el día se elige después si hace falta).
+  if (!day) {
+    const year = resolveYearForMonthDay(month, "01");
+    return `${year}-${month.padStart(2, "0")}`;
+  }
   return formatDate(resolveYearForMonthDay(month, day), month, day);
 }
 

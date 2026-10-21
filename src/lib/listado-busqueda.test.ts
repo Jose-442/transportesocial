@@ -155,4 +155,13 @@ describe("coincideFechaListado", () => {
       coincideFechaListado("2026-10-18", { fecha: "2026-10-17" })
     ).toBe(false);
   });
+
+  it("con solo el mes acepta cualquier día de ese mes", () => {
+    expect(coincideFechaListado("2027-01-15", { fecha: "2027-01" })).toBe(
+      true
+    );
+    expect(coincideFechaListado("2026-10-22", { fecha: "2027-01" })).toBe(
+      false
+    );
+  });
 });
