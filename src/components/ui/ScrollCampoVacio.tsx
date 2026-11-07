@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { scrollAlCampo, scrollAlSiguienteVacio } from "@/lib/scroll-campo";
+import {
+  precioListoParaSaltar,
+  scrollAlCampo,
+  scrollAlSiguienteVacio,
+} from "@/lib/scroll-campo";
 
 function escribiendo(campo: HTMLElement): boolean {
   const activo = document.activeElement;
@@ -140,8 +144,10 @@ export function ScrollCampoVacio() {
       esperaTecleo = window.setTimeout(() => {
         const valor = el.value.trim();
         if (el.type === "number") {
-          const importe = parseFloat(el.value);
-          if (!Number.isFinite(importe) || importe <= 0) return;
+          // Dos euros enteros (40) saltan. Una cifra se queda.
+          // Tres cifras (100) no saltan, para poder añadir el tercer número.
+          // Con coma o punto no salta: no hay céntimos.
+          if (!precioListoParaSaltar(valor)) return;
         } else if (valor === "") {
           return;
         } else if (el.type === "email") {

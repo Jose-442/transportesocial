@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { calcPrecioConComision } from "@/lib/pricing";
+import { MENSAJE_PRECIO_ENTERO, precioEntero } from "@/lib/precio-minimo";
 import { puedeAnadirAsientos } from "@/lib/capacidad/asientos";
 import { ESPACIO_OPCIONES } from "@/lib/espacio-opciones";
 import type { OfertaCapacidad } from "@/types/database";
@@ -59,9 +60,9 @@ export async function crearOfertaCapacidad(formData: FormData) {
     return { error: "Aún no hay una reserva principal confirmada en este viaje." };
   }
 
-  const precioNeto = Number(String(formData.get("precio_neto")).replace(",", "."));
-  if (!Number.isFinite(precioNeto) || precioNeto <= 0) {
-    return { error: "Indica un precio neto válido." };
+  const precioNeto = precioEntero(formData.get("precio_neto"));
+  if (precioNeto == null) {
+    return { error: MENSAJE_PRECIO_ENTERO };
   }
 
   const precioPublicado = calcPrecioConComision(precioNeto);

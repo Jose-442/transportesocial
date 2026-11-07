@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { calcComision, calcPrecioConComision } from "@/lib/pricing";
+import { MENSAJE_PRECIO_ENTERO, precioEntero } from "@/lib/precio-minimo";
 import { errorSiPrecioBajoMinimo } from "@/lib/km-carretera";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { ejecutarDecisionConductor } from "@/lib/reservas/decidir-conductor";
@@ -101,9 +102,9 @@ export async function guardarRebajaReserva(formData: FormData) {
   }
   const rutaId = reservaOk.ruta_conductor_id;
 
-  const neto = Number(String(formData.get("precio_neto") ?? "").replace(",", "."));
-  if (!Number.isFinite(neto) || neto <= 0) {
-    return { error: "Indica un precio válido." };
+  const neto = precioEntero(formData.get("precio_neto"));
+  if (neto == null) {
+    return { error: MENSAJE_PRECIO_ENTERO };
   }
   const visible = calcPrecioConComision(neto);
 

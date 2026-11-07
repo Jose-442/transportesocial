@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { enviarOferta } from "@/actions/ofertas";
 import { calcOfertaTotales, incluyeBulto, numPasajeros } from "@/lib/solicitud-viaje";
 import { formatEur } from "@/lib/pricing";
+import { textoPrecioEntero } from "@/lib/precio-minimo";
 import type { TipoSolicitud } from "@/lib/solicitud-viaje";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { sincronizarCuentaBorradores } from "@/lib/draft-cuenta";
@@ -239,13 +240,18 @@ export function OfertaForm({
         <Input
           name="precio_neto_bulto"
           label={`Tu precio por el ${nombreBulto} (€)`}
-          type="text"
-          inputMode="decimal"
+          type="number"
+          inputMode="numeric"
+          min="1"
+          step="1"
           placeholder="Ej. 25"
           required
           value={form.precio_neto_bulto}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, precio_neto_bulto: e.target.value }))
+            setForm((prev) => ({
+              ...prev,
+              precio_neto_bulto: textoPrecioEntero(e.target.value),
+            }))
           }
         />
       )}
@@ -283,15 +289,17 @@ export function OfertaForm({
             <Input
               name="precio_neto_plaza"
               label="Pon precio por pasajero (€)"
-              type="text"
-              inputMode="decimal"
+              type="number"
+              inputMode="numeric"
+              min="1"
+              step="1"
               placeholder="Ej. 25"
               required
               value={form.precio_neto_plaza}
               onChange={(e) =>
                 setForm((prev) => ({
                   ...prev,
-                  precio_neto_plaza: e.target.value,
+                  precio_neto_plaza: textoPrecioEntero(e.target.value),
                 }))
               }
             />

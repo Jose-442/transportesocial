@@ -24,7 +24,9 @@ import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import {
   mensajePrecioPorDebajo,
+  precioEntero,
   precioVisiblePorDebajo,
+  textoPrecioEntero,
 } from "@/lib/precio-minimo";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { useAvisoTiemposParadas } from "@/components/rutas/useAvisoTiemposParadas";
@@ -184,31 +186,6 @@ export function NuevaRutaForm({
   const llevaBulto = tipoOfertaLlevaBulto(form.tipo_oferta);
   const llevaPasajeros = tipoOfertaLlevaPasajeros(form.tipo_oferta);
 
-  useEffect(() => {
-    if (!ready) return;
-    const neto = parseFloat(form.precio_neto);
-    const plaza = parseFloat(form.precio_neto_plaza);
-    const precioBulto = llevaBulto && Number.isFinite(neto) && neto > 0;
-    const precioPlaza = llevaPasajeros && Number.isFinite(plaza) && plaza > 0;
-    if (!precioBulto && !precioPlaza) return;
-    const espera = window.setTimeout(() => {
-      const formEl = formRef.current;
-      if (!formEl) return;
-      const nombre =
-        precioPlaza && !precioBulto ? "precio_neto_plaza" : "precio_neto";
-      scrollAlSiguienteVacio(
-        formEl,
-        formEl.querySelector<HTMLElement>(`[name="${nombre}"]`)
-      );
-    }, 450);
-    return () => window.clearTimeout(espera);
-  }, [
-    ready,
-    llevaBulto,
-    llevaPasajeros,
-    form.precio_neto,
-    form.precio_neto_plaza,
-  ]);
   const neto = parseFloat(form.precio_neto) || 0;
   const publicado = neto > 0 ? calcPrecioConComision(neto) : 0;
   const plazas = parseInt(form.plazas_acompanante, 10);
@@ -428,9 +405,9 @@ export function NuevaRutaForm({
       if (!draft.espacio_tamano) {
         errors.espacio_tamano = "Selecciona el espacio del que dispones.";
       }
-      const precioNeto = parseFloat(draft.precio_neto);
-      if (!precioNeto || precioNeto <= 0) {
-        errors.precio_neto = "Indica un precio válido para el bulto.";
+      const precioNeto = precioEntero(draft.precio_neto);
+      if (precioNeto == null) {
+        errors.precio_neto = "Indica el precio del bulto en euros enteros.";
       }
     }
 
@@ -443,12 +420,10 @@ export function NuevaRutaForm({
       ) {
         errors.plazas_acompanante = "Marca cuántas plazas ofreces.";
       }
-      const precioPlaza = parseFloat(draft.precio_neto_plaza);
-      if (
-        plazasDraft > 0 &&
-        (!precioPlaza || precioPlaza <= 0)
-      ) {
-        errors.precio_neto_plaza = "Indica un precio válido por acompañante.";
+      const precioPlaza = precioEntero(draft.precio_neto_plaza);
+      if (plazasDraft > 0 && precioPlaza == null) {
+        errors.precio_neto_plaza =
+          "Indica el precio por acompañante en euros enteros.";
       }
     }
 
@@ -932,12 +907,15 @@ export function NuevaRutaForm({
             name="precio_neto"
             label="PRECIO POR EL PORTE DEL BULTO"
             type="number"
+            inputMode="numeric"
             min="1"
-            step="0.01"
+            step="1"
             required
             value={form.precio_neto}
             error={fieldErrors.precio_neto ?? avisoPrecioBajo(publicado) ?? undefined}
-            onChange={(e) => updateField("precio_neto", e.target.value)}
+            onChange={(e) =>
+              updateField("precio_neto", textoPrecioEntero(e.target.value))
+            }
           />
           {publicado > 0 && (
             <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
@@ -995,8 +973,9 @@ export function NuevaRutaForm({
                 name="precio_neto_plaza"
                 label="PRECIO POR ACOMPAÑANTE"
                 type="number"
-                min="0.01"
-                step="0.01"
+                inputMode="numeric"
+                min="1"
+                step="1"
                 required
                 value={form.precio_neto_plaza}
                 error={
@@ -1005,7 +984,10 @@ export function NuevaRutaForm({
                   undefined
                 }
                 onChange={(e) =>
-                  updateField("precio_neto_plaza", e.target.value)
+                  updateField(
+                    "precio_neto_plaza",
+                    textoPrecioEntero(e.target.value)
+                  )
                 }
               />
               {publicadoPlaza > 0 && (

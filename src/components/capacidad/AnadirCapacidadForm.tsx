@@ -11,6 +11,7 @@ import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { plazasAsientoDisponiblesRestantes } from "@/lib/capacidad/asientos";
 import type { OfertaCapacidad } from "@/types/database";
 import { DRAFT_KEYS } from "@/lib/form-draft";
+import { textoPrecioEntero } from "@/lib/precio-minimo";
 import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { useFormDraft } from "@/lib/use-form-draft";
 
@@ -168,11 +169,15 @@ export function AnadirCapacidadForm({
         label="Precio neto (€)"
         name="precio_neto"
         type="number"
-        step="0.01"
-        min="0.01"
+        inputMode="numeric"
+        step="1"
+        min="1"
         value={form.precio_neto}
         onChange={(e) =>
-          setForm((prev) => ({ ...prev, precio_neto: e.target.value }))
+          setForm((prev) => ({
+            ...prev,
+            precio_neto: textoPrecioEntero(e.target.value),
+          }))
         }
         required
         hint={

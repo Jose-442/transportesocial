@@ -32,3 +32,21 @@ export function mensajePrecioMinimo(minimo: number, km: number): string {
 export function mensajePrecioPorDebajo(minimo: number): string {
   return `El precio mínimo es ${formatEurEntero(minimo)}.`;
 }
+
+export const MENSAJE_PRECIO_ENTERO =
+  "El precio se escribe en euros enteros, sin céntimos.";
+
+/** Deja solo los euros de delante. 40,5 o 40.5 se quedan en 40. */
+export function textoPrecioEntero(valor: string): string {
+  const entero = valor.split(/[.,]/)[0] ?? "";
+  return entero.replace(/\D/g, "");
+}
+
+/** Euros enteros mayores que cero. Null si hay céntimos o no es un número. */
+export function precioEntero(valor: unknown): number | null {
+  const texto = String(valor ?? "").trim();
+  if (!/^\d+$/.test(texto)) return null;
+  const n = Number(texto);
+  if (!Number.isInteger(n) || n <= 0) return null;
+  return n;
+}

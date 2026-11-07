@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deltaParaVerEntero } from "@/lib/scroll-campo";
+import { deltaParaVerEntero, precioListoParaSaltar } from "@/lib/scroll-campo";
 
 describe("deltaParaVerEntero", () => {
   const margenArriba = 72;
@@ -14,6 +14,16 @@ describe("deltaParaVerEntero", () => {
         limiteAbajo,
       })
     ).toBe(0);
+  });
+
+  it("salta el precio solo al segundo dígito", () => {
+    expect(precioListoParaSaltar("4")).toBe(false);
+    expect(precioListoParaSaltar("40")).toBe(true);
+    expect(precioListoParaSaltar("44")).toBe(true);
+    expect(precioListoParaSaltar("400")).toBe(false);
+    expect(precioListoParaSaltar("4,5")).toBe(false);
+    expect(precioListoParaSaltar("4.5")).toBe(false);
+    expect(precioListoParaSaltar("40,5")).toBe(false);
   });
 
   it("sube el bloque que el menú de abajo tapa", () => {

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   mensajePrecioMinimo,
+  precioEntero,
   precioMinimoDesdeMetros,
   precioVisiblePorDebajo,
+  textoPrecioEntero,
 } from "@/lib/precio-minimo";
 
 describe("precio mínimo por carretera", () => {
@@ -16,6 +18,16 @@ describe("precio mínimo por carretera", () => {
   it("compara el precio visible con el mínimo", () => {
     expect(precioVisiblePorDebajo(16.5, 17)).toBe(true);
     expect(precioVisiblePorDebajo(17, 17)).toBe(false);
+  });
+
+  it("no admite céntimos en el precio", () => {
+    expect(textoPrecioEntero("40")).toBe("40");
+    expect(textoPrecioEntero("40,5")).toBe("40");
+    expect(textoPrecioEntero("40.50")).toBe("40");
+    expect(precioEntero("40")).toBe(40);
+    expect(precioEntero("40,5")).toBeNull();
+    expect(precioEntero("40.5")).toBeNull();
+    expect(precioEntero("0")).toBeNull();
   });
 
   it("escribe el mínimo en euros enteros", () => {

@@ -8,6 +8,7 @@ import { sendNuevaOfertaEmail } from "@/lib/email/nueva-oferta";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { enviarPushNotificacion } from "@/lib/push/send";
 import { publicationFeeAmount } from "@/lib/pricing";
+import { MENSAJE_PRECIO_ENTERO, precioEntero } from "@/lib/precio-minimo";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { getOrCreateProfile } from "@/lib/profile";
@@ -65,11 +66,11 @@ export async function enviarOferta(formData: FormData) {
   const conBulto = incluyeBulto(tipoSolicitud);
   const plazas = numPasajeros(tipoSolicitud);
 
-  const precioNetoBulto = parseFloat(String(formData.get("precio_neto_bulto") ?? ""));
-  const precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza") ?? ""));
+  const precioNetoBulto = precioEntero(formData.get("precio_neto_bulto"));
+  const precioNetoPlaza = precioEntero(formData.get("precio_neto_plaza"));
 
-  if (conBulto && (!precioNetoBulto || precioNetoBulto <= 0)) {
-    return { error: "Indica el precio neto del bulto." };
+  if (conBulto && precioNetoBulto == null) {
+    return { error: MENSAJE_PRECIO_ENTERO };
   }
 
   let plazasOfrecidas = plazas;
@@ -92,14 +93,14 @@ export async function enviarOferta(formData: FormData) {
     }
   }
 
-  if (plazasOfrecidas > 0 && (!precioNetoPlaza || precioNetoPlaza <= 0)) {
-    return { error: "Indica el precio neto por pasajero." };
+  if (plazasOfrecidas > 0 && precioNetoPlaza == null) {
+    return { error: MENSAJE_PRECIO_ENTERO };
   }
 
   const { precio_neto, precio_total, desglose } = calcOfertaTotales(
     tipoSolicitud,
-    conBulto ? precioNetoBulto : 0,
-    plazasOfrecidas > 0 ? precioNetoPlaza : 0,
+    conBulto ? (precioNetoBulto ?? 0) : 0,
+    plazasOfrecidas > 0 ? (precioNetoPlaza ?? 0) : 0,
     plazas > 0 ? plazasOfrecidas : undefined
   );
 

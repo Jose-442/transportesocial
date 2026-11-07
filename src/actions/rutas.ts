@@ -9,6 +9,7 @@ import { etiquetaMunicipio, resolverMunicipioFormulario } from "@/lib/municipios
 import { columnasCoordenadas } from "@/lib/cae-reserva";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { calcPrecioConComision } from "@/lib/pricing";
+import { MENSAJE_PRECIO_ENTERO, precioEntero } from "@/lib/precio-minimo";
 import { errorSiPrecioBajoMinimo } from "@/lib/km-carretera";
 import { getOrCreateProfile } from "@/lib/profile";
 import {
@@ -92,10 +93,11 @@ export async function crearRuta(formData: FormData) {
   let precioNeto = 0;
   let precioPublicado = 0;
   if (conBulto) {
-    precioNeto = parseFloat(String(formData.get("precio_neto")));
-    if (!precioNeto || precioNeto <= 0) {
-      return { error: "Indica un precio neto válido." };
+    const precioBulto = precioEntero(formData.get("precio_neto"));
+    if (precioBulto == null) {
+      return { error: MENSAJE_PRECIO_ENTERO };
     }
+    precioNeto = precioBulto;
     precioPublicado = calcPrecioConComision(precioNeto);
 
     const espacioTamano = String(formData.get("espacio_tamano")).trim();
@@ -125,10 +127,11 @@ export async function crearRuta(formData: FormData) {
   let precioNetoPlaza = 0;
   let precioPublicadoPlaza = 0;
   if (conPasajeros) {
-    precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
-    if (!precioNetoPlaza || precioNetoPlaza <= 0) {
-      return { error: "Indica un precio neto válido por plaza." };
+    const precioPlaza = precioEntero(formData.get("precio_neto_plaza"));
+    if (precioPlaza == null) {
+      return { error: MENSAJE_PRECIO_ENTERO };
     }
+    precioNetoPlaza = precioPlaza;
     precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
   }
 
@@ -416,10 +419,11 @@ export async function actualizarRutaPublicada(
   let precioNeto = 0;
   let precioPublicado = 0;
   if (conBulto) {
-    precioNeto = parseFloat(String(formData.get("precio_neto")));
-    if (!precioNeto || precioNeto <= 0) {
-      return { error: "Indica un precio neto válido." };
+    const precioBulto = precioEntero(formData.get("precio_neto"));
+    if (precioBulto == null) {
+      return { error: MENSAJE_PRECIO_ENTERO };
     }
+    precioNeto = precioBulto;
     precioPublicado = calcPrecioConComision(precioNeto);
 
     const espacioTamano = String(formData.get("espacio_tamano")).trim();
@@ -449,10 +453,11 @@ export async function actualizarRutaPublicada(
   let precioNetoPlaza = 0;
   let precioPublicadoPlaza = 0;
   if (conPasajeros) {
-    precioNetoPlaza = parseFloat(String(formData.get("precio_neto_plaza")));
-    if (!precioNetoPlaza || precioNetoPlaza <= 0) {
-      return { error: "Indica un precio neto válido por plaza." };
+    const precioPlaza = precioEntero(formData.get("precio_neto_plaza"));
+    if (precioPlaza == null) {
+      return { error: MENSAJE_PRECIO_ENTERO };
     }
+    precioNetoPlaza = precioPlaza;
     precioPublicadoPlaza = calcPrecioConComision(precioNetoPlaza);
   }
 

@@ -30,7 +30,11 @@ async function rechazarReservaEntera(reservaId: string): Promise<string | null> 
 }
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
-import { mensajePrecioPorDebajo, precioVisiblePorDebajo } from "@/lib/precio-minimo";
+import {
+  mensajePrecioPorDebajo,
+  precioVisiblePorDebajo,
+  textoPrecioEntero,
+} from "@/lib/precio-minimo";
 import {
   agruparPortesRebajaTramo,
   TEXTO_CANCELAR_TRAMO_SIN_REBAJA,
@@ -223,10 +227,12 @@ function Formulario({
         <Input
           name="precio_neto"
           label="Precio nuevo (neto, sin gastos)"
-          type="text"
-          inputMode="decimal"
+          type="number"
+          inputMode="numeric"
+          min="1"
+          step="1"
           value={netoTexto}
-          onChange={(e) => setNetoTexto(e.target.value)}
+          onChange={(e) => setNetoTexto(textoPrecioEntero(e.target.value))}
           placeholder="Ej. 40"
           required
         />

@@ -17,6 +17,7 @@ import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import {
   mensajePrecioPorDebajo,
   precioVisiblePorDebajo,
+  textoPrecioEntero,
 } from "@/lib/precio-minimo";
 import { usePrecioMinimoCarretera } from "@/components/rutas/usePrecioMinimoCarretera";
 import {
@@ -419,12 +420,16 @@ export function EditarViajePublicado({
                 name="precio_neto"
                 label="PRECIO POR EL PORTE DEL BULTO"
                 type="number"
+                inputMode="numeric"
                 min="1"
-                step="0.01"
+                step="1"
                 required
                 value={form.precioNeto}
                 onChange={(e) =>
-                  setForm((prev) => ({ ...prev, precioNeto: e.target.value }))
+                  setForm((prev) => ({
+                    ...prev,
+                    precioNeto: textoPrecioEntero(e.target.value),
+                  }))
                 }
               />
               {publicado > 0 && (
@@ -480,14 +485,15 @@ export function EditarViajePublicado({
                     name="precio_neto_plaza"
                     label="PRECIO POR ACOMPAÑANTE"
                     type="number"
-                    min="0.01"
-                    step="0.01"
+                    inputMode="numeric"
+                    min="1"
+                    step="1"
                     required
                     value={form.precioNetoPlaza}
                     onChange={(e) =>
                       setForm((prev) => ({
                         ...prev,
-                        precioNetoPlaza: e.target.value,
+                        precioNetoPlaza: textoPrecioEntero(e.target.value),
                       }))
                     }
                   />

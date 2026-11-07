@@ -139,3 +139,8 @@ export function scrollAlSiguienteVacio(
   const fin = marcado ?? botones[botones.length - 1];
   if (fin && fin.getClientRects().length > 0) scrollAlCampo(fin);
 }
+
+/** Salta solo con dos euros enteros (40). Una cifra, tres, o céntimos, no. */
+export function precioListoParaSaltar(valor: string): boolean {
+  return /^\d{2}$/.test(valor.trim());
+}
