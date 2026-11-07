@@ -10,13 +10,9 @@ import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { crearRuta } from "@/actions/rutas";
-import { actualizarIdentidad } from "@/actions/cuenta";
 import { cerrarSesion } from "@/actions/auth";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
-import {
-  documentoIdentidadValido,
-  telefonoEsValido,
-} from "@/lib/identidad";
+import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
@@ -128,11 +124,9 @@ export function NuevaRutaForm({
     documento: identidadInicial.documento_identidad ?? "",
   });
   const { telefono, documento } = identidad;
-  const [guardandoIdentidad, setGuardandoIdentidad] = useState(false);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [errorIdentidad, setErrorIdentidad] = useState<string | null>(null);
-  const [mensajeIdentidad, setMensajeIdentidad] = useState<string | null>(null);
   /** Avisos suaves: índices de parada cuya hora el usuario confirma. */
   const [horasParadaConfirmadas, setHorasParadaConfirmadas] = useState<
     Record<number, boolean>
@@ -244,7 +238,6 @@ export function NuevaRutaForm({
   useEffect(() => {
     if (!error) return;
     if (
-      error === "Pulsa guardar" ||
       error.includes("Datos del vehículo") ||
       error.includes("Espera un momento")
     ) {
@@ -481,51 +474,6 @@ export function NuevaRutaForm({
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [botonArriba]);
 
-  async function guardarIdentidad() {
-    setGuardandoIdentidad(true);
-    setErrorTelefono(null);
-    setErrorDocumento(null);
-    setErrorIdentidad(null);
-    setMensajeIdentidad(null);
-
-    let hayError = false;
-    if (!telefonoEsValido(telefono)) {
-      setErrorTelefono("Por favor, introduce un número de teléfono válido");
-      hayError = true;
-    }
-    if (!documentoIdentidadValido(documento)) {
-      setErrorDocumento(
-        "El DNI o NIE introducido no es válido. Revisa los números y la letra"
-      );
-      hayError = true;
-    }
-    if (hayError) {
-      setGuardandoIdentidad(false);
-      return;
-    }
-
-    const result = await actualizarIdentidad({ telefono, documento });
-    setGuardandoIdentidad(false);
-    if (result.errorTelefono) {
-      setErrorTelefono(result.errorTelefono);
-      return;
-    }
-    if (result.errorDocumento) {
-      setErrorDocumento(result.errorDocumento);
-      return;
-    }
-    if (result.error) {
-      setErrorIdentidad(result.error);
-      return;
-    }
-
-    clearIdentidad();
-    setFaltaIdentidad(false);
-    setMensajeIdentidad("Identidad guardada.");
-    setError("");
-    router.refresh();
-  }
-
   function soltarEnvio() {
     enviando.current = false;
     setLoading(false);
@@ -538,11 +486,6 @@ export function NuevaRutaForm({
     setLoading(true);
     setError("");
 
-    if (faltaIdentidad) {
-      setError("Pulsa guardar");
-      soltarEnvio();
-      return;
-    }
     if (mostrarAvisoVehiculo) {
       setError('Pulsa abajo en: "Datos del vehículo" y complétalos antes de continuar');
       soltarEnvio();
@@ -651,6 +594,24 @@ export function NuevaRutaForm({
     formData.set("precio_neto", form.precio_neto);
     formData.set("acepta_mascotas", form.acepta_mascotas);
 
+    if (faltaIdentidad) {
+      setErrorTelefono(null);
+      setErrorDocumento(null);
+      setErrorIdentidad(null);
+      const guardado = await guardarIdentidadParaPagar(telefono, documento);
+      if (!guardado.ok) {
+        setErrorTelefono(guardado.errorTelefono ?? null);
+        setErrorDocumento(guardado.errorDocumento ?? null);
+        setErrorIdentidad(guardado.error ?? null);
+        setError(
+          guardado.error ??
+            "Revisa el teléfono y el DNI antes de publicar."
+        );
+        soltarEnvio();
+        return;
+      }
+    }
+
     let result: Awaited<ReturnType<typeof crearRuta>>;
     try {
       result = await crearRuta(formData);
@@ -667,6 +628,7 @@ export function NuevaRutaForm({
     }
 
     clearDraft(DRAFT_KEYS.nuevaRuta);
+    clearIdentidad();
     sessionStorage.removeItem("transporte-social-desde-vehiculo");
     router.push(`/rutas/${result.id}`);
     router.refresh();
@@ -690,13 +652,10 @@ export function NuevaRutaForm({
 
   const botonPublicar = (
     <div className="space-y-2">
-      {faltaIdentidad ? (
-        <p className="text-base font-semibold text-red-600">Pulsa guardar</p>
-      ) : null}
       <Button
         type="submit"
         fullWidth
-        disabled={loading || faltaIdentidad || mostrarAvisoVehiculo}
+        disabled={loading || mostrarAvisoVehiculo}
         className="ts-btn-publicar-ruta"
       >
         {loading ? "Publicando…" : "Publicar ruta"}
@@ -1046,7 +1005,9 @@ export function NuevaRutaForm({
       {faltaIdentidad && (
         <div
           className="space-y-3 rounded-xl bg-zinc-50 px-3 py-2.5"
-          {...(error === "Pulsa guardar" ? { "data-campo-error": "" } : {})}
+          {...(errorTelefono || errorDocumento || errorIdentidad
+            ? { "data-campo-error": "" }
+            : {})}
         >
           <p className="text-base text-zinc-600">
             Por normativa legal necesitamos pedirte tu DNI/NIE y tu teléfono
@@ -1086,21 +1047,9 @@ export function NuevaRutaForm({
             }}
             error={errorDocumento ?? undefined}
           />
-          {mensajeIdentidad ? (
-            <p className="text-sm text-emerald-700">{mensajeIdentidad}</p>
-          ) : null}
           {errorIdentidad ? (
             <p className="text-sm text-red-600">{errorIdentidad}</p>
           ) : null}
-          <p className="text-base font-semibold text-red-600">Pulsa guardar</p>
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={guardandoIdentidad}
-            onClick={() => void guardarIdentidad()}
-          >
-            {guardandoIdentidad ? "Guardando…" : "Guardar identidad"}
-          </Button>
         </div>
       )}
       {mostrarAvisoVehiculo && (
