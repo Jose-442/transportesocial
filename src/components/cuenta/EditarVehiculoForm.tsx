@@ -49,7 +49,6 @@ export function EditarVehiculoForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const yaMontado = useRef(false);
 
   useEffect(() => {
     const volver = new URLSearchParams(window.location.search).get("volver");
@@ -59,17 +58,6 @@ export function EditarVehiculoForm({
     }, 300);
     return () => window.clearTimeout(espera);
   }, []);
-
-  useEffect(() => {
-    if (!yaMontado.current) {
-      yaMontado.current = true;
-      return;
-    }
-    const espera = window.setTimeout(() => {
-      scrollAlSiguienteVacio(formRef.current);
-    }, 400);
-    return () => window.clearTimeout(espera);
-  }, [tipo, marca, modelo, matricula, anio, distintivo]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -111,7 +99,12 @@ export function EditarVehiculoForm({
   }
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} className="space-y-3">
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      className="space-y-3"
+      data-salto-solo-desplegable=""
+    >
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         <Select
           label="Tipo de vehículo"

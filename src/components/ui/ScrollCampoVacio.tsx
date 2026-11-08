@@ -29,6 +29,12 @@ function emailCompleto(valor: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor.trim());
 }
 
+/** Formularios en los que el cursor solo salta al elegir un desplegable. */
+function noSaltarDesdeTexto(campo: HTMLElement): boolean {
+  if (!campo.closest("[data-salto-solo-desplegable]")) return false;
+  return !(campo.querySelector("select") instanceof HTMLSelectElement);
+}
+
 /** Email ya completo: hay que saltar aunque el cursor siga ahí. */
 function emailListoParaSaltar(campo: HTMLElement): boolean {
   const input = campo.querySelector("input");
@@ -43,6 +49,7 @@ export function ScrollCampoVacio() {
   useEffect(() => {
     function alRellenar(campo: HTMLElement, ponerCursor = false) {
       if (escribiendo(campo) && !emailListoParaSaltar(campo)) return;
+      if (ponerCursor && noSaltarDesdeTexto(campo)) return;
       const form = campo.closest("form");
       scrollAlSiguienteVacio(form ?? document, ponerCursor ? campo : null, ponerCursor);
     }
@@ -140,6 +147,7 @@ export function ScrollCampoVacio() {
       if (!esCaja || el.getAttribute("role") === "combobox") return;
       const campo = el.closest("[data-campo]");
       if (!(campo instanceof HTMLElement)) return;
+      if (noSaltarDesdeTexto(campo)) return;
       window.clearTimeout(esperaTecleo);
       esperaTecleo = window.setTimeout(() => {
         const valor = el.value.trim();
@@ -175,6 +183,7 @@ export function ScrollCampoVacio() {
       if (!(campo instanceof HTMLElement)) return;
       window.setTimeout(() => {
         if (campo.hasAttribute("data-campo-vacio")) return;
+        if (noSaltarDesdeTexto(campo)) return;
         alRellenar(campo);
       }, 160);
     }
