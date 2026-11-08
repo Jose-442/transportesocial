@@ -1,5 +1,9 @@
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { tramosPorCarretera } from "@/lib/km-carretera";
+import {
+  etiquetaMunicipio,
+  resolverMunicipio,
+} from "@/lib/municipios-espana";
 import type { ParadaFormulario } from "@/lib/rutas/paradas";
 
 /** Burrada: mucho menos de la mitad del tiempo normal (no se puede publicar). */
@@ -96,6 +100,96 @@ function minutosEntreIso(desdeIso: string, hastaIso: string): number {
   return Math.round(
     (new Date(hastaIso).getTime() - new Date(desdeIso).getTime()) / 60000
   );
+}
+
+/** Minutos desde medianoche. Null si la hora no es HH:mm. */
+function minutosDeReloj(hora: string): number | null {
+  const coincidencia = /^(\d{2}):(\d{2})$/.exec(hora.trim());
+  if (!coincidencia) return null;
+  const horas = Number(coincidencia[1]);
+  const minutos = Number(coincidencia[2]);
+  if (horas > 23 || minutos > 59) return null;
+  return horas * 60 + minutos;
+}
+
+function nombrePunto(texto: string, siVacio: string): string {
+  const limpio = texto.trim();
+  if (!limpio) return siVacio;
+  const municipio = resolverMunicipio(limpio, { incluirFrontera: true });
+  return municipio ? etiquetaMunicipio(municipio) : limpio;
+}
+
+export function mensajeHoraNoPosterior(opts: {
+  anterior: string;
+  actual: string;
+  misma: boolean;
+}): string {
+  const puesto = opts.misma
+    ? "has puesto la misma hora"
+    : "la hora va hacia atrás";
+  return (
+    `Entre ${opts.anterior} y ${opts.actual} ${puesto}. ` +
+    `Esa hora parece imposible: corrígela, por favor.`
+  );
+}
+
+/**
+ * La parada tiene que ir después de la salida o de la parada anterior.
+ * No espera al cálculo por carretera: la misma hora ya es un error.
+ */
+export function avisosHoraNoPosterior(opts: {
+  origen: string;
+  horaSalida: string;
+  paradas: { municipio: string; hora: string }[];
+}): AvisoTiempoParada[] {
+  const avisos: AvisoTiempoParada[] = [];
+  let anteriorMin = minutosDeReloj(opts.horaSalida);
+  let anteriorNombre =
+    anteriorMin == null ? "" : nombrePunto(opts.origen, "la salida");
+
+  for (let i = 0; i < opts.paradas.length; i++) {
+    const parada = opts.paradas[i];
+    const municipio = parada.municipio.trim();
+    const hora = parada.hora.trim();
+    if (!municipio || !hora) continue;
+    const minutos = minutosDeReloj(hora);
+    if (minutos == null) continue;
+    const nombre = nombrePunto(municipio, `la parada ${i + 1}`);
+    if (anteriorMin != null && anteriorNombre && minutos <= anteriorMin) {
+      avisos.push({
+        aviso: mensajeHoraNoPosterior({
+          anterior: anteriorNombre,
+          actual: nombre,
+          misma: minutos === anteriorMin,
+        }),
+        paradaIndex: i,
+        nivel: "duro",
+      });
+    }
+    anteriorMin = minutos;
+    anteriorNombre = nombre;
+  }
+
+  return avisos;
+}
+
+/**
+ * El aviso de reloj sale al momento. Si la carretera también marca esa
+ * parada, se queda el de carretera (dice cuánto se tarda). Un aviso duro
+ * de reloj no se sustituye por uno amable.
+ */
+export function juntarAvisosParadas(
+  deReloj: AvisoTiempoParada[],
+  deCarretera: AvisoTiempoParada[]
+): AvisoTiempoParada[] {
+  const mapa = new Map<number, AvisoTiempoParada>();
+  for (const aviso of deReloj) mapa.set(aviso.paradaIndex, aviso);
+  for (const aviso of deCarretera) {
+    const ya = mapa.get(aviso.paradaIndex);
+    if (ya?.nivel === "duro" && aviso.nivel !== "duro") continue;
+    mapa.set(aviso.paradaIndex, aviso);
+  }
+  return [...mapa.values()].sort((a, b) => a.paradaIndex - b.paradaIndex);
 }
 
 export type AvisoTiempoParada = {

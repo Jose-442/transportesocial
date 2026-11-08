@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { MunicipioAutocomplete } from "@/components/ui/MunicipioAutocomplete";
@@ -47,6 +47,10 @@ import {
   MAX_PARADAS_INTERMEDIAS,
   prepararParadasParaGuardar,
 } from "@/lib/rutas/paradas";
+import {
+  avisosHoraNoPosterior,
+  juntarAvisosParadas,
+} from "@/lib/rutas/tiempos-paradas";
 
 type RutaFieldKey =
   | "origen"
@@ -203,14 +207,26 @@ export function NuevaRutaForm({
     horaSalida: form.hora_salida,
     paradas: form.paradas,
   });
-  const avisoPorParada = new Map(
-    avisoTiempos.avisos.map((a) => [a.paradaIndex, a])
+  const avisosParada = useMemo(
+    () =>
+      juntarAvisosParadas(
+        avisosHoraNoPosterior({
+          origen: form.origen,
+          horaSalida: form.hora_salida,
+          paradas: form.paradas,
+        }),
+        avisoTiempos.avisos
+      ),
+    [form.origen, form.hora_salida, form.paradas, avisoTiempos.avisos]
   );
-  const avisoDuro = avisoTiempos.avisos.find((a) => a.nivel === "duro");
-  const suavesSinConfirmar = avisoTiempos.avisos.filter(
+  const avisoPorParada = new Map(
+    avisosParada.map((a) => [a.paradaIndex, a])
+  );
+  const avisoDuro = avisosParada.find((a) => a.nivel === "duro");
+  const suavesSinConfirmar = avisosParada.filter(
     (a) => a.nivel === "suave" && !horasParadaConfirmadas[a.paradaIndex]
   );
-  const avisosSuavesKey = avisoTiempos.avisos
+  const avisosSuavesKey = avisosParada
     .filter((a) => a.nivel === "suave")
     .map((a) => a.paradaIndex)
     .join(",");
