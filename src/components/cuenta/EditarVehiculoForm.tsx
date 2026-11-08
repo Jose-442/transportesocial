@@ -152,6 +152,7 @@ export function EditarVehiculoForm({
           value={anio}
           onChange={(e) => setForm((prev) => ({ ...prev, anio: e.target.value }))}
           options={VEHICULO_ANIO_OPTIONS}
+          listaDebajo
           required
         />
         <Select
@@ -161,6 +162,7 @@ export function EditarVehiculoForm({
             setForm((prev) => ({ ...prev, distintivo: e.target.value }))
           }
           options={DISTINTIVO_AMBIENTAL_OPTIONS}
+          listaDebajo
           required
         />
       </div>
