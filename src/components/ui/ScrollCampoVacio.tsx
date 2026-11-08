@@ -55,7 +55,11 @@ export function ScrollCampoVacio() {
     }
 
     function alError(el: HTMLElement) {
-      scrollAlCampo(el);
+      const form = el.closest("form");
+      const aviso = form?.querySelector("[data-aviso-publicar]");
+      // El aviso de publicar va delante. Si se salta al campo, ese aviso
+      // se queda arriba y desaparece de la pantalla.
+      scrollAlCampo(aviso instanceof HTMLElement ? aviso : el);
     }
 
     let esperaRelleno = 0;

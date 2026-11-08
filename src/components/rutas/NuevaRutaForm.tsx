@@ -14,7 +14,7 @@ import { cerrarSesion } from "@/actions/auth";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
-import { scrollAlSiguienteVacio } from "@/lib/scroll-campo";
+import { scrollAlCampo, scrollAlSiguienteVacio } from "@/lib/scroll-campo";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
@@ -119,6 +119,7 @@ export function NuevaRutaForm({
   const uidRef = useRef("");
   const formRef = useRef<HTMLFormElement>(null);
   const enviando = useRef(false);
+  const verAvisoPublicar = useRef(false);
   const [faltaIdentidad, setFaltaIdentidad] = useState(mostrarAvisoIdentidad);
   const {
     form: identidad,
@@ -414,8 +415,16 @@ export function NuevaRutaForm({
     } else if (!resolverMunicipio(draft.destino, { incluirFrontera: true })) {
       errors.destino = "Selecciona un municipio válido en destino.";
     }
-    if (!draft.fecha_salida) errors.fecha_salida = "Indica la fecha de salida.";
-    if (!draft.hora_salida) errors.hora_salida = "Indica la hora de salida.";
+    if (!draft.fecha_salida) {
+      errors.fecha_salida = "Indica la fecha de salida.";
+    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.fecha_salida)) {
+      errors.fecha_salida = "Indica también el día.";
+    }
+    if (!draft.hora_salida) {
+      errors.hora_salida = "Indica la hora de salida.";
+    } else if (!/^\d{2}:\d{2}$/.test(draft.hora_salida)) {
+      errors.hora_salida = "Hora no válida.";
+    }
     if (!draft.tipo_oferta) {
       errors.tipo_oferta = "Marca si ofreces bulto, pasajeros o las dos cosas.";
     }
@@ -503,9 +512,17 @@ export function NuevaRutaForm({
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [botonArriba]);
 
+  useEffect(() => {
+    if (!verAvisoPublicar.current || !error) return;
+    verAvisoPublicar.current = false;
+    const aviso = formRef.current?.querySelector("[data-aviso-publicar]");
+    if (aviso instanceof HTMLElement) scrollAlCampo(aviso);
+  }, [error, fieldErrors]);
+
   function soltarEnvio() {
     enviando.current = false;
     setLoading(false);
+    verAvisoPublicar.current = true;
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -577,10 +594,18 @@ export function NuevaRutaForm({
       form.hora_salida
     );
     if (!fechaLlegadaPrevista) {
-      setFieldErrors({
-        fecha_salida: "Fecha no válida.",
-        hora_salida: "Hora no válida.",
-      });
+      const erroresFecha: Partial<Record<RutaFieldKey, string>> = {};
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(form.fecha_salida)) {
+        erroresFecha.fecha_salida = "Indica también el día.";
+      }
+      if (!/^\d{2}:\d{2}$/.test(form.hora_salida)) {
+        erroresFecha.hora_salida = "Hora no válida.";
+      }
+      if (Object.keys(erroresFecha).length === 0) {
+        erroresFecha.fecha_salida = "Fecha no válida.";
+        erroresFecha.hora_salida = "Hora no válida.";
+      }
+      setFieldErrors(erroresFecha);
       setError("Completa los campos marcados en rojo.");
       soltarEnvio();
       return;
@@ -711,12 +736,15 @@ export function NuevaRutaForm({
       </h1>
       {botonArriba && (
         <div className="space-y-3">
+          {botonPublicar}
           {mostrarError && (
-            <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p
+              data-aviso-publicar=""
+              className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700"
+            >
               {error}
             </p>
           )}
-          {botonPublicar}
         </div>
       )}
       <Card className="space-y-4">
@@ -1027,7 +1055,10 @@ export function NuevaRutaForm({
       </fieldset>
 
       {mostrarError && !botonArriba && (
-        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p
+          data-aviso-publicar=""
+          className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700"
+        >
           {error}
         </p>
       )}
