@@ -49,6 +49,7 @@ import {
 } from "@/lib/rutas/paradas";
 import {
   avisosHoraNoPosterior,
+  avisosTiempoAprox,
   juntarAvisosParadas,
 } from "@/lib/rutas/tiempos-paradas";
 
@@ -215,9 +216,21 @@ export function NuevaRutaForm({
           horaSalida: form.hora_salida,
           paradas: form.paradas,
         }),
-        avisoTiempos.avisos
+        avisoTiempos.ok
+          ? avisoTiempos.avisos
+          : avisosTiempoAprox({
+              origen: form.origen,
+              horaSalida: form.hora_salida,
+              paradas: form.paradas,
+            })
       ),
-    [form.origen, form.hora_salida, form.paradas, avisoTiempos.avisos]
+    [
+      form.origen,
+      form.hora_salida,
+      form.paradas,
+      avisoTiempos.ok,
+      avisoTiempos.avisos,
+    ]
   );
   const avisoPorParada = new Map(
     avisosParada.map((a) => [a.paradaIndex, a])

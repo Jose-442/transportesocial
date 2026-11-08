@@ -174,14 +174,34 @@ export async function crearRuta(formData: FormData) {
   if (!paradasPrep.ok) return { error: paradasPrep.error };
 
   if (paradasPrep.paradas.length > 0) {
-    const { avisoTiemposParadas } = await import("@/lib/rutas/tiempos-paradas");
-    const avisosTiempo = await avisoTiemposParadas({
+    const {
+      avisoTiemposParadas,
+      avisosHoraNoPosterior,
+      avisosTiempoAprox,
+      juntarAvisosParadas,
+    } = await import("@/lib/rutas/tiempos-paradas");
+    const paradasForm = parseParadasJson(formData.get("paradas"));
+    const resultadoTiempo = await avisoTiemposParadas({
       origen,
       destino,
       fechaSalida,
       horaSalida: horaSalidaForm,
-      paradas: parseParadasJson(formData.get("paradas")),
+      paradas: paradasForm,
     });
+    const avisosTiempo = juntarAvisosParadas(
+      avisosHoraNoPosterior({
+        origen,
+        horaSalida: horaSalidaForm,
+        paradas: paradasForm,
+      }),
+      resultadoTiempo.ok
+        ? resultadoTiempo.avisos
+        : avisosTiempoAprox({
+            origen,
+            horaSalida: horaSalidaForm,
+            paradas: paradasForm,
+          })
+    );
     // Solo bloquea burradas; el aviso suave se confirma en el formulario.
     const duro = avisosTiempo.find((a) => a.nivel === "duro");
     if (duro) return { error: duro.aviso };

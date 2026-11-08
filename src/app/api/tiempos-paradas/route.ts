@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Datos no válidos." }, { status: 400 });
   }
 
-  const avisos = await avisoTiemposParadas({
+  const resultado = await avisoTiemposParadas({
     origen: String(body.origen ?? ""),
     destino: String(body.destino ?? ""),
     fechaSalida: String(body.fechaSalida ?? ""),
@@ -28,5 +28,5 @@ export async function POST(request: Request) {
     })),
   });
 
-  return NextResponse.json({ avisos });
+  return NextResponse.json(resultado);
 }

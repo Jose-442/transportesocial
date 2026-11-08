@@ -1,6 +1,8 @@
 import { combineDateAndTime } from "@/lib/datetime-form";
 import { tramosPorCarretera } from "@/lib/km-carretera";
 import {
+  coordenadasMunicipio,
+  distanciaKm,
   etiquetaMunicipio,
   resolverMunicipio,
 } from "@/lib/municipios-espana";
@@ -173,6 +175,84 @@ export function avisosHoraNoPosterior(opts: {
   return avisos;
 }
 
+/** Recta a 100 km/h: solo para el rojo al momento, sin esperar al mapa. */
+const KMH_RECTA = 100;
+
+function minutosEnCocheAprox(desde: string, hasta: string): number | null {
+  const a = resolverMunicipio(desde, { incluirFrontera: true });
+  const b = resolverMunicipio(hasta, { incluirFrontera: true });
+  if (!a || !b) return null;
+  const ca = coordenadasMunicipio(a);
+  const cb = coordenadasMunicipio(b);
+  if (!ca || !cb) return null;
+  const km = distanciaKm(ca, cb);
+  if (!Number.isFinite(km) || km < 1) return null;
+  return Math.max(1, Math.round((km / KMH_RECTA) * 60));
+}
+
+function mensajeTiempoParadaImposible(opts: {
+  origen: string;
+  destino: string;
+  minutosUsuario: number;
+}): string {
+  return (
+    `Entre ${opts.origen} y ${opts.destino} has puesto ${textoTiempoPuesto(opts.minutosUsuario)}. ` +
+    `Esa hora parece imposible: corrígela, por favor.`
+  );
+}
+
+/**
+ * Rojo al momento si el hueco es imposible en línea recta.
+ * No avisa el caso «un poco justo»: ese espera al tiempo real en coche.
+ */
+export function avisosTiempoAprox(opts: {
+  origen: string;
+  horaSalida: string;
+  paradas: { municipio: string; hora: string }[];
+}): AvisoTiempoParada[] {
+  const avisos: AvisoTiempoParada[] = [];
+  let anteriorTexto = opts.origen.trim();
+  let anteriorMin = minutosDeReloj(opts.horaSalida);
+  let anteriorNombre =
+    anteriorMin == null || !anteriorTexto
+      ? ""
+      : nombrePunto(anteriorTexto, "la salida");
+
+  for (let i = 0; i < opts.paradas.length; i++) {
+    const parada = opts.paradas[i];
+    const municipio = parada.municipio.trim();
+    const hora = parada.hora.trim();
+    if (!municipio || !hora) continue;
+    const minutos = minutosDeReloj(hora);
+    if (minutos == null) continue;
+    const nombre = nombrePunto(municipio, `la parada ${i + 1}`);
+    if (anteriorMin != null && anteriorNombre && anteriorTexto) {
+      const puestos = minutos - anteriorMin;
+      const estimados = minutosEnCocheAprox(anteriorTexto, municipio);
+      if (
+        puestos > 0 &&
+        estimados != null &&
+        tiempoTramoEsBurrada(puestos, estimados)
+      ) {
+        avisos.push({
+          aviso: mensajeTiempoParadaImposible({
+            origen: anteriorNombre,
+            destino: nombre,
+            minutosUsuario: puestos,
+          }),
+          paradaIndex: i,
+          nivel: "duro",
+        });
+      }
+    }
+    anteriorTexto = municipio;
+    anteriorMin = minutos;
+    anteriorNombre = nombre;
+  }
+
+  return avisos;
+}
+
 /**
  * El aviso de reloj sale al momento. Si la carretera también marca esa
  * parada, se queda el de carretera (dice cuánto se tarda). Un aviso duro
@@ -204,22 +284,28 @@ export type AvisoTiempoParada = {
  * Compara horas puestas (salida → paradas) con tiempo estimado por carretera.
  * Devuelve un aviso por cada tramo problemático (cada uno bajo su parada).
  */
+export type ResultadoAvisosTiempo = {
+  /** False si no se ha podido medir el tiempo en coche. */
+  ok: boolean;
+  avisos: AvisoTiempoParada[];
+};
+
 export async function avisoTiemposParadas(opts: {
   origen: string;
   destino: string;
   fechaSalida: string;
   horaSalida: string;
   paradas: ParadaFormulario[];
-}): Promise<AvisoTiempoParada[]> {
+}): Promise<ResultadoAvisosTiempo> {
   const indicesConDatos: number[] = [];
   for (let i = 0; i < opts.paradas.length; i++) {
     const p = opts.paradas[i];
     if (p.municipio.trim() && p.hora.trim()) indicesConDatos.push(i);
   }
-  if (indicesConDatos.length === 0) return [];
+  if (indicesConDatos.length === 0) return { ok: true, avisos: [] };
 
   const salidaIso = combineDateAndTime(opts.fechaSalida, opts.horaSalida);
-  if (!salidaIso) return [];
+  if (!salidaIso) return { ok: false, avisos: [] };
 
   const paradasConDatos = indicesConDatos.map((i) => opts.paradas[i]);
   const puntos = [
@@ -228,7 +314,9 @@ export async function avisoTiemposParadas(opts: {
     opts.destino,
   ];
   const ruta = await tramosPorCarretera(puntos);
-  if (!ruta.ok) return [];
+  if (!ruta.ok || ruta.tramos.length < paradasConDatos.length) {
+    return { ok: false, avisos: [] };
+  }
 
   const horasIso = [
     salidaIso,
@@ -236,7 +324,7 @@ export async function avisoTiemposParadas(opts: {
       combineDateAndTime(opts.fechaSalida, p.hora)
     ),
   ];
-  if (horasIso.some((h) => !h)) return [];
+  if (horasIso.some((h) => !h)) return { ok: false, avisos: [] };
 
   const avisos: AvisoTiempoParada[] = [];
 
@@ -269,5 +357,5 @@ export async function avisoTiemposParadas(opts: {
     }
   }
 
-  return avisos;
+  return { ok: true, avisos };
 }

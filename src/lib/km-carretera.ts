@@ -210,7 +210,26 @@ export async function tramosPorCarretera(
     resueltos.push({ etiqueta: punto.etiqueta, coords: punto.coords });
   }
 
-  const ruta = await rutaOsrm(resueltos.map((p) => p.coords));
+  const coords = resueltos.map((p) => p.coords);
+  let ruta = await rutaOsrm(coords);
+  if (!ruta.ok || ruta.legs.length !== resueltos.length - 1) {
+    const pares = await Promise.all(
+      resueltos.slice(0, -1).map(async (_, i) => {
+        const uno = await rutaOsrm([resueltos[i].coords, resueltos[i + 1].coords]);
+        if (!uno.ok) return null;
+        return (
+          uno.legs[0] ?? { metros: uno.metros, segundos: uno.segundos }
+        );
+      })
+    );
+    if (pares.some((p) => !p)) return { ok: false, error: ERROR_KM };
+    ruta = {
+      ok: true,
+      metros: pares.reduce((suma, p) => suma + p!.metros, 0),
+      segundos: pares.reduce((suma, p) => suma + p!.segundos, 0),
+      legs: pares as { metros: number; segundos: number }[],
+    };
+  }
   if (!ruta.ok) return { ok: false, error: ERROR_KM };
 
   const tramos: TramoCarretera[] = ruta.legs.map((leg, i) => ({

@@ -15,9 +15,12 @@ export function useAvisoTiemposParadas(opts: {
 }): {
   avisos: AvisoTiempoParada[];
   cargando: boolean;
+  /** True cuando el tiempo en coche ha vuelto bien. */
+  ok: boolean;
 } {
   const [avisos, setAvisos] = useState<AvisoTiempoParada[]>([]);
   const [cargando, setCargando] = useState(false);
+  const [ok, setOk] = useState(false);
   const activo = opts.activo !== false;
   const paradasKey = JSON.stringify(
     opts.paradas.map((p) => ({
@@ -30,6 +33,7 @@ export function useAvisoTiemposParadas(opts: {
     if (!activo) {
       setAvisos([]);
       setCargando(false);
+      setOk(false);
       return;
     }
     const puntos = etiquetasDeViaje(opts.origen, opts.destino);
@@ -43,11 +47,13 @@ export function useAvisoTiemposParadas(opts: {
     ) {
       setAvisos([]);
       setCargando(false);
+      setOk(false);
       return;
     }
 
     let cancelado = false;
     setCargando(true);
+    setOk(false);
     const espera = window.setTimeout(() => {
       void fetch("/api/tiempos-paradas", {
         method: "POST",
@@ -66,14 +72,18 @@ export function useAvisoTiemposParadas(opts: {
         .then(async (respuesta) => {
           const json = (await respuesta.json()) as {
             avisos?: AvisoTiempoParada[];
+            ok?: boolean;
           };
           if (cancelado) return;
-          setAvisos(Array.isArray(json.avisos) ? json.avisos : []);
+          const lista = Array.isArray(json.avisos) ? json.avisos : [];
+          setAvisos(lista);
+          setOk(respuesta.ok && json.ok !== false);
           setCargando(false);
         })
         .catch(() => {
           if (cancelado) return;
           setAvisos([]);
+          setOk(false);
           setCargando(false);
         });
     }, 500);
@@ -91,5 +101,5 @@ export function useAvisoTiemposParadas(opts: {
     paradasKey,
   ]);
 
-  return { avisos, cargando };
+  return { avisos, cargando, ok };
 }

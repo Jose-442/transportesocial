@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   avisosHoraNoPosterior,
+  avisosTiempoAprox,
   formatDuracionAprox,
   juntarAvisosParadas,
   mensajeTiempoParadaSuave,
@@ -92,6 +93,37 @@ describe("avisosHoraNoPosterior", () => {
       ],
     });
     expect(avisos).toEqual([]);
+  });
+});
+
+describe("avisosTiempoAprox", () => {
+  it("marca en rojo un cuarto de hora de Zaragoza a Lleida", () => {
+    const avisos = avisosTiempoAprox({
+      origen: "Madrid (Madrid)",
+      horaSalida: "08:00",
+      paradas: [
+        { municipio: "Zaragoza (Zaragoza)", hora: "10:00" },
+        { municipio: "Lleida (Lleida)", hora: "10:15" },
+      ],
+    });
+    const lleida = avisos.find((a) => a.paradaIndex === 1);
+    expect(lleida?.nivel).toBe("duro");
+    expect(lleida?.aviso).toContain("Zaragoza (Zaragoza)");
+    expect(lleida?.aviso).toContain("Lleida (Lleida)");
+    expect(lleida?.aviso).toContain("15 minutos");
+    expect(lleida?.aviso).toContain("parece imposible");
+  });
+
+  it("no marca en rojo un hueco holgado", () => {
+    const avisos = avisosTiempoAprox({
+      origen: "Madrid (Madrid)",
+      horaSalida: "08:00",
+      paradas: [
+        { municipio: "Zaragoza (Zaragoza)", hora: "12:00" },
+        { municipio: "Lleida (Lleida)", hora: "14:30" },
+      ],
+    });
+    expect(avisos.filter((a) => a.nivel === "duro")).toEqual([]);
   });
 });
 
