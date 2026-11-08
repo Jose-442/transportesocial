@@ -472,7 +472,9 @@ export function TimePickerInput({
         </label>
       </div>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && (
+        <p className="text-2xl font-medium leading-snug text-red-600">{error}</p>
+      )}
     </fieldset>
   );
 }
