@@ -1057,7 +1057,7 @@ export function NuevaRutaForm({
           <p className="text-base text-zinc-600">
             Para publicar una ruta necesitas indicar los datos de tu vehículo
           </p>
-          <p className="mt-2 text-base text-zinc-600">
+          <p className="mt-2 text-base text-emerald-800">
             Completar también los datos de tu perfil da confianza a tu viaje.
             (Opcional)
           </p>
