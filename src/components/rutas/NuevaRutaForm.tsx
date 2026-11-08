@@ -809,7 +809,7 @@ export function NuevaRutaForm({
         ))}
         {form.paradas.length < MAX_PARADAS_INTERMEDIAS ? (
           <Button type="button" variant="secondary" onClick={anadirParada}>
-            Añadir parada
+            {form.paradas.length === 0 ? "Añadir parada" : "Añadir otra parada"}
           </Button>
         ) : (
           <p className="text-xs text-zinc-500">
