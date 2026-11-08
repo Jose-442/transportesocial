@@ -1055,7 +1055,11 @@ export function NuevaRutaForm({
       {mostrarAvisoVehiculo && (
         <div className="rounded-xl bg-zinc-50 px-3 py-2.5 text-base text-zinc-600">
           <p className="text-base text-zinc-600">
-            Para publicar una ruta necesitas indicar los datos de tu vehículo
+            Para publicar una ruta necesitas indicar los datos de tu vehículo.
+            (Opcional)
+          </p>
+          <p className="mt-2 text-base text-zinc-600">
+            Completar también los datos de tu perfil da confianza a tu viaje.
           </p>
           <ButtonLink
             href={cuentaHrefConVolver("/rutas/nueva")}
@@ -1066,9 +1070,6 @@ export function NuevaRutaForm({
           >
             Datos del vehículo
           </ButtonLink>
-          <p className="mt-2 text-base text-zinc-600">
-            Completar también los datos de tu perfil da confianza a tu viaje.
-          </p>
         </div>
       )}
       {!botonArriba && <div data-scroll-fin="">{botonPublicar}</div>}
