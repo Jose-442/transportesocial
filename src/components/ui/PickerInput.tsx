@@ -16,6 +16,7 @@ import {
   parseTime,
   resolveYearForMonthDay,
 } from "@/lib/datetime-form";
+import { scrollAlCampo } from "@/lib/scroll-campo";
 
 type FieldProps = {
   label: string;
@@ -120,6 +121,32 @@ const GridSelectField = forwardRef<
   useEffect(() => {
     if (disabled) setOpen(false);
   }, [disabled]);
+
+  useEffect(() => {
+    if (!open || !abrirAbajo) return;
+    const lista = boxRef.current?.querySelector("[role='listbox']");
+    if (!(lista instanceof HTMLElement)) return;
+    const menu = document.querySelector("nav.fixed.bottom-0");
+    const menuAlto =
+      menu instanceof HTMLElement
+        ? Math.ceil(menu.getBoundingClientRect().height)
+        : 140;
+    const limite = window.innerHeight - menuAlto - 20;
+    const falta = Math.ceil(lista.getBoundingClientRect().bottom - limite);
+    const maximo = document.documentElement.scrollHeight - window.innerHeight;
+    const margen = Math.max(0, falta - (maximo - window.scrollY));
+    let hueco: HTMLDivElement | null = null;
+    if (margen > 8) {
+      hueco = document.createElement("div");
+      hueco.setAttribute("aria-hidden", "true");
+      hueco.style.height = `${margen + 12}px`;
+      document.body.appendChild(hueco);
+    }
+    scrollAlCampo(lista);
+    return () => {
+      hueco?.remove();
+    };
+  }, [open, abrirAbajo]);
 
   useImperativeHandle(ref, () => ({
     abrir() {
