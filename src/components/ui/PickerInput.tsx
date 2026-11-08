@@ -374,6 +374,7 @@ export function DatePickerInput({
             listLabel="Mes"
             placeholder="Mes"
             columns={3}
+            abrirAbajo
           />
         </label>
         <label className="block space-y-1">
@@ -390,6 +391,7 @@ export function DatePickerInput({
             placeholder="Día"
             disabledPlaceholder="Elige mes primero"
             columns={7}
+            abrirAbajo
           />
         </label>
       </div>
