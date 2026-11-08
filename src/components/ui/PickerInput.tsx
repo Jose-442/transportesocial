@@ -72,6 +72,7 @@ const GridSelectField = forwardRef<
     placeholder: string;
     disabledPlaceholder?: string;
     columns?: 3 | 4 | 6 | 7;
+    abrirAbajo?: boolean;
   }
 >(function GridSelectField(
   {
@@ -85,6 +86,7 @@ const GridSelectField = forwardRef<
     placeholder,
     disabledPlaceholder,
     columns = 4,
+    abrirAbajo = false,
   },
   ref
 ) {
@@ -188,11 +190,15 @@ const GridSelectField = forwardRef<
           <div
             role="listbox"
             aria-label={listLabel}
-            className={
-              columns === 3
-                ? "absolute bottom-full left-0 z-[60] mb-1 w-[24rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
-                : "absolute bottom-full right-0 z-[60] mb-1 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg"
-            }
+            className={[
+              "absolute z-[60] max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg",
+              columns === 3 ? "w-[24rem]" : "w-[19rem]",
+              abrirAbajo
+                ? "top-full left-0 mt-1"
+                : columns === 3
+                  ? "bottom-full left-0 mb-1"
+                  : "bottom-full right-0 mb-1",
+            ].join(" ")}
           >
             <div
               className={
@@ -416,6 +422,7 @@ export function TimePickerInput({
             listLabel="Hora"
             placeholder="Elige hora"
             columns={6}
+            abrirAbajo
           />
         </label>
         <label className="block space-y-1">
