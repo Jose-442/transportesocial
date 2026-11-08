@@ -1,83 +1,95 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
-import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/Input";
-import { actualizarIdentidad } from "@/actions/cuenta";
 import { DRAFT_KEYS } from "@/lib/form-draft";
+import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
 import { useFormDraft } from "@/lib/use-form-draft";
 import {
   documentoIdentidadValido,
+  normalizarDocumentoIdentidad,
+  normalizarTelefonoEs,
   telefonoEsValido,
 } from "@/lib/identidad";
 import type { Profile } from "@/types/database";
+
+const ERROR_TELEFONO = "Por favor, introduce un número de teléfono válido";
+const ERROR_DOCUMENTO =
+  "El DNI o NIE introducido no es válido. Revisa los números y la letra";
+
+function telefonoAcabado(raw: string): boolean {
+  return raw.replace(/\D/g, "").length >= 9;
+}
+
+function documentoAcabado(raw: string): boolean {
+  return raw.replace(/[\s.-]/g, "").length >= 9;
+}
 
 export function EditarIdentidadForm({
   inicial,
 }: {
   inicial: Pick<Profile, "phone" | "documento_identidad">;
 }) {
-  const router = useRouter();
-  const { form, setForm, clear } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
+  const { form, setForm } = useFormDraft(DRAFT_KEYS.editarIdentidad, {
     telefono: inicial.phone ?? "",
     documento: inicial.documento_identidad ?? "",
   });
   const { telefono, documento } = form;
-  const [loading, setLoading] = useState(false);
-  const [mensaje, setMensaje] = useState<string | null>(null);
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null);
+  const guardado = useRef({
+    telefono: normalizarTelefonoEs(inicial.phone ?? "") ?? "",
+    documento:
+      normalizarDocumentoIdentidad(inicial.documento_identidad ?? "") ?? "",
+  });
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setMensaje(null);
-    setErrorTelefono(null);
-    setErrorDocumento(null);
-    setErrorGeneral(null);
+  useEffect(() => {
+    const telOk = telefonoEsValido(telefono);
+    const docOk = documentoIdentidadValido(documento);
 
-    let hayError = false;
-    if (!telefonoEsValido(telefono)) {
-      setErrorTelefono("Por favor, introduce un número de teléfono válido");
-      hayError = true;
-    }
-    if (!documentoIdentidadValido(documento)) {
-      setErrorDocumento(
-        "El DNI o NIE introducido no es válido. Revisa los números y la letra"
-      );
-      hayError = true;
-    }
-    if (hayError) {
-      setLoading(false);
+    if (telefonoAcabado(telefono) && !telOk) setErrorTelefono(ERROR_TELEFONO);
+    else if (telOk) setErrorTelefono(null);
+
+    if (documentoAcabado(documento) && !docOk) setErrorDocumento(ERROR_DOCUMENTO);
+    else if (docOk) setErrorDocumento(null);
+
+    if (!telOk || !docOk) return;
+
+    const tel = normalizarTelefonoEs(telefono);
+    const doc = normalizarDocumentoIdentidad(documento);
+    if (!tel || !doc) return;
+    if (
+      tel === guardado.current.telefono &&
+      doc === guardado.current.documento
+    ) {
       return;
     }
 
-    const result = await actualizarIdentidad({ telefono, documento });
-    setLoading(false);
+    let cancelado = false;
+    void guardarIdentidadParaPagar(telefono, documento).then((result) => {
+      if (cancelado) return;
+      if (!result.ok) {
+        setErrorTelefono(result.errorTelefono ?? null);
+        setErrorDocumento(result.errorDocumento ?? null);
+        setErrorGeneral(
+          result.error && !result.errorTelefono && !result.errorDocumento
+            ? result.error
+            : null
+        );
+        return;
+      }
+      guardado.current = { telefono: tel, documento: doc };
+      setErrorGeneral(null);
+    });
 
-    if (result.errorTelefono) {
-      setErrorTelefono(result.errorTelefono);
-      return;
-    }
-    if (result.errorDocumento) {
-      setErrorDocumento(result.errorDocumento);
-      return;
-    }
-    if (result.error) {
-      setErrorGeneral(result.error);
-      return;
-    }
-
-    setMensaje("Datos de identidad guardados.");
-    clear();
-    router.refresh();
-  }
+    return () => {
+      cancelado = true;
+    };
+  }, [telefono, documento]);
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3" noValidate>
+    <div className="space-y-3">
       <Input
         label="Teléfono móvil"
         name="telefono"
@@ -91,11 +103,7 @@ export function EditarIdentidadForm({
           if (errorTelefono) setErrorTelefono(null);
         }}
         error={errorTelefono ?? undefined}
-        hint={
-          errorTelefono
-            ? undefined
-            : "Obligatorio para pagar un viaje."
-        }
+        hint={errorTelefono ? undefined : "Obligatorio para pagar un viaje."}
       />
       <Input
         label="DNI o NIE"
@@ -112,26 +120,11 @@ export function EditarIdentidadForm({
           if (errorDocumento) setErrorDocumento(null);
         }}
         error={errorDocumento ?? undefined}
-        hint={
-          errorDocumento
-            ? undefined
-            : "Obligatorio para pagar un viaje."
-        }
+        hint={errorDocumento ? undefined : "Obligatorio para pagar un viaje."}
       />
-      {mensaje ? (
-        <p className="text-sm text-emerald-700">{mensaje}</p>
-      ) : null}
       {errorGeneral ? (
         <p className="text-sm text-red-600">{errorGeneral}</p>
       ) : null}
-      <Button
-        type="submit"
-        variant="secondary"
-        className={CUENTA_BTN_SECONDARY}
-        disabled={loading}
-      >
-        {loading ? "Guardando…" : "Guardar"}
-      </Button>
-    </form>
+    </div>
   );
 }
