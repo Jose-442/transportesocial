@@ -314,6 +314,8 @@ export function DatePickerInput({
     diaRef.current?.abrir();
   }, [parts.month, parts.day]);
 
+  const faltaElDia = Boolean(error && parts.month && !parts.day);
+
   const dayOptions = useMemo(() => {
     if (!parts.month) return [];
     const year = parseInt(
@@ -366,7 +368,7 @@ export function DatePickerInput({
         <label className="block space-y-1">
           <span className="text-sm font-medium text-zinc-900">Mes</span>
           <GridSelectField
-            error={!!error}
+            error={Boolean(error) && !faltaElDia}
             value={parts.month}
             options={MONTH_OPTIONS}
             onChange={(next) => update("month", next)}
@@ -377,26 +379,31 @@ export function DatePickerInput({
             abrirAbajo
           />
         </label>
-        <label className="block space-y-1">
-          <span className="text-sm font-medium text-zinc-900">Día</span>
-          <GridSelectField
-            ref={diaRef}
-            error={!!error}
-            disabled={!parts.month}
-            value={parts.day}
-            options={dayOptions}
-            onChange={(next) => update("day", next)}
-            ariaLabel="Día"
-            listLabel="Día del mes"
-            placeholder="Día"
-            disabledPlaceholder="Elige mes primero"
-            columns={7}
-            abrirAbajo
-          />
-        </label>
+        <div className="space-y-1">
+          <label className="block space-y-1">
+            <span className="text-sm font-medium text-zinc-900">Día</span>
+            <GridSelectField
+              ref={diaRef}
+              error={!!error}
+              disabled={!parts.month}
+              value={parts.day}
+              options={dayOptions}
+              onChange={(next) => update("day", next)}
+              ariaLabel="Día"
+              listLabel="Día del mes"
+              placeholder="Día"
+              disabledPlaceholder="Elige mes primero"
+              columns={7}
+              abrirAbajo
+            />
+          </label>
+          {faltaElDia && <p className="text-xs text-red-600">{error}</p>}
+        </div>
       </div>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && !faltaElDia && (
+        <p className="text-xs text-red-600">{error}</p>
+      )}
     </fieldset>
   );
 }
