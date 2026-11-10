@@ -204,7 +204,7 @@ export default async function HomePage() {
           <img
             src="/brand/logo-camara-burgos.jpg"
             alt="Cámara de Comercio de Burgos"
-            className="mx-auto mt-4 block h-auto w-full max-w-xs"
+            className="mx-auto mt-4 block h-auto w-full max-w-[10rem]"
           />
         </section>
       </div>
