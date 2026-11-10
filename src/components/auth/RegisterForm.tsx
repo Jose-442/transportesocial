@@ -121,7 +121,11 @@ export function RegisterForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+      data-salto-solo-desplegable=""
+    >
       <div className="space-y-2">
         <span className="text-sm font-medium text-zinc-800">
           Tu foto (opcional)
