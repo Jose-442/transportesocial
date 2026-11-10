@@ -10,7 +10,7 @@ import type { Reserva } from "@/types/database";
 export const HORAS_LIMITE_REBAJA = 48;
 
 export const TEXTO_PUEDE_PEDIR_REBAJA =
-  "Solo en caso de que al final el porte sea más pequeño de lo que ofrecía el conductor, puede solicitar a este una rebaja, que queda supeditada a que el conductor acceda.";
+  "Solo en caso de que al final el bulto sea más pequeño de lo que ofrecía el conductor, puedes solicitar una rebaja, que queda supeditada a que el conductor la acepte.";
 
 /** Cuando la búsqueda es un tramo de una ruta más larga. */
 export const TEXTO_PUEDE_PEDIR_REBAJA_TRAMO =
