@@ -74,6 +74,8 @@ const GridSelectField = forwardRef<
     disabledPlaceholder?: string;
     columns?: 3 | 4 | 6 | 7;
     abrirAbajo?: boolean;
+    /** Si ya hay un valor, el desplegable ofrece quitarlo. */
+    permiteQuitar?: boolean;
   }
 >(function GridSelectField(
   {
@@ -88,6 +90,7 @@ const GridSelectField = forwardRef<
     disabledPlaceholder,
     columns = 4,
     abrirAbajo = false,
+    permiteQuitar = false,
   },
   ref
 ) {
@@ -182,7 +185,9 @@ const GridSelectField = forwardRef<
         className={`${selectClasses(error)} md:hidden`}
         value={value}
         disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) =>
+          onChange(e.target.value === "__quitar" ? "" : e.target.value)
+        }
       >
         {disabled ? (
           <option value="">{disabledPlaceholder ?? placeholder}</option>
@@ -191,6 +196,9 @@ const GridSelectField = forwardRef<
             <option value="" disabled hidden>
               {placeholder}
             </option>
+            {permiteQuitar && value ? (
+              <option value="__quitar">Quitar</option>
+            ) : null}
             {options.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -227,6 +235,18 @@ const GridSelectField = forwardRef<
                   : "bottom-full right-0 mb-1",
             ].join(" ")}
           >
+            {permiteQuitar && value ? (
+              <button
+                type="button"
+                className="mb-1 min-h-8 w-full cursor-pointer rounded-md px-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100"
+                onClick={() => {
+                  onChange("");
+                  setOpen(false);
+                }}
+              >
+                Quitar
+              </button>
+            ) : null}
             <div
               className={
                 columns === 7
@@ -330,7 +350,20 @@ export function DatePickerInput({
     });
   }, [parts.month, parts.day]);
 
+  const sePuedeQuitar = !required;
+
   function update(part: "month" | "day", next: string) {
+    if (!next) {
+      if (part === "month") {
+        setParts({ month: "", day: "" });
+        onChange("");
+      } else {
+        setParts({ month: parts.month, day: "" });
+        onChange(formatDateFromMonthDay(parts.month, ""));
+      }
+      return;
+    }
+
     const nextMonth = part === "month" ? next : parts.month;
     let nextDay = part === "day" ? next : parts.day;
 
@@ -377,6 +410,7 @@ export function DatePickerInput({
             placeholder="Mes"
             columns={3}
             abrirAbajo
+            permiteQuitar={sePuedeQuitar}
           />
         </label>
         <div className="space-y-1">
@@ -395,6 +429,7 @@ export function DatePickerInput({
               disabledPlaceholder="Elige mes primero"
               columns={7}
               abrirAbajo
+              permiteQuitar={sePuedeQuitar}
             />
           </label>
           {faltaElDia && <p className="text-xs text-red-600">{error}</p>}
