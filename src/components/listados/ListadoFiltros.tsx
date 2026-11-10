@@ -193,9 +193,11 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
         onChange={setFecha}
       />
       <p className="text-base leading-snug text-zinc-600">
-        Busca solo al elegir salida y destino. Si pones mes y día, filtra ese
-        día; si solo el mes, ese mes; si no pones fecha, muestra los {palabra}{" "}
-        que salen antes.
+        La búsqueda se hace sola.
+        <br />
+        Si SOLO pones el mes, ves los de ese mes.
+        <br />
+        Si NO pones fecha, ves TODOS los {palabra} que todavía no han salido.
       </p>
       <div className="flex gap-2">
         <Button type="submit" fullWidth>
