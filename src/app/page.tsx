@@ -201,6 +201,11 @@ export default async function HomePage() {
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
           </p>
+          <img
+            src="/brand/logo-camara-burgos.jpg"
+            alt="Cámara de Comercio de Burgos"
+            className="mx-auto mt-4 block h-auto w-full max-w-xs"
+          />
         </section>
       </div>
     </div>
