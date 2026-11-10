@@ -9,10 +9,6 @@ export type FiltrosListado = {
   origen?: string;
   destino?: string;
   fecha?: string;
-  /** Si true: busca un tramo de 7 días (no un día concreto). */
-  semana?: boolean;
-  /** Inicio del tramo de 7 días (YYYY-MM-DD). Si falta, hoy. */
-  desde?: string;
 };
 
 export function parseFiltros(
@@ -22,23 +18,15 @@ export function parseFiltros(
     const v = searchParams[key];
     return typeof v === "string" ? v.trim() : "";
   };
-  const semanaRaw = pick("semana");
   return {
     origen: pick("origen"),
     destino: pick("destino"),
     fecha: pick("fecha"),
-    semana: semanaRaw === "1" || semanaRaw === "true" || semanaRaw === "on",
-    desde: pick("desde"),
   };
 }
 
 export function tieneFiltrosActivos(filtros: FiltrosListado): boolean {
-  return !!(
-    filtros.origen ||
-    filtros.destino ||
-    filtros.fecha ||
-    filtros.semana
-  );
+  return !!(filtros.origen || filtros.destino || filtros.fecha);
 }
 
 export function tieneBusquedaCompleta(filtros: FiltrosListado): boolean {
@@ -50,11 +38,7 @@ export function filtrosToSearchQuery(filtros: FiltrosListado): string | null {
   const params = new URLSearchParams();
   params.set("origen", filtros.origen!);
   params.set("destino", filtros.destino!);
-  // Día y tramo de 7 días no se mezclan.
-  if (filtros.semana) {
-    params.set("semana", "1");
-    params.set("desde", inicioTramo7Dias(filtros));
-  } else if (filtros.fecha) {
+  if (filtros.fecha) {
     params.set("fecha", filtros.fecha);
   }
   return params.toString();
@@ -144,110 +128,11 @@ export function fechasDelMes(ym: string): string[] {
   return out;
 }
 
-/** Hoy (YYYY-MM-DD) en hora de España. */
-export function hoyIsoMadrid(ahora = new Date()): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Madrid",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(ahora);
-}
-
-/**
- * Lunes a domingo de la semana que contiene `refIso` (calendario civil UTC del día).
- * En España la semana empieza en lunes.
- */
-export function fechasDeLaSemana(refIso: string): string[] {
-  const dia = refIso.slice(0, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || !fechaCalendarioValida(dia)) {
-    return [];
-  }
-  const [year, month, day] = dia.split("-").map(Number);
-  const utc = new Date(Date.UTC(year, month - 1, day));
-  const dow = utc.getUTCDay(); // 0 domingo … 6 sábado
-  const aLunes = dow === 0 ? -6 : 1 - dow;
-  const lunes = new Date(utc);
-  lunes.setUTCDate(utc.getUTCDate() + aLunes);
-  const out: string[] = [];
-  for (let i = 0; i < 7; i++) {
-    const x = new Date(lunes);
-    x.setUTCDate(lunes.getUTCDate() + i);
-    out.push(x.toISOString().slice(0, 10));
-  }
-  return out;
-}
-
-/** Suma (o resta) días a una fecha YYYY-MM-DD. */
-export function sumarDiasIso(iso: string, dias: number): string {
-  const dia = iso.slice(0, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || !fechaCalendarioValida(dia)) {
-    return "";
-  }
-  const [year, month, day] = dia.split("-").map(Number);
-  const utc = new Date(Date.UTC(year, month - 1, day));
-  utc.setUTCDate(utc.getUTCDate() + dias);
-  return utc.toISOString().slice(0, 10);
-}
-
-/** Hoy y los 6 días siguientes (7 en total), en YYYY-MM-DD. */
-export function fechasProximosDias(
-  desdeIso: string,
-  cuantos = 7
-): string[] {
-  const dia = desdeIso.slice(0, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia) || !fechaCalendarioValida(dia)) {
-    return [];
-  }
-  const out: string[] = [];
-  for (let i = 0; i < cuantos; i++) {
-    const siguiente = sumarDiasIso(dia, i);
-    if (siguiente) out.push(siguiente);
-  }
-  return out;
-}
-
-/** Primer día del tramo de 7 días (param `desde`, o hoy). */
-export function inicioTramo7Dias(
-  filtros: FiltrosListado,
-  ahora = new Date()
-): string {
-  const desde = filtros.desde?.slice(0, 10) ?? "";
-  if (/^\d{4}-\d{2}-\d{2}$/.test(desde) && fechaCalendarioValida(desde)) {
-    return desde;
-  }
-  return hoyIsoMadrid(ahora);
-}
-
-/** Texto corto del tramo, p. ej. «18 oct → 24 oct». */
-export function etiquetaTramo7Dias(
-  filtros: FiltrosListado,
-  ahora = new Date()
-): string {
-  const dias = fechasProximosDias(inicioTramo7Dias(filtros, ahora), 7);
-  if (dias.length < 2) return "";
-  const corto = (iso: string) => {
-    const [y, m, d] = iso.split("-").map(Number);
-    return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("es-ES", {
-      timeZone: "UTC",
-      day: "numeric",
-      month: "short",
-    });
-  };
-  return `${corto(dias[0])} → ${corto(dias[dias.length - 1])}`;
-}
-
-/** ¿La fecha del anuncio encaja con el filtro (día concreto o tramo de 7 días)? */
+/** ¿La fecha del anuncio encaja con el filtro (día concreto, mes o sin fecha)? */
 export function coincideFechaListado(
   fechaAlmacenada: string | null | undefined,
-  filtros: FiltrosListado,
-  ahora = new Date()
+  filtros: FiltrosListado
 ): boolean {
-  if (filtros.semana) {
-    const dias = fechasProximosDias(inicioTramo7Dias(filtros, ahora), 7);
-    const dia = fechaAlmacenada?.slice(0, 10) ?? "";
-    return Boolean(dia && dias.includes(dia));
-  }
   if (filtros.fecha) {
     return mismaFechaMesDia(fechaAlmacenada ?? null, filtros.fecha);
   }
@@ -259,20 +144,14 @@ export function coincideFechaListado(
  * origenes o destinos a null: no acotar ese lado (la lista fina sigue en memoria).
  * fechas a null: no acotar por día (salida + destino bastan).
  */
-export function limitesBusqueda(
-  filtros: FiltrosListado,
-  ahora = new Date()
-): {
+export function limitesBusqueda(filtros: FiltrosListado): {
   origenes: string[] | null;
   destinos: string[] | null;
   fechas: string[] | null;
 } | null {
   if (!filtros.origen || !filtros.destino) return null;
   let fechas: string[] | null = null;
-  if (filtros.semana) {
-    fechas = fechasProximosDias(inicioTramo7Dias(filtros, ahora), 7);
-    if (fechas.length === 0) return null;
-  } else if (filtros.fecha) {
+  if (filtros.fecha) {
     const f = filtros.fecha.trim();
     fechas = /^\d{4}-\d{2}$/.test(f.slice(0, 7)) && f.length === 7
       ? fechasDelMes(f)
@@ -287,8 +166,7 @@ export function limitesBusqueda(
 
 export function coincideFiltrosBulto(
   bulto: { origen: string; destino: string; fecha_limite: string | null },
-  filtros: FiltrosListado,
-  ahora = new Date()
+  filtros: FiltrosListado
 ): boolean {
   if (
     filtros.origen &&
@@ -302,7 +180,7 @@ export function coincideFiltrosBulto(
   ) {
     return false;
   }
-  if (!coincideFechaListado(bulto.fecha_limite, filtros, ahora)) {
+  if (!coincideFechaListado(bulto.fecha_limite, filtros)) {
     return false;
   }
   return true;
@@ -310,8 +188,7 @@ export function coincideFiltrosBulto(
 
 export function coincideFiltrosRuta(
   ruta: { origen: string; destino: string; fecha_salida: string },
-  filtros: FiltrosListado,
-  ahora = new Date()
+  filtros: FiltrosListado
 ): boolean {
   if (
     filtros.origen &&
@@ -325,7 +202,7 @@ export function coincideFiltrosRuta(
   ) {
     return false;
   }
-  if (!coincideFechaListado(ruta.fecha_salida, filtros, ahora)) {
+  if (!coincideFechaListado(ruta.fecha_salida, filtros)) {
     return false;
   }
   return true;

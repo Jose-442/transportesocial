@@ -3,10 +3,7 @@ import { numerosDePagina } from "@/lib/listado-paginacion";
 import {
   coincideFechaListado,
   fechasCercanasAlDia,
-  fechasDeLaSemana,
-  fechasProximosDias,
   limitesBusqueda,
-  sumarDiasIso,
 } from "@/lib/listado-filters";
 import { etiquetasMunicipiosCercanos } from "@/lib/municipios-espana";
 
@@ -58,95 +55,9 @@ describe("limitesBusqueda", () => {
     expect(limites?.fechas).toBeNull();
     expect(limites?.origenes).toContain("Burgos (Burgos)");
   });
-
-  it("con semana acota 7 días desde hoy si no hay desde", () => {
-    const limites = limitesBusqueda(
-      {
-        origen: "Burgos (Burgos)",
-        destino: "Madrid (Madrid)",
-        semana: true,
-      },
-      new Date("2026-10-18T12:00:00+02:00")
-    );
-    expect(limites?.fechas).toEqual([
-      "2026-10-18",
-      "2026-10-19",
-      "2026-10-20",
-      "2026-10-21",
-      "2026-10-22",
-      "2026-10-23",
-      "2026-10-24",
-    ]);
-  });
-
-  it("con desde acota el tramo siguiente de 7 días", () => {
-    const limites = limitesBusqueda({
-      origen: "Burgos (Burgos)",
-      destino: "Madrid (Madrid)",
-      semana: true,
-      desde: "2026-10-25",
-    });
-    expect(limites?.fechas).toEqual([
-      "2026-10-25",
-      "2026-10-26",
-      "2026-10-27",
-      "2026-10-28",
-      "2026-10-29",
-      "2026-10-30",
-      "2026-10-31",
-    ]);
-  });
-});
-
-describe("sumarDiasIso", () => {
-  it("avanza una semana", () => {
-    expect(sumarDiasIso("2026-10-18", 7)).toBe("2026-10-25");
-  });
-});
-
-describe("fechasDeLaSemana", () => {
-  it("un domingo cierra la semana del lunes anterior", () => {
-    expect(fechasDeLaSemana("2026-10-18")).toEqual([
-      "2026-10-12",
-      "2026-10-13",
-      "2026-10-14",
-      "2026-10-15",
-      "2026-10-16",
-      "2026-10-17",
-      "2026-10-18",
-    ]);
-  });
-});
-
-describe("fechasProximosDias", () => {
-  it("incluye el 22 si hoy es el 18", () => {
-    expect(fechasProximosDias("2026-10-18", 7)).toEqual([
-      "2026-10-18",
-      "2026-10-19",
-      "2026-10-20",
-      "2026-10-21",
-      "2026-10-22",
-      "2026-10-23",
-      "2026-10-24",
-    ]);
-  });
 });
 
 describe("coincideFechaListado", () => {
-  it("en modo semana acepta un viaje dentro del tramo de 7 días", () => {
-    const ahora = new Date("2026-10-18T12:00:00+02:00");
-    const filtros = { semana: true };
-    expect(coincideFechaListado("2026-10-22", filtros, ahora)).toBe(true);
-    expect(coincideFechaListado("2026-10-18", filtros, ahora)).toBe(true);
-    expect(coincideFechaListado("2026-10-25", filtros, ahora)).toBe(false);
-  });
-
-  it("con desde mira ese tramo, no el de hoy", () => {
-    const filtros = { semana: true, desde: "2026-10-25" };
-    expect(coincideFechaListado("2026-10-22", filtros)).toBe(false);
-    expect(coincideFechaListado("2026-10-28", filtros)).toBe(true);
-  });
-
   it("con día concreto solo ese día", () => {
     expect(
       coincideFechaListado("2026-10-17", { fecha: "2026-10-17" })

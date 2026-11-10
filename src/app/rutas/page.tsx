@@ -4,7 +4,6 @@ import { RutaCard } from "@/components/rutas/RutaCard";
 import { ListadoFiltros } from "@/components/listados/ListadoFiltros";
 import { createClient } from "@/lib/supabase/server";
 import {
-  etiquetaTramo7Dias,
   filtrosToSearchQuery,
   parseFiltros,
   tieneBusquedaCompleta,
@@ -52,7 +51,7 @@ export default async function RutasPage({
     if (user) {
       rutas = rutas.filter((ruta) => ruta.user_id !== user.id);
     }
-    if (user && rutas.length === 0 && fechaDia && !filtros.semana) {
+    if (user && rutas.length === 0 && fechaDia) {
       const { data: alerta } = await supabase
         .from("alertas_viaje")
         .select("id")
@@ -97,20 +96,11 @@ export default async function RutasPage({
         <>
           <p className="text-sm font-medium text-zinc-700">
             {rutas.length === 1
-              ? filtros.semana
-                ? `1 viaje en el tramo ${etiquetaTramo7Dias(filtros)}`
-                : "1 viaje encontrado"
-              : filtros.semana
-                ? `${rutas.length} viajes en el tramo ${etiquetaTramo7Dias(filtros)}`
-                : `${rutas.length} viajes encontrados`}
+              ? "1 viaje encontrado"
+              : `${rutas.length} viajes encontrados`}
           </p>
           {rutas.length === 0 ? (
-            filtros.semana ? (
-              <p className="text-sm text-zinc-500">
-                No hay viajes en el tramo {etiquetaTramo7Dias(filtros)}. Prueba
-                «7 días después», un día concreto, o mira más adelante.
-              </p>
-            ) : fechaDia ? (
+            fechaDia ? (
               <AlertaViajeBusqueda
                 origen={filtros.origen!}
                 destino={filtros.destino!}
@@ -120,13 +110,12 @@ export default async function RutasPage({
               />
             ) : filtros.fecha ? (
               <p className="text-sm text-zinc-500">
-                No hay viajes en ese mes. Prueba otro mes, un día concreto o
-                «tramo de 7 días».
+                No hay viajes en ese mes. Prueba otro mes o un día concreto.
               </p>
             ) : (
               <p className="text-sm text-zinc-500">
-                No hay viajes próximos en esta ruta. Prueba con un día, marca
-                «tramo de 7 días» o mira más adelante.
+                No hay viajes próximos en esta ruta. Prueba con un mes o un
+                día.
               </p>
             )
           ) : (
