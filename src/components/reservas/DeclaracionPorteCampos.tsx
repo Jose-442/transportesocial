@@ -12,10 +12,12 @@ function FotoCarga({
   titulo,
   obligatoria,
   name,
+  onArchivo,
 }: {
   titulo: string;
   obligatoria?: boolean;
   name: string;
+  onArchivo?: (file: File | null) => void;
 }) {
   const galeriaRef = useRef<HTMLInputElement>(null);
   const camaraRef = useRef<HTMLInputElement>(null);
@@ -36,17 +38,20 @@ function FotoCarga({
       guardarEnvio(null);
       setPreview(null);
       setAviso(null);
+      onArchivo?.(null);
       return;
     }
     if (file.size > FOTO_MAX_BYTES) {
       guardarEnvio(null);
       setPreview(null);
       setAviso("Cada foto no puede superar 5 MB.");
+      onArchivo?.(null);
       return;
     }
     guardarEnvio(file);
     setAviso(null);
     setPreview(URL.createObjectURL(file));
+    onArchivo?.(file);
   }
 
   return (
@@ -140,6 +145,7 @@ export function DeclaracionPorteCampos({
   onMedidas,
   faltaFoto = false,
   faltaDeclaracion = false,
+  onFoto,
 }: {
   declaracionAceptada: boolean;
   onDeclaracion: (value: boolean) => void;
@@ -149,6 +155,7 @@ export function DeclaracionPorteCampos({
   onMedidas: (value: string) => void;
   faltaFoto?: boolean;
   faltaDeclaracion?: boolean;
+  onFoto?: (hay: boolean) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -161,7 +168,12 @@ export function DeclaracionPorteCampos({
           className="grid grid-cols-1 gap-3 md:grid-cols-2"
           {...(faltaFoto ? { "data-campo-error": "" } : {})}
         >
-          <FotoCarga titulo="Foto 1" obligatoria name="foto" />
+          <FotoCarga
+            titulo="Foto 1"
+            obligatoria
+            name="foto"
+            onArchivo={(file) => onFoto?.(Boolean(file))}
+          />
           <FotoCarga titulo="Foto 2" name="foto_2" />
         </div>
         <p className="text-xs text-zinc-500">

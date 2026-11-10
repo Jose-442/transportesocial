@@ -352,6 +352,11 @@ export function ReservarRutaForm({
               onDeclaracion={(declaracion_aceptada) =>
                 setForm((prev) => ({ ...prev, declaracion_aceptada }))
               }
+              onFoto={(hay) => {
+                if (hay && error === "Añade al menos una foto de la carga.") {
+                  setError(null);
+                }
+              }}
             />
           ) : null}
         </Card>
