@@ -200,10 +200,10 @@ describe("frases de cancelación", () => {
       "Te devolvemos el 100 % (118,00 €). El reembolso, lo que tarde tu banco."
     );
     expect(fraseAyudaCancelacionCliente("viaje_sin_gastos", "70,00 €")).toBe(
-      "Te devolvemos el viaje (70,00 €). Los gastos ocasionados por la gestión no se devuelven."
+      "Te devolvemos el viaje (70,00 €). Los gastos ocasionados por la gestión no se pueden devolver."
     );
     expect(fraseAyudaCancelacionCliente("viaje_sin_gastos", "45,50 €")).toBe(
-      "Te devolvemos el viaje (45,50 €). Los gastos ocasionados por la gestión no se devuelven."
+      "Te devolvemos el viaje (45,50 €). Los gastos ocasionados por la gestión no se pueden devolver."
     );
     expect(fraseAyudaCancelacionCliente("mitad", "50,00 €")).toBe(
       "Faltan menos de 24 horas. Te devolvemos la mitad del viaje (50,00 €). El conductor se queda la otra mitad. El gasto de gestión no se devuelve."

@@ -158,7 +158,7 @@ export function fraseAyudaCancelacionCliente(
     return `Te devolvemos el viaje menos ${TEXTO_TARIFA_BANCO_TARJETA}.`;
   }
   if (tipo === "viaje_sin_gastos") {
-    return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se devuelven.`;
+    return `Te devolvemos el viaje (${reembolsoEur}). Los gastos ocasionados por la gestión no se pueden devolver.`;
   }
   return `Faltan menos de ${CANCELACION_ANTICIPADA_HORAS} horas. Te devolvemos la mitad del viaje (${reembolsoEur}). El conductor se queda la otra mitad. El gasto de gestión no se devuelve.`;
 }
