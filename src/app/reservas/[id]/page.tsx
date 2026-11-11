@@ -332,6 +332,9 @@ export default async function ReservaDetallePage({
   const titulo = ruta
     ? `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`
     : fraseQueIncluyeReservas(relacionadas);
+  const tramoParcial = relacionadas.find(
+    (r) => r.es_tramo && r.tramo_origen && r.tramo_destino
+  );
 
   const otroPerfil = esCliente
     ? perfiles[reserva.transportista_id]
@@ -388,16 +391,10 @@ export default async function ReservaDetallePage({
 
       <div>
         <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">{titulo}</h1>
-        {relacionadas.some((r) => r.tramo_origen && r.tramo_destino) ? (
+        {tramoParcial ? (
           <p className="mt-1.5 text-base font-semibold text-emerald-800 md:mt-2 md:text-lg">
-            Tramo:{" "}
-            {formatCiudad(
-              relacionadas.find((r) => r.tramo_origen)?.tramo_origen ?? ""
-            )}{" "}
-            →{" "}
-            {formatCiudad(
-              relacionadas.find((r) => r.tramo_destino)?.tramo_destino ?? ""
-            )}
+            Tramo: {formatCiudad(tramoParcial.tramo_origen ?? "")} →{" "}
+            {formatCiudad(tramoParcial.tramo_destino ?? "")}
           </p>
         ) : null}
         <div className="mt-1 flex flex-wrap items-center gap-2 md:mt-2">

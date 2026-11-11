@@ -12,8 +12,10 @@ import {
 } from "@/lib/reservas/rebaja";
 import { formatCiudad } from "@/lib/format-ciudad";
 
-function sufijoTramo(r: Pick<Reserva, "tramo_origen" | "tramo_destino">): string {
-  if (!r.tramo_origen || !r.tramo_destino) return "";
+function sufijoTramo(
+  r: Pick<Reserva, "es_tramo" | "tramo_origen" | "tramo_destino">
+): string {
+  if (!r.es_tramo || !r.tramo_origen || !r.tramo_destino) return "";
   return ` Tramo: ${formatCiudad(r.tramo_origen)} → ${formatCiudad(r.tramo_destino)}.`;
 }
 
