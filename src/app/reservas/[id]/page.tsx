@@ -196,6 +196,22 @@ export default async function ReservaDetallePage({
     reserva.estado === "cancelado";
   let relacionadas: Reserva[] = [reserva];
   if (
+    reserva.estado === "cancelado" &&
+    reserva.cancelada_en &&
+    reserva.ruta_conductor_id
+  ) {
+    const { data: juntas } = await supabase
+      .from("reservas")
+      .select("*")
+      .eq("ruta_conductor_id", reserva.ruta_conductor_id)
+      .eq("cliente_id", reserva.cliente_id)
+      .eq("transportista_id", reserva.transportista_id)
+      .eq("estado", "cancelado")
+      .eq("cancelada_en", reserva.cancelada_en);
+    if (juntas && juntas.length > 0) {
+      relacionadas = juntas as Reserva[];
+    }
+  } else if (
     reserva.ruta_conductor_id &&
     !avisoCancelacion &&
     reserva.estado !== "cancelado"

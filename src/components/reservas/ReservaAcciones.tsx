@@ -40,6 +40,7 @@ import type { Disputa, Reserva } from "@/types/database";
 
 function fraseReembolsoEnViaje(
   reserva: Reserva,
+  filas: Reserva[],
   fechaSalida: string,
   reembolsoEntero: boolean
 ): string {
@@ -61,7 +62,8 @@ function fraseReembolsoEnViaje(
   if (!tipo) {
     return "El reembolso ya está hecho. Lo que tarde tu banco.";
   }
-  const reparto = repartoCancelacion([reserva], tipo);
+  const grupo = filas.length > 0 ? filas : [reserva];
+  const reparto = repartoCancelacion(grupo, tipo);
   if (reparto.reembolsoCents < 1) {
     return "El reembolso ya está hecho. Lo que tarde tu banco.";
   }
@@ -188,7 +190,12 @@ export function ReservaAcciones({
 
       {estado === "cancelado" && esCliente && reserva.pagada_en ? (
         <p className="text-sm font-medium text-zinc-900">
-          {fraseReembolsoEnViaje(reserva, fechaSalida, reembolsoEntero)}
+          {fraseReembolsoEnViaje(
+            reserva,
+            relacionadas,
+            fechaSalida,
+            reembolsoEntero
+          )}
         </p>
       ) : null}
 
