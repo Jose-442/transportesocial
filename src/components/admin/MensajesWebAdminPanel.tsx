@@ -12,7 +12,6 @@ import {
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
-import { ETIQUETA_CORTA_MENSAJE } from "@/lib/mensajes-web";
 
 const FILTROS: { id: FiltroMensajesWeb; label: string }[] = [
   { id: "nuevas", label: "Nuevos" },
@@ -112,18 +111,15 @@ export function MensajesWebAdminPanel({
         mensajes.map((mensaje) => (
           <Card key={mensaje.id} className="space-y-2">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p className="font-semibold text-zinc-900">
-                {ETIQUETA_CORTA_MENSAJE[mensaje.tipo]}
-              </p>
+              <p className="font-semibold text-zinc-900">{mensaje.autor_nombre}</p>
               <p className="text-xs text-zinc-500">
                 {new Date(mensaje.created_at).toLocaleString("es-ES")}
                 {mensaje.estado === "vista" ? " · Visto" : ""}
               </p>
             </div>
-            <p className="text-sm text-zinc-800">
-              <span className="font-semibold">{mensaje.autor_nombre}</span>
-              {mensaje.autor_email ? ` · ${mensaje.autor_email}` : ""}
-            </p>
+            {mensaje.autor_email ? (
+              <p className="text-sm text-zinc-600">{mensaje.autor_email}</p>
+            ) : null}
             {mensaje.viaje_etiqueta && (
               <p className="text-sm text-zinc-600">{mensaje.viaje_etiqueta}</p>
             )}

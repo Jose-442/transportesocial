@@ -8,7 +8,6 @@ import { loadAdminDashboardStats } from "@/actions/admin-dashboard";
 import { loadMensajesWebNuevos } from "@/actions/mensajes-web";
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
-import { ETIQUETA_CORTA_MENSAJE } from "@/lib/mensajes-web";
 
 export default async function AdminHomePage() {
   const [
@@ -92,9 +91,7 @@ export default async function AdminHomePage() {
               href="/admin/mensajes"
               className="block rounded-xl bg-white px-3 py-2 text-sm text-zinc-800"
             >
-              <p className="font-semibold">
-                {ETIQUETA_CORTA_MENSAJE[m.tipo]} · {m.autor_nombre}
-              </p>
+              <p className="font-semibold">{m.autor_nombre}</p>
               <p className="mt-1 line-clamp-3 whitespace-pre-wrap">{m.texto}</p>
               <p className="mt-1 text-xs text-zinc-500">
                 {new Date(m.created_at).toLocaleString("es-ES")}

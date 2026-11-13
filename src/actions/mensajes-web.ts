@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ADMIN_EMAILS } from "@/lib/admin";
@@ -9,16 +8,13 @@ import { idsUsuariosAdmin } from "@/lib/admin/ids-admin";
 import { getAdminDb, requireAdminUser } from "@/lib/admin/require-admin";
 import { sendMensajeWebAdminEmail } from "@/lib/email/mensaje-web-admin";
 import {
-  etiquetaViajeMensaje,
   parseTipoMensajeWeb,
   validarTextoMensaje,
   type EstadoMensajeWeb,
   type TipoMensajeWeb,
 } from "@/lib/mensajes-web";
 import { crearNotificacion } from "@/lib/reservas/notify";
-import { ESTADO_RESERVA_LABELS } from "@/lib/reservas/labels";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
-import type { EstadoReserva } from "@/types/database";
 
 const LIMITE_DIA = 10;
 
@@ -34,11 +30,6 @@ export async function enviarMensajeWeb(formData: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: "Debes iniciar sesión." };
-
-  const tipo = parseTipoMensajeWeb(String(formData.get("tipo") ?? ""));
-  if (!tipo) {
-    return { error: "Elige si es una incidencia, una mejora o una queja." };
-  }
 
   const validado = validarTextoMensaje(String(formData.get("texto") ?? ""));
   if ("error" in validado) return { error: validado.error };
@@ -72,18 +63,6 @@ export async function enviarMensajeWeb(formData: FormData) {
     return { error: "Este mensaje ya lo hemos recibido." };
   }
 
-  let reservaId: string | null = null;
-  let viajeEtiqueta: string | null = null;
-  if (tipo === "incidencia") {
-    const pedido = String(formData.get("reserva_id") ?? "").trim();
-    if (pedido) {
-      const ligado = await etiquetaSiEsSuViaje(supabase, user.id, pedido);
-      if ("error" in ligado) return { error: ligado.error };
-      reservaId = pedido;
-      viajeEtiqueta = ligado.etiqueta;
-    }
-  }
-
   const { data: perfil } = await supabase
     .from("profiles")
     .select("display_name")
@@ -95,9 +74,7 @@ export async function enviarMensajeWeb(formData: FormData) {
 
   const { error: insertError } = await supabase.from("mensajes_web").insert({
     user_id: user.id,
-    tipo,
-    reserva_id: reservaId,
-    viaje_etiqueta: viajeEtiqueta,
+    tipo: "queja",
     texto,
     autor_nombre: autorNombre,
     autor_email: autorEmail,
@@ -112,7 +89,7 @@ export async function enviarMensajeWeb(formData: FormData) {
       await crearNotificacion(admin, {
         user_id: adminId,
         tipo: "sistema",
-        titulo: ETIQUETA_AVISO[tipo],
+        titulo: "Mensaje nuevo",
         mensaje: `${autorNombre}: ${texto.slice(0, 140)}`,
         enlace: "/admin/mensajes",
       });
@@ -122,11 +99,9 @@ export async function enviarMensajeWeb(formData: FormData) {
   for (const email of ADMIN_EMAILS) {
     void sendMensajeWebAdminEmail({
       to: email,
-      tipo,
       autorNombre,
       autorEmail,
       texto,
-      viajeEtiqueta,
     }).catch((err) => {
       console.error("[mensaje-web-admin-email]", err);
     });
@@ -134,61 +109,6 @@ export async function enviarMensajeWeb(formData: FormData) {
 
   revalidateMensajes();
   return { ok: true as const };
-}
-
-const ETIQUETA_AVISO: Record<TipoMensajeWeb, string> = {
-  incidencia: "Incidencia en un viaje",
-  mejora: "Propuesta de mejora",
-  queja: "Queja nueva",
-};
-
-async function etiquetaSiEsSuViaje(
-  supabase: SupabaseClient,
-  userId: string,
-  reservaId: string
-): Promise<{ etiqueta: string } | { error: string }> {
-  const { data } = await supabase
-    .from("reservas")
-    .select(
-      "id, estado, fecha_llegada_prevista, es_tramo, tramo_origen, tramo_destino, ruta_conductor_id, cliente_id, transportista_id"
-    )
-    .eq("id", reservaId)
-    .maybeSingle();
-
-  if (
-    !data ||
-    (data.cliente_id !== userId && data.transportista_id !== userId)
-  ) {
-    return { error: "Ese viaje no es tuyo." };
-  }
-
-  let origen: string | null =
-    data.es_tramo && data.tramo_origen ? data.tramo_origen : null;
-  let destino: string | null =
-    data.es_tramo && data.tramo_destino ? data.tramo_destino : null;
-  let fecha: string | null = data.fecha_llegada_prevista;
-
-  if (data.ruta_conductor_id && (!origen || !destino)) {
-    const db = createAdminClient() ?? supabase;
-    const { data: ruta } = await db
-      .from("rutas_conductores")
-      .select("origen, destino, fecha_salida")
-      .eq("id", data.ruta_conductor_id)
-      .maybeSingle();
-    origen = origen ?? ruta?.origen ?? null;
-    destino = destino ?? ruta?.destino ?? null;
-    fecha = ruta?.fecha_salida ?? fecha;
-  }
-
-  const estado = data.estado as EstadoReserva;
-  return {
-    etiqueta: etiquetaViajeMensaje({
-      origen,
-      destino,
-      fecha,
-      estadoLabel: ESTADO_RESERVA_LABELS[estado] ?? "",
-    }),
-  };
 }
 
 export type MensajeWebAdminItem = {
