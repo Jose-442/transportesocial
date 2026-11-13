@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { solicitarCambioContrasena } from "@/actions/cuenta";
 import { EditarNombreForm } from "@/components/cuenta/EditarNombreForm";
@@ -86,12 +86,6 @@ export function CuentaPrivacidadSection({
         <p className="mt-1.5 text-xs text-zinc-500">
           Exporta tu perfil, reservas, notificaciones y publicaciones en JSON.
         </p>
-      </div>
-
-      <div className="border-t border-zinc-100 pt-4">
-        <ButtonLink href="/cuenta/incidencias" fullWidth>
-          Incidencias, mejoras y quejas
-        </ButtonLink>
       </div>
 
       <div className="border-t border-zinc-100 pt-4 space-y-2 text-sm">

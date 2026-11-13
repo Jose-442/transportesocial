@@ -244,6 +244,10 @@ export default async function CuentaPage({
         <CuentaPrivacidadSection displayName={profile.display_name} />
       </Card>
 
+      <ButtonLink href="/cuenta/incidencias" fullWidth>
+        Incidencias, mejoras y quejas
+      </ButtonLink>
+
       <form action={cerrarSesion}>
         <Button
           type="submit"
