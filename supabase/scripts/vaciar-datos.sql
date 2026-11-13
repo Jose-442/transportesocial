@@ -13,12 +13,14 @@ DECLARE
     'chat_canales',
     'resenas',
     'disputas',
+    'mensajes_web',
     'push_subscriptions',
     'transacciones',
     'reservas',
     'ofertas_capacidad',
     'ofertas_precio',
     'anuncios_bultos',
+    'ruta_paradas',
     'rutas_conductores',
     'notificaciones',
     'alertas_viaje',
@@ -45,4 +47,9 @@ UNION ALL SELECT 'profiles', count(*) FROM public.profiles
 UNION ALL SELECT 'rutas_conductores', count(*) FROM public.rutas_conductores
 UNION ALL SELECT 'anuncios_bultos', count(*) FROM public.anuncios_bultos
 UNION ALL SELECT 'reservas', count(*) FROM public.reservas
+UNION ALL SELECT 'transacciones', count(*) FROM public.transacciones
+UNION ALL SELECT 'notificaciones', count(*) FROM public.notificaciones
+UNION ALL SELECT 'alertas_viaje', count(*) FROM public.alertas_viaje
+UNION ALL SELECT 'chat_mensajes', count(*) FROM public.chat_mensajes
+UNION ALL SELECT 'mensajes_web', count(*) FROM public.mensajes_web
 ORDER BY 1;

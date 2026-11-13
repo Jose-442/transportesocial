@@ -5,8 +5,10 @@ import {
 } from "@/actions/admin-chat";
 import { loadAlertasRechazoRecogida } from "@/actions/admin-alertas-recogida";
 import { loadAdminDashboardStats } from "@/actions/admin-dashboard";
+import { loadMensajesWebNuevos } from "@/actions/mensajes-web";
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 import { Card } from "@/components/ui/Card";
+import { ETIQUETA_CORTA_MENSAJE } from "@/lib/mensajes-web";
 
 export default async function AdminHomePage() {
   const [
@@ -14,12 +16,15 @@ export default async function AdminHomePage() {
     alertasCancelacion,
     alertasRecogida,
     alertasRevisionChat,
+    mensajesNuevos,
   ] = await Promise.all([
     loadAdminDashboardStats(),
     loadAlertasSegundaCancelacion(),
     loadAlertasRechazoRecogida(),
     loadAlertasRevisionChat(),
+    loadMensajesWebNuevos(),
   ]);
+  const mensajesEnRecuadro = mensajesNuevos.slice(0, 6);
 
   return (
     <div className="space-y-6">
@@ -73,6 +78,37 @@ export default async function AdminHomePage() {
               </p>
             </Link>
           ))}
+        </Card>
+      ) : null}
+
+      {mensajesEnRecuadro.length > 0 ? (
+        <Card className="space-y-3 border-amber-300 bg-amber-50">
+          <h2 className="font-semibold text-amber-950">
+            Incidencias, mejoras y quejas
+          </h2>
+          {mensajesEnRecuadro.map((m) => (
+            <Link
+              key={m.id}
+              href="/admin/mensajes"
+              className="block rounded-xl bg-white px-3 py-2 text-sm text-zinc-800"
+            >
+              <p className="font-semibold">
+                {ETIQUETA_CORTA_MENSAJE[m.tipo]} · {m.autor_nombre}
+              </p>
+              <p className="mt-1 line-clamp-3 whitespace-pre-wrap">{m.texto}</p>
+              <p className="mt-1 text-xs text-zinc-500">
+                {new Date(m.created_at).toLocaleString("es-ES")}
+              </p>
+            </Link>
+          ))}
+          {mensajesNuevos.length > mensajesEnRecuadro.length ? (
+            <Link
+              href="/admin/mensajes"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-amber-950"
+            >
+              Ver todos
+            </Link>
+          ) : null}
         </Card>
       ) : null}
 

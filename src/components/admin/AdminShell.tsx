@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 const NAV: { href: string; label: string; exact?: boolean }[] = [
   { href: "/admin", label: "Inicio", exact: true },
   { href: "/admin/disputas", label: "Disputas" },
+  { href: "/admin/mensajes", label: "Mensajes" },
   { href: "/admin/reservas", label: "Reservas" },
   { href: "/admin/anuncios", label: "Anuncios" },
   { href: "/admin/usuarios", label: "Usuarios" },

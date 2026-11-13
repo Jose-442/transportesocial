@@ -18,6 +18,9 @@ export function supabaseErrorMessage(error: { message: string }): string {
     if (/profiles/i.test(msg)) {
       return "No se ha podido guardar la cuenta bancaria en tu ficha. Falta un permiso en la base de datos.";
     }
+    if (/mensajes_web/i.test(msg)) {
+      return "Falta un permiso para guardar el mensaje. En Supabase → SQL Editor, ejecuta la migración 077.";
+    }
     return (
       "Sin permiso en la base de datos para guardar. En Supabase → SQL Editor, " +
       "ejecuta el archivo supabase/migrations/006_table_grants.sql."
@@ -33,6 +36,9 @@ export function supabaseErrorMessage(error: { message: string }): string {
         "Falta configurar la base de datos (tabla de plazas). " +
         "Ejecuta en Supabase las migraciones 011, 012 y 013."
       );
+    }
+    if (/mensajes_web/i.test(msg)) {
+      return "Falta la tabla de mensajes. En Supabase → SQL Editor, ejecuta la migración 077.";
     }
     return (
       "Falta configurar la base de datos. Revisa las migraciones en Supabase → SQL Editor."
