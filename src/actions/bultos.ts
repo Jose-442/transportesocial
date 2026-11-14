@@ -4,17 +4,6 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
-export async function crearBulto(
-  formData: FormData
-): Promise<{ error: string } | { id: string }> {
-  void formData;
-  return {
-    error:
-      "Ya no se publica un anuncio de bulto o mascota. Deja un aviso y reserva cuando un conductor publique esa ruta.",
-  };
-
-}
-
 const RESERVA_EN_CURSO_ESTADOS = [
   "pendiente_pago",
   "pendiente_aprobacion",

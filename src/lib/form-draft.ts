@@ -4,12 +4,6 @@ import {
 } from "@/lib/datetime-form";
 import { parseTipoOfertaRuta } from "@/lib/ruta-oferta";
 
-export type StoredFile = {
-  name: string;
-  type: string;
-  dataUrl: string;
-};
-
 export function loadDraft<T>(key: string): T | null {
   if (typeof window === "undefined") return null;
   try {
@@ -151,41 +145,9 @@ export function saveOwnedDraft<T extends object>(
   saveDraft(key, { ...data, _uid: uid });
 }
 
-export function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-export function dataUrlToFile(stored: StoredFile): File | null {
-  try {
-    const base64 = stored.dataUrl.split(",")[1] ?? "";
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return new File([bytes], stored.name, { type: stored.type });
-  } catch {
-    return null;
-  }
-}
-
-export async function fileToStored(file: File): Promise<StoredFile | null> {
-  try {
-    const dataUrl = await fileToDataUrl(file);
-    return { name: file.name, type: file.type, dataUrl };
-  } catch {
-    return null;
-  }
-}
-
 export const DRAFT_KEYS = {
   login: "transporte-social-login-draft",
   nuevaRuta: "transporte-social-nueva-ruta-draft",
-  nuevoBulto: "transporte-social-nuevo-bulto-draft",
-  oferta: (bultoId: string) => `transporte-social-oferta-draft-${bultoId}`,
   filtrosViajes: "transporte-social-filtros-viajes-draft",
   filtrosBultos: "transporte-social-filtros-bultos-draft",
   recuperar: "transporte-social-recuperar-draft",
@@ -205,69 +167,6 @@ export const DRAFT_KEYS = {
     `transporte-social-reserva-capacidad-draft-${rutaId}`,
   chat: (reservaId: string) => `transporte-social-chat-draft-${reservaId}`,
 } as const;
-
-const ofertaPostLoginKey = (bultoId: string) =>
-  `transporte-social-oferta-post-login-${bultoId}`;
-
-const ofertaBackupKey = (bultoId: string) =>
-  `transporte-social-oferta-backup-${bultoId}`;
-
-export function setOfertaPostLogin(
-  bultoId: string,
-  draft?: {
-    precio_neto_bulto?: string;
-    precio_neto_plaza?: string;
-    plazas_ofrecidas?: string;
-    mensaje?: string;
-  }
-) {
-  if (typeof window === "undefined") return;
-  sessionStorage.setItem(ofertaPostLoginKey(bultoId), "1");
-  if (draft) {
-    try {
-      sessionStorage.setItem(ofertaBackupKey(bultoId), JSON.stringify(draft));
-    } catch {
-      // Sin espacio: no bloqueamos el flujo.
-    }
-  }
-}
-
-export function loadOfertaBackup(bultoId: string): {
-  precio_neto_bulto?: string;
-  precio_neto_plaza?: string;
-  plazas_ofrecidas?: string;
-  mensaje?: string;
-} | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = sessionStorage.getItem(ofertaBackupKey(bultoId));
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (!data || typeof data !== "object") return null;
-    return data as {
-      precio_neto_bulto?: string;
-      precio_neto_plaza?: string;
-      plazas_ofrecidas?: string;
-      mensaje?: string;
-    };
-  } catch {
-    return null;
-  }
-}
-
-export function consumeOfertaPostLogin(bultoId: string): boolean {
-  if (typeof window === "undefined") return false;
-  const key = ofertaPostLoginKey(bultoId);
-  if (sessionStorage.getItem(key) !== "1") return false;
-  sessionStorage.removeItem(key);
-  return true;
-}
-
-export function clearOfertaPostLogin(bultoId: string) {
-  if (typeof window === "undefined") return;
-  sessionStorage.removeItem(ofertaPostLoginKey(bultoId));
-  sessionStorage.removeItem(ofertaBackupKey(bultoId));
-}
 
 export type LoginDraft = {
   email: string;
@@ -294,31 +193,6 @@ export type NuevaRutaDraft = {
   precio_neto: string;
   /** "" = sin marcar; "si" | "no" */
   acepta_mascotas: "" | "si" | "no";
-};
-
-export type NuevoBultoDraft = {
-  tipo_solicitud: import("@/lib/solicitud-viaje").TipoSolicitud | "";
-  tipo_solicitud_marcada?: boolean;
-  origen: string;
-  destino: string;
-  descripcion: string;
-  espacio_tamano: string;
-  espacio_detalle: string;
-  tipo_carga: import("@/lib/porte-legal").TipoCarga | "";
-  declaracion_aceptada: boolean;
-  fecha_limite: string;
-  hora_limite: string;
-  /** "" = sin marcar; no | pequena | grande */
-  mascota: "" | "no" | "pequena" | "grande";
-  mascota_detalle: string;
-  foto: StoredFile | null;
-};
-
-export type OfertaDraft = {
-  precio_neto_bulto: string;
-  precio_neto_plaza: string;
-  plazas_ofrecidas: string;
-  mensaje: string;
 };
 
 export const EMPTY_NUEVA_RUTA_DRAFT: NuevaRutaDraft = {
@@ -349,23 +223,6 @@ function normalizeParadasDraft(raw: Record<string, unknown>): ParadaRutaDraft[] 
     }))
     .filter((p) => p.municipio || p.hora);
 }
-
-export const EMPTY_NUEVO_BULTO_DRAFT: NuevoBultoDraft = {
-  tipo_solicitud: "",
-  tipo_solicitud_marcada: false,
-  origen: "",
-  destino: "",
-  descripcion: "",
-  espacio_tamano: "",
-  espacio_detalle: "",
-  tipo_carga: "",
-  declaracion_aceptada: false,
-  fecha_limite: "",
-  hora_limite: "",
-  mascota: "",
-  mascota_detalle: "",
-  foto: null,
-};
 
 /** El «1» antiguo se guardaba solo, aunque nadie lo hubiera marcado. */
 function normalizePlazasAcompananteDraft(

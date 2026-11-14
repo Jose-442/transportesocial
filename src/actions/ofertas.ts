@@ -6,15 +6,6 @@ import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import { crearNotificacion } from "@/lib/reservas/notify";
 import { prepararReservaBulto } from "@/actions/reservas";
 
-export async function enviarOferta(formData: FormData) {
-  void formData;
-  return {
-    error:
-      "Ya no se hacen propuestas sobre un anuncio. Publica tu ruta. Quien necesita el bulto, la mascota o la plaza reserva en ese viaje.",
-  };
-
-}
-
 export async function aceptarOferta(
   ofertaId: string
 ): Promise<{ error: string } | { checkoutUrl: string }> {
