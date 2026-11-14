@@ -74,8 +74,9 @@ export default function TerminosPage() {
             <li>
               {APP_NAME} es una plataforma tecnológica de intermediación que
               pone en contacto a particulares que desean enviar un objeto o
-              enser personal con otros particulares que realizan un trayecto por
-              su cuenta y disponen de espacio libre en su vehículo.
+              enser personal con otros particulares que ya tenían previsto
+              hacer ese trayecto por su cuenta y disponen de espacio libre en
+              su vehículo.
             </li>
             <li>
               <strong>{APP_NAME} NO</strong> es una empresa de transportes, de
@@ -83,6 +84,19 @@ export default function TerminosPage() {
               presta servicios de transporte, no posee flota de vehículos ni
               contrata a los Conductores. Su función es la intermediación
               tecnológica entre particulares (P2P).
+            </li>
+            <li>
+              <strong>
+                {APP_NAME} solo pone en contacto a quien necesita viajar o
+                enviar un bulto con un conductor particular que ya tenía
+                previsto hacer ese viaje.
+              </strong>{" "}
+              El Conductor sale por un motivo suyo (trabajo, recado, familia u
+              otro) y, si le queda sitio, comparte ese trayecto. Quien reserva
+              se suma a un viaje ya previsto. La web no junta conductores, no
+              llama a un conductor para que salga a buscar a nadie, no organiza
+              portes a demanda y no compite con el taxi ni con el reparto
+              profesional.
             </li>
             <li>
               La relación contractual de transporte o compartición de viaje se
@@ -163,6 +177,18 @@ export default function TerminosPage() {
               El Titular podrá limitar viajes, bultos e importes máximos para
               cumplir la normativa española de transportes. El incumplimiento es
               responsabilidad exclusiva del Conductor.
+            </li>
+            <li>
+              Si alguien hace muchos viajes o portes seguidos, ese uso puede
+              resultar sospechoso de transporte profesional (taxi, VTC o
+              mensajería). <strong>Eso no es culpa de la web.</strong>{" "}
+              {APP_NAME} solo pone en contacto a quien necesita viajar o enviar
+              un bulto con un conductor particular que ya tenía previsto hacer
+              ese viaje. No junta conductores, no organiza esos viajes, no los
+              autoriza, no contrata a esa persona y no responde de lo que haga.
+              La responsabilidad es solo de quien publica y realiza esos
+              viajes. El Titular podrá limitar sus publicaciones, suspender o
+              cerrar la cuenta.
             </li>
           </ul>
         </section>
