@@ -9,6 +9,7 @@ import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import {
   CIUDADES_URBANAS,
+  ETIQUETA_MUNICIPIO_URBANO,
   ciudadUrbana,
   etiquetaZona,
 } from "@/lib/ciudad/zonas-burgos";
@@ -106,7 +107,7 @@ export function PublicarCiudadForm() {
   return (
     <div className="space-y-4">
       <Select
-        label="Ciudad"
+        label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual.id}
         options={CIUDADES_URBANAS.map((c) => ({ value: c.id, label: c.nombre }))}
         onChange={(e) => {

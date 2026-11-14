@@ -41,8 +41,8 @@ export default async function CiudadPage({
           Buscar trayecto en mi ciudad
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Por ahora, Burgos. Eliges barrio o polígono. La calle se concreta en
-          el chat.
+          Burgos, Aranda de Duero y Miranda de Ebro. Eliges barrio o polígono.
+          La calle se concreta en el chat.
         </p>
       </div>
 

@@ -7,6 +7,7 @@ import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import {
   CIUDADES_URBANAS,
+  ETIQUETA_MUNICIPIO_URBANO,
   ciudadUrbana,
   etiquetaZona,
 } from "@/lib/ciudad/zonas-burgos";
@@ -43,7 +44,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
   return (
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4">
       <Select
-        label="Ciudad"
+        label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual.id}
         options={CIUDADES_URBANAS.map((c) => ({
           value: c.id,

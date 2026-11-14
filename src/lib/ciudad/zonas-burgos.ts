@@ -1,5 +1,14 @@
-/** Barrios y polígonos del Ayuntamiento de Burgos (reglamento de distritos, 2020). */
+/**
+ * Barrios y polígonos cerrados.
+ * Burgos: reglamento de distritos del Ayuntamiento, 2020.
+ * Aranda de Duero: reuniones de barrios del Ayuntamiento, 2026, más San Francisco
+ * (plan general) y los polígonos del plan.
+ * Miranda de Ebro: nombres que usa el Ayuntamiento; sin Miranda Sur (sigue en proyecto).
+ */
 export type TipoZona = "barrio" | "poligono";
+
+export const ETIQUETA_MUNICIPIO_URBANO =
+  "Municipios de las de 30.000 habitantes";
 
 export type ZonaCiudad = {
   nombre: string;
@@ -52,12 +61,68 @@ const POLIGONOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Monte de la Abadesa", tipo: "poligono" },
 ];
 
+const BARRIOS_ARANDA: ZonaCiudad[] = [
+  { nombre: "La Aguilera", tipo: "barrio" },
+  { nombre: "Costaján", tipo: "barrio" },
+  { nombre: "Sinovas", tipo: "barrio" },
+  { nombre: "La Calabaza", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "El Polígono", tipo: "barrio" },
+  { nombre: "Allendeduero", tipo: "barrio" },
+  { nombre: "Tenerías", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Ferial-Bañuelos", tipo: "barrio" },
+  { nombre: "Las Casitas", tipo: "barrio" },
+];
+
+const POLIGONOS_ARANDA: ZonaCiudad[] = [
+  { nombre: "Polígono Allendeduero", tipo: "poligono" },
+  { nombre: "Prado Marina", tipo: "poligono" },
+  { nombre: "Polígono Norte", tipo: "poligono" },
+  { nombre: "Carretera de Palencia", tipo: "poligono" },
+];
+
+const BARRIOS_MIRANDA: ZonaCiudad[] = [
+  { nombre: "Aquende", tipo: "barrio" },
+  { nombre: "Allende", tipo: "barrio" },
+  { nombre: "Anduva", tipo: "barrio" },
+  { nombre: "Barriada de San Juan", tipo: "barrio" },
+  { nombre: "Bardauri", tipo: "barrio" },
+  { nombre: "Bayas", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "El Crucero", tipo: "barrio" },
+  { nombre: "La Charca", tipo: "barrio" },
+  { nombre: "Las Matillas", tipo: "barrio" },
+  { nombre: "Los Ángeles", tipo: "barrio" },
+  { nombre: "Los Corrales", tipo: "barrio" },
+  { nombre: "Valverde de Miranda", tipo: "barrio" },
+];
+
+const POLIGONOS_MIRANDA: ZonaCiudad[] = [
+  { nombre: "Polígono de Bayas", tipo: "poligono" },
+  { nombre: "Ircio", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
     nombre: "Burgos",
     etiqueta: "Burgos (Burgos)",
     zonas: [...BARRIOS_BURGOS, ...POLIGONOS_BURGOS],
+  },
+  {
+    id: "aranda",
+    nombre: "Aranda de Duero",
+    etiqueta: "Aranda de Duero (Burgos)",
+    zonas: [...BARRIOS_ARANDA, ...POLIGONOS_ARANDA],
+  },
+  {
+    id: "miranda",
+    nombre: "Miranda de Ebro",
+    etiqueta: "Miranda de Ebro (Burgos)",
+    zonas: [...BARRIOS_MIRANDA, ...POLIGONOS_MIRANDA],
   },
 ];
 
@@ -67,7 +132,10 @@ export function ciudadUrbana(id: string): CiudadUrbana | null {
 }
 
 export function etiquetaZona(zona: ZonaCiudad): string {
-  return zona.tipo === "poligono" ? `Polígono · ${zona.nombre}` : zona.nombre;
+  if (zona.tipo !== "poligono") return zona.nombre;
+  const ya = zona.nombre.toLocaleLowerCase("es");
+  if (ya.startsWith("polígono") || ya.startsWith("poligono")) return zona.nombre;
+  return `Polígono · ${zona.nombre}`;
 }
 
 export function zonaDeCiudad(

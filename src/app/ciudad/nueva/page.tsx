@@ -15,8 +15,8 @@ export default async function NuevaCiudadPage() {
           Publicar trayecto en mi ciudad
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Solo si ya ibas a hacer ese recorrido. Por ahora, Burgos. La calle se
-          concreta en el chat.
+          Solo si ya ibas a hacer ese recorrido. Burgos, Aranda de Duero y
+          Miranda de Ebro. La calle se concreta en el chat.
         </p>
       </div>
       <PublicarCiudadForm />
