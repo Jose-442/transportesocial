@@ -4,6 +4,8 @@
  * Aranda de Duero: reuniones de barrios del Ayuntamiento, 2026, más San Francisco
  * (plan general) y los polígonos del plan.
  * Miranda de Ebro: nombres que usa el Ayuntamiento; sin Miranda Sur (sigue en proyecto).
+ * Logroño: barrios que nombra el Ayuntamiento en los distritos y en las obras por barrio;
+ * polígonos Cantabria, Las Cañas y La Portalada (plan municipal 2024-2027).
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -105,6 +107,38 @@ const POLIGONOS_MIRANDA: ZonaCiudad[] = [
   { nombre: "Ircio", tipo: "poligono" },
 ];
 
+const BARRIOS_LOGRONO: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Ciudad de Santiago", tipo: "barrio" },
+  { nombre: "El Campillo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Madre de Dios", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Lobete", tipo: "barrio" },
+  { nombre: "Los Lirios", tipo: "barrio" },
+  { nombre: "Varea", tipo: "barrio" },
+  { nombre: "Cascajos", tipo: "barrio" },
+  { nombre: "La Estrella", tipo: "barrio" },
+  { nombre: "San Adrián", tipo: "barrio" },
+  { nombre: "Siete Infantes", tipo: "barrio" },
+  { nombre: "Las Gaunas", tipo: "barrio" },
+  { nombre: "El Arco", tipo: "barrio" },
+  { nombre: "La Cava", tipo: "barrio" },
+  { nombre: "Fardachón", tipo: "barrio" },
+  { nombre: "Yagüe", tipo: "barrio" },
+  { nombre: "El Cortijo", tipo: "barrio" },
+  { nombre: "El Cubo", tipo: "barrio" },
+  { nombre: "Valdegastea", tipo: "barrio" },
+];
+
+const POLIGONOS_LOGRONO: ZonaCiudad[] = [
+  { nombre: "Cantabria", tipo: "poligono" },
+  { nombre: "Las Cañas", tipo: "poligono" },
+  { nombre: "La Portalada", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -123,6 +157,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Miranda de Ebro",
     etiqueta: "Miranda de Ebro (Burgos)",
     zonas: [...BARRIOS_MIRANDA, ...POLIGONOS_MIRANDA],
+  },
+  {
+    id: "logrono",
+    nombre: "Logroño",
+    etiqueta: "Logroño (La Rioja)",
+    zonas: [...BARRIOS_LOGRONO, ...POLIGONOS_LOGRONO],
   },
 ];
 

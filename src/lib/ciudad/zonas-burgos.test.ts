@@ -12,6 +12,7 @@ describe("zonas de Burgos", () => {
       "burgos",
       "aranda",
       "miranda",
+      "logrono",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -33,6 +34,11 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(miranda!, "Polígono de Bayas")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(miranda!, "Ircio")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(miranda!, "Miranda Sur")).toBeNull();
+    const logrono = ciudadUrbana("logrono");
+    expect(logrono?.etiqueta).toBe("Logroño (La Rioja)");
+    expect(zonaDeCiudad(logrono!, "Yagüe")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(logrono!, "La Portalada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(logrono!, "Calle inventada")).toBeNull();
   });
 
   it("el título del trayecto corto usa los barrios", () => {
