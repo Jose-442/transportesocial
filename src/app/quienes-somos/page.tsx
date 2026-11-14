@@ -42,8 +42,9 @@ export default function QuienesSomosPage() {
         </p>
         <p>
           Además, si tu envío es más pequeño que el espacio publicado, la App
-          le da al conductor la opción de ajustar el precio hasta 48 horas
-          antes del viaje.
+          te da la opción de solicitar una rebaja en el precio y el conductor
+          tiene esa opción de ajustar el precio hasta 48 horas antes del
+          viaje.
         </p>
         <p>¡Así de fácil! Un éxito para ambas partes.</p>
       </div>
