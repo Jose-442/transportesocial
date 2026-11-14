@@ -405,7 +405,7 @@ export function NuevoBultoForm({
 
     try {
       const result = await crearBulto(formData);
-      if (result.error) {
+      if ("error" in result) {
         setError(result.error);
         enviando.current = false;
         return;

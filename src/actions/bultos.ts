@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 
-export async function crearBulto(formData: FormData) {
+export async function crearBulto(
+  formData: FormData
+): Promise<{ error: string } | { id: string }> {
   void formData;
   return {
     error:

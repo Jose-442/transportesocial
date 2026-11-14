@@ -49,11 +49,13 @@ export function AvisoPlazaForm() {
       ) : (
         <>
           <MunicipioAutocomplete
+            name="origen"
             label="Salida"
             value={origen}
             onChange={setOrigen}
           />
           <MunicipioAutocomplete
+            name="destino"
             label="Destino"
             value={destino}
             onChange={setDestino}
