@@ -118,19 +118,6 @@ export default async function HomePage() {
                   Buscar conductor con viaje previsto
                 </span>
               </ButtonLink>
-              <ButtonLink
-                href="/rutas"
-                variant="secondary"
-                fullWidth
-                className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
-              >
-                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
-                    📦
-                  </span>
-                  Buscar viaje con sitio para bulto o mascota
-                </span>
-              </ButtonLink>
             </div>
           </div>
           <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
