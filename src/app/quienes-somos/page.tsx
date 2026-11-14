@@ -91,11 +91,10 @@ export default function QuienesSomosPage() {
               segura hasta que el envío se complete según estas condiciones.
             </li>
             <li>
-              Puedes reservar un viaje ya publicado (
-              <strong>Viajes propuestos por conductores</strong>) o publicar una
-              solicitud de envío y aceptar una oferta de un conductor (
-              <strong>Propuestas de personas que necesitan enviar bulto</strong>
-              ).
+              Reservas el viaje que ya publicó el conductor. Si necesitas una
+              plaza, un bulto o llevar una mascota, dejas un aviso y reservas
+              cuando un conductor publique esa ruta. No se publica un encargo
+              ni se reciben ofertas sobre él.
             </li>
             <li>
               Si el conductor no tiene activada la aceptación automática, dispone

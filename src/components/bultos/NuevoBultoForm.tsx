@@ -22,6 +22,7 @@ import {
 } from "@/lib/mascota-solicitud";
 import { TEXTO_DECLARACION_PORTE } from "@/lib/porte-legal";
 import {
+  esPeticionSoloPlaza,
   incluyeBulto,
   isTipoSolicitud,
   TIPO_SOLICITUD_OPTIONS,
@@ -330,6 +331,9 @@ export function NuevoBultoForm({
     }
     if (!isTipoSolicitud(form.tipo_solicitud)) {
       errors.tipo_solicitud = "Elige cuántas plazas necesitas.";
+    } else if (esPeticionSoloPlaza(form.tipo_solicitud)) {
+      errors.tipo_solicitud =
+        "Si solo necesitas viajar, deja el aviso de arriba. No se publica un anuncio.";
     } else if (
       form.mascota === "grande" &&
       (form.tipo_solicitud === "solo_bulto" ||
@@ -421,14 +425,16 @@ export function NuevoBultoForm({
   }
 
   const mascotaGrande = form.mascota === "grande";
-  const opcionesPlazas = mascotaGrande
-    ? TIPO_SOLICITUD_OPTIONS.filter(
-        (opt) => incluyeBulto(opt.value) && opt.value !== "solo_bulto"
-      ).map((opt) => ({
-        ...opt,
-        label: textoMascotaEnVezDeBulto(opt.label, "grande"),
-      }))
-    : TIPO_SOLICITUD_OPTIONS;
+  const opcionesPlazas = (
+    mascotaGrande
+      ? TIPO_SOLICITUD_OPTIONS.filter(
+          (opt) => incluyeBulto(opt.value) && opt.value !== "solo_bulto"
+        ).map((opt) => ({
+          ...opt,
+          label: textoMascotaEnVezDeBulto(opt.label, "grande"),
+        }))
+      : TIPO_SOLICITUD_OPTIONS
+  ).filter((opt) => incluyeBulto(opt.value));
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

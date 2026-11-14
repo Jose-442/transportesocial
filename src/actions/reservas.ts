@@ -25,6 +25,7 @@ import {
   marcoPideRebaja,
 } from "@/lib/reservas/rebaja";
 import {
+  incluyeBulto,
   isTipoSolicitud,
   necesidadRestanteTrasOferta,
   tipoSolicitudDesdeDesglose,
@@ -823,12 +824,22 @@ export async function prepararReservaBulto(ofertaId: string) {
     tipoActual,
     (oferta as OfertaPrecio).desglose
   );
-  if (resto.cubreTodo || !resto.tipoRestante) {
+  const quedaSoloPlaza =
+    !!resto.tipoRestante && !incluyeBulto(resto.tipoRestante);
+  if (resto.cubreTodo || !resto.tipoRestante || quedaSoloPlaza) {
     await supabase
       .from("anuncios_bultos")
       .update({ estado: "reservado" })
       .eq("id", oferta.anuncio_bulto_id)
       .eq("user_id", user.id);
+    if (quedaSoloPlaza && bulto.fecha_limite) {
+      await supabase.from("alertas_viaje").insert({
+        user_id: bulto.user_id,
+        origen: bulto.origen,
+        destino: bulto.destino,
+        fecha: String(bulto.fecha_limite).slice(0, 10),
+      });
+    }
   } else {
     await supabase
       .from("anuncios_bultos")

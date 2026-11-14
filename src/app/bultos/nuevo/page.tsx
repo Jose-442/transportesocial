@@ -1,30 +1,21 @@
+import { AvisoPlazaForm } from "@/components/bultos/AvisoPlazaForm";
 import { Card } from "@/components/ui/Card";
-import { NuevoBultoForm } from "@/components/bultos/NuevoBultoForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
 
 export const metadata = {
-  title: "Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)",
+  title: "Avisarme si un conductor hace esta ruta",
 };
 
-export default async function NuevoBultoPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function NuevoBultoPage() {
   await requirePublicationAccess("/bultos/nuevo");
-  const params = await searchParams;
-  const entrada = params.entrada;
-  const desdePortada =
-    entrada === "portada" ||
-    (Array.isArray(entrada) && entrada.includes("portada"));
 
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold text-zinc-900">
-        Publicar porte para bulto y/o viaje para pasajero (con o sin mascota)
+        Avisarme si un conductor hace esta ruta
       </h1>
       <Card>
-        <NuevoBultoForm desdePortada={desdePortada} />
+        <AvisoPlazaForm />
       </Card>
     </div>
   );

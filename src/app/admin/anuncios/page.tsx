@@ -28,8 +28,8 @@ export default async function AdminAnunciosPage({
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">Anuncios</h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Viajes propuestos por conductores y propuestas de personas que
-          necesitan enviar bulto.
+          Viajes publicados por conductores. Un anuncio de quien necesita
+          plaza, bulto o mascota ya no se crea.
         </p>
       </div>
       <AdminAnunciosPanel

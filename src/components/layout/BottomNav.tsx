@@ -13,12 +13,12 @@ const items: NavItem[] = [
   { href: "/", label: "Inicio" },
   { href: "/rutas", label: "Viajes propuestos por conductores" },
   {
-    href: "/bultos",
+    href: "/bultos/nuevo",
     label: (
       <>
-        Propuestas de personas que necesitan
+        Avisarme si un conductor
         <br />
-        enviar bulto
+        hace mi ruta
       </>
     ),
   },

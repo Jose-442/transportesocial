@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { OfertaForm } from "@/components/bultos/OfertaForm";
 import { OfertasList } from "@/components/bultos/OfertasList";
 import { CancelarPublicacionButton } from "@/components/cuenta/CancelarPublicacionButton";
 import { MarcarNotificacionesEnlaceLeida } from "@/components/notifications/MarcarNotificacionesEnlaceLeida";
@@ -17,10 +16,12 @@ import {
   textoMascotaEnVezDeBulto,
   textoMascotaSolicitud,
 } from "@/lib/mascota-solicitud";
-import { incluyeBulto, labelTipoSolicitud } from "@/lib/solicitud-viaje";
+import {
+  incluyeBulto,
+  labelTipoSolicitud,
+} from "@/lib/solicitud-viaje";
 import { TIPO_CARGA_OPTIONS } from "@/lib/porte-legal";
-import { perfilPresentacionIncompleta, loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
-import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
+import { loadPerfilPublico, loadPerfilesPublicos } from "@/lib/profile";
 import type { AnuncioBulto, OfertaPrecio } from "@/types/database";
 
 export async function generateMetadata({
@@ -92,26 +93,16 @@ export default async function BultoDetallePage({
       ? await loadPerfilesPublicos(supabase, conductorIds)
       : {};
 
-  let mostrarAvisoPerfil = false;
-  let mostrarAvisoVehiculo = false;
-  if (user && !esDueno) {
-    const miPerfil = await loadPerfilPublico(supabase, user.id);
-    if (miPerfil) {
-      mostrarAvisoPerfil = perfilPresentacionIncompleta(miPerfil);
-      mostrarAvisoVehiculo = perfilVehiculoIncompleto(miPerfil);
-    }
-  }
-
   return (
     <div className="space-y-4">
       {user && (
         <MarcarNotificacionesEnlaceLeida enlace={`/bultos/${id}`} />
       )}
       <Link
-        href="/bultos"
+        href="/rutas"
         className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-700"
       >
-        ← Volver a buscar portes
+        ← Volver a buscar viajes
       </Link>
 
       <div className="space-y-2">
@@ -287,8 +278,8 @@ export default async function BultoDetallePage({
         </h2>
         {esDueno && bulto.estado === "activo" && (
           <p className="text-base text-zinc-600">
-            Este es tu anuncio. Aquí aparecerán las propuestas de los
-            conductores.
+            Este anuncio ya no recibe propuestas nuevas. Si queda alguna
+            pendiente, la ves aquí.
           </p>
         )}
         <OfertasList
@@ -308,22 +299,12 @@ export default async function BultoDetallePage({
         </div>
       )}
 
-      {!esDueno && bulto.estado === "activo" && !yaPropuso && (
+      {!esDueno && bulto.estado === "activo" && (
         <Card>
-          <h2 className="font-semibold text-zinc-900">Proponer precio</h2>
-          <p className="mt-1 text-base text-zinc-600">
-            Indica el precio por {bulto.mascota === "grande" ? "bulto (mascota)" : "bulto"} y/o por asiento libre
+          <p className="text-sm leading-snug text-zinc-700">
+            Ya no se hacen propuestas sobre un anuncio de plaza, bulto o
+            mascota. Publica tu ruta. Quien lo necesita reserva en ese viaje.
           </p>
-          <div className="mt-4">
-            <OfertaForm
-              bultoId={bulto.id}
-              tipoSolicitud={tipoSolicitud}
-              isLoggedIn={!!user}
-              mostrarAvisoPerfil={mostrarAvisoPerfil}
-              mostrarAvisoVehiculo={mostrarAvisoVehiculo}
-              esMascota={bulto.mascota === "grande"}
-            />
-          </div>
         </Card>
       )}
     </div>

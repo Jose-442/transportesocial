@@ -37,7 +37,16 @@ export function isTipoSolicitud(value: string): value is TipoSolicitud {
 
 export function incluyeBulto(tipo: TipoSolicitud | ""): boolean {
   if (!tipo) return false;
-  return tipo !== "solo_1_pasajero" && tipo !== "solo_2_pasajeros" && tipo !== "solo_3_pasajeros";
+  return !esPeticionSoloPlaza(tipo);
+}
+
+/** Plaza sin bulto: no se publica. Queda como aviso hasta que un conductor saque la ruta. */
+export function esPeticionSoloPlaza(tipo: string | null | undefined): boolean {
+  return (
+    tipo === "solo_1_pasajero" ||
+    tipo === "solo_2_pasajeros" ||
+    tipo === "solo_3_pasajeros"
+  );
 }
 
 export function numPasajeros(tipo: TipoSolicitud): number {

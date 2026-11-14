@@ -105,10 +105,10 @@ export default function TerminosPage() {
               obligaciones propias del contrato de transporte.
             </li>
             <li>
-              La Plataforma ofrece dos modalidades:{" "}
-              <strong>Viajes propuestos por conductores</strong> y{" "}
-              <strong>Propuestas de personas que necesitan enviar bulto</strong>
-              .
+              La Plataforma ofrece los viajes que publica el conductor. Quien
+              necesita una plaza, un bulto o llevar una mascota no publica un
+              anuncio ni recibe ofertas: deja un aviso y reserva cuando un
+              conductor publique esa ruta.
             </li>
           </ul>
         </section>
@@ -222,8 +222,8 @@ export default function TerminosPage() {
               condiciones adecuadas.
             </li>
             <li>
-              Al publicar un bulto, el Emisor debe aceptar la declaración de
-              responsabilidad que aparece en el formulario de publicación.
+              Al reservar el porte de un bulto, el Emisor debe aceptar la
+              declaración de responsabilidad que aparece en el formulario.
             </li>
           </ul>
         </section>
@@ -236,8 +236,8 @@ export default function TerminosPage() {
             <li>
               El Conductor puede inspeccionar visualmente la carga y solicitar
               la apertura de paquetes o bultos cerrados en el momento de la
-              recogida, conforme a la autorización dada por el Emisor al
-              publicar.
+              recogida,               conforme a la autorización dada por el Emisor al
+              reservar.
             </li>
             <li>
               Cuando la reserva está confirmada, el Conductor puede{" "}

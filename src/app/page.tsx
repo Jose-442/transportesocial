@@ -100,9 +100,9 @@ export default async function HomePage() {
               </h1>
             </div>
             <p className="text-xs text-emerald-50 sm:text-sm lg:text-base">
-              Cercano, práctico, útil. Conectamos conductores con espacio libre
-              con personas que necesitan enviar un bulto, viajar o desplazarse
-              con su mascota.
+              Cercano, práctico, útil. Ponemos en contacto a quien necesita
+              viajar, enviar un bulto o ir con su mascota con un conductor
+              particular que ya tenía previsto ese viaje.
             </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
@@ -119,7 +119,7 @@ export default async function HomePage() {
                 </span>
               </ButtonLink>
               <ButtonLink
-                href="/bultos"
+                href="/rutas"
                 variant="secondary"
                 fullWidth
                 className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
@@ -128,7 +128,7 @@ export default async function HomePage() {
                   <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
                     📦
                   </span>
-                  Buscar porte o pasajeros
+                  Buscar viaje con sitio para bulto o mascota
                 </span>
               </ButtonLink>
             </div>
@@ -191,7 +191,7 @@ export default async function HomePage() {
                 (Soy Remitente/Pasajero)
               </span>
               <span className="text-base font-semibold leading-snug sm:text-lg">
-                PUBLICAR mi necesidad de transporte
+                AVISARME si un conductor hace esta ruta
               </span>
             </ButtonLink>
           </div>

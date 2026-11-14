@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   calcOfertaTotales,
+  esPeticionSoloPlaza,
   incluyeBulto,
   necesidadRestanteTrasOferta,
   numPasajeros,
@@ -14,8 +15,10 @@ describe("solicitud-viaje", () => {
     expect(incluyeBulto("solo_bulto")).toBe(true);
   });
 
-  it("solo pasajeros: sin bulto", () => {
+  it("solo pasajeros: sin bulto y no se publica", () => {
     expect(incluyeBulto("solo_2_pasajeros")).toBe(false);
+    expect(esPeticionSoloPlaza("solo_2_pasajeros")).toBe(true);
+    expect(esPeticionSoloPlaza("bulto_1_pasajero")).toBe(false);
     expect(numPasajeros("solo_2_pasajeros")).toBe(2);
   });
 
