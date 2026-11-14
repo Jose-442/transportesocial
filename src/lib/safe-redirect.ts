@@ -23,5 +23,6 @@ export function etiquetaRedirectVehiculo(redirect: string): string | null {
   const path = redirect.split("?")[0] ?? redirect;
   if (/^\/bultos\/[^/]+$/.test(path)) return "Volver a la propuesta";
   if (path === "/rutas/nueva") return "Volver a publicar ruta";
+  if (path === "/ciudad/nueva") return "Volver a publicar el trayecto";
   return null;
 }

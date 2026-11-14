@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { AsientosLibresDots } from "@/components/capacidad/AsientosLibresDots";
 import { formatHoraEs } from "@/lib/datetime-form";
 import { formatEur } from "@/lib/pricing";
+import { tituloTrayectoCiudad } from "@/lib/ciudad/zonas-burgos";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import { badgeOfertaRuta, lineasOfertaRuta } from "@/lib/oferta-ruta-labels";
@@ -59,7 +60,8 @@ export function RutaCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <p className="min-w-0 font-semibold text-zinc-900">
-              {formatCiudad(ruta.origen)} → {formatCiudad(ruta.destino)}
+              {tituloTrayectoCiudad(ruta) ||
+                `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`}
             </p>
             {variant === "listado" && (
               <Badge
@@ -70,9 +72,15 @@ export function RutaCard({
               </Badge>
             )}
           </div>
-          <p className="mt-1 text-sm text-zinc-600">
-            {fecha} · {horaSalida}
-          </p>
+          {tituloTrayectoCiudad(ruta) ? (
+            <p className="mt-1 text-sm text-zinc-600">
+              {formatCiudad(ruta.origen)} · {fecha} · {horaSalida}
+            </p>
+          ) : (
+            <p className="mt-1 text-sm text-zinc-600">
+              {fecha} · {horaSalida}
+            </p>
+          )}
           {item.busquedaEsTramo && (
             <div className="mt-1 space-y-0.5 text-sm font-medium text-amber-800">
               <p>Pasa por el tramo que solicitas</p>

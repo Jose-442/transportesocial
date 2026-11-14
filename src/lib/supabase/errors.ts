@@ -53,6 +53,10 @@ export function supabaseErrorMessage(error: { message: string }): string {
     return "Aún no se puede guardar el tipo de vehículo. Falta un paso en la base de datos.";
   }
 
+  if (/en_ciudad|barrio_origen|barrio_destino/i.test(msg)) {
+    return "Falta activar los trayectos en la ciudad. En Supabase → SQL Editor, ejecuta la migración 078.";
+  }
+
   if (/infinite recursion/i.test(msg) && /chat_mensajes/i.test(msg)) {
     return "No se ha podido enviar el mensaje. Prueba otra vez.";
   }

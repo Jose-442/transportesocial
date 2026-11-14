@@ -39,7 +39,9 @@ export default async function LoginPage({
     rawRedirect.startsWith("/bultos/") &&
     !esRedirectPublicarBulto;
   const esRedirectPublicarViaje =
-    typeof rawRedirect === "string" && rawRedirect.startsWith("/rutas/nueva");
+    typeof rawRedirect === "string" &&
+    (rawRedirect.startsWith("/rutas/nueva") ||
+      rawRedirect.startsWith("/ciudad/nueva"));
   const contrasenaActualizada =
     params.ok === "contrasena" ||
     (Array.isArray(params.ok) && params.ok[0] === "contrasena");

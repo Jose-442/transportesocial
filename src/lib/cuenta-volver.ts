@@ -12,7 +12,7 @@ export function parseCuentaVolver(
   if (!seguro) return null;
 
   const path = (seguro.split("?")[0] ?? seguro).replace(/\/$/, "") || "/";
-  if (path === "/rutas/nueva") return path;
+  if (path === "/rutas/nueva" || path === "/ciudad/nueva") return path;
 
   const bulto = path.match(/^\/bultos\/([^/]+)$/);
   if (bulto && UUID_RE.test(bulto[1])) return path;

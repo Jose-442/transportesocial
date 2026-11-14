@@ -142,6 +142,7 @@ export async function listarRutasConCapacidad(
 
   const filtrarPorFiltros = (rutas: RutaConductor[]) =>
     rutas.filter((r) => {
+      if (r.en_ciudad) return false;
       if (salidaYaPasada(r.fecha_llegada_prevista || r.fecha_salida)) {
         return false;
       }

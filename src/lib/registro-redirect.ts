@@ -1,4 +1,8 @@
-export const REGISTRO_REDIRECTS = ["/rutas/nueva", "/bultos/nuevo"] as const;
+export const REGISTRO_REDIRECTS = [
+  "/rutas/nueva",
+  "/ciudad/nueva",
+  "/bultos/nuevo",
+] as const;
 
 export type RegistroRedirect = (typeof REGISTRO_REDIRECTS)[number];
 
@@ -27,6 +31,9 @@ export function mensajeRegistroRedirect(
 ): string | null {
   if (redirect === "/rutas/nueva") {
     return "Crea tu cuenta para publicar una ruta. Es gratis.";
+  }
+  if (redirect === "/ciudad/nueva") {
+    return "Crea tu cuenta para publicar un trayecto en tu ciudad. Es gratis.";
   }
   if (redirect === "/bultos/nuevo") {
     return "Crea tu cuenta para proponer un envío. Es gratis.";

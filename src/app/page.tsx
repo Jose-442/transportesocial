@@ -118,6 +118,19 @@ export default async function HomePage() {
                   Buscar conductor con viaje previsto
                 </span>
               </ButtonLink>
+              <ButtonLink
+                href="/ciudad"
+                variant="secondary"
+                fullWidth
+                className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
+              >
+                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
+                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                    🏘️
+                  </span>
+                  Buscar trayecto en mi ciudad
+                </span>
+              </ButtonLink>
             </div>
           </div>
           <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
@@ -181,6 +194,28 @@ export default async function HomePage() {
                 AVISARME si un conductor hace esta ruta
               </span>
             </ButtonLink>
+          </div>
+          <div className="mt-3 lg:mt-5">
+            <ButtonLink
+              href="/ciudad/nueva"
+              variant="secondary"
+              fullWidth
+              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-700 bg-white px-3 py-4 text-left text-emerald-950 hover:bg-emerald-50 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
+            >
+              <span className="flex items-center gap-2 text-sm font-semibold text-emerald-800 sm:text-base">
+                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
+                  🏘️
+                </span>
+                (Dentro de la ciudad)
+              </span>
+              <span className="text-base font-semibold leading-snug sm:text-lg">
+                PUBLICAR trayecto en mi ciudad
+              </span>
+            </ButtonLink>
+            <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
+              Por ahora, Burgos. Barrio o polígono. La calle se concreta en el
+              chat.
+            </p>
           </div>
           <p
             className={`${camaraFont.className} mt-6 text-center text-lg italic leading-snug text-orange-500 sm:mt-8 sm:text-xl`}

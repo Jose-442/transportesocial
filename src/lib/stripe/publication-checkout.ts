@@ -14,9 +14,9 @@ import { getRequestOrigin } from "./origin";
 import { getStripeServer, isStripeConfigured } from "./server";
 
 function publicationProductName(dest: PublicationDest): string {
-  return dest === "/rutas/nueva"
-    ? "Aportación publicación de ruta"
-    : "Aportación publicación de bulto";
+  if (dest === "/ciudad/nueva") return "Aportación publicación de trayecto en la ciudad";
+  if (dest === "/rutas/nueva") return "Aportación publicación de ruta";
+  return "Aportación publicación de bulto";
 }
 
 export type CreatePublicationCheckoutResult =

@@ -34,6 +34,7 @@ export async function updateSession(request: NextRequest) {
 
   const protectedPrefixes = [
     "/rutas/nueva",
+    "/ciudad/nueva",
     "/bultos/nuevo",
     "/cuenta",
     "/aportacion",

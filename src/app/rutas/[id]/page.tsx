@@ -28,6 +28,7 @@ import {
 } from "@/lib/espacio-opciones";
 import type { TipoOfertaRuta } from "@/lib/ruta-oferta";
 import { formatEur } from "@/lib/pricing";
+import { tituloTrayectoCiudad } from "@/lib/ciudad/zonas-burgos";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { ofertaDisponible, resumenAsientosRuta } from "@/lib/capacidad/asientos";
 import {
@@ -301,8 +302,12 @@ export default async function RutaDetallePage({
     ampliarMuestraBultoOferta ||
     ampliarMuestraBultoOriginal;
 
-  const origen = formatCiudad(ruta.origen);
-  const destino = formatCiudad(ruta.destino);
+  const tituloCiudad = tituloTrayectoCiudad(ruta);
+  const origen = tituloCiudad ? ruta.barrio_origen || "" : formatCiudad(ruta.origen);
+  const destino = tituloCiudad
+    ? ruta.barrio_destino || ""
+    : formatCiudad(ruta.destino);
+  const volverAlListado = tituloCiudad ? "/ciudad" : volverHref;
 
   const dia = formatFechaDiaEs(String(ruta.fecha_salida));
   const horaSalida = formatHoraEs(String(ruta.fecha_llegada_prevista));
@@ -332,7 +337,7 @@ export default async function RutaDetallePage({
     vehiculo: VehiculoEdicion | null;
   } | null = null;
 
-  if (esPropio && ruta.estado === "activa" && user) {
+  if (esPropio && ruta.estado === "activa" && user && !ruta.en_ciudad) {
     const { count } = await supabase
       .from("reservas")
       .select("id", { count: "exact", head: true })
@@ -427,16 +432,21 @@ export default async function RutaDetallePage({
     <div className="space-y-2 md:space-y-4">
       <ScrollToHash />
       <Link
-        href={volverHref}
+        href={volverAlListado}
         className="inline-flex min-h-9 items-center text-sm font-semibold text-emerald-700 md:min-h-11"
       >
-        ← Volver a buscar viajes
+        {tituloCiudad ? "← Volver a buscar en la ciudad" : "← Volver a buscar viajes"}
       </Link>
 
       <div>
         <h1 className="text-lg font-bold text-zinc-900 md:text-2xl">
-          {origen} → {destino}
+          {tituloCiudad || `${origen} → ${destino}`}
         </h1>
+        {tituloCiudad ? (
+          <p className="mt-1 text-sm text-zinc-600">
+            {formatCiudad(ruta.origen)}. La calle se concreta en el chat.
+          </p>
+        ) : null}
         <p className="mt-1 hidden text-sm text-zinc-600 md:block">{dia}</p>
       </div>
 

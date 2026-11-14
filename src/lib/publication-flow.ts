@@ -1,4 +1,8 @@
-export const PUBLICATION_DESTS = ["/rutas/nueva", "/bultos/nuevo"] as const;
+export const PUBLICATION_DESTS = [
+  "/rutas/nueva",
+  "/ciudad/nueva",
+  "/bultos/nuevo",
+] as const;
 
 export type PublicationDest = (typeof PUBLICATION_DESTS)[number];
 
@@ -15,7 +19,7 @@ export function parsePublicationDest(
 export function publicationFeeTipo(
   dest: PublicationDest
 ): "tarifa_publicacion" | "tarifa_propuesta" {
-  return dest === "/rutas/nueva" ? "tarifa_publicacion" : "tarifa_propuesta";
+  return dest === "/bultos/nuevo" ? "tarifa_propuesta" : "tarifa_publicacion";
 }
 
 export function aportacionHref(dest: PublicationDest): string {

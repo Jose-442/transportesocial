@@ -220,6 +220,10 @@ export type RutaConductor = {
   /** true = sí (acompañadas / DGT); false = no; null = rutas antiguas. */
   acepta_mascotas: boolean | null;
   estado: "activa" | "reservada" | "completada" | "cancelada";
+  /** Trayecto dentro de la misma ciudad. */
+  en_ciudad?: boolean | null;
+  barrio_origen?: string | null;
+  barrio_destino?: string | null;
   created_at: string;
   updated_at: string;
 };

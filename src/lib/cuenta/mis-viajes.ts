@@ -8,6 +8,7 @@ import type {
 import { apartadoReserva } from "@/lib/reservas/categorias";
 import { claveGrupoReserva } from "@/lib/cuenta/grupo-viaje";
 import { salidaYaPasada } from "@/lib/cuenta/salida-pasada";
+import { tituloTrayectoCiudad } from "@/lib/ciudad/zonas-burgos";
 import { formatCiudad } from "@/lib/format-ciudad";
 import { rutaOfreceBulto } from "@/lib/espacio-opciones";
 import {
@@ -45,7 +46,10 @@ function tituloReserva(
     ? rutasMap[reserva.ruta_conductor_id]
     : null;
   if (ruta) {
-    return `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`;
+    return (
+      tituloTrayectoCiudad(ruta) ||
+      `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`
+    );
   }
   return reserva.tipo === "bulto_oferta"
     ? fraseQueIncluyeReservas([reserva])
@@ -77,6 +81,46 @@ function hoyEnEspana(): string {
   }).format(new Date());
 }
 
+const CAMPOS_RUTA_CORTA =
+  "id, origen, destino, created_at, fecha_salida, fecha_llegada_prevista, estado, espacio_disponible, precio_publicado, en_ciudad, barrio_origen, barrio_destino";
+const CAMPOS_RUTA_CORTA_MIN =
+  "id, origen, destino, created_at, fecha_salida, fecha_llegada_prevista, estado, espacio_disponible, precio_publicado";
+
+function faltaColumnaCiudad(error: { message?: string } | null): boolean {
+  return /en_ciudad|barrio_origen|barrio_destino/i.test(error?.message ?? "");
+}
+
+async function leerRutasActivas(
+  supabase: DbClient,
+  userId: string,
+  ahoraIso: string
+) {
+  const filtrar = (columnas: string) =>
+    supabase
+      .from("rutas_conductores")
+      .select(columnas)
+      .eq("user_id", userId)
+      .in("estado", ["activa", "reservada"])
+      .gte("fecha_llegada_prevista", ahoraIso);
+  const conZona = await filtrar(CAMPOS_RUTA_CORTA);
+  if (faltaColumnaCiudad(conZona.error)) return filtrar(CAMPOS_RUTA_CORTA_MIN);
+  return conZona;
+}
+
+async function leerRutasPorIds(supabase: DbClient, ids: string[]) {
+  const conZona = await supabase
+    .from("rutas_conductores")
+    .select("id, origen, destino, en_ciudad, barrio_origen, barrio_destino")
+    .in("id", ids);
+  if (faltaColumnaCiudad(conZona.error)) {
+    return supabase
+      .from("rutas_conductores")
+      .select("id, origen, destino")
+      .in("id", ids);
+  }
+  return conZona;
+}
+
 function claveItem(item: ViajeListItem): string {
   if (item.kind === "publicacion") return `${item.kind}:${item.tipo}:${item.id}`;
   return `${item.kind}:${item.id}`;
@@ -99,14 +143,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
         .eq("user_id", userId)
         .eq("estado", "activo")
         .or(`fecha_limite.is.null,fecha_limite.gte.${hoy}`),
-      supabase
-        .from("rutas_conductores")
-        .select(
-          "id, origen, destino, created_at, fecha_salida, fecha_llegada_prevista, estado, espacio_disponible, precio_publicado"
-        )
-        .eq("user_id", userId)
-        .in("estado", ["activa", "reservada"])
-        .gte("fecha_llegada_prevista", ahoraIso),
+      leerRutasActivas(supabase, userId, ahoraIso),
     ]);
 
   const lista = (reservas ?? []) as Reserva[];
@@ -115,7 +152,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
     AnuncioBulto,
     "id" | "origen" | "destino" | "created_at" | "fecha_limite" | "estado"
   >[];
-  const rutas = (misRutas ?? []) as Pick<
+  const rutas = (misRutas ?? []) as unknown as Pick<
     RutaConductor,
     | "id"
     | "origen"
@@ -154,10 +191,7 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
 
   let rutasMap: Record<string, RutaConductor> = {};
   if (rutaIds.length > 0) {
-    const { data: rutasReserva } = await supabase
-      .from("rutas_conductores")
-      .select("id, origen, destino")
-      .in("id", rutaIds);
+    const { data: rutasReserva } = await leerRutasPorIds(supabase, rutaIds);
     rutasMap = Object.fromEntries(
       (rutasReserva ?? []).map((r) => [r.id, r as RutaConductor])
     );
@@ -187,7 +221,9 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       kind: "publicacion",
       id: ruta.id,
       tipo: "ruta",
-      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      titulo:
+        tituloTrayectoCiudad(ruta) ||
+        `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.fecha_salida || ruta.created_at,
       salidaEn: ruta.fecha_llegada_prevista || null,
       estado: "publicado",
@@ -213,7 +249,9 @@ export async function loadMisViajes(supabase: DbClient, userId: string) {
       kind: "publicacion",
       id: ruta.id,
       tipo: "ruta",
-      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      titulo:
+        tituloTrayectoCiudad(ruta) ||
+        `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.created_at,
       estado: "cancelado",
     });
@@ -532,7 +570,9 @@ export async function cargarHistorialPagina(
       kind: "publicacion",
       id: ruta.id,
       tipo: "ruta",
-      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      titulo:
+        tituloTrayectoCiudad(ruta) ||
+        `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.fecha_salida || ruta.created_at,
       salidaEn: ruta.fecha_llegada_prevista || null,
       estado: "publicado",
@@ -553,7 +593,9 @@ export async function cargarHistorialPagina(
       kind: "publicacion",
       id: ruta.id,
       tipo: "ruta",
-      titulo: `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
+      titulo:
+        tituloTrayectoCiudad(ruta) ||
+        `${formatCiudad(ruta.origen)} → ${formatCiudad(ruta.destino)}`,
       fecha: ruta.created_at,
       estado: "cancelado",
     });
@@ -614,10 +656,7 @@ export async function cargarHistorialPagina(
     .filter(Boolean) as string[];
   let rutasMap: Record<string, RutaConductor> = {};
   if (rutaIds.length > 0) {
-    const { data: rutasReserva } = await supabase
-      .from("rutas_conductores")
-      .select("id, origen, destino")
-      .in("id", rutaIds);
+    const { data: rutasReserva } = await leerRutasPorIds(supabase, rutaIds);
     rutasMap = Object.fromEntries(
       (rutasReserva ?? []).map((ruta) => [ruta.id, ruta as RutaConductor])
     );
