@@ -29,17 +29,16 @@ export default function QuienesSomosPage() {
 
       <div className="mb-6 space-y-4 text-base leading-relaxed sm:text-lg">
         <p>
-          Somos una plataforma que conecta a conductores que tienen un viaje ya
-          programado y disponen de espacio libre, con personas que necesitan
-          enviar un porte.
+          Somos una plataforma que pone en contacto a quien necesita viajar,
+          enviar un bulto o ir con su mascota con un conductor particular que
+          ya tenía previsto hacer ese viaje y tiene sitio libre.
         </p>
         <p>
-          Al hacer esa conexión, logramos que un porte sea económico, rápido,
-          eficiente y sostenible, con cero emisiones añadidas, ya que el viaje
-          se iba a hacer de todas formas. También en nuestra plataforma puede
-          publicar su solicitud de viaje la persona que necesite hacer un
-          porte, para que los conductores que hagan esa ruta puedan ofrecerle
-          un precio.
+          El viaje se iba a hacer de todas formas, así que el porte sale
+          económico, rápido y sin un desplazamiento añadido. El conductor
+          publica su ruta. Quien necesita la plaza, el bulto o la mascota no
+          publica un anuncio: deja un aviso y reserva cuando un conductor
+          publique esa ruta.
         </p>
         <p>
           Además, si tu envío es más pequeño que el espacio publicado, la App

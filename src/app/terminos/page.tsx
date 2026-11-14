@@ -236,7 +236,7 @@ export default function TerminosPage() {
             <li>
               El Conductor puede inspeccionar visualmente la carga y solicitar
               la apertura de paquetes o bultos cerrados en el momento de la
-              recogida,               conforme a la autorización dada por el Emisor al
+              recogida, conforme a la autorización dada por el Emisor al
               reservar.
             </li>
             <li>
