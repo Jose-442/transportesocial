@@ -39,12 +39,13 @@ export function AvisoPlazaForm() {
       <p className="text-sm leading-snug text-zinc-600">
         No se publica un anuncio y ningún conductor puede hacerte una oferta.
         Dejas un aviso con la salida, el destino y el día. Cuando un conductor
-        publique esa ruta por su cuenta, te avisamos para que reserves en su
-        viaje. El bulto o la mascota se describen al reservar, en ese viaje.
+        publique esa ruta por su cuenta, te avisamos por correo y en el móvil
+        para que reserves en su viaje. El bulto o la mascota se describen al
+        reservar, en ese viaje.
       </p>
       {listo ? (
         <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-          Aviso guardado. Te avisaremos si un conductor publica este viaje.
+          Aviso guardado. Te avisaremos por correo y en el móvil si un conductor publica este viaje.
         </p>
       ) : (
         <>
