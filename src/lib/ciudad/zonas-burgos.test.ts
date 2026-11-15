@@ -34,6 +34,7 @@ describe("zonas de Burgos", () => {
       "pontevedra",
       "vigo",
       "vilagarcia",
+      "coruna",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -242,6 +243,18 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(vilagarcia!, "O Pousadoiro")?.tipo).toBe("poligono");
     const nombresVilagarcia = vilagarcia!.zonas.map((z) => z.nombre);
     expect(new Set(nombresVilagarcia).size).toBe(nombresVilagarcia.length);
+    const coruna = ciudadUrbana("coruna");
+    expect(coruna?.etiqueta).toBe("A Coruña (A Coruña)");
+    expect(zonaDeCiudad(coruna!, "Cidade Vella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coruna!, "Os Castros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coruna!, "San Vicenzo de Elviña")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coruna!, "Meicende")).toBeNull();
+    expect(zonaDeCiudad(coruna!, "Parque Empresarial de Pocomaco")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(coruna!, "Polígono de Someso")?.tipo).toBe("poligono");
+    const nombresCoruna = coruna!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCoruna).size).toBe(nombresCoruna.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
