@@ -215,7 +215,8 @@ export default async function HomePage() {
             <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
               Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
               Santander, Torrelavega, Castro-Urdiales, Vitoria-Gasteiz,
-              Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada y Soria.
+              Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria
+              y Segovia.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>

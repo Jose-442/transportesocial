@@ -39,6 +39,8 @@
  * Soria: asociaciones de vecinos que subvenciona el Ayuntamiento,
  * incluidos los cuatro barrios rurales. La Barriada (Yagüe).
  * Polígonos Las Casas y Valcorba.
+ * Segovia: los 19 barrios de los presupuestos participativos del Ayuntamiento.
+ * Polígonos El Cerro, Hontoria y El Acueducto.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -591,6 +593,34 @@ const POLIGONOS_SORIA: ZonaCiudad[] = [
   { nombre: "Valcorba", tipo: "poligono" },
 ];
 
+const BARRIOS_SEGOVIA: ZonaCiudad[] = [
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "El Salvador", tipo: "barrio" },
+  { nombre: "San Millán", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "San Marcos", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Santo Tomás", tipo: "barrio" },
+  { nombre: "Santa Eulalia", tipo: "barrio" },
+  { nombre: "Cristo del Mercado", tipo: "barrio" },
+  { nombre: "La Albuera", tipo: "barrio" },
+  { nombre: "Nueva Segovia", tipo: "barrio" },
+  { nombre: "Puente de Hierro", tipo: "barrio" },
+  { nombre: "Zamarramala", tipo: "barrio" },
+  { nombre: "Hontoria", tipo: "barrio" },
+  { nombre: "Madrona", tipo: "barrio" },
+  { nombre: "Fuentemilanos", tipo: "barrio" },
+  { nombre: "Revenga", tipo: "barrio" },
+  { nombre: "Torredondo", tipo: "barrio" },
+  { nombre: "Perogordo", tipo: "barrio" },
+];
+
+const POLIGONOS_SEGOVIA: ZonaCiudad[] = [
+  { nombre: "El Cerro", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Hontoria", tipo: "poligono" },
+  { nombre: "El Acueducto", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -681,6 +711,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Soria",
     etiqueta: "Soria (Soria)",
     zonas: [...BARRIOS_SORIA, ...POLIGONOS_SORIA],
+  },
+  {
+    id: "segovia",
+    nombre: "Segovia",
+    etiqueta: "Segovia (Segovia)",
+    zonas: [...BARRIOS_SEGOVIA, ...POLIGONOS_SEGOVIA],
   },
 ];
 
