@@ -18,6 +18,7 @@ describe("zonas de Burgos", () => {
       "torrelavega",
       "castro",
       "vitoria",
+      "pamplona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -73,6 +74,11 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(vitoria!, "Zona Rural Este")).toBeNull();
     const nombres = vitoria!.zonas.map((z) => z.nombre);
     expect(new Set(nombres).size).toBe(nombres.length);
+    const pamplona = ciudadUrbana("pamplona");
+    expect(pamplona?.etiqueta).toBe("Pamplona (Navarra)");
+    expect(zonaDeCiudad(pamplona!, "Rochapea")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pamplona!, "Landaben")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pamplona!, "Cordovilla")).toBeNull();
   });
 
   it("el título del trayecto corto usa los barrios", () => {

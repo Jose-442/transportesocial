@@ -17,6 +17,8 @@
  * Vitoria-Gasteiz: 28 barrios del plano municipal (sin las tres «zonas rurales»,
  * porque los pueblos van con su nombre) y los núcleos del Ayuntamiento.
  * Ocho polígonos de la página de industria del Ayuntamiento.
+ * Pamplona: listado de barrios del Ayuntamiento y los nombres que usan
+ * los concejales de barrio. Polígonos Landaben y Agustinos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -379,6 +381,36 @@ const POLIGONOS_VITORIA: ZonaCiudad[] = [
   { nombre: "Parque Tecnológico de Álava", tipo: "poligono" },
 ];
 
+const BARRIOS_PAMPLONA: ZonaCiudad[] = [
+  { nombre: "Abejeras-Azpilagaña", tipo: "barrio" },
+  { nombre: "Beloso", tipo: "barrio" },
+  { nombre: "Buztintxuri", tipo: "barrio" },
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "Erripagaña", tipo: "barrio" },
+  { nombre: "Etxabakoitz", tipo: "barrio" },
+  { nombre: "Ezkaba", tipo: "barrio" },
+  { nombre: "Ensanche I", tipo: "barrio" },
+  { nombre: "Ensanche II", tipo: "barrio" },
+  { nombre: "Iturrama", tipo: "barrio" },
+  { nombre: "Lezkairu", tipo: "barrio" },
+  { nombre: "Ermitagaña", tipo: "barrio" },
+  { nombre: "Mendebaldea", tipo: "barrio" },
+  { nombre: "Mendillorri", tipo: "barrio" },
+  { nombre: "Milagrosa", tipo: "barrio" },
+  { nombre: "Rochapea", tipo: "barrio" },
+  { nombre: "San Jorge", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Txantrea", tipo: "barrio" },
+  { nombre: "Arrosadía", tipo: "barrio" },
+  { nombre: "Bidezar", tipo: "barrio" },
+  { nombre: "Santa María la Real", tipo: "barrio" },
+];
+
+const POLIGONOS_PAMPLONA: ZonaCiudad[] = [
+  { nombre: "Landaben", tipo: "poligono" },
+  { nombre: "Agustinos", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -433,6 +465,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vitoria-Gasteiz",
     etiqueta: "Vitoria-Gasteiz (Álava)",
     zonas: [...BARRIOS_VITORIA, ...POLIGONOS_VITORIA],
+  },
+  {
+    id: "pamplona",
+    nombre: "Pamplona",
+    etiqueta: "Pamplona (Navarra)",
+    zonas: [...BARRIOS_PAMPLONA, ...POLIGONOS_PAMPLONA],
   },
 ];
 
