@@ -45,6 +45,8 @@
  * Polígonos Argales, San Cristóbal, Carrascal y Berrocal.
  * Zamora: barrios del registro municipal de asociaciones de vecinos.
  * Polígonos Los Llanos, La Hiniesta y La Hiniesta Ampliación.
+ * Zaragoza: juntas municipales, los cuatro barrios del Distrito Sur
+ * y los catorce barrios rurales. Polígonos del listado municipal.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -723,6 +725,75 @@ const POLIGONOS_ZAMORA: ZonaCiudad[] = [
   { nombre: "La Hiniesta Ampliación", tipo: "poligono" },
 ];
 
+const BARRIOS_ZARAGOZA: ZonaCiudad[] = [
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Delicias", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Las Fuentes", tipo: "barrio" },
+  { nombre: "La Almozara", tipo: "barrio" },
+  { nombre: "Oliver-Valdefierro", tipo: "barrio" },
+  { nombre: "Torrero-La Paz", tipo: "barrio" },
+  { nombre: "El Rabal", tipo: "barrio" },
+  { nombre: "Actur-Rey Fernando", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+  { nombre: "Santa Isabel", tipo: "barrio" },
+  { nombre: "Miralbueno", tipo: "barrio" },
+  { nombre: "Sur", tipo: "barrio" },
+  { nombre: "Valdespartera", tipo: "barrio" },
+  { nombre: "Montecanal", tipo: "barrio" },
+  { nombre: "Rosales del Canal", tipo: "barrio" },
+  { nombre: "Arcosur", tipo: "barrio" },
+  { nombre: "Alfocea", tipo: "barrio" },
+  { nombre: "Casetas", tipo: "barrio" },
+  { nombre: "Garrapinillos", tipo: "barrio" },
+  { nombre: "Juslibol", tipo: "barrio" },
+  { nombre: "La Cartuja Baja", tipo: "barrio" },
+  { nombre: "Montañana", tipo: "barrio" },
+  { nombre: "Monzalbarba", tipo: "barrio" },
+  { nombre: "Movera", tipo: "barrio" },
+  { nombre: "Peñaflor", tipo: "barrio" },
+  { nombre: "San Gregorio", tipo: "barrio" },
+  { nombre: "San Juan de Mozarrifar", tipo: "barrio" },
+  { nombre: "Torrecilla de Valmadrid", tipo: "barrio" },
+  { nombre: "Venta del Olivar", tipo: "barrio" },
+  { nombre: "Villarrapa", tipo: "barrio" },
+];
+
+const POLIGONOS_ZARAGOZA: ZonaCiudad[] = [
+  { nombre: "Polígono Malpica", tipo: "poligono" },
+  { nombre: "Cogullada", tipo: "poligono" },
+  { nombre: "PLAZA", tipo: "poligono" },
+  { nombre: "Mercazaragoza", tipo: "poligono" },
+  { nombre: "Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "Argualas", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Reciclado López Soriano", tipo: "poligono" },
+  { nombre: "Alcalde Caballero", tipo: "poligono" },
+  { nombre: "Antiguas Naves Jesús Vicente", tipo: "poligono" },
+  { nombre: "Dinamiza", tipo: "poligono" },
+  { nombre: "El Pilar", tipo: "poligono" },
+  { nombre: "Empresarium", tipo: "poligono" },
+  { nombre: "Europa I", tipo: "poligono" },
+  { nombre: "Europa II", tipo: "poligono" },
+  { nombre: "Insider", tipo: "poligono" },
+  { nombre: "La Unión I", tipo: "poligono" },
+  { nombre: "La Unión II", tipo: "poligono" },
+  { nombre: "Las Navas", tipo: "poligono" },
+  { nombre: "Las Ventas", tipo: "poligono" },
+  { nombre: "Los Arcos", tipo: "poligono" },
+  { nombre: "Miguel Servet", tipo: "poligono" },
+  { nombre: "Miraflores", tipo: "poligono" },
+  { nombre: "Molino del Pilar", tipo: "poligono" },
+  { nombre: "Montemolín", tipo: "poligono" },
+  { nombre: "Puerta Norte", tipo: "poligono" },
+  { nombre: "Quattro", tipo: "poligono" },
+  { nombre: "San Valero", tipo: "poligono" },
+  { nombre: "Tecnum", tipo: "poligono" },
+  { nombre: "Valseca", tipo: "poligono" },
+  { nombre: "Vista Bella", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -831,6 +902,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Zamora",
     etiqueta: "Zamora (Zamora)",
     zonas: [...BARRIOS_ZAMORA, ...POLIGONOS_ZAMORA],
+  },
+  {
+    id: "zaragoza",
+    nombre: "Zaragoza",
+    etiqueta: "Zaragoza (Zaragoza)",
+    zonas: [...BARRIOS_ZARAGOZA, ...POLIGONOS_ZARAGOZA],
   },
 ];
 

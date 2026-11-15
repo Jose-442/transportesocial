@@ -216,7 +216,7 @@ export default async function HomePage() {
               Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
               Santander, Torrelavega, Castro-Urdiales, Vitoria-Gasteiz,
               Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria,
-              Segovia, Valladolid y Zamora.
+              Segovia, Valladolid, Zamora y Zaragoza.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>
