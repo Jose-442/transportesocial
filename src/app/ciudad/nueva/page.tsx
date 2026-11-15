@@ -17,7 +17,8 @@ export default async function NuevaCiudadPage() {
         <p className="mt-1 text-sm text-zinc-600">
           Solo si ya ibas a hacer ese recorrido. Burgos, Aranda de Duero,
           Miranda de Ebro, Logroño, Palencia, Santander, Torrelavega,
-          Castro-Urdiales, Vitoria-Gasteiz, Pamplona, Tudela y León. La calle se concreta
+          Castro-Urdiales, Vitoria-Gasteiz, Pamplona, Tudela, León,
+          San Andrés del Rabanedo y Ponferrada. La calle se concreta
           en el chat.
         </p>
       </div>

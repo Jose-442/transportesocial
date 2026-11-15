@@ -21,6 +21,8 @@ describe("zonas de Burgos", () => {
       "pamplona",
       "tudela",
       "leon",
+      "sanandres",
+      "ponferrada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -101,6 +103,26 @@ describe("zonas de Burgos", () => {
     );
     const nombresLeon = leon!.zonas.map((z) => z.nombre);
     expect(new Set(nombresLeon).size).toBe(nombresLeon.length);
+    const sanAndres = ciudadUrbana("sanandres");
+    expect(sanAndres?.etiqueta).toBe("San Andrés del Rabanedo (León)");
+    expect(zonaDeCiudad(sanAndres!, "Trobajo del Camino")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanAndres!, "Pinilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanAndres!, "Polígono Industrial de Trobajo")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresSanAndres = sanAndres!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanAndres).size).toBe(nombresSanAndres.length);
+    const ponferrada = ciudadUrbana("ponferrada");
+    expect(ponferrada?.etiqueta).toBe("Ponferrada (León)");
+    expect(zonaDeCiudad(ponferrada!, "Flores del Sil")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ponferrada!, "La Rosaleda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ponferrada!, "La Martina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ponferrada!, "La Llanada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ponferrada!, "Polígono La Martina")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresPonferrada = ponferrada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPonferrada).size).toBe(nombresPonferrada.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

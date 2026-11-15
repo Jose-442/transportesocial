@@ -30,6 +30,12 @@
  * Oteruelo es Oteruelo de la Valdoncina. Polígono 58 y Polígono 10
  * son barrios de viviendas. Polígonos: Onzonilla (el Polígono Industrial
  * de León) y el Parque Tecnológico de León.
+ * San Andrés del Rabanedo: pueblos y barrios de la página del Ayuntamiento.
+ * Polígono industrial de Trobajo del Camino.
+ * Ponferrada: núcleos del padrón del Ayuntamiento, más Casco Antiguo,
+ * La Rosaleda, Puente Boeza y San Antonio. Polígonos del municipio:
+ * La Llanada, el del Bierzo, Cantalobos, La Martina, La Barca, Dehesas,
+ * Montearenas y Los Poulones.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -494,6 +500,74 @@ const POLIGONOS_LEON: ZonaCiudad[] = [
   { nombre: "Parque Tecnológico de León", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_ANDRES: ZonaCiudad[] = [
+  { nombre: "Trobajo del Camino", tipo: "barrio" },
+  { nombre: "San Andrés del Rabanedo", tipo: "barrio" },
+  { nombre: "Villabalter", tipo: "barrio" },
+  { nombre: "Ferral del Bernesga", tipo: "barrio" },
+  { nombre: "Pinilla", tipo: "barrio" },
+  { nombre: "Paraíso-Cantinas", tipo: "barrio" },
+  { nombre: "La Sal", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_ANDRES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Trobajo", tipo: "poligono" },
+];
+
+const BARRIOS_PONFERRADA: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "La Rosaleda", tipo: "barrio" },
+  { nombre: "Puente Boeza", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Compostilla", tipo: "barrio" },
+  { nombre: "Cuatrovientos", tipo: "barrio" },
+  { nombre: "La Placa", tipo: "barrio" },
+  { nombre: "Flores del Sil", tipo: "barrio" },
+  { nombre: "La Martina", tipo: "barrio" },
+  { nombre: "Bárcena del Bierzo", tipo: "barrio" },
+  { nombre: "Bouzas", tipo: "barrio" },
+  { nombre: "Campo", tipo: "barrio" },
+  { nombre: "Urbanización Patricia", tipo: "barrio" },
+  { nombre: "Carracedo de Compludo", tipo: "barrio" },
+  { nombre: "Columbrianos", tipo: "barrio" },
+  { nombre: "Compludo", tipo: "barrio" },
+  { nombre: "Dehesas", tipo: "barrio" },
+  { nombre: "Espinoso de Compludo", tipo: "barrio" },
+  { nombre: "Fuentesnuevas", tipo: "barrio" },
+  { nombre: "Lombillo de los Barrios", tipo: "barrio" },
+  { nombre: "Manzanedo de Valdueza", tipo: "barrio" },
+  { nombre: "Montes de Valdueza", tipo: "barrio" },
+  { nombre: "Otero", tipo: "barrio" },
+  { nombre: "Ozuela", tipo: "barrio" },
+  { nombre: "Palacios de Compludo", tipo: "barrio" },
+  { nombre: "Peñalba de Santiago", tipo: "barrio" },
+  { nombre: "Rimor", tipo: "barrio" },
+  { nombre: "Salas de los Barrios", tipo: "barrio" },
+  { nombre: "San Andrés de Montejos", tipo: "barrio" },
+  { nombre: "San Clemente de Valdueza", tipo: "barrio" },
+  { nombre: "San Cristóbal de Valdueza", tipo: "barrio" },
+  { nombre: "San Adrián de Valdueza", tipo: "barrio" },
+  { nombre: "San Esteban de Valdueza", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "Santo Tomás de las Ollas", tipo: "barrio" },
+  { nombre: "Toral de Merayo", tipo: "barrio" },
+  { nombre: "Valdecañada", tipo: "barrio" },
+  { nombre: "Valdefrancos", tipo: "barrio" },
+  { nombre: "Villanueva de Valdueza", tipo: "barrio" },
+  { nombre: "Villar de los Barrios", tipo: "barrio" },
+];
+
+const POLIGONOS_PONFERRADA: ZonaCiudad[] = [
+  { nombre: "La Llanada", tipo: "poligono" },
+  { nombre: "Polígono Industrial del Bierzo", tipo: "poligono" },
+  { nombre: "Cantalobos", tipo: "poligono" },
+  { nombre: "Polígono La Martina", tipo: "poligono" },
+  { nombre: "La Barca", tipo: "poligono" },
+  { nombre: "Polígono Dehesas", tipo: "poligono" },
+  { nombre: "Montearenas", tipo: "poligono" },
+  { nombre: "Los Poulones", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -566,6 +640,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "León",
     etiqueta: "León (León)",
     zonas: [...BARRIOS_LEON, ...POLIGONOS_LEON],
+  },
+  {
+    id: "sanandres",
+    nombre: "San Andrés del Rabanedo",
+    etiqueta: "San Andrés del Rabanedo (León)",
+    zonas: [...BARRIOS_SAN_ANDRES, ...POLIGONOS_SAN_ANDRES],
+  },
+  {
+    id: "ponferrada",
+    nombre: "Ponferrada",
+    etiqueta: "Ponferrada (León)",
+    zonas: [...BARRIOS_PONFERRADA, ...POLIGONOS_PONFERRADA],
   },
 ];
 
