@@ -100,6 +100,9 @@
  * Polígonos Famades, Solanes y Est. Almeda es barrio.
  * Sant Boi de Llobregat: los 6 distritos del Ayuntamiento.
  * Ocho polígonos urbanos. La zona del aeropuerto queda fuera.
+ * Viladecans: los barrios de las tres regidurías de distrito.
+ * Polígonos Business Park, Ca n'Alemany, Can Calderon, Agròpolis
+ * y el industrial Centre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1871,6 +1874,37 @@ const POLIGONOS_CORNELLA: ZonaCiudad[] = [
   { nombre: "Est", tipo: "poligono" },
 ];
 
+const BARRIOS_VILADECANS: ZonaCiudad[] = [
+  { nombre: "Sant Jordi-Gabrielistes", tipo: "barrio" },
+  { nombre: "Barri Sales", tipo: "barrio" },
+  { nombre: "Barri Antic", tipo: "barrio" },
+  { nombre: "Eixample Centre", tipo: "barrio" },
+  { nombre: "Torre-roja", tipo: "barrio" },
+  { nombre: "Campreciós", tipo: "barrio" },
+  { nombre: "Llevant", tipo: "barrio" },
+  { nombre: "Montserratina", tipo: "barrio" },
+  { nombre: "Mas Ratés", tipo: "barrio" },
+  { nombre: "Molí-Can Ginestar", tipo: "barrio" },
+  { nombre: "Torrent Ballester", tipo: "barrio" },
+  { nombre: "Alba-rosa", tipo: "barrio" },
+  { nombre: "Can Guardiola", tipo: "barrio" },
+  { nombre: "Can Palmer", tipo: "barrio" },
+  { nombre: "Can Batllori", tipo: "barrio" },
+  { nombre: "Hispanitat", tipo: "barrio" },
+  { nombre: "Hospital Roca", tipo: "barrio" },
+  { nombre: "Can Sellarès", tipo: "barrio" },
+  { nombre: "Congrés", tipo: "barrio" },
+  { nombre: "Mil·lenari", tipo: "barrio" },
+];
+
+const POLIGONOS_VILADECANS: ZonaCiudad[] = [
+  { nombre: "Viladecans Business Park", tipo: "poligono" },
+  { nombre: "Ca n'Alemany", tipo: "poligono" },
+  { nombre: "Can Calderon", tipo: "poligono" },
+  { nombre: "Agròpolis", tipo: "poligono" },
+  { nombre: "Polígono industrial Centre", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2161,6 +2195,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sant Boi de Llobregat",
     etiqueta: "Sant Boi de Llobregat (Barcelona)",
     zonas: [...BARRIOS_SANT_BOI, ...POLIGONOS_SANT_BOI],
+  },
+  {
+    id: "viladecans",
+    nombre: "Viladecans",
+    etiqueta: "Viladecans (Barcelona)",
+    zonas: [...BARRIOS_VILADECANS, ...POLIGONOS_VILADECANS],
   },
 ];
 

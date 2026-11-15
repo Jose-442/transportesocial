@@ -54,6 +54,7 @@ describe("zonas de Burgos", () => {
       "santacoloma",
       "cornella",
       "santboi",
+      "viladecans",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -474,6 +475,17 @@ describe("zonas de Burgos", () => {
     const nombresSantBoi = santBoi!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSantBoi).size).toBe(nombresSantBoi.length);
     expect(nombresSantBoi.filter((n) => santBoi!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(6);
+    const viladecans = ciudadUrbana("viladecans");
+    expect(viladecans?.etiqueta).toBe("Viladecans (Barcelona)");
+    expect(viladecans?.nombre).toBe("Viladecans");
+    expect(zonaDeCiudad(viladecans!, "Barri Antic")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(viladecans!, "Montserratina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(viladecans!, "Ca n'Alemany")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(viladecans!, "Polígono industrial Centre")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(viladecans!, "Salas")).toBeNull();
+    const nombresViladecans = viladecans!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresViladecans).size).toBe(nombresViladecans.length);
+    expect(nombresViladecans.filter((n) => viladecans!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
