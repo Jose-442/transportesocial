@@ -107,6 +107,9 @@
  * y el Eixample Sud. Polígonos de las zonas de actividad económica.
  * Esplugues de Llobregat: los 10 barrios del Ayuntamiento.
  * El Gall, La Plana y Montesa son también las zonas industriales.
+ * Gavà: los barrios de las regidurías de barrio.
+ * Polígonos del Parc Empresarial: Les Massotes, La Post, Les Parets,
+ * El Camí Ral, El Regàs y La Marina.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1954,6 +1957,36 @@ const BARRIOS_ESPLUGUES: ZonaCiudad[] = [
 
 const POLIGONOS_ESPLUGUES: ZonaCiudad[] = [];
 
+const BARRIOS_GAVA: ZonaCiudad[] = [
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Barceloneta", tipo: "barrio" },
+  { nombre: "Àngela Roca", tipo: "barrio" },
+  { nombre: "Can Serra Balet", tipo: "barrio" },
+  { nombre: "Ausiàs March", tipo: "barrio" },
+  { nombre: "Can Ribes", tipo: "barrio" },
+  { nombre: "Les Ferreres", tipo: "barrio" },
+  { nombre: "Ca n'Espinós", tipo: "barrio" },
+  { nombre: "Bòbiles", tipo: "barrio" },
+  { nombre: "Diagonal", tipo: "barrio" },
+  { nombre: "Santa Teresa", tipo: "barrio" },
+  { nombre: "Les Colomeres", tipo: "barrio" },
+  { nombre: "La Sentiu", tipo: "barrio" },
+  { nombre: "Bruguers", tipo: "barrio" },
+  { nombre: "Can Tintorer", tipo: "barrio" },
+  { nombre: "Can Pere Bori", tipo: "barrio" },
+  { nombre: "Can Tries", tipo: "barrio" },
+  { nombre: "Gavà Mar", tipo: "barrio" },
+];
+
+const POLIGONOS_GAVA: ZonaCiudad[] = [
+  { nombre: "Les Massotes", tipo: "poligono" },
+  { nombre: "La Post", tipo: "poligono" },
+  { nombre: "Les Parets", tipo: "poligono" },
+  { nombre: "El Camí Ral", tipo: "poligono" },
+  { nombre: "El Regàs", tipo: "poligono" },
+  { nombre: "La Marina", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2262,6 +2295,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Esplugues de Llobregat",
     etiqueta: "Esplugues de Llobregat (Barcelona)",
     zonas: [...BARRIOS_ESPLUGUES, ...POLIGONOS_ESPLUGUES],
+  },
+  {
+    id: "gava",
+    nombre: "Gavà",
+    etiqueta: "Gavà (Barcelona)",
+    zonas: [...BARRIOS_GAVA, ...POLIGONOS_GAVA],
   },
 ];
 

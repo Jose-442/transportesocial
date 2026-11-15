@@ -57,6 +57,7 @@ describe("zonas de Burgos", () => {
       "viladecans",
       "elprat",
       "esplugues",
+      "gava",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -509,6 +510,17 @@ describe("zonas de Burgos", () => {
     const nombresEsplugues = esplugues!.zonas.map((z) => z.nombre);
     expect(new Set(nombresEsplugues).size).toBe(nombresEsplugues.length);
     expect(nombresEsplugues.filter((n) => esplugues!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    const gava = ciudadUrbana("gava");
+    expect(gava?.etiqueta).toBe("Gavà (Barcelona)");
+    expect(gava?.nombre).toBe("Gavà");
+    expect(zonaDeCiudad(gava!, "Gavà Mar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gava!, "Ca n'Espinós")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gava!, "El Regàs")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gava!, "La Marina")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gava!, "Torre Lluch")).toBeNull();
+    const nombresGava = gava!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGava).size).toBe(nombresGava.length);
+    expect(nombresGava.filter((n) => gava!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
