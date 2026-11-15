@@ -69,6 +69,8 @@
  * Polígonos Río do Pozo, A Gándara y As Lagoas.
  * Oleiros: parroquias del padrón, más Santa Cristina, Bastiagueiro y O Real.
  * Polígono Icaria.
+ * Bilbao: barrios del plano del Ayuntamiento de 2023 y los núcleos rurales del plan.
+ * Zorrotzaurre va como zona. Los polígonos de al lado están fuera del municipio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1363,6 +1365,51 @@ const POLIGONOS_OLEIROS: ZonaCiudad[] = [
   { nombre: "Icaria", tipo: "poligono" },
 ];
 
+const BARRIOS_BILBAO: ZonaCiudad[] = [
+  { nombre: "Arangoiti", tipo: "barrio" },
+  { nombre: "Ibarrekolanda", tipo: "barrio" },
+  { nombre: "San Ignacio - Elorrieta", tipo: "barrio" },
+  { nombre: "San Pedro de Deustu - La Ribera", tipo: "barrio" },
+  { nombre: "Zorrotzaurre", tipo: "barrio" },
+  { nombre: "Castaños", tipo: "barrio" },
+  { nombre: "Matiko - Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Uribarri", tipo: "barrio" },
+  { nombre: "Zurbaran - Arabella", tipo: "barrio" },
+  { nombre: "Otxarkoaga", tipo: "barrio" },
+  { nombre: "Txurdinaga", tipo: "barrio" },
+  { nombre: "Begoña", tipo: "barrio" },
+  { nombre: "Santutxu", tipo: "barrio" },
+  { nombre: "Bolueta", tipo: "barrio" },
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "Atxuri", tipo: "barrio" },
+  { nombre: "Bilbao La Vieja", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "Zabala", tipo: "barrio" },
+  { nombre: "Solokoetxe", tipo: "barrio" },
+  { nombre: "La Peña", tipo: "barrio" },
+  { nombre: "Iturralde", tipo: "barrio" },
+  { nombre: "San Adrián", tipo: "barrio" },
+  { nombre: "Miribilla", tipo: "barrio" },
+  { nombre: "Abando", tipo: "barrio" },
+  { nombre: "Indautxu", tipo: "barrio" },
+  { nombre: "Ametzola", tipo: "barrio" },
+  { nombre: "Iralabarri", tipo: "barrio" },
+  { nombre: "Errekaldeberri - Larraskitu", tipo: "barrio" },
+  { nombre: "Iturrigorri - Peñascal", tipo: "barrio" },
+  { nombre: "Uretamendi", tipo: "barrio" },
+  { nombre: "Basurtu", tipo: "barrio" },
+  { nombre: "Altamira", tipo: "barrio" },
+  { nombre: "Olabeaga", tipo: "barrio" },
+  { nombre: "Masustegi - Monte Caramelo", tipo: "barrio" },
+  { nombre: "Zorrotza", tipo: "barrio" },
+  { nombre: "Buia", tipo: "barrio" },
+  { nombre: "Seberetxe", tipo: "barrio" },
+  { nombre: "San Justo", tipo: "barrio" },
+  { nombre: "Azkarai", tipo: "barrio" },
+];
+
+const POLIGONOS_BILBAO: ZonaCiudad[] = [];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1543,6 +1590,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Oleiros",
     etiqueta: "Oleiros (A Coruña)",
     zonas: [...BARRIOS_OLEIROS, ...POLIGONOS_OLEIROS],
+  },
+  {
+    id: "bilbao",
+    nombre: "Bilbao",
+    etiqueta: "Bilbao (Bizkaia)",
+    zonas: [...BARRIOS_BILBAO, ...POLIGONOS_BILBAO],
   },
 ];
 
