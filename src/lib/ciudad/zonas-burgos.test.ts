@@ -48,6 +48,7 @@ describe("zonas de Burgos", () => {
       "sansebastian",
       "irun",
       "errenteria",
+      "barcelona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -406,6 +407,18 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(errenteria!, "Sagasti")).toBeNull();
     const nombresErrenteria = errenteria!.zonas.map((z) => z.nombre);
     expect(new Set(nombresErrenteria).size).toBe(nombresErrenteria.length);
+    const barcelona = ciudadUrbana("barcelona");
+    expect(barcelona?.etiqueta).toBe("Barcelona (Barcelona)");
+    expect(barcelona?.nombre).toBe("Barcelona");
+    expect(zonaDeCiudad(barcelona!, "el Raval")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barcelona!, "el Barri Gòtic")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barcelona!, "la Vila de Gràcia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barcelona!, "Zona Franca")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(barcelona!, "22@")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(barcelona!, "La Verneda")).toBeNull();
+    const nombresBarcelona = barcelona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBarcelona).size).toBe(nombresBarcelona.length);
+    expect(nombresBarcelona.filter((n) => barcelona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(73);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

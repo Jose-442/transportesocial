@@ -87,6 +87,9 @@
  * Dunboa es Dumboa. Behobia va aparte de Bidasoa. Polígono 54 es Azken Portu.
  * Errenteria: barrios de EUSTAT 2025. Rentería es el mismo municipio.
  * Polígonos Egiburuberri, Masti-Loidi, Olibet, Txirrita-Maleo y Aranguren.
+ * Barcelona: los 73 barrios del Ayuntamiento.
+ * Polígonos Zona Franca, Mercabarna, Bon Pastor, Torrent de l'Estadella,
+ * La Verneda Industrial, Montsolís y 22@.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1666,6 +1669,92 @@ const POLIGONOS_ERRENTERIA: ZonaCiudad[] = [
   { nombre: "Aranguren", tipo: "poligono" },
 ];
 
+const BARRIOS_BARCELONA: ZonaCiudad[] = [
+  { nombre: "el Raval", tipo: "barrio" },
+  { nombre: "el Barri Gòtic", tipo: "barrio" },
+  { nombre: "la Barceloneta", tipo: "barrio" },
+  { nombre: "Sant Pere, Santa Caterina i la Ribera", tipo: "barrio" },
+  { nombre: "el Fort Pienc", tipo: "barrio" },
+  { nombre: "la Sagrada Família", tipo: "barrio" },
+  { nombre: "la Dreta de l'Eixample", tipo: "barrio" },
+  { nombre: "l'Antiga Esquerra de l'Eixample", tipo: "barrio" },
+  { nombre: "la Nova Esquerra de l'Eixample", tipo: "barrio" },
+  { nombre: "Sant Antoni", tipo: "barrio" },
+  { nombre: "el Poble-sec", tipo: "barrio" },
+  { nombre: "la Marina del Prat Vermell", tipo: "barrio" },
+  { nombre: "la Marina de Port", tipo: "barrio" },
+  { nombre: "la Font de la Guatlla", tipo: "barrio" },
+  { nombre: "Hostafrancs", tipo: "barrio" },
+  { nombre: "la Bordeta", tipo: "barrio" },
+  { nombre: "Sants - Badal", tipo: "barrio" },
+  { nombre: "Sants", tipo: "barrio" },
+  { nombre: "les Corts", tipo: "barrio" },
+  { nombre: "la Maternitat i Sant Ramon", tipo: "barrio" },
+  { nombre: "Pedralbes", tipo: "barrio" },
+  { nombre: "Vallvidrera, el Tibidabo i les Planes", tipo: "barrio" },
+  { nombre: "Sarrià", tipo: "barrio" },
+  { nombre: "les Tres Torres", tipo: "barrio" },
+  { nombre: "Sant Gervasi - la Bonanova", tipo: "barrio" },
+  { nombre: "Sant Gervasi - Galvany", tipo: "barrio" },
+  { nombre: "el Putxet i el Farró", tipo: "barrio" },
+  { nombre: "Vallcarca i els Penitents", tipo: "barrio" },
+  { nombre: "el Coll", tipo: "barrio" },
+  { nombre: "la Salut", tipo: "barrio" },
+  { nombre: "la Vila de Gràcia", tipo: "barrio" },
+  { nombre: "el Camp d'en Grassot i Gràcia Nova", tipo: "barrio" },
+  { nombre: "el Baix Guinardó", tipo: "barrio" },
+  { nombre: "Can Baró", tipo: "barrio" },
+  { nombre: "el Guinardó", tipo: "barrio" },
+  { nombre: "la Font d'en Fargues", tipo: "barrio" },
+  { nombre: "el Carmel", tipo: "barrio" },
+  { nombre: "la Teixonera", tipo: "barrio" },
+  { nombre: "Sant Genís dels Agudells", tipo: "barrio" },
+  { nombre: "Montbau", tipo: "barrio" },
+  { nombre: "la Vall d'Hebron", tipo: "barrio" },
+  { nombre: "la Clota", tipo: "barrio" },
+  { nombre: "Horta", tipo: "barrio" },
+  { nombre: "Vilapicina i la Torre Llobeta", tipo: "barrio" },
+  { nombre: "Porta", tipo: "barrio" },
+  { nombre: "el Turó de la Peira", tipo: "barrio" },
+  { nombre: "Can Peguera", tipo: "barrio" },
+  { nombre: "la Guineueta", tipo: "barrio" },
+  { nombre: "Canyelles", tipo: "barrio" },
+  { nombre: "les Roquetes", tipo: "barrio" },
+  { nombre: "Verdun", tipo: "barrio" },
+  { nombre: "la Prosperitat", tipo: "barrio" },
+  { nombre: "la Trinitat Nova", tipo: "barrio" },
+  { nombre: "Torre Baró", tipo: "barrio" },
+  { nombre: "Ciutat Meridiana", tipo: "barrio" },
+  { nombre: "Vallbona", tipo: "barrio" },
+  { nombre: "la Trinitat Vella", tipo: "barrio" },
+  { nombre: "Baró de Viver", tipo: "barrio" },
+  { nombre: "el Bon Pastor", tipo: "barrio" },
+  { nombre: "Sant Andreu", tipo: "barrio" },
+  { nombre: "la Sagrera", tipo: "barrio" },
+  { nombre: "el Congrés i els Indians", tipo: "barrio" },
+  { nombre: "Navas", tipo: "barrio" },
+  { nombre: "el Camp de l'Arpa del Clot", tipo: "barrio" },
+  { nombre: "el Clot", tipo: "barrio" },
+  { nombre: "el Parc i la Llacuna del Poblenou", tipo: "barrio" },
+  { nombre: "la Vila Olímpica del Poblenou", tipo: "barrio" },
+  { nombre: "el Poblenou", tipo: "barrio" },
+  { nombre: "Diagonal Mar i el Front Marítim del Poblenou", tipo: "barrio" },
+  { nombre: "el Besòs i el Maresme", tipo: "barrio" },
+  { nombre: "Provençals del Poblenou", tipo: "barrio" },
+  { nombre: "Sant Martí de Provençals", tipo: "barrio" },
+  { nombre: "la Verneda i la Pau", tipo: "barrio" },
+];
+
+const POLIGONOS_BARCELONA: ZonaCiudad[] = [
+  { nombre: "Zona Franca", tipo: "poligono" },
+  { nombre: "Mercabarna", tipo: "poligono" },
+  { nombre: "Bon Pastor", tipo: "poligono" },
+  { nombre: "Torrent de l'Estadella", tipo: "poligono" },
+  { nombre: "La Verneda Industrial", tipo: "poligono" },
+  { nombre: "Montsolís", tipo: "poligono" },
+  { nombre: "22@", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1900,6 +1989,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Errenteria (Rentería)",
     etiqueta: "Errenteria (Gipuzkoa)",
     zonas: [...BARRIOS_ERRENTERIA, ...POLIGONOS_ERRENTERIA],
+  },
+  {
+    id: "barcelona",
+    nombre: "Barcelona",
+    etiqueta: "Barcelona (Barcelona)",
+    zonas: [...BARRIOS_BARCELONA, ...POLIGONOS_BARCELONA],
   },
 ];
 
