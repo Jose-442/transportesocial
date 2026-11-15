@@ -63,6 +63,7 @@ describe("zonas de Burgos", () => {
       "sabadell",
       "mataro",
       "santcugat",
+      "rubi",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -585,6 +586,18 @@ describe("zonas de Burgos", () => {
     const nombresSantCugat = santcugat!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSantCugat).size).toBe(nombresSantCugat.length);
     expect(nombresSantCugat.filter((n) => santcugat!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(68);
+    const rubi = ciudadUrbana("rubi");
+    expect(rubi?.etiqueta).toBe("Rubí (Barcelona)");
+    expect(rubi?.nombre).toBe("Rubí");
+    expect(zonaDeCiudad(rubi!, "Can Serrafossà – La Perla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rubi!, "Ca n’Alzamora")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rubi!, "El Pinar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rubi!, "CiT 3A Can Sant Joan Oest")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rubi!, "CiT 5B La Llana- Can Serra")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rubi!, "Escardívol")).toBeNull();
+    const nombresRubi = rubi!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRubi).size).toBe(nombresRubi.length);
+    expect(nombresRubi.filter((n) => rubi!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

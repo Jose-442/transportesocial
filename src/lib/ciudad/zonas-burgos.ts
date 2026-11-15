@@ -121,6 +121,8 @@
  * Sant Cugat del Vallès: los barrios del padrón municipal,
  * también los de Valldoreix. Siete parques empresariales.
  * Can Calopa, Ca n'Ametller y La Guinardera salen una vez.
+ * Rubí: los 23 barrios del Ayuntamiento.
+ * Los 11 polígonos del mapa municipal.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2237,6 +2239,46 @@ const POLIGONOS_SANT_CUGAT: ZonaCiudad[] = [
   { nombre: "Can Magí-Can Calders", tipo: "poligono" },
 ];
 
+const BARRIOS_RUBI: ZonaCiudad[] = [
+  { nombre: "Can Fatjó", tipo: "barrio" },
+  { nombre: "Sant Jordi Park", tipo: "barrio" },
+  { nombre: "Can Serrafossà – La Perla", tipo: "barrio" },
+  { nombre: "Can Ximelis", tipo: "barrio" },
+  { nombre: "Els Avets", tipo: "barrio" },
+  { nombre: "Castellnou – Can Mir", tipo: "barrio" },
+  { nombre: "Can Solà", tipo: "barrio" },
+  { nombre: "Can Barceló - Vallespark", tipo: "barrio" },
+  { nombre: "Sant Muç", tipo: "barrio" },
+  { nombre: "Ca n’Alzamora", tipo: "barrio" },
+  { nombre: "Can Vallhonrat", tipo: "barrio" },
+  { nombre: "25 de Setembre", tipo: "barrio" },
+  { nombre: "Les Torres", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Plana del Castell", tipo: "barrio" },
+  { nombre: "Ca n’Oriol", tipo: "barrio" },
+  { nombre: "Zona Nord - La Serreta", tipo: "barrio" },
+  { nombre: "Can Rosés", tipo: "barrio" },
+  { nombre: "El Progrés - Rubí 2000", tipo: "barrio" },
+  { nombre: "Mercat", tipo: "barrio" },
+  { nombre: "Plana de Can Bertran", tipo: "barrio" },
+  { nombre: "Sector Z", tipo: "barrio" },
+  { nombre: "El Pinar", tipo: "barrio" },
+];
+
+const POLIGONOS_RUBI: ZonaCiudad[] = [
+  { nombre: "CiT 1A Can Vallhonrat", tipo: "poligono" },
+  { nombre: "CiT 1B Can Jardí", tipo: "poligono" },
+  { nombre: "CiT 1D Rubí Sud", tipo: "poligono" },
+  { nombre: "CiT 1E Can Alzamora", tipo: "poligono" },
+  { nombre: "CiT 1F Cova Solera", tipo: "poligono" },
+  { nombre: "CiT 1G Sant Genís", tipo: "poligono" },
+  { nombre: "CiT 3A Can Sant Joan Oest", tipo: "poligono" },
+  { nombre: "CiT 5A Ctra. Terrassa", tipo: "poligono" },
+  { nombre: "CiT 5B La Llana- Can Serra", tipo: "poligono" },
+  { nombre: "CiT 5C Molí de la Bastida", tipo: "poligono" },
+  { nombre: "CiT 5D Can Rosés", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2581,6 +2623,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sant Cugat del Vallès",
     etiqueta: "Sant Cugat del Vallès (Barcelona)",
     zonas: [...BARRIOS_SANT_CUGAT, ...POLIGONOS_SANT_CUGAT],
+  },
+  {
+    id: "rubi",
+    nombre: "Rubí",
+    etiqueta: "Rubí (Barcelona)",
+    zonas: [...BARRIOS_RUBI, ...POLIGONOS_RUBI],
   },
 ];
 
