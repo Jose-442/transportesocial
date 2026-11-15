@@ -29,6 +29,7 @@ describe("zonas de Burgos", () => {
       "zamora",
       "zaragoza",
       "gijon",
+      "lugo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -186,6 +187,15 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(gijon!, "Polígono de La Calzada")?.tipo).toBe("poligono");
     const nombresGijon = gijon!.zonas.map((z) => z.nombre);
     expect(new Set(nombresGijon).size).toBe(nombresGijon.length);
+    const lugo = ciudadUrbana("lugo");
+    expect(lugo?.etiqueta).toBe("Lugo (Lugo)");
+    expect(zonaDeCiudad(lugo!, "Recatelo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lugo!, "As Gándaras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lugo!, "Calde (San Pedro)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lugo!, "O Ceao")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(lugo!, "Polígono As Gándaras")?.tipo).toBe("poligono");
+    const nombresLugo = lugo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLugo).size).toBe(nombresLugo.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

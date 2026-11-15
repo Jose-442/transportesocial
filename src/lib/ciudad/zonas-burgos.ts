@@ -49,6 +49,8 @@
  * y los catorce barrios rurales. Polígonos del listado municipal.
  * Gijón: barrios y parroquias del reglamento de distritos.
  * Polígonos del listado de áreas industriales del Ayuntamiento.
+ * Lugo: barrios que nombra el Ayuntamiento y las 54 parroquias del Concello.
+ * Polígonos O Ceao y As Gándaras.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -875,6 +877,94 @@ const POLIGONOS_GIJON: ZonaCiudad[] = [
   { nombre: "Parque Científico Tecnológico", tipo: "poligono" },
 ];
 
+const BARRIOS_LUGO: ZonaCiudad[] = [
+  { nombre: "Recinto amurallado", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Recatelo", tipo: "barrio" },
+  { nombre: "A Tinería", tipo: "barrio" },
+  { nombre: "O Carme", tipo: "barrio" },
+  { nombre: "A Cheda", tipo: "barrio" },
+  { nombre: "A Ponte", tipo: "barrio" },
+  { nombre: "Fonte dos Ranchos", tipo: "barrio" },
+  { nombre: "A Tolda", tipo: "barrio" },
+  { nombre: "Acea de Olga", tipo: "barrio" },
+  { nombre: "Fingoi", tipo: "barrio" },
+  { nombre: "A Milagrosa", tipo: "barrio" },
+  { nombre: "Feijoo", tipo: "barrio" },
+  { nombre: "A Piringalla", tipo: "barrio" },
+  { nombre: "Albeiros", tipo: "barrio" },
+  { nombre: "Paradai", tipo: "barrio" },
+  { nombre: "As Fontiñas", tipo: "barrio" },
+  { nombre: "A Chanca", tipo: "barrio" },
+  { nombre: "Sagrado Corazón", tipo: "barrio" },
+  { nombre: "As Gándaras", tipo: "barrio" },
+  { nombre: "Galegos", tipo: "barrio" },
+  { nombre: "Xuíz", tipo: "barrio" },
+  { nombre: "Montirón", tipo: "barrio" },
+  { nombre: "Garabolos", tipo: "barrio" },
+  { nombre: "A Residencia", tipo: "barrio" },
+  { nombre: "Abella", tipo: "barrio" },
+  { nombre: "Adai (Santa María Madanela)", tipo: "barrio" },
+  { nombre: "Santa María Alta (Santa María)", tipo: "barrio" },
+  { nombre: "Alto (San Xoán)", tipo: "barrio" },
+  { nombre: "Anxos (San Mamede)", tipo: "barrio" },
+  { nombre: "Bacurín (San Miguel)", tipo: "barrio" },
+  { nombre: "Bascuas (Santa María)", tipo: "barrio" },
+  { nombre: "Bazar (San Remixio)", tipo: "barrio" },
+  { nombre: "Benade (Santo Estevo)", tipo: "barrio" },
+  { nombre: "Bocamaos (San Xiao)", tipo: "barrio" },
+  { nombre: "Bóveda (Sta. Eulalia)", tipo: "barrio" },
+  { nombre: "Boveda (Sta. María)", tipo: "barrio" },
+  { nombre: "Burgo (San Vicente)", tipo: "barrio" },
+  { nombre: "Calde (San Pedro)", tipo: "barrio" },
+  { nombre: "Camoira (Santo Estevo)", tipo: "barrio" },
+  { nombre: "Campo (San Xoan)", tipo: "barrio" },
+  { nombre: "Carballido (San Martiño)", tipo: "barrio" },
+  { nombre: "Castro (Santo Andre)", tipo: "barrio" },
+  { nombre: "Coeo (San Vicente)", tipo: "barrio" },
+  { nombre: "Coeses (Santa María Madanela)", tipo: "barrio" },
+  { nombre: "Cuiña (Santa Eulalia)", tipo: "barrio" },
+  { nombre: "Esperante (Santa Eulalia)", tipo: "barrio" },
+  { nombre: "Fixos (Santa Marta)", tipo: "barrio" },
+  { nombre: "Gondar (Santa María)", tipo: "barrio" },
+  { nombre: "Labio (San Pedro)", tipo: "barrio" },
+  { nombre: "Lamas (Santa Eulalia)", tipo: "barrio" },
+  { nombre: "Mazoi (Santa Eulalia)", tipo: "barrio" },
+  { nombre: "Meilán (Santiago)", tipo: "barrio" },
+  { nombre: "Mera (San Pedro)", tipo: "barrio" },
+  { nombre: "Monte de Meda (Santa María Madanela)", tipo: "barrio" },
+  { nombre: "Muxa (San Salvador)", tipo: "barrio" },
+  { nombre: "Ombreiro (San Martiño)", tipo: "barrio" },
+  { nombre: "Orbazai (San Miguel)", tipo: "barrio" },
+  { nombre: "Outeiro (San Salvador)", tipo: "barrio" },
+  { nombre: "Pedreda (San Vicente)", tipo: "barrio" },
+  { nombre: "Pena (San Xoán)", tipo: "barrio" },
+  { nombre: "Pías (San Vicente)", tipo: "barrio" },
+  { nombre: "Piñeiro (San Martiño)", tipo: "barrio" },
+  { nombre: "Piúgos (Santiago)", tipo: "barrio" },
+  { nombre: "Poutomillos (San Martiño)", tipo: "barrio" },
+  { nombre: "Progalo (Santiago)", tipo: "barrio" },
+  { nombre: "Recimil (San Lourenzo)", tipo: "barrio" },
+  { nombre: "Ribas de Miño (San Mamede)", tipo: "barrio" },
+  { nombre: "Romean (San Pedro)", tipo: "barrio" },
+  { nombre: "Rubias (San Xiao)", tipo: "barrio" },
+  { nombre: "Saa (Santiago)", tipo: "barrio" },
+  { nombre: "Santa Cristina de San Romao (Santa Cristina)", tipo: "barrio" },
+  { nombre: "Santa Comba (San Pedro)", tipo: "barrio" },
+  { nombre: "Santa María de Muxa", tipo: "barrio" },
+  { nombre: "Soñar (San Pedro)", tipo: "barrio" },
+  { nombre: "Teixeiro (Santa María)", tipo: "barrio" },
+  { nombre: "Tirimol (San Xoan)", tipo: "barrio" },
+  { nombre: "Torible (Santa María)", tipo: "barrio" },
+  { nombre: "Veral (San Vicente)", tipo: "barrio" },
+  { nombre: "Vilachá de Mera (San Xiao)", tipo: "barrio" },
+];
+
+const POLIGONOS_LUGO: ZonaCiudad[] = [
+  { nombre: "O Ceao", tipo: "poligono" },
+  { nombre: "Polígono As Gándaras", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -995,6 +1085,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Gijón",
     etiqueta: "Gijón (Asturias)",
     zonas: [...BARRIOS_GIJON, ...POLIGONOS_GIJON],
+  },
+  {
+    id: "lugo",
+    nombre: "Lugo",
+    etiqueta: "Lugo (Lugo)",
+    zonas: [...BARRIOS_LUGO, ...POLIGONOS_LUGO],
   },
 ];
 
