@@ -26,6 +26,10 @@
  * Polígonos de la página de industria del Ayuntamiento: Municipal,
  * Las Labradas, Montes de Cierzo, La Serna, Centro de Servicios,
  * La Barrena y AA4. El Área Logística sigue sin hacerse: es La Serna 2.
+ * León: barrios de la página de concejales de barrio del Ayuntamiento.
+ * Oteruelo es Oteruelo de la Valdoncina. Polígono 58 y Polígono 10
+ * son barrios de viviendas. Polígonos: Onzonilla (el Polígono Industrial
+ * de León) y el Parque Tecnológico de León.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -448,6 +452,48 @@ const POLIGONOS_TUDELA: ZonaCiudad[] = [
   { nombre: "AA4", tipo: "poligono" },
 ];
 
+const BARRIOS_LEON: ZonaCiudad[] = [
+  { nombre: "La Palomera", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "Mariano Andrés", tipo: "barrio" },
+  { nombre: "Ventas", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "La Serna", tipo: "barrio" },
+  { nombre: "Fernández Ladreda", tipo: "barrio" },
+  { nombre: "La Lastra", tipo: "barrio" },
+  { nombre: "Barrio Húmedo", tipo: "barrio" },
+  { nombre: "Santa Marina", tipo: "barrio" },
+  { nombre: "Mercado", tipo: "barrio" },
+  { nombre: "Polígono 58", tipo: "barrio" },
+  { nombre: "Área 17", tipo: "barrio" },
+  { nombre: "El Soto", tipo: "barrio" },
+  { nombre: "Trobajo del Cerecedo", tipo: "barrio" },
+  { nombre: "Eras de Renueva", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Área 18", tipo: "barrio" },
+  { nombre: "Chantría", tipo: "barrio" },
+  { nombre: "San Claudio", tipo: "barrio" },
+  { nombre: "Crucero", tipo: "barrio" },
+  { nombre: "Pinilla", tipo: "barrio" },
+  { nombre: "La Vega", tipo: "barrio" },
+  { nombre: "Puente Castro", tipo: "barrio" },
+  { nombre: "San Mamés", tipo: "barrio" },
+  { nombre: "La Inmaculada", tipo: "barrio" },
+  { nombre: "Armunia", tipo: "barrio" },
+  { nombre: "Polígono 10", tipo: "barrio" },
+  { nombre: "El Ejido", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Oteruelo", tipo: "barrio" },
+  { nombre: "Cantamilanos", tipo: "barrio" },
+  { nombre: "La Asunción", tipo: "barrio" },
+  { nombre: "San Esteban", tipo: "barrio" },
+];
+
+const POLIGONOS_LEON: ZonaCiudad[] = [
+  { nombre: "Onzonilla", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de León", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -514,6 +560,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Tudela",
     etiqueta: "Tudela (Navarra)",
     zonas: [...BARRIOS_TUDELA, ...POLIGONOS_TUDELA],
+  },
+  {
+    id: "leon",
+    nombre: "León",
+    etiqueta: "León (León)",
+    zonas: [...BARRIOS_LEON, ...POLIGONOS_LEON],
   },
 ];
 

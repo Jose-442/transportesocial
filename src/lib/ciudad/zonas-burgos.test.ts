@@ -20,6 +20,7 @@ describe("zonas de Burgos", () => {
       "vitoria",
       "pamplona",
       "tudela",
+      "leon",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -90,6 +91,16 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(tudela!, "La Albea")).toBeNull();
     const nombresTudela = tudela!.zonas.map((z) => z.nombre);
     expect(new Set(nombresTudela).size).toBe(nombresTudela.length);
+    const leon = ciudadUrbana("leon");
+    expect(leon?.etiqueta).toBe("León (León)");
+    expect(zonaDeCiudad(leon!, "Barrio Húmedo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leon!, "Polígono 58")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leon!, "Onzonilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(leon!, "Parque Tecnológico de León")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresLeon = leon!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLeon).size).toBe(nombresLeon.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
