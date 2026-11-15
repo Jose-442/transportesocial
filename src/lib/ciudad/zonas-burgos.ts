@@ -35,7 +35,7 @@
  * Ponferrada: núcleos del padrón del Ayuntamiento, más Casco Antiguo,
  * La Rosaleda, Puente Boeza y San Antonio. Polígonos del municipio:
  * La Llanada, el del Bierzo, Cantalobos, La Martina, La Barca, Dehesas,
- * Montearenas y Los Poulones.
+ * Montearenas, Los Poulones y El Bayo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -566,6 +566,7 @@ const POLIGONOS_PONFERRADA: ZonaCiudad[] = [
   { nombre: "Polígono Dehesas", tipo: "poligono" },
   { nombre: "Montearenas", tipo: "poligono" },
   { nombre: "Los Poulones", tipo: "poligono" },
+  { nombre: "El Bayo", tipo: "poligono" },
 ];
 
 export const CIUDADES_URBANAS: CiudadUrbana[] = [

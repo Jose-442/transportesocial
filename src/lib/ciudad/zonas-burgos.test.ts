@@ -118,6 +118,7 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(ponferrada!, "La Rosaleda")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(ponferrada!, "La Martina")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(ponferrada!, "La Llanada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ponferrada!, "El Bayo")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(ponferrada!, "Polígono La Martina")?.tipo).toBe(
       "poligono"
     );
