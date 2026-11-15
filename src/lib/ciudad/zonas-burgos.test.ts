@@ -64,6 +64,7 @@ describe("zonas de Burgos", () => {
       "mataro",
       "santcugat",
       "rubi",
+      "vilanova",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -598,6 +599,18 @@ describe("zonas de Burgos", () => {
     const nombresRubi = rubi!.zonas.map((z) => z.nombre);
     expect(new Set(nombresRubi).size).toBe(nombresRubi.length);
     expect(nombresRubi.filter((n) => rubi!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    const vilanova = ciudadUrbana("vilanova");
+    expect(vilanova?.etiqueta).toBe("Vilanova i la Geltrú (Barcelona)");
+    expect(vilanova?.nombre).toBe("Vilanova i la Geltrú");
+    expect(zonaDeCiudad(vilanova!, "L'Aragai")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilanova!, "Centrevila")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilanova!, "La Collada - Els Sis Camins")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilanova!, "Masia d'en Frederic")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilanova!, "Industrial Roquetes Subsector V")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilanova!, "Centre Vila")).toBeNull();
+    const nombresVilanova = vilanova!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVilanova).size).toBe(nombresVilanova.length);
+    expect(nombresVilanova.filter((n) => vilanova!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

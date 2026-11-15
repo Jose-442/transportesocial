@@ -123,6 +123,8 @@
  * Can Calopa, Ca n'Ametller y La Guinardera salen una vez.
  * Rubí: los 23 barrios del Ayuntamiento.
  * Los 11 polígonos del mapa municipal.
+ * Vilanova i la Geltrú: los barrios de la página del Ayuntamiento.
+ * Los 12 polígonos del censo municipal.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2279,6 +2281,42 @@ const POLIGONOS_RUBI: ZonaCiudad[] = [
   { nombre: "CiT 5D Can Rosés", tipo: "poligono" },
 ];
 
+const BARRIOS_VILANOVA: ZonaCiudad[] = [
+  { nombre: "L'Aragai", tipo: "barrio" },
+  { nombre: "L'Armanyà", tipo: "barrio" },
+  { nombre: "Barri de Mar", tipo: "barrio" },
+  { nombre: "Can Marquès", tipo: "barrio" },
+  { nombre: "Casernes", tipo: "barrio" },
+  { nombre: "Centrevila", tipo: "barrio" },
+  { nombre: "La Collada - Els Sis Camins", tipo: "barrio" },
+  { nombre: "Fondo Somella", tipo: "barrio" },
+  { nombre: "La Geltrú", tipo: "barrio" },
+  { nombre: "Masia Nova", tipo: "barrio" },
+  { nombre: "Molí de Vent", tipo: "barrio" },
+  { nombre: "Nucli Antic", tipo: "barrio" },
+  { nombre: "Plaça de La Sardana", tipo: "barrio" },
+  { nombre: "Prat de Vilanova", tipo: "barrio" },
+  { nombre: "Ribes Roges", tipo: "barrio" },
+  { nombre: "Sant Joan", tipo: "barrio" },
+  { nombre: "Santa Maria", tipo: "barrio" },
+  { nombre: "Tacó", tipo: "barrio" },
+];
+
+const POLIGONOS_VILANOVA: ZonaCiudad[] = [
+  { nombre: "Masia d'en Frederic", tipo: "poligono" },
+  { nombre: "Masia del Notari", tipo: "poligono" },
+  { nombre: "Masia del Notari – Pirelli", tipo: "poligono" },
+  { nombre: "Polígono industrial Masia Barreres", tipo: "poligono" },
+  { nombre: "Sector Marquès", tipo: "poligono" },
+  { nombre: "Industrial Roquetes", tipo: "poligono" },
+  { nombre: "La Bòbila", tipo: "poligono" },
+  { nombre: "Torrent de Santa Magdalena", tipo: "poligono" },
+  { nombre: "Sínia de les Vaques", tipo: "poligono" },
+  { nombre: "Industrial Roquetes Subsector V", tipo: "poligono" },
+  { nombre: "La Pastera", tipo: "poligono" },
+  { nombre: "Industrial La Plana", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2629,6 +2667,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Rubí",
     etiqueta: "Rubí (Barcelona)",
     zonas: [...BARRIOS_RUBI, ...POLIGONOS_RUBI],
+  },
+  {
+    id: "vilanova",
+    nombre: "Vilanova i la Geltrú",
+    etiqueta: "Vilanova i la Geltrú (Barcelona)",
+    zonas: [...BARRIOS_VILANOVA, ...POLIGONOS_VILANOVA],
   },
 ];
 
