@@ -53,6 +53,7 @@ describe("zonas de Burgos", () => {
       "badalona",
       "santacoloma",
       "cornella",
+      "santboi",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -463,6 +464,16 @@ describe("zonas de Burgos", () => {
     const nombresCornella = cornella!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCornella).size).toBe(nombresCornella.length);
     expect(nombresCornella.filter((n) => cornella!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
+    const santBoi = ciudadUrbana("santboi");
+    expect(santBoi?.etiqueta).toBe("Sant Boi de Llobregat (Barcelona)");
+    expect(santBoi?.nombre).toBe("Sant Boi de Llobregat");
+    expect(zonaDeCiudad(santBoi!, "Marianao")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santBoi!, "Casablanca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santBoi!, "Can Calderon")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santBoi!, "Famades")).toBeNull();
+    const nombresSantBoi = santBoi!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantBoi).size).toBe(nombresSantBoi.length);
+    expect(nombresSantBoi.filter((n) => santBoi!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(6);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

@@ -98,6 +98,8 @@
  * Polígono del Bosc Llarg i les Canyes.
  * Cornellà de Llobregat: los 7 barrios del Ayuntamiento.
  * Polígonos Famades, Solanes y Est. Almeda es barrio.
+ * Sant Boi de Llobregat: los 6 distritos del Ayuntamiento.
+ * Ocho polígonos urbanos. La zona del aeropuerto queda fuera.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1869,6 +1871,26 @@ const POLIGONOS_CORNELLA: ZonaCiudad[] = [
   { nombre: "Est", tipo: "poligono" },
 ];
 
+const BARRIOS_SANT_BOI: ZonaCiudad[] = [
+  { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
+  { nombre: "Marianao", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Vinyets i Molí Vell", tipo: "barrio" },
+  { nombre: "Camps Blancs", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+];
+
+const POLIGONOS_SANT_BOI: ZonaCiudad[] = [
+  { nombre: "Salas", tipo: "poligono" },
+  { nombre: "Abat Oliva", tipo: "poligono" },
+  { nombre: "Fonollar Nord", tipo: "poligono" },
+  { nombre: "Can Calderon", tipo: "poligono" },
+  { nombre: "Fonollar Sud - Bullidor", tipo: "poligono" },
+  { nombre: "Salines", tipo: "poligono" },
+  { nombre: "Prologis Park", tipo: "poligono" },
+  { nombre: "Sector Comercial Alcampo", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -2133,6 +2155,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cornellà de Llobregat",
     etiqueta: "Cornellà de Llobregat (Barcelona)",
     zonas: [...BARRIOS_CORNELLA, ...POLIGONOS_CORNELLA],
+  },
+  {
+    id: "santboi",
+    nombre: "Sant Boi de Llobregat",
+    etiqueta: "Sant Boi de Llobregat (Barcelona)",
+    zonas: [...BARRIOS_SANT_BOI, ...POLIGONOS_SANT_BOI],
   },
 ];
 
