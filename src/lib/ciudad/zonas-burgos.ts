@@ -37,7 +37,7 @@
  * La Llanada, el del Bierzo, Cantalobos, La Martina, La Barca, Dehesas,
  * Montearenas, Los Poulones y El Bayo.
  * Soria: asociaciones de vecinos que subvenciona el Ayuntamiento,
- * incluidos los cuatro barrios rurales. La Barriada es la de Yagüe.
+ * incluidos los cuatro barrios rurales. La Barriada (Yagüe).
  * Polígonos Las Casas y Valcorba.
  */
 export type TipoZona = "barrio" | "poligono";
@@ -576,7 +576,7 @@ const BARRIOS_SORIA: ZonaCiudad[] = [
   { nombre: "Casco Viejo", tipo: "barrio" },
   { nombre: "El Calaverón", tipo: "barrio" },
   { nombre: "San Pedro", tipo: "barrio" },
-  { nombre: "La Barriada", tipo: "barrio" },
+  { nombre: "La Barriada (Yagüe)", tipo: "barrio" },
   { nombre: "Santa Bárbara", tipo: "barrio" },
   { nombre: "Los Pajaritos", tipo: "barrio" },
   { nombre: "Los Royales", tipo: "barrio" },

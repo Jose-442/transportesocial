@@ -128,6 +128,7 @@ describe("zonas de Burgos", () => {
     const soria = ciudadUrbana("soria");
     expect(soria?.etiqueta).toBe("Soria (Soria)");
     expect(zonaDeCiudad(soria!, "El Calaverón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(soria!, "La Barriada (Yagüe)")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(soria!, "Las Casas")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(soria!, "Polígono Industrial Las Casas")?.tipo).toBe(
       "poligono"
