@@ -105,6 +105,8 @@
  * y el industrial Centre.
  * El Prat de Llobregat: los 9 barrios del área metropolitana
  * y el Eixample Sud. Polígonos de las zonas de actividad económica.
+ * Esplugues de Llobregat: los 10 barrios del Ayuntamiento.
+ * El Gall, La Plana y Montesa son también las zonas industriales.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1937,6 +1939,21 @@ const POLIGONOS_EL_PRAT: ZonaCiudad[] = [
   { nombre: "Aeroport", tipo: "poligono" },
 ];
 
+const BARRIOS_ESPLUGUES: ZonaCiudad[] = [
+  { nombre: "Can Clota", tipo: "barrio" },
+  { nombre: "Can Vidalet", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Ciutat Diagonal", tipo: "barrio" },
+  { nombre: "El Gall", tipo: "barrio" },
+  { nombre: "Finestrelles", tipo: "barrio" },
+  { nombre: "La Mallola", tipo: "barrio" },
+  { nombre: "La Miranda", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "Montesa", tipo: "barrio" },
+];
+
+const POLIGONOS_ESPLUGUES: ZonaCiudad[] = [];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2239,6 +2256,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "El Prat de Llobregat",
     etiqueta: "Prat de Llobregat, El (Barcelona)",
     zonas: [...BARRIOS_EL_PRAT, ...POLIGONOS_EL_PRAT],
+  },
+  {
+    id: "esplugues",
+    nombre: "Esplugues de Llobregat",
+    etiqueta: "Esplugues de Llobregat (Barcelona)",
+    zonas: [...BARRIOS_ESPLUGUES, ...POLIGONOS_ESPLUGUES],
   },
 ];
 
