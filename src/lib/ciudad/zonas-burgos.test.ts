@@ -46,6 +46,8 @@ describe("zonas de Burgos", () => {
       "santurtzi",
       "basauri",
       "sansebastian",
+      "irun",
+      "errenteria",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -385,6 +387,25 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(sanSebastian!, "Belartza Alto")).toBeNull();
     const nombresSanSebastian = sanSebastian!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSanSebastian).size).toBe(nombresSanSebastian.length);
+    const irun = ciudadUrbana("irun");
+    expect(irun?.etiqueta).toBe("Irun (Gipuzkoa)");
+    expect(irun?.nombre).toBe("Irun");
+    expect(zonaDeCiudad(irun!, "Behobia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(irun!, "Dunboa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(irun!, "Araso")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(irun!, "Polígono 54")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(irun!, "Zubieta")).toBeNull();
+    const nombresIrun = irun!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresIrun).size).toBe(nombresIrun.length);
+    const errenteria = ciudadUrbana("errenteria");
+    expect(errenteria?.etiqueta).toBe("Errenteria (Gipuzkoa)");
+    expect(errenteria?.nombre).toBe("Errenteria (Rentería)");
+    expect(zonaDeCiudad(errenteria!, "Galtzaraborda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(errenteria!, "Capuchinos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(errenteria!, "Txirrita-Maleo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(errenteria!, "Sagasti")).toBeNull();
+    const nombresErrenteria = errenteria!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresErrenteria).size).toBe(nombresErrenteria.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

@@ -83,6 +83,10 @@
  * Polígono Industrial Artunduaga.
  * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
  * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
+ * Irun: barrios de EUSTAT 2025 y los que recorre el Ayuntamiento.
+ * Dunboa es Dumboa. Behobia va aparte de Bidasoa. Polígono 54 es Azken Portu.
+ * Errenteria: barrios de EUSTAT 2025. Rentería es el mismo municipio.
+ * Polígonos Egiburuberri, Masti-Loidi, Olibet, Txirrita-Maleo y Aranguren.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1598,6 +1602,70 @@ const POLIGONOS_SAN_SEBASTIAN: ZonaCiudad[] = [
   { nombre: "Parque Científico y Tecnológico de Gipuzkoa", tipo: "poligono" },
 ];
 
+const BARRIOS_IRUN: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Parte Vieja (Casco Viejo)", tipo: "barrio" },
+  { nombre: "Anaka (Puiana)", tipo: "barrio" },
+  { nombre: "Anzaran", tipo: "barrio" },
+  { nombre: "Azken Portu", tipo: "barrio" },
+  { nombre: "Belaskoenea", tipo: "barrio" },
+  { nombre: "Beraun-Santiago", tipo: "barrio" },
+  { nombre: "Behobia", tipo: "barrio" },
+  { nombre: "Bidasoa", tipo: "barrio" },
+  { nombre: "Dunboa", tipo: "barrio" },
+  { nombre: "Lapice (Elitxu)", tipo: "barrio" },
+  { nombre: "Larreaundi", tipo: "barrio" },
+  { nombre: "Paseo Colón - Mendibil", tipo: "barrio" },
+  { nombre: "El Pinar", tipo: "barrio" },
+  { nombre: "Pío XII", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "Uranzu - Artía", tipo: "barrio" },
+  { nombre: "Ventas-Landetxa", tipo: "barrio" },
+  { nombre: "Urdanibia", tipo: "barrio" },
+  { nombre: "Arbes", tipo: "barrio" },
+  { nombre: "Meaka", tipo: "barrio" },
+  { nombre: "Olaberria", tipo: "barrio" },
+];
+
+const POLIGONOS_IRUN: ZonaCiudad[] = [
+  { nombre: "Araso", tipo: "poligono" },
+  { nombre: "Arretxe-Ugalde", tipo: "poligono" },
+  { nombre: "Gabiria-Ventas", tipo: "poligono" },
+  { nombre: "Agirretxe-Oianzabaleta", tipo: "poligono" },
+  { nombre: "Bidaurre-Ureder", tipo: "poligono" },
+  { nombre: "Eskortza-Txumarraga", tipo: "poligono" },
+  { nombre: "Aranibar", tipo: "poligono" },
+  { nombre: "Primauteko Errota", tipo: "poligono" },
+  { nombre: "Fosforera", tipo: "poligono" },
+  { nombre: "Zaisa", tipo: "poligono" },
+  { nombre: "Polígono 54", tipo: "poligono" },
+  { nombre: "Anaka Sur (Hegoaldea)", tipo: "poligono" },
+  { nombre: "Anaka Norte (Iparraldea)", tipo: "poligono" },
+  { nombre: "Alto Arretxe", tipo: "poligono" },
+];
+
+const BARRIOS_ERRENTERIA: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Alaberga-Versalles", tipo: "barrio" },
+  { nombre: "Beraun", tipo: "barrio" },
+  { nombre: "Capuchinos", tipo: "barrio" },
+  { nombre: "Gabierrota-Larzabal", tipo: "barrio" },
+  { nombre: "Galtzaraborda", tipo: "barrio" },
+  { nombre: "Gaztaño-Agustinas", tipo: "barrio" },
+  { nombre: "Iztieta", tipo: "barrio" },
+  { nombre: "Olibet-Casas Nuevas", tipo: "barrio" },
+  { nombre: "Pontika", tipo: "barrio" },
+  { nombre: "Zona Rural", tipo: "barrio" },
+];
+
+const POLIGONOS_ERRENTERIA: ZonaCiudad[] = [
+  { nombre: "Egiburuberri", tipo: "poligono" },
+  { nombre: "Masti-Loidi", tipo: "poligono" },
+  { nombre: "Olibet", tipo: "poligono" },
+  { nombre: "Txirrita-Maleo", tipo: "poligono" },
+  { nombre: "Aranguren", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1820,6 +1888,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Sebastián",
     etiqueta: "San Sebastián (Gipuzkoa)",
     zonas: [...BARRIOS_SAN_SEBASTIAN, ...POLIGONOS_SAN_SEBASTIAN],
+  },
+  {
+    id: "irun",
+    nombre: "Irun",
+    etiqueta: "Irun (Gipuzkoa)",
+    zonas: [...BARRIOS_IRUN, ...POLIGONOS_IRUN],
+  },
+  {
+    id: "errenteria",
+    nombre: "Errenteria (Rentería)",
+    etiqueta: "Errenteria (Gipuzkoa)",
+    zonas: [...BARRIOS_ERRENTERIA, ...POLIGONOS_ERRENTERIA],
   },
 ];
 
