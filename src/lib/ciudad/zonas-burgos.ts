@@ -53,6 +53,8 @@
  * Polígonos O Ceao y As Gándaras.
  * Ourense: barrios de los centros cívicos y de las líneas de bus del Concello,
  * y las parroquias del padrón. Polígonos Quintela y Seixalbo.
+ * Pontevedra: barrios de la estrategia urbana del Concello y las parroquias del padrón.
+ * Polígonos O Campiño y O Vao.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1008,6 +1010,50 @@ const POLIGONOS_OURENSE: ZonaCiudad[] = [
   { nombre: "Polígono Seixalbo", tipo: "poligono" },
 ];
 
+const BARRIOS_PONTEVEDRA: ZonaCiudad[] = [
+  { nombre: "Centro histórico", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "A Moureira", tipo: "barrio" },
+  { nombre: "As Corbaceiras", tipo: "barrio" },
+  { nombre: "O Burgo", tipo: "barrio" },
+  { nombre: "A Xunqueira", tipo: "barrio" },
+  { nombre: "Campolongo", tipo: "barrio" },
+  { nombre: "Mollavao", tipo: "barrio" },
+  { nombre: "A Eiriña", tipo: "barrio" },
+  { nombre: "A Seca", tipo: "barrio" },
+  { nombre: "Os Salgueiriños", tipo: "barrio" },
+  { nombre: "O Castañal", tipo: "barrio" },
+  { nombre: "A Parda", tipo: "barrio" },
+  { nombre: "Valdecorvos", tipo: "barrio" },
+  { nombre: "San Mauro", tipo: "barrio" },
+  { nombre: "Monte Porreiro", tipo: "barrio" },
+  { nombre: "O Gorgullón", tipo: "barrio" },
+  { nombre: "Ponte Muíños", tipo: "barrio" },
+  { nombre: "Estribela", tipo: "barrio" },
+  { nombre: "Placeres", tipo: "barrio" },
+  { nombre: "A Canicouva (Santo Estevo)", tipo: "barrio" },
+  { nombre: "A Virxe do Camiño (Virxe do Camiño)", tipo: "barrio" },
+  { nombre: "Alba (Santa María)", tipo: "barrio" },
+  { nombre: "Bora (Santa Mariña)", tipo: "barrio" },
+  { nombre: "Campañó (San Pedro)", tipo: "barrio" },
+  { nombre: "Cerponzóns (San Vicente)", tipo: "barrio" },
+  { nombre: "Lérez (San Salvador)", tipo: "barrio" },
+  { nombre: "Lourizán (Santo André)", tipo: "barrio" },
+  { nombre: "Marcón (San Miguel)", tipo: "barrio" },
+  { nombre: "Mourente (Santa María)", tipo: "barrio" },
+  { nombre: "Ponte Sampaio (Santa María)", tipo: "barrio" },
+  { nombre: "Salcedo (San Martiño)", tipo: "barrio" },
+  { nombre: "Santa María de Xeve (Santa María)", tipo: "barrio" },
+  { nombre: "Tomeza (San Pedro)", tipo: "barrio" },
+  { nombre: "Verducido (San Martiño)", tipo: "barrio" },
+  { nombre: "Xeve (Santo André)", tipo: "barrio" },
+];
+
+const POLIGONOS_PONTEVEDRA: ZonaCiudad[] = [
+  { nombre: "O Campiño", tipo: "poligono" },
+  { nombre: "O Vao", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1140,6 +1186,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ourense",
     etiqueta: "Ourense (Ourense)",
     zonas: [...BARRIOS_OURENSE, ...POLIGONOS_OURENSE],
+  },
+  {
+    id: "pontevedra",
+    nombre: "Pontevedra",
+    etiqueta: "Pontevedra (Pontevedra)",
+    zonas: [...BARRIOS_PONTEVEDRA, ...POLIGONOS_PONTEVEDRA],
   },
 ];
 

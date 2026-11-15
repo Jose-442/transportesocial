@@ -31,6 +31,7 @@ describe("zonas de Burgos", () => {
       "gijon",
       "lugo",
       "ourense",
+      "pontevedra",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -205,6 +206,15 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(ourense!, "Polígono Seixalbo")?.tipo).toBe("poligono");
     const nombresOurense = ourense!.zonas.map((z) => z.nombre);
     expect(new Set(nombresOurense).size).toBe(nombresOurense.length);
+    const pontevedra = ciudadUrbana("pontevedra");
+    expect(pontevedra?.etiqueta).toBe("Pontevedra (Pontevedra)");
+    expect(zonaDeCiudad(pontevedra!, "O Burgo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pontevedra!, "Campolongo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pontevedra!, "Lérez (San Salvador)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pontevedra!, "O Campiño")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pontevedra!, "O Vao")?.tipo).toBe("poligono");
+    const nombresPontevedra = pontevedra!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPontevedra).size).toBe(nombresPontevedra.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
