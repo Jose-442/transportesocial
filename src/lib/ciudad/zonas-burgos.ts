@@ -92,6 +92,8 @@
  * La Verneda Industrial, Montsolís y 22@.
  * L'Hospitalet: los 13 barrios del Ayuntamiento. Granvia Sud es barrio.
  * Polígonos Pedrosa, Carretera del Mig y los tres de Santa Eulàlia.
+ * Badalona: los 34 barrios del Ayuntamiento.
+ * Polígonos Badalona Sud y Badalona Nord. Can Ribó es el Nord.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1781,6 +1783,48 @@ const POLIGONOS_HOSPITALET: ZonaCiudad[] = [
   { nombre: "Santa Eulàlia-Martí i Codolar", tipo: "poligono" },
 ];
 
+const BARRIOS_BADALONA: ZonaCiudad[] = [
+  { nombre: "Casagemes", tipo: "barrio" },
+  { nombre: "Manresà", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Coll i Pujol", tipo: "barrio" },
+  { nombre: "Progrés", tipo: "barrio" },
+  { nombre: "Canyadó", tipo: "barrio" },
+  { nombre: "Dalt la Vila", tipo: "barrio" },
+  { nombre: "Sant Crist", tipo: "barrio" },
+  { nombre: "Sistrells", tipo: "barrio" },
+  { nombre: "Lloreda", tipo: "barrio" },
+  { nombre: "Nova Lloreda", tipo: "barrio" },
+  { nombre: "Puigfred", tipo: "barrio" },
+  { nombre: "La Pau", tipo: "barrio" },
+  { nombre: "Montigalà", tipo: "barrio" },
+  { nombre: "Canyet", tipo: "barrio" },
+  { nombre: "Mas Ram", tipo: "barrio" },
+  { nombre: "Bufalà", tipo: "barrio" },
+  { nombre: "Pomar", tipo: "barrio" },
+  { nombre: "Pomar de Dalt", tipo: "barrio" },
+  { nombre: "Morera", tipo: "barrio" },
+  { nombre: "Les Guixeres", tipo: "barrio" },
+  { nombre: "Bonavista", tipo: "barrio" },
+  { nombre: "La Salut", tipo: "barrio" },
+  { nombre: "Sant Joan de Llefià", tipo: "barrio" },
+  { nombre: "Sant Mori de Llefià", tipo: "barrio" },
+  { nombre: "Sant Antoni de Llefià", tipo: "barrio" },
+  { nombre: "Gorg", tipo: "barrio" },
+  { nombre: "La Mora", tipo: "barrio" },
+  { nombre: "Congrés", tipo: "barrio" },
+  { nombre: "Can Claris", tipo: "barrio" },
+  { nombre: "Raval", tipo: "barrio" },
+  { nombre: "Artigues", tipo: "barrio" },
+  { nombre: "Sant Roc", tipo: "barrio" },
+  { nombre: "El Remei", tipo: "barrio" },
+];
+
+const POLIGONOS_BADALONA: ZonaCiudad[] = [
+  { nombre: "Badalona Sud", tipo: "poligono" },
+  { nombre: "Badalona Nord", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -2027,6 +2071,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "L'Hospitalet de Llobregat",
     etiqueta: "Hospitalet de Llobregat (Barcelona)",
     zonas: [...BARRIOS_HOSPITALET, ...POLIGONOS_HOSPITALET],
+  },
+  {
+    id: "badalona",
+    nombre: "Badalona",
+    etiqueta: "Badalona (Barcelona)",
+    zonas: [...BARRIOS_BADALONA, ...POLIGONOS_BADALONA],
   },
 ];
 

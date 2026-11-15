@@ -50,6 +50,7 @@ describe("zonas de Burgos", () => {
       "errenteria",
       "barcelona",
       "hospitalet",
+      "badalona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -430,6 +431,16 @@ describe("zonas de Burgos", () => {
     const nombresHospitalet = hospitalet!.zonas.map((z) => z.nombre);
     expect(new Set(nombresHospitalet).size).toBe(nombresHospitalet.length);
     expect(nombresHospitalet.filter((n) => hospitalet!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
+    const badalona = ciudadUrbana("badalona");
+    expect(badalona?.etiqueta).toBe("Badalona (Barcelona)");
+    expect(badalona?.nombre).toBe("Badalona");
+    expect(zonaDeCiudad(badalona!, "Gorg")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badalona!, "Dalt la Vila")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badalona!, "Badalona Sud")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(badalona!, "El Sot")).toBeNull();
+    const nombresBadalona = badalona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBadalona).size).toBe(nombresBadalona.length);
+    expect(nombresBadalona.filter((n) => badalona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
