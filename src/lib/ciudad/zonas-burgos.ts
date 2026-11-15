@@ -10,6 +10,10 @@
  * Polígonos Nuestra Señora de los Ángeles, San Antolín, Villalobón y El Poligonillo.
  * Santander: nombres del plano municipal de 2026, de los consejos de distrito
  * y del estudio municipal de polígonos.
+ * Torrelavega: núcleos del municipio y barrios del plan general.
+ * Polígono Tanos-Viérnoles. Las Excavadas y La Hilera siguen en proyecto.
+ * Castro-Urdiales: juntas vecinales, pedanías y barrios que nombra el Ayuntamiento.
+ * Polígonos Vallegón y La Tejera.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -219,6 +223,56 @@ const POLIGONOS_SANTANDER: ZonaCiudad[] = [
   { nombre: "Raos", tipo: "poligono" },
 ];
 
+const BARRIOS_TORRELAVEGA: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Covadonga", tipo: "barrio" },
+  { nombre: "Ciudad Vergel", tipo: "barrio" },
+  { nombre: "Nueva Ciudad", tipo: "barrio" },
+  { nombre: "Miravalles", tipo: "barrio" },
+  { nombre: "La Inmobiliaria", tipo: "barrio" },
+  { nombre: "El Zapatón", tipo: "barrio" },
+  { nombre: "Campuzano", tipo: "barrio" },
+  { nombre: "Tanos", tipo: "barrio" },
+  { nombre: "Sierrapando", tipo: "barrio" },
+  { nombre: "Barreda", tipo: "barrio" },
+  { nombre: "Ganzo", tipo: "barrio" },
+  { nombre: "Duález", tipo: "barrio" },
+  { nombre: "Torres", tipo: "barrio" },
+  { nombre: "Viérnoles", tipo: "barrio" },
+  { nombre: "La Montaña", tipo: "barrio" },
+  { nombre: "San Ramón", tipo: "barrio" },
+];
+
+const POLIGONOS_TORRELAVEGA: ZonaCiudad[] = [
+  { nombre: "Tanos-Viérnoles", tipo: "poligono" },
+];
+
+const BARRIOS_CASTRO: ZonaCiudad[] = [
+  { nombre: "Casco histórico", tipo: "barrio" },
+  { nombre: "Los Marineros", tipo: "barrio" },
+  { nombre: "Brazomar", tipo: "barrio" },
+  { nombre: "Cotolino", tipo: "barrio" },
+  { nombre: "Ostende", tipo: "barrio" },
+  { nombre: "Campijo", tipo: "barrio" },
+  { nombre: "Allendelagua", tipo: "barrio" },
+  { nombre: "Cerdigo", tipo: "barrio" },
+  { nombre: "Islares", tipo: "barrio" },
+  { nombre: "Lusa", tipo: "barrio" },
+  { nombre: "Mioño", tipo: "barrio" },
+  { nombre: "Ontón", tipo: "barrio" },
+  { nombre: "Oriñón", tipo: "barrio" },
+  { nombre: "Otañes", tipo: "barrio" },
+  { nombre: "Sámano", tipo: "barrio" },
+  { nombre: "Santullán", tipo: "barrio" },
+  { nombre: "Sonabia", tipo: "barrio" },
+  { nombre: "Talledo", tipo: "barrio" },
+];
+
+const POLIGONOS_CASTRO: ZonaCiudad[] = [
+  { nombre: "Vallegón", tipo: "poligono" },
+  { nombre: "La Tejera", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -255,6 +309,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santander",
     etiqueta: "Santander (Cantabria)",
     zonas: [...BARRIOS_SANTANDER, ...POLIGONOS_SANTANDER],
+  },
+  {
+    id: "torrelavega",
+    nombre: "Torrelavega",
+    etiqueta: "Torrelavega (Cantabria)",
+    zonas: [...BARRIOS_TORRELAVEGA, ...POLIGONOS_TORRELAVEGA],
+  },
+  {
+    id: "castro",
+    nombre: "Castro-Urdiales",
+    etiqueta: "Castro-Urdiales (Cantabria)",
+    zonas: [...BARRIOS_CASTRO, ...POLIGONOS_CASTRO],
   },
 ];
 
