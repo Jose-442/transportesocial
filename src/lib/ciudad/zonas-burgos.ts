@@ -7,7 +7,7 @@
  * Logroño: barrios que nombra el Ayuntamiento en los distritos y en las obras por barrio;
  * polígonos Cantabria, Las Cañas y La Portalada (plan municipal 2024-2027).
  * Palencia: 12 barrios del plano municipal y del avance del plan de 2026.
- * Polígonos Nuestra Señora de los Ángeles, San Antolín y Villalobón.
+ * Polígonos Nuestra Señora de los Ángeles, San Antolín, Villalobón y El Poligonillo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -160,6 +160,7 @@ const POLIGONOS_PALENCIA: ZonaCiudad[] = [
   { nombre: "Nuestra Señora de los Ángeles", tipo: "poligono" },
   { nombre: "San Antolín", tipo: "poligono" },
   { nombre: "Villalobón", tipo: "poligono" },
+  { nombre: "El Poligonillo", tipo: "poligono" },
 ];
 
 export const CIUDADES_URBANAS: CiudadUrbana[] = [

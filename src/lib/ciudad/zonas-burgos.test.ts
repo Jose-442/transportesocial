@@ -44,7 +44,7 @@ describe("zonas de Burgos", () => {
     expect(palencia?.etiqueta).toBe("Palencia (Palencia)");
     expect(zonaDeCiudad(palencia!, "Allende el Río")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(palencia!, "San Antolín")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(palencia!, "El Poligonillo")).toBeNull();
+    expect(zonaDeCiudad(palencia!, "El Poligonillo")?.tipo).toBe("poligono");
   });
 
   it("el título del trayecto corto usa los barrios", () => {
