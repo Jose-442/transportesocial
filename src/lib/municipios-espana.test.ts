@@ -121,6 +121,12 @@ describe("municipios-espana", () => {
     expect(resolverMunicipio("Renedo, Piélagos (Cantabria)")?.nombre).toBe(
       "Renedo, Piélagos"
     );
+    expect(
+      filtrarMunicipios("Torres").some((m) => m.nombre === "Torres, Calatayud")
+    ).toBe(true);
+    expect(resolverMunicipio("Torres, Calatayud (Zaragoza)")?.nombre).toBe(
+      "Torres, Calatayud"
+    );
   });
 
   it("coincideMunicipioBusqueda: Oporto coincide con filtro Oporto (PT)", () => {

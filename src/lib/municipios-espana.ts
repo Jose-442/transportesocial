@@ -174,6 +174,13 @@ function filasDe(lista: MunicipioEspana[]): FilaBusqueda[] {
 const FILAS_ESPAÑA = filasDe(MUNICIPIOS_ESPAÑA);
 const FILAS_FRONTERA = filasDe(MUNICIPIOS_FRONTERA);
 
+function rangoNombre(nombre: string, queryNorm: string): number {
+  const limpio = normalizarTextoBusqueda(nombre);
+  if (limpio === queryNorm) return 0;
+  if (limpio.startsWith(`${queryNorm},`)) return 1;
+  return 2;
+}
+
 function puntuarFila(fila: FilaBusqueda, queryNorm: string): number {
   if (fila.nombre.startsWith(queryNorm)) return 0;
   if (fila.nombre.includes(queryNorm)) return 1;
@@ -202,7 +209,12 @@ export function filtrarMunicipios(
   }
 
   const ordenar = (lista: MunicipioEspana[]) =>
-    lista.sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }));
+    lista.sort((a, b) => {
+      const rango =
+        rangoNombre(a.nombre, queryNorm) - rangoNombre(b.nombre, queryNorm);
+      if (rango !== 0) return rango;
+      return a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" });
+    });
 
   const elegidos: MunicipioEspana[] = [];
   for (const nivel of niveles) {

@@ -232,6 +232,16 @@ for (const lista of grupos.values()) {
   }
 }
 
+for (const pueblo of pueblos) {
+  if (
+    norm(pueblo.nombre) === "torres" &&
+    norm(pueblo.provincia) === "zaragoza" &&
+    norm(pueblo.municipio) === "calatayud"
+  ) {
+    pueblo.nombre = "Torres, Calatayud";
+  }
+}
+
 const porEtiqueta = new Map();
 for (const pueblo of pueblos) {
   const clave = `${norm(pueblo.nombre)}|${norm(pueblo.provincia)}`;
