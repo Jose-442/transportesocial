@@ -26,6 +26,7 @@ describe("zonas de Burgos", () => {
       "soria",
       "segovia",
       "valladolid",
+      "zamora",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -158,6 +159,14 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(valladolid!, "San Cristóbal")?.tipo).toBe("poligono");
     const nombresValladolid = valladolid!.zonas.map((z) => z.nombre);
     expect(new Set(nombresValladolid).size).toBe(nombresValladolid.length);
+    const zamora = ciudadUrbana("zamora");
+    expect(zamora?.etiqueta).toBe("Zamora (Zamora)");
+    expect(zonaDeCiudad(zamora!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(zamora!, "Carrascal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(zamora!, "Los Llanos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(zamora!, "La Hiniesta")?.tipo).toBe("poligono");
+    const nombresZamora = zamora!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresZamora).size).toBe(nombresZamora.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

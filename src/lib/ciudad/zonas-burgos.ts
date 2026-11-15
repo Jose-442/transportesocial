@@ -43,6 +43,8 @@
  * Polígonos El Cerro, Hontoria y El Acueducto.
  * Valladolid: las zonas estadísticas del Ayuntamiento.
  * Polígonos Argales, San Cristóbal, Carrascal y Berrocal.
+ * Zamora: barrios del registro municipal de asociaciones de vecinos.
+ * Polígonos Los Llanos, La Hiniesta y La Hiniesta Ampliación.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -682,6 +684,45 @@ const POLIGONOS_VALLADOLID: ZonaCiudad[] = [
   { nombre: "Berrocal", tipo: "poligono" },
 ];
 
+const BARRIOS_ZAMORA: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Barrios Bajos-La Horta", tipo: "barrio" },
+  { nombre: "Cabañales", tipo: "barrio" },
+  { nombre: "Olivares", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "Espíritu Santo", tipo: "barrio" },
+  { nombre: "Obelisco", tipo: "barrio" },
+  { nombre: "Pinilla", tipo: "barrio" },
+  { nombre: "San Frontis", tipo: "barrio" },
+  { nombre: "Carrascal", tipo: "barrio" },
+  { nombre: "San José Obrero", tipo: "barrio" },
+  { nombre: "San Lázaro", tipo: "barrio" },
+  { nombre: "Valorio", tipo: "barrio" },
+  { nombre: "Villagodio", tipo: "barrio" },
+  { nombre: "La Lana", tipo: "barrio" },
+  { nombre: "Pantoja", tipo: "barrio" },
+  { nombre: "Las Viñas", tipo: "barrio" },
+  { nombre: "Los Bloques", tipo: "barrio" },
+  { nombre: "Los Bloques Ministerios", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Barriada de Asturias", tipo: "barrio" },
+  { nombre: "La Alberca", tipo: "barrio" },
+  { nombre: "La Villarina", tipo: "barrio" },
+  { nombre: "Los Arenales", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Alto de los Curas", tipo: "barrio" },
+  { nombre: "Tres Cruces", tipo: "barrio" },
+  { nombre: "San Blas", tipo: "barrio" },
+  { nombre: "Peña Trevinca", tipo: "barrio" },
+];
+
+const POLIGONOS_ZAMORA: ZonaCiudad[] = [
+  { nombre: "Los Llanos", tipo: "poligono" },
+  { nombre: "La Hiniesta", tipo: "poligono" },
+  { nombre: "La Hiniesta Ampliación", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -784,6 +825,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Valladolid",
     etiqueta: "Valladolid (Valladolid)",
     zonas: [...BARRIOS_VALLADOLID, ...POLIGONOS_VALLADOLID],
+  },
+  {
+    id: "zamora",
+    nombre: "Zamora",
+    etiqueta: "Zamora (Zamora)",
+    zonas: [...BARRIOS_ZAMORA, ...POLIGONOS_ZAMORA],
   },
 ];
 
