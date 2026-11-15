@@ -71,6 +71,8 @@
  * Polígono Icaria.
  * Bilbao: barrios del plano del Ayuntamiento de 2023 y los núcleos rurales del plan.
  * Zorrotzaurre va como zona. Los polígonos de al lado están fuera del municipio.
+ * Barakaldo: los 12 barrios del Ayuntamiento (2026) y las zonas que ese texto nombra.
+ * Polígonos Kareaga Norte y Beurko Viejo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1410,6 +1412,46 @@ const BARRIOS_BILBAO: ZonaCiudad[] = [
 
 const POLIGONOS_BILBAO: ZonaCiudad[] = [];
 
+const BARRIOS_BARAKALDO: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Zaballa", tipo: "barrio" },
+  { nombre: "Rontegi", tipo: "barrio" },
+  { nombre: "Beurko", tipo: "barrio" },
+  { nombre: "Bagatza", tipo: "barrio" },
+  { nombre: "Santa Teresa", tipo: "barrio" },
+  { nombre: "Lasesarre", tipo: "barrio" },
+  { nombre: "Desertu-Urban", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Larrea", tipo: "barrio" },
+  { nombre: "San Vicente", tipo: "barrio" },
+  { nombre: "Zuazo", tipo: "barrio" },
+  { nombre: "Arteagabeitia", tipo: "barrio" },
+  { nombre: "Ansio", tipo: "barrio" },
+  { nombre: "Retuerto", tipo: "barrio" },
+  { nombre: "Kareaga", tipo: "barrio" },
+  { nombre: "Bengolea", tipo: "barrio" },
+  { nombre: "El Regato", tipo: "barrio" },
+  { nombre: "Gorostiza", tipo: "barrio" },
+  { nombre: "Gurutzeta (Cruces)", tipo: "barrio" },
+  { nombre: "Basatxu", tipo: "barrio" },
+  { nombre: "Tranviarios", tipo: "barrio" },
+  { nombre: "La Dinamita", tipo: "barrio" },
+  { nombre: "La Constancia", tipo: "barrio" },
+  { nombre: "Lutxana", tipo: "barrio" },
+  { nombre: "Llano", tipo: "barrio" },
+  { nombre: "Burtzeña", tipo: "barrio" },
+  { nombre: "Peñaskuren", tipo: "barrio" },
+  { nombre: "Kadagua", tipo: "barrio" },
+  { nombre: "Kastrexana", tipo: "barrio" },
+  { nombre: "Santa Agueda", tipo: "barrio" },
+  { nombre: "Zubileta", tipo: "barrio" },
+];
+
+const POLIGONOS_BARAKALDO: ZonaCiudad[] = [
+  { nombre: "Polígono Kareaga Norte", tipo: "poligono" },
+  { nombre: "Beurko Viejo", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1596,6 +1638,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Bilbao",
     etiqueta: "Bilbao (Bizkaia)",
     zonas: [...BARRIOS_BILBAO, ...POLIGONOS_BILBAO],
+  },
+  {
+    id: "barakaldo",
+    nombre: "Barakaldo",
+    etiqueta: "Barakaldo (Bizkaia)",
+    zonas: [...BARRIOS_BARAKALDO, ...POLIGONOS_BARAKALDO],
   },
 ];
 

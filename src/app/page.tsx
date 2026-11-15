@@ -218,7 +218,7 @@ export default async function HomePage() {
               Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria,
               Segovia, Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense,
               Pontevedra, Vigo, Vilagarcía de Arousa, A Coruña, Santiago de
-              Compostela, Ferrol, Narón, Oleiros y Bilbao.
+              Compostela, Ferrol, Narón, Oleiros, Bilbao y Barakaldo.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>
