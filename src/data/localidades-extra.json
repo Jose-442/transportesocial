@@ -1,0 +1,22 @@
+[
+  { "nombre": "Arce", "provincia": "Cantabria", "lat": 43.40984, "lng": -3.94271 },
+  { "nombre": "Barcenilla", "provincia": "Cantabria", "lat": 43.38893, "lng": -3.95475 },
+  { "nombre": "Boo de Piélagos", "provincia": "Cantabria", "lat": 43.43049, "lng": -3.94551 },
+  { "nombre": "Carandía", "provincia": "Cantabria", "lat": 43.33684, "lng": -3.97495 },
+  { "nombre": "Liencres", "provincia": "Cantabria", "lat": 43.46047, "lng": -3.92762 },
+  { "nombre": "Mortera", "provincia": "Cantabria", "lat": 43.44382, "lng": -3.92869 },
+  { "nombre": "Oruña", "provincia": "Cantabria", "lat": 43.40237, "lng": -3.94936 },
+  { "nombre": "Parbayón", "provincia": "Cantabria", "lat": 43.37677, "lng": -3.89423 },
+  { "nombre": "Quijano", "provincia": "Cantabria", "lat": 43.36924, "lng": -3.95728 },
+  { "nombre": "Renedo de Piélagos", "provincia": "Cantabria", "lat": 43.35389, "lng": -3.95193 },
+  { "nombre": "Vioño de Piélagos", "provincia": "Cantabria", "lat": 43.36138, "lng": -3.97077 },
+  { "nombre": "Zurita", "provincia": "Cantabria", "lat": 43.34768, "lng": -3.991 },
+  { "nombre": "Cacicedo", "provincia": "Cantabria", "lat": 43.43299, "lng": -3.87345 },
+  { "nombre": "Camargo pueblo", "provincia": "Cantabria", "lat": 43.40794, "lng": -3.88487 },
+  { "nombre": "Escobedo", "provincia": "Cantabria", "lat": 43.40558, "lng": -3.90115 },
+  { "nombre": "Herrera", "provincia": "Cantabria", "lat": 43.42371, "lng": -3.86358 },
+  { "nombre": "Igollo", "provincia": "Cantabria", "lat": 43.43641, "lng": -3.88573 },
+  { "nombre": "Maliaño", "provincia": "Cantabria", "lat": 43.41741, "lng": -3.84206 },
+  { "nombre": "Muriedas", "provincia": "Cantabria", "lat": 43.43142, "lng": -3.85841 },
+  { "nombre": "Revilla", "provincia": "Cantabria", "lat": 43.40643, "lng": -3.86381 }
+]

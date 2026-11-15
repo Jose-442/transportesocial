@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   coincideMunicipioBusqueda,
+  coordenadasMunicipio,
   filtrarMunicipios,
   resolverMunicipio,
 } from "@/lib/municipios-espana";
@@ -59,6 +60,49 @@ describe("municipios-espana", () => {
   it("coincideMunicipioBusqueda: Getafe coincide con filtro Madrid", () => {
     expect(coincideMunicipioBusqueda("Getafe", "Madrid")).toBe(true);
     expect(coincideMunicipioBusqueda("Barcelona", "Madrid")).toBe(false);
+  });
+
+  it("los pueblos de Piélagos y Camargo salen en el desplegable", () => {
+    const nombres = [
+      "Arce",
+      "Barcenilla",
+      "Boo de Piélagos",
+      "Carandía",
+      "Liencres",
+      "Mortera",
+      "Oruña",
+      "Parbayón",
+      "Quijano",
+      "Renedo de Piélagos",
+      "Vioño de Piélagos",
+      "Zurita",
+      "Cacicedo",
+      "Camargo pueblo",
+      "Escobedo",
+      "Herrera",
+      "Igollo",
+      "Maliaño",
+      "Muriedas",
+      "Revilla",
+    ];
+    for (const nombre of nombres) {
+      const municipio = resolverMunicipio(`${nombre} (Cantabria)`);
+      expect(municipio?.nombre).toBe(nombre);
+      expect(municipio?.provincia).toBe("Cantabria");
+      expect(coordenadasMunicipio(municipio!)).not.toBeNull();
+    }
+    expect(filtrarMunicipios("liencres").some((m) => m.nombre === "Liencres")).toBe(
+      true
+    );
+    expect(
+      filtrarMunicipios("renedo").some((m) => m.nombre === "Renedo de Piélagos")
+    ).toBe(true);
+    expect(filtrarMunicipios("boo").some((m) => m.nombre === "Boo de Piélagos")).toBe(
+      true
+    );
+    expect(resolverMunicipio("Arce")?.provincia).toBe("Navarra");
+    expect(resolverMunicipio("Arce (Cantabria)")?.provincia).toBe("Cantabria");
+    expect(resolverMunicipio("Camargo")?.nombre).toBe("Camargo");
   });
 
   it("coincideMunicipioBusqueda: Oporto coincide con filtro Oporto (PT)", () => {

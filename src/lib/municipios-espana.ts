@@ -2,10 +2,12 @@
  * Catálogo de municipios españoles (INE, ~8.000).
  * Coordenadas: src/data/municipios-coordenadas.json (centroides es-atlas).
  * Regenerar: node scripts/generar-municipios-coordenadas.mjs
+ * Pueblos de dentro de un ayuntamiento: src/data/localidades-extra.json
  */
 import rawMunicipios from "@/data/municipios-espana.json";
 import rawCoordenadas from "@/data/municipios-coordenadas.json";
 import rawFrontera from "@/data/municipios-frontera.json";
+import rawLocalidades from "@/data/localidades-extra.json";
 
 export type MunicipioEspana = {
   nombre: string;
@@ -24,10 +26,18 @@ export type MunicipiosOpts = {
 
 export const RADIO_BUSQUEDA_KM = 50;
 
-export const MUNICIPIOS_ESPAÑA = rawMunicipios as MunicipioEspana[];
+type LocalidadExtra = MunicipioEspana & MunicipioCoordenadas;
+
+const LOCALIDADES_EXTRA = rawLocalidades as LocalidadExtra[];
+
+export const MUNICIPIOS_ESPAÑA: MunicipioEspana[] = [
+  ...(rawMunicipios as MunicipioEspana[]),
+  ...LOCALIDADES_EXTRA.map(({ nombre, provincia }) => ({ nombre, provincia })),
+];
 export const MUNICIPIOS_FRONTERA = rawFrontera as MunicipioEspana[];
 
 const coordenadasPorIne = rawCoordenadas as Record<string, MunicipioCoordenadas>;
+const coordenadasLocalidad = new Map<string, MunicipioCoordenadas>();
 
 export function normalizarTextoBusqueda(value: string): string {
   return value
@@ -40,8 +50,17 @@ export function normalizarTextoBusqueda(value: string): string {
 const indicePorNombre = new Map<string, MunicipioEspana>();
 const indiceFronteraPorNombre = new Map<string, MunicipioEspana>();
 
-for (const municipio of MUNICIPIOS_ESPAÑA) {
+for (const municipio of rawMunicipios as MunicipioEspana[]) {
   indicePorNombre.set(normalizarTextoBusqueda(municipio.nombre), municipio);
+}
+
+for (const localidad of LOCALIDADES_EXTRA) {
+  const clave = `${normalizarTextoBusqueda(localidad.nombre)}|${normalizarTextoBusqueda(localidad.provincia)}`;
+  coordenadasLocalidad.set(clave, { lat: localidad.lat, lng: localidad.lng });
+  const nombre = normalizarTextoBusqueda(localidad.nombre);
+  if (!indicePorNombre.has(nombre)) {
+    indicePorNombre.set(nombre, { nombre: localidad.nombre, provincia: localidad.provincia });
+  }
 }
 
 for (const municipio of MUNICIPIOS_FRONTERA) {
@@ -167,8 +186,12 @@ export function resolverMunicipioFormulario(
 export function coordenadasMunicipio(
   municipio: MunicipioEspana
 ): MunicipioCoordenadas | null {
-  if (!municipio.codigoIne) return null;
-  return coordenadasPorIne[municipio.codigoIne] ?? null;
+  if (municipio.codigoIne) {
+    const coords = coordenadasPorIne[municipio.codigoIne];
+    if (coords) return coords;
+  }
+  const clave = `${normalizarTextoBusqueda(municipio.nombre)}|${normalizarTextoBusqueda(municipio.provincia)}`;
+  return coordenadasLocalidad.get(clave) ?? null;
 }
 
 export function distanciaKm(
