@@ -47,6 +47,8 @@
  * Polígonos Los Llanos, La Hiniesta y La Hiniesta Ampliación.
  * Zaragoza: juntas municipales, los cuatro barrios del Distrito Sur
  * y los catorce barrios rurales. Polígonos del listado municipal.
+ * Gijón: barrios y parroquias del reglamento de distritos.
+ * Polígonos del listado de áreas industriales del Ayuntamiento.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -794,6 +796,85 @@ const POLIGONOS_ZARAGOZA: ZonaCiudad[] = [
   { nombre: "Vista Bella", tipo: "poligono" },
 ];
 
+const BARRIOS_GIJON: ZonaCiudad[] = [
+  { nombre: "El Centro", tipo: "barrio" },
+  { nombre: "Cimavilla", tipo: "barrio" },
+  { nombre: "Laviada", tipo: "barrio" },
+  { nombre: "L'Arena", tipo: "barrio" },
+  { nombre: "El Coto", tipo: "barrio" },
+  { nombre: "El Bibio-Parque", tipo: "barrio" },
+  { nombre: "Les Mestes", tipo: "barrio" },
+  { nombre: "Viesques", tipo: "barrio" },
+  { nombre: "Ceares (Ciares)", tipo: "barrio" },
+  { nombre: "El Llano", tipo: "barrio" },
+  { nombre: "Pumarín", tipo: "barrio" },
+  { nombre: "Montevil", tipo: "barrio" },
+  { nombre: "Contrueces", tipo: "barrio" },
+  { nombre: "El Polígono", tipo: "barrio" },
+  { nombre: "Nuevo Gijón (La Peral)", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Perchera-La Braña", tipo: "barrio" },
+  { nombre: "Roces", tipo: "barrio" },
+  { nombre: "Nuevo Roces", tipo: "barrio" },
+  { nombre: "La Calzada", tipo: "barrio" },
+  { nombre: "Jove (Xove)", tipo: "barrio" },
+  { nombre: "Tremañes", tipo: "barrio" },
+  { nombre: "El Natahoyo", tipo: "barrio" },
+  { nombre: "Moreda", tipo: "barrio" },
+  { nombre: "Cabueñes", tipo: "barrio" },
+  { nombre: "Caldones", tipo: "barrio" },
+  { nombre: "Castiello Bernueces", tipo: "barrio" },
+  { nombre: "Deva", tipo: "barrio" },
+  { nombre: "Fano", tipo: "barrio" },
+  { nombre: "Fresno", tipo: "barrio" },
+  { nombre: "Granda", tipo: "barrio" },
+  { nombre: "L'Abadía Cenero", tipo: "barrio" },
+  { nombre: "La Pedrera", tipo: "barrio" },
+  { nombre: "Leorio (Llorio)", tipo: "barrio" },
+  { nombre: "Llavandera", tipo: "barrio" },
+  { nombre: "Porceyo", tipo: "barrio" },
+  { nombre: "Puao", tipo: "barrio" },
+  { nombre: "Ruedes", tipo: "barrio" },
+  { nombre: "Samartín de Güerces", tipo: "barrio" },
+  { nombre: "San Andrés de los Tacones", tipo: "barrio" },
+  { nombre: "Santurio", tipo: "barrio" },
+  { nombre: "Serín", tipo: "barrio" },
+  { nombre: "Somió", tipo: "barrio" },
+  { nombre: "Tremañes (sur)", tipo: "barrio" },
+  { nombre: "Valdornón", tipo: "barrio" },
+  { nombre: "Vega", tipo: "barrio" },
+  { nombre: "Veriña", tipo: "barrio" },
+];
+
+const POLIGONOS_GIJON: ZonaCiudad[] = [
+  { nombre: "Bankunión I", tipo: "poligono" },
+  { nombre: "Bankunión 2", tipo: "poligono" },
+  { nombre: "Bankunión 2B", tipo: "poligono" },
+  { nombre: "Somonte 1", tipo: "poligono" },
+  { nombre: "Somonte 2", tipo: "poligono" },
+  { nombre: "Polígono de La Calzada", tipo: "poligono" },
+  { nombre: "La Juvería", tipo: "poligono" },
+  { nombre: "La Juvería 2", tipo: "poligono" },
+  { nombre: "La Peñona", tipo: "poligono" },
+  { nombre: "Maximino Vega", tipo: "poligono" },
+  { nombre: "Mora Garay y Balagón", tipo: "poligono" },
+  { nombre: "Promosa", tipo: "poligono" },
+  { nombre: "Roces-Porceyo", tipo: "poligono" },
+  { nombre: "Roces-Puente Seco", tipo: "poligono" },
+  { nombre: "Roces 1B", tipo: "poligono" },
+  { nombre: "Roces 2", tipo: "poligono" },
+  { nombre: "Roces 3", tipo: "poligono" },
+  { nombre: "Roces 4", tipo: "poligono" },
+  { nombre: "Roces 5", tipo: "poligono" },
+  { nombre: "Roces I-12", tipo: "poligono" },
+  { nombre: "Roces I-13", tipo: "poligono" },
+  { nombre: "Roces I-14", tipo: "poligono" },
+  { nombre: "Polígono La Vega", tipo: "poligono" },
+  { nombre: "Lloreda", tipo: "poligono" },
+  { nombre: "Los Campones", tipo: "poligono" },
+  { nombre: "Parque Científico Tecnológico", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -908,6 +989,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Zaragoza",
     etiqueta: "Zaragoza (Zaragoza)",
     zonas: [...BARRIOS_ZARAGOZA, ...POLIGONOS_ZARAGOZA],
+  },
+  {
+    id: "gijon",
+    nombre: "Gijón",
+    etiqueta: "Gijón (Asturias)",
+    zonas: [...BARRIOS_GIJON, ...POLIGONOS_GIJON],
   },
 ];
 
