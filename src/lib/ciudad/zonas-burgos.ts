@@ -94,6 +94,8 @@
  * Polígonos Pedrosa, Carretera del Mig y los tres de Santa Eulàlia.
  * Badalona: los 34 barrios del Ayuntamiento.
  * Polígonos Badalona Sud y Badalona Nord. Can Ribó es el Nord.
+ * Santa Coloma de Gramenet: los 17 barrios del Ayuntamiento.
+ * Polígono del Bosc Llarg i les Canyes.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1825,6 +1827,30 @@ const POLIGONOS_BADALONA: ZonaCiudad[] = [
   { nombre: "Badalona Nord", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_COLOMA: ZonaCiudad[] = [
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Can Mariner", tipo: "barrio" },
+  { nombre: "Llatí", tipo: "barrio" },
+  { nombre: "Riera Alta", tipo: "barrio" },
+  { nombre: "Cementiri Vell", tipo: "barrio" },
+  { nombre: "Singuerlín", tipo: "barrio" },
+  { nombre: "Les Oliveres", tipo: "barrio" },
+  { nombre: "Can Franquesa", tipo: "barrio" },
+  { nombre: "Guinardera", tipo: "barrio" },
+  { nombre: "Serra de Marina", tipo: "barrio" },
+  { nombre: "Can Calvet", tipo: "barrio" },
+  { nombre: "Riu Nord", tipo: "barrio" },
+  { nombre: "Riu Sud", tipo: "barrio" },
+  { nombre: "Raval", tipo: "barrio" },
+  { nombre: "Santa Rosa", tipo: "barrio" },
+  { nombre: "Safaretjos", tipo: "barrio" },
+  { nombre: "Fondo", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_COLOMA: ZonaCiudad[] = [
+  { nombre: "Bosc Llarg i les Canyes", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -2077,6 +2103,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Badalona",
     etiqueta: "Badalona (Barcelona)",
     zonas: [...BARRIOS_BADALONA, ...POLIGONOS_BADALONA],
+  },
+  {
+    id: "santacoloma",
+    nombre: "Santa Coloma de Gramenet",
+    etiqueta: "Santa Coloma de Gramenet (Barcelona)",
+    zonas: [...BARRIOS_SANTA_COLOMA, ...POLIGONOS_SANTA_COLOMA],
   },
 ];
 
