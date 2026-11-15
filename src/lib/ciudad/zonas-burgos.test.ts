@@ -35,6 +35,10 @@ describe("zonas de Burgos", () => {
       "vigo",
       "vilagarcia",
       "coruna",
+      "santiago",
+      "ferrol",
+      "naron",
+      "oleiros",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -255,6 +259,44 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(coruna!, "Polígono de Someso")?.tipo).toBe("poligono");
     const nombresCoruna = coruna!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCoruna).size).toBe(nombresCoruna.length);
+    const santiago = ciudadUrbana("santiago");
+    expect(santiago?.etiqueta).toBe("Santiago de Compostela (A Coruña)");
+    expect(zonaDeCiudad(santiago!, "Zona Monumental")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santiago!, "As Fontiñas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santiago!, "Conxo (Santa María)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santiago!, "Milladoiro")).toBeNull();
+    expect(zonaDeCiudad(santiago!, "Polígono do Tambre")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santiago!, "Boisaca")?.tipo).toBe("poligono");
+    const nombresSantiago = santiago!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantiago).size).toBe(nombresSantiago.length);
+    const ferrol = ciudadUrbana("ferrol");
+    expect(ferrol?.etiqueta).toBe("Ferrol (A Coruña)");
+    expect(zonaDeCiudad(ferrol!, "Ferrol Vello")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ferrol!, "Caranza")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ferrol!, "Doniños (San Román)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ferrol!, "Polígono de Caranza")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ferrol!, "Polígono de A Gándara")?.tipo).toBe("poligono");
+    const nombresFerrol = ferrol!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresFerrol).size).toBe(nombresFerrol.length);
+    const naron = ciudadUrbana("naron");
+    expect(naron?.etiqueta).toBe("Narón (A Coruña)");
+    expect(zonaDeCiudad(naron!, "A Gándara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(naron!, "Xuvia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(naron!, "O Val (Santa María a Maior)")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(naron!, "Río do Pozo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(naron!, "Polígono da Gándara")?.tipo).toBe("poligono");
+    const nombresNaron = naron!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresNaron).size).toBe(nombresNaron.length);
+    const oleiros = ciudadUrbana("oleiros");
+    expect(oleiros?.etiqueta).toBe("Oleiros (A Coruña)");
+    expect(zonaDeCiudad(oleiros!, "Perillo (Santa Locaia)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(oleiros!, "Santa Cristina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(oleiros!, "Liáns (Santaia)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(oleiros!, "Icaria")?.tipo).toBe("poligono");
+    const nombresOleiros = oleiros!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresOleiros).size).toBe(nombresOleiros.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

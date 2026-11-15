@@ -61,6 +61,14 @@
  * Polígonos Bamio, Trabanca y O Pousadoiro.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
+ * Santiago de Compostela: zonas del Concello y parroquias del padrón.
+ * Polígonos Tambre, Boisaca y Costa Vella.
+ * Ferrol: barrios del plano del Concello y parroquias del padrón.
+ * Polígonos Caranza y A Gándara.
+ * Narón: barrios del casco urbano del Concello y parroquias del padrón.
+ * Polígonos Río do Pozo, A Gándara y As Lagoas.
+ * Oleiros: parroquias del padrón, más Santa Cristina, Bastiagueiro y O Real.
+ * Polígono Icaria.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1233,6 +1241,128 @@ const POLIGONOS_CORUNA: ZonaCiudad[] = [
   { nombre: "Polígono de Someso", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTIAGO: ZonaCiudad[] = [
+  { nombre: "Zona Monumental", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Porta do Camiño", tipo: "barrio" },
+  { nombre: "As Fontiñas", tipo: "barrio" },
+  { nombre: "As Cancelas", tipo: "barrio" },
+  { nombre: "Galeras", tipo: "barrio" },
+  { nombre: "Santa Marta", tipo: "barrio" },
+  { nombre: "Vite", tipo: "barrio" },
+  { nombre: "Pontepedriña", tipo: "barrio" },
+  { nombre: "Sar", tipo: "barrio" },
+  { nombre: "San Lázaro (Santiago)", tipo: "barrio" },
+  { nombre: "Vista Alegre (San Xoán)", tipo: "barrio" },
+  { nombre: "Conxo (Santa María)", tipo: "barrio" },
+  { nombre: "O Castiñeiriño (Nosa Señora de Fátima)", tipo: "barrio" },
+  { nombre: "San Caetano (Santiago)", tipo: "barrio" },
+  { nombre: "San Paio (Santiago)", tipo: "barrio" },
+  { nombre: "A Peregrina (Santa María)", tipo: "barrio" },
+  { nombre: "Figueiras (Santa María)", tipo: "barrio" },
+  { nombre: "O Eixo (San Cristovo)", tipo: "barrio" },
+  { nombre: "Aríns (San Martiño)", tipo: "barrio" },
+  { nombre: "Bando (Santa Eulalia)", tipo: "barrio" },
+  { nombre: "A Barciela (Santo André)", tipo: "barrio" },
+  { nombre: "Busto (San Pedro)", tipo: "barrio" },
+  { nombre: "O Carballal (San Xulián)", tipo: "barrio" },
+  { nombre: "Cesar (Santa María)", tipo: "barrio" },
+  { nombre: "A Enfesta (San Cristovo)", tipo: "barrio" },
+  { nombre: "Fecha (San Xoán)", tipo: "barrio" },
+  { nombre: "Santa Cristina de Fecha (Santa Cristina)", tipo: "barrio" },
+  { nombre: "Grixoa (Santa María)", tipo: "barrio" },
+  { nombre: "Laraño (San Martiño)", tipo: "barrio" },
+  { nombre: "Marantes (San Vicente)", tipo: "barrio" },
+  { nombre: "Marrozos (Santa María)", tipo: "barrio" },
+  { nombre: "Nemenzo (Santa Cristina)", tipo: "barrio" },
+  { nombre: "Sabugueira (San Paio)", tipo: "barrio" },
+  { nombre: "Vidán (Divino Salvador)", tipo: "barrio" },
+  { nombre: "Verdía (Santa Mariña)", tipo: "barrio" },
+  { nombre: "Villestro (Santa María)", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTIAGO: ZonaCiudad[] = [
+  { nombre: "Polígono do Tambre", tipo: "poligono" },
+  { nombre: "Boisaca", tipo: "poligono" },
+  { nombre: "Costa Vella", tipo: "poligono" },
+];
+
+const BARRIOS_FERROL: ZonaCiudad[] = [
+  { nombre: "Ferrol Vello", tipo: "barrio" },
+  { nombre: "A Magdalena", tipo: "barrio" },
+  { nombre: "Canido", tipo: "barrio" },
+  { nombre: "Ensanche A", tipo: "barrio" },
+  { nombre: "Ensanche B (Ultramar)", tipo: "barrio" },
+  { nombre: "Recimil", tipo: "barrio" },
+  { nombre: "Esteiro", tipo: "barrio" },
+  { nombre: "Caranza", tipo: "barrio" },
+  { nombre: "San Xoán-Bertón", tipo: "barrio" },
+  { nombre: "Santa Mariña", tipo: "barrio" },
+  { nombre: "Catabois", tipo: "barrio" },
+  { nombre: "Santa Icía", tipo: "barrio" },
+  { nombre: "San Felipe", tipo: "barrio" },
+  { nombre: "Serantes (San Salvador)", tipo: "barrio" },
+  { nombre: "A Cabana (Santo Antonio)", tipo: "barrio" },
+  { nombre: "A Graña (Santa Rosa de Viterbo)", tipo: "barrio" },
+  { nombre: "Brión (Santa María)", tipo: "barrio" },
+  { nombre: "Doniños (San Román)", tipo: "barrio" },
+  { nombre: "San Xurxo da Mariña (San Xurxo)", tipo: "barrio" },
+  { nombre: "Esmelle (San Xoán)", tipo: "barrio" },
+  { nombre: "Covas (San Martiño)", tipo: "barrio" },
+  { nombre: "Marmancón (San Pedro)", tipo: "barrio" },
+  { nombre: "Mandiá (Santa Uxía)", tipo: "barrio" },
+  { nombre: "Leixa (San Pedro)", tipo: "barrio" },
+  { nombre: "Santa Cecilia de Trasancos (Santa Cecilia)", tipo: "barrio" },
+];
+
+const POLIGONOS_FERROL: ZonaCiudad[] = [
+  { nombre: "Polígono de Caranza", tipo: "poligono" },
+  { nombre: "Polígono de A Gándara", tipo: "poligono" },
+];
+
+const BARRIOS_NARON: ZonaCiudad[] = [
+  { nombre: "A Gándara", tipo: "barrio" },
+  { nombre: "Alto do Castiñeiro", tipo: "barrio" },
+  { nombre: "O Couto", tipo: "barrio" },
+  { nombre: "Santa Icía", tipo: "barrio" },
+  { nombre: "Piñeiros", tipo: "barrio" },
+  { nombre: "Xuvia", tipo: "barrio" },
+  { nombre: "A Solaina", tipo: "barrio" },
+  { nombre: "Freixeiro", tipo: "barrio" },
+  { nombre: "Castro (Santa María)", tipo: "barrio" },
+  { nombre: "Doso (San Lourenzo)", tipo: "barrio" },
+  { nombre: "San Xiao de Narón (San Xiao)", tipo: "barrio" },
+  { nombre: "Pedroso (San Salvador)", tipo: "barrio" },
+  { nombre: "Sedes (Santo Estevo)", tipo: "barrio" },
+  { nombre: "Trasancos (San Mateo)", tipo: "barrio" },
+  { nombre: "O Val (Santa María a Maior)", tipo: "barrio" },
+];
+
+const POLIGONOS_NARON: ZonaCiudad[] = [
+  { nombre: "Río do Pozo", tipo: "poligono" },
+  { nombre: "Polígono da Gándara", tipo: "poligono" },
+  { nombre: "Polígono das Lagoas", tipo: "poligono" },
+];
+
+const BARRIOS_OLEIROS: ZonaCiudad[] = [
+  { nombre: "Perillo (Santa Locaia)", tipo: "barrio" },
+  { nombre: "Santa Cristina", tipo: "barrio" },
+  { nombre: "Bastiagueiro", tipo: "barrio" },
+  { nombre: "Liáns (Santaia)", tipo: "barrio" },
+  { nombre: "San Pedro de Nós (San Pedro)", tipo: "barrio" },
+  { nombre: "Iñás (San Xorxe)", tipo: "barrio" },
+  { nombre: "Dorneda (San Martiño)", tipo: "barrio" },
+  { nombre: "Oleiros (Santa María)", tipo: "barrio" },
+  { nombre: "O Real", tipo: "barrio" },
+  { nombre: "Maianca (San Cosme)", tipo: "barrio" },
+  { nombre: "Serantes (San Xián)", tipo: "barrio" },
+  { nombre: "Dexo (Santa María)", tipo: "barrio" },
+];
+
+const POLIGONOS_OLEIROS: ZonaCiudad[] = [
+  { nombre: "Icaria", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1389,6 +1519,30 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "A Coruña",
     etiqueta: "A Coruña (A Coruña)",
     zonas: [...BARRIOS_CORUNA, ...POLIGONOS_CORUNA],
+  },
+  {
+    id: "santiago",
+    nombre: "Santiago de Compostela",
+    etiqueta: "Santiago de Compostela (A Coruña)",
+    zonas: [...BARRIOS_SANTIAGO, ...POLIGONOS_SANTIAGO],
+  },
+  {
+    id: "ferrol",
+    nombre: "Ferrol",
+    etiqueta: "Ferrol (A Coruña)",
+    zonas: [...BARRIOS_FERROL, ...POLIGONOS_FERROL],
+  },
+  {
+    id: "naron",
+    nombre: "Narón",
+    etiqueta: "Narón (A Coruña)",
+    zonas: [...BARRIOS_NARON, ...POLIGONOS_NARON],
+  },
+  {
+    id: "oleiros",
+    nombre: "Oleiros",
+    etiqueta: "Oleiros (A Coruña)",
+    zonas: [...BARRIOS_OLEIROS, ...POLIGONOS_OLEIROS],
   },
 ];
 
