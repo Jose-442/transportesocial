@@ -23,6 +23,7 @@ describe("zonas de Burgos", () => {
       "leon",
       "sanandres",
       "ponferrada",
+      "soria",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -124,6 +125,16 @@ describe("zonas de Burgos", () => {
     );
     const nombresPonferrada = ponferrada!.zonas.map((z) => z.nombre);
     expect(new Set(nombresPonferrada).size).toBe(nombresPonferrada.length);
+    const soria = ciudadUrbana("soria");
+    expect(soria?.etiqueta).toBe("Soria (Soria)");
+    expect(zonaDeCiudad(soria!, "El Calaverón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(soria!, "Las Casas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(soria!, "Polígono Industrial Las Casas")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(soria!, "Valcorba")?.tipo).toBe("poligono");
+    const nombresSoria = soria!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSoria).size).toBe(nombresSoria.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

@@ -18,7 +18,7 @@ export default async function NuevaCiudadPage() {
           Solo si ya ibas a hacer ese recorrido. Burgos, Aranda de Duero,
           Miranda de Ebro, Logroño, Palencia, Santander, Torrelavega,
           Castro-Urdiales, Vitoria-Gasteiz, Pamplona, Tudela, León,
-          San Andrés del Rabanedo y Ponferrada. La calle se concreta
+          San Andrés del Rabanedo, Ponferrada y Soria. La calle se concreta
           en el chat.
         </p>
       </div>

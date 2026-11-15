@@ -36,6 +36,9 @@
  * La Rosaleda, Puente Boeza y San Antonio. Polígonos del municipio:
  * La Llanada, el del Bierzo, Cantalobos, La Martina, La Barca, Dehesas,
  * Montearenas, Los Poulones y El Bayo.
+ * Soria: asociaciones de vecinos que subvenciona el Ayuntamiento,
+ * incluidos los cuatro barrios rurales. La Barriada es la de Yagüe.
+ * Polígonos Las Casas y Valcorba.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -569,6 +572,25 @@ const POLIGONOS_PONFERRADA: ZonaCiudad[] = [
   { nombre: "El Bayo", tipo: "poligono" },
 ];
 
+const BARRIOS_SORIA: ZonaCiudad[] = [
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "El Calaverón", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "La Barriada", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Los Pajaritos", tipo: "barrio" },
+  { nombre: "Los Royales", tipo: "barrio" },
+  { nombre: "Las Casas", tipo: "barrio" },
+  { nombre: "Toledillo", tipo: "barrio" },
+  { nombre: "Pedrajas", tipo: "barrio" },
+  { nombre: "Oteruelos", tipo: "barrio" },
+];
+
+const POLIGONOS_SORIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Las Casas", tipo: "poligono" },
+  { nombre: "Valcorba", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -653,6 +675,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ponferrada",
     etiqueta: "Ponferrada (León)",
     zonas: [...BARRIOS_PONFERRADA, ...POLIGONOS_PONFERRADA],
+  },
+  {
+    id: "soria",
+    nombre: "Soria",
+    etiqueta: "Soria (Soria)",
+    zonas: [...BARRIOS_SORIA, ...POLIGONOS_SORIA],
   },
 ];
 
