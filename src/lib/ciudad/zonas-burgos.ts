@@ -114,6 +114,8 @@
  * Polígonos de los mapas municipales. Can Cuiàs es barrio y polígono.
  * Terrassa: los barrios del mapa del Ayuntamiento.
  * Polígonos industriales del mismo mapa. Segle XX y Can Palet salen una vez.
+ * Sabadell: los barrios de los siete distritos.
+ * Polígonos de actividad económica. Can Roqueta y Can Feu salen una vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2077,6 +2079,57 @@ const POLIGONOS_TERRASSA: ZonaCiudad[] = [
   { nombre: "Santa Eulàlia", tipo: "poligono" },
 ];
 
+const BARRIOS_SABADELL: ZonaCiudad[] = [
+  { nombre: "El Centre", tipo: "barrio" },
+  { nombre: "Hostafrans", tipo: "barrio" },
+  { nombre: "Covadonga", tipo: "barrio" },
+  { nombre: "Nostra Llar", tipo: "barrio" },
+  { nombre: "Sol i Padris", tipo: "barrio" },
+  { nombre: "Avinguda-Eixample", tipo: "barrio" },
+  { nombre: "La Creu Alta", tipo: "barrio" },
+  { nombre: "Can Puiggener", tipo: "barrio" },
+  { nombre: "Rodal de Togores", tipo: "barrio" },
+  { nombre: "Ca n'Oriac", tipo: "barrio" },
+  { nombre: "Torreguitart", tipo: "barrio" },
+  { nombre: "Torrent del Capellà", tipo: "barrio" },
+  { nombre: "La Plana del Pintor", tipo: "barrio" },
+  { nombre: "Sant Julià", tipo: "barrio" },
+  { nombre: "La Roureda", tipo: "barrio" },
+  { nombre: "Can Deu", tipo: "barrio" },
+  { nombre: "Rodal de St. Julià", tipo: "barrio" },
+  { nombre: "La Concòrdia", tipo: "barrio" },
+  { nombre: "Can Llong", tipo: "barrio" },
+  { nombre: "Castellarnau", tipo: "barrio" },
+  { nombre: "Rodal Berardo", tipo: "barrio" },
+  { nombre: "Cifuentes", tipo: "barrio" },
+  { nombre: "Can Rull", tipo: "barrio" },
+  { nombre: "Gràcia", tipo: "barrio" },
+  { nombre: "Can Feu", tipo: "barrio" },
+  { nombre: "La Serra d'en Camaró", tipo: "barrio" },
+  { nombre: "Els Merinals", tipo: "barrio" },
+  { nombre: "Can Gambús", tipo: "barrio" },
+  { nombre: "Rodal Oest", tipo: "barrio" },
+  { nombre: "La Creu de Barberà", tipo: "barrio" },
+  { nombre: "Les Termes", tipo: "barrio" },
+  { nombre: "Espronceda", tipo: "barrio" },
+  { nombre: "Campoamor", tipo: "barrio" },
+  { nombre: "Sant Pau de Riu-Sec", tipo: "barrio" },
+  { nombre: "El Raval d'Amàlia", tipo: "barrio" },
+  { nombre: "El Poblenou", tipo: "barrio" },
+  { nombre: "Torre-romeu", tipo: "barrio" },
+  { nombre: "Can Roqueta", tipo: "barrio" },
+  { nombre: "El Rodal de la Serra de Sant Iscle", tipo: "barrio" },
+  { nombre: "Rodal Est", tipo: "barrio" },
+];
+
+const POLIGONOS_SABADELL: ZonaCiudad[] = [
+  { nombre: "Sud-Oest", tipo: "poligono" },
+  { nombre: "Parc Industrial Riu Ripoll", tipo: "poligono" },
+  { nombre: "Gràcia Nord", tipo: "poligono" },
+  { nombre: "Gràcia Sud", tipo: "poligono" },
+  { nombre: "Sabadell Parc Empresarial", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2403,6 +2456,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Terrassa",
     etiqueta: "Terrassa (Barcelona)",
     zonas: [...BARRIOS_TERRASSA, ...POLIGONOS_TERRASSA],
+  },
+  {
+    id: "sabadell",
+    nombre: "Sabadell",
+    etiqueta: "Sabadell (Barcelona)",
+    zonas: [...BARRIOS_SABADELL, ...POLIGONOS_SABADELL],
   },
 ];
 

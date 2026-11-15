@@ -60,6 +60,7 @@ describe("zonas de Burgos", () => {
       "gava",
       "montcada",
       "terrassa",
+      "sabadell",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -546,6 +547,18 @@ describe("zonas de Burgos", () => {
     const nombresTerrassa = terrassa!.zonas.map((z) => z.nombre);
     expect(new Set(nombresTerrassa).size).toBe(nombresTerrassa.length);
     expect(nombresTerrassa.filter((n) => terrassa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
+    const sabadell = ciudadUrbana("sabadell");
+    expect(sabadell?.etiqueta).toBe("Sabadell (Barcelona)");
+    expect(sabadell?.nombre).toBe("Sabadell");
+    expect(zonaDeCiudad(sabadell!, "Ca n'Oriac")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sabadell!, "Can Roqueta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sabadell!, "Can Feu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sabadell!, "Sud-Oest")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sabadell!, "Gràcia Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sabadell!, "Palau Nord")).toBeNull();
+    const nombresSabadell = sabadell!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSabadell).size).toBe(nombresSabadell.length);
+    expect(nombresSabadell.filter((n) => sabadell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
