@@ -51,6 +51,8 @@
  * Polígonos del listado de áreas industriales del Ayuntamiento.
  * Lugo: barrios que nombra el Ayuntamiento y las 54 parroquias del Concello.
  * Polígonos O Ceao y As Gándaras.
+ * Ourense: barrios de los centros cívicos y de las líneas de bus del Concello,
+ * y las parroquias del padrón. Polígonos Quintela y Seixalbo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -965,6 +967,47 @@ const POLIGONOS_LUGO: ZonaCiudad[] = [
   { nombre: "Polígono As Gándaras", tipo: "poligono" },
 ];
 
+const BARRIOS_OURENSE: ZonaCiudad[] = [
+  { nombre: "Centro histórico", tipo: "barrio" },
+  { nombre: "O Posío", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "A Carballeira", tipo: "barrio" },
+  { nombre: "O Couto", tipo: "barrio" },
+  { nombre: "As Lagoas", tipo: "barrio" },
+  { nombre: "A Ponte", tipo: "barrio" },
+  { nombre: "A Chavasqueira", tipo: "barrio" },
+  { nombre: "Oira", tipo: "barrio" },
+  { nombre: "O Vinteún", tipo: "barrio" },
+  { nombre: "Peliquín", tipo: "barrio" },
+  { nombre: "Mariñamansa", tipo: "barrio" },
+  { nombre: "A Cuña", tipo: "barrio" },
+  { nombre: "A Residencia", tipo: "barrio" },
+  { nombre: "Berrocás", tipo: "barrio" },
+  { nombre: "O Polvorín", tipo: "barrio" },
+  { nombre: "Arrabaldo (Santa Cruz)", tipo: "barrio" },
+  { nombre: "Beiro (Santa Baia)", tipo: "barrio" },
+  { nombre: "Canedo (San Miguel)", tipo: "barrio" },
+  { nombre: "Ceboliño (Bo Xesús)", tipo: "barrio" },
+  { nombre: "Cudeiro (San Pedro)", tipo: "barrio" },
+  { nombre: "Montealegre (A Milagrosa)", tipo: "barrio" },
+  { nombre: "O Castro de Beiro (Santo André)", tipo: "barrio" },
+  { nombre: "Palmés (San Mamede)", tipo: "barrio" },
+  { nombre: "Rairo (Santa Lucía)", tipo: "barrio" },
+  { nombre: "Reza (Santa María)", tipo: "barrio" },
+  { nombre: "Santa Mariña do Monte (Santa Mariña)", tipo: "barrio" },
+  { nombre: "Seixalbo (San Breixo)", tipo: "barrio" },
+  { nombre: "Trasalba (San Pedro)", tipo: "barrio" },
+  { nombre: "Untes (Santo Estevo)", tipo: "barrio" },
+  { nombre: "Velle (Santa Marta)", tipo: "barrio" },
+  { nombre: "Vilar de Astrés (Purísima Concepción)", tipo: "barrio" },
+  { nombre: "Vista Fermosa (San Xosé)", tipo: "barrio" },
+];
+
+const POLIGONOS_OURENSE: ZonaCiudad[] = [
+  { nombre: "Polígono Quintela", tipo: "poligono" },
+  { nombre: "Polígono Seixalbo", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1091,6 +1134,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Lugo",
     etiqueta: "Lugo (Lugo)",
     zonas: [...BARRIOS_LUGO, ...POLIGONOS_LUGO],
+  },
+  {
+    id: "ourense",
+    nombre: "Ourense",
+    etiqueta: "Ourense (Ourense)",
+    zonas: [...BARRIOS_OURENSE, ...POLIGONOS_OURENSE],
   },
 ];
 
