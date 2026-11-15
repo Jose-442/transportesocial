@@ -116,6 +116,8 @@
  * Polígonos industriales del mismo mapa. Segle XX y Can Palet salen una vez.
  * Sabadell: los barrios de los siete distritos.
  * Polígonos de actividad económica. Can Roqueta y Can Feu salen una vez.
+ * Mataró: los 12 barrios del mapa del Ayuntamiento.
+ * Siete polígonos. Pla d'en Boet es barrio y polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2130,6 +2132,30 @@ const POLIGONOS_SABADELL: ZonaCiudad[] = [
   { nombre: "Sabadell Parc Empresarial", tipo: "poligono" },
 ];
 
+const BARRIOS_MATARO: ZonaCiudad[] = [
+  { nombre: "Peramàs", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Escorxador", tipo: "barrio" },
+  { nombre: "Rocafonda", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Els Molins", tipo: "barrio" },
+  { nombre: "Cirera", tipo: "barrio" },
+  { nombre: "La Llàntia", tipo: "barrio" },
+  { nombre: "El Palau", tipo: "barrio" },
+  { nombre: "Cerdanyola", tipo: "barrio" },
+  { nombre: "Pla d'en Boet", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+];
+
+const POLIGONOS_MATARO: ZonaCiudad[] = [
+  { nombre: "Mata-Rocafonda", tipo: "poligono" },
+  { nombre: "Balançó i Boter", tipo: "poligono" },
+  { nombre: "Hortes del Camí Ral", tipo: "poligono" },
+  { nombre: "Vallveric", tipo: "poligono" },
+  { nombre: "El Rengle I", tipo: "poligono" },
+  { nombre: "El Rengle II", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2462,6 +2488,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sabadell",
     etiqueta: "Sabadell (Barcelona)",
     zonas: [...BARRIOS_SABADELL, ...POLIGONOS_SABADELL],
+  },
+  {
+    id: "mataro",
+    nombre: "Mataró",
+    etiqueta: "Mataró (Barcelona)",
+    zonas: [...BARRIOS_MATARO, ...POLIGONOS_MATARO],
   },
 ];
 

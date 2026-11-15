@@ -61,6 +61,7 @@ describe("zonas de Burgos", () => {
       "montcada",
       "terrassa",
       "sabadell",
+      "mataro",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -559,6 +560,17 @@ describe("zonas de Burgos", () => {
     const nombresSabadell = sabadell!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSabadell).size).toBe(nombresSabadell.length);
     expect(nombresSabadell.filter((n) => sabadell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
+    const mataro = ciudadUrbana("mataro");
+    expect(mataro?.etiqueta).toBe("Mataró (Barcelona)");
+    expect(mataro?.nombre).toBe("Mataró");
+    expect(zonaDeCiudad(mataro!, "Rocafonda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mataro!, "Pla d'en Boet")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mataro!, "Mata-Rocafonda")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mataro!, "El Rengle II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mataro!, "Vallverich")).toBeNull();
+    const nombresMataro = mataro!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMataro).size).toBe(nombresMataro.length);
+    expect(nombresMataro.filter((n) => mataro!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
