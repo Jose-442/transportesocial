@@ -217,7 +217,7 @@ export default async function HomePage() {
               Santander, Torrelavega, Castro-Urdiales, Vitoria-Gasteiz,
               Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria,
               Segovia, Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense,
-              Pontevedra y Vigo.
+              Pontevedra, Vigo y Vilagarcía de Arousa.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>

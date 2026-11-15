@@ -57,6 +57,8 @@
  * Polígonos O Campiño y O Vao.
  * Vigo: barrios del núcleo urbano y parroquias del plan general del Concello.
  * Polígonos Balaídos y el parque tecnológico de Valadares.
+ * Vilagarcía de Arousa: parroquias del nomenclátor de Galicia de 2026, más Vilaxoán.
+ * Polígonos Bamio, Trabanca y O Pousadoiro.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1090,6 +1092,27 @@ const POLIGONOS_VIGO: ZonaCiudad[] = [
   { nombre: "Parque Tecnológico de Valadares", tipo: "poligono" },
 ];
 
+const BARRIOS_VILAGARCIA: ZonaCiudad[] = [
+  { nombre: "Vilagarcía (Santa Baia)", tipo: "barrio" },
+  { nombre: "O Carril (Santiago)", tipo: "barrio" },
+  { nombre: "Vilaxoán", tipo: "barrio" },
+  { nombre: "Arealonga (Santa Baia)", tipo: "barrio" },
+  { nombre: "Bamio (San Xens)", tipo: "barrio" },
+  { nombre: "Cea (San Pedro)", tipo: "barrio" },
+  { nombre: "Cornazo (San Pedro)", tipo: "barrio" },
+  { nombre: "Fontecarmoa (San Pedro)", tipo: "barrio" },
+  { nombre: "Rubiáns (Santa María)", tipo: "barrio" },
+  { nombre: "Sobradelo (San Salvador)", tipo: "barrio" },
+  { nombre: "Sobrán (San Martiño)", tipo: "barrio" },
+  { nombre: "Solobeira (San Fins)", tipo: "barrio" },
+];
+
+const POLIGONOS_VILAGARCIA: ZonaCiudad[] = [
+  { nombre: "Polígono Bamio", tipo: "poligono" },
+  { nombre: "Trabanca", tipo: "poligono" },
+  { nombre: "O Pousadoiro", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1234,6 +1257,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vigo",
     etiqueta: "Vigo (Pontevedra)",
     zonas: [...BARRIOS_VIGO, ...POLIGONOS_VIGO],
+  },
+  {
+    id: "vilagarcia",
+    nombre: "Vilagarcía de Arousa",
+    etiqueta: "Vilagarcía de Arousa (Pontevedra)",
+    zonas: [...BARRIOS_VILAGARCIA, ...POLIGONOS_VILAGARCIA],
   },
 ];
 
