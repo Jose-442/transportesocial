@@ -79,6 +79,8 @@
  * Polígono Industrial Ballonti.
  * Santurtzi: barrios de EUSTAT 2025. Kabiezes es Cabieces.
  * Polígonos Balparda y El Árbol.
+ * Basauri: barrios de EUSTAT 2025. Kareaga es Careaga. Bidebieta es la Estación.
+ * Polígono Industrial Artunduaga.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1536,6 +1538,28 @@ const POLIGONOS_SANTURTZI: ZonaCiudad[] = [
   { nombre: "Polígono El Árbol", tipo: "poligono" },
 ];
 
+const BARRIOS_BASAURI: ZonaCiudad[] = [
+  { nombre: "Ariz", tipo: "barrio" },
+  { nombre: "Arizgoiti", tipo: "barrio" },
+  { nombre: "Basozelai", tipo: "barrio" },
+  { nombre: "Bentakoiko", tipo: "barrio" },
+  { nombre: "Berriotxoa-Soloarte", tipo: "barrio" },
+  { nombre: "Kareaga (Careaga)", tipo: "barrio" },
+  { nombre: "El Calero (Kareaga Goikoa)", tipo: "barrio" },
+  { nombre: "Bidebieta (Estación)", tipo: "barrio" },
+  { nombre: "Hernán Cortés", tipo: "barrio" },
+  { nombre: "Matadero (Gaztañabaltza)", tipo: "barrio" },
+  { nombre: "Pozokoetxe", tipo: "barrio" },
+  { nombre: "San Miguel (Elexalde)", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "Urbi", tipo: "barrio" },
+  { nombre: "Virgen de Begoña", tipo: "barrio" },
+];
+
+const POLIGONOS_BASAURI: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Artunduaga", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1746,6 +1770,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santurtzi",
     etiqueta: "Santurtzi (Bizkaia)",
     zonas: [...BARRIOS_SANTURTZI, ...POLIGONOS_SANTURTZI],
+  },
+  {
+    id: "basauri",
+    nombre: "Basauri",
+    etiqueta: "Basauri (Bizkaia)",
+    zonas: [...BARRIOS_BASAURI, ...POLIGONOS_BASAURI],
   },
 ];
 
