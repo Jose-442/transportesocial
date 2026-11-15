@@ -110,6 +110,8 @@
  * Gavà: los barrios de las regidurías de barrio.
  * Polígonos del Parc Empresarial: Les Massotes, La Post, Les Parets,
  * El Camí Ral, El Regàs y La Marina.
+ * Montcada i Reixac: los 10 barrios del Ayuntamiento.
+ * Polígonos de los mapas municipales. Can Cuiàs es barrio y polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1987,6 +1989,32 @@ const POLIGONOS_GAVA: ZonaCiudad[] = [
   { nombre: "La Marina", tipo: "poligono" },
 ];
 
+const BARRIOS_MONTCADA: ZonaCiudad[] = [
+  { nombre: "Mas Rampinyo", tipo: "barrio" },
+  { nombre: "Mas Duran", tipo: "barrio" },
+  { nombre: "Can Sant Joan", tipo: "barrio" },
+  { nombre: "Terra Nostra", tipo: "barrio" },
+  { nombre: "Montcada Centre", tipo: "barrio" },
+  { nombre: "La Ribera", tipo: "barrio" },
+  { nombre: "Vallençana-Reixac", tipo: "barrio" },
+  { nombre: "Font Pudenta-Muntanyeta", tipo: "barrio" },
+  { nombre: "Can Cuiàs", tipo: "barrio" },
+  { nombre: "Montcada Nova-Pla d'en Coll", tipo: "barrio" },
+];
+
+const POLIGONOS_MONTCADA: ZonaCiudad[] = [
+  { nombre: "Pla d'en Coll", tipo: "poligono" },
+  { nombre: "Can Milans", tipo: "poligono" },
+  { nombre: "La Granja", tipo: "poligono" },
+  { nombre: "Foinvasa", tipo: "poligono" },
+  { nombre: "Molí d'en Bisbe", tipo: "poligono" },
+  { nombre: "Can Tapioles", tipo: "poligono" },
+  { nombre: "La Ferreria", tipo: "poligono" },
+  { nombre: "Hermes", tipo: "poligono" },
+  { nombre: "Coll de Montcada", tipo: "poligono" },
+  { nombre: "Asland", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2301,6 +2329,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Gavà",
     etiqueta: "Gavà (Barcelona)",
     zonas: [...BARRIOS_GAVA, ...POLIGONOS_GAVA],
+  },
+  {
+    id: "montcada",
+    nombre: "Montcada i Reixac",
+    etiqueta: "Montcada i Reixac (Barcelona)",
+    zonas: [...BARRIOS_MONTCADA, ...POLIGONOS_MONTCADA],
   },
 ];
 

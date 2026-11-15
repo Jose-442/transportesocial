@@ -58,6 +58,7 @@ describe("zonas de Burgos", () => {
       "elprat",
       "esplugues",
       "gava",
+      "montcada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -521,6 +522,17 @@ describe("zonas de Burgos", () => {
     const nombresGava = gava!.zonas.map((z) => z.nombre);
     expect(new Set(nombresGava).size).toBe(nombresGava.length);
     expect(nombresGava.filter((n) => gava!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    const montcada = ciudadUrbana("montcada");
+    expect(montcada?.etiqueta).toBe("Montcada i Reixac (Barcelona)");
+    expect(montcada?.nombre).toBe("Montcada i Reixac");
+    expect(zonaDeCiudad(montcada!, "Can Cuiàs")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(montcada!, "Montcada Centre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(montcada!, "Pla d'en Coll")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(montcada!, "Asland")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(montcada!, "Can Pomada")).toBeNull();
+    const nombresMontcada = montcada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMontcada).size).toBe(nombresMontcada.length);
+    expect(nombresMontcada.filter((n) => montcada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
