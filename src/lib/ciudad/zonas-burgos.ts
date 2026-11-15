@@ -96,6 +96,8 @@
  * Polígonos Badalona Sud y Badalona Nord. Can Ribó es el Nord.
  * Santa Coloma de Gramenet: los 17 barrios del Ayuntamiento.
  * Polígono del Bosc Llarg i les Canyes.
+ * Cornellà de Llobregat: los 7 barrios del Ayuntamiento.
+ * Polígonos Famades, Solanes y Est. Almeda es barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1851,6 +1853,22 @@ const POLIGONOS_SANTA_COLOMA: ZonaCiudad[] = [
   { nombre: "Bosc Llarg i les Canyes", tipo: "poligono" },
 ];
 
+const BARRIOS_CORNELLA: ZonaCiudad[] = [
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Riera", tipo: "barrio" },
+  { nombre: "Almeda", tipo: "barrio" },
+  { nombre: "Fontsanta-Fatjó", tipo: "barrio" },
+  { nombre: "El Pedró", tipo: "barrio" },
+  { nombre: "La Gavarra", tipo: "barrio" },
+  { nombre: "Sant Ildefons", tipo: "barrio" },
+];
+
+const POLIGONOS_CORNELLA: ZonaCiudad[] = [
+  { nombre: "Famades", tipo: "poligono" },
+  { nombre: "Solanes", tipo: "poligono" },
+  { nombre: "Est", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -2109,6 +2127,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santa Coloma de Gramenet",
     etiqueta: "Santa Coloma de Gramenet (Barcelona)",
     zonas: [...BARRIOS_SANTA_COLOMA, ...POLIGONOS_SANTA_COLOMA],
+  },
+  {
+    id: "cornella",
+    nombre: "Cornellà de Llobregat",
+    etiqueta: "Cornellà de Llobregat (Barcelona)",
+    zonas: [...BARRIOS_CORNELLA, ...POLIGONOS_CORNELLA],
   },
 ];
 
