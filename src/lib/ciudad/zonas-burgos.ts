@@ -81,6 +81,8 @@
  * Polígonos Balparda y El Árbol.
  * Basauri: barrios de EUSTAT 2025. Kareaga es Careaga. Bidebieta es la Estación.
  * Polígono Industrial Artunduaga.
+ * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
+ * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1560,6 +1562,42 @@ const POLIGONOS_BASAURI: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Artunduaga", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_SEBASTIAN: ZonaCiudad[] = [
+  { nombre: "Centro (Erdialdea)", tipo: "barrio" },
+  { nombre: "Gros", tipo: "barrio" },
+  { nombre: "Egia", tipo: "barrio" },
+  { nombre: "Amara Berri", tipo: "barrio" },
+  { nombre: "Antiguo (Antigua)", tipo: "barrio" },
+  { nombre: "Aiete", tipo: "barrio" },
+  { nombre: "Añorga", tipo: "barrio" },
+  { nombre: "Ibaeta", tipo: "barrio" },
+  { nombre: "Igeldo", tipo: "barrio" },
+  { nombre: "Loiola", tipo: "barrio" },
+  { nombre: "Martutene", tipo: "barrio" },
+  { nombre: "Intxaurrondo", tipo: "barrio" },
+  { nombre: "Miracruz - Bidebieta (Mirakruz)", tipo: "barrio" },
+  { nombre: "Altza", tipo: "barrio" },
+  { nombre: "Ategorrieta - Ulia", tipo: "barrio" },
+  { nombre: "Miramon - Zorroaga", tipo: "barrio" },
+  { nombre: "Zubieta", tipo: "barrio" },
+  { nombre: "Landarbaso (Landerbaso)", tipo: "barrio" },
+  { nombre: "Oberan (Oarain)", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_SEBASTIAN: ZonaCiudad[] = [
+  { nombre: "Igara", tipo: "poligono" },
+  { nombre: "Zuatzu", tipo: "poligono" },
+  { nombre: "Belartza", tipo: "poligono" },
+  { nombre: "Polígono 27 (Torrua Zahar)", tipo: "poligono" },
+  { nombre: "Eskusaitzeta", tipo: "poligono" },
+  { nombre: "Molinao", tipo: "poligono" },
+  { nombre: "Antzita", tipo: "poligono" },
+  { nombre: "Artxipi", tipo: "poligono" },
+  { nombre: "Bugati", tipo: "poligono" },
+  { nombre: "Errekalde", tipo: "poligono" },
+  { nombre: "Parque Científico y Tecnológico de Gipuzkoa", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1776,6 +1814,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Basauri",
     etiqueta: "Basauri (Bizkaia)",
     zonas: [...BARRIOS_BASAURI, ...POLIGONOS_BASAURI],
+  },
+  {
+    id: "sansebastian",
+    nombre: "San Sebastián",
+    etiqueta: "San Sebastián (Gipuzkoa)",
+    zonas: [...BARRIOS_SAN_SEBASTIAN, ...POLIGONOS_SAN_SEBASTIAN],
   },
 ];
 
