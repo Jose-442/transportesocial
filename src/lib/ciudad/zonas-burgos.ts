@@ -75,6 +75,8 @@
  * Polígonos Kareaga Norte y Beurko Viejo.
  * Getxo: los barrios del Ayuntamiento y las zonas del plan de 2026.
  * Polígono Industrial Errotatxu.
+ * Portugalete: barrios de EUSTAT 2025 y las zonas que nombra el Ayuntamiento.
+ * Polígono Industrial Ballonti.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1480,6 +1482,28 @@ const POLIGONOS_GETXO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Errotatxu", tipo: "poligono" },
 ];
 
+const BARRIOS_PORTUGALETE: ZonaCiudad[] = [
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Abaro", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Zona Nueva", tipo: "barrio" },
+  { nombre: "Peñota", tipo: "barrio" },
+  { nombre: "Azeta", tipo: "barrio" },
+  { nombre: "Abatxolo", tipo: "barrio" },
+  { nombre: "Repélega", tipo: "barrio" },
+  { nombre: "Rivas", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "Mugakoa", tipo: "barrio" },
+  { nombre: "Campazar (Kanpazar)", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+];
+
+const POLIGONOS_PORTUGALETE: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Ballonti", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1678,6 +1702,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Getxo",
     etiqueta: "Getxo (Bizkaia)",
     zonas: [...BARRIOS_GETXO, ...POLIGONOS_GETXO],
+  },
+  {
+    id: "portugalete",
+    nombre: "Portugalete",
+    etiqueta: "Portugalete (Bizkaia)",
+    zonas: [...BARRIOS_PORTUGALETE, ...POLIGONOS_PORTUGALETE],
   },
 ];
 
