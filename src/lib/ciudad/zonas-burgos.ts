@@ -8,6 +8,8 @@
  * polígonos Cantabria, Las Cañas y La Portalada (plan municipal 2024-2027).
  * Palencia: 12 barrios del plano municipal y del avance del plan de 2026.
  * Polígonos Nuestra Señora de los Ángeles, San Antolín, Villalobón y El Poligonillo.
+ * Santander: nombres del plano municipal de 2026, de los consejos de distrito
+ * y del estudio municipal de polígonos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -163,6 +165,60 @@ const POLIGONOS_PALENCIA: ZonaCiudad[] = [
   { nombre: "El Poligonillo", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTANDER: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Puertochico", tipo: "barrio" },
+  { nombre: "El Sardinero", tipo: "barrio" },
+  { nombre: "Tetuán", tipo: "barrio" },
+  { nombre: "Castilla-Hermida", tipo: "barrio" },
+  { nombre: "Barrio Pesquero", tipo: "barrio" },
+  { nombre: "Barrio del Rey", tipo: "barrio" },
+  { nombre: "Río de la Pila", tipo: "barrio" },
+  { nombre: "Perines", tipo: "barrio" },
+  { nombre: "Pronillo", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Grupo San Luis", tipo: "barrio" },
+  { nombre: "Grupo San Francisco", tipo: "barrio" },
+  { nombre: "Cazoña", tipo: "barrio" },
+  { nombre: "La Albericia", tipo: "barrio" },
+  { nombre: "El Alisal", tipo: "barrio" },
+  { nombre: "Piedras Blancas", tipo: "barrio" },
+  { nombre: "Peñacastillo", tipo: "barrio" },
+  { nombre: "Nueva Montaña", tipo: "barrio" },
+  { nombre: "Adarzo", tipo: "barrio" },
+  { nombre: "Camarreal", tipo: "barrio" },
+  { nombre: "Lluja", tipo: "barrio" },
+  { nombre: "Cajo", tipo: "barrio" },
+  { nombre: "Campogiro", tipo: "barrio" },
+  { nombre: "La Remonta", tipo: "barrio" },
+  { nombre: "Monte", tipo: "barrio" },
+  { nombre: "Corbanera", tipo: "barrio" },
+  { nombre: "Cueto", tipo: "barrio" },
+  { nombre: "Valdenoja", tipo: "barrio" },
+  { nombre: "La Maruca", tipo: "barrio" },
+  { nombre: "El Mazo", tipo: "barrio" },
+  { nombre: "Rostrío", tipo: "barrio" },
+  { nombre: "San Román", tipo: "barrio" },
+  { nombre: "Virgen del Mar", tipo: "barrio" },
+  { nombre: "El Castillo", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTANDER: ZonaCiudad[] = [
+  { nombre: "Puerto de Santander", tipo: "poligono" },
+  { nombre: "Candina", tipo: "poligono" },
+  { nombre: "Polígono de la Albericia", tipo: "poligono" },
+  { nombre: "El Campón", tipo: "poligono" },
+  { nombre: "Polígono Nueva Montaña", tipo: "poligono" },
+  { nombre: "Faustino Cavadas", tipo: "poligono" },
+  { nombre: "Parayas", tipo: "poligono" },
+  { nombre: "Herrera Oria", tipo: "poligono" },
+  { nombre: "Elegarcu", tipo: "poligono" },
+  { nombre: "Mercasantander", tipo: "poligono" },
+  { nombre: "Primero de Mayo", tipo: "poligono" },
+  { nombre: "Ciudad del Transportista", tipo: "poligono" },
+  { nombre: "Raos", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -193,6 +249,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Palencia",
     etiqueta: "Palencia (Palencia)",
     zonas: [...BARRIOS_PALENCIA, ...POLIGONOS_PALENCIA],
+  },
+  {
+    id: "santander",
+    nombre: "Santander",
+    etiqueta: "Santander (Cantabria)",
+    zonas: [...BARRIOS_SANTANDER, ...POLIGONOS_SANTANDER],
   },
 ];
 

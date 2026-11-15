@@ -14,6 +14,7 @@ describe("zonas de Burgos", () => {
       "miranda",
       "logrono",
       "palencia",
+      "santander",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -45,6 +46,11 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(palencia!, "Allende el Río")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(palencia!, "San Antolín")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(palencia!, "El Poligonillo")?.tipo).toBe("poligono");
+    const santander = ciudadUrbana("santander");
+    expect(santander?.etiqueta).toBe("Santander (Cantabria)");
+    expect(zonaDeCiudad(santander!, "El Sardinero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santander!, "Candina")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santander!, "Pedreña")).toBeNull();
   });
 
   it("el título del trayecto corto usa los barrios", () => {

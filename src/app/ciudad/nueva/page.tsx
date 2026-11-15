@@ -16,7 +16,8 @@ export default async function NuevaCiudadPage() {
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
           Solo si ya ibas a hacer ese recorrido. Burgos, Aranda de Duero,
-          Miranda de Ebro, Logroño y Palencia. La calle se concreta en el chat.
+          Miranda de Ebro, Logroño, Palencia y Santander. La calle se concreta
+          en el chat.
         </p>
       </div>
       <PublicarCiudadForm />
