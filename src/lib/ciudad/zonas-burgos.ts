@@ -41,6 +41,8 @@
  * Polígonos Las Casas y Valcorba.
  * Segovia: los 19 barrios de los presupuestos participativos del Ayuntamiento.
  * Polígonos El Cerro, Hontoria y El Acueducto.
+ * Valladolid: las zonas estadísticas del Ayuntamiento.
+ * Polígonos Argales, San Cristóbal, Carrascal y Berrocal.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -621,6 +623,65 @@ const POLIGONOS_SEGOVIA: ZonaCiudad[] = [
   { nombre: "El Acueducto", tipo: "poligono" },
 ];
 
+const BARRIOS_VALLADOLID: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Caño Argales", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "San Pablo", tipo: "barrio" },
+  { nombre: "San Nicolás", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "Circular", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Juan II", tipo: "barrio" },
+  { nombre: "Vadillos", tipo: "barrio" },
+  { nombre: "Batallas", tipo: "barrio" },
+  { nombre: "Hospital", tipo: "barrio" },
+  { nombre: "Rondilla", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "Huerta del Rey (Alta)", tipo: "barrio" },
+  { nombre: "Huerta del Rey (Baja)", tipo: "barrio" },
+  { nombre: "Huerta del Rey (Media)", tipo: "barrio" },
+  { nombre: "Gavilla", tipo: "barrio" },
+  { nombre: "Paseo Zorrilla (Bajo)", tipo: "barrio" },
+  { nombre: "Campo Grande", tipo: "barrio" },
+  { nombre: "Pajarillos Bajos", tipo: "barrio" },
+  { nombre: "Pilarica", tipo: "barrio" },
+  { nombre: "Belén", tipo: "barrio" },
+  { nombre: "San Pedro Regalado", tipo: "barrio" },
+  { nombre: "Barrio España", tipo: "barrio" },
+  { nombre: "Avenida de Burgos-Canal de Castilla", tipo: "barrio" },
+  { nombre: "Girón", tipo: "barrio" },
+  { nombre: "Insonusa", tipo: "barrio" },
+  { nombre: "Parquesol", tipo: "barrio" },
+  { nombre: "Arturo Eyríes (Alto)", tipo: "barrio" },
+  { nombre: "Arturo Eyríes (Bajo)", tipo: "barrio" },
+  {
+    nombre: "Las Villas-Cañada Puente Duero-Covaresa-Parque Alameda-Paula López",
+    tipo: "barrio",
+  },
+  { nombre: "La Rubia", tipo: "barrio" },
+  { nombre: "Arturo León", tipo: "barrio" },
+  { nombre: "Cuatro de Marzo", tipo: "barrio" },
+  { nombre: "Paseo de Zorrilla (Alto)", tipo: "barrio" },
+  { nombre: "Barriada de la Guardia Civil", tipo: "barrio" },
+  { nombre: "Camino de la Esperanza", tipo: "barrio" },
+  { nombre: "Delicias", tipo: "barrio" },
+  { nombre: "Caamaño-Las Viudas", tipo: "barrio" },
+  { nombre: "Páramo San Isidro-Poblado Esperanza", tipo: "barrio" },
+  { nombre: "Pajarillos Altos", tipo: "barrio" },
+  { nombre: "Las Flores", tipo: "barrio" },
+  { nombre: "La Overuela-Navabuena", tipo: "barrio" },
+  { nombre: "El Pinar de Antequera", tipo: "barrio" },
+  { nombre: "Puente Duero", tipo: "barrio" },
+];
+
+const POLIGONOS_VALLADOLID: ZonaCiudad[] = [
+  { nombre: "Polígono de Argales", tipo: "poligono" },
+  { nombre: "San Cristóbal", tipo: "poligono" },
+  { nombre: "Carrascal", tipo: "poligono" },
+  { nombre: "Berrocal", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -717,6 +778,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Segovia",
     etiqueta: "Segovia (Segovia)",
     zonas: [...BARRIOS_SEGOVIA, ...POLIGONOS_SEGOVIA],
+  },
+  {
+    id: "valladolid",
+    nombre: "Valladolid",
+    etiqueta: "Valladolid (Valladolid)",
+    zonas: [...BARRIOS_VALLADOLID, ...POLIGONOS_VALLADOLID],
   },
 ];
 
