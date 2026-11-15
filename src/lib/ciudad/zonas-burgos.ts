@@ -77,6 +77,8 @@
  * Polígono Industrial Errotatxu.
  * Portugalete: barrios de EUSTAT 2025 y las zonas que nombra el Ayuntamiento.
  * Polígono Industrial Ballonti.
+ * Santurtzi: barrios de EUSTAT 2025. Kabiezes es Cabieces.
+ * Polígonos Balparda y El Árbol.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1504,6 +1506,36 @@ const POLIGONOS_PORTUGALETE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Ballonti", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTURTZI: ZonaCiudad[] = [
+  { nombre: "Balparda", tipo: "barrio" },
+  { nombre: "Buena Vista", tipo: "barrio" },
+  { nombre: "Kabiezes (Cabieces)", tipo: "barrio" },
+  { nombre: "Coscojales", tipo: "barrio" },
+  { nombre: "Cuesta Hospital", tipo: "barrio" },
+  { nombre: "El Bullón", tipo: "barrio" },
+  { nombre: "El Campón", tipo: "barrio" },
+  { nombre: "El Cotillo", tipo: "barrio" },
+  { nombre: "El Parque", tipo: "barrio" },
+  { nombre: "Fontuso", tipo: "barrio" },
+  { nombre: "Kai-Alde", tipo: "barrio" },
+  { nombre: "La Chicharra", tipo: "barrio" },
+  { nombre: "Las Viñas", tipo: "barrio" },
+  { nombre: "Lauaxeta", tipo: "barrio" },
+  { nombre: "Mamariga", tipo: "barrio" },
+  { nombre: "Mirabueno", tipo: "barrio" },
+  { nombre: "Nafarroa", tipo: "barrio" },
+  { nombre: "Peñota", tipo: "barrio" },
+  { nombre: "Portalada", tipo: "barrio" },
+  { nombre: "Ranzari", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Torquillas", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTURTZI: ZonaCiudad[] = [
+  { nombre: "Polígono Balparda", tipo: "poligono" },
+  { nombre: "Polígono El Árbol", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1708,6 +1740,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Portugalete",
     etiqueta: "Portugalete (Bizkaia)",
     zonas: [...BARRIOS_PORTUGALETE, ...POLIGONOS_PORTUGALETE],
+  },
+  {
+    id: "santurtzi",
+    nombre: "Santurtzi",
+    etiqueta: "Santurtzi (Bizkaia)",
+    zonas: [...BARRIOS_SANTURTZI, ...POLIGONOS_SANTURTZI],
   },
 ];
 
