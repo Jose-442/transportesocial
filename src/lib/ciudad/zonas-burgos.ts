@@ -118,6 +118,9 @@
  * Polígonos de actividad económica. Can Roqueta y Can Feu salen una vez.
  * Mataró: los 12 barrios del mapa del Ayuntamiento.
  * Siete polígonos. Pla d'en Boet es barrio y polígono.
+ * Sant Cugat del Vallès: los barrios del padrón municipal,
+ * también los de Valldoreix. Siete parques empresariales.
+ * Can Calopa, Ca n'Ametller y La Guinardera salen una vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2156,6 +2159,84 @@ const POLIGONOS_MATARO: ZonaCiudad[] = [
   { nombre: "El Rengle II", tipo: "poligono" },
 ];
 
+const BARRIOS_SANT_CUGAT: ZonaCiudad[] = [
+  { nombre: "Eixample Sud", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Parc Central", tipo: "barrio" },
+  { nombre: "El Colomer", tipo: "barrio" },
+  { nombre: "Can Gatxet", tipo: "barrio" },
+  { nombre: "Pla de la Pagesa", tipo: "barrio" },
+  { nombre: "Arxiu", tipo: "barrio" },
+  { nombre: "Sant Domènec Est", tipo: "barrio" },
+  { nombre: "Golf", tipo: "barrio" },
+  { nombre: "Costa del Golf", tipo: "barrio" },
+  { nombre: "Can Trabal", tipo: "barrio" },
+  { nombre: "Coll Favà", tipo: "barrio" },
+  { nombre: "Can Magí Nord", tipo: "barrio" },
+  { nombre: "Can Magí Sud", tipo: "barrio" },
+  { nombre: "Sant Francesc", tipo: "barrio" },
+  { nombre: "Monestir", tipo: "barrio" },
+  { nombre: "Torre Blanca", tipo: "barrio" },
+  { nombre: "Torre Negra", tipo: "barrio" },
+  { nombre: "Can Bell", tipo: "barrio" },
+  { nombre: "Calado", tipo: "barrio" },
+  { nombre: "Can Gordi", tipo: "barrio" },
+  { nombre: "Collserola - Centre", tipo: "barrio" },
+  { nombre: "Volpelleres", tipo: "barrio" },
+  { nombre: "Can Barata", tipo: "barrio" },
+  { nombre: "Galliners", tipo: "barrio" },
+  { nombre: "Can Sant Joan Nord", tipo: "barrio" },
+  { nombre: "Can Sant Joan Sud", tipo: "barrio" },
+  { nombre: "La Guinardera", tipo: "barrio" },
+  { nombre: "Sant Domènec Oest", tipo: "barrio" },
+  { nombre: "Roquetes", tipo: "barrio" },
+  { nombre: "Mira-sol", tipo: "barrio" },
+  { nombre: "Mas Gener", tipo: "barrio" },
+  { nombre: "Can Cabassa", tipo: "barrio" },
+  { nombre: "Ca n'Ametller", tipo: "barrio" },
+  { nombre: "Can Mates Nord", tipo: "barrio" },
+  { nombre: "Can Mates Est", tipo: "barrio" },
+  { nombre: "Can Mates Oest", tipo: "barrio" },
+  { nombre: "Bell Indret", tipo: "barrio" },
+  { nombre: "Colònia Oller", tipo: "barrio" },
+  { nombre: "La Serreta", tipo: "barrio" },
+  { nombre: "La Muntanyesa", tipo: "barrio" },
+  { nombre: "Can Llobet", tipo: "barrio" },
+  { nombre: "Casino", tipo: "barrio" },
+  { nombre: "Turó del Fumet", tipo: "barrio" },
+  { nombre: "Buscarons", tipo: "barrio" },
+  { nombre: "Sol i Aire", tipo: "barrio" },
+  { nombre: "Collserola - Floresta", tipo: "barrio" },
+  { nombre: "Mas Fortuny", tipo: "barrio" },
+  { nombre: "Sant Medir", tipo: "barrio" },
+  { nombre: "Les Planes", tipo: "barrio" },
+  { nombre: "Can Cortés", tipo: "barrio" },
+  { nombre: "Can Borrull", tipo: "barrio" },
+  { nombre: "Collserola - Les Planes", tipo: "barrio" },
+  { nombre: "Sant Jaume", tipo: "barrio" },
+  { nombre: "La Barceloneta", tipo: "barrio" },
+  { nombre: "Can Cadena", tipo: "barrio" },
+  { nombre: "Ca n'Enric La Miranda", tipo: "barrio" },
+  { nombre: "Mas Fuster", tipo: "barrio" },
+  { nombre: "Aqualonga", tipo: "barrio" },
+  { nombre: "Rossinyol", tipo: "barrio" },
+  { nombre: "Mas Roig", tipo: "barrio" },
+  { nombre: "Les Bobines", tipo: "barrio" },
+  { nombre: "Montmany", tipo: "barrio" },
+  { nombre: "Regadiu", tipo: "barrio" },
+  { nombre: "Can Casulleres", tipo: "barrio" },
+  { nombre: "Colònia Montserrat", tipo: "barrio" },
+  { nombre: "Can Calopa", tipo: "barrio" },
+  { nombre: "Collserola - Valldoreix", tipo: "barrio" },
+];
+
+const POLIGONOS_SANT_CUGAT: ZonaCiudad[] = [
+  { nombre: "Can Sant Joan", tipo: "poligono" },
+  { nombre: "Can Mates", tipo: "poligono" },
+  { nombre: "Sant Mamet", tipo: "poligono" },
+  { nombre: "Can Magí-Can Calders", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2494,6 +2575,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mataró",
     etiqueta: "Mataró (Barcelona)",
     zonas: [...BARRIOS_MATARO, ...POLIGONOS_MATARO],
+  },
+  {
+    id: "santcugat",
+    nombre: "Sant Cugat del Vallès",
+    etiqueta: "Sant Cugat del Vallès (Barcelona)",
+    zonas: [...BARRIOS_SANT_CUGAT, ...POLIGONOS_SANT_CUGAT],
   },
 ];
 

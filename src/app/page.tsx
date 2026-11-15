@@ -218,7 +218,7 @@ export default async function HomePage() {
               Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria,
               Segovia, Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense,
               Pontevedra, Vigo, Vilagarcía de Arousa, A Coruña, Santiago de
-              Compostela, Ferrol, Narón, Oleiros, Bilbao, Barakaldo, Getxo, Portugalete, Santurtzi, Basauri, San Sebastián, Irun, Errenteria, Barcelona, L'Hospitalet de Llobregat, Badalona, Santa Coloma de Gramenet, Cornellà de Llobregat, Sant Boi de Llobregat, Viladecans, El Prat de Llobregat, Esplugues de Llobregat, Gavà, Montcada i Reixac, Terrassa, Sabadell y Mataró.
+              Compostela, Ferrol, Narón, Oleiros, Bilbao, Barakaldo, Getxo, Portugalete, Santurtzi, Basauri, San Sebastián, Irun, Errenteria, Barcelona, L'Hospitalet de Llobregat, Badalona, Santa Coloma de Gramenet, Cornellà de Llobregat, Sant Boi de Llobregat, Viladecans, El Prat de Llobregat, Esplugues de Llobregat, Gavà, Montcada i Reixac, Terrassa, Sabadell, Mataró y Sant Cugat del Vallès.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>

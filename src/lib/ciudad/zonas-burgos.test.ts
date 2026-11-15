@@ -62,6 +62,7 @@ describe("zonas de Burgos", () => {
       "terrassa",
       "sabadell",
       "mataro",
+      "santcugat",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -571,6 +572,19 @@ describe("zonas de Burgos", () => {
     const nombresMataro = mataro!.zonas.map((z) => z.nombre);
     expect(new Set(nombresMataro).size).toBe(nombresMataro.length);
     expect(nombresMataro.filter((n) => mataro!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
+    const santcugat = ciudadUrbana("santcugat");
+    expect(santcugat?.etiqueta).toBe("Sant Cugat del Vallès (Barcelona)");
+    expect(santcugat?.nombre).toBe("Sant Cugat del Vallès");
+    expect(zonaDeCiudad(santcugat!, "Collserola - Centre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santcugat!, "Ca n'Ametller")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santcugat!, "Can Calopa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santcugat!, "La Guinardera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santcugat!, "Sant Mamet")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santcugat!, "Can Sant Joan")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santcugat!, "Can Rabella")).toBeNull();
+    const nombresSantCugat = santcugat!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantCugat).size).toBe(nombresSantCugat.length);
+    expect(nombresSantCugat.filter((n) => santcugat!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(68);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
