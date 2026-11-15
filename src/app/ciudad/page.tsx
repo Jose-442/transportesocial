@@ -46,7 +46,7 @@ export default async function CiudadPage({
           Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria, Segovia,
           Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense, Pontevedra, Vigo,
           Vilagarcía de Arousa, A Coruña, Santiago de Compostela, Ferrol, Narón,
-          Oleiros, Bilbao, Barakaldo, Getxo, Portugalete, Santurtzi, Basauri, San Sebastián, Irun, Errenteria y Barcelona.
+          Oleiros, Bilbao, Barakaldo, Getxo, Portugalete, Santurtzi, Basauri, San Sebastián, Irun, Errenteria, Barcelona y L'Hospitalet de Llobregat.
           Eliges barrio o polígono.
           La calle se concreta en el chat.
         </p>

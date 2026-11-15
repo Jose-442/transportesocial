@@ -90,6 +90,8 @@
  * Barcelona: los 73 barrios del Ayuntamiento.
  * Polígonos Zona Franca, Mercabarna, Bon Pastor, Torrent de l'Estadella,
  * La Verneda Industrial, Montsolís y 22@.
+ * L'Hospitalet: los 13 barrios del Ayuntamiento. Granvia Sud es barrio.
+ * Polígonos Pedrosa, Carretera del Mig y los tres de Santa Eulàlia.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1755,6 +1757,30 @@ const POLIGONOS_BARCELONA: ZonaCiudad[] = [
   { nombre: "22@", tipo: "poligono" },
 ];
 
+const BARRIOS_HOSPITALET: ZonaCiudad[] = [
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Sanfeliu", tipo: "barrio" },
+  { nombre: "Sant Josep", tipo: "barrio" },
+  { nombre: "La Torrassa", tipo: "barrio" },
+  { nombre: "Collblanc", tipo: "barrio" },
+  { nombre: "Santa Eulàlia", tipo: "barrio" },
+  { nombre: "Granvia Sud", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "Les Planes", tipo: "barrio" },
+  { nombre: "Can Serra", tipo: "barrio" },
+  { nombre: "Pubilla Cases", tipo: "barrio" },
+  { nombre: "El Gornal", tipo: "barrio" },
+  { nombre: "Bellvitge", tipo: "barrio" },
+];
+
+const POLIGONOS_HOSPITALET: ZonaCiudad[] = [
+  { nombre: "Pedrosa", tipo: "poligono" },
+  { nombre: "Carretera del Mig", tipo: "poligono" },
+  { nombre: "Santa Eulàlia-Provençana", tipo: "poligono" },
+  { nombre: "Santa Eulàlia-Narcís Monturiol", tipo: "poligono" },
+  { nombre: "Santa Eulàlia-Martí i Codolar", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1995,6 +2021,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Barcelona",
     etiqueta: "Barcelona (Barcelona)",
     zonas: [...BARRIOS_BARCELONA, ...POLIGONOS_BARCELONA],
+  },
+  {
+    id: "hospitalet",
+    nombre: "L'Hospitalet de Llobregat",
+    etiqueta: "Hospitalet de Llobregat (Barcelona)",
+    zonas: [...BARRIOS_HOSPITALET, ...POLIGONOS_HOSPITALET],
   },
 ];
 

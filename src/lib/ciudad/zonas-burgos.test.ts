@@ -49,6 +49,7 @@ describe("zonas de Burgos", () => {
       "irun",
       "errenteria",
       "barcelona",
+      "hospitalet",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -419,6 +420,16 @@ describe("zonas de Burgos", () => {
     const nombresBarcelona = barcelona!.zonas.map((z) => z.nombre);
     expect(new Set(nombresBarcelona).size).toBe(nombresBarcelona.length);
     expect(nombresBarcelona.filter((n) => barcelona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(73);
+    const hospitalet = ciudadUrbana("hospitalet");
+    expect(hospitalet?.etiqueta).toBe("Hospitalet de Llobregat (Barcelona)");
+    expect(hospitalet?.nombre).toBe("L'Hospitalet de Llobregat");
+    expect(zonaDeCiudad(hospitalet!, "Bellvitge")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hospitalet!, "Granvia Sud")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hospitalet!, "Pedrosa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(hospitalet!, "Zona Franca")).toBeNull();
+    const nombresHospitalet = hospitalet!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresHospitalet).size).toBe(nombresHospitalet.length);
+    expect(nombresHospitalet.filter((n) => hospitalet!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
