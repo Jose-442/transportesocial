@@ -19,6 +19,7 @@ describe("zonas de Burgos", () => {
       "castro",
       "vitoria",
       "pamplona",
+      "tudela",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -80,6 +81,15 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(pamplona!, "Landaben")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(pamplona!, "Cordovilla")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(pamplona!, "Ciudad del Transporte")?.tipo).toBe("poligono");
+    const tudela = ciudadUrbana("tudela");
+    expect(tudela?.etiqueta).toBe("Tudela (Navarra)");
+    expect(zonaDeCiudad(tudela!, "Lourdes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tudela!, "Casco Viejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tudela!, "La Serna")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tudela!, "Las Labradas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tudela!, "La Albea")).toBeNull();
+    const nombresTudela = tudela!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTudela).size).toBe(nombresTudela.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

@@ -21,6 +21,11 @@
  * los concejales de barrio. Polígonos Landaben, Agustinos y los de al lado
  * que la gente usa con Pamplona: Cordovilla, Morea, Talluntxe,
  * Ciudad del Transporte y Mugazuri.
+ * Tudela: barrios que recoge el plan general (el Casco Viejo va aparte,
+ * como núcleo histórico). Queiles es el mismo sitio que La Albea.
+ * Polígonos de la página de industria del Ayuntamiento: Municipal,
+ * Las Labradas, Montes de Cierzo, La Serna, Centro de Servicios,
+ * La Barrena y AA4. El Área Logística sigue sin hacerse: es La Serna 2.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -418,6 +423,31 @@ const POLIGONOS_PAMPLONA: ZonaCiudad[] = [
   { nombre: "Mugazuri", tipo: "poligono" },
 ];
 
+const BARRIOS_TUDELA: ZonaCiudad[] = [
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "Azucarera", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "De la Música", tipo: "barrio" },
+  { nombre: "Elola", tipo: "barrio" },
+  { nombre: "Gardachales", tipo: "barrio" },
+  { nombre: "Griseras", tipo: "barrio" },
+  { nombre: "Instituto", tipo: "barrio" },
+  { nombre: "Lourdes", tipo: "barrio" },
+  { nombre: "Queiles", tipo: "barrio" },
+  { nombre: "Velilla", tipo: "barrio" },
+  { nombre: "Virgen de la Cabeza", tipo: "barrio" },
+];
+
+const POLIGONOS_TUDELA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Municipal", tipo: "poligono" },
+  { nombre: "Las Labradas", tipo: "poligono" },
+  { nombre: "Montes de Cierzo", tipo: "poligono" },
+  { nombre: "La Serna", tipo: "poligono" },
+  { nombre: "Centro de Servicios", tipo: "poligono" },
+  { nombre: "La Barrena", tipo: "poligono" },
+  { nombre: "AA4", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -478,6 +508,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Pamplona",
     etiqueta: "Pamplona (Navarra)",
     zonas: [...BARRIOS_PAMPLONA, ...POLIGONOS_PAMPLONA],
+  },
+  {
+    id: "tudela",
+    nombre: "Tudela",
+    etiqueta: "Tudela (Navarra)",
+    zonas: [...BARRIOS_TUDELA, ...POLIGONOS_TUDELA],
   },
 ];
 
