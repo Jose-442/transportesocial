@@ -73,6 +73,8 @@
  * Zorrotzaurre va como zona. Los polígonos de al lado están fuera del municipio.
  * Barakaldo: los 12 barrios del Ayuntamiento (2026) y las zonas que ese texto nombra.
  * Polígonos Kareaga Norte y Beurko Viejo.
+ * Getxo: los barrios del Ayuntamiento y las zonas del plan de 2026.
+ * Polígono Industrial Errotatxu.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1452,6 +1454,32 @@ const POLIGONOS_BARAKALDO: ZonaCiudad[] = [
   { nombre: "Beurko Viejo", tipo: "poligono" },
 ];
 
+const BARRIOS_GETXO: ZonaCiudad[] = [
+  { nombre: "Algorta", tipo: "barrio" },
+  { nombre: "Algorta Centro", tipo: "barrio" },
+  { nombre: "Algorta Este", tipo: "barrio" },
+  { nombre: "Algorta Frente Costero", tipo: "barrio" },
+  { nombre: "Puerto Viejo", tipo: "barrio" },
+  { nombre: "Andra Mari (Santa María)", tipo: "barrio" },
+  { nombre: "La Galea", tipo: "barrio" },
+  { nombre: "Neguri", tipo: "barrio" },
+  { nombre: "Zugazarte", tipo: "barrio" },
+  { nombre: "Las Arenas (Areeta)", tipo: "barrio" },
+  { nombre: "Romo", tipo: "barrio" },
+  { nombre: "Santa Eugenia", tipo: "barrio" },
+  { nombre: "Aiboa", tipo: "barrio" },
+  { nombre: "Gobeloki", tipo: "barrio" },
+  { nombre: "Konporte", tipo: "barrio" },
+  { nombre: "Fadura", tipo: "barrio" },
+  { nombre: "Etxezuri", tipo: "barrio" },
+  { nombre: "Villa de Plentzia", tipo: "barrio" },
+  { nombre: "Zubilleta", tipo: "barrio" },
+];
+
+const POLIGONOS_GETXO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Errotatxu", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1644,6 +1672,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Barakaldo",
     etiqueta: "Barakaldo (Bizkaia)",
     zonas: [...BARRIOS_BARAKALDO, ...POLIGONOS_BARAKALDO],
+  },
+  {
+    id: "getxo",
+    nombre: "Getxo",
+    etiqueta: "Getxo (Bizkaia)",
+    zonas: [...BARRIOS_GETXO, ...POLIGONOS_GETXO],
   },
 ];
 

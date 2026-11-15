@@ -41,6 +41,7 @@ describe("zonas de Burgos", () => {
       "oleiros",
       "bilbao",
       "barakaldo",
+      "getxo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -319,6 +320,18 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(barakaldo!, "Beurko Viejo")?.tipo).toBe("poligono");
     const nombresBarakaldo = barakaldo!.zonas.map((z) => z.nombre);
     expect(new Set(nombresBarakaldo).size).toBe(nombresBarakaldo.length);
+    const getxo = ciudadUrbana("getxo");
+    expect(getxo?.etiqueta).toBe("Getxo (Bizkaia)");
+    expect(zonaDeCiudad(getxo!, "Algorta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getxo!, "Romo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getxo!, "Las Arenas (Areeta)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getxo!, "Neguri")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getxo!, "Polígono Industrial Errotatxu")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(getxo!, "Mimenaga")).toBeNull();
+    const nombresGetxo = getxo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGetxo).size).toBe(nombresGetxo.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
