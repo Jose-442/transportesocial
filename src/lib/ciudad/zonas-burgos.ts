@@ -18,7 +18,9 @@
  * porque los pueblos van con su nombre) y los núcleos del Ayuntamiento.
  * Ocho polígonos de la página de industria del Ayuntamiento.
  * Pamplona: listado de barrios del Ayuntamiento y los nombres que usan
- * los concejales de barrio. Polígonos Landaben y Agustinos.
+ * los concejales de barrio. Polígonos Landaben, Agustinos y los de al lado
+ * que la gente usa con Pamplona: Cordovilla, Morea, Talluntxe,
+ * Ciudad del Transporte y Mugazuri.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -409,6 +411,11 @@ const BARRIOS_PAMPLONA: ZonaCiudad[] = [
 const POLIGONOS_PAMPLONA: ZonaCiudad[] = [
   { nombre: "Landaben", tipo: "poligono" },
   { nombre: "Agustinos", tipo: "poligono" },
+  { nombre: "Cordovilla", tipo: "poligono" },
+  { nombre: "Morea", tipo: "poligono" },
+  { nombre: "Talluntxe", tipo: "poligono" },
+  { nombre: "Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "Mugazuri", tipo: "poligono" },
 ];
 
 export const CIUDADES_URBANAS: CiudadUrbana[] = [

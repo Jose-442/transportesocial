@@ -78,7 +78,8 @@ describe("zonas de Burgos", () => {
     expect(pamplona?.etiqueta).toBe("Pamplona (Navarra)");
     expect(zonaDeCiudad(pamplona!, "Rochapea")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(pamplona!, "Landaben")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(pamplona!, "Cordovilla")).toBeNull();
+    expect(zonaDeCiudad(pamplona!, "Cordovilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pamplona!, "Ciudad del Transporte")?.tipo).toBe("poligono");
   });
 
   it("el título del trayecto corto usa los barrios", () => {
