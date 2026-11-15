@@ -112,6 +112,8 @@
  * El Camí Ral, El Regàs y La Marina.
  * Montcada i Reixac: los 10 barrios del Ayuntamiento.
  * Polígonos de los mapas municipales. Can Cuiàs es barrio y polígono.
+ * Terrassa: los barrios del mapa del Ayuntamiento.
+ * Polígonos industriales del mismo mapa. Segle XX y Can Palet salen una vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2015,6 +2017,66 @@ const POLIGONOS_MONTCADA: ZonaCiudad[] = [
   { nombre: "Asland", tipo: "poligono" },
 ];
 
+const BARRIOS_TERRASSA: ZonaCiudad[] = [
+  { nombre: "Can Parellada", tipo: "barrio" },
+  { nombre: "Les Fonts", tipo: "barrio" },
+  { nombre: "Can Jofresa", tipo: "barrio" },
+  { nombre: "Guadalhorce", tipo: "barrio" },
+  { nombre: "Can Palet II", tipo: "barrio" },
+  { nombre: "Xúquer", tipo: "barrio" },
+  { nombre: "Montserrat", tipo: "barrio" },
+  { nombre: "Vilardell", tipo: "barrio" },
+  { nombre: "Torre-sana", tipo: "barrio" },
+  { nombre: "Les Arenes / La Grípia / Can Montllor", tipo: "barrio" },
+  { nombre: "Sant Llorenç", tipo: "barrio" },
+  { nombre: "Sant Pere Nord", tipo: "barrio" },
+  { nombre: "Ègara", tipo: "barrio" },
+  { nombre: "Ca n'Anglada", tipo: "barrio" },
+  { nombre: "Plaça Catalunya / Escola Industrial", tipo: "barrio" },
+  { nombre: "Cementiri Vell", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Vallparadís", tipo: "barrio" },
+  { nombre: "Antic Poble de Sant Pere", tipo: "barrio" },
+  { nombre: "Sant Pere", tipo: "barrio" },
+  { nombre: "Can Tusell", tipo: "barrio" },
+  { nombre: "Pla del Bon Aire", tipo: "barrio" },
+  { nombre: "Can Roca", tipo: "barrio" },
+  { nombre: "Poble Nou / Zona Esportiva", tipo: "barrio" },
+  { nombre: "Torrent d'en Pere Parres", tipo: "barrio" },
+  { nombre: "Can Boada Casc Antic", tipo: "barrio" },
+  { nombre: "Ca n'Aurell", tipo: "barrio" },
+  { nombre: "La Maurina", tipo: "barrio" },
+  { nombre: "La Cogullada", tipo: "barrio" },
+  { nombre: "Segle XX", tipo: "barrio" },
+  { nombre: "Can Palet", tipo: "barrio" },
+  { nombre: "Roc Blanc", tipo: "barrio" },
+  { nombre: "Can Boada del Pi", tipo: "barrio" },
+  { nombre: "Can Gonteres", tipo: "barrio" },
+  { nombre: "Can Palet de Vista Alegre", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Les Martines", tipo: "barrio" },
+  { nombre: "Pla del Bon Aire - El Garrot", tipo: "barrio" },
+  { nombre: "Font de l'Espardenyera", tipo: "barrio" },
+  { nombre: "Els Caus Els Pinetons", tipo: "barrio" },
+];
+
+const POLIGONOS_TERRASSA: ZonaCiudad[] = [
+  { nombre: "Can Farcan", tipo: "poligono" },
+  { nombre: "Santa Margarida I", tipo: "poligono" },
+  { nombre: "Santa Margarida II", tipo: "poligono" },
+  { nombre: "Can Guitard", tipo: "poligono" },
+  { nombre: "Colom II", tipo: "poligono" },
+  { nombre: "Els Bellots", tipo: "poligono" },
+  { nombre: "Sector Montserrat", tipo: "poligono" },
+  { nombre: "Can Gorgs", tipo: "poligono" },
+  { nombre: "La Grípia", tipo: "poligono" },
+  { nombre: "Can Petit", tipo: "poligono" },
+  { nombre: "Puigbarral", tipo: "poligono" },
+  { nombre: "Can Parellada industrial", tipo: "poligono" },
+  { nombre: "Carrer d'Alemanya", tipo: "poligono" },
+  { nombre: "Santa Eulàlia", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2335,6 +2397,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Montcada i Reixac",
     etiqueta: "Montcada i Reixac (Barcelona)",
     zonas: [...BARRIOS_MONTCADA, ...POLIGONOS_MONTCADA],
+  },
+  {
+    id: "terrassa",
+    nombre: "Terrassa",
+    etiqueta: "Terrassa (Barcelona)",
+    zonas: [...BARRIOS_TERRASSA, ...POLIGONOS_TERRASSA],
   },
 ];
 

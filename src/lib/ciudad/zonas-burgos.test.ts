@@ -59,6 +59,7 @@ describe("zonas de Burgos", () => {
       "esplugues",
       "gava",
       "montcada",
+      "terrassa",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -533,6 +534,18 @@ describe("zonas de Burgos", () => {
     const nombresMontcada = montcada!.zonas.map((z) => z.nombre);
     expect(new Set(nombresMontcada).size).toBe(nombresMontcada.length);
     expect(nombresMontcada.filter((n) => montcada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    const terrassa = ciudadUrbana("terrassa");
+    expect(terrassa?.etiqueta).toBe("Terrassa (Barcelona)");
+    expect(terrassa?.nombre).toBe("Terrassa");
+    expect(zonaDeCiudad(terrassa!, "Ca n'Anglada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(terrassa!, "Segle XX")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(terrassa!, "Can Palet")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(terrassa!, "Can Farcan")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(terrassa!, "Els Bellots")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(terrassa!, "Palau Nord")).toBeNull();
+    const nombresTerrassa = terrassa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTerrassa).size).toBe(nombresTerrassa.length);
+    expect(nombresTerrassa.filter((n) => terrassa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
