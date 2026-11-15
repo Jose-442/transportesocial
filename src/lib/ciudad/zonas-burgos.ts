@@ -103,6 +103,8 @@
  * Viladecans: los barrios de las tres regidurías de distrito.
  * Polígonos Business Park, Ca n'Alemany, Can Calderon, Agròpolis
  * y el industrial Centre.
+ * El Prat de Llobregat: los 9 barrios del área metropolitana
+ * y el Eixample Sud. Polígonos de las zonas de actividad económica.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1905,6 +1907,36 @@ const POLIGONOS_VILADECANS: ZonaCiudad[] = [
   { nombre: "Polígono industrial Centre", tipo: "poligono" },
 ];
 
+const BARRIOS_EL_PRAT: ZonaCiudad[] = [
+  { nombre: "Llevant-Marina", tipo: "barrio" },
+  { nombre: "Nucli antic", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "la Granja", tipo: "barrio" },
+  { nombre: "Sant Cosme", tipo: "barrio" },
+  { nombre: "Sant Jordi-Ribera Baixa", tipo: "barrio" },
+  { nombre: "les Palmeres", tipo: "barrio" },
+  { nombre: "la Barceloneta", tipo: "barrio" },
+  { nombre: "Cases de la Seda", tipo: "barrio" },
+  { nombre: "Eixample Sud", tipo: "barrio" },
+];
+
+const POLIGONOS_EL_PRAT: ZonaCiudad[] = [
+  { nombre: "Ca l'Alaio", tipo: "poligono" },
+  { nombre: "Cal Saio", tipo: "poligono" },
+  { nombre: "Enkalene", tipo: "poligono" },
+  { nombre: "Estruch", tipo: "poligono" },
+  { nombre: "Fondo d'en Peixo", tipo: "poligono" },
+  { nombre: "Mas Mateu", tipo: "poligono" },
+  { nombre: "Pratenc", tipo: "poligono" },
+  { nombre: "Urgoiti-Ponsich", tipo: "poligono" },
+  { nombre: "Mas Blau I", tipo: "poligono" },
+  { nombre: "Mas Blau II", tipo: "poligono" },
+  { nombre: "Prat Nord", tipo: "poligono" },
+  { nombre: "ZAL-Prat", tipo: "poligono" },
+  { nombre: "Plana del Galet", tipo: "poligono" },
+  { nombre: "Aeroport", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2201,6 +2233,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Viladecans",
     etiqueta: "Viladecans (Barcelona)",
     zonas: [...BARRIOS_VILADECANS, ...POLIGONOS_VILADECANS],
+  },
+  {
+    id: "elprat",
+    nombre: "El Prat de Llobregat",
+    etiqueta: "Prat de Llobregat, El (Barcelona)",
+    zonas: [...BARRIOS_EL_PRAT, ...POLIGONOS_EL_PRAT],
   },
 ];
 
