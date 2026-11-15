@@ -55,6 +55,8 @@
  * y las parroquias del padrón. Polígonos Quintela y Seixalbo.
  * Pontevedra: barrios de la estrategia urbana del Concello y las parroquias del padrón.
  * Polígonos O Campiño y O Vao.
+ * Vigo: barrios del núcleo urbano y parroquias del plan general del Concello.
+ * Polígonos Balaídos y el parque tecnológico de Valadares.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -1054,6 +1056,40 @@ const POLIGONOS_PONTEVEDRA: ZonaCiudad[] = [
   { nombre: "O Vao", tipo: "poligono" },
 ];
 
+const BARRIOS_VIGO: ZonaCiudad[] = [
+  { nombre: "Casco Vello", tipo: "barrio" },
+  { nombre: "O Berbés", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "O Calvario", tipo: "barrio" },
+  { nombre: "Bouzas", tipo: "barrio" },
+  { nombre: "Coia", tipo: "barrio" },
+  { nombre: "As Travesas", tipo: "barrio" },
+  { nombre: "Alcabre (Santa Baia)", tipo: "barrio" },
+  { nombre: "Beade (Santo Estevo)", tipo: "barrio" },
+  { nombre: "Bembrive (Santiago)", tipo: "barrio" },
+  { nombre: "Cabral (Santa Mariña)", tipo: "barrio" },
+  { nombre: "Candeán (San Cristovo)", tipo: "barrio" },
+  { nombre: "Castrelos (Santa María)", tipo: "barrio" },
+  { nombre: "Comesaña (Santo André)", tipo: "barrio" },
+  { nombre: "Coruxo (San Salvador)", tipo: "barrio" },
+  { nombre: "Freixeiro (San Tomé)", tipo: "barrio" },
+  { nombre: "Lavadores (Santa Cristina)", tipo: "barrio" },
+  { nombre: "Matamá (San Pedro)", tipo: "barrio" },
+  { nombre: "Navia (San Paio)", tipo: "barrio" },
+  { nombre: "Oia (San Miguel)", tipo: "barrio" },
+  { nombre: "Saiáns (San Xurxo)", tipo: "barrio" },
+  { nombre: "Sárdoma (San Pedro)", tipo: "barrio" },
+  { nombre: "Teis (San Salvador)", tipo: "barrio" },
+  { nombre: "Valadares (Santo André)", tipo: "barrio" },
+  { nombre: "Zamáns (San Mamede)", tipo: "barrio" },
+  { nombre: "Cíes (San Francisco)", tipo: "barrio" },
+];
+
+const POLIGONOS_VIGO: ZonaCiudad[] = [
+  { nombre: "Polígono de Balaídos", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Valadares", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -1192,6 +1228,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Pontevedra",
     etiqueta: "Pontevedra (Pontevedra)",
     zonas: [...BARRIOS_PONTEVEDRA, ...POLIGONOS_PONTEVEDRA],
+  },
+  {
+    id: "vigo",
+    nombre: "Vigo",
+    etiqueta: "Vigo (Pontevedra)",
+    zonas: [...BARRIOS_VIGO, ...POLIGONOS_VIGO],
   },
 ];
 

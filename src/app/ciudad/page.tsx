@@ -44,7 +44,7 @@ export default async function CiudadPage({
           Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
           Santander, Torrelavega, Castro-Urdiales, Vitoria-Gasteiz, Pamplona,
           Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria, Segovia,
-          Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense y Pontevedra.
+          Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense, Pontevedra y Vigo.
           Eliges barrio o polígono.
           La calle se concreta en el chat.
         </p>
