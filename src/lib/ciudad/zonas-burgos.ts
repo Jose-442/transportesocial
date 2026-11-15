@@ -6,6 +6,8 @@
  * Miranda de Ebro: nombres que usa el Ayuntamiento; sin Miranda Sur (sigue en proyecto).
  * Logroño: barrios que nombra el Ayuntamiento en los distritos y en las obras por barrio;
  * polígonos Cantabria, Las Cañas y La Portalada (plan municipal 2024-2027).
+ * Palencia: 12 barrios del plano municipal y del avance del plan de 2026.
+ * Polígonos Nuestra Señora de los Ángeles, San Antolín y Villalobón.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -139,6 +141,27 @@ const POLIGONOS_LOGRONO: ZonaCiudad[] = [
   { nombre: "La Portalada", tipo: "poligono" },
 ];
 
+const BARRIOS_PALENCIA: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "San Pablo y Santa Marina", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "El Cristo", tipo: "barrio" },
+  { nombre: "Ave María", tipo: "barrio" },
+  { nombre: "San Juanillo", tipo: "barrio" },
+  { nombre: "Pan y Guindas", tipo: "barrio" },
+  { nombre: "Campo de la Juventud", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Avenida de Madrid", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Allende el Río", tipo: "barrio" },
+];
+
+const POLIGONOS_PALENCIA: ZonaCiudad[] = [
+  { nombre: "Nuestra Señora de los Ángeles", tipo: "poligono" },
+  { nombre: "San Antolín", tipo: "poligono" },
+  { nombre: "Villalobón", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -163,6 +186,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Logroño",
     etiqueta: "Logroño (La Rioja)",
     zonas: [...BARRIOS_LOGRONO, ...POLIGONOS_LOGRONO],
+  },
+  {
+    id: "palencia",
+    nombre: "Palencia",
+    etiqueta: "Palencia (Palencia)",
+    zonas: [...BARRIOS_PALENCIA, ...POLIGONOS_PALENCIA],
   },
 ];
 

@@ -213,8 +213,8 @@ export default async function HomePage() {
               </span>
             </ButtonLink>
             <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
-              Burgos, Aranda de Duero, Miranda de Ebro y Logroño. Barrio o
-              polígono. La calle se concreta en el chat.
+              Burgos, Aranda de Duero, Miranda de Ebro, Logroño y Palencia.
+              Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>
           <p
