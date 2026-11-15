@@ -105,6 +105,24 @@ describe("municipios-espana", () => {
     expect(resolverMunicipio("Camargo")?.nombre).toBe("Camargo");
   });
 
+  it("un pueblo que no es ayuntamiento sale con su provincia", () => {
+    const navarra = resolverMunicipio("Cordovilla (Navarra)");
+    const albacete = resolverMunicipio("Cordovilla (Albacete)");
+    expect(navarra?.provincia).toBe("Navarra");
+    expect(albacete?.provincia).toBe("Albacete");
+    expect(navarra?.nombre).toBe("Cordovilla");
+    expect(coordenadasMunicipio(navarra!)).not.toBeNull();
+    expect(coordenadasMunicipio(albacete!)).not.toBeNull();
+    expect(filtrarMunicipios("cordovilla").map((m) => m.provincia)).toEqual(
+      expect.arrayContaining(["Navarra", "Albacete"])
+    );
+    expect(resolverMunicipio("Foronda (Álava)")?.nombre).toBe("Foronda");
+    expect(resolverMunicipio("Pedreña (Cantabria)")?.nombre).toBe("Pedreña");
+    expect(resolverMunicipio("Renedo, Piélagos (Cantabria)")?.nombre).toBe(
+      "Renedo, Piélagos"
+    );
+  });
+
   it("coincideMunicipioBusqueda: Oporto coincide con filtro Oporto (PT)", () => {
     expect(coincideMunicipioBusqueda("Oporto", "Oporto")).toBe(true);
     expect(coincideMunicipioBusqueda("Oporto", "Lisboa")).toBe(false);

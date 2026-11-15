@@ -3,11 +3,14 @@
  * Coordenadas: src/data/municipios-coordenadas.json (centroides es-atlas).
  * Regenerar: node scripts/generar-municipios-coordenadas.mjs
  * Pueblos de dentro de un ayuntamiento: src/data/localidades-extra.json
+ * Resto de pueblos de España: src/data/pueblos-espana.json
+ * (node scripts/generar-pueblos.mjs, nomenclátor del IGN).
  */
 import rawMunicipios from "@/data/municipios-espana.json";
 import rawCoordenadas from "@/data/municipios-coordenadas.json";
 import rawFrontera from "@/data/municipios-frontera.json";
 import rawLocalidades from "@/data/localidades-extra.json";
+import rawPueblos from "@/data/pueblos-espana.json";
 
 export type MunicipioEspana = {
   nombre: string;
@@ -29,10 +32,14 @@ export const RADIO_BUSQUEDA_KM = 50;
 type LocalidadExtra = MunicipioEspana & MunicipioCoordenadas;
 
 const LOCALIDADES_EXTRA = rawLocalidades as LocalidadExtra[];
+const PUEBLOS = (rawPueblos as [string, string, number, number][]).map(
+  ([nombre, provincia, lat, lng]) => ({ nombre, provincia, lat, lng })
+);
 
 export const MUNICIPIOS_ESPAÑA: MunicipioEspana[] = [
   ...(rawMunicipios as MunicipioEspana[]),
   ...LOCALIDADES_EXTRA.map(({ nombre, provincia }) => ({ nombre, provincia })),
+  ...PUEBLOS.map(({ nombre, provincia }) => ({ nombre, provincia })),
 ];
 export const MUNICIPIOS_FRONTERA = rawFrontera as MunicipioEspana[];
 
@@ -48,7 +55,13 @@ export function normalizarTextoBusqueda(value: string): string {
 }
 
 const indicePorNombre = new Map<string, MunicipioEspana>();
+const indicePorNombreYProvincia = new Map<string, MunicipioEspana>();
 const indiceFronteraPorNombre = new Map<string, MunicipioEspana>();
+const indiceFronteraPorNombreYProvincia = new Map<string, MunicipioEspana>();
+
+function claveNombreProvincia(nombre: string, provincia: string): string {
+  return `${normalizarTextoBusqueda(nombre)}|${normalizarTextoBusqueda(provincia)}`;
+}
 
 for (const municipio of rawMunicipios as MunicipioEspana[]) {
   indicePorNombre.set(normalizarTextoBusqueda(municipio.nombre), municipio);
@@ -63,8 +76,30 @@ for (const localidad of LOCALIDADES_EXTRA) {
   }
 }
 
+for (const pueblo of PUEBLOS) {
+  const clave = `${normalizarTextoBusqueda(pueblo.nombre)}|${normalizarTextoBusqueda(pueblo.provincia)}`;
+  if (!coordenadasLocalidad.has(clave)) {
+    coordenadasLocalidad.set(clave, { lat: pueblo.lat, lng: pueblo.lng });
+  }
+  const nombre = normalizarTextoBusqueda(pueblo.nombre);
+  if (!indicePorNombre.has(nombre)) {
+    indicePorNombre.set(nombre, { nombre: pueblo.nombre, provincia: pueblo.provincia });
+  }
+}
+
+for (const municipio of MUNICIPIOS_ESPAÑA) {
+  indicePorNombreYProvincia.set(
+    claveNombreProvincia(municipio.nombre, municipio.provincia),
+    municipio
+  );
+}
+
 for (const municipio of MUNICIPIOS_FRONTERA) {
   indiceFronteraPorNombre.set(normalizarTextoBusqueda(municipio.nombre), municipio);
+  indiceFronteraPorNombreYProvincia.set(
+    claveNombreProvincia(municipio.nombre, municipio.provincia),
+    municipio
+  );
 }
 
 function esMunicipioFrontera(municipio: MunicipioEspana): boolean {
@@ -104,18 +139,14 @@ export function resolverMunicipio(
   const nombreKey = normalizarTextoBusqueda(nombre);
   if (!nombreKey) return null;
 
-  const catalogo = opts?.incluirFrontera
-    ? [...MUNICIPIOS_ESPAÑA, ...MUNICIPIOS_FRONTERA]
-    : MUNICIPIOS_ESPAÑA;
-
   if (provincia) {
-    const provinciaKey = normalizarTextoBusqueda(provincia);
-    const exacto = catalogo.find(
-      (m) =>
-        normalizarTextoBusqueda(m.nombre) === nombreKey &&
-        normalizarTextoBusqueda(m.provincia) === provinciaKey
+    const clave = `${nombreKey}|${normalizarTextoBusqueda(provincia)}`;
+    return (
+      indicePorNombreYProvincia.get(clave) ??
+      (opts?.incluirFrontera
+        ? indiceFronteraPorNombreYProvincia.get(clave) ?? null
+        : null)
     );
-    return exacto ?? null;
   }
 
   const espanol = indicePorNombre.get(nombreKey);
@@ -126,17 +157,28 @@ export function resolverMunicipio(
   return null;
 }
 
-function puntuacionMunicipio(
-  municipio: MunicipioEspana,
-  queryNorm: string
-): number {
-  const nombreNorm = normalizarTextoBusqueda(municipio.nombre);
-  const provinciaNorm = normalizarTextoBusqueda(municipio.provincia);
+type FilaBusqueda = {
+  municipio: MunicipioEspana;
+  nombre: string;
+  provincia: string;
+};
 
-  if (nombreNorm.startsWith(queryNorm)) return 0;
-  if (nombreNorm.includes(queryNorm)) return 1;
-  if (provinciaNorm.startsWith(queryNorm)) return 2;
-  if (provinciaNorm.includes(queryNorm)) return 3;
+function filasDe(lista: MunicipioEspana[]): FilaBusqueda[] {
+  return lista.map((municipio) => ({
+    municipio,
+    nombre: normalizarTextoBusqueda(municipio.nombre),
+    provincia: normalizarTextoBusqueda(municipio.provincia),
+  }));
+}
+
+const FILAS_ESPAÑA = filasDe(MUNICIPIOS_ESPAÑA);
+const FILAS_FRONTERA = filasDe(MUNICIPIOS_FRONTERA);
+
+function puntuarFila(fila: FilaBusqueda, queryNorm: string): number {
+  if (fila.nombre.startsWith(queryNorm)) return 0;
+  if (fila.nombre.includes(queryNorm)) return 1;
+  if (fila.provincia.startsWith(queryNorm)) return 2;
+  if (fila.provincia.includes(queryNorm)) return 3;
   return 99;
 }
 
@@ -149,24 +191,30 @@ export function filtrarMunicipios(
   const queryNorm = normalizarTextoBusqueda(nombre);
   if (queryNorm.length < 2) return [];
 
-  const catalogo = opts?.incluirFrontera
-    ? [...MUNICIPIOS_ESPAÑA, ...MUNICIPIOS_FRONTERA]
-    : MUNICIPIOS_ESPAÑA;
+  const filas = opts?.incluirFrontera
+    ? FILAS_ESPAÑA.concat(FILAS_FRONTERA)
+    : FILAS_ESPAÑA;
 
-  const resultados: MunicipioEspana[] = [];
-  for (const municipio of catalogo) {
-    const score = puntuacionMunicipio(municipio, queryNorm);
-    if (score < 99) resultados.push(municipio);
+  const niveles: MunicipioEspana[][] = [[], [], [], []];
+  for (const fila of filas) {
+    const score = puntuarFila(fila, queryNorm);
+    if (score < 99) niveles[score].push(fila.municipio);
   }
 
-  return resultados
-    .sort((a, b) => {
-      const diff =
-        puntuacionMunicipio(a, queryNorm) - puntuacionMunicipio(b, queryNorm);
-      if (diff !== 0) return diff;
-      return a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" });
-    })
-    .slice(0, limit);
+  const ordenar = (lista: MunicipioEspana[]) =>
+    lista.sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }));
+
+  const elegidos: MunicipioEspana[] = [];
+  for (const nivel of niveles) {
+    if (elegidos.length >= limit) break;
+    if (elegidos.length + nivel.length <= limit) {
+      elegidos.push(...ordenar(nivel));
+    } else {
+      elegidos.push(...ordenar(nivel).slice(0, limit - elegidos.length));
+      break;
+    }
+  }
+  return elegidos;
 }
 
 export function resolverMunicipioFormulario(
@@ -241,7 +289,7 @@ export function etiquetasMunicipiosCercanos(valor: string): string[] | null {
     }
   }
   cercanos.sort((a, b) => a.km - b.km);
-  if (cercanos.length > 250) return null;
+  if (cercanos.length > 8000) return null;
   return cercanos.map((item) => item.etiqueta);
 }
 
