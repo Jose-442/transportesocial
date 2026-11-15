@@ -42,7 +42,8 @@ export default async function CiudadPage({
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
           Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
-          Santander, Torrelavega y Castro-Urdiales. Eliges barrio o polígono.
+          Santander, Torrelavega, Castro-Urdiales y Vitoria-Gasteiz. Eliges
+          barrio o polígono.
           La calle se concreta en el chat.
         </p>
       </div>

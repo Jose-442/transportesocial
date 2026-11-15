@@ -17,6 +17,7 @@ describe("zonas de Burgos", () => {
       "santander",
       "torrelavega",
       "castro",
+      "vitoria",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -62,6 +63,16 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(torrelavega!, "Las Excavadas")).toBeNull();
     expect(zonaDeCiudad(castro!, "Los Marineros")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(castro!, "Vallegón")?.tipo).toBe("poligono");
+    const vitoria = ciudadUrbana("vitoria");
+    expect(vitoria?.etiqueta).toBe("Vitoria-Gasteiz (Álava)");
+    expect(zonaDeCiudad(vitoria!, "Salburua")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vitoria!, "Foronda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vitoria!, "Armentia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vitoria!, "Jundiz")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vitoria!, "Polígono Armentia")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vitoria!, "Zona Rural Este")).toBeNull();
+    const nombres = vitoria!.zonas.map((z) => z.nombre);
+    expect(new Set(nombres).size).toBe(nombres.length);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

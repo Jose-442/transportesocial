@@ -214,8 +214,8 @@ export default async function HomePage() {
             </ButtonLink>
             <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
               Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
-              Santander, Torrelavega y Castro-Urdiales. Barrio o polígono. La
-              calle se concreta en el chat.
+              Santander, Torrelavega, Castro-Urdiales y Vitoria-Gasteiz. Barrio o
+              polígono. La calle se concreta en el chat.
             </p>
           </div>
           <p
