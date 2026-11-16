@@ -158,7 +158,7 @@
 export type TipoZona = "barrio" | "poligono";
 
 export const ETIQUETA_MUNICIPIO_URBANO =
-  "Municipios de las de 30.000 habitantes";
+  "Municipios de más de 25000 habitantes";
 
 export type ZonaCiudad = {
   nombre: string;
