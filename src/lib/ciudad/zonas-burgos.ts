@@ -136,6 +136,7 @@
  * Sitges: los barrios y los polígonos de la lista.
  * Sant Pere de Ribes: los barrios y los polígonos de la lista.
  * Vic: los barrios y los polígonos de la lista.
+ * Igualada: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2706,6 +2707,42 @@ const POLIGONOS_VIC: ZonaCiudad[] = [
   { nombre: "Sot dels Pradals", tipo: "poligono" },
 ];
 
+const BARRIOS_IGUALADA: ZonaCiudad[] = [
+  { nombre: "Barri de Fàtima", tipo: "barrio" },
+  { nombre: "Barri de Sant Agustí", tipo: "barrio" },
+  { nombre: "Barri de Sant Crist", tipo: "barrio" },
+  { nombre: "Barri de Sant Jaume de Sesoliveres", tipo: "barrio" },
+  { nombre: "Barri de Set Camins", tipo: "barrio" },
+  { nombre: "Barri del Poble Sec", tipo: "barrio" },
+  { nombre: "Barri del Rec", tipo: "barrio" },
+  { nombre: "Barri del Xipreret", tipo: "barrio" },
+  { nombre: "Barri de Cal Font", tipo: "barrio" },
+  { nombre: "Barri de Santa Caterina", tipo: "barrio" },
+  { nombre: "Barri de l'Aurora", tipo: "barrio" },
+  { nombre: "Barri de les Flors", tipo: "barrio" },
+  { nombre: "Barri de Montserrat", tipo: "barrio" },
+  { nombre: "Barri de les Comes", tipo: "barrio" },
+  { nombre: "Barri de la Soledat", tipo: "barrio" },
+  { nombre: "Barri de la Zona Escolar", tipo: "barrio" },
+  { nombre: "Barri de l'Antic Escorxador", tipo: "barrio" },
+  { nombre: "Barri de Pla de la Massa", tipo: "barrio" },
+  { nombre: "Barri de Ses Oliveres", tipo: "barrio" },
+  { nombre: "Centre Històric", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+  { nombre: "Les Comes", tipo: "barrio" },
+  { nombre: "Molí Nou", tipo: "barrio" },
+  { nombre: "Nucli Antic", tipo: "barrio" },
+  { nombre: "Pla de la Massa", tipo: "barrio" },
+  { nombre: "Sant Jaume Sesoliveres", tipo: "barrio" },
+  { nombre: "Set Camins", tipo: "barrio" },
+];
+
+const POLIGONOS_IGUALADA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Les Comes", tipo: "poligono" },
+  { nombre: "Polígono Industrial del Rec", tipo: "poligono" },
+  { nombre: "El Rec", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3116,6 +3153,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vic",
     etiqueta: "Vic (Barcelona)",
     zonas: [...BARRIOS_VIC, ...POLIGONOS_VIC],
+  },
+  {
+    id: "igualada",
+    nombre: "Igualada",
+    etiqueta: "Igualada (Barcelona)",
+    zonas: [...BARRIOS_IGUALADA, ...POLIGONOS_IGUALADA],
   },
 ];
 

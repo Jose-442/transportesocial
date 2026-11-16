@@ -74,6 +74,7 @@ describe("zonas de Burgos", () => {
       "sitges",
       "santpere",
       "vic",
+      "igualada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -729,6 +730,18 @@ describe("zonas de Burgos", () => {
     const nombresVic = vic!.zonas.map((z) => z.nombre);
     expect(new Set(nombresVic).size).toBe(nombresVic.length);
     expect(nombresVic.filter((n) => vic!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
+    const igualada = ciudadUrbana("igualada");
+    expect(igualada?.etiqueta).toBe("Igualada (Barcelona)");
+    expect(igualada?.nombre).toBe("Igualada");
+    expect(zonaDeCiudad(igualada!, "Les Comes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(igualada!, "Barri de les Comes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(igualada!, "El Rec")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(igualada!, "Polígono Industrial Les Comes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(igualada!, "Polígono Industrial del Rec")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(igualada!, "Comes")).toBeNull();
+    const nombresIgualada = igualada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresIgualada).size).toBe(nombresIgualada.length);
+    expect(nombresIgualada.filter((n) => igualada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
