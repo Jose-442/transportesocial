@@ -2729,7 +2729,6 @@ const BARRIOS_IGUALADA: ZonaCiudad[] = [
   { nombre: "Barri de Ses Oliveres", tipo: "barrio" },
   { nombre: "Centre Històric", tipo: "barrio" },
   { nombre: "Eixample", tipo: "barrio" },
-  { nombre: "Les Comes", tipo: "barrio" },
   { nombre: "Molí Nou", tipo: "barrio" },
   { nombre: "Nucli Antic", tipo: "barrio" },
   { nombre: "Pla de la Massa", tipo: "barrio" },
@@ -2738,9 +2737,10 @@ const BARRIOS_IGUALADA: ZonaCiudad[] = [
 ];
 
 const POLIGONOS_IGUALADA: ZonaCiudad[] = [
+  { nombre: "Les Comes", tipo: "poligono" },
+  { nombre: "El Rec", tipo: "poligono" },
   { nombre: "Polígono Industrial Les Comes", tipo: "poligono" },
   { nombre: "Polígono Industrial del Rec", tipo: "poligono" },
-  { nombre: "El Rec", tipo: "poligono" },
 ];
 
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
