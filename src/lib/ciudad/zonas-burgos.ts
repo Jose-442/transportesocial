@@ -158,6 +158,7 @@
  * San José de Valderas queda como barrio.
  * Torrejón de Ardoz: los barrios y los polígonos de la lista.
  * Las Fronteras queda como barrio.
+ * Parla: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3824,6 +3825,48 @@ const POLIGONOS_TORREJON: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Las Polvaredas", tipo: "poligono" },
 ];
 
+const BARRIOS_PARLA: ZonaCiudad[] = [
+  { nombre: "Barrio 2001", tipo: "barrio" },
+  { nombre: "Casco Viejo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Nido", tipo: "barrio" },
+  { nombre: "Fuentebella (Fuente Bella)", tipo: "barrio" },
+  { nombre: "Inlasa (Parque Inlasa)", tipo: "barrio" },
+  { nombre: "La Ermita", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "La Laguna (Laguna Park)", tipo: "barrio" },
+  { nombre: "La Fuente", tipo: "barrio" },
+  { nombre: "Las Américas", tipo: "barrio" },
+  { nombre: "Pryconsa", tipo: "barrio" },
+  { nombre: "San Ramón", tipo: "barrio" },
+  { nombre: "San Fermín", tipo: "barrio" },
+  { nombre: "Villa Juventus I", tipo: "barrio" },
+  { nombre: "Villa Juventus II", tipo: "barrio" },
+  { nombre: "Parla Este", tipo: "barrio" },
+  { nombre: "El Leguario", tipo: "barrio" },
+  { nombre: "Leguario Norte", tipo: "barrio" },
+  { nombre: "Leguario Sur", tipo: "barrio" },
+  { nombre: "Las Estrellas", tipo: "barrio" },
+  { nombre: "Los Planetas", tipo: "barrio" },
+  { nombre: "Las Constelaciones", tipo: "barrio" },
+  { nombre: "Parque de las Comunidades de España", tipo: "barrio" },
+  { nombre: "Flor del Sur", tipo: "barrio" },
+  { nombre: "El Prado", tipo: "barrio" },
+  { nombre: "Las Eras", tipo: "barrio" },
+  { nombre: "Las Olivas", tipo: "barrio" },
+  { nombre: "El Lavadero", tipo: "barrio" },
+  { nombre: "Casas Bajas", tipo: "barrio" },
+];
+
+const POLIGONOS_PARLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Cerro del Rubal", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ciudad de Parla", tipo: "poligono" },
+  { nombre: "Polígono Industrial García Rivera (Buenavista)", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Ermita", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Borrachitos", tipo: "poligono" },
+  { nombre: "Parque Empresarial y Tecnológico Parla Progresa (PAU-5)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4348,6 +4391,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torrejón de Ardoz",
     etiqueta: "Torrejón de Ardoz (Madrid)",
     zonas: [...BARRIOS_TORREJON, ...POLIGONOS_TORREJON],
+  },
+  {
+    id: "parla",
+    nombre: "Parla",
+    etiqueta: "Parla (Madrid)",
+    zonas: [...BARRIOS_PARLA, ...POLIGONOS_PARLA],
   },
 ];
 
