@@ -133,6 +133,7 @@ describe("zonas de Burgos", () => {
       "fuengirola",
       "estepona",
       "benalmadena",
+      "torremolinos",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1762,6 +1763,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresBenalmadena).size).toBe(nombresBenalmadena.length);
     expect(nombresBenalmadena.filter((n) => benalmadena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(49);
     expect(nombresBenalmadena.filter((n) => benalmadena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const torremolinos = ciudadUrbana("torremolinos");
+    expect(torremolinos?.etiqueta).toBe("Torremolinos (Málaga)");
+    expect(torremolinos?.nombre).toBe("Torremolinos");
+    expect(zonaDeCiudad(torremolinos!, "El Pinillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "La Colina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Los Pinares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "La Carihuela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Torremolinos Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Pinillo Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Pinillo Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torremolinos!, "Parque Empresarial El Pinillo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torremolinos!, "Polígono Industrial La Colina (zona productiva)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torremolinos!, "Zona Empresarial Los Pinares")?.tipo).toBe("poligono");
+    const nombresTorremolinos = torremolinos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorremolinos).size).toBe(nombresTorremolinos.length);
+    expect(nombresTorremolinos.filter((n) => torremolinos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
+    expect(nombresTorremolinos.filter((n) => torremolinos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1822,8 +1841,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 4]?.negrita).toBeUndefined();
     expect(ciudades[malagaIdx + 5]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 6]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 6]?.label).toBe("Torremolinos");
     expect(ciudades[malagaIdx + 6]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 7]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 7]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

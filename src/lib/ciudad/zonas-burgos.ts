@@ -239,6 +239,9 @@
  * Benalmádena: los barrios y los polígonos de la lista.
  * Arroyo de la Miel entra aquí como barrio. Polígono Industrial Arroyo de la Miel como polígono.
  * La Leala queda como barrio. Polígono Industrial La Léala como polígono.
+ * Torremolinos: los barrios y los polígonos de la lista.
+ * El Pinillo, La Colina y Los Pinares quedan como barrio.
+ * Parque Empresarial El Pinillo, Polígono Industrial La Colina (zona productiva) y Zona Empresarial Los Pinares como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6076,6 +6079,48 @@ const POLIGONOS_BENALMADENA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Léala", tipo: "poligono" },
 ];
 
+const BARRIOS_TORREMOLINOS: ZonaCiudad[] = [
+  { nombre: "Altos del Olivar", tipo: "barrio" },
+  { nombre: "Altos del Toril", tipo: "barrio" },
+  { nombre: "Aquapark", tipo: "barrio" },
+  { nombre: "Benyamina", tipo: "barrio" },
+  { nombre: "Cantarranas", tipo: "barrio" },
+  { nombre: "Cañada de los Cardos", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Bajondillo", tipo: "barrio" },
+  { nombre: "El Calvario", tipo: "barrio" },
+  { nombre: "El Olivar", tipo: "barrio" },
+  { nombre: "El Paraíso", tipo: "barrio" },
+  { nombre: "El Pinar", tipo: "barrio" },
+  { nombre: "El Pinillo", tipo: "barrio" },
+  { nombre: "El Saltillo", tipo: "barrio" },
+  { nombre: "Eurosol", tipo: "barrio" },
+  { nombre: "Jardines del Pinillo", tipo: "barrio" },
+  { nombre: "La Carihuela", tipo: "barrio" },
+  { nombre: "La Colina", tipo: "barrio" },
+  { nombre: "La Leala", tipo: "barrio" },
+  { nombre: "La Nogalera", tipo: "barrio" },
+  { nombre: "Las Estrellas", tipo: "barrio" },
+  { nombre: "Los Álamos", tipo: "barrio" },
+  { nombre: "Los Nidos", tipo: "barrio" },
+  { nombre: "Los Palacios", tipo: "barrio" },
+  { nombre: "Los Pinares", tipo: "barrio" },
+  { nombre: "Los Tres Caballeros", tipo: "barrio" },
+  { nombre: "Montemar", tipo: "barrio" },
+  { nombre: "Monte Real", tipo: "barrio" },
+  { nombre: "Playamar", tipo: "barrio" },
+  { nombre: "Pinillo Norte", tipo: "barrio" },
+  { nombre: "Pinillo Sur", tipo: "barrio" },
+  { nombre: "Senda del Pilar", tipo: "barrio" },
+  { nombre: "Torremolinos Centro", tipo: "barrio" },
+];
+
+const POLIGONOS_TORREMOLINOS: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial El Pinillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Colina (zona productiva)", tipo: "poligono" },
+  { nombre: "Zona Empresarial Los Pinares", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6822,6 +6867,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Benalmádena",
     etiqueta: "Benalmádena (Málaga)",
     zonas: [...BARRIOS_BENALMADENA, ...POLIGONOS_BENALMADENA],
+  },
+  {
+    id: "torremolinos",
+    nombre: "Torremolinos",
+    etiqueta: "Torremolinos (Málaga)",
+    zonas: [...BARRIOS_TORREMOLINOS, ...POLIGONOS_TORREMOLINOS],
   },
 ];
 
