@@ -112,6 +112,7 @@ describe("zonas de Burgos", () => {
       "colmenar",
       "pinto",
       "trescantos",
+      "sanfernando",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1355,6 +1356,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresTresCantos).size).toBe(nombresTresCantos.length);
     expect(nombresTresCantos.filter((n) => tresCantos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
     expect(nombresTresCantos.filter((n) => tresCantos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const sanFernando = ciudadUrbana("sanfernando");
+    expect(sanFernando?.etiqueta).toBe("San Fernando de Henares (Madrid)");
+    expect(sanFernando?.nombre).toBe("San Fernando de Henares");
+    expect(zonaDeCiudad(sanFernando!, "Barrio de la OTAN")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanFernando!, "Ciudad Parque Henares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanFernando!, "Parque Henares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanFernando!, "Zona del Hospital")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanFernando!, "El Barral (Parque Logístico)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sanFernando!, "Las Fronteras")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sanFernando!, "Parque Industrial SUP I-2")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sanFernando!, "Parque Industrial SUE-5")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sanFernando!, "Prologis Park San Fernando")?.tipo).toBe("poligono");
+    const nombresSanFernando = sanFernando!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanFernando).size).toBe(nombresSanFernando.length);
+    expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1373,7 +1390,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 24).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 25).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1394,6 +1411,7 @@ describe("zonas de Burgos", () => {
       "Pinto",
       "Pozuelo de Alarcón",
       "Rivas-Vaciamadrid",
+      "San Fernando de Henares",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
       "Tres Cantos",

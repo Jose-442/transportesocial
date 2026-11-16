@@ -191,6 +191,7 @@
  * La Estación no entra: queda Pinto-Estación.
  * Tres Cantos: los sectores y los polígonos de la lista.
  * Soto de Viñuelas queda como barrio.
+ * San Fernando de Henares: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4569,6 +4570,36 @@ const POLIGONOS_TRES_CANTOS: ZonaCiudad[] = [
   { nombre: "Zona Industrial Oeste", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_FERNANDO: ZonaCiudad[] = [
+  { nombre: "Barrio de la OTAN", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Colonia Montserrat", tipo: "barrio" },
+  { nombre: "Ciudad Parque Henares", tipo: "barrio" },
+  { nombre: "El Ensanche", tipo: "barrio" },
+  { nombre: "El Ferial", tipo: "barrio" },
+  { nombre: "Parque Henares", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Zona de la Estación", tipo: "barrio" },
+  { nombre: "Zona del Hospital", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_FERNANDO: ZonaCiudad[] = [
+  { nombre: "El Barral (Parque Logístico)", tipo: "poligono" },
+  { nombre: "La Fuentecilla", tipo: "poligono" },
+  { nombre: "Las Fronteras", tipo: "poligono" },
+  { nombre: "Parque Empresarial Best Point", tipo: "poligono" },
+  { nombre: "Parque Empresarial de San Fernando", tipo: "poligono" },
+  { nombre: "Parque Empresarial San Fernando II", tipo: "poligono" },
+  { nombre: "Parque Industrial San Fernando Centro", tipo: "poligono" },
+  { nombre: "Parque Industrial San Fernando Norte", tipo: "poligono" },
+  { nombre: "Parque Industrial San Fernando Sur", tipo: "poligono" },
+  { nombre: "Parque Industrial SUP I-2", tipo: "poligono" },
+  { nombre: "Parque Industrial SUP I-4", tipo: "poligono" },
+  { nombre: "Parque Industrial SUE-5", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerta de Madrid", tipo: "poligono" },
+  { nombre: "Prologis Park San Fernando", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5189,6 +5220,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Tres Cantos",
     etiqueta: "Tres Cantos (Madrid)",
     zonas: [...BARRIOS_TRES_CANTOS, ...POLIGONOS_TRES_CANTOS],
+  },
+  {
+    id: "sanfernando",
+    nombre: "San Fernando de Henares",
+    etiqueta: "San Fernando de Henares (Madrid)",
+    zonas: [...BARRIOS_SAN_FERNANDO, ...POLIGONOS_SAN_FERNANDO],
   },
 ];
 
