@@ -82,6 +82,7 @@ describe("zonas de Burgos", () => {
       "cambrils",
       "tortosa",
       "calafell",
+      "salou",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -844,6 +845,17 @@ describe("zonas de Burgos", () => {
     const nombresCalafell = calafell!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCalafell).size).toBe(nombresCalafell.length);
     expect(nombresCalafell.filter((n) => calafell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
+    const salou = ciudadUrbana("salou");
+    expect(salou?.etiqueta).toBe("Salou (Tarragona)");
+    expect(salou?.nombre).toBe("Salou");
+    expect(zonaDeCiudad(salou!, "Nucli Antic (casco antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(salou!, "Centre Recreatiu Turístic (CRT)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(salou!, "Complex Turístic Integrat (CTI)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(salou!, "Vila-seca")).toBeNull();
+    const nombresSalou = salou!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSalou).size).toBe(nombresSalou.length);
+    expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
+    expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(0);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

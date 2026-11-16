@@ -144,6 +144,7 @@
  * Cambrils: los barrios y los polígonos de la lista.
  * Tortosa: los barrios y los polígonos de la lista.
  * Calafell: los barrios y los polígonos de la lista.
+ * Salou: los barrios de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3092,6 +3093,44 @@ const POLIGONOS_CALAFELL: ZonaCiudad[] = [
   { nombre: "Zona industrial de la carretera de Bellvei", tipo: "poligono" },
 ];
 
+const BARRIOS_SALOU: ZonaCiudad[] = [
+  { nombre: "Barenys", tipo: "barrio" },
+  { nombre: "Barri de la Salut", tipo: "barrio" },
+  { nombre: "Capellans", tipo: "barrio" },
+  { nombre: "Centre (Centro)", tipo: "barrio" },
+  { nombre: "Carles Buïgas", tipo: "barrio" },
+  { nombre: "Eixample Turístic – Primer Eixample", tipo: "barrio" },
+  { nombre: "Eixample Turístic – Segon Eixample", tipo: "barrio" },
+  { nombre: "Els Pilons", tipo: "barrio" },
+  { nombre: "Emprius", tipo: "barrio" },
+  { nombre: "Nucli Antic (casco antiguo)", tipo: "barrio" },
+  { nombre: "Ponent", tipo: "barrio" },
+  { nombre: "Llevant", tipo: "barrio" },
+  { nombre: "Terrer", tipo: "barrio" },
+  { nombre: "Zona Esportiva i Rural", tipo: "barrio" },
+  { nombre: "Bosc Gran", tipo: "barrio" },
+  { nombre: "Cap de Salou", tipo: "barrio" },
+  { nombre: "Colina del Sol", tipo: "barrio" },
+  { nombre: "Covamar", tipo: "barrio" },
+  { nombre: "Dunamar", tipo: "barrio" },
+  { nombre: "Els Bergants", tipo: "barrio" },
+  { nombre: "Mirador de Salou", tipo: "barrio" },
+  { nombre: "Nostra Senyora de Núria", tipo: "barrio" },
+  { nombre: "Pinomar", tipo: "barrio" },
+  { nombre: "Port Pirata", tipo: "barrio" },
+  { nombre: "Taufana", tipo: "barrio" },
+  { nombre: "Vil·lings", tipo: "barrio" },
+  { nombre: "Xalets de Salou", tipo: "barrio" },
+  { nombre: "Xalets dels Prats", tipo: "barrio" },
+  { nombre: "Zona Estival", tipo: "barrio" },
+  { nombre: "Zona Estival Baviera", tipo: "barrio" },
+  { nombre: "Zona Estival Alta", tipo: "barrio" },
+  { nombre: "Centre Recreatiu Turístic (CRT)", tipo: "barrio" },
+  { nombre: "Complex Turístic Integrat (CTI)", tipo: "barrio" },
+];
+
+const POLIGONOS_SALOU: ZonaCiudad[] = [];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3550,6 +3589,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Calafell",
     etiqueta: "Calafell (Tarragona)",
     zonas: [...BARRIOS_CALAFELL, ...POLIGONOS_CALAFELL],
+  },
+  {
+    id: "salou",
+    nombre: "Salou",
+    etiqueta: "Salou (Tarragona)",
+    zonas: [...BARRIOS_SALOU, ...POLIGONOS_SALOU],
   },
 ];
 
