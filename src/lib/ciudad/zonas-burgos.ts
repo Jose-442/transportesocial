@@ -254,6 +254,9 @@
  * Tartessos queda como barrio. Polígono Industrial Tartessos como polígono.
  * Almería: los barrios y los polígonos de la lista.
  * El Puche queda como barrio. Polígono El Puche como polígono.
+ * Roquetas de Mar: las dos listas de barrios y los polígonos.
+ * Cortijos de Marín y La Algaida quedan como barrio.
+ * Polígono Industrial Cortijos de Marín y Polígono Industrial La Algaida como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6473,6 +6476,41 @@ const POLIGONOS_ALMERIA: ZonaCiudad[] = [
   { nombre: "Sector 20 (SEPES)", tipo: "poligono" },
 ];
 
+const BARRIOS_ROQUETAS: ZonaCiudad[] = [
+  { nombre: "Aguadulce", tipo: "barrio" },
+  { nombre: "Aguadulce Norte", tipo: "barrio" },
+  { nombre: "Aguadulce Sur", tipo: "barrio" },
+  { nombre: "Campillo del Moro", tipo: "barrio" },
+  { nombre: "Cortijos de Marín", tipo: "barrio" },
+  { nombre: "El Parador de las Hortichuelas", tipo: "barrio" },
+  { nombre: "El Puerto", tipo: "barrio" },
+  { nombre: "El Sabinar", tipo: "barrio" },
+  { nombre: "El Solanillo", tipo: "barrio" },
+  { nombre: "La Algaida", tipo: "barrio" },
+  { nombre: "La Romanilla", tipo: "barrio" },
+  { nombre: "Las Losas", tipo: "barrio" },
+  { nombre: "Las Marinas", tipo: "barrio" },
+  { nombre: "Las Salinas", tipo: "barrio" },
+  { nombre: "Los Bajos", tipo: "barrio" },
+  { nombre: "Playa Serena", tipo: "barrio" },
+  { nombre: "Roquetas Centro", tipo: "barrio" },
+  { nombre: "Roquetas Pueblo", tipo: "barrio" },
+  { nombre: "Urbanización de Roquetas de Mar (La Urba)", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "El Puerto - La Romanilla", tipo: "barrio" },
+  { nombre: "La Gloria", tipo: "barrio" },
+  { nombre: "Las Colinas", tipo: "barrio" },
+  { nombre: "Las Salinas de San Rafael", tipo: "barrio" },
+  { nombre: "Los Melilleros", tipo: "barrio" },
+  { nombre: "Villa África", tipo: "barrio" },
+];
+
+const POLIGONOS_ROQUETAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Cortijos de Marín", tipo: "poligono" },
+  { nombre: "Polígono Industrial Gran Plaza", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Algaida", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7261,6 +7299,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Almería",
     etiqueta: "Almería (Almería)",
     zonas: [...BARRIOS_ALMERIA, ...POLIGONOS_ALMERIA],
+  },
+  {
+    id: "roquetas",
+    nombre: "Roquetas de Mar",
+    etiqueta: "Roquetas de Mar (Almería)",
+    zonas: [...BARRIOS_ROQUETAS, ...POLIGONOS_ROQUETAS],
   },
 ];
 

@@ -140,6 +140,7 @@ describe("zonas de Burgos", () => {
       "ronda",
       "huelva",
       "almeria",
+      "roquetas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1900,6 +1901,28 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlmeria).size).toBe(nombresAlmeria.length);
     expect(nombresAlmeria.filter((n) => almeria!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(47);
     expect(nombresAlmeria.filter((n) => almeria!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
+    const roquetas = ciudadUrbana("roquetas");
+    expect(roquetas?.etiqueta).toBe("Roquetas de Mar (Almería)");
+    expect(roquetas?.nombre).toBe("Roquetas de Mar");
+    expect(zonaDeCiudad(roquetas!, "Aguadulce")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Aguadulce Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Aguadulce Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Cortijos de Marín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "La Algaida")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "El Puerto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "El Puerto - La Romanilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "La Romanilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Las Salinas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Las Salinas de San Rafael")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Urbanización de Roquetas de Mar (La Urba)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Villa África")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(roquetas!, "Polígono Industrial Cortijos de Marín")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(roquetas!, "Polígono Industrial Gran Plaza")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(roquetas!, "Polígono Industrial La Algaida")?.tipo).toBe("poligono");
+    const nombresRoquetas = roquetas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRoquetas).size).toBe(nombresRoquetas.length);
+    expect(nombresRoquetas.filter((n) => roquetas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
+    expect(nombresRoquetas.filter((n) => roquetas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1973,6 +1996,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 11]?.label).toBe("Vélez-Málaga");
     expect(ciudades[malagaIdx + 11]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "almeria")?.negrita).toBe(true);
+    const almeriaIdx = ciudades.findIndex((c) => c.value === "almeria");
+    expect(ciudades[almeriaIdx + 1]?.label).toBe("Roquetas de Mar");
+    expect(ciudades[almeriaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
