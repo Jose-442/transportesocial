@@ -246,6 +246,8 @@
  * Benagalbón y Cotomar quedan como barrio.
  * Cala del Moral (La) queda como barrio. Área comercial de La Cala del Moral como polígono.
  * Alhaurín de la Torre: los barrios y los polígonos de la lista.
+ * Antequera: los barrios, los núcleos rurales y los polígonos de la lista.
+ * Villanueva de Cauche y Los Nogales entran una sola vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6232,6 +6234,57 @@ const POLIGONOS_ALHAURIN_TORRE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Zamorilla", tipo: "poligono" },
 ];
 
+const BARRIOS_ANTEQUERA: ZonaCiudad[] = [
+  { nombre: "Albarizas", tipo: "barrio" },
+  { nombre: "Altos de Santa Catalina", tipo: "barrio" },
+  { nombre: "Antequera Golf", tipo: "barrio" },
+  { nombre: "Barrio del Carmen", tipo: "barrio" },
+  { nombre: "Barrio del Hospital", tipo: "barrio" },
+  { nombre: "Barrio de San Juan", tipo: "barrio" },
+  { nombre: "Barrio de Santiago", tipo: "barrio" },
+  { nombre: "Barrio de Veracruz", tipo: "barrio" },
+  { nombre: "Bobadilla", tipo: "barrio" },
+  { nombre: "Bobadilla Estación", tipo: "barrio" },
+  { nombre: "Camino de la Estación", tipo: "barrio" },
+  { nombre: "Camino de las Yeseras", tipo: "barrio" },
+  { nombre: "Cartaojal", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Colonia de Santa Ana", tipo: "barrio" },
+  { nombre: "El Arenal", tipo: "barrio" },
+  { nombre: "El Maulí", tipo: "barrio" },
+  { nombre: "El Pontón", tipo: "barrio" },
+  { nombre: "Ensanche Oeste", tipo: "barrio" },
+  { nombre: "Fuente de la Mora", tipo: "barrio" },
+  { nombre: "La Joya", tipo: "barrio" },
+  { nombre: "La Pesquera", tipo: "barrio" },
+  { nombre: "La Verónica", tipo: "barrio" },
+  { nombre: "Las Lagunillas", tipo: "barrio" },
+  { nombre: "Las Peñuelas", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Los Nogales", tipo: "barrio" },
+  { nombre: "Mirador de Santa Catalina", tipo: "barrio" },
+  { nombre: "Parque Nueva Antequera", tipo: "barrio" },
+  { nombre: "Parquesol", tipo: "barrio" },
+  { nombre: "Puerta de Granada", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Urbanización El Molino", tipo: "barrio" },
+  { nombre: "Urbanización La Quinta", tipo: "barrio" },
+  { nombre: "Villanueva de Cauche", tipo: "barrio" },
+  { nombre: "Cañadas de Pareja", tipo: "barrio" },
+  { nombre: "Llanos de Antequera", tipo: "barrio" },
+  { nombre: "Barriada Ortiz Recio", tipo: "barrio" },
+];
+
+const POLIGONOS_ANTEQUERA: ZonaCiudad[] = [
+  { nombre: "Centro Logístico de Antequera (CLA / CLAA)", tipo: "poligono" },
+  { nombre: "Parque Empresarial de Antequera (PEAN)", tipo: "poligono" },
+  { nombre: "Parque Empresarial Este", tipo: "poligono" },
+  { nombre: "Parque Empresarial Oeste", tipo: "poligono" },
+  { nombre: "Polígono Industrial Azucarera", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Antequera (PIA)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6996,6 +7049,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alhaurín de la Torre",
     etiqueta: "Alhaurín de la Torre (Málaga)",
     zonas: [...BARRIOS_ALHAURIN_TORRE, ...POLIGONOS_ALHAURIN_TORRE],
+  },
+  {
+    id: "antequera",
+    nombre: "Antequera",
+    etiqueta: "Antequera (Málaga)",
+    zonas: [...BARRIOS_ANTEQUERA, ...POLIGONOS_ANTEQUERA],
   },
 ];
 
