@@ -116,6 +116,7 @@ describe("zonas de Burgos", () => {
       "arroyomolinos",
       "galapagar",
       "navalcarnero",
+      "sevilla",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1424,6 +1425,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresNavalcarnero).size).toBe(nombresNavalcarnero.length);
     expect(nombresNavalcarnero.filter((n) => navalcarnero!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
     expect(nombresNavalcarnero.filter((n) => navalcarnero!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const sevilla = ciudadUrbana("sevilla");
+    expect(sevilla?.etiqueta).toBe("Sevilla (Sevilla)");
+    expect(sevilla?.nombre).toBe("Sevilla");
+    expect(zonaDeCiudad(sevilla!, "Arenal, El")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Triana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Polígono Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Polígono Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Pino Montano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Barriada Pino Montano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "San Jerónimo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sevilla!, "Parque Industrial San Jerónimo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sevilla!, "Carretera Amarilla (PICA)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sevilla!, "Parque Empresarial PICA")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sevilla!, "Zona de Actividades Logísticas (ZAL)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sevilla!, "PISA")).toBeNull();
+    expect(zonaDeCiudad(sevilla!, "PIBO")).toBeNull();
+    const nombresSevilla = sevilla!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSevilla).size).toBe(nombresSevilla.length);
+    expect(nombresSevilla.filter((n) => sevilla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(70);
+    expect(nombresSevilla.filter((n) => sevilla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(16);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1472,6 +1493,7 @@ describe("zonas de Burgos", () => {
       "Tres Cantos",
       "Valdemoro",
     ]);
+    expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);

@@ -197,6 +197,10 @@
  * Galapagar: los núcleos y las zonas empresariales de la lista.
  * Navalcarnero: los barrios y los polígonos de la lista.
  * San Isidro queda como barrio. Polígono San Isidro como polígono.
+ * Sevilla: los barrios y los polígonos de la lista.
+ * Arenal, El queda con el nombre así.
+ * Polígono Norte y Polígono Sur quedan como barrio.
+ * PISA, PIBO y el Aljarafe no entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4708,6 +4712,98 @@ const POLIGONOS_NAVALCARNERO: ZonaCiudad[] = [
   { nombre: "Polígono San Isidro", tipo: "poligono" },
 ];
 
+const BARRIOS_SEVILLA: ZonaCiudad[] = [
+  { nombre: "Aeropuerto Viejo", tipo: "barrio" },
+  { nombre: "Alfalfa", tipo: "barrio" },
+  { nombre: "Amate", tipo: "barrio" },
+  { nombre: "Arenal, El", tipo: "barrio" },
+  { nombre: "Árbol Gordo", tipo: "barrio" },
+  { nombre: "Avenida de la Paz", tipo: "barrio" },
+  { nombre: "Barriada de Pineda", tipo: "barrio" },
+  { nombre: "Bami", tipo: "barrio" },
+  { nombre: "Barriada Pino Montano", tipo: "barrio" },
+  { nombre: "Barrio León", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "Begoña-Santa Catalina", tipo: "barrio" },
+  { nombre: "Cerro del Águila", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Cisneo Alto", tipo: "barrio" },
+  { nombre: "Condequinto", tipo: "barrio" },
+  { nombre: "Consolación", tipo: "barrio" },
+  { nombre: "El Cerezo", tipo: "barrio" },
+  { nombre: "El Juncal-Híspalis", tipo: "barrio" },
+  { nombre: "El Plantinar", tipo: "barrio" },
+  { nombre: "El Porvenir", tipo: "barrio" },
+  { nombre: "El Prado-Parque de María Luisa", tipo: "barrio" },
+  { nombre: "El Rocío", tipo: "barrio" },
+  { nombre: "El Tardón", tipo: "barrio" },
+  { nombre: "Encarnación-Regina", tipo: "barrio" },
+  { nombre: "Feria", tipo: "barrio" },
+  { nombre: "Heliópolis", tipo: "barrio" },
+  { nombre: "Hermandades-La Carrasca", tipo: "barrio" },
+  { nombre: "Huerta de Santa Teresa", tipo: "barrio" },
+  { nombre: "Juan XXIII", tipo: "barrio" },
+  { nombre: "La Bachillera", tipo: "barrio" },
+  { nombre: "La Calzada", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Oliva", tipo: "barrio" },
+  { nombre: "La Plata", tipo: "barrio" },
+  { nombre: "La Rosaleda", tipo: "barrio" },
+  { nombre: "La Salle", tipo: "barrio" },
+  { nombre: "Las Avenidas", tipo: "barrio" },
+  { nombre: "Las Letanías", tipo: "barrio" },
+  { nombre: "Los Arcos", tipo: "barrio" },
+  { nombre: "Los Carteros", tipo: "barrio" },
+  { nombre: "Los Pájaros", tipo: "barrio" },
+  { nombre: "Los Príncipes-La Fontanilla", tipo: "barrio" },
+  { nombre: "Macarena", tipo: "barrio" },
+  { nombre: "Nervión", tipo: "barrio" },
+  { nombre: "Palmete", tipo: "barrio" },
+  { nombre: "Parque Alcosa", tipo: "barrio" },
+  { nombre: "Parque Atlántico-Las Dalias", tipo: "barrio" },
+  { nombre: "Parque Flores", tipo: "barrio" },
+  { nombre: "Parque Miraflores", tipo: "barrio" },
+  { nombre: "Pino Montano", tipo: "barrio" },
+  { nombre: "Polígono Norte", tipo: "barrio" },
+  { nombre: "Polígono Sur", tipo: "barrio" },
+  { nombre: "Rochelambert", tipo: "barrio" },
+  { nombre: "San Bernardo", tipo: "barrio" },
+  { nombre: "San Gil", tipo: "barrio" },
+  { nombre: "San Jerónimo", tipo: "barrio" },
+  { nombre: "San Julián", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "San Pablo", tipo: "barrio" },
+  { nombre: "San Vicente", tipo: "barrio" },
+  { nombre: "Santa Aurelia", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "Santa Cruz", tipo: "barrio" },
+  { nombre: "Santa Justa", tipo: "barrio" },
+  { nombre: "Sevilla Este", tipo: "barrio" },
+  { nombre: "Torreblanca", tipo: "barrio" },
+  { nombre: "Triana", tipo: "barrio" },
+  { nombre: "Valdezorras", tipo: "barrio" },
+  { nombre: "Villegas", tipo: "barrio" },
+];
+
+const POLIGONOS_SEVILLA: ZonaCiudad[] = [
+  { nombre: "Astilleros", tipo: "poligono" },
+  { nombre: "Avenida de la Prensa", tipo: "poligono" },
+  { nombre: "Calonge", tipo: "poligono" },
+  { nombre: "Carretera Amarilla (PICA)", tipo: "poligono" },
+  { nombre: "El Pino", tipo: "poligono" },
+  { nombre: "La Chaparrilla", tipo: "poligono" },
+  { nombre: "La Negrilla", tipo: "poligono" },
+  { nombre: "Parque Empresarial Nuevo Torneo", tipo: "poligono" },
+  { nombre: "Parque Empresarial PICA", tipo: "poligono" },
+  { nombre: "Parque Empresarial Torneo", tipo: "poligono" },
+  { nombre: "Parque Industrial San Jerónimo", tipo: "poligono" },
+  { nombre: "Parque Logístico de Carmona", tipo: "poligono" },
+  { nombre: "Store", tipo: "poligono" },
+  { nombre: "Torrecuéllar", tipo: "poligono" },
+  { nombre: "Zona Franca de Sevilla", tipo: "poligono" },
+  { nombre: "Zona de Actividades Logísticas (ZAL)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5352,6 +5448,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Navalcarnero",
     etiqueta: "Navalcarnero (Madrid)",
     zonas: [...BARRIOS_NAVALCARNERO, ...POLIGONOS_NAVALCARNERO],
+  },
+  {
+    id: "sevilla",
+    nombre: "Sevilla",
+    etiqueta: "Sevilla (Sevilla)",
+    zonas: [...BARRIOS_SEVILLA, ...POLIGONOS_SEVILLA],
   },
 ];
 
