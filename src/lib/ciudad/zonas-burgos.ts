@@ -184,6 +184,8 @@
  * Arganda del Rey: los barrios y los polígonos de la lista.
  * Cañal, El queda con el nombre así.
  * El Guijar queda como barrio. Polígono El Guijar como polígono.
+ * Colmenar Viejo: los barrios y los polígonos de la lista.
+ * Arcos, Los y Cerrillo, El quedan con el nombre así.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4453,6 +4455,47 @@ const POLIGONOS_ARGANDA: ZonaCiudad[] = [
   { nombre: "Velasco", tipo: "poligono" },
 ];
 
+const BARRIOS_COLMENAR: ZonaCiudad[] = [
+  { nombre: "Adelfillas", tipo: "barrio" },
+  { nombre: "Alto Eugenio", tipo: "barrio" },
+  { nombre: "Arcos, Los", tipo: "barrio" },
+  { nombre: "Arroyo Espino", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerca Tejera", tipo: "barrio" },
+  { nombre: "Cerrillo, El", tipo: "barrio" },
+  { nombre: "Cristo del Perdón – La Magdalena", tipo: "barrio" },
+  { nombre: "Dos Castillas", tipo: "barrio" },
+  { nombre: "El Pozanco", tipo: "barrio" },
+  { nombre: "El Redondillo", tipo: "barrio" },
+  { nombre: "El Vivero", tipo: "barrio" },
+  { nombre: "Fuente Santa", tipo: "barrio" },
+  { nombre: "La Colina de las Torres", tipo: "barrio" },
+  { nombre: "La Corredera", tipo: "barrio" },
+  { nombre: "La Estación – El Rosario", tipo: "barrio" },
+  { nombre: "La Lanera", tipo: "barrio" },
+  { nombre: "Las Vegas", tipo: "barrio" },
+  { nombre: "Los Residenciales", tipo: "barrio" },
+  { nombre: "Navallar", tipo: "barrio" },
+  { nombre: "Prado Rosales", tipo: "barrio" },
+  { nombre: "Puente Nuevo", tipo: "barrio" },
+  { nombre: "Puente Viejo", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "San Crispín", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Santa Lucía", tipo: "barrio" },
+  { nombre: "Santa Teresa de Ávila", tipo: "barrio" },
+  { nombre: "Virgen del Carmen", tipo: "barrio" },
+  { nombre: "Virgen del Pilar", tipo: "barrio" },
+  { nombre: "Vista Nevada", tipo: "barrio" },
+];
+
+const POLIGONOS_COLMENAR: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Artesanos", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Mina", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Yedra", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sur", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5055,6 +5098,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arganda del Rey",
     etiqueta: "Arganda del Rey (Madrid)",
     zonas: [...BARRIOS_ARGANDA, ...POLIGONOS_ARGANDA],
+  },
+  {
+    id: "colmenar",
+    nombre: "Colmenar Viejo",
+    etiqueta: "Colmenar Viejo (Madrid)",
+    zonas: [...BARRIOS_COLMENAR, ...POLIGONOS_COLMENAR],
   },
 ];
 
