@@ -77,6 +77,7 @@ describe("zonas de Burgos", () => {
       "igualada",
       "vilafranca",
       "tarragona",
+      "reus",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -768,6 +769,19 @@ describe("zonas de Burgos", () => {
     const nombresTarragona = tarragona!.zonas.map((z) => z.nombre);
     expect(new Set(nombresTarragona).size).toBe(nombresTarragona.length);
     expect(nombresTarragona.filter((n) => tarragona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(56);
+    const reus = ciudadUrbana("reus");
+    expect(reus?.etiqueta).toBe("Reus (Tarragona)");
+    expect(reus?.nombre).toBe("Reus");
+    expect(zonaDeCiudad(reus!, "Pinar, el")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(reus!, "Mas d'Iglésies")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(reus!, "Parc Tecnoparc")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(reus!, "Agro-Reus")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(reus!, "CIMALSA – CIM del Camp")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(reus!, "Polígono de la Carretera de Montblanc")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(reus!, "Mas Iglesies")).toBeNull();
+    const nombresReus = reus!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresReus).size).toBe(nombresReus.length);
+    expect(nombresReus.filter((n) => reus!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(38);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

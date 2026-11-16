@@ -139,6 +139,7 @@
  * Igualada: los barrios y los polígonos de la lista.
  * Vilafranca del Penedès: los barrios y los polígonos de la lista.
  * Tarragona: los barrios y los polígonos de la lista.
+ * Reus: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2856,6 +2857,61 @@ const POLIGONOS_TARRAGONA: ZonaCiudad[] = [
   { nombre: "Polígono PPU-54 (CIM El Camp)", tipo: "poligono" },
 ];
 
+const BARRIOS_REUS: ZonaCiudad[] = [
+  { nombre: "Aigüesverds", tipo: "barrio" },
+  { nombre: "Artiga", tipo: "barrio" },
+  { nombre: "Barri Gaudí", tipo: "barrio" },
+  { nombre: "Barri Fortuny", tipo: "barrio" },
+  { nombre: "Barri Juroca", tipo: "barrio" },
+  { nombre: "Barri Montserrat", tipo: "barrio" },
+  { nombre: "Barri Sant Josep Obrer", tipo: "barrio" },
+  { nombre: "Barri de la Immaculada", tipo: "barrio" },
+  { nombre: "Barri de la Misericòrdia", tipo: "barrio" },
+  { nombre: "Barri Niloga", tipo: "barrio" },
+  { nombre: "Barri Sol i Vista", tipo: "barrio" },
+  { nombre: "Bellisens", tipo: "barrio" },
+  { nombre: "Gaudimar", tipo: "barrio" },
+  { nombre: "Juncosa", tipo: "barrio" },
+  { nombre: "La Carpa", tipo: "barrio" },
+  { nombre: "Les Palmeres", tipo: "barrio" },
+  { nombre: "Mas Abelló", tipo: "barrio" },
+  { nombre: "Mas Carpa", tipo: "barrio" },
+  { nombre: "Mas d'Iglésies", tipo: "barrio" },
+  { nombre: "Mas Ferrer", tipo: "barrio" },
+  { nombre: "Mas Iglesias", tipo: "barrio" },
+  { nombre: "Mas Pellicer", tipo: "barrio" },
+  { nombre: "Mas Pallisser", tipo: "barrio" },
+  { nombre: "Mas Vilanova", tipo: "barrio" },
+  { nombre: "Masó", tipo: "barrio" },
+  { nombre: "Mercader", tipo: "barrio" },
+  { nombre: "Moixí", tipo: "barrio" },
+  { nombre: "Parcel·les Casas", tipo: "barrio" },
+  { nombre: "Parc Tecnoparc", tipo: "barrio" },
+  { nombre: "Passatge de la Misericòrdia", tipo: "barrio" },
+  { nombre: "Pelai", tipo: "barrio" },
+  { nombre: "Pi", tipo: "barrio" },
+  { nombre: "Pinar, el", tipo: "barrio" },
+  { nombre: "Quintana", tipo: "barrio" },
+  { nombre: "Residencial Blancafort", tipo: "barrio" },
+  { nombre: "Reus Centre", tipo: "barrio" },
+  { nombre: "Sant Joan", tipo: "barrio" },
+  { nombre: "Solivista", tipo: "barrio" },
+];
+
+const POLIGONOS_REUS: ZonaCiudad[] = [
+  { nombre: "Agro-Reus", tipo: "poligono" },
+  { nombre: "Bescós", tipo: "poligono" },
+  { nombre: "CIMALSA – CIM del Camp", tipo: "poligono" },
+  { nombre: "Dyna", tipo: "poligono" },
+  { nombre: "La Roureda", tipo: "poligono" },
+  { nombre: "Mas Batlle", tipo: "poligono" },
+  { nombre: "Mas de les Ànimes", tipo: "poligono" },
+  { nombre: "Mas Sunyer", tipo: "poligono" },
+  { nombre: "Nirsa", tipo: "poligono" },
+  { nombre: "Polígono de la Carretera de Montblanc", tipo: "poligono" },
+  { nombre: "Vegé", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3284,6 +3340,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Tarragona",
     etiqueta: "Tarragona (Tarragona)",
     zonas: [...BARRIOS_TARRAGONA, ...POLIGONOS_TARRAGONA],
+  },
+  {
+    id: "reus",
+    nombre: "Reus",
+    etiqueta: "Reus (Tarragona)",
+    zonas: [...BARRIOS_REUS, ...POLIGONOS_REUS],
   },
 ];
 
