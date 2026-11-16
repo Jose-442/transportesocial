@@ -232,6 +232,7 @@
  * Entrerríos y La Torre quedan como barrio. Polígono Entrerríos y Polígono La Torre como polígono.
  * Vélez-Málaga: los barrios y los polígonos de la lista.
  * Arroyo de la Miel no entra: es de Benalmádena.
+ * Fuengirola: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5893,6 +5894,45 @@ const POLIGONOS_VELEZ_MALAGA: ZonaCiudad[] = [
   { nombre: "Zona de Mercovélez", tipo: "poligono" },
 ];
 
+const BARRIOS_FUENGIROLA: ZonaCiudad[] = [
+  { nombre: "Carvajal", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Boquetillo", tipo: "barrio" },
+  { nombre: "El Ejido", tipo: "barrio" },
+  { nombre: "El Higuerón", tipo: "barrio" },
+  { nombre: "La Campana", tipo: "barrio" },
+  { nombre: "La Loma", tipo: "barrio" },
+  { nombre: "Las Gaviotas", tipo: "barrio" },
+  { nombre: "Las Yucas", tipo: "barrio" },
+  { nombre: "Los Boliches", tipo: "barrio" },
+  { nombre: "Los Núcleos", tipo: "barrio" },
+  { nombre: "Los Pacos", tipo: "barrio" },
+  { nombre: "Miramar", tipo: "barrio" },
+  { nombre: "Pueblo López", tipo: "barrio" },
+  { nombre: "Pueblo Lucía", tipo: "barrio" },
+  { nombre: "San Cayetano", tipo: "barrio" },
+  { nombre: "Torreblanca", tipo: "barrio" },
+  { nombre: "Zona Puerto Deportivo", tipo: "barrio" },
+  { nombre: "Zona Sohail", tipo: "barrio" },
+  { nombre: "Zona Virgen del Carmen", tipo: "barrio" },
+  { nombre: "Zona Yeseras", tipo: "barrio" },
+  { nombre: "Colina Blanca", tipo: "barrio" },
+  { nombre: "Higuerón West", tipo: "barrio" },
+  { nombre: "La Reserva del Higuerón", tipo: "barrio" },
+  { nombre: "Las Pérgolas", tipo: "barrio" },
+  { nombre: "Puebla Blanca", tipo: "barrio" },
+  { nombre: "Residencial Panorámica", tipo: "barrio" },
+  { nombre: "Torreblanca del Sol", tipo: "barrio" },
+];
+
+const POLIGONOS_FUENGIROLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Morena", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Salinas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Campanales", tipo: "poligono" },
+  { nombre: "Polígono Industrial Rancho Hermoso", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Rafael", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6621,6 +6661,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vélez-Málaga",
     etiqueta: "Vélez-Málaga (Málaga)",
     zonas: [...BARRIOS_VELEZ_MALAGA, ...POLIGONOS_VELEZ_MALAGA],
+  },
+  {
+    id: "fuengirola",
+    nombre: "Fuengirola",
+    etiqueta: "Fuengirola (Málaga)",
+    zonas: [...BARRIOS_FUENGIROLA, ...POLIGONOS_FUENGIROLA],
   },
 ];
 
