@@ -197,6 +197,8 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Villafría", tipo: "barrio" },
   { nombre: "Cótar", tipo: "barrio" },
   { nombre: "Cortes", tipo: "barrio" },
+  { nombre: "La Cellophane", tipo: "barrio" },
+  { nombre: "Los Parralillos", tipo: "barrio" },
 ];
 
 const POLIGONOS_BURGOS: ZonaCiudad[] = [
