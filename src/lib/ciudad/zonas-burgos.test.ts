@@ -126,6 +126,7 @@ describe("zonas de Burgos", () => {
       "lospalacios",
       "coria",
       "carmona",
+      "malaga",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1601,6 +1602,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCarmona).size).toBe(nombresCarmona.length);
     expect(nombresCarmona.filter((n) => carmona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
     expect(nombresCarmona.filter((n) => carmona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const malaga = ciudadUrbana("malaga");
+    expect(malaga?.etiqueta).toBe("Málaga (Málaga)");
+    expect(malaga?.nombre).toBe("Málaga");
+    expect(zonaDeCiudad(malaga!, "El Viso")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(malaga!, "La Pelusa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(malaga!, "La Pelusilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(malaga!, "Dos Hermanas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(malaga!, "Churriana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(malaga!, "Polígono El Viso")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(malaga!, "Polígono La Pelusa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(malaga!, "Parque Empresarial El Viso")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(malaga!, "Parque Tecnológico de Andalucía (PTA)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(malaga!, "Polígono de Cártama")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(malaga!, "Mercamálaga")?.tipo).toBe("poligono");
+    const nombresMalaga = malaga!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMalaga).size).toBe(nombresMalaga.length);
+    expect(nombresMalaga.filter((n) => malaga!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(181);
+    expect(nombresMalaga.filter((n) => malaga!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(39);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1649,6 +1668,7 @@ describe("zonas de Burgos", () => {
       "Tres Cantos",
       "Valdemoro",
     ]);
+    expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
