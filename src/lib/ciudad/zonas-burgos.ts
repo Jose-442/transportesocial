@@ -245,6 +245,7 @@
  * Rincón de la Victoria: los barrios y las cuatro áreas de la lista.
  * Benagalbón y Cotomar quedan como barrio.
  * Cala del Moral (La) queda como barrio. Área comercial de La Cala del Moral como polígono.
+ * Alhaurín de la Torre: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6174,6 +6175,63 @@ const POLIGONOS_RINCON_VICTORIA: ZonaCiudad[] = [
   { nombre: "Zona empresarial de Cotomar", tipo: "poligono" },
 ];
 
+const BARRIOS_ALHAURIN_TORRE: ZonaCiudad[] = [
+  { nombre: "Alamillo", tipo: "barrio" },
+  { nombre: "Altos de Viñagrande", tipo: "barrio" },
+  { nombre: "Barrio de la Alegría", tipo: "barrio" },
+  { nombre: "Barrio Viejo", tipo: "barrio" },
+  { nombre: "Bellavista de Zambrana", tipo: "barrio" },
+  { nombre: "Blas Infante", tipo: "barrio" },
+  { nombre: "Camino de la Acequia", tipo: "barrio" },
+  { nombre: "Capellanía (La)", tipo: "barrio" },
+  { nombre: "Carranque", tipo: "barrio" },
+  { nombre: "Cortijos del Sol", tipo: "barrio" },
+  { nombre: "El Cerro", tipo: "barrio" },
+  { nombre: "El Cordobés", tipo: "barrio" },
+  { nombre: "El Lagar", tipo: "barrio" },
+  { nombre: "El Limón", tipo: "barrio" },
+  { nombre: "El Romeral", tipo: "barrio" },
+  { nombre: "Ermita del Cerro", tipo: "barrio" },
+  { nombre: "Fuensanguínea", tipo: "barrio" },
+  { nombre: "Huerta Alta", tipo: "barrio" },
+  { nombre: "Huerta Nueva", tipo: "barrio" },
+  { nombre: "Huerto Coscorrón", tipo: "barrio" },
+  { nombre: "Huerto de la Rosa", tipo: "barrio" },
+  { nombre: "Jardines de Alhaurín", tipo: "barrio" },
+  { nombre: "La Alquería", tipo: "barrio" },
+  { nombre: "Lagar de las Pitas", tipo: "barrio" },
+  { nombre: "Loma de Cantarranas", tipo: "barrio" },
+  { nombre: "Los Tomillares", tipo: "barrio" },
+  { nombre: "Mestanza", tipo: "barrio" },
+  { nombre: "Molina", tipo: "barrio" },
+  { nombre: "Peñón", tipo: "barrio" },
+  { nombre: "Piamonte", tipo: "barrio" },
+  { nombre: "Pinos de Alhaurín", tipo: "barrio" },
+  { nombre: "Platero I", tipo: "barrio" },
+  { nombre: "Platero II", tipo: "barrio" },
+  { nombre: "Puerta Alhaurín", tipo: "barrio" },
+  { nombre: "Puertatorre", tipo: "barrio" },
+  { nombre: "Retamar", tipo: "barrio" },
+  { nombre: "Santa Amalia", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "Tabico", tipo: "barrio" },
+  { nombre: "Tabico Alto", tipo: "barrio" },
+  { nombre: "Taralpe", tipo: "barrio" },
+  { nombre: "Torre Alquería", tipo: "barrio" },
+  { nombre: "Torrealquería", tipo: "barrio" },
+  { nombre: "Torresol", tipo: "barrio" },
+  { nombre: "Viñagrande", tipo: "barrio" },
+  { nombre: "Zapata", tipo: "barrio" },
+  { nombre: "Zambrana", tipo: "barrio" },
+];
+
+const POLIGONOS_ALHAURIN_TORRE: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Moraga", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Américas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Laurotorre", tipo: "poligono" },
+  { nombre: "Polígono Industrial Zamorilla", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6932,6 +6990,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Rincón de la Victoria",
     etiqueta: "Rincón de la Victoria (Málaga)",
     zonas: [...BARRIOS_RINCON_VICTORIA, ...POLIGONOS_RINCON_VICTORIA],
+  },
+  {
+    id: "alhaurindelatorre",
+    nombre: "Alhaurín de la Torre",
+    etiqueta: "Alhaurín de la Torre (Málaga)",
+    zonas: [...BARRIOS_ALHAURIN_TORRE, ...POLIGONOS_ALHAURIN_TORRE],
   },
 ];
 
