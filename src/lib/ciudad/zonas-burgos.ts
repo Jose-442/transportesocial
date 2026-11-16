@@ -149,6 +149,7 @@
  * Salamanca: los barrios y los polígonos de la lista.
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
  * Móstoles: los barrios y los polígonos de la lista.
+ * Alcalá de Henares: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3506,6 +3507,62 @@ const POLIGONOS_MOSTOLES: ZonaCiudad[] = [
   { nombre: "Zona Industrial Las Monjas", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCALA: ZonaCiudad[] = [
+  { nombre: "Casco Histórico o Centro", tipo: "barrio" },
+  { nombre: "El Chorrillo", tipo: "barrio" },
+  { nombre: "Campo del Ángel", tipo: "barrio" },
+  { nombre: "La Garena", tipo: "barrio" },
+  { nombre: "La Rinconada", tipo: "barrio" },
+  { nombre: "Reyes Católicos", tipo: "barrio" },
+  { nombre: "Nueva Alcalá", tipo: "barrio" },
+  { nombre: "Venecia", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "Juan de Austria", tipo: "barrio" },
+  { nombre: "El Val", tipo: "barrio" },
+  { nombre: "Virgen del Val", tipo: "barrio" },
+  { nombre: "El Juncal", tipo: "barrio" },
+  { nombre: "El Ensanche", tipo: "barrio" },
+  { nombre: "Espartales Norte", tipo: "barrio" },
+  { nombre: "Espartales Sur", tipo: "barrio" },
+  { nombre: "Ciudad del Aire", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "La Ciudadela", tipo: "barrio" },
+  { nombre: "Lope de Vega", tipo: "barrio" },
+  { nombre: "Ronda Fiscal", tipo: "barrio" },
+  { nombre: "El Olivar", tipo: "barrio" },
+  { nombre: "Las Sedas", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "Jardín de Alcalá", tipo: "barrio" },
+  { nombre: "Los Gorriones", tipo: "barrio" },
+  { nombre: "Urbanización El Pilar", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCALA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Camporroso", tipo: "poligono" },
+  { nombre: "Polígono Industrial Bañuelos", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Garena", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Chorrillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Nilo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Esgaravita", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Encín", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Descubrimiento", tipo: "poligono" },
+  { nombre: "Polígono Industrial Azkue", tipo: "poligono" },
+  { nombre: "Polígono Industrial Santa Rosa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camarmilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Europa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerta de Alcalá", tipo: "poligono" },
+  { nombre: "Polígono Industrial Vía Complutense", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camino del Cementerio", tipo: "poligono" },
+  { nombre: "Polígono Industrial Antigua Carretera de Ajalvir", tipo: "poligono" },
+  { nombre: "Polígono Industrial Casarrubios", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Pesados", tipo: "poligono" },
+  { nombre: "Polígono Industrial Galiana", tipo: "poligono" },
+  { nombre: "Polígono Industrial INBISA I", tipo: "poligono" },
+  { nombre: "Polígono Industrial INBISA II", tipo: "poligono" },
+  { nombre: "Área Industrial Reyes Católicos", tipo: "poligono" },
+  { nombre: "Área Industrial La Garena", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3994,6 +4051,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Móstoles",
     etiqueta: "Móstoles (Madrid)",
     zonas: [...BARRIOS_MOSTOLES, ...POLIGONOS_MOSTOLES],
+  },
+  {
+    id: "alcala",
+    nombre: "Alcalá de Henares",
+    etiqueta: "Alcalá de Henares (Madrid)",
+    zonas: [...BARRIOS_ALCALA, ...POLIGONOS_ALCALA],
   },
 ];
 

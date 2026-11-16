@@ -87,6 +87,7 @@ describe("zonas de Burgos", () => {
       "salamanca",
       "madrid",
       "mostoles",
+      "alcala",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -916,6 +917,22 @@ describe("zonas de Burgos", () => {
     const nombresMostoles = mostoles!.zonas.map((z) => z.nombre);
     expect(new Set(nombresMostoles).size).toBe(nombresMostoles.length);
     expect(nombresMostoles.filter((n) => mostoles!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    const alcala = ciudadUrbana("alcala");
+    expect(alcala?.etiqueta).toBe("Alcalá de Henares (Madrid)");
+    expect(alcala?.nombre).toBe("Alcalá de Henares");
+    expect(zonaDeCiudad(alcala!, "Ciudad del Aire")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "El Olivar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "Las Sedas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "El Pilar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "Urbanización El Pilar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "La Garena")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcala!, "Polígono Industrial La Garena")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcala!, "Área Industrial La Garena")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcala!, "Meco")).toBeNull();
+    const nombresAlcala = alcala!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlcala).size).toBe(nombresAlcala.length);
+    expect(nombresAlcala.filter((n) => alcala!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
+    expect(nombresAlcala.filter((n) => alcala!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(23);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
