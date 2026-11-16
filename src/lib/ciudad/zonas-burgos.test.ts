@@ -105,6 +105,7 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(burgos!, "Gamonal Sur")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(burgos!, "La Cellophane")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(burgos!, "Los Parralillos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(burgos!, "Juan XXIII")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(burgos!, "Centro")).toBeNull();
     expect(zonaDeCiudad(burgos!, "Centro Histórico")).toBeNull();
     expect(zonaDeCiudad(burgos!, "Centro Sur")).toBeNull();
