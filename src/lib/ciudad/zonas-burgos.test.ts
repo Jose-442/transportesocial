@@ -115,6 +115,7 @@ describe("zonas de Burgos", () => {
       "sanfernando",
       "arroyomolinos",
       "galapagar",
+      "navalcarnero",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1407,6 +1408,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresGalapagar).size).toBe(nombresGalapagar.length);
     expect(nombresGalapagar.filter((n) => galapagar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
     expect(nombresGalapagar.filter((n) => galapagar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const navalcarnero = ciudadUrbana("navalcarnero");
+    expect(navalcarnero?.etiqueta).toBe("Navalcarnero (Madrid)");
+    expect(navalcarnero?.nombre).toBe("Navalcarnero");
+    expect(zonaDeCiudad(navalcarnero!, "Calypo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(navalcarnero!, "La Dehesa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(navalcarnero!, "La Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(navalcarnero!, "San Isidro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(navalcarnero!, "Alparrache I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(navalcarnero!, "Alparrache II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(navalcarnero!, "Carril Toledano")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(navalcarnero!, "Mancigordo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(navalcarnero!, "Polígono San Isidro")?.tipo).toBe("poligono");
+    const nombresNavalcarnero = navalcarnero!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresNavalcarnero).size).toBe(nombresNavalcarnero.length);
+    expect(nombresNavalcarnero.filter((n) => navalcarnero!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresNavalcarnero.filter((n) => navalcarnero!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1425,7 +1442,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 27).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 28).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1444,6 +1461,7 @@ describe("zonas de Burgos", () => {
       "Leganés",
       "Majadahonda",
       "Móstoles",
+      "Navalcarnero",
       "Parla",
       "Pinto",
       "Pozuelo de Alarcón",

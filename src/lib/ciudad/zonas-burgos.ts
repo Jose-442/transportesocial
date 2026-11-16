@@ -195,6 +195,8 @@
  * Arroyomolinos: los barrios y los polígonos de la lista.
  * Castañeras, Las; Carrizos, Los; Castillo, El; Dehesa, La y Encinar, El quedan con el nombre así.
  * Galapagar: los núcleos y las zonas empresariales de la lista.
+ * Navalcarnero: los barrios y los polígonos de la lista.
+ * San Isidro queda como barrio. Polígono San Isidro como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4678,6 +4680,34 @@ const POLIGONOS_GALAPAGAR: ZonaCiudad[] = [
   { nombre: "Zona empresarial del casco urbano", tipo: "poligono" },
 ];
 
+const BARRIOS_NAVALCARNERO: ZonaCiudad[] = [
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Calypo", tipo: "barrio" },
+  { nombre: "Caño Viejo", tipo: "barrio" },
+  { nombre: "Canto Pelín", tipo: "barrio" },
+  { nombre: "Cuesta Pajares", tipo: "barrio" },
+  { nombre: "El Pinar", tipo: "barrio" },
+  { nombre: "El Silo", tipo: "barrio" },
+  { nombre: "La Candelaria", tipo: "barrio" },
+  { nombre: "La Dehesa", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "La Perdiguera", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Villarino", tipo: "barrio" },
+];
+
+const POLIGONOS_NAVALCARNERO: ZonaCiudad[] = [
+  { nombre: "Alparrache I", tipo: "poligono" },
+  { nombre: "Alparrache II", tipo: "poligono" },
+  { nombre: "Carril Toledano", tipo: "poligono" },
+  { nombre: "Industrial Sector 4", tipo: "poligono" },
+  { nombre: "Mancigordo", tipo: "poligono" },
+  { nombre: "Polígono San Isidro", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5316,6 +5346,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Galapagar",
     etiqueta: "Galapagar (Madrid)",
     zonas: [...BARRIOS_GALAPAGAR, ...POLIGONOS_GALAPAGAR],
+  },
+  {
+    id: "navalcarnero",
+    nombre: "Navalcarnero",
+    etiqueta: "Navalcarnero (Madrid)",
+    zonas: [...BARRIOS_NAVALCARNERO, ...POLIGONOS_NAVALCARNERO],
   },
 ];
 
