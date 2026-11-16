@@ -10,8 +10,9 @@ import { Select } from "@/components/ui/Select";
 import {
   CIUDADES_URBANAS,
   ETIQUETA_MUNICIPIO_URBANO,
+  ciudadesParaDesplegable,
   ciudadUrbana,
-  etiquetaZona,
+  zonasParaDesplegable,
 } from "@/lib/ciudad/zonas-burgos";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
@@ -55,10 +56,8 @@ export function PublicarCiudadForm() {
   const [enviando, setEnviando] = useState(false);
 
   const actual = ciudadUrbana(ciudad) ?? CIUDADES_URBANAS[0];
-  const opcionesZona = actual.zonas.map((zona) => ({
-    value: zona.nombre,
-    label: etiquetaZona(zona),
-  }));
+  const opcionesZona = zonasParaDesplegable(actual);
+  const opcionesCiudad = ciudadesParaDesplegable();
   const llevaBulto = tipoOfertaLlevaBulto(tipo);
   const llevaPlaza = tipoOfertaLlevaPasajeros(tipo);
   const visibleBulto = precioBulto
@@ -109,7 +108,7 @@ export function PublicarCiudadForm() {
       <Select
         label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual.id}
-        options={CIUDADES_URBANAS.map((c) => ({ value: c.id, label: c.nombre }))}
+        options={opcionesCiudad}
         onChange={(e) => {
           setCiudad(e.target.value);
           setDesde("");

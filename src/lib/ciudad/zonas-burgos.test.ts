@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   CIUDADES_URBANAS,
+  ciudadesParaDesplegable,
   ciudadUrbana,
+  compararTextoEs,
   tituloTrayectoCiudad,
+  zonasParaDesplegable,
   zonaDeCiudad,
 } from "@/lib/ciudad/zonas-burgos";
 
@@ -983,6 +986,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresFuenlabrada).size).toBe(nombresFuenlabrada.length);
     expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
     expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(41);
+  });
+
+  it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
+    const ciudades = ciudadesParaDesplegable();
+    expect(ciudades).toHaveLength(CIUDADES_URBANAS.length);
+    expect(ciudades.map((c) => c.value).sort()).toEqual(
+      CIUDADES_URBANAS.map((c) => c.id).sort()
+    );
+    for (let i = 1; i < ciudades.length; i++) {
+      expect(
+        compararTextoEs(ciudades[i - 1].label, ciudades[i].label)
+      ).toBeLessThanOrEqual(0);
+    }
+    for (const ciudad of CIUDADES_URBANAS) {
+      const opciones = zonasParaDesplegable(ciudad);
+      expect(opciones).toHaveLength(ciudad.zonas.length);
+      expect(opciones.map((z) => z.value).sort()).toEqual(
+        ciudad.zonas.map((z) => z.nombre).sort()
+      );
+      for (let i = 1; i < opciones.length; i++) {
+        expect(
+          compararTextoEs(opciones[i - 1].label, opciones[i].label)
+        ).toBeLessThanOrEqual(0);
+      }
+    }
   });
 
   it("el título del trayecto corto usa los barrios", () => {

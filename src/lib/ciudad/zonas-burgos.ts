@@ -4235,6 +4235,24 @@ export function etiquetaZona(zona: ZonaCiudad): string {
   return `Polígono · ${zona.nombre}`;
 }
 
+export function compararTextoEs(a: string, b: string): number {
+  return a.localeCompare(b, "es", { sensitivity: "base", numeric: true });
+}
+
+export function ciudadesParaDesplegable(): { value: string; label: string }[] {
+  return [...CIUDADES_URBANAS]
+    .sort((a, b) => compararTextoEs(a.nombre, b.nombre))
+    .map((ciudad) => ({ value: ciudad.id, label: ciudad.nombre }));
+}
+
+export function zonasParaDesplegable(
+  ciudad: CiudadUrbana
+): { value: string; label: string }[] {
+  return [...ciudad.zonas]
+    .sort((a, b) => compararTextoEs(etiquetaZona(a), etiquetaZona(b)))
+    .map((zona) => ({ value: zona.nombre, label: etiquetaZona(zona) }));
+}
+
 export function zonaDeCiudad(
   ciudad: CiudadUrbana,
   nombre: string
