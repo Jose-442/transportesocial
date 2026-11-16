@@ -85,6 +85,7 @@ describe("zonas de Burgos", () => {
       "salou",
       "avila",
       "salamanca",
+      "madrid",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -883,6 +884,22 @@ describe("zonas de Burgos", () => {
     const nombresSalamanca = salamanca!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSalamanca).size).toBe(nombresSalamanca.length);
     expect(nombresSalamanca.filter((n) => salamanca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(50);
+    const madrid = ciudadUrbana("madrid");
+    expect(madrid?.etiqueta).toBe("Madrid (Madrid)");
+    expect(madrid?.nombre).toBe("Madrid");
+    expect(zonaDeCiudad(madrid!, "Embajadores")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(madrid!, "Cuatro Vientos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(madrid!, "Opañel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(madrid!, "Alameda de Osuna")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(madrid!, "Alameda de Osuna – N-II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(madrid!, "Polígono Industrial de Villaverde")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(madrid!, "Polígono de Las Mercedes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(madrid!, "Medina de Pomar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(madrid!, "Las Tablas")).toBeNull();
+    const nombresMadrid = madrid!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMadrid).size).toBe(nombresMadrid.length);
+    expect(nombresMadrid.filter((n) => madrid!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(131);
+    expect(nombresMadrid.filter((n) => madrid!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(92);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
