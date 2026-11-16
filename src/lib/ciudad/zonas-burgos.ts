@@ -143,6 +143,7 @@
  * El Vendrell: los barrios y los polígonos de la lista.
  * Cambrils: los barrios y los polígonos de la lista.
  * Tortosa: los barrios y los polígonos de la lista.
+ * Calafell: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3053,6 +3054,44 @@ const POLIGONOS_TORTOSA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Pla de l'Estació", tipo: "poligono" },
 ];
 
+const BARRIOS_CALAFELL: ZonaCiudad[] = [
+  { nombre: "Calafell Poble (casco antiguo)", tipo: "barrio" },
+  { nombre: "Calafell Platja", tipo: "barrio" },
+  { nombre: "Calafell Residencial", tipo: "barrio" },
+  { nombre: "El Prat de Calafell", tipo: "barrio" },
+  { nombre: "El Vilarenc", tipo: "barrio" },
+  { nombre: "La Sínia", tipo: "barrio" },
+  { nombre: "El Sindicat", tipo: "barrio" },
+  { nombre: "Solà-Forcada", tipo: "barrio" },
+  { nombre: "Masia de la Font", tipo: "barrio" },
+  { nombre: "Miramar Residencial", tipo: "barrio" },
+  { nombre: "Vilamar", tipo: "barrio" },
+  { nombre: "Segur de Calafell – zona playa", tipo: "barrio" },
+  { nombre: "Segur de Dalt", tipo: "barrio" },
+  { nombre: "Segur de Calafell – zona montaña", tipo: "barrio" },
+  { nombre: "Alorda Park", tipo: "barrio" },
+  { nombre: "Bellamar", tipo: "barrio" },
+  { nombre: "Bellamel", tipo: "barrio" },
+  { nombre: "Bonanova", tipo: "barrio" },
+  { nombre: "Calafell Parc", tipo: "barrio" },
+  { nombre: "El Mas Mel", tipo: "barrio" },
+  { nombre: "El Mas Romeu", tipo: "barrio" },
+  { nombre: "L'Estany", tipo: "barrio" },
+  { nombre: "La Baronia del Mar", tipo: "barrio" },
+  { nombre: "Les Brises", tipo: "barrio" },
+  { nombre: "Les Vil·les", tipo: "barrio" },
+  { nombre: "Mas de la Mel", tipo: "barrio" },
+  { nombre: "Parc Empresarial", tipo: "barrio" },
+  { nombre: "Romaní", tipo: "barrio" },
+  { nombre: "Valldemar", tipo: "barrio" },
+];
+
+const POLIGONOS_CALAFELL: ZonaCiudad[] = [
+  { nombre: "Parc Empresarial de Calafell", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Sínia", tipo: "poligono" },
+  { nombre: "Zona industrial de la carretera de Bellvei", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3505,6 +3544,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Tortosa",
     etiqueta: "Tortosa (Tarragona)",
     zonas: [...BARRIOS_TORTOSA, ...POLIGONOS_TORTOSA],
+  },
+  {
+    id: "calafell",
+    nombre: "Calafell",
+    etiqueta: "Calafell (Tarragona)",
+    zonas: [...BARRIOS_CALAFELL, ...POLIGONOS_CALAFELL],
   },
 ];
 

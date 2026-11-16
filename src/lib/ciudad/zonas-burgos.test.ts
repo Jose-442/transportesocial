@@ -81,6 +81,7 @@ describe("zonas de Burgos", () => {
       "elvendrell",
       "cambrils",
       "tortosa",
+      "calafell",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -827,6 +828,22 @@ describe("zonas de Burgos", () => {
     const nombresTortosa = tortosa!.zonas.map((z) => z.nombre);
     expect(new Set(nombresTortosa).size).toBe(nombresTortosa.length);
     expect(nombresTortosa.filter((n) => tortosa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
+    const calafell = ciudadUrbana("calafell");
+    expect(calafell?.etiqueta).toBe("Calafell (Tarragona)");
+    expect(calafell?.nombre).toBe("Calafell");
+    expect(zonaDeCiudad(calafell!, "Calafell Poble (casco antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calafell!, "Parc Empresarial")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calafell!, "La Sínia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calafell!, "El Mas Mel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calafell!, "Mas de la Mel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calafell!, "Parc Empresarial de Calafell")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(calafell!, "Polígono Industrial de la Sínia")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(calafell!, "Zona industrial de la carretera de Bellvei")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(calafell!, "Polígon Industrial de la Sínia")).toBeNull();
+    expect(zonaDeCiudad(calafell!, "Bellvei")).toBeNull();
+    const nombresCalafell = calafell!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCalafell).size).toBe(nombresCalafell.length);
+    expect(nombresCalafell.filter((n) => calafell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
