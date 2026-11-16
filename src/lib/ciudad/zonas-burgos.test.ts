@@ -95,6 +95,7 @@ describe("zonas de Burgos", () => {
       "getafe",
       "fuenlabrada",
       "alcorcon",
+      "torrejon",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1017,6 +1018,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcorcon).size).toBe(nombresAlcorcon.length);
     expect(nombresAlcorcon.filter((n) => alcorcon!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(21);
     expect(nombresAlcorcon.filter((n) => alcorcon!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const torrejon = ciudadUrbana("torrejon");
+    expect(torrejon?.etiqueta).toBe("Torrejón de Ardoz (Madrid)");
+    expect(torrejon?.nombre).toBe("Torrejón de Ardoz");
+    expect(zonaDeCiudad(torrejon!, "Las Fronteras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "La Mancha Amarilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Mancha Amarilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Las Veredillas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Veredillas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Coivisa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Parque Florencia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Torrejón 2000")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrejon!, "Casablanca")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrejon!, "Ctra. de Loeches")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrejon!, "Los Almendros")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrejon!, "Polígono Industrial El Rosario")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrejon!, "Polígono Industrial Las Polvaredas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrejon!, "Loeches")).toBeNull();
+    const nombresTorrejon = torrejon!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorrejon).size).toBe(nombresTorrejon.length);
+    expect(nombresTorrejon.filter((n) => torrejon!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
+    expect(nombresTorrejon.filter((n) => torrejon!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(17);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1035,7 +1057,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 7).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 8).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcorcón",
@@ -1043,6 +1065,7 @@ describe("zonas de Burgos", () => {
       "Getafe",
       "Leganés",
       "Móstoles",
+      "Torrejón de Ardoz",
     ]);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);

@@ -156,6 +156,8 @@
  * Fuenlabrada: los barrios y los polígonos de la lista.
  * Alcorcón: los barrios y los polígonos de la lista.
  * San José de Valderas queda como barrio.
+ * Torrejón de Ardoz: los barrios y los polígonos de la lista.
+ * Las Fronteras queda como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3759,6 +3761,69 @@ const POLIGONOS_ALCORCON: ZonaCiudad[] = [
   { nombre: "Ventorro del Cano", tipo: "poligono" },
 ];
 
+const BARRIOS_TORREJON: ZonaCiudad[] = [
+  { nombre: "Aldovea", tipo: "barrio" },
+  { nombre: "Barrio del Castillo", tipo: "barrio" },
+  { nombre: "Barrio del Rosario", tipo: "barrio" },
+  { nombre: "Barrio San Benito", tipo: "barrio" },
+  { nombre: "Barrio Verde", tipo: "barrio" },
+  { nombre: "Cañada", tipo: "barrio" },
+  { nombre: "Casco Antiguo o Centro", tipo: "barrio" },
+  { nombre: "Ciudad Jardín del Rosario", tipo: "barrio" },
+  { nombre: "Coivisa", tipo: "barrio" },
+  { nombre: "El Juncal", tipo: "barrio" },
+  { nombre: "El Saucar", tipo: "barrio" },
+  { nombre: "Fresnos", tipo: "barrio" },
+  { nombre: "Jardines de la Solana", tipo: "barrio" },
+  { nombre: "La Mancha Amarilla", tipo: "barrio" },
+  { nombre: "La Zarzuela", tipo: "barrio" },
+  { nombre: "Las Fronteras", tipo: "barrio" },
+  { nombre: "Las Veredillas", tipo: "barrio" },
+  { nombre: "Los Berrocales del Jarama", tipo: "barrio" },
+  { nombre: "Los Villares", tipo: "barrio" },
+  { nombre: "Mancha Amarilla", tipo: "barrio" },
+  { nombre: "Parque Cataluña", tipo: "barrio" },
+  { nombre: "Parque Europa", tipo: "barrio" },
+  { nombre: "Parque Granada", tipo: "barrio" },
+  { nombre: "Parque Murguía", tipo: "barrio" },
+  { nombre: "Parque Orbasa", tipo: "barrio" },
+  { nombre: "Parque Florencia", tipo: "barrio" },
+  { nombre: "Rosaleda-Prado Ardoz", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Santiago Apóstol", tipo: "barrio" },
+  { nombre: "Soto del Henares", tipo: "barrio" },
+  { nombre: "Soto Norte", tipo: "barrio" },
+  { nombre: "Torrenieve", tipo: "barrio" },
+  { nombre: "Torrepista", tipo: "barrio" },
+  { nombre: "Torrejón 2000", tipo: "barrio" },
+  { nombre: "Torreparque", tipo: "barrio" },
+  { nombre: "Valrey", tipo: "barrio" },
+  { nombre: "Veredillas", tipo: "barrio" },
+  { nombre: "Barrio de la Estación", tipo: "barrio" },
+  { nombre: "Barrio de los Cobos", tipo: "barrio" },
+  { nombre: "Quinta de la Solana", tipo: "barrio" },
+];
+
+const POLIGONOS_TORREJON: ZonaCiudad[] = [
+  { nombre: "Casablanca", tipo: "poligono" },
+  { nombre: "Ctra. de Loeches", tipo: "poligono" },
+  { nombre: "El Jardín", tipo: "poligono" },
+  { nombre: "El Preceptor", tipo: "poligono" },
+  { nombre: "El Rosal", tipo: "poligono" },
+  { nombre: "El Xiabre", tipo: "poligono" },
+  { nombre: "La Galeana", tipo: "poligono" },
+  { nombre: "La Yegua", tipo: "poligono" },
+  { nombre: "Las Monjas", tipo: "poligono" },
+  { nombre: "Los Almendros", tipo: "poligono" },
+  { nombre: "Los Girasoles", tipo: "poligono" },
+  { nombre: "Parque Empresarial San Fernando", tipo: "poligono" },
+  { nombre: "Parque Industrial El Charco de los Peces", tipo: "poligono" },
+  { nombre: "San Fernando Norte", tipo: "poligono" },
+  { nombre: "San Fernando Sur", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Rosario", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Polvaredas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4277,6 +4342,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcorcón",
     etiqueta: "Alcorcón (Madrid)",
     zonas: [...BARRIOS_ALCORCON, ...POLIGONOS_ALCORCON],
+  },
+  {
+    id: "torrejon",
+    nombre: "Torrejón de Ardoz",
+    etiqueta: "Torrejón de Ardoz (Madrid)",
+    zonas: [...BARRIOS_TORREJON, ...POLIGONOS_TORREJON],
   },
 ];
 
