@@ -152,6 +152,7 @@
  * Alcalá de Henares: los barrios y los polígonos de la lista.
  * Leganés: los barrios y los polígonos de la lista.
  * Getafe: los barrios y los polígonos de la lista.
+ * Fuenlabrada: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3636,6 +3637,77 @@ const POLIGONOS_GETAFE: ZonaCiudad[] = [
   { nombre: "TecnoGetafe (Área Tecnológica del Sur)", tipo: "poligono" },
 ];
 
+const BARRIOS_FUENLABRADA: ZonaCiudad[] = [
+  { nombre: "Avanzada", tipo: "barrio" },
+  { nombre: "Arroyo-La Fuente", tipo: "barrio" },
+  { nombre: "Casco Antiguo o Centro", tipo: "barrio" },
+  { nombre: "Cerro-El Molino", tipo: "barrio" },
+  { nombre: "El Naranjo", tipo: "barrio" },
+  { nombre: "El Vivero", tipo: "barrio" },
+  { nombre: "La Cueva", tipo: "barrio" },
+  { nombre: "La Serna", tipo: "barrio" },
+  { nombre: "Loranca", tipo: "barrio" },
+  { nombre: "Nuevo Versalles", tipo: "barrio" },
+  { nombre: "Parque Europa", tipo: "barrio" },
+  { nombre: "Parque de Miraflores", tipo: "barrio" },
+  { nombre: "San Gregorio", tipo: "barrio" },
+  { nombre: "Universidad-Hospital", tipo: "barrio" },
+  { nombre: "La Fuente", tipo: "barrio" },
+  { nombre: "Belén", tipo: "barrio" },
+  { nombre: "Castilla la Vieja", tipo: "barrio" },
+  { nombre: "El Camino", tipo: "barrio" },
+  { nombre: "Polvoranca", tipo: "barrio" },
+  { nombre: "Fuenlabrada II", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "La Pollina", tipo: "barrio" },
+  { nombre: "El Arroyo", tipo: "barrio" },
+  { nombre: "La Avanzada", tipo: "barrio" },
+];
+
+const POLIGONOS_FUENLABRADA: ZonaCiudad[] = [
+  { nombre: "Acedinos", tipo: "poligono" },
+  { nombre: "Cantueña", tipo: "poligono" },
+  { nombre: "Cobo Calleja", tipo: "poligono" },
+  { nombre: "El Palomo", tipo: "poligono" },
+  { nombre: "La Vega II", tipo: "poligono" },
+  { nombre: "Los Gallegos", tipo: "poligono" },
+  { nombre: "Pico de la Mira", tipo: "poligono" },
+  { nombre: "Pozoblanco", tipo: "poligono" },
+  { nombre: "Sevilla", tipo: "poligono" },
+  { nombre: "Sierra Elvira", tipo: "poligono" },
+  { nombre: "Sonsoles", tipo: "poligono" },
+  { nombre: "Vereda del Tempranar", tipo: "poligono" },
+  { nombre: "Calfersa", tipo: "poligono" },
+  { nombre: "Cordel de la Carrera", tipo: "poligono" },
+  { nombre: "Niño del Remedio", tipo: "poligono" },
+  { nombre: "La Piqueta", tipo: "poligono" },
+  { nombre: "Uranga", tipo: "poligono" },
+  { nombre: "La Laguna", tipo: "poligono" },
+  { nombre: "Campo Hermoso", tipo: "poligono" },
+  { nombre: "Carretera de Humanes Este", tipo: "poligono" },
+  { nombre: "La Estación", tipo: "poligono" },
+  { nombre: "Codein", tipo: "poligono" },
+  { nombre: "Berruguete", tipo: "poligono" },
+  { nombre: "Circunvalación Sur", tipo: "poligono" },
+  { nombre: "Carretera de Humanes", tipo: "poligono" },
+  { nombre: "El Álamo I", tipo: "poligono" },
+  { nombre: "El Álamo II", tipo: "poligono" },
+  { nombre: "Constitución Norte", tipo: "poligono" },
+  { nombre: "Constitución Sur", tipo: "poligono" },
+  { nombre: "La Albarreja", tipo: "poligono" },
+  { nombre: "Cuesta Olivilla", tipo: "poligono" },
+  { nombre: "La Vega I", tipo: "poligono" },
+  { nombre: "Moraleja", tipo: "poligono" },
+  { nombre: "Valdonaire", tipo: "poligono" },
+  { nombre: "Carretera de Humanes Norte", tipo: "poligono" },
+  { nombre: "Vereda de Bañuelos", tipo: "poligono" },
+  { nombre: "La Toca I", tipo: "poligono" },
+  { nombre: "La Toca II", tipo: "poligono" },
+  { nombre: "Codein Cruce", tipo: "poligono" },
+  { nombre: "Cruce I", tipo: "poligono" },
+  { nombre: "Cruce II", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4142,6 +4214,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Getafe",
     etiqueta: "Getafe (Madrid)",
     zonas: [...BARRIOS_GETAFE, ...POLIGONOS_GETAFE],
+  },
+  {
+    id: "fuenlabrada",
+    nombre: "Fuenlabrada",
+    etiqueta: "Fuenlabrada (Madrid)",
+    zonas: [...BARRIOS_FUENLABRADA, ...POLIGONOS_FUENLABRADA],
   },
 ];
 

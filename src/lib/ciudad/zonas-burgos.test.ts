@@ -90,6 +90,7 @@ describe("zonas de Burgos", () => {
       "alcala",
       "leganes",
       "getafe",
+      "fuenlabrada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -965,6 +966,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresGetafe).size).toBe(nombresGetafe.length);
     expect(nombresGetafe.filter((n) => getafe!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
     expect(nombresGetafe.filter((n) => getafe!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const fuenlabrada = ciudadUrbana("fuenlabrada");
+    expect(fuenlabrada?.etiqueta).toBe("Fuenlabrada (Madrid)");
+    expect(fuenlabrada?.nombre).toBe("Fuenlabrada");
+    expect(zonaDeCiudad(fuenlabrada!, "El Naranjo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(fuenlabrada!, "La Pollina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(fuenlabrada!, "Universidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(fuenlabrada!, "La Avanzada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(fuenlabrada!, "El Arroyo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(fuenlabrada!, "Cobo Calleja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(fuenlabrada!, "La Vega I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(fuenlabrada!, "Carretera de Humanes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(fuenlabrada!, "Humanes")).toBeNull();
+    expect(zonaDeCiudad(fuenlabrada!, "Naranjo-La Serna")).toBeNull();
+    const nombresFuenlabrada = fuenlabrada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresFuenlabrada).size).toBe(nombresFuenlabrada.length);
+    expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
+    expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(41);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
