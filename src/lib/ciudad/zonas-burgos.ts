@@ -205,6 +205,8 @@
  * Ibarburu queda como barrio. Polígono Ibarburu como polígono.
  * Fuente del Rey queda como barrio. Polígono Fuente del Rey como polígono.
  * Barrio Centro no entra: queda Casco Antiguo.
+ * Alcalá de Guadaíra: los barrios y los polígonos de la lista.
+ * Las Lirios no entra: queda Los Lirios.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4913,6 +4915,81 @@ const POLIGONOS_DOS_HERMANAS: ZonaCiudad[] = [
   { nombre: "Zona Industrial Autovía II", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCALA_GUADAIRA: ZonaCiudad[] = [
+  { nombre: "Barrio Nuevo", tipo: "barrio" },
+  { nombre: "Barriada La Liebre", tipo: "barrio" },
+  { nombre: "Barriada Pablo VI", tipo: "barrio" },
+  { nombre: "Barro Blanco", tipo: "barrio" },
+  { nombre: "Campo de las Beatas", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro Blanco", tipo: "barrio" },
+  { nombre: "Cerro del Moro", tipo: "barrio" },
+  { nombre: "El Algarrobo", tipo: "barrio" },
+  { nombre: "El Barrero", tipo: "barrio" },
+  { nombre: "El Castillo – San Miguel", tipo: "barrio" },
+  { nombre: "El Duque", tipo: "barrio" },
+  { nombre: "El Perejil", tipo: "barrio" },
+  { nombre: "El Zacatín", tipo: "barrio" },
+  { nombre: "La Concepción", tipo: "barrio" },
+  { nombre: "La Juncosa", tipo: "barrio" },
+  { nombre: "La Mina", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "La Plazuela", tipo: "barrio" },
+  { nombre: "Las Mairenas", tipo: "barrio" },
+  { nombre: "Los Carambolos", tipo: "barrio" },
+  { nombre: "Los Cercadillos", tipo: "barrio" },
+  { nombre: "Los Lirios", tipo: "barrio" },
+  { nombre: "Los Toreros", tipo: "barrio" },
+  { nombre: "Pinares de Oromana", tipo: "barrio" },
+  { nombre: "Rabesa", tipo: "barrio" },
+  { nombre: "San Rafael", tipo: "barrio" },
+  { nombre: "Santa Lucía", tipo: "barrio" },
+  { nombre: "Silos", tipo: "barrio" },
+  { nombre: "Torrequinto", tipo: "barrio" },
+  { nombre: "Urbanización Las Encinas", tipo: "barrio" },
+  { nombre: "Urbanización Residencial Sevilla Golf", tipo: "barrio" },
+  { nombre: "Venta La Liebre", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCALA_GUADAIRA: ZonaCiudad[] = [
+  { nombre: "Complejo Tecnológico de Servicios Avanzados", tipo: "poligono" },
+  { nombre: "Parque Empresarial Alcalá de Guadaíra", tipo: "poligono" },
+  { nombre: "Parque Empresarial Alcalá X", tipo: "poligono" },
+  { nombre: "Parque Empresarial Bansur", tipo: "poligono" },
+  { nombre: "Parque Empresarial Cabeza Hermosa", tipo: "poligono" },
+  { nombre: "Parque Empresarial El Chaparral", tipo: "poligono" },
+  { nombre: "Parque Empresarial Hacienda Dolores", tipo: "poligono" },
+  { nombre: "Parque Empresarial La Red Sur", tipo: "poligono" },
+  { nombre: "Parque Empresarial Los Palillos", tipo: "poligono" },
+  { nombre: "Parque Empresarial Piedra Hincada", tipo: "poligono" },
+  { nombre: "Parque Empresarial Polysol", tipo: "poligono" },
+  { nombre: "Parque Empresarial San Nicolás", tipo: "poligono" },
+  { nombre: "Parque Empresarial Vereda de Cuchipanda", tipo: "poligono" },
+  { nombre: "Parque Industrial y Empresarial Recisur", tipo: "poligono" },
+  { nombre: "Parque Metropolitano Alcalá", tipo: "poligono" },
+  { nombre: "Polígono Industrial Alcalá X", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cementera", tipo: "poligono" },
+  { nombre: "Polígono Industrial Chaparrejo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cristalería", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cuchipanda", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Cruce", tipo: "poligono" },
+  { nombre: "Polígono Industrial Espaldillas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Fridex", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Cancela", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Liebre", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Red Norte", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Red Sur", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Red XXI", tipo: "poligono" },
+  { nombre: "Polígono Industrial Laguna Larga", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Palillos", tipo: "poligono" },
+  { nombre: "Polígono Industrial Palmetillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pero Mingo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Piedra Hincada", tipo: "poligono" },
+  { nombre: "Polígono Industrial Polysol", tipo: "poligono" },
+  { nombre: "Polígono Industrial Recisur", tipo: "poligono" },
+  { nombre: "Polígono Industrial Venta La Liebre", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5569,6 +5646,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Dos Hermanas",
     etiqueta: "Dos Hermanas (Sevilla)",
     zonas: [...BARRIOS_DOS_HERMANAS, ...POLIGONOS_DOS_HERMANAS],
+  },
+  {
+    id: "alcalaguadaira",
+    nombre: "Alcalá de Guadaíra",
+    etiqueta: "Alcalá de Guadaíra (Sevilla)",
+    zonas: [...BARRIOS_ALCALA_GUADAIRA, ...POLIGONOS_ALCALA_GUADAIRA],
   },
 ];
 

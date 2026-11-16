@@ -118,6 +118,7 @@ describe("zonas de Burgos", () => {
       "navalcarnero",
       "sevilla",
       "doshermanas",
+      "alcalaguadaira",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1467,6 +1468,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresDosHermanas).size).toBe(nombresDosHermanas.length);
     expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(87);
     expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
+    const alcalaGuadaira = ciudadUrbana("alcalaguadaira");
+    expect(alcalaGuadaira?.etiqueta).toBe("Alcalá de Guadaíra (Sevilla)");
+    expect(alcalaGuadaira?.nombre).toBe("Alcalá de Guadaíra");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Los Lirios")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Las Lirios")).toBeNull();
+    expect(zonaDeCiudad(alcalaGuadaira!, "El Castillo – San Miguel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Barriada La Liebre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Venta La Liebre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Parque Empresarial Alcalá X")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Polígono Industrial Alcalá X")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Polígono Industrial La Liebre")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Polígono Industrial Venta La Liebre")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Parque Empresarial La Red Sur")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcalaGuadaira!, "Polígono Industrial La Red Sur")?.tipo).toBe("poligono");
+    const nombresAlcalaGuadaira = alcalaGuadaira!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlcalaGuadaira).size).toBe(nombresAlcalaGuadaira.length);
+    expect(nombresAlcalaGuadaira.filter((n) => alcalaGuadaira!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
+    expect(nombresAlcalaGuadaira.filter((n) => alcalaGuadaira!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(36);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1517,8 +1536,10 @@ describe("zonas de Burgos", () => {
     ]);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
-    expect(ciudades[sevillaIdx + 1]?.label).toBe("Dos Hermanas");
+    expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
     expect(ciudades[sevillaIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[sevillaIdx + 2]?.label).toBe("Dos Hermanas");
+    expect(ciudades[sevillaIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
