@@ -233,7 +233,9 @@
  * Vélez-Málaga: los barrios y los polígonos de la lista.
  * Arroyo de la Miel no entra: es de Benalmádena.
  * Fuengirola: los barrios y los polígonos de la lista.
- * Estepona: los barrios y los polígonos de la lista. Cancelada entra aquí.
+ * Estepona: lista revisada. Cancelada entra aquí.
+ * Polígono Industrial Llano del Negro pasa a Polígono Industrial Llanos del Negro.
+ * Zona de Servicios de Estepona sale. Entra Polígono Industrial Ampliación de Llanos del Negro.
  * Benalmádena: los barrios y los polígonos de la lista.
  * Arroyo de la Miel entra aquí como barrio. Polígono Industrial Arroyo de la Miel como polígono.
  * La Leala queda como barrio. Polígono Industrial La Léala como polígono.
@@ -5940,6 +5942,8 @@ const POLIGONOS_FUENGIROLA: ZonaCiudad[] = [
 const BARRIOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "Alcazaba Beach", tipo: "barrio" },
   { nombre: "Aldea del Sol", tipo: "barrio" },
+  { nombre: "Altos de Antequera", tipo: "barrio" },
+  { nombre: "Altos de Calancha", tipo: "barrio" },
   { nombre: "Altos de Estepona", tipo: "barrio" },
   { nombre: "Arena Beach", tipo: "barrio" },
   { nombre: "Arroyo Vaquero", tipo: "barrio" },
@@ -5957,13 +5961,16 @@ const BARRIOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "Centro", tipo: "barrio" },
   { nombre: "Costalita", tipo: "barrio" },
   { nombre: "Costa Natura", tipo: "barrio" },
+  { nombre: "Diana", tipo: "barrio" },
   { nombre: "Diana Park", tipo: "barrio" },
   { nombre: "Dominion Beach", tipo: "barrio" },
   { nombre: "Don Pedro", tipo: "barrio" },
+  { nombre: "El Campanario", tipo: "barrio" },
   { nombre: "El Coral", tipo: "barrio" },
   { nombre: "El Padrón", tipo: "barrio" },
   { nombre: "El Paraíso", tipo: "barrio" },
   { nombre: "El Pirata", tipo: "barrio" },
+  { nombre: "El Presidente", tipo: "barrio" },
   { nombre: "El Velerín", tipo: "barrio" },
   { nombre: "Estepona Golf", tipo: "barrio" },
   { nombre: "Guadalobón", tipo: "barrio" },
@@ -5975,7 +5982,13 @@ const BARRIOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "La Resina", tipo: "barrio" },
   { nombre: "Las Mesas", tipo: "barrio" },
   { nombre: "Las Salinas", tipo: "barrio" },
+  { nombre: "Las Joyas", tipo: "barrio" },
+  { nombre: "Las Lomas", tipo: "barrio" },
   { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Los Reales", tipo: "barrio" },
+  { nombre: "Mar y Sierra", tipo: "barrio" },
+  { nombre: "Mirador de Estepona Hills", tipo: "barrio" },
+  { nombre: "Moches", tipo: "barrio" },
   { nombre: "Nueva Atalaya", tipo: "barrio" },
   { nombre: "Nueva Milla de Oro", tipo: "barrio" },
   { nombre: "Parque Antena", tipo: "barrio" },
@@ -5983,30 +5996,26 @@ const BARRIOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "Playa Bella", tipo: "barrio" },
   { nombre: "Playa del Sol", tipo: "barrio" },
   { nombre: "Puerto Deportivo", tipo: "barrio" },
+  { nombre: "Puerto Paraíso", tipo: "barrio" },
+  { nombre: "Puerto Romano", tipo: "barrio" },
+  { nombre: "Punta de la Doncella", tipo: "barrio" },
   { nombre: "Punta Plata", tipo: "barrio" },
+  { nombre: "Rancho del Rocío", tipo: "barrio" },
   { nombre: "Saladillo", tipo: "barrio" },
   { nombre: "Saladavieja", tipo: "barrio" },
   { nombre: "Seghers", tipo: "barrio" },
   { nombre: "Selwo", tipo: "barrio" },
+  { nombre: "Sierra Bermeja", tipo: "barrio" },
   { nombre: "Torre Bermeja", tipo: "barrio" },
+  { nombre: "Torre de Guadalmansa", tipo: "barrio" },
   { nombre: "Valle Romano", tipo: "barrio" },
   { nombre: "Villacana", tipo: "barrio" },
-  { nombre: "Altos de las Mesas", tipo: "barrio" },
-  { nombre: "Los Reales", tipo: "barrio" },
-  { nombre: "Puerto de Estepona", tipo: "barrio" },
-  { nombre: "Puerto Alto", tipo: "barrio" },
-  { nombre: "Puerto Paraíso", tipo: "barrio" },
-  { nombre: "Punta Doncella", tipo: "barrio" },
-  { nombre: "Residencial Infinity", tipo: "barrio" },
-  { nombre: "Torre de Guadalmansa", tipo: "barrio" },
-  { nombre: "Valle Romano Golf", tipo: "barrio" },
-  { nombre: "Vista África", tipo: "barrio" },
 ];
 
 const POLIGONOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial José Martín Méndez", tipo: "poligono" },
-  { nombre: "Polígono Industrial Llano del Negro", tipo: "poligono" },
-  { nombre: "Zona de Servicios de Estepona", tipo: "poligono" },
+  { nombre: "Polígono Industrial Llanos del Negro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ampliación de Llanos del Negro", tipo: "poligono" },
 ];
 
 const BARRIOS_BENALMADENA: ZonaCiudad[] = [
