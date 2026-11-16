@@ -786,18 +786,21 @@ describe("zonas de Burgos", () => {
     const elVendrell = ciudadUrbana("elvendrell");
     expect(elVendrell?.etiqueta).toBe("Vendrell, El (Tarragona)");
     expect(elVendrell?.nombre).toBe("El Vendrell");
-    expect(zonaDeCiudad(elVendrell!, "La Muntanyeta")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(elVendrell!, "Barri del Centre (Casco Antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "Els Masos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "Vendrell (Centre)")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(elVendrell!, "Edèn Parc")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(elVendrell!, "Parc Empresarial Els Masets")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(elVendrell!, "La Cometa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "La Cometa I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "La Muntanyeta")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(elVendrell!, "Les Mates")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(elVendrell!, "Edèn Park Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Casa Larrienaga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Edèn Parc Nord")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(elVendrell!, "Els Masets")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(elVendrell!, "Casa Larrienaga")).toBeNull();
+    expect(zonaDeCiudad(elVendrell!, "La Cometa")).toBeNull();
+    expect(zonaDeCiudad(elVendrell!, "Barri del Centre (Casco Antiguo)")).toBeNull();
     const nombresElVendrell = elVendrell!.zonas.map((z) => z.nombre);
     expect(new Set(nombresElVendrell).size).toBe(nombresElVendrell.length);
-    expect(nombresElVendrell.filter((n) => elVendrell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(43);
+    expect(nombresElVendrell.filter((n) => elVendrell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(44);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
