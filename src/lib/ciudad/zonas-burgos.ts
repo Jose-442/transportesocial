@@ -4247,10 +4247,24 @@ export function ciudadesParaDesplegable(): { value: string; label: string }[] {
 
 export function zonasParaDesplegable(
   ciudad: CiudadUrbana
-): { value: string; label: string }[] {
-  return [...ciudad.zonas]
-    .sort((a, b) => compararTextoEs(etiquetaZona(a), etiquetaZona(b)))
-    .map((zona) => ({ value: zona.nombre, label: etiquetaZona(zona) }));
+): { value: string; label: string; group: string }[] {
+  const barrios = ciudad.zonas
+    .filter((zona) => zona.tipo === "barrio")
+    .sort((a, b) => compararTextoEs(a.nombre, b.nombre))
+    .map((zona) => ({
+      value: zona.nombre,
+      label: etiquetaZona(zona),
+      group: "Barrios",
+    }));
+  const poligonos = ciudad.zonas
+    .filter((zona) => zona.tipo === "poligono")
+    .sort((a, b) => compararTextoEs(a.nombre, b.nombre))
+    .map((zona) => ({
+      value: zona.nombre,
+      label: etiquetaZona(zona),
+      group: "Polígonos",
+    }));
+  return [...barrios, ...poligonos];
 }
 
 export function zonaDeCiudad(

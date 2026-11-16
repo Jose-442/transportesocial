@@ -1005,9 +1005,25 @@ describe("zonas de Burgos", () => {
       expect(opciones.map((z) => z.value).sort()).toEqual(
         ciudad.zonas.map((z) => z.nombre).sort()
       );
-      for (let i = 1; i < opciones.length; i++) {
+      const corte = opciones.findIndex((z) => z.group === "Polígonos");
+      const barrios = corte === -1 ? opciones : opciones.slice(0, corte);
+      const poligonos = corte === -1 ? [] : opciones.slice(corte);
+      expect(barrios.every((z) => z.group === "Barrios")).toBe(true);
+      expect(poligonos.every((z) => z.group === "Polígonos")).toBe(true);
+      expect(barrios).toHaveLength(
+        ciudad.zonas.filter((z) => z.tipo === "barrio").length
+      );
+      expect(poligonos).toHaveLength(
+        ciudad.zonas.filter((z) => z.tipo === "poligono").length
+      );
+      for (let i = 1; i < barrios.length; i++) {
         expect(
-          compararTextoEs(opciones[i - 1].label, opciones[i].label)
+          compararTextoEs(barrios[i - 1].value, barrios[i].value)
+        ).toBeLessThanOrEqual(0);
+      }
+      for (let i = 1; i < poligonos.length; i++) {
+        expect(
+          compararTextoEs(poligonos[i - 1].value, poligonos[i].value)
         ).toBeLessThanOrEqual(0);
       }
     }

@@ -12,6 +12,7 @@ import {
 export type SelectOption = {
   value: string;
   label: string;
+  group?: string;
 };
 
 type Props = SelectHTMLAttributes<HTMLSelectElement> & {
@@ -74,11 +75,7 @@ export function Select({
             {placeholder}
           </option>
         )}
-        {options.map((opt) => (
-          <option key={opt.value || opt.label} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
+        {opcionesEnGrupos(options)}
       </select>
       {listaDebajo && (
         <ListaDebajo
@@ -100,6 +97,32 @@ export function Select({
       {error && <p className="text-xs text-red-600">{error}</p>}
     </label>
   );
+}
+
+function opcionesEnGrupos(options: SelectOption[]) {
+  if (!options.some((opt) => opt.group)) {
+    return options.map((opt) => (
+      <option key={opt.value || opt.label} value={opt.value}>
+        {opt.label}
+      </option>
+    ));
+  }
+  const grupos: { nombre: string; opciones: SelectOption[] }[] = [];
+  for (const opt of options) {
+    const nombre = opt.group ?? "";
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.nombre === nombre) ultimo.opciones.push(opt);
+    else grupos.push({ nombre, opciones: [opt] });
+  }
+  return grupos.map((grupo) => (
+    <optgroup key={grupo.nombre || "sin-grupo"} label={grupo.nombre}>
+      {grupo.opciones.map((opt) => (
+        <option key={opt.value || opt.label} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </optgroup>
+  ));
 }
 
 const selectClassName =
@@ -202,27 +225,37 @@ function ListaDebajo({
           className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
           style={{ maxHeight: maxAlto }}
         >
-          {options.map((opt) => {
+          {options.map((opt, indice) => {
             const elegido = opt.value === value;
+            const tituloGrupo =
+              opt.group && options[indice - 1]?.group !== opt.group
+                ? opt.group
+                : "";
             return (
-              <button
-                key={opt.value || opt.label}
-                type="button"
-                role="option"
-                aria-selected={elegido}
-                className={[
-                  "block w-full rounded-lg px-3 py-2 text-left text-base",
-                  elegido
-                    ? "bg-emerald-600 font-medium text-white"
-                    : "text-zinc-900 hover:bg-emerald-50",
-                ].join(" ")}
-                onClick={() => {
-                  onElegir(opt.value);
-                  setOpen(false);
-                }}
-              >
-                {opt.label}
-              </button>
+              <div key={opt.value || opt.label}>
+                {tituloGrupo && (
+                  <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
+                    {tituloGrupo}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={elegido}
+                  className={[
+                    "block w-full rounded-lg px-3 py-2 text-left text-base",
+                    elegido
+                      ? "bg-emerald-600 font-medium text-white"
+                      : "text-zinc-900 hover:bg-emerald-50",
+                  ].join(" ")}
+                  onClick={() => {
+                    onElegir(opt.value);
+                    setOpen(false);
+                  }}
+                >
+                  {opt.label}
+                </button>
+              </div>
             );
           })}
         </div>
