@@ -166,6 +166,7 @@
  * Európolis queda solo como polígono.
  * San Sebastián de los Reyes: los barrios y los polígonos de la lista.
  * Pozuelo de Alarcón: los barrios y los polígonos de la lista.
+ * Valdemoro: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4090,6 +4091,71 @@ const POLIGONOS_POZUELO: ZonaCiudad[] = [
   { nombre: "Parque Empresarial IMCE", tipo: "poligono" },
 ];
 
+const BARRIOS_VALDEMORO: ZonaCiudad[] = [
+  { nombre: "Benelux", tipo: "barrio" },
+  { nombre: "Brezo", tipo: "barrio" },
+  { nombre: "Campo Olivar", tipo: "barrio" },
+  { nombre: "Canto Negro", tipo: "barrio" },
+  { nombre: "El Caracol", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "El Castillo", tipo: "barrio" },
+  { nombre: "Cercado del Marqués", tipo: "barrio" },
+  { nombre: "La Corita", tipo: "barrio" },
+  { nombre: "Duque de Ahumada", tipo: "barrio" },
+  { nombre: "Egido del Cristo", tipo: "barrio" },
+  { nombre: "El Majuelo Norte", tipo: "barrio" },
+  { nombre: "Eras de la Cruz", tipo: "barrio" },
+  { nombre: "Eras del Sol", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "Extremadura", tipo: "barrio" },
+  { nombre: "Fuente de la Villa", tipo: "barrio" },
+  { nombre: "Fuente Vieja", tipo: "barrio" },
+  { nombre: "Guardia Civil", tipo: "barrio" },
+  { nombre: "La Iglesia", tipo: "barrio" },
+  { nombre: "El Juncarejo", tipo: "barrio" },
+  { nombre: "Marquesa de Villa Antonia", tipo: "barrio" },
+  { nombre: "Marte", tipo: "barrio" },
+  { nombre: "Mediterráneo", tipo: "barrio" },
+  { nombre: "Neptuno", tipo: "barrio" },
+  { nombre: "Nuevo Valdemoro", tipo: "barrio" },
+  { nombre: "Paraje Merino", tipo: "barrio" },
+  { nombre: "Parque Tierno Galván", tipo: "barrio" },
+  { nombre: "Paseo de la Estación", tipo: "barrio" },
+  { nombre: "El Peralejo", tipo: "barrio" },
+  { nombre: "La Picota", tipo: "barrio" },
+  { nombre: "La Piña", tipo: "barrio" },
+  { nombre: "Plaza de Castilla", tipo: "barrio" },
+  { nombre: "Pozo de San Pedro", tipo: "barrio" },
+  { nombre: "El Puente", tipo: "barrio" },
+  { nombre: "Puerta del Moro", tipo: "barrio" },
+  { nombre: "La Rambla", tipo: "barrio" },
+  { nombre: "El Redondal", tipo: "barrio" },
+  { nombre: "El Restón", tipo: "barrio" },
+  { nombre: "Reyes Católicos", tipo: "barrio" },
+  { nombre: "Río Nilo", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Vicente de Paúl", tipo: "barrio" },
+  { nombre: "Sendero del Olmo", tipo: "barrio" },
+  { nombre: "El Soto", tipo: "barrio" },
+  { nombre: "La Taeña", tipo: "barrio" },
+  { nombre: "Tinto Enrique", tipo: "barrio" },
+  { nombre: "Valle de San Sebastián", tipo: "barrio" },
+  { nombre: "Los Yesares", tipo: "barrio" },
+];
+
+const POLIGONOS_VALDEMORO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Albresa", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Carrehuela", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Corte Inglés", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Postura", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Canteras", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Prado (Paseo del Prado)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Rompecubas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Valmor", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Peluquera", tipo: "poligono" },
+  { nombre: "Polígono Industrial Yesos Ibéricos", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4650,6 +4716,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Pozuelo de Alarcón",
     etiqueta: "Pozuelo de Alarcón (Madrid)",
     zonas: [...BARRIOS_POZUELO, ...POLIGONOS_POZUELO],
+  },
+  {
+    id: "valdemoro",
+    nombre: "Valdemoro",
+    etiqueta: "Valdemoro (Madrid)",
+    zonas: [...BARRIOS_VALDEMORO, ...POLIGONOS_VALDEMORO],
   },
 ];
 

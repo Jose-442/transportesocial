@@ -102,6 +102,7 @@ describe("zonas de Burgos", () => {
       "lasrozas",
       "ssreyes",
       "pozuelo",
+      "valdemoro",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1166,6 +1167,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresPozuelo).size).toBe(nombresPozuelo.length);
     expect(nombresPozuelo.filter((n) => pozuelo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
     expect(nombresPozuelo.filter((n) => pozuelo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const valdemoro = ciudadUrbana("valdemoro");
+    expect(valdemoro?.etiqueta).toBe("Valdemoro (Madrid)");
+    expect(valdemoro?.nombre).toBe("Valdemoro");
+    expect(zonaDeCiudad(valdemoro!, "El Restón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "La Taeña")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "Egido del Cristo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "La Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "Paseo de la Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "Valle de San Sebastián")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdemoro!, "Polígono Industrial Albresa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdemoro!, "Polígono Industrial La Carrehuela")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdemoro!, "Polígono Industrial El Prado (Paseo del Prado)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdemoro!, "Polígono Industrial Yesos Ibéricos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdemoro!, "El Prado")).toBeNull();
+    const nombresValdemoro = valdemoro!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresValdemoro).size).toBe(nombresValdemoro.length);
+    expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(49);
+    expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1184,7 +1203,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 14).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 15).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1199,6 +1218,7 @@ describe("zonas de Burgos", () => {
       "Rivas-Vaciamadrid",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
+      "Valdemoro",
     ]);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
