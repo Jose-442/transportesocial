@@ -133,6 +133,7 @@
  * Mollet del Vallès: los barrios y los 5 polígonos de la lista.
  * Barberà del Vallès: los barrios y los polígonos de la lista.
  * Manresa: los barrios y los polígonos de la lista.
+ * Sitges: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2567,6 +2568,53 @@ const POLIGONOS_MANRESA: ZonaCiudad[] = [
   { nombre: "El Guix", tipo: "poligono" },
 ];
 
+const BARRIOS_SITGES: ZonaCiudad[] = [
+  { nombre: "Aiguadolç", tipo: "barrio" },
+  { nombre: "Baix Fondac", tipo: "barrio" },
+  { nombre: "Can Girona", tipo: "barrio" },
+  { nombre: "Can Güell", tipo: "barrio" },
+  { nombre: "Can Pei", tipo: "barrio" },
+  { nombre: "Cases del Sord", tipo: "barrio" },
+  { nombre: "Cases Noves", tipo: "barrio" },
+  { nombre: "Casc Antic – Centre", tipo: "barrio" },
+  { nombre: "Garraf", tipo: "barrio" },
+  { nombre: "Garraf Dos", tipo: "barrio" },
+  { nombre: "La Bòbila", tipo: "barrio" },
+  { nombre: "La Llevantina", tipo: "barrio" },
+  { nombre: "La Marina d'Aiguadolç", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "La Plana Est", tipo: "barrio" },
+  { nombre: "Les Botigues de Sitges", tipo: "barrio" },
+  { nombre: "Les Botigues – Rat Penat", tipo: "barrio" },
+  { nombre: "Els Molins", tipo: "barrio" },
+  { nombre: "L'Oasis", tipo: "barrio" },
+  { nombre: "Madriguera", tipo: "barrio" },
+  { nombre: "Miralpeix", tipo: "barrio" },
+  { nombre: "Montgavina", tipo: "barrio" },
+  { nombre: "Nucli Antic", tipo: "barrio" },
+  { nombre: "Parc de Mar", tipo: "barrio" },
+  { nombre: "Passeig Marítim", tipo: "barrio" },
+  { nombre: "Plans d'Aiguadolç", tipo: "barrio" },
+  { nombre: "Poble de Garraf", tipo: "barrio" },
+  { nombre: "Poble Sec – Pins Vens", tipo: "barrio" },
+  { nombre: "Quintmar", tipo: "barrio" },
+  { nombre: "Rat-Penat", tipo: "barrio" },
+  { nombre: "Sant Crispí", tipo: "barrio" },
+  { nombre: "Sant Sebastià", tipo: "barrio" },
+  { nombre: "Santa Bàrbara", tipo: "barrio" },
+  { nombre: "Sínia Morera", tipo: "barrio" },
+  { nombre: "Terramar", tipo: "barrio" },
+  { nombre: "Vallcarca", tipo: "barrio" },
+  { nombre: "Vallpineda", tipo: "barrio" },
+  { nombre: "Vallpineda – Santa Bàrbara", tipo: "barrio" },
+  { nombre: "Vinyet", tipo: "barrio" },
+];
+
+const POLIGONOS_SITGES: ZonaCiudad[] = [
+  { nombre: "Mas Alba", tipo: "poligono" },
+  { nombre: "Vallcarca – Uniland", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2959,6 +3007,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Manresa",
     etiqueta: "Manresa (Barcelona)",
     zonas: [...BARRIOS_MANRESA, ...POLIGONOS_MANRESA],
+  },
+  {
+    id: "sitges",
+    nombre: "Sitges",
+    etiqueta: "Sitges (Barcelona)",
+    zonas: [...BARRIOS_SITGES, ...POLIGONOS_SITGES],
   },
 ];
 

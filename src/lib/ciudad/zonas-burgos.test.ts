@@ -71,6 +71,7 @@ describe("zonas de Burgos", () => {
       "mollet",
       "barbera",
       "manresa",
+      "sitges",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -693,6 +694,17 @@ describe("zonas de Burgos", () => {
     const nombresManresa = manresa!.zonas.map((z) => z.nombre);
     expect(new Set(nombresManresa).size).toBe(nombresManresa.length);
     expect(nombresManresa.filter((n) => manresa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(36);
+    const sitges = ciudadUrbana("sitges");
+    expect(sitges?.etiqueta).toBe("Sitges (Barcelona)");
+    expect(sitges?.nombre).toBe("Sitges");
+    expect(zonaDeCiudad(sitges!, "Vallcarca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sitges!, "Rat-Penat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sitges!, "Mas Alba")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sitges!, "Vallcarca – Uniland")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sitges!, "Uniland")).toBeNull();
+    const nombresSitges = sitges!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSitges).size).toBe(nombresSitges.length);
+    expect(nombresSitges.filter((n) => sitges!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(39);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
