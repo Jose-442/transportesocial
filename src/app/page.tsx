@@ -128,7 +128,7 @@ export default async function HomePage() {
                   <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
                     🏘️
                   </span>
-                  Buscar ruta dentro de mi población
+                  Buscar ruta dentro de mi municipio.
                 </span>
               </ButtonLink>
             </div>
