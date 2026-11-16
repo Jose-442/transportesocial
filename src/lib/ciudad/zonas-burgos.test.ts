@@ -88,6 +88,7 @@ describe("zonas de Burgos", () => {
       "madrid",
       "mostoles",
       "alcala",
+      "leganes",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -933,6 +934,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcala).size).toBe(nombresAlcala.length);
     expect(nombresAlcala.filter((n) => alcala!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
     expect(nombresAlcala.filter((n) => alcala!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(23);
+    const leganes = ciudadUrbana("leganes");
+    expect(leganes?.etiqueta).toBe("Leganés (Madrid)");
+    expect(leganes?.nombre).toBe("Leganés");
+    expect(zonaDeCiudad(leganes!, "El Carrascal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leganes!, "Vereda de los Estudiantes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leganes!, "Las Flores")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leganes!, "La Fortuna")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leganes!, "Solagua")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leganes!, "El Portillo – Ciudad del Automóvil")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(leganes!, "Leganés Tecnológico (LEGATEC)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(leganes!, "Carrascal")).toBeNull();
+    expect(zonaDeCiudad(leganes!, "Getafe")).toBeNull();
+    const nombresLeganes = leganes!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLeganes).size).toBe(nombresLeganes.length);
+    expect(nombresLeganes.filter((n) => leganes!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresLeganes.filter((n) => leganes!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

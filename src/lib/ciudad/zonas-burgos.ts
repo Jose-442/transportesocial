@@ -150,6 +150,7 @@
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
  * Móstoles: los barrios y los polígonos de la lista.
  * Alcalá de Henares: los barrios y los polígonos de la lista.
+ * Leganés: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3563,6 +3564,45 @@ const POLIGONOS_ALCALA: ZonaCiudad[] = [
   { nombre: "Área Industrial La Garena", tipo: "poligono" },
 ];
 
+const BARRIOS_LEGANES: ZonaCiudad[] = [
+  { nombre: "Arroyo Culebro", tipo: "barrio" },
+  { nombre: "Batallas", tipo: "barrio" },
+  { nombre: "Campo de Tiro", tipo: "barrio" },
+  { nombre: "El Carrascal", tipo: "barrio" },
+  { nombre: "Centro o Casco Antiguo", tipo: "barrio" },
+  { nombre: "Conquistadores", tipo: "barrio" },
+  { nombre: "Derechos Humanos", tipo: "barrio" },
+  { nombre: "Descubridores", tipo: "barrio" },
+  { nombre: "Escritores", tipo: "barrio" },
+  { nombre: "Vereda de los Estudiantes", tipo: "barrio" },
+  { nombre: "Las Flores", tipo: "barrio" },
+  { nombre: "La Fortuna", tipo: "barrio" },
+  { nombre: "Leganés Norte", tipo: "barrio" },
+  { nombre: "Los Frailes", tipo: "barrio" },
+  { nombre: "Los Santos", tipo: "barrio" },
+  { nombre: "Poza del Agua", tipo: "barrio" },
+  { nombre: "Quinto Centenario", tipo: "barrio" },
+  { nombre: "San Nicasio", tipo: "barrio" },
+  { nombre: "Valdepelayo", tipo: "barrio" },
+  { nombre: "Vírgenes", tipo: "barrio" },
+  { nombre: "Zarzaquemada Norte", tipo: "barrio" },
+  { nombre: "Zarzaquemada Sur", tipo: "barrio" },
+  { nombre: "Solagua", tipo: "barrio" },
+];
+
+const POLIGONOS_LEGANES: ZonaCiudad[] = [
+  { nombre: "El Portillo – Ciudad del Automóvil", tipo: "poligono" },
+  { nombre: "La Laguna", tipo: "poligono" },
+  { nombre: "Leganés Tecnológico (LEGATEC)", tipo: "poligono" },
+  { nombre: "Nuestra Señora de Butarque", tipo: "poligono" },
+  { nombre: "Polvoranca", tipo: "poligono" },
+  { nombre: "Polvoranca-Estación (antigua zona de Tabacalera)", tipo: "poligono" },
+  { nombre: "Prado Overa", tipo: "poligono" },
+  { nombre: "San José de Valderas", tipo: "poligono" },
+  { nombre: "Sur-M50 (PP10-Neinor)", tipo: "poligono" },
+  { nombre: "Puerta de Carabanchel", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4057,6 +4097,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcalá de Henares",
     etiqueta: "Alcalá de Henares (Madrid)",
     zonas: [...BARRIOS_ALCALA, ...POLIGONOS_ALCALA],
+  },
+  {
+    id: "leganes",
+    nombre: "Leganés",
+    etiqueta: "Leganés (Madrid)",
+    zonas: [...BARRIOS_LEGANES, ...POLIGONOS_LEGANES],
   },
 ];
 
