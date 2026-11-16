@@ -248,6 +248,8 @@
  * Alhaurín de la Torre: los barrios y los polígonos de la lista.
  * Antequera: los barrios, los núcleos rurales y los polígonos de la lista.
  * Villanueva de Cauche y Los Nogales entran una sola vez.
+ * Ronda: los barrios, las pedanías y los polígonos de la lista.
+ * Los Prados entra una sola vez. El Fuerte queda como barrio. Polígono Industrial El Fuerte como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6285,6 +6287,44 @@ const POLIGONOS_ANTEQUERA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Antequera (PIA)", tipo: "poligono" },
 ];
 
+const BARRIOS_RONDA: ZonaCiudad[] = [
+  { nombre: "Arenal", tipo: "barrio" },
+  { nombre: "Barrio de El Carmen", tipo: "barrio" },
+  { nombre: "Barrio de San Francisco", tipo: "barrio" },
+  { nombre: "Barrio de San Rafael", tipo: "barrio" },
+  { nombre: "Barrio de San Cristóbal", tipo: "barrio" },
+  { nombre: "Barrio de Padre Jesús", tipo: "barrio" },
+  { nombre: "Barrio del Mercadillo", tipo: "barrio" },
+  { nombre: "Barrio del Sur", tipo: "barrio" },
+  { nombre: "Casco Histórico (La Ciudad)", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Fuerte", tipo: "barrio" },
+  { nombre: "El Arenal", tipo: "barrio" },
+  { nombre: "El Olivar de las Monjas", tipo: "barrio" },
+  { nombre: "La Dehesa", tipo: "barrio" },
+  { nombre: "La Planilla", tipo: "barrio" },
+  { nombre: "La Torrecilla", tipo: "barrio" },
+  { nombre: "Las Quinientas", tipo: "barrio" },
+  { nombre: "Llano de la Estación", tipo: "barrio" },
+  { nombre: "Los Lacasitos", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "Los Prados", tipo: "barrio" },
+  { nombre: "Partidas Norte", tipo: "barrio" },
+  { nombre: "Partidas Sur", tipo: "barrio" },
+  { nombre: "Zona Juzgados-La Feria", tipo: "barrio" },
+  { nombre: "La Cimada", tipo: "barrio" },
+  { nombre: "Los Villalones", tipo: "barrio" },
+  { nombre: "Puerto Sauco", tipo: "barrio" },
+  { nombre: "Los Ventorrillos", tipo: "barrio" },
+  { nombre: "Montecorto", tipo: "barrio" },
+  { nombre: "Serrato", tipo: "barrio" },
+];
+
+const POLIGONOS_RONDA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Fuerte", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Serranía", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7055,6 +7095,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Antequera",
     etiqueta: "Antequera (Málaga)",
     zonas: [...BARRIOS_ANTEQUERA, ...POLIGONOS_ANTEQUERA],
+  },
+  {
+    id: "ronda",
+    nombre: "Ronda",
+    etiqueta: "Ronda (Málaga)",
+    zonas: [...BARRIOS_RONDA, ...POLIGONOS_RONDA],
   },
 ];
 
