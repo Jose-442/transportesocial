@@ -67,6 +67,7 @@ describe("zonas de Burgos", () => {
       "vilanova",
       "castelldefels",
       "granollers",
+      "cerdanyola",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -638,6 +639,18 @@ describe("zonas de Burgos", () => {
     const nombresGranollers = granollers!.zonas.map((z) => z.nombre);
     expect(new Set(nombresGranollers).size).toBe(nombresGranollers.length);
     expect(nombresGranollers.filter((n) => granollers!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
+    const cerdanyola = ciudadUrbana("cerdanyola");
+    expect(cerdanyola?.etiqueta).toBe("Cerdanyola del Vallès (Barcelona)");
+    expect(cerdanyola?.nombre).toBe("Cerdanyola del Vallès");
+    expect(zonaDeCiudad(cerdanyola!, "Can Fatjó dels Aurons")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cerdanyola!, "Parc Tecnològic del Vallès")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cerdanyola!, "Can Fatjó Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cerdanyola!, "Riviere – Can Mitjans")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cerdanyola!, "Santa Anna – Xarau")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cerdanyola!, "Can Fatjó")).toBeNull();
+    const nombresCerdanyola = cerdanyola!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCerdanyola).size).toBe(nombresCerdanyola.length);
+    expect(nombresCerdanyola.filter((n) => cerdanyola!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(46);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

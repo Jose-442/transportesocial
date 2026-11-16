@@ -129,6 +129,7 @@
  * El polígono industrial del Camí Ral, el parque tecnológico y Pla de Carat.
  * Granollers: los 17 barrios del mapa municipal.
  * Los 7 polígonos de la sede electrónica.
+ * Cerdanyola del Vallès: los barrios y los 9 polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2379,6 +2380,67 @@ const POLIGONOS_GRANOLLERS: ZonaCiudad[] = [
   { nombre: "Cal Gordi - Can Català", tipo: "poligono" },
 ];
 
+const BARRIOS_CERDANYOLA: ZonaCiudad[] = [
+  { nombre: "Antolí", tipo: "barrio" },
+  { nombre: "Av. Catalunya", tipo: "barrio" },
+  { nombre: "Banús", tipo: "barrio" },
+  { nombre: "Barri de Baix", tipo: "barrio" },
+  { nombre: "Barri de Dalt", tipo: "barrio" },
+  { nombre: "Bellaterra", tipo: "barrio" },
+  { nombre: "Bonasort", tipo: "barrio" },
+  { nombre: "Can Cerdà", tipo: "barrio" },
+  { nombre: "Can Fatjó dels Aurons", tipo: "barrio" },
+  { nombre: "Can Planas", tipo: "barrio" },
+  { nombre: "Can Serra", tipo: "barrio" },
+  { nombre: "Can Xarau", tipo: "barrio" },
+  { nombre: "Canaletes", tipo: "barrio" },
+  { nombre: "Cerdanyola 2000", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Centre Direccional", tipo: "barrio" },
+  { nombre: "Cordelles", tipo: "barrio" },
+  { nombre: "Els Gorgs", tipo: "barrio" },
+  { nombre: "Els Mayols", tipo: "barrio" },
+  { nombre: "Els Xops", tipo: "barrio" },
+  { nombre: "Farigola", tipo: "barrio" },
+  { nombre: "Font d'en Fargues", tipo: "barrio" },
+  { nombre: "La Fàngola", tipo: "barrio" },
+  { nombre: "La Sínia", tipo: "barrio" },
+  { nombre: "Les Fontetes", tipo: "barrio" },
+  { nombre: "Martinica", tipo: "barrio" },
+  { nombre: "Montflorit", tipo: "barrio" },
+  { nombre: "Parc de l'Alba", tipo: "barrio" },
+  { nombre: "Parc Tecnològic del Vallès", tipo: "barrio" },
+  { nombre: "Parcers", tipo: "barrio" },
+  { nombre: "Plana del Castell", tipo: "barrio" },
+  { nombre: "Pont Vell", tipo: "barrio" },
+  { nombre: "Quatre Cantons", tipo: "barrio" },
+  { nombre: "Sant Pau", tipo: "barrio" },
+  { nombre: "Sant Ramon", tipo: "barrio" },
+  { nombre: "Santa Rosa", tipo: "barrio" },
+  { nombre: "Serragalliners", tipo: "barrio" },
+  { nombre: "Serraparera", tipo: "barrio" },
+  { nombre: "Terranova", tipo: "barrio" },
+  { nombre: "Tiana", tipo: "barrio" },
+  { nombre: "Turonet", tipo: "barrio" },
+  { nombre: "Turó de Sant Pau", tipo: "barrio" },
+  { nombre: "Universitat Autònoma de Barcelona (UAB)", tipo: "barrio" },
+  { nombre: "Uralita", tipo: "barrio" },
+  { nombre: "Vila Universitària", tipo: "barrio" },
+  { nombre: "Xarau", tipo: "barrio" },
+];
+
+const POLIGONOS_CERDANYOLA: ZonaCiudad[] = [
+  { nombre: "Can Fatjó Nord", tipo: "poligono" },
+  { nombre: "Can Fatjó Sud", tipo: "poligono" },
+  { nombre: "Can Mitjans", tipo: "poligono" },
+  { nombre: "Carretera de Barcelona", tipo: "poligono" },
+  { nombre: "La Bòbila", tipo: "poligono" },
+  { nombre: "La Clota", tipo: "poligono" },
+  { nombre: "Polizur", tipo: "poligono" },
+  { nombre: "Riviere – Can Mitjans", tipo: "poligono" },
+  { nombre: "Santa Anna – Xarau", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2747,6 +2809,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Granollers",
     etiqueta: "Granollers (Barcelona)",
     zonas: [...BARRIOS_GRANOLLERS, ...POLIGONOS_GRANOLLERS],
+  },
+  {
+    id: "cerdanyola",
+    nombre: "Cerdanyola del Vallès",
+    etiqueta: "Cerdanyola del Vallès (Barcelona)",
+    zonas: [...BARRIOS_CERDANYOLA, ...POLIGONOS_CERDANYOLA],
   },
 ];
 
