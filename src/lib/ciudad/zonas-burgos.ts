@@ -173,6 +173,9 @@
  * Majadahonda: los barrios y los polígonos de la lista.
  * El Carralero queda como barrio. Polígono Industrial Carralero como polígono.
  * Los Satélites queda como barrio.
+ * Collado Villalba: los barrios y los polígonos de la lista.
+ * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
+ * Los Negrales queda en Collado Villalba.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4268,6 +4271,59 @@ const POLIGONOS_MAJADAHONDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Carralero", tipo: "poligono" },
 ];
 
+const BARRIOS_COLLADO_VILLALBA: ZonaCiudad[] = [
+  { nombre: "Altavista", tipo: "barrio" },
+  { nombre: "Arroyo Arriba", tipo: "barrio" },
+  { nombre: "Balconada, La", tipo: "barrio" },
+  { nombre: "Batalla de Bailén", tipo: "barrio" },
+  { nombre: "Cantos Altos", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerca, La", tipo: "barrio" },
+  { nombre: "Colonia Avenida", tipo: "barrio" },
+  { nombre: "Colonia Los Valles", tipo: "barrio" },
+  { nombre: "Dehesa Boyal", tipo: "barrio" },
+  { nombre: "El Gorronal", tipo: "barrio" },
+  { nombre: "El Matadero", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "El Soto", tipo: "barrio" },
+  { nombre: "Fontenebro", tipo: "barrio" },
+  { nombre: "Jardines de Villalba", tipo: "barrio" },
+  { nombre: "La Chopera", tipo: "barrio" },
+  { nombre: "Las Eras", tipo: "barrio" },
+  { nombre: "Las Suertes", tipo: "barrio" },
+  { nombre: "Las Costas", tipo: "barrio" },
+  { nombre: "Los Belgas", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Los Negrales", tipo: "barrio" },
+  { nombre: "Los Valles", tipo: "barrio" },
+  { nombre: "Mirador de la Sierra", tipo: "barrio" },
+  { nombre: "Mirasierra", tipo: "barrio" },
+  { nombre: "Montenebros I", tipo: "barrio" },
+  { nombre: "Montenebros II", tipo: "barrio" },
+  { nombre: "Parque de la Coruña", tipo: "barrio" },
+  { nombre: "Parque Sierra", tipo: "barrio" },
+  { nombre: "Peñanevada II", tipo: "barrio" },
+  { nombre: "Peñanevada III", tipo: "barrio" },
+  { nombre: "Peñanevada IV", tipo: "barrio" },
+  { nombre: "Pradillo Herrero", tipo: "barrio" },
+  { nombre: "Prado de los Enebros", tipo: "barrio" },
+  { nombre: "Romacalderas", tipo: "barrio" },
+  { nombre: "Villalba Estación", tipo: "barrio" },
+  { nombre: "Villalba Pueblo", tipo: "barrio" },
+  { nombre: "Vial Sur", tipo: "barrio" },
+  { nombre: "Virgen del Enebral", tipo: "barrio" },
+];
+
+const POLIGONOS_COLLADO_VILLALBA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Granjillas P-5", tipo: "poligono" },
+  { nombre: "Polígono Industrial Itelevasa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Jabonería", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Llanos", tipo: "poligono" },
+  { nombre: "Polígono Industrial P-29", tipo: "poligono" },
+  { nombre: "Polígono Industrial Roma-Caldera", tipo: "poligono" },
+  { nombre: "Parque Empresarial Sierra Norte", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4846,6 +4902,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Majadahonda",
     etiqueta: "Majadahonda (Madrid)",
     zonas: [...BARRIOS_MAJADAHONDA, ...POLIGONOS_MAJADAHONDA],
+  },
+  {
+    id: "colladovillalba",
+    nombre: "Collado Villalba",
+    etiqueta: "Collado Villalba (Madrid)",
+    zonas: [...BARRIOS_COLLADO_VILLALBA, ...POLIGONOS_COLLADO_VILLALBA],
   },
 ];
 

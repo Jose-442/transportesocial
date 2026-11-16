@@ -105,6 +105,7 @@ describe("zonas de Burgos", () => {
       "valdemoro",
       "coslada",
       "majadahonda",
+      "colladovillalba",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1230,6 +1231,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMaja).size).toBe(nombresMaja.length);
     expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(60);
     expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const collado = ciudadUrbana("colladovillalba");
+    expect(collado?.etiqueta).toBe("Collado Villalba (Madrid)");
+    expect(collado?.nombre).toBe("Collado Villalba");
+    expect(zonaDeCiudad(collado!, "Los Negrales")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(collado!, "Los Llanos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(collado!, "Balconada, La")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(collado!, "Romacalderas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(collado!, "Polígono Industrial Los Llanos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(collado!, "Polígono Industrial Roma-Caldera")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(collado!, "Parque Empresarial Sierra Norte")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(collado!, "Roma-Caldera")).toBeNull();
+    const nombresCollado = collado!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCollado).size).toBe(nombresCollado.length);
+    expect(nombresCollado.filter((n) => collado!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
+    expect(nombresCollado.filter((n) => collado!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1248,11 +1264,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 17).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 18).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
+      "Collado Villalba",
       "Coslada",
       "Fuenlabrada",
       "Getafe",
