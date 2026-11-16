@@ -127,6 +127,7 @@ describe("zonas de Burgos", () => {
       "coria",
       "carmona",
       "malaga",
+      "marbella",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1620,6 +1621,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMalaga).size).toBe(nombresMalaga.length);
     expect(nombresMalaga.filter((n) => malaga!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(181);
     expect(nombresMalaga.filter((n) => malaga!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(39);
+    const marbella = ciudadUrbana("marbella");
+    expect(marbella?.etiqueta).toBe("Marbella (Málaga)");
+    expect(marbella?.nombre).toBe("Marbella");
+    expect(zonaDeCiudad(marbella!, "Elviria")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "La Campana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Las Albarizas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Albarizas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Nueva Campana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "San Pedro Alcántara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Casco Antiguo de Marbella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Nueva Andalucía")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Las Chapas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Bello Horizonte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Bello Horizonte I")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Trapiche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "El Trapiche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marbella!, "Cancelada")).toBeNull();
+    expect(zonaDeCiudad(marbella!, "Polígono Elviria")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(marbella!, "Polígono La Campana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(marbella!, "Polígono Las Albarizas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(marbella!, "Polígono Nueva Campana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(marbella!, "San Pedro de Alcántara")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(marbella!, "Costa del Sol")?.tipo).toBe("poligono");
+    const nombresMarbella = marbella!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMarbella).size).toBe(nombresMarbella.length);
+    expect(nombresMarbella.filter((n) => marbella!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(209);
+    expect(nombresMarbella.filter((n) => marbella!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1669,6 +1697,9 @@ describe("zonas de Burgos", () => {
       "Valdemoro",
     ]);
     expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
+    const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");
+    expect(ciudades[malagaIdx + 1]?.label).toBe("Marbella");
+    expect(ciudades[malagaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
