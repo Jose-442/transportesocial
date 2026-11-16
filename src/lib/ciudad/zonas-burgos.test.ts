@@ -106,6 +106,7 @@ describe("zonas de Burgos", () => {
       "coslada",
       "majadahonda",
       "colladovillalba",
+      "boadilla",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1246,6 +1247,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCollado).size).toBe(nombresCollado.length);
     expect(nombresCollado.filter((n) => collado!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
     expect(nombresCollado.filter((n) => collado!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const boadilla = ciudadUrbana("boadilla");
+    expect(boadilla?.etiqueta).toBe("Boadilla del Monte (Madrid)");
+    expect(boadilla?.nombre).toBe("Boadilla del Monte");
+    expect(zonaDeCiudad(boadilla!, "El Encinar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(boadilla!, "Los Fresnos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(boadilla!, "Prado del Espino")).toBeNull();
+    expect(zonaDeCiudad(boadilla!, "Ventorro del Cano")).toBeNull();
+    expect(zonaDeCiudad(boadilla!, "Parque Empresarial Prado del Espino")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(boadilla!, "Ciudad Financiera del Banco Santander")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(boadilla!, "Sector Terciario 4.2")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(boadilla!, "Zona Empresarial Sur")?.tipo).toBe("poligono");
+    const nombresBoadilla = boadilla!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBoadilla).size).toBe(nombresBoadilla.length);
+    expect(nombresBoadilla.filter((n) => boadilla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
+    expect(nombresBoadilla.filter((n) => boadilla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1264,11 +1280,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 18).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 19).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
+      "Boadilla del Monte",
       "Collado Villalba",
       "Coslada",
       "Fuenlabrada",

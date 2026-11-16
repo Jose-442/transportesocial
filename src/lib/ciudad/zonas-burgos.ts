@@ -176,6 +176,8 @@
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
+ * Boadilla del Monte: los barrios y los polígonos de la lista.
+ * Prado del Espino queda como Parque Empresarial Prado del Espino.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4324,6 +4326,40 @@ const POLIGONOS_COLLADO_VILLALBA: ZonaCiudad[] = [
   { nombre: "Parque Empresarial Sierra Norte", tipo: "poligono" },
 ];
 
+const BARRIOS_BOADILLA: ZonaCiudad[] = [
+  { nombre: "Bonanza", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cortijo Norte", tipo: "barrio" },
+  { nombre: "Cortijo Sur", tipo: "barrio" },
+  { nombre: "El Encinar", tipo: "barrio" },
+  { nombre: "El Olivar", tipo: "barrio" },
+  { nombre: "El Pastel", tipo: "barrio" },
+  { nombre: "El Olivar de Mirabal", tipo: "barrio" },
+  { nombre: "Ensanche de Boadilla", tipo: "barrio" },
+  { nombre: "La Cárcava", tipo: "barrio" },
+  { nombre: "Las Eras", tipo: "barrio" },
+  { nombre: "Las Lomas", tipo: "barrio" },
+  { nombre: "Monte de las Encinas", tipo: "barrio" },
+  { nombre: "Montepríncipe", tipo: "barrio" },
+  { nombre: "Parque Boadilla", tipo: "barrio" },
+  { nombre: "Pino Centinela", tipo: "barrio" },
+  { nombre: "Residencial Siglo XXI", tipo: "barrio" },
+  { nombre: "Sector B", tipo: "barrio" },
+  { nombre: "Sector S", tipo: "barrio" },
+  { nombre: "Valdecabañas", tipo: "barrio" },
+  { nombre: "Valdepastores", tipo: "barrio" },
+  { nombre: "Valenoso", tipo: "barrio" },
+  { nombre: "Viñas Viejas", tipo: "barrio" },
+  { nombre: "Los Fresnos", tipo: "barrio" },
+];
+
+const POLIGONOS_BOADILLA: ZonaCiudad[] = [
+  { nombre: "Ciudad Financiera del Banco Santander", tipo: "poligono" },
+  { nombre: "Parque Empresarial Prado del Espino", tipo: "poligono" },
+  { nombre: "Sector Terciario 4.2", tipo: "poligono" },
+  { nombre: "Zona Empresarial Sur", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4908,6 +4944,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Collado Villalba",
     etiqueta: "Collado Villalba (Madrid)",
     zonas: [...BARRIOS_COLLADO_VILLALBA, ...POLIGONOS_COLLADO_VILLALBA],
+  },
+  {
+    id: "boadilla",
+    nombre: "Boadilla del Monte",
+    etiqueta: "Boadilla del Monte (Madrid)",
+    zonas: [...BARRIOS_BOADILLA, ...POLIGONOS_BOADILLA],
   },
 ];
 
