@@ -142,6 +142,7 @@ describe("zonas de Burgos", () => {
       "almeria",
       "roquetas",
       "elejido",
+      "nijar",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1947,6 +1948,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresElejido).size).toBe(nombresElejido.length);
     expect(nombresElejido.filter((n) => elejido!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
     expect(nombresElejido.filter((n) => elejido!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const nijar = ciudadUrbana("nijar");
+    expect(nijar?.etiqueta).toBe("Níjar (Almería)");
+    expect(nijar?.nombre).toBe("Níjar");
+    expect(zonaDeCiudad(nijar!, "Níjar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "San José")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Las Negras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Rodalquilar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Agua Amarga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Saladar y Leche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Las Norias")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Área Logística de Níjar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(nijar!, "Parque Industrial Balsaseca")?.tipo).toBe("poligono");
+    const nombresNijar = nijar!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresNijar).size).toBe(nombresNijar.length);
+    expect(nombresNijar.filter((n) => nijar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
+    expect(nombresNijar.filter((n) => nijar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2023,8 +2040,10 @@ describe("zonas de Burgos", () => {
     const almeriaIdx = ciudades.findIndex((c) => c.value === "almeria");
     expect(ciudades[almeriaIdx + 1]?.label).toBe("El Ejido");
     expect(ciudades[almeriaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[almeriaIdx + 2]?.label).toBe("Roquetas de Mar");
+    expect(ciudades[almeriaIdx + 2]?.label).toBe("Níjar");
     expect(ciudades[almeriaIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[almeriaIdx + 3]?.label).toBe("Roquetas de Mar");
+    expect(ciudades[almeriaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");

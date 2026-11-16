@@ -260,6 +260,7 @@
  * El Ejido: las dos listas de barrios y los polígonos.
  * Balerma y La Redonda quedan como barrio.
  * Polígono Industrial Balerma y Polígono Industrial La Redonda como polígono.
+ * Níjar: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6552,6 +6553,51 @@ const POLIGONOS_EL_EJIDO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Puesto Rubio (Las Norias)", tipo: "poligono" },
 ];
 
+const BARRIOS_NIJAR: ZonaCiudad[] = [
+  { nombre: "Agua Amarga", tipo: "barrio" },
+  { nombre: "Atochares", tipo: "barrio" },
+  { nombre: "Boca de los Frailes", tipo: "barrio" },
+  { nombre: "Campohermoso", tipo: "barrio" },
+  { nombre: "Cuevas del Lino", tipo: "barrio" },
+  { nombre: "El Barranquete", tipo: "barrio" },
+  { nombre: "El Jabonero", tipo: "barrio" },
+  { nombre: "El Rodón", tipo: "barrio" },
+  { nombre: "El Viso", tipo: "barrio" },
+  { nombre: "Fernán Pérez", tipo: "barrio" },
+  { nombre: "Huebro", tipo: "barrio" },
+  { nombre: "La Fabriquilla", tipo: "barrio" },
+  { nombre: "La Fuensanta", tipo: "barrio" },
+  { nombre: "La Isleta del Moro", tipo: "barrio" },
+  { nombre: "La Joya", tipo: "barrio" },
+  { nombre: "Las Casillas", tipo: "barrio" },
+  { nombre: "Las Hortichuelas", tipo: "barrio" },
+  { nombre: "Las Negras", tipo: "barrio" },
+  { nombre: "Las Norias", tipo: "barrio" },
+  { nombre: "Las Presillas", tipo: "barrio" },
+  { nombre: "Los Albaricoques", tipo: "barrio" },
+  { nombre: "Los Cortijillos", tipo: "barrio" },
+  { nombre: "Los Grillos", tipo: "barrio" },
+  { nombre: "Los Nietos", tipo: "barrio" },
+  { nombre: "Níjar", tipo: "barrio" },
+  { nombre: "Pozo de los Frailes", tipo: "barrio" },
+  { nombre: "Pozo del Capitán", tipo: "barrio" },
+  { nombre: "Pueblo Blanco", tipo: "barrio" },
+  { nombre: "Pujaire", tipo: "barrio" },
+  { nombre: "Rodalquilar", tipo: "barrio" },
+  { nombre: "Ruescas", tipo: "barrio" },
+  { nombre: "Saladar y Leche", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Torre del Campo", tipo: "barrio" },
+  { nombre: "Venta del Pobre", tipo: "barrio" },
+  { nombre: "Vistabella", tipo: "barrio" },
+];
+
+const POLIGONOS_NIJAR: ZonaCiudad[] = [
+  { nombre: "Área Logística de Níjar", tipo: "poligono" },
+  { nombre: "Parque Industrial Balsaseca", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7352,6 +7398,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "El Ejido",
     etiqueta: "El Ejido (Almería)",
     zonas: [...BARRIOS_EL_EJIDO, ...POLIGONOS_EL_EJIDO],
+  },
+  {
+    id: "nijar",
+    nombre: "Níjar",
+    etiqueta: "Níjar (Almería)",
+    zonas: [...BARRIOS_NIJAR, ...POLIGONOS_NIJAR],
   },
 ];
 
