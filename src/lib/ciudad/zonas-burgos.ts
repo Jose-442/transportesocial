@@ -138,6 +138,7 @@
  * Vic: los barrios y los polígonos de la lista.
  * Igualada: los barrios y los polígonos de la lista.
  * Vilafranca del Penedès: los barrios y los polígonos de la lista.
+ * Tarragona: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2781,6 +2782,80 @@ const POLIGONOS_VILAFRANCA: ZonaCiudad[] = [
   { nombre: "Avinguda de Barcelona", tipo: "poligono" },
 ];
 
+const BARRIOS_TARRAGONA: ZonaCiudad[] = [
+  { nombre: "Albada, l'", tipo: "barrio" },
+  { nombre: "Arrabassada", tipo: "barrio" },
+  { nombre: "Barri del Port", tipo: "barrio" },
+  { nombre: "Bon Sol", tipo: "barrio" },
+  { nombre: "Bonavista", tipo: "barrio" },
+  { nombre: "Boscos de Tarragona", tipo: "barrio" },
+  { nombre: "Cala Romana", tipo: "barrio" },
+  { nombre: "Campclar", tipo: "barrio" },
+  { nombre: "Campus Catalunya (URV)", tipo: "barrio" },
+  { nombre: "Campus Sescelades (URV)", tipo: "barrio" },
+  { nombre: "Colls Majors", tipo: "barrio" },
+  { nombre: "Coves del Llorito", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+  { nombre: "El Miracle", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "El Pinatell", tipo: "barrio" },
+  { nombre: "El Rodolat del Moro", tipo: "barrio" },
+  { nombre: "El Serrallo", tipo: "barrio" },
+  { nombre: "Els Cocons", tipo: "barrio" },
+  { nombre: "Els Gavarres", tipo: "barrio" },
+  { nombre: "Els Montgons", tipo: "barrio" },
+  { nombre: "Els Quatre Garrofers", tipo: "barrio" },
+  { nombre: "Entrepins", tipo: "barrio" },
+  { nombre: "Escipió", tipo: "barrio" },
+  { nombre: "Ferran", tipo: "barrio" },
+  { nombre: "Gran Indústria", tipo: "barrio" },
+  { nombre: "Hospital Universitari Joan XXIII", tipo: "barrio" },
+  { nombre: "Icomar", tipo: "barrio" },
+  { nombre: "La Floresta", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "La Mora", tipo: "barrio" },
+  { nombre: "La Savinosa", tipo: "barrio" },
+  { nombre: "La Vileta de Mar", tipo: "barrio" },
+  { nombre: "Les Moreres", tipo: "barrio" },
+  { nombre: "Les Pinedes", tipo: "barrio" },
+  { nombre: "Mas Corsini", tipo: "barrio" },
+  { nombre: "Mas d'en Pastor", tipo: "barrio" },
+  { nombre: "Mas del Frare", tipo: "barrio" },
+  { nombre: "Mas del Moro", tipo: "barrio" },
+  { nombre: "Monnars", tipo: "barrio" },
+  { nombre: "Nou Eixample Nord", tipo: "barrio" },
+  { nombre: "Parc Central", tipo: "barrio" },
+  { nombre: "Parc Riuclar", tipo: "barrio" },
+  { nombre: "Parc Tecnològic i Universitari (PPU-59)", tipo: "barrio" },
+  { nombre: "Part Alta", tipo: "barrio" },
+  { nombre: "Pedrol", tipo: "barrio" },
+  { nombre: "Riu Clar", tipo: "barrio" },
+  { nombre: "Sant Marc", tipo: "barrio" },
+  { nombre: "Sant Pere i Sant Pau", tipo: "barrio" },
+  { nombre: "Sant Ramon", tipo: "barrio" },
+  { nombre: "Sant Salvador", tipo: "barrio" },
+  { nombre: "Santa Isabel", tipo: "barrio" },
+  { nombre: "Solimar", tipo: "barrio" },
+  { nombre: "Tamarit", tipo: "barrio" },
+  { nombre: "Torreforta", tipo: "barrio" },
+  { nombre: "Zona Portuària", tipo: "barrio" },
+];
+
+const POLIGONOS_TARRAGONA: ZonaCiudad[] = [
+  { nombre: "Campsa", tipo: "poligono" },
+  { nombre: "Entrevies", tipo: "poligono" },
+  { nombre: "Francolí", tipo: "poligono" },
+  { nombre: "Les Gavarres", tipo: "poligono" },
+  { nombre: "Polígono Francolí", tipo: "poligono" },
+  { nombre: "Polígono Industrial Entrevies", tipo: "poligono" },
+  { nombre: "Polígono Industrial Riu Clar", tipo: "poligono" },
+  { nombre: "Polígono PPU-9", tipo: "poligono" },
+  { nombre: "Polígono PPU-10", tipo: "poligono" },
+  { nombre: "Polígono PPU-13", tipo: "poligono" },
+  { nombre: "Polígono PPU-38 (ampliación Riu Clar)", tipo: "poligono" },
+  { nombre: "Polígono PPU-54 (CIM El Camp)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3203,6 +3278,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vilafranca del Penedès",
     etiqueta: "Vilafranca del Penedès (Barcelona)",
     zonas: [...BARRIOS_VILAFRANCA, ...POLIGONOS_VILAFRANCA],
+  },
+  {
+    id: "tarragona",
+    nombre: "Tarragona",
+    etiqueta: "Tarragona (Tarragona)",
+    zonas: [...BARRIOS_TARRAGONA, ...POLIGONOS_TARRAGONA],
   },
 ];
 

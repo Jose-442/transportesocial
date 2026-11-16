@@ -76,6 +76,7 @@ describe("zonas de Burgos", () => {
       "vic",
       "igualada",
       "vilafranca",
+      "tarragona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -753,6 +754,20 @@ describe("zonas de Burgos", () => {
     const nombresVilafranca = vilafranca!.zonas.map((z) => z.nombre);
     expect(new Set(nombresVilafranca).size).toBe(nombresVilafranca.length);
     expect(nombresVilafranca.filter((n) => vilafranca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
+    const tarragona = ciudadUrbana("tarragona");
+    expect(tarragona?.etiqueta).toBe("Tarragona (Tarragona)");
+    expect(tarragona?.nombre).toBe("Tarragona");
+    expect(zonaDeCiudad(tarragona!, "Albada, l'")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tarragona!, "Els Gavarres")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tarragona!, "Riu Clar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tarragona!, "Les Gavarres")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tarragona!, "Francolí")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tarragona!, "Polígono Francolí")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tarragona!, "Polígono PPU-54 (CIM El Camp)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tarragona!, "Serrallo")).toBeNull();
+    const nombresTarragona = tarragona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTarragona).size).toBe(nombresTarragona.length);
+    expect(nombresTarragona.filter((n) => tarragona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(56);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
