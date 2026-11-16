@@ -132,6 +132,7 @@ describe("zonas de Burgos", () => {
       "velezmalaga",
       "fuengirola",
       "estepona",
+      "benalmadena",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1735,6 +1736,25 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresEstepona).size).toBe(nombresEstepona.length);
     expect(nombresEstepona.filter((n) => estepona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(63);
     expect(nombresEstepona.filter((n) => estepona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const benalmadena = ciudadUrbana("benalmadena");
+    expect(benalmadena?.etiqueta).toBe("Benalmádena (Málaga)");
+    expect(benalmadena?.nombre).toBe("Benalmádena");
+    expect(zonaDeCiudad(benalmadena!, "Arroyo de la Miel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Benalmádena Pueblo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Benalmádena Costa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Capellanía (La)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "La Leala")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "El Tomillar Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Monte Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Montealto II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Reserva del Higuerón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benalmadena!, "Polígono Industrial Arroyo de la Miel")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(benalmadena!, "Polígono Industrial El Tomillar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(benalmadena!, "Polígono Industrial La Léala")?.tipo).toBe("poligono");
+    const nombresBenalmadena = benalmadena!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBenalmadena).size).toBe(nombresBenalmadena.length);
+    expect(nombresBenalmadena.filter((n) => benalmadena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(49);
+    expect(nombresBenalmadena.filter((n) => benalmadena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1785,16 +1805,18 @@ describe("zonas de Burgos", () => {
     ]);
     expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
     const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");
-    expect(ciudades[malagaIdx + 1]?.label).toBe("Estepona");
+    expect(ciudades[malagaIdx + 1]?.label).toBe("Benalmádena");
     expect(ciudades[malagaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 2]?.label).toBe("Fuengirola");
+    expect(ciudades[malagaIdx + 2]?.label).toBe("Estepona");
     expect(ciudades[malagaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 3]?.label).toBe("Marbella");
+    expect(ciudades[malagaIdx + 3]?.label).toBe("Fuengirola");
     expect(ciudades[malagaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 4]?.label).toBe("Mijas");
+    expect(ciudades[malagaIdx + 4]?.label).toBe("Marbella");
     expect(ciudades[malagaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 5]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 5]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 5]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 6]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

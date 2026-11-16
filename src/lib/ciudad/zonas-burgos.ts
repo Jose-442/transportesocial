@@ -234,6 +234,9 @@
  * Arroyo de la Miel no entra: es de Benalmádena.
  * Fuengirola: los barrios y los polígonos de la lista.
  * Estepona: los barrios y los polígonos de la lista. Cancelada entra aquí.
+ * Benalmádena: los barrios y los polígonos de la lista.
+ * Arroyo de la Miel entra aquí como barrio. Polígono Industrial Arroyo de la Miel como polígono.
+ * La Leala queda como barrio. Polígono Industrial La Léala como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6006,6 +6009,64 @@ const POLIGONOS_ESTEPONA: ZonaCiudad[] = [
   { nombre: "Zona de Servicios de Estepona", tipo: "poligono" },
 ];
 
+const BARRIOS_BENALMADENA: ZonaCiudad[] = [
+  { nombre: "Arenal Golf", tipo: "barrio" },
+  { nombre: "Arroyo de la Miel", tipo: "barrio" },
+  { nombre: "Arroyo Hondo", tipo: "barrio" },
+  { nombre: "Atalaya", tipo: "barrio" },
+  { nombre: "Avenida de las Palmeras", tipo: "barrio" },
+  { nombre: "Benalmádena Costa", tipo: "barrio" },
+  { nombre: "Benalmádena Pueblo", tipo: "barrio" },
+  { nombre: "Benalmar", tipo: "barrio" },
+  { nombre: "Benalmádena Golf", tipo: "barrio" },
+  { nombre: "Benamaina", tipo: "barrio" },
+  { nombre: "Béjar", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "Bonanza", tipo: "barrio" },
+  { nombre: "Capellanía (La)", tipo: "barrio" },
+  { nombre: "Carola", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+  { nombre: "Cortijo de Torrequebrada", tipo: "barrio" },
+  { nombre: "El Higuerón", tipo: "barrio" },
+  { nombre: "El Tomillar Alto", tipo: "barrio" },
+  { nombre: "Finca Doña María", tipo: "barrio" },
+  { nombre: "Hacienda de Torrequebrada", tipo: "barrio" },
+  { nombre: "Hacienda San Fernando", tipo: "barrio" },
+  { nombre: "La Leala", tipo: "barrio" },
+  { nombre: "La Perla", tipo: "barrio" },
+  { nombre: "La Sierrezuela", tipo: "barrio" },
+  { nombre: "Las Brisas", tipo: "barrio" },
+  { nombre: "Las Flores", tipo: "barrio" },
+  { nombre: "Las Mimosas", tipo: "barrio" },
+  { nombre: "Los Nadales", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "Monte Alto", tipo: "barrio" },
+  { nombre: "Montealto II", tipo: "barrio" },
+  { nombre: "Pueblo Evita", tipo: "barrio" },
+  { nombre: "Pueblo Quinta", tipo: "barrio" },
+  { nombre: "Rancho Domingo", tipo: "barrio" },
+  { nombre: "Reserva del Higuerón", tipo: "barrio" },
+  { nombre: "Retamar", tipo: "barrio" },
+  { nombre: "Santangelo", tipo: "barrio" },
+  { nombre: "Santangelo Norte", tipo: "barrio" },
+  { nombre: "Santangelo Sur", tipo: "barrio" },
+  { nombre: "Solymar", tipo: "barrio" },
+  { nombre: "Torremar", tipo: "barrio" },
+  { nombre: "Torremuelle", tipo: "barrio" },
+  { nombre: "Torrequebrada", tipo: "barrio" },
+  { nombre: "Veracruz", tipo: "barrio" },
+  { nombre: "Veracruz Norte", tipo: "barrio" },
+  { nombre: "Veracruz Sur", tipo: "barrio" },
+  { nombre: "Veracruz Oeste", tipo: "barrio" },
+  { nombre: "Yuca", tipo: "barrio" },
+];
+
+const POLIGONOS_BENALMADENA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Arroyo de la Miel", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Tomillar", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Léala", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6746,6 +6807,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Estepona",
     etiqueta: "Estepona (Málaga)",
     zonas: [...BARRIOS_ESTEPONA, ...POLIGONOS_ESTEPONA],
+  },
+  {
+    id: "benalmadena",
+    nombre: "Benalmádena",
+    etiqueta: "Benalmádena (Málaga)",
+    zonas: [...BARRIOS_BENALMADENA, ...POLIGONOS_BENALMADENA],
   },
 ];
 
