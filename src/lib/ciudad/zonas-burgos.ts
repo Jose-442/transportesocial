@@ -154,6 +154,8 @@
  * Leganés: los barrios y los polígonos de la lista.
  * Getafe: los barrios y los polígonos de la lista.
  * Fuenlabrada: los barrios y los polígonos de la lista.
+ * Alcorcón: los barrios y los polígonos de la lista.
+ * San José de Valderas queda como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3726,6 +3728,37 @@ const POLIGONOS_FUENLABRADA: ZonaCiudad[] = [
   { nombre: "Cruce II", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCORCON: ZonaCiudad[] = [
+  { nombre: "Campodón", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Ensanche Sur", tipo: "barrio" },
+  { nombre: "Fuente Cisneros", tipo: "barrio" },
+  { nombre: "Fuente del Palomar", tipo: "barrio" },
+  { nombre: "Hogar 68", tipo: "barrio" },
+  { nombre: "Igueldo", tipo: "barrio" },
+  { nombre: "La Rivota", tipo: "barrio" },
+  { nombre: "Las Torres", tipo: "barrio" },
+  { nombre: "Los Castillos", tipo: "barrio" },
+  { nombre: "Montepríncipe", tipo: "barrio" },
+  { nombre: "Ondarreta", tipo: "barrio" },
+  { nombre: "Parque El Lucero", tipo: "barrio" },
+  { nombre: "Parque Lisboa", tipo: "barrio" },
+  { nombre: "Parque Mayor", tipo: "barrio" },
+  { nombre: "Parque Oeste", tipo: "barrio" },
+  { nombre: "Parque Ondarreta", tipo: "barrio" },
+  { nombre: "Prado de Santo Domingo", tipo: "barrio" },
+  { nombre: "San José de Valderas", tipo: "barrio" },
+  { nombre: "Santo Domingo", tipo: "barrio" },
+  { nombre: "Torres Bellas", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCORCON: ZonaCiudad[] = [
+  { nombre: "Industrias Especiales", tipo: "poligono" },
+  { nombre: "Urtinsa I", tipo: "poligono" },
+  { nombre: "Urtinsa II", tipo: "poligono" },
+  { nombre: "Ventorro del Cano", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4238,6 +4271,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Fuenlabrada",
     etiqueta: "Fuenlabrada (Madrid)",
     zonas: [...BARRIOS_FUENLABRADA, ...POLIGONOS_FUENLABRADA],
+  },
+  {
+    id: "alcorcon",
+    nombre: "Alcorcón",
+    etiqueta: "Alcorcón (Madrid)",
+    zonas: [...BARRIOS_ALCORCON, ...POLIGONOS_ALCORCON],
   },
 ];
 

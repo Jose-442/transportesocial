@@ -94,6 +94,7 @@ describe("zonas de Burgos", () => {
       "leganes",
       "getafe",
       "fuenlabrada",
+      "alcorcon",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1001,6 +1002,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresFuenlabrada).size).toBe(nombresFuenlabrada.length);
     expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
     expect(nombresFuenlabrada.filter((n) => fuenlabrada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(41);
+    const alcorcon = ciudadUrbana("alcorcon");
+    expect(alcorcon?.etiqueta).toBe("Alcorcón (Madrid)");
+    expect(alcorcon?.nombre).toBe("Alcorcón");
+    expect(zonaDeCiudad(alcorcon!, "Campodón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcorcon!, "Montepríncipe")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcorcon!, "San José de Valderas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcorcon!, "Torres Bellas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcorcon!, "Industrias Especiales")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcorcon!, "Urtinsa I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcorcon!, "Urtinsa II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcorcon!, "Ventorro del Cano")?.tipo).toBe("poligono");
+    const nombresAlcorcon = alcorcon!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlcorcon).size).toBe(nombresAlcorcon.length);
+    expect(nombresAlcorcon.filter((n) => alcorcon!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(21);
+    expect(nombresAlcorcon.filter((n) => alcorcon!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1019,9 +1035,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 6).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 7).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
+      "Alcorcón",
       "Fuenlabrada",
       "Getafe",
       "Leganés",
