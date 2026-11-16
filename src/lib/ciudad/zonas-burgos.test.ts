@@ -139,6 +139,7 @@ describe("zonas de Burgos", () => {
       "antequera",
       "ronda",
       "huelva",
+      "almeria",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1883,6 +1884,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresHuelva).size).toBe(nombresHuelva.length);
     expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(54);
     expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(22);
+    const almeria = ciudadUrbana("almeria");
+    expect(almeria?.etiqueta).toBe("Almería (Almería)");
+    expect(almeria?.nombre).toBe("Almería");
+    expect(zonaDeCiudad(almeria!, "El Puche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almeria!, "Cabo de Gata")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almeria!, "El Toyo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almeria!, "Zapillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almeria!, "500 Viviendas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almeria!, "Polígono El Puche")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almeria!, "Parque Científico-Tecnológico de Almería (PITA)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almeria!, "Sector 20 (SEPES)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almeria!, "Avenida de Monserrat")?.tipo).toBe("poligono");
+    const nombresAlmeria = almeria!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlmeria).size).toBe(nombresAlmeria.length);
+    expect(nombresAlmeria.filter((n) => almeria!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(47);
+    expect(nombresAlmeria.filter((n) => almeria!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1955,6 +1972,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 10]?.negrita).toBeUndefined();
     expect(ciudades[malagaIdx + 11]?.label).toBe("Vélez-Málaga");
     expect(ciudades[malagaIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "almeria")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");

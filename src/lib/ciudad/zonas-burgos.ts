@@ -252,6 +252,8 @@
  * Los Prados entra una sola vez. El Fuerte queda como barrio. Polígono Industrial El Fuerte como polígono.
  * Huelva: los barrios y los polígonos de la lista. Polígono San Sebastián queda como barrio.
  * Tartessos queda como barrio. Polígono Industrial Tartessos como polígono.
+ * Almería: los barrios y los polígonos de la lista.
+ * El Puche queda como barrio. Polígono El Puche como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6409,6 +6411,68 @@ const POLIGONOS_HUELVA: ZonaCiudad[] = [
   { nombre: "Vaciadero Norte", tipo: "poligono" },
 ];
 
+const BARRIOS_ALMERIA: ZonaCiudad[] = [
+  { nombre: "500 Viviendas", tipo: "barrio" },
+  { nombre: "Altamira", tipo: "barrio" },
+  { nombre: "Barrio Alto", tipo: "barrio" },
+  { nombre: "Barrio Araceli", tipo: "barrio" },
+  { nombre: "Barrio de Los Ángeles", tipo: "barrio" },
+  { nombre: "Barrio San Luis", tipo: "barrio" },
+  { nombre: "Cabo de Gata", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "Castell del Rey", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Cerro de San Cristóbal", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Costacabana", tipo: "barrio" },
+  { nombre: "Cortijo Grande", tipo: "barrio" },
+  { nombre: "Cruz de Caravaca", tipo: "barrio" },
+  { nombre: "Cuevas de los Medinas", tipo: "barrio" },
+  { nombre: "Cuevas de los Úbedas", tipo: "barrio" },
+  { nombre: "El Alquián", tipo: "barrio" },
+  { nombre: "El Diezmo", tipo: "barrio" },
+  { nombre: "El Puche", tipo: "barrio" },
+  { nombre: "El Toyo", tipo: "barrio" },
+  { nombre: "Fuentecica", tipo: "barrio" },
+  { nombre: "La Almadraba de Monteleva", tipo: "barrio" },
+  { nombre: "La Cañada de San Urbano", tipo: "barrio" },
+  { nombre: "La Chanca", tipo: "barrio" },
+  { nombre: "La Esperanza", tipo: "barrio" },
+  { nombre: "La Goleta", tipo: "barrio" },
+  { nombre: "Las Chocillas", tipo: "barrio" },
+  { nombre: "Los Almendros", tipo: "barrio" },
+  { nombre: "Los Molinos", tipo: "barrio" },
+  { nombre: "Nueva Almería", tipo: "barrio" },
+  { nombre: "Nueva Andalucía", tipo: "barrio" },
+  { nombre: "Oliveros", tipo: "barrio" },
+  { nombre: "Pescadería", tipo: "barrio" },
+  { nombre: "Piedras Redondas", tipo: "barrio" },
+  { nombre: "Plaza de Toros", tipo: "barrio" },
+  { nombre: "Pujaire", tipo: "barrio" },
+  { nombre: "Retamar", tipo: "barrio" },
+  { nombre: "Regiones", tipo: "barrio" },
+  { nombre: "Ruescas", tipo: "barrio" },
+  { nombre: "San Félix", tipo: "barrio" },
+  { nombre: "Santa Rita", tipo: "barrio" },
+  { nombre: "Tagarete", tipo: "barrio" },
+  { nombre: "Torrecárdenas", tipo: "barrio" },
+  { nombre: "Vega de Acá", tipo: "barrio" },
+  { nombre: "Villablanca", tipo: "barrio" },
+  { nombre: "Zapillo", tipo: "barrio" },
+];
+
+const POLIGONOS_ALMERIA: ZonaCiudad[] = [
+  { nombre: "Avenida de Monserrat", tipo: "poligono" },
+  { nombre: "Polígono El Puche", tipo: "poligono" },
+  { nombre: "La Celulosa", tipo: "poligono" },
+  { nombre: "La Mezquita", tipo: "poligono" },
+  { nombre: "La Molineta", tipo: "poligono" },
+  { nombre: "Parque Científico-Tecnológico de Almería (PITA)", tipo: "poligono" },
+  { nombre: "Puerto Comercial de Almería", tipo: "poligono" },
+  { nombre: "San Carlos", tipo: "poligono" },
+  { nombre: "Sector 20 (SEPES)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7191,6 +7255,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Huelva",
     etiqueta: "Huelva (Huelva)",
     zonas: [...BARRIOS_HUELVA, ...POLIGONOS_HUELVA],
+  },
+  {
+    id: "almeria",
+    nombre: "Almería",
+    etiqueta: "Almería (Almería)",
+    zonas: [...BARRIOS_ALMERIA, ...POLIGONOS_ALMERIA],
   },
 ];
 
