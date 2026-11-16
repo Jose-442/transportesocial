@@ -185,7 +185,7 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Los Ríos - Vista Alegre", tipo: "barrio" },
   { nombre: "San Pedro de la Fuente", tipo: "barrio" },
   { nombre: "Fuentecillas", tipo: "barrio" },
-  { nombre: "San Juan Bautista", tipo: "barrio" },
+  { nombre: "San Juan Bautista (Barriada Yagüe)", tipo: "barrio" },
   { nombre: "Huelgas - El Pilar", tipo: "barrio" },
   { nombre: "San Julián", tipo: "barrio" },
   { nombre: "El Crucero - San José", tipo: "barrio" },
