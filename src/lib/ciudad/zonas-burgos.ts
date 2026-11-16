@@ -213,6 +213,8 @@
  * PISA entra en Mairena del Aljarafe, no en Sevilla.
  * La Rinconada: los barrios y los polígonos de la lista.
  * El Gordillo queda como barrio. Polígono El Gordillo como polígono.
+ * Écija: los barrios y los polígonos de la lista.
+ * Villanueva del Rey queda como barrio. Polígono Villanueva del Rey como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5139,6 +5141,40 @@ const POLIGONOS_LA_RINCONADA: ZonaCiudad[] = [
   { nombre: "Torre Pavas", tipo: "poligono" },
 ];
 
+const BARRIOS_ECIJA: ZonaCiudad[] = [
+  { nombre: "Astigi (Urbanización)", tipo: "barrio" },
+  { nombre: "Barriada Colonda", tipo: "barrio" },
+  { nombre: "Barriada El Limero", tipo: "barrio" },
+  { nombre: "Barriada San Hermenegildo", tipo: "barrio" },
+  { nombre: "Cerro de San Cristóbal", tipo: "barrio" },
+  { nombre: "Cerro Perea", tipo: "barrio" },
+  { nombre: "El Picadero", tipo: "barrio" },
+  { nombre: "El Valle", tipo: "barrio" },
+  { nombre: "Isla Redonda", tipo: "barrio" },
+  { nombre: "Isla Redonda-La Aceñuela", tipo: "barrio" },
+  { nombre: "La Alcarrachela", tipo: "barrio" },
+  { nombre: "La Fuensanta", tipo: "barrio" },
+  { nombre: "La Merced", tipo: "barrio" },
+  { nombre: "Las Moreras", tipo: "barrio" },
+  { nombre: "San Gil", tipo: "barrio" },
+  { nombre: "Vía Augusta (Cuesta Blanca)", tipo: "barrio" },
+  { nombre: "Villanueva del Rey", tipo: "barrio" },
+];
+
+const POLIGONOS_ECIJA: ZonaCiudad[] = [
+  { nombre: "El Barrero", tipo: "poligono" },
+  { nombre: "El Limero", tipo: "poligono" },
+  { nombre: "El Mirador", tipo: "poligono" },
+  { nombre: "Fuensanta-Virgen del Rocío", tipo: "poligono" },
+  { nombre: "La Campiña", tipo: "poligono" },
+  { nombre: "La Lagunilla", tipo: "poligono" },
+  { nombre: "Los Tejares", tipo: "poligono" },
+  { nombre: "Maza y Marín", tipo: "poligono" },
+  { nombre: "Parque Industrial Sedesa", tipo: "poligono" },
+  { nombre: "Quinta Machado", tipo: "poligono" },
+  { nombre: "Polígono Villanueva del Rey", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5819,6 +5855,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "La Rinconada",
     etiqueta: "La Rinconada (Sevilla)",
     zonas: [...BARRIOS_LA_RINCONADA, ...POLIGONOS_LA_RINCONADA],
+  },
+  {
+    id: "ecija",
+    nombre: "Écija",
+    etiqueta: "Écija (Sevilla)",
+    zonas: [...BARRIOS_ECIJA, ...POLIGONOS_ECIJA],
   },
 ];
 
