@@ -123,6 +123,7 @@ describe("zonas de Burgos", () => {
       "mairenaaljarafe",
       "larinconada",
       "ecija",
+      "lospalacios",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1554,6 +1555,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresEcija).size).toBe(nombresEcija.length);
     expect(nombresEcija.filter((n) => ecija!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
     expect(nombresEcija.filter((n) => ecija!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const palacios = ciudadUrbana("lospalacios");
+    expect(palacios?.etiqueta).toBe("Los Palacios y Villafranca (Sevilla)");
+    expect(palacios?.nombre).toBe("Los Palacios y Villafranca");
+    expect(zonaDeCiudad(palacios!, "Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palacios!, "Centro-Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palacios!, "El Trobal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palacios!, "Maribáñez")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palacios!, "Polígono El Trobal")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(palacios!, "Polígono Maribáñez")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(palacios!, "Palenquivir (Parque Logístico Empresarial)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(palacios!, "Los Chapatales")?.tipo).toBe("poligono");
+    const nombresPalacios = palacios!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPalacios).size).toBe(nombresPalacios.length);
+    expect(nombresPalacios.filter((n) => palacios!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresPalacios.filter((n) => palacios!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1612,10 +1628,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[sevillaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[sevillaIdx + 4]?.label).toBe("La Rinconada");
     expect(ciudades[sevillaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 5]?.label).toBe("Mairena del Aljarafe");
+    expect(ciudades[sevillaIdx + 5]?.label).toBe("Los Palacios y Villafranca");
     expect(ciudades[sevillaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 6]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 6]?.label).toBe("Mairena del Aljarafe");
     expect(ciudades[sevillaIdx + 6]?.negrita).toBeUndefined();
+    expect(ciudades[sevillaIdx + 7]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 7]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);

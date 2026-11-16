@@ -215,6 +215,9 @@
  * El Gordillo queda como barrio. Polígono El Gordillo como polígono.
  * Écija: los barrios y los polígonos de la lista.
  * Villanueva del Rey queda como barrio. Polígono Villanueva del Rey como polígono.
+ * Los Palacios y Villafranca: los barrios y los polígonos de la lista.
+ * El Trobal queda como barrio. Polígono El Trobal como polígono.
+ * Maribáñez queda como barrio. Polígono Maribáñez como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5175,6 +5178,36 @@ const POLIGONOS_ECIJA: ZonaCiudad[] = [
   { nombre: "Polígono Villanueva del Rey", tipo: "poligono" },
 ];
 
+const BARRIOS_LOS_PALACIOS: ZonaCiudad[] = [
+  { nombre: "Barriada de las Flores", tipo: "barrio" },
+  { nombre: "Barriada de las Suertes", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Centro-Oeste", tipo: "barrio" },
+  { nombre: "El Cuzco (urbanización)", tipo: "barrio" },
+  { nombre: "El Pino (urbanización)", tipo: "barrio" },
+  { nombre: "El Trobal", tipo: "barrio" },
+  { nombre: "La Almazara", tipo: "barrio" },
+  { nombre: "La Bodeguilla (urbanización)", tipo: "barrio" },
+  { nombre: "La Nana", tipo: "barrio" },
+  { nombre: "La Señuela (parcelaciones)", tipo: "barrio" },
+  { nombre: "Las Dos Anitas (urbanización)", tipo: "barrio" },
+  { nombre: "Las Nieves (urbanización)", tipo: "barrio" },
+  { nombre: "Maribáñez", tipo: "barrio" },
+  { nombre: "Villarubia", tipo: "barrio" },
+];
+
+const POLIGONOS_LOS_PALACIOS: ZonaCiudad[] = [
+  { nombre: "Almudeyne", tipo: "poligono" },
+  { nombre: "El Muro", tipo: "poligono" },
+  { nombre: "El Pradillo", tipo: "poligono" },
+  { nombre: "Polígono El Trobal", tipo: "poligono" },
+  { nombre: "Los Chapatales", tipo: "poligono" },
+  { nombre: "Polígono Maribáñez", tipo: "poligono" },
+  { nombre: "Palenquivir (Parque Logístico Empresarial)", tipo: "poligono" },
+  { nombre: "Santa Lucía", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5861,6 +5894,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Écija",
     etiqueta: "Écija (Sevilla)",
     zonas: [...BARRIOS_ECIJA, ...POLIGONOS_ECIJA],
+  },
+  {
+    id: "lospalacios",
+    nombre: "Los Palacios y Villafranca",
+    etiqueta: "Los Palacios y Villafranca (Sevilla)",
+    zonas: [...BARRIOS_LOS_PALACIOS, ...POLIGONOS_LOS_PALACIOS],
   },
 ];
 
