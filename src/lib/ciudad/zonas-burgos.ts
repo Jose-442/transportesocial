@@ -142,6 +142,7 @@
  * Reus: los barrios y los polígonos de la lista.
  * El Vendrell: los barrios y los polígonos de la lista.
  * Cambrils: los barrios y los polígonos de la lista.
+ * Tortosa: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3019,6 +3020,39 @@ const POLIGONOS_CAMBRILS: ZonaCiudad[] = [
   { nombre: "Les Comes", tipo: "poligono" },
 ];
 
+const BARRIOS_TORTOSA: ZonaCiudad[] = [
+  { nombre: "Centre (Centro)", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+  { nombre: "El Temple", tipo: "barrio" },
+  { nombre: "Ferreries", tipo: "barrio" },
+  { nombre: "Grup del Temple", tipo: "barrio" },
+  { nombre: "La Simpàtica", tipo: "barrio" },
+  { nombre: "Mare de Déu de la Roca", tipo: "barrio" },
+  { nombre: "Nucli Antic (Casco Antiguo)", tipo: "barrio" },
+  { nombre: "Quatre Camins", tipo: "barrio" },
+  { nombre: "Remolins", tipo: "barrio" },
+  { nombre: "Rastre", tipo: "barrio" },
+  { nombre: "Sant Josep de la Muntanya", tipo: "barrio" },
+  { nombre: "Sant Llàtzer", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "California", tipo: "barrio" },
+  { nombre: "Els Molins del Comte", tipo: "barrio" },
+  { nombre: "La Petja", tipo: "barrio" },
+  { nombre: "Mig Camí", tipo: "barrio" },
+  { nombre: "Pimpí", tipo: "barrio" },
+  { nombre: "Sant Bernabé", tipo: "barrio" },
+  { nombre: "Torre Gassia", tipo: "barrio" },
+  { nombre: "Voraparc", tipo: "barrio" },
+];
+
+const POLIGONOS_TORTOSA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Baix Ebre", tipo: "poligono" },
+  { nombre: "Polígono Industrial Catalunya Sud", tipo: "poligono" },
+  { nombre: "Polígono Industrial Els Portals", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ferreries", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pla de l'Estació", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3465,6 +3499,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cambrils",
     etiqueta: "Cambrils (Tarragona)",
     zonas: [...BARRIOS_CAMBRILS, ...POLIGONOS_CAMBRILS],
+  },
+  {
+    id: "tortosa",
+    nombre: "Tortosa",
+    etiqueta: "Tortosa (Tarragona)",
+    zonas: [...BARRIOS_TORTOSA, ...POLIGONOS_TORTOSA],
   },
 ];
 

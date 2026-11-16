@@ -80,6 +80,7 @@ describe("zonas de Burgos", () => {
       "reus",
       "elvendrell",
       "cambrils",
+      "tortosa",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -814,6 +815,18 @@ describe("zonas de Burgos", () => {
     const nombresCambrils = cambrils!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCambrils).size).toBe(nombresCambrils.length);
     expect(nombresCambrils.filter((n) => cambrils!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(38);
+    const tortosa = ciudadUrbana("tortosa");
+    expect(tortosa?.etiqueta).toBe("Tortosa (Tarragona)");
+    expect(tortosa?.nombre).toBe("Tortosa");
+    expect(zonaDeCiudad(tortosa!, "Ferreries")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tortosa!, "Centre (Centro)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tortosa!, "Nucli Antic (Casco Antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tortosa!, "Polígono Industrial Ferreries")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tortosa!, "Polígono Industrial Pla de l'Estació")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tortosa!, "Polígon Industrial Baix Ebre")).toBeNull();
+    const nombresTortosa = tortosa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTortosa).size).toBe(nombresTortosa.length);
+    expect(nombresTortosa.filter((n) => tortosa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
