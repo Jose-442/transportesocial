@@ -209,6 +209,8 @@
  * Las Lirios no entra: queda Los Lirios.
  * Utrera: los barrios y los polígonos de la lista.
  * Ibárrburu queda con el nombre así.
+ * Mairena del Aljarafe: los barrios y los polígonos de la lista.
+ * PISA entra en Mairena del Aljarafe, no en Sevilla.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5062,6 +5064,45 @@ const POLIGONOS_UTRERA: ZonaCiudad[] = [
   { nombre: "Orippo", tipo: "poligono" },
 ];
 
+const BARRIOS_MAIRENA_ALJARAFE: ZonaCiudad[] = [
+  { nombre: "Calahoyas", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cavaleri", tipo: "barrio" },
+  { nombre: "Ciudad Aljarafe", tipo: "barrio" },
+  { nombre: "Ciudad Expo", tipo: "barrio" },
+  { nombre: "Ciudad Jardín del Aljarafe", tipo: "barrio" },
+  { nombre: "El Almendral", tipo: "barrio" },
+  { nombre: "El Rosario", tipo: "barrio" },
+  { nombre: "Estacada del Marqués", tipo: "barrio" },
+  { nombre: "Hacienda Los Olivos", tipo: "barrio" },
+  { nombre: "Java", tipo: "barrio" },
+  { nombre: "La Prusiana", tipo: "barrio" },
+  { nombre: "La Señora", tipo: "barrio" },
+  { nombre: "Las Brisas I", tipo: "barrio" },
+  { nombre: "Las Brisas II", tipo: "barrio" },
+  { nombre: "Las Tinajas", tipo: "barrio" },
+  { nombre: "Las Tres Barras", tipo: "barrio" },
+  { nombre: "Lepanto", tipo: "barrio" },
+  { nombre: "Los Alcores", tipo: "barrio" },
+  { nombre: "Nuevo Bulevar", tipo: "barrio" },
+  { nombre: "Poniente Norte", tipo: "barrio" },
+  { nombre: "Poniente Sur", tipo: "barrio" },
+  { nombre: "Puebla del Marqués", tipo: "barrio" },
+  { nombre: "Simón Verde", tipo: "barrio" },
+  { nombre: "Cañada de Porzuna", tipo: "barrio" },
+  { nombre: "Mampela", tipo: "barrio" },
+  { nombre: "Pinar de Simón Verde", tipo: "barrio" },
+  { nombre: "Residencial Aljarasol", tipo: "barrio" },
+  { nombre: "Ribera de Porzuna", tipo: "barrio" },
+  { nombre: "Urbanización del Bus", tipo: "barrio" },
+  { nombre: "Virgen del Rocío", tipo: "barrio" },
+];
+
+const POLIGONOS_MAIRENA_ALJARAFE: ZonaCiudad[] = [
+  { nombre: "Parque Industrial y de Servicios del Aljarafe (PISA)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Hacienda Peralta", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5730,6 +5771,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Utrera",
     etiqueta: "Utrera (Sevilla)",
     zonas: [...BARRIOS_UTRERA, ...POLIGONOS_UTRERA],
+  },
+  {
+    id: "mairenaaljarafe",
+    nombre: "Mairena del Aljarafe",
+    etiqueta: "Mairena del Aljarafe (Sevilla)",
+    zonas: [...BARRIOS_MAIRENA_ALJARAFE, ...POLIGONOS_MAIRENA_ALJARAFE],
   },
 ];
 
