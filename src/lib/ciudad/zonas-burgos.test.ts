@@ -131,6 +131,7 @@ describe("zonas de Burgos", () => {
       "mijas",
       "velezmalaga",
       "fuengirola",
+      "estepona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1718,6 +1719,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresFuengirola).size).toBe(nombresFuengirola.length);
     expect(nombresFuengirola.filter((n) => fuengirola!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
     expect(nombresFuengirola.filter((n) => fuengirola!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const estepona = ciudadUrbana("estepona");
+    expect(estepona?.etiqueta).toBe("Estepona (Málaga)");
+    expect(estepona?.nombre).toBe("Estepona");
+    expect(zonaDeCiudad(estepona!, "Cancelada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "El Paraíso")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "Paraíso-Barronal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "Valle Romano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "Valle Romano Golf")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "Vista África")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(estepona!, "Polígono Industrial José Martín Méndez")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(estepona!, "Polígono Industrial Llano del Negro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(estepona!, "Zona de Servicios de Estepona")?.tipo).toBe("poligono");
+    const nombresEstepona = estepona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresEstepona).size).toBe(nombresEstepona.length);
+    expect(nombresEstepona.filter((n) => estepona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(63);
+    expect(nombresEstepona.filter((n) => estepona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1768,14 +1785,16 @@ describe("zonas de Burgos", () => {
     ]);
     expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
     const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");
-    expect(ciudades[malagaIdx + 1]?.label).toBe("Fuengirola");
+    expect(ciudades[malagaIdx + 1]?.label).toBe("Estepona");
     expect(ciudades[malagaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 2]?.label).toBe("Marbella");
+    expect(ciudades[malagaIdx + 2]?.label).toBe("Fuengirola");
     expect(ciudades[malagaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 3]?.label).toBe("Mijas");
+    expect(ciudades[malagaIdx + 3]?.label).toBe("Marbella");
     expect(ciudades[malagaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 4]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 4]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 4]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 5]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

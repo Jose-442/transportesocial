@@ -233,6 +233,7 @@
  * Vélez-Málaga: los barrios y los polígonos de la lista.
  * Arroyo de la Miel no entra: es de Benalmádena.
  * Fuengirola: los barrios y los polígonos de la lista.
+ * Estepona: los barrios y los polígonos de la lista. Cancelada entra aquí.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5933,6 +5934,78 @@ const POLIGONOS_FUENGIROLA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial San Rafael", tipo: "poligono" },
 ];
 
+const BARRIOS_ESTEPONA: ZonaCiudad[] = [
+  { nombre: "Alcazaba Beach", tipo: "barrio" },
+  { nombre: "Aldea del Sol", tipo: "barrio" },
+  { nombre: "Altos de Estepona", tipo: "barrio" },
+  { nombre: "Arena Beach", tipo: "barrio" },
+  { nombre: "Arroyo Vaquero", tipo: "barrio" },
+  { nombre: "Atalaya", tipo: "barrio" },
+  { nombre: "Bahía Azul", tipo: "barrio" },
+  { nombre: "Bahía Dorada", tipo: "barrio" },
+  { nombre: "Bahía Doncella", tipo: "barrio" },
+  { nombre: "Bahía de Estepona", tipo: "barrio" },
+  { nombre: "Bel Air", tipo: "barrio" },
+  { nombre: "Benamara", tipo: "barrio" },
+  { nombre: "Benatalaya", tipo: "barrio" },
+  { nombre: "Buenas Noches", tipo: "barrio" },
+  { nombre: "Cancelada", tipo: "barrio" },
+  { nombre: "Casasola", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Costalita", tipo: "barrio" },
+  { nombre: "Costa Natura", tipo: "barrio" },
+  { nombre: "Diana Park", tipo: "barrio" },
+  { nombre: "Dominion Beach", tipo: "barrio" },
+  { nombre: "Don Pedro", tipo: "barrio" },
+  { nombre: "El Coral", tipo: "barrio" },
+  { nombre: "El Padrón", tipo: "barrio" },
+  { nombre: "El Paraíso", tipo: "barrio" },
+  { nombre: "El Pirata", tipo: "barrio" },
+  { nombre: "El Velerín", tipo: "barrio" },
+  { nombre: "Estepona Golf", tipo: "barrio" },
+  { nombre: "Guadalobón", tipo: "barrio" },
+  { nombre: "Guadalmansa", tipo: "barrio" },
+  { nombre: "Hacienda del Sol", tipo: "barrio" },
+  { nombre: "Isdabe", tipo: "barrio" },
+  { nombre: "La Gaspara", tipo: "barrio" },
+  { nombre: "La Lobilla", tipo: "barrio" },
+  { nombre: "La Resina", tipo: "barrio" },
+  { nombre: "Las Mesas", tipo: "barrio" },
+  { nombre: "Las Salinas", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Nueva Atalaya", tipo: "barrio" },
+  { nombre: "Nueva Milla de Oro", tipo: "barrio" },
+  { nombre: "Parque Antena", tipo: "barrio" },
+  { nombre: "Paraíso-Barronal", tipo: "barrio" },
+  { nombre: "Playa Bella", tipo: "barrio" },
+  { nombre: "Playa del Sol", tipo: "barrio" },
+  { nombre: "Puerto Deportivo", tipo: "barrio" },
+  { nombre: "Punta Plata", tipo: "barrio" },
+  { nombre: "Saladillo", tipo: "barrio" },
+  { nombre: "Saladavieja", tipo: "barrio" },
+  { nombre: "Seghers", tipo: "barrio" },
+  { nombre: "Selwo", tipo: "barrio" },
+  { nombre: "Torre Bermeja", tipo: "barrio" },
+  { nombre: "Valle Romano", tipo: "barrio" },
+  { nombre: "Villacana", tipo: "barrio" },
+  { nombre: "Altos de las Mesas", tipo: "barrio" },
+  { nombre: "Los Reales", tipo: "barrio" },
+  { nombre: "Puerto de Estepona", tipo: "barrio" },
+  { nombre: "Puerto Alto", tipo: "barrio" },
+  { nombre: "Puerto Paraíso", tipo: "barrio" },
+  { nombre: "Punta Doncella", tipo: "barrio" },
+  { nombre: "Residencial Infinity", tipo: "barrio" },
+  { nombre: "Torre de Guadalmansa", tipo: "barrio" },
+  { nombre: "Valle Romano Golf", tipo: "barrio" },
+  { nombre: "Vista África", tipo: "barrio" },
+];
+
+const POLIGONOS_ESTEPONA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial José Martín Méndez", tipo: "poligono" },
+  { nombre: "Polígono Industrial Llano del Negro", tipo: "poligono" },
+  { nombre: "Zona de Servicios de Estepona", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6667,6 +6740,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Fuengirola",
     etiqueta: "Fuengirola (Málaga)",
     zonas: [...BARRIOS_FUENGIROLA, ...POLIGONOS_FUENGIROLA],
+  },
+  {
+    id: "estepona",
+    nombre: "Estepona",
+    etiqueta: "Estepona (Málaga)",
+    zonas: [...BARRIOS_ESTEPONA, ...POLIGONOS_ESTEPONA],
   },
 ];
 
