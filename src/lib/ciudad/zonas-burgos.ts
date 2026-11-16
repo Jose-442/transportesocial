@@ -1,6 +1,7 @@
 /**
  * Barrios y polígonos cerrados.
  * Burgos: reglamento de distritos del Ayuntamiento, 2020.
+ * Sin Centro, Centro Histórico ni Centro Sur.
  * Aranda de Duero: reuniones de barrios del Ayuntamiento, 2026, más San Francisco
  * (plan general) y los polígonos del plan.
  * Miranda de Ebro: nombres que usa el Ayuntamiento; sin Miranda Sur (sigue en proyecto).
@@ -179,8 +180,6 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Capiscol", tipo: "barrio" },
   { nombre: "San Cristóbal", tipo: "barrio" },
   { nombre: "Villímar", tipo: "barrio" },
-  { nombre: "Centro Histórico", tipo: "barrio" },
-  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Los Vadillos", tipo: "barrio" },
   { nombre: "Río Vena", tipo: "barrio" },
   { nombre: "Los Ríos - Vista Alegre", tipo: "barrio" },
@@ -190,7 +189,6 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Huelgas - El Pilar", tipo: "barrio" },
   { nombre: "San Julián", tipo: "barrio" },
   { nombre: "El Crucero - San José", tipo: "barrio" },
-  { nombre: "Centro Sur", tipo: "barrio" },
   { nombre: "San Pedro y San Felices", tipo: "barrio" },
   { nombre: "Villatoro", tipo: "barrio" },
   { nombre: "Villayuda - La Ventilla", tipo: "barrio" },

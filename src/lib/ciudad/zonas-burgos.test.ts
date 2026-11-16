@@ -103,6 +103,9 @@ describe("zonas de Burgos", () => {
     expect(miranda?.etiqueta).toBe("Miranda de Ebro (Burgos)");
     expect(zonaDeCiudad(burgos!, "Gamonal Norte")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(burgos!, "Gamonal Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(burgos!, "Centro")).toBeNull();
+    expect(zonaDeCiudad(burgos!, "Centro Histórico")).toBeNull();
+    expect(zonaDeCiudad(burgos!, "Centro Sur")).toBeNull();
     expect(zonaDeCiudad(burgos!, "Villalonquéjar I")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(burgos!, "Calle inventada")).toBeNull();
     expect(zonaDeCiudad(aranda!, "Allendeduero")?.tipo).toBe("barrio");
