@@ -204,6 +204,7 @@
  * Dos Hermanas: los barrios y los polígonos de la lista.
  * Ibarburu queda como barrio. Polígono Ibarburu como polígono.
  * Fuente del Rey queda como barrio. Polígono Fuente del Rey como polígono.
+ * Barrio Centro no entra: queda Casco Antiguo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4808,7 +4809,6 @@ const POLIGONOS_SEVILLA: ZonaCiudad[] = [
 ];
 
 const BARRIOS_DOS_HERMANAS: ZonaCiudad[] = [
-  { nombre: "Barrio Centro", tipo: "barrio" },
   { nombre: "Casco Antiguo", tipo: "barrio" },
   { nombre: "La Pólvora", tipo: "barrio" },
   { nombre: "La Moneda", tipo: "barrio" },

@@ -1449,7 +1449,8 @@ describe("zonas de Burgos", () => {
     const dosHermanas = ciudadUrbana("doshermanas");
     expect(dosHermanas?.etiqueta).toBe("Dos Hermanas (Sevilla)");
     expect(dosHermanas?.nombre).toBe("Dos Hermanas");
-    expect(zonaDeCiudad(dosHermanas!, "Montequinto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Barrio Centro")).toBeNull();
     expect(zonaDeCiudad(dosHermanas!, "Condequinto")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(dosHermanas!, "Ibarburu")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(dosHermanas!, "Fuente del Rey")?.tipo).toBe("barrio");
@@ -1464,7 +1465,7 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(dosHermanas!, "Zona Industrial Autovía II")?.tipo).toBe("poligono");
     const nombresDosHermanas = dosHermanas!.zonas.map((z) => z.nombre);
     expect(new Set(nombresDosHermanas).size).toBe(nombresDosHermanas.length);
-    expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(88);
+    expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(87);
     expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
   });
 
