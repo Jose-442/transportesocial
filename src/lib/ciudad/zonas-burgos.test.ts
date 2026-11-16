@@ -78,6 +78,7 @@ describe("zonas de Burgos", () => {
       "vilafranca",
       "tarragona",
       "reus",
+      "elvendrell",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -782,6 +783,21 @@ describe("zonas de Burgos", () => {
     const nombresReus = reus!.zonas.map((z) => z.nombre);
     expect(new Set(nombresReus).size).toBe(nombresReus.length);
     expect(nombresReus.filter((n) => reus!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(38);
+    const elVendrell = ciudadUrbana("elvendrell");
+    expect(elVendrell?.etiqueta).toBe("Vendrell, El (Tarragona)");
+    expect(elVendrell?.nombre).toBe("El Vendrell");
+    expect(zonaDeCiudad(elVendrell!, "La Muntanyeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "Barri del Centre (Casco Antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "Edèn Parc")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "Parc Empresarial Els Masets")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elVendrell!, "La Cometa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Les Mates")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Edèn Park Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Els Masets")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elVendrell!, "Casa Larrienaga")).toBeNull();
+    const nombresElVendrell = elVendrell!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresElVendrell).size).toBe(nombresElVendrell.length);
+    expect(nombresElVendrell.filter((n) => elVendrell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(43);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

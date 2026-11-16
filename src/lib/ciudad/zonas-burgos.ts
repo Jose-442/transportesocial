@@ -140,6 +140,7 @@
  * Vilafranca del Penedès: los barrios y los polígonos de la lista.
  * Tarragona: los barrios y los polígonos de la lista.
  * Reus: los barrios y los polígonos de la lista.
+ * El Vendrell: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2912,6 +2913,61 @@ const POLIGONOS_REUS: ZonaCiudad[] = [
   { nombre: "Vegé", tipo: "poligono" },
 ];
 
+const BARRIOS_EL_VENDRELL: ZonaCiudad[] = [
+  { nombre: "Aciomar – Cintoi", tipo: "barrio" },
+  { nombre: "Barri de França", tipo: "barrio" },
+  { nombre: "Barri del Centre (Casco Antiguo)", tipo: "barrio" },
+  { nombre: "Barri del Tancat", tipo: "barrio" },
+  { nombre: "Barri del Serrallo", tipo: "barrio" },
+  { nombre: "Bell-lloc", tipo: "barrio" },
+  { nombre: "Bonavista", tipo: "barrio" },
+  { nombre: "Brisamar", tipo: "barrio" },
+  { nombre: "Coma-ruga", tipo: "barrio" },
+  { nombre: "Coma-ruga Parc", tipo: "barrio" },
+  { nombre: "Creu de Coma-ruga", tipo: "barrio" },
+  { nombre: "Creu del Vendrell", tipo: "barrio" },
+  { nombre: "El Francàs", tipo: "barrio" },
+  { nombre: "El Nou Vendrell", tipo: "barrio" },
+  { nombre: "El Romaní", tipo: "barrio" },
+  { nombre: "Edèn Parc", tipo: "barrio" },
+  { nombre: "Els Garrofers", tipo: "barrio" },
+  { nombre: "Els Masos", tipo: "barrio" },
+  { nombre: "Estació de Sant Vicenç", tipo: "barrio" },
+  { nombre: "La Baronia del Mar", tipo: "barrio" },
+  { nombre: "La Franquesa", tipo: "barrio" },
+  { nombre: "La Llança", tipo: "barrio" },
+  { nombre: "La Muntanyeta", tipo: "barrio" },
+  { nombre: "La Plana de Bonavista", tipo: "barrio" },
+  { nombre: "Mas Astor", tipo: "barrio" },
+  { nombre: "Mas Borràs", tipo: "barrio" },
+  { nombre: "Mas d'en Gual", tipo: "barrio" },
+  { nombre: "Masia Blanca", tipo: "barrio" },
+  { nombre: "Mas Leví", tipo: "barrio" },
+  { nombre: "Nirvana", tipo: "barrio" },
+  { nombre: "Oasis", tipo: "barrio" },
+  { nombre: "Oasis-Eden", tipo: "barrio" },
+  { nombre: "Parc Empresarial Els Masets", tipo: "barrio" },
+  { nombre: "Pic i Martí", tipo: "barrio" },
+  { nombre: "Sant Jordi", tipo: "barrio" },
+  { nombre: "Sant Salvador", tipo: "barrio" },
+  { nombre: "Sant Vicenç de Calders", tipo: "barrio" },
+  { nombre: "Socies Català", tipo: "barrio" },
+  { nombre: "Tancat", tipo: "barrio" },
+  { nombre: "Torrebanca", tipo: "barrio" },
+  { nombre: "Vendrellmar", tipo: "barrio" },
+  { nombre: "Vives", tipo: "barrio" },
+  { nombre: "Xalet Blanco", tipo: "barrio" },
+];
+
+const POLIGONOS_EL_VENDRELL: ZonaCiudad[] = [
+  { nombre: "La Cometa", tipo: "poligono" },
+  { nombre: "Les Mates", tipo: "poligono" },
+  { nombre: "Riera de Banyeres", tipo: "poligono" },
+  { nombre: "Zona Industrial Casa Larrienaga", tipo: "poligono" },
+  { nombre: "Edèn Park Nord", tipo: "poligono" },
+  { nombre: "Els Masets", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3346,6 +3402,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Reus",
     etiqueta: "Reus (Tarragona)",
     zonas: [...BARRIOS_REUS, ...POLIGONOS_REUS],
+  },
+  {
+    id: "elvendrell",
+    nombre: "El Vendrell",
+    etiqueta: "Vendrell, El (Tarragona)",
+    zonas: [...BARRIOS_EL_VENDRELL, ...POLIGONOS_EL_VENDRELL],
   },
 ];
 
