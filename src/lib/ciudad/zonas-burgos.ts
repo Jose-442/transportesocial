@@ -178,6 +178,9 @@
  * Los Negrales queda en Collado Villalba.
  * Boadilla del Monte: los barrios y los polígonos de la lista.
  * Prado del Espino queda como Parque Empresarial Prado del Espino.
+ * Aranjuez: los barrios y los polígonos de la lista.
+ * Industrial Gonzalo Chacón y Polígono Industrial Gonzalo Chacón quedan los dos.
+ * Cortijo de San Isidro y Real Cortijo de San Isidro quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4360,6 +4363,54 @@ const POLIGONOS_BOADILLA: ZonaCiudad[] = [
   { nombre: "Zona Empresarial Sur", tipo: "poligono" },
 ];
 
+const BARRIOS_ARANJUEZ: ZonaCiudad[] = [
+  { nombre: "Agfa", tipo: "barrio" },
+  { nombre: "Alpajés", tipo: "barrio" },
+  { nombre: "Barrio de la Estación", tipo: "barrio" },
+  { nombre: "Barrio de las Aves", tipo: "barrio" },
+  { nombre: "Barrio de las Moreras", tipo: "barrio" },
+  { nombre: "Barrio de OPA", tipo: "barrio" },
+  { nombre: "Ciudad de las Artes", tipo: "barrio" },
+  { nombre: "Colonia Aviación Norte", tipo: "barrio" },
+  { nombre: "Colonia Aviación Sur", tipo: "barrio" },
+  { nombre: "Colonia de Cables", tipo: "barrio" },
+  { nombre: "Colonia El Progreso", tipo: "barrio" },
+  { nombre: "Colonia Militar", tipo: "barrio" },
+  { nombre: "Colonia Palomitas", tipo: "barrio" },
+  { nombre: "Cortijo de San Isidro", tipo: "barrio" },
+  { nombre: "El Deleite", tipo: "barrio" },
+  { nombre: "El Mirador de Aranjuez", tipo: "barrio" },
+  { nombre: "El Pinar de Aranjuez", tipo: "barrio" },
+  { nombre: "El Vergel", tipo: "barrio" },
+  { nombre: "Foso-Moreras", tipo: "barrio" },
+  { nombre: "Jardín de Narváez", tipo: "barrio" },
+  { nombre: "Jardín de Oñate", tipo: "barrio" },
+  { nombre: "La Montaña (PAU de La Montaña)", tipo: "barrio" },
+  { nombre: "Las Olivas", tipo: "barrio" },
+  { nombre: "Nuevo Aranjuez", tipo: "barrio" },
+  { nombre: "Palacio", tipo: "barrio" },
+  { nombre: "Plaza de Toros", tipo: "barrio" },
+  { nombre: "Real Cortijo de San Isidro", tipo: "barrio" },
+  { nombre: "Residencial Alba II", tipo: "barrio" },
+  { nombre: "Residencial Monte Jardín", tipo: "barrio" },
+  { nombre: "San Estanislao", tipo: "barrio" },
+  { nombre: "Vista Real", tipo: "barrio" },
+];
+
+const POLIGONOS_ARANJUEZ: ZonaCiudad[] = [
+  { nombre: "Industrial AGFA", tipo: "poligono" },
+  { nombre: "Industrial Gonzalo Chacón", tipo: "poligono" },
+  { nombre: "Industrial Las Tejeras", tipo: "poligono" },
+  { nombre: "Industrial Mar Chico", tipo: "poligono" },
+  { nombre: "Industrial Naval", tipo: "poligono" },
+  { nombre: "Industrial Penicilina", tipo: "poligono" },
+  { nombre: "Industrial Pirelli", tipo: "poligono" },
+  { nombre: "Industrial Puente Barcas", tipo: "poligono" },
+  { nombre: "Industrial de la Estación", tipo: "poligono" },
+  { nombre: "Polígono Industrial Gonzalo Chacón", tipo: "poligono" },
+  { nombre: "Polígono Industrial del Automóvil", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4950,6 +5001,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Boadilla del Monte",
     etiqueta: "Boadilla del Monte (Madrid)",
     zonas: [...BARRIOS_BOADILLA, ...POLIGONOS_BOADILLA],
+  },
+  {
+    id: "aranjuez",
+    nombre: "Aranjuez",
+    etiqueta: "Aranjuez (Madrid)",
+    zonas: [...BARRIOS_ARANJUEZ, ...POLIGONOS_ARANJUEZ],
   },
 ];
 
