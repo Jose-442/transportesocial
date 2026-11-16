@@ -70,6 +70,7 @@ describe("zonas de Burgos", () => {
       "cerdanyola",
       "mollet",
       "barbera",
+      "manresa",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -678,6 +679,17 @@ describe("zonas de Burgos", () => {
     const nombresBarbera = barbera!.zonas.map((z) => z.nombre);
     expect(new Set(nombresBarbera).size).toBe(nombresBarbera.length);
     expect(nombresBarbera.filter((n) => barbera!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    const manresa = ciudadUrbana("manresa");
+    expect(manresa?.etiqueta).toBe("Manresa (Barcelona)");
+    expect(manresa?.nombre).toBe("Manresa");
+    expect(zonaDeCiudad(manresa!, "Sagrada Família")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "Pare Ignasi Puig")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "Bufalvent")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manresa!, "Els Dolors")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manresa!, "el Xup")).toBeNull();
+    const nombresManresa = manresa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresManresa).size).toBe(nombresManresa.length);
+    expect(nombresManresa.filter((n) => manresa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

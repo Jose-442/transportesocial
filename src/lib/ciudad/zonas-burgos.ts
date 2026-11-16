@@ -132,6 +132,8 @@
  * Cerdanyola del Vallès: los barrios y los 9 polígonos de la lista.
  * Mollet del Vallès: los barrios y los 5 polígonos de la lista.
  * Barberà del Vallès: los barrios y los polígonos de la lista.
+ * Manresa: los 18 barrios del padrón municipal.
+ * Los 4 polígonos de la página del Ayuntamiento.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2513,6 +2515,34 @@ const POLIGONOS_BARBERA: ZonaCiudad[] = [
   { nombre: "Santa Maria", tipo: "poligono" },
 ];
 
+const BARRIOS_MANRESA: ZonaCiudad[] = [
+  { nombre: "Barri Antic", tipo: "barrio" },
+  { nombre: "La Balconada", tipo: "barrio" },
+  { nombre: "Cal Gravat", tipo: "barrio" },
+  { nombre: "Carretera de Santpedor", tipo: "barrio" },
+  { nombre: "Escodines", tipo: "barrio" },
+  { nombre: "Farreres - Suanya - Comtals - Santa Caterina - l'Oller - Guia", tipo: "barrio" },
+  { nombre: "Font dels Capellans", tipo: "barrio" },
+  { nombre: "Guix - Pujada Roja", tipo: "barrio" },
+  { nombre: "Mion - Puigberenguer - Miralpeix", tipo: "barrio" },
+  { nombre: "Pare Ignasi Puig", tipo: "barrio" },
+  { nombre: "Passeig i Rodalies", tipo: "barrio" },
+  { nombre: "Plaça Catalunya - Barriada de Saldes", tipo: "barrio" },
+  { nombre: "Poble Nou", tipo: "barrio" },
+  { nombre: "Sagrada Família", tipo: "barrio" },
+  { nombre: "Sant Pau", tipo: "barrio" },
+  { nombre: "Valldaura", tipo: "barrio" },
+  { nombre: "Vic - Remei", tipo: "barrio" },
+  { nombre: "Viladordis", tipo: "barrio" },
+];
+
+const POLIGONOS_MANRESA: ZonaCiudad[] = [
+  { nombre: "Bufalvent", tipo: "poligono" },
+  { nombre: "Pont Nou", tipo: "poligono" },
+  { nombre: "Els Dolors", tipo: "poligono" },
+  { nombre: "Els Trullols", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2899,6 +2929,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Barberà del Vallès",
     etiqueta: "Barberà del Vallès (Barcelona)",
     zonas: [...BARRIOS_BARBERA, ...POLIGONOS_BARBERA],
+  },
+  {
+    id: "manresa",
+    nombre: "Manresa",
+    etiqueta: "Manresa (Barcelona)",
+    zonas: [...BARRIOS_MANRESA, ...POLIGONOS_MANRESA],
   },
 ];
 
