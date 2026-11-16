@@ -99,6 +99,7 @@ describe("zonas de Burgos", () => {
       "parla",
       "alcobendas",
       "rivas",
+      "lasrozas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1099,6 +1100,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresRivas).size).toBe(nombresRivas.length);
     expect(nombresRivas.filter((n) => rivas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
     expect(nombresRivas.filter((n) => rivas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const lasrozas = ciudadUrbana("lasrozas");
+    expect(lasrozas?.etiqueta).toBe("Rozas de Madrid, Las (Madrid)");
+    expect(lasrozas?.nombre).toBe("Las Rozas de Madrid");
+    expect(zonaDeCiudad(lasrozas!, "Európolis")).toBeNull();
+    expect(zonaDeCiudad(lasrozas!, "Polígono Industrial Európolis")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(lasrozas!, "La Cornisa-Yucatán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "Yucatán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "La Marazuela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "La Marazuela Vieja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "La Marazuela Nueva")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "El Encinar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "El Encinar de Las Matas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasrozas!, "Europa Empresarial")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(lasrozas!, "Parque Empresarial de Camilo José Cela")?.tipo).toBe("poligono");
+    const nombresRozas = lasrozas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRozas).size).toBe(nombresRozas.length);
+    expect(nombresRozas.filter((n) => lasrozas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(44);
+    expect(nombresRozas.filter((n) => lasrozas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1117,13 +1136,14 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 11).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 12).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
       "Fuenlabrada",
       "Getafe",
+      "Las Rozas de Madrid",
       "Leganés",
       "Móstoles",
       "Parla",

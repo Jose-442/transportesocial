@@ -162,6 +162,8 @@
  * Alcobendas: los barrios y los polígonos de la lista.
  * Fuente Hito, Valdelasfuentes, Fuentelucha, Arroyo de la Vega y El Juncal quedan como barrio.
  * Rivas-Vaciamadrid: los barrios y los polígonos de la lista.
+ * Las Rozas de Madrid: los barrios y los polígonos de la lista.
+ * Európolis queda solo como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3942,6 +3944,62 @@ const POLIGONOS_RIVAS: ZonaCiudad[] = [
   { nombre: "Parque Empresarial Rivas Futura", tipo: "poligono" },
 ];
 
+const BARRIOS_LAS_ROZAS: ZonaCiudad[] = [
+  { nombre: "Alto Lazarejo", tipo: "barrio" },
+  { nombre: "Alto del Abajón", tipo: "barrio" },
+  { nombre: "Barrio de RENFE-Talgo", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Casco Urbano", tipo: "barrio" },
+  { nombre: "Club de Golf", tipo: "barrio" },
+  { nombre: "Coruña XXI", tipo: "barrio" },
+  { nombre: "Coto del Pardo", tipo: "barrio" },
+  { nombre: "Dehesa de Navalcarbón", tipo: "barrio" },
+  { nombre: "El Abajón", tipo: "barrio" },
+  { nombre: "El Cantizal", tipo: "barrio" },
+  { nombre: "El Encinar", tipo: "barrio" },
+  { nombre: "El Encinar de Las Matas", tipo: "barrio" },
+  { nombre: "El Garzo", tipo: "barrio" },
+  { nombre: "El Montecillo", tipo: "barrio" },
+  { nombre: "El Pedrosillo", tipo: "barrio" },
+  { nombre: "El Pinar", tipo: "barrio" },
+  { nombre: "El Reloj", tipo: "barrio" },
+  { nombre: "El Tomillar", tipo: "barrio" },
+  { nombre: "Entremontes", tipo: "barrio" },
+  { nombre: "Eurógar", tipo: "barrio" },
+  { nombre: "Jardines del César", tipo: "barrio" },
+  { nombre: "La Chopera", tipo: "barrio" },
+  { nombre: "La Cornisa-Yucatán", tipo: "barrio" },
+  { nombre: "La Marazuela", tipo: "barrio" },
+  { nombre: "La Marazuela Vieja", tipo: "barrio" },
+  { nombre: "La Marazuela Nueva", tipo: "barrio" },
+  { nombre: "La Hiedra", tipo: "barrio" },
+  { nombre: "Las Matas", tipo: "barrio" },
+  { nombre: "Las Palomas", tipo: "barrio" },
+  { nombre: "Los Castillos", tipo: "barrio" },
+  { nombre: "Los Peñascales", tipo: "barrio" },
+  { nombre: "Maracaibo", tipo: "barrio" },
+  { nombre: "Molino de la Hoz", tipo: "barrio" },
+  { nombre: "Monte Rozas", tipo: "barrio" },
+  { nombre: "Monte Verde", tipo: "barrio" },
+  { nombre: "Parque Matas", tipo: "barrio" },
+  { nombre: "Parque Rozas", tipo: "barrio" },
+  { nombre: "Punta Galea", tipo: "barrio" },
+  { nombre: "Sector IX", tipo: "barrio" },
+  { nombre: "Valle del Roncal", tipo: "barrio" },
+  { nombre: "Villarrozas", tipo: "barrio" },
+  { nombre: "Yucatán", tipo: "barrio" },
+];
+
+const POLIGONOS_LAS_ROZAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Európolis", tipo: "poligono" },
+  { nombre: "Parque Empresarial Las Rozas", tipo: "poligono" },
+  { nombre: "Europa Empresarial", tipo: "poligono" },
+  { nombre: "Parque Empresarial Alvia", tipo: "poligono" },
+  { nombre: "Parque Empresarial Tripark", tipo: "poligono" },
+  { nombre: "Parque Empresarial de Camilo José Cela", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4484,6 +4542,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Rivas-Vaciamadrid",
     etiqueta: "Rivas-Vaciamadrid (Madrid)",
     zonas: [...BARRIOS_RIVAS, ...POLIGONOS_RIVAS],
+  },
+  {
+    id: "lasrozas",
+    nombre: "Las Rozas de Madrid",
+    etiqueta: "Rozas de Madrid, Las (Madrid)",
+    zonas: [...BARRIOS_LAS_ROZAS, ...POLIGONOS_LAS_ROZAS],
   },
 ];
 
