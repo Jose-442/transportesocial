@@ -73,6 +73,7 @@ describe("zonas de Burgos", () => {
       "manresa",
       "sitges",
       "santpere",
+      "vic",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -717,6 +718,17 @@ describe("zonas de Burgos", () => {
     const nombresSantPere = santpere!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSantPere).size).toBe(nombresSantPere.length);
     expect(nombresSantPere.filter((n) => santpere!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
+    const vic = ciudadUrbana("vic");
+    expect(vic?.etiqueta).toBe("Vic (Barcelona)");
+    expect(vic?.nombre).toBe("Vic");
+    expect(zonaDeCiudad(vic!, "Barri de l'Estadi")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vic!, "Barri Serra-de-senferm")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vic!, "El Bruguer")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vic!, "Mas d'en Prat")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vic!, "Quatre Estacions")).toBeNull();
+    const nombresVic = vic!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVic).size).toBe(nombresVic.length);
+    expect(nombresVic.filter((n) => vic!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

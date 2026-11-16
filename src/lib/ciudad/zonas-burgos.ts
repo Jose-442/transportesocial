@@ -135,6 +135,7 @@
  * Manresa: los barrios y los polígonos de la lista.
  * Sitges: los barrios y los polígonos de la lista.
  * Sant Pere de Ribes: los barrios y los polígonos de la lista.
+ * Vic: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2664,6 +2665,47 @@ const POLIGONOS_SANT_PERE: ZonaCiudad[] = [
   { nombre: "Variant C-31", tipo: "poligono" },
 ];
 
+const BARRIOS_VIC: ZonaCiudad[] = [
+  { nombre: "Barri de l'Estadi", tipo: "barrio" },
+  { nombre: "Barri del Nord", tipo: "barrio" },
+  { nombre: "Barri del Remei", tipo: "barrio" },
+  { nombre: "Barri dels Caputxins", tipo: "barrio" },
+  { nombre: "Barri dels Molins", tipo: "barrio" },
+  { nombre: "Barri Osona", tipo: "barrio" },
+  { nombre: "Barri Santa Anna", tipo: "barrio" },
+  { nombre: "Barri Serra-de-senferm", tipo: "barrio" },
+  { nombre: "Barri Sant Llàtzer – Quatre Estacions", tipo: "barrio" },
+  { nombre: "Barri del Sucre", tipo: "barrio" },
+  { nombre: "Barri de la Calla", tipo: "barrio" },
+  { nombre: "Barri de l'Horta Vermella", tipo: "barrio" },
+  { nombre: "Barri del Carrer Sant Pere", tipo: "barrio" },
+  { nombre: "Centre Històric", tipo: "barrio" },
+  { nombre: "Castell d'en Planes", tipo: "barrio" },
+  { nombre: "El Nadal", tipo: "barrio" },
+  { nombre: "El Portal de Queralt", tipo: "barrio" },
+  { nombre: "La Guixa", tipo: "barrio" },
+  { nombre: "La Serra", tipo: "barrio" },
+  { nombre: "Sentfores", tipo: "barrio" },
+  { nombre: "Zona del Seminari", tipo: "barrio" },
+  { nombre: "Zona de l'Hospital", tipo: "barrio" },
+  { nombre: "Zona de la Plaça Major", tipo: "barrio" },
+  { nombre: "Zona de la Carretera de Roda", tipo: "barrio" },
+  { nombre: "Zona de la Carretera de Manlleu", tipo: "barrio" },
+  { nombre: "Zona de la Carretera de Barcelona", tipo: "barrio" },
+];
+
+const POLIGONOS_VIC: ZonaCiudad[] = [
+  { nombre: "El Bruguer", tipo: "poligono" },
+  { nombre: "Les Casasses", tipo: "poligono" },
+  { nombre: "Malloles", tipo: "poligono" },
+  { nombre: "Mas Beuló", tipo: "poligono" },
+  { nombre: "Mas de Bigas", tipo: "poligono" },
+  { nombre: "Mas d'en Prat", tipo: "poligono" },
+  { nombre: "Parc d'Activitats Econòmiques d'Osona Nord", tipo: "poligono" },
+  { nombre: "Parc d'Activitats Econòmiques d'Osona Sud", tipo: "poligono" },
+  { nombre: "Sot dels Pradals", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3068,6 +3110,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sant Pere de Ribes",
     etiqueta: "Sant Pere de Ribes (Barcelona)",
     zonas: [...BARRIOS_SANT_PERE, ...POLIGONOS_SANT_PERE],
+  },
+  {
+    id: "vic",
+    nombre: "Vic",
+    etiqueta: "Vic (Barcelona)",
+    zonas: [...BARRIOS_VIC, ...POLIGONOS_VIC],
   },
 ];
 
