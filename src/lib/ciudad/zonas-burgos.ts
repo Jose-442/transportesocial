@@ -137,6 +137,7 @@
  * Sant Pere de Ribes: los barrios y los polígonos de la lista.
  * Vic: los barrios y los polígonos de la lista.
  * Igualada: los barrios y los polígonos de la lista.
+ * Vilafranca del Penedès: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2743,6 +2744,43 @@ const POLIGONOS_IGUALADA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial del Rec", tipo: "poligono" },
 ];
 
+const BARRIOS_VILAFRANCA: ZonaCiudad[] = [
+  { nombre: "Barceloneta – Sant Magí", tipo: "barrio" },
+  { nombre: "Bordallet", tipo: "barrio" },
+  { nombre: "Cal Salines", tipo: "barrio" },
+  { nombre: "Carrer d'en Pere Pau", tipo: "barrio" },
+  { nombre: "Centre de la Vila", tipo: "barrio" },
+  { nombre: "Ciutat Jardí", tipo: "barrio" },
+  { nombre: "L'Espirall", tipo: "barrio" },
+  { nombre: "La Girada", tipo: "barrio" },
+  { nombre: "La Serreta", tipo: "barrio" },
+  { nombre: "Les Clotes", tipo: "barrio" },
+  { nombre: "Molí d'en Rovira", tipo: "barrio" },
+  { nombre: "Poble Nou", tipo: "barrio" },
+  { nombre: "Sant Julià", tipo: "barrio" },
+];
+
+const POLIGONOS_VILAFRANCA: ZonaCiudad[] = [
+  { nombre: "Els Cirerers", tipo: "poligono" },
+  { nombre: "Estació de Mercaderies – Les Fonts", tipo: "poligono" },
+  { nombre: "Domenys I", tipo: "poligono" },
+  { nombre: "Domenys II", tipo: "poligono" },
+  { nombre: "Domenys III", tipo: "poligono" },
+  { nombre: "Domenys IV", tipo: "poligono" },
+  { nombre: "Llevant", tipo: "poligono" },
+  { nombre: "Marges Alts", tipo: "poligono" },
+  { nombre: "PAU 10", tipo: "poligono" },
+  { nombre: "PAU 19 – Carretera de Barcelona", tipo: "poligono" },
+  { nombre: "Pous d'en Rossell", tipo: "poligono" },
+  { nombre: "Porroig", tipo: "poligono" },
+  { nombre: "Rocallisa", tipo: "poligono" },
+  { nombre: "Sud-Oest", tipo: "poligono" },
+  { nombre: "Tigsa", tipo: "poligono" },
+  { nombre: "Vallmoll", tipo: "poligono" },
+  { nombre: "Avinguda de Tarragona", tipo: "poligono" },
+  { nombre: "Avinguda de Barcelona", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3159,6 +3197,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Igualada",
     etiqueta: "Igualada (Barcelona)",
     zonas: [...BARRIOS_IGUALADA, ...POLIGONOS_IGUALADA],
+  },
+  {
+    id: "vilafranca",
+    nombre: "Vilafranca del Penedès",
+    etiqueta: "Vilafranca del Penedès (Barcelona)",
+    zonas: [...BARRIOS_VILAFRANCA, ...POLIGONOS_VILAFRANCA],
   },
 ];
 

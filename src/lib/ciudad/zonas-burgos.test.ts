@@ -75,6 +75,7 @@ describe("zonas de Burgos", () => {
       "santpere",
       "vic",
       "igualada",
+      "vilafranca",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -742,6 +743,16 @@ describe("zonas de Burgos", () => {
     const nombresIgualada = igualada!.zonas.map((z) => z.nombre);
     expect(new Set(nombresIgualada).size).toBe(nombresIgualada.length);
     expect(nombresIgualada.filter((n) => igualada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
+    const vilafranca = ciudadUrbana("vilafranca");
+    expect(vilafranca?.etiqueta).toBe("Vilafranca del Penedès (Barcelona)");
+    expect(vilafranca?.nombre).toBe("Vilafranca del Penedès");
+    expect(zonaDeCiudad(vilafranca!, "L'Espirall")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilafranca!, "Domenys I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilafranca!, "PAU 19 – Carretera de Barcelona")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilafranca!, "Domenys")).toBeNull();
+    const nombresVilafranca = vilafranca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVilafranca).size).toBe(nombresVilafranca.length);
+    expect(nombresVilafranca.filter((n) => vilafranca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
