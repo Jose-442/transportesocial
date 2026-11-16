@@ -83,6 +83,7 @@ describe("zonas de Burgos", () => {
       "tortosa",
       "calafell",
       "salou",
+      "avila",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -856,6 +857,19 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSalou).size).toBe(nombresSalou.length);
     expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
     expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(0);
+    const avila = ciudadUrbana("avila");
+    expect(avila?.etiqueta).toBe("Ávila (Ávila)");
+    expect(avila?.nombre).toBe("Ávila");
+    expect(zonaDeCiudad(avila!, "Pinar de las Hervencias")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(avila!, "Santo Tomás – Universidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(avila!, "Las Hervencias")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(avila!, "Parque Empresarial Pinar de las Hervencias")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(avila!, "Vicolozano")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(avila!, "Centro Logístico CyLoG")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(avila!, "Tornadizos de Ávila")).toBeNull();
+    const nombresAvila = avila!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAvila).size).toBe(nombresAvila.length);
+    expect(nombresAvila.filter((n) => avila!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

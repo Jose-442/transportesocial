@@ -145,6 +145,7 @@
  * Tortosa: los barrios y los polígonos de la lista.
  * Calafell: los barrios y los polígonos de la lista.
  * Salou: los barrios de la lista.
+ * Ávila: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3131,6 +3132,46 @@ const BARRIOS_SALOU: ZonaCiudad[] = [
 
 const POLIGONOS_SALOU: ZonaCiudad[] = [];
 
+const BARRIOS_AVILA: ZonaCiudad[] = [
+  { nombre: "Academia", tipo: "barrio" },
+  { nombre: "Arrabal del Puente", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Ciudad Deportiva", tipo: "barrio" },
+  { nombre: "Dehesa del Pinar", tipo: "barrio" },
+  { nombre: "El Rastro", tipo: "barrio" },
+  { nombre: "Extramuros", tipo: "barrio" },
+  { nombre: "La Cacharra", tipo: "barrio" },
+  { nombre: "La Encarnación", tipo: "barrio" },
+  { nombre: "La Toledana", tipo: "barrio" },
+  { nombre: "Las Vacas", tipo: "barrio" },
+  { nombre: "Recinto Amurallado", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Nicolás", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Santo Tomás – Universidad", tipo: "barrio" },
+  { nombre: "Tiro de Pichón", tipo: "barrio" },
+  { nombre: "Valle Amblés", tipo: "barrio" },
+  { nombre: "Zurra", tipo: "barrio" },
+  { nombre: "Cordel de las Moruchas", tipo: "barrio" },
+  { nombre: "Fuentes Claras", tipo: "barrio" },
+  { nombre: "Hervencias Residencial", tipo: "barrio" },
+  { nombre: "Hervencias Altas", tipo: "barrio" },
+  { nombre: "La Viña", tipo: "barrio" },
+  { nombre: "Las Alondras", tipo: "barrio" },
+  { nombre: "Las Moruchas", tipo: "barrio" },
+  { nombre: "Pinar de las Hervencias", tipo: "barrio" },
+  { nombre: "Residencial La Alondra", tipo: "barrio" },
+];
+
+const POLIGONOS_AVILA: ZonaCiudad[] = [
+  { nombre: "Las Hervencias", tipo: "poligono" },
+  { nombre: "Parque Empresarial Pinar de las Hervencias", tipo: "poligono" },
+  { nombre: "Vicolozano", tipo: "poligono" },
+  { nombre: "Vicolozano II", tipo: "poligono" },
+  { nombre: "Vicolozano III-A", tipo: "poligono" },
+  { nombre: "Centro Logístico CyLoG", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3595,6 +3636,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Salou",
     etiqueta: "Salou (Tarragona)",
     zonas: [...BARRIOS_SALOU, ...POLIGONOS_SALOU],
+  },
+  {
+    id: "avila",
+    nombre: "Ávila",
+    etiqueta: "Ávila (Ávila)",
+    zonas: [...BARRIOS_AVILA, ...POLIGONOS_AVILA],
   },
 ];
 
