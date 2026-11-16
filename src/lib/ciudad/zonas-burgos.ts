@@ -230,6 +230,8 @@
  * San Pedro Alcántara queda como barrio. San Pedro de Alcántara como polígono.
  * Mijas: las dos listas de barrios, sin repetir el mismo nombre.
  * Entrerríos y La Torre quedan como barrio. Polígono Entrerríos y Polígono La Torre como polígono.
+ * Vélez-Málaga: los barrios y los polígonos de la lista.
+ * Arroyo de la Miel no entra: es de Benalmádena.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5848,6 +5850,49 @@ const POLIGONOS_MIJAS: ZonaCiudad[] = [
   { nombre: "San Rafael", tipo: "poligono" },
 ];
 
+const BARRIOS_VELEZ_MALAGA: ZonaCiudad[] = [
+  { nombre: "Almayate Alto", tipo: "barrio" },
+  { nombre: "Almayate Bajo", tipo: "barrio" },
+  { nombre: "Almayate Costa", tipo: "barrio" },
+  { nombre: "Benajarafe", tipo: "barrio" },
+  { nombre: "Benajarafe Costa", tipo: "barrio" },
+  { nombre: "Benajarafe Pueblo", tipo: "barrio" },
+  { nombre: "Cajiz", tipo: "barrio" },
+  { nombre: "Caleta de Vélez", tipo: "barrio" },
+  { nombre: "Chilches", tipo: "barrio" },
+  { nombre: "Chilches Costa", tipo: "barrio" },
+  { nombre: "El Capitán", tipo: "barrio" },
+  { nombre: "El Limonar", tipo: "barrio" },
+  { nombre: "El Trapiche", tipo: "barrio" },
+  { nombre: "Lagos", tipo: "barrio" },
+  { nombre: "Mezquitilla", tipo: "barrio" },
+  { nombre: "Playa del Capitán", tipo: "barrio" },
+  { nombre: "Pueblo Nuevo de la Axarquía", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Torre del Mar", tipo: "barrio" },
+  { nombre: "Triana", tipo: "barrio" },
+  { nombre: "Valle-Niza", tipo: "barrio" },
+  { nombre: "Vélez-Málaga (Casco Histórico)", tipo: "barrio" },
+  { nombre: "Zona de Baviera Golf", tipo: "barrio" },
+  { nombre: "Zona residencial El Truche", tipo: "barrio" },
+  { nombre: "Zona residencial Finca Baviera", tipo: "barrio" },
+];
+
+const POLIGONOS_VELEZ_MALAGA: ZonaCiudad[] = [
+  { nombre: "El Higueral", tipo: "poligono" },
+  { nombre: "El Zamorano (Los Zamoranos)", tipo: "poligono" },
+  { nombre: "Explanada de la Estación", tipo: "poligono" },
+  { nombre: "La Mata", tipo: "poligono" },
+  { nombre: "La Matita – El Olivarillo", tipo: "poligono" },
+  { nombre: "La Pañoleta – Campiñuela", tipo: "poligono" },
+  { nombre: "Parque Tecnoalimentario de Vélez-Málaga", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cajiz", tipo: "poligono" },
+  { nombre: "Prado del Rey", tipo: "poligono" },
+  { nombre: "Trops", tipo: "poligono" },
+  { nombre: "Xarqui", tipo: "poligono" },
+  { nombre: "Zona de Mercovélez", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6570,6 +6615,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mijas",
     etiqueta: "Mijas (Málaga)",
     zonas: [...BARRIOS_MIJAS, ...POLIGONOS_MIJAS],
+  },
+  {
+    id: "velezmalaga",
+    nombre: "Vélez-Málaga",
+    etiqueta: "Vélez-Málaga (Málaga)",
+    zonas: [...BARRIOS_VELEZ_MALAGA, ...POLIGONOS_VELEZ_MALAGA],
   },
 ];
 

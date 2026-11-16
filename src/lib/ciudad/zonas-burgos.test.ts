@@ -129,6 +129,7 @@ describe("zonas de Burgos", () => {
       "malaga",
       "marbella",
       "mijas",
+      "velezmalaga",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1677,6 +1678,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMijas).size).toBe(nombresMijas.length);
     expect(nombresMijas.filter((n) => mijas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(94);
     expect(nombresMijas.filter((n) => mijas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const velez = ciudadUrbana("velezmalaga");
+    expect(velez?.etiqueta).toBe("Vélez-Málaga (Málaga)");
+    expect(velez?.nombre).toBe("Vélez-Málaga");
+    expect(zonaDeCiudad(velez!, "Torre del Mar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "Caleta de Vélez")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "Vélez-Málaga (Casco Histórico)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "Cajiz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "El Trapiche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "Triana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(velez!, "Arroyo de la Miel")).toBeNull();
+    expect(zonaDeCiudad(velez!, "El Higueral")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "El Zamorano (Los Zamoranos)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "La Matita – El Olivarillo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "La Pañoleta – Campiñuela")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "Parque Tecnoalimentario de Vélez-Málaga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "Polígono Industrial Cajiz")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(velez!, "Zona de Mercovélez")?.tipo).toBe("poligono");
+    const nombresVelez = velez!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVelez).size).toBe(nombresVelez.length);
+    expect(nombresVelez.filter((n) => velez!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(25);
+    expect(nombresVelez.filter((n) => velez!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1731,6 +1753,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[malagaIdx + 2]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 3]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
