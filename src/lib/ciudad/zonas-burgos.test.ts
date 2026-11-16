@@ -69,6 +69,7 @@ describe("zonas de Burgos", () => {
       "granollers",
       "cerdanyola",
       "mollet",
+      "barbera",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -664,6 +665,19 @@ describe("zonas de Burgos", () => {
     const nombresMollet = mollet!.zonas.map((z) => z.nombre);
     expect(new Set(nombresMollet).size).toBe(nombresMollet.length);
     expect(nombresMollet.filter((n) => mollet!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
+    const barbera = ciudadUrbana("barbera");
+    expect(barbera?.etiqueta).toBe("Barberà del Vallès (Barcelona)");
+    expect(barbera?.nombre).toBe("Barberà del Vallès");
+    expect(zonaDeCiudad(barbera!, "Ca n'Esteper")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barbera!, "Santiga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barbera!, "Zona Nord")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(barbera!, "Can Gorgs")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(barbera!, "Polígono A")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(barbera!, "Santiga – Provasa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(barbera!, "Barberà de la Conca")).toBeNull();
+    const nombresBarbera = barbera!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBarbera).size).toBe(nombresBarbera.length);
+    expect(nombresBarbera.filter((n) => barbera!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

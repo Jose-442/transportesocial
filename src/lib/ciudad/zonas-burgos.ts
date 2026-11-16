@@ -131,6 +131,7 @@
  * Los 7 polígonos de la sede electrónica.
  * Cerdanyola del Vallès: los barrios y los 9 polígonos de la lista.
  * Mollet del Vallès: los barrios y los 5 polígonos de la lista.
+ * Barberà del Vallès: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2473,6 +2474,45 @@ const POLIGONOS_MOLLET: ZonaCiudad[] = [
   { nombre: "Mas Regà", tipo: "poligono" },
 ];
 
+const BARRIOS_BARBERA: ZonaCiudad[] = [
+  { nombre: "Barri Antic", tipo: "barrio" },
+  { nombre: "Barri de l'Estació", tipo: "barrio" },
+  { nombre: "Barri de la Romànica", tipo: "barrio" },
+  { nombre: "Barri de Can Gorgs", tipo: "barrio" },
+  { nombre: "Can Gorgs II", tipo: "barrio" },
+  { nombre: "Can Llobet", tipo: "barrio" },
+  { nombre: "Can Rabella", tipo: "barrio" },
+  { nombre: "Can Serra", tipo: "barrio" },
+  { nombre: "Ca n'Esteper", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Colònia Estaper", tipo: "barrio" },
+  { nombre: "Creu de Barberà", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+  { nombre: "Espronceda", tipo: "barrio" },
+  { nombre: "La Romànica", tipo: "barrio" },
+  { nombre: "Les Termes", tipo: "barrio" },
+  { nombre: "Molí d'en Santo", tipo: "barrio" },
+  { nombre: "Parc Central", tipo: "barrio" },
+  { nombre: "Parc d'Europa", tipo: "barrio" },
+  { nombre: "Parc Europa", tipo: "barrio" },
+  { nombre: "Santiga", tipo: "barrio" },
+  { nombre: "Torre Mateu", tipo: "barrio" },
+  { nombre: "Zona Nord", tipo: "barrio" },
+];
+
+const POLIGONOS_BARBERA: ZonaCiudad[] = [
+  { nombre: "Can Gorgs", tipo: "poligono" },
+  { nombre: "Can Salvatella", tipo: "poligono" },
+  { nombre: "Joan Mateu", tipo: "poligono" },
+  { nombre: "Polígono A", tipo: "poligono" },
+  { nombre: "Polígono B", tipo: "poligono" },
+  { nombre: "Polígono C", tipo: "poligono" },
+  { nombre: "Provasa", tipo: "poligono" },
+  { nombre: "Ronda Santa Maria", tipo: "poligono" },
+  { nombre: "Santiga – Provasa", tipo: "poligono" },
+  { nombre: "Santa Maria", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2853,6 +2893,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mollet del Vallès",
     etiqueta: "Mollet del Vallès (Barcelona)",
     zonas: [...BARRIOS_MOLLET, ...POLIGONOS_MOLLET],
+  },
+  {
+    id: "barbera",
+    nombre: "Barberà del Vallès",
+    etiqueta: "Barberà del Vallès (Barcelona)",
+    zonas: [...BARRIOS_BARBERA, ...POLIGONOS_BARBERA],
   },
 ];
 
