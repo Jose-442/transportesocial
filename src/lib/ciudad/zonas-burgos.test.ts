@@ -620,6 +620,8 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(castelldefels!, "Can Vinader")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(castelldefels!, "Camí Ral")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(castelldefels!, "Polígono Industrial del Camí Ral")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(castelldefels!, "Parc Mediterrani de la Tecnologia")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(castelldefels!, "Pla de Carat")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(castelldefels!, "Can Cargol")).toBeNull();
     const nombresCastelldefels = castelldefels!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCastelldefels).size).toBe(nombresCastelldefels.length);

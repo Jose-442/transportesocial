@@ -126,7 +126,7 @@
  * Vilanova i la Geltrú: los barrios de la página del Ayuntamiento.
  * Los 12 polígonos del censo municipal.
  * Castelldefels: los 19 barrios del Ayuntamiento.
- * El polígono industrial del Camí Ral.
+ * El polígono industrial del Camí Ral, el parque tecnológico y Pla de Carat.
  * Granollers: los 17 barrios del mapa municipal.
  * Los 7 polígonos de la sede electrónica.
  */
@@ -2345,6 +2345,8 @@ const BARRIOS_CASTELLDEFELS: ZonaCiudad[] = [
 
 const POLIGONOS_CASTELLDEFELS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial del Camí Ral", tipo: "poligono" },
+  { nombre: "Parc Mediterrani de la Tecnologia", tipo: "poligono" },
+  { nombre: "Pla de Carat", tipo: "poligono" },
 ];
 
 const BARRIOS_GRANOLLERS: ZonaCiudad[] = [
