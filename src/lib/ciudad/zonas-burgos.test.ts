@@ -111,6 +111,7 @@ describe("zonas de Burgos", () => {
       "arganda",
       "colmenar",
       "pinto",
+      "trescantos",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1336,6 +1337,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresPinto).size).toBe(nombresPinto.length);
     expect(nombresPinto.filter((n) => pinto!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(19);
     expect(nombresPinto.filter((n) => pinto!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const tresCantos = ciudadUrbana("trescantos");
+    expect(tresCantos?.etiqueta).toBe("Tres Cantos (Madrid)");
+    expect(tresCantos?.nombre).toBe("Tres Cantos");
+    expect(zonaDeCiudad(tresCantos!, "Centro – Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Foresta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Forestal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Nuevo Tres Cantos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Soto de Viñuelas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Residencial El Pinar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tresCantos!, "Parque Empresarial Euronova")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tresCantos!, "Parque Empresarial UA-3 / UA-4")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tresCantos!, "Parque Tecnológico Nuevo Tres Cantos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tresCantos!, "Polígono Industrial de Tres Cantos (Zona Industrial Este)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tresCantos!, "Zona Industrial Oeste")?.tipo).toBe("poligono");
+    const nombresTresCantos = tresCantos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTresCantos).size).toBe(nombresTresCantos.length);
+    expect(nombresTresCantos.filter((n) => tresCantos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    expect(nombresTresCantos.filter((n) => tresCantos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1354,7 +1373,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 23).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 24).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1377,6 +1396,7 @@ describe("zonas de Burgos", () => {
       "Rivas-Vaciamadrid",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
+      "Tres Cantos",
       "Valdemoro",
     ]);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();

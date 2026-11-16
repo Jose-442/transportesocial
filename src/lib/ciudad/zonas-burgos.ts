@@ -189,6 +189,8 @@
  * Pinto: los barrios y los polígonos de la lista.
  * Rábida, La queda con el nombre así.
  * La Estación no entra: queda Pinto-Estación.
+ * Tres Cantos: los sectores y los polígonos de la lista.
+ * Soto de Viñuelas queda como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4535,6 +4537,38 @@ const POLIGONOS_PINTO: ZonaCiudad[] = [
   { nombre: "Parque Industrial Sector 2", tipo: "poligono" },
 ];
 
+const BARRIOS_TRES_CANTOS: ZonaCiudad[] = [
+  { nombre: "América", tipo: "barrio" },
+  { nombre: "Centro – Estación", tipo: "barrio" },
+  { nombre: "Descubridores", tipo: "barrio" },
+  { nombre: "Embarcaciones", tipo: "barrio" },
+  { nombre: "Forestal", tipo: "barrio" },
+  { nombre: "Foresta", tipo: "barrio" },
+  { nombre: "Islas", tipo: "barrio" },
+  { nombre: "Literatos", tipo: "barrio" },
+  { nombre: "Mares", tipo: "barrio" },
+  { nombre: "Músicos", tipo: "barrio" },
+  { nombre: "Nuevo Tres Cantos", tipo: "barrio" },
+  { nombre: "Océanos", tipo: "barrio" },
+  { nombre: "Oficios", tipo: "barrio" },
+  { nombre: "Pintores", tipo: "barrio" },
+  { nombre: "Planetas", tipo: "barrio" },
+  { nombre: "Pueblos", tipo: "barrio" },
+  { nombre: "Soto de Viñuelas", tipo: "barrio" },
+  { nombre: "Residencial El Pinar", tipo: "barrio" },
+];
+
+const POLIGONOS_TRES_CANTOS: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Euronova", tipo: "poligono" },
+  { nombre: "Parque Empresarial UA-3 / UA-4", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Madrid", tipo: "poligono" },
+  { nombre: "Parque Tecnológico Nuevo Tres Cantos", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Tres Cantos (Zona Industrial Este)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sur", tipo: "poligono" },
+  { nombre: "Polígono Industrial Valdelaosa", tipo: "poligono" },
+  { nombre: "Zona Industrial Oeste", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5149,6 +5183,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Pinto",
     etiqueta: "Pinto (Madrid)",
     zonas: [...BARRIOS_PINTO, ...POLIGONOS_PINTO],
+  },
+  {
+    id: "trescantos",
+    nombre: "Tres Cantos",
+    etiqueta: "Tres Cantos (Madrid)",
+    zonas: [...BARRIOS_TRES_CANTOS, ...POLIGONOS_TRES_CANTOS],
   },
 ];
 
