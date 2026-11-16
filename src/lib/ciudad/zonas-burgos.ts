@@ -161,6 +161,7 @@
  * Parla: los barrios y los polígonos de la lista.
  * Alcobendas: los barrios y los polígonos de la lista.
  * Fuente Hito, Valdelasfuentes, Fuentelucha, Arroyo de la Vega y El Juncal quedan como barrio.
+ * Rivas-Vaciamadrid: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3904,6 +3905,43 @@ const POLIGONOS_ALCOBENDAS: ZonaCiudad[] = [
   { nombre: "Zona empresarial El Juncal", tipo: "poligono" },
 ];
 
+const BARRIOS_RIVAS: ZonaCiudad[] = [
+  { nombre: "Barrio Oeste", tipo: "barrio" },
+  { nombre: "Covibar", tipo: "barrio" },
+  { nombre: "Pablo Iglesias", tipo: "barrio" },
+  { nombre: "La Partija", tipo: "barrio" },
+  { nombre: "La Luna", tipo: "barrio" },
+  { nombre: "Cristo de Rivas", tipo: "barrio" },
+  { nombre: "Barrio Centro", tipo: "barrio" },
+  { nombre: "Santa Mónica", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "José Hierro", tipo: "barrio" },
+  { nombre: "Cómic", tipo: "barrio" },
+  { nombre: "Cerro de la Cabaña", tipo: "barrio" },
+  { nombre: "Los Montecillos", tipo: "barrio" },
+  { nombre: "Olivar de la Partija", tipo: "barrio" },
+  { nombre: "Las Urbanizaciones", tipo: "barrio" },
+  { nombre: "Barrio Este", tipo: "barrio" },
+  { nombre: "Casco Antiguo (Rivas Pueblo)", tipo: "barrio" },
+  { nombre: "Rivas Futura", tipo: "barrio" },
+  { nombre: "Avenida del Levante", tipo: "barrio" },
+  { nombre: "Camino Bajo de Rivas", tipo: "barrio" },
+  { nombre: "Mirador Norte", tipo: "barrio" },
+  { nombre: "Mirador Sur", tipo: "barrio" },
+  { nombre: "Las Colinas", tipo: "barrio" },
+];
+
+const POLIGONOS_RIVAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Santa Ana", tipo: "poligono" },
+  { nombre: "Área de Servicios Santa Ana", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Deseada", tipo: "poligono" },
+  { nombre: "Polígono Industrial Capanegra", tipo: "poligono" },
+  { nombre: "Zona Industrial Urbana (Los Areneros)", tipo: "poligono" },
+  { nombre: "Zona Industrial La Estación", tipo: "poligono" },
+  { nombre: "Zona Industrial El Campillo", tipo: "poligono" },
+  { nombre: "Parque Empresarial Rivas Futura", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4440,6 +4478,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcobendas",
     etiqueta: "Alcobendas (Madrid)",
     zonas: [...BARRIOS_ALCOBENDAS, ...POLIGONOS_ALCOBENDAS],
+  },
+  {
+    id: "rivas",
+    nombre: "Rivas-Vaciamadrid",
+    etiqueta: "Rivas-Vaciamadrid (Madrid)",
+    zonas: [...BARRIOS_RIVAS, ...POLIGONOS_RIVAS],
   },
 ];
 

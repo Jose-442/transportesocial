@@ -98,6 +98,7 @@ describe("zonas de Burgos", () => {
       "torrejon",
       "parla",
       "alcobendas",
+      "rivas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1081,6 +1082,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcobendas).size).toBe(nombresAlcobendas.length);
     expect(nombresAlcobendas.filter((n) => alcobendas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
     expect(nombresAlcobendas.filter((n) => alcobendas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
+    const rivas = ciudadUrbana("rivas");
+    expect(rivas?.etiqueta).toBe("Rivas-Vaciamadrid (Madrid)");
+    expect(rivas?.nombre).toBe("Rivas-Vaciamadrid");
+    expect(zonaDeCiudad(rivas!, "Barrio Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Barrio Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Barrio Este")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Casco Antiguo (Rivas Pueblo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Rivas Futura")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Cómic")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rivas!, "Polígono Industrial de Santa Ana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rivas!, "Área de Servicios Santa Ana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rivas!, "Zona Industrial Urbana (Los Areneros)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rivas!, "Parque Empresarial Rivas Futura")?.tipo).toBe("poligono");
+    const nombresRivas = rivas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRivas).size).toBe(nombresRivas.length);
+    expect(nombresRivas.filter((n) => rivas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresRivas.filter((n) => rivas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1099,7 +1117,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 10).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 11).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1109,6 +1127,7 @@ describe("zonas de Burgos", () => {
       "Leganés",
       "Móstoles",
       "Parla",
+      "Rivas-Vaciamadrid",
       "Torrejón de Ardoz",
     ]);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
