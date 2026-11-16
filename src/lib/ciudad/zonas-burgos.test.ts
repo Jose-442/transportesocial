@@ -110,7 +110,13 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(burgos!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(burgos!, "Centro Histórico")).toBeNull();
     expect(zonaDeCiudad(burgos!, "Centro Sur")).toBeNull();
-    expect(zonaDeCiudad(burgos!, "Villalonquéjar I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Polígono Industrial Villalonquéjar I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Polígono Industrial Gamonal-Villímar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Área Industrial Fábrica Nacional de Moneda y Timbre (FNMT)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Centro de Actividades Económicas (CAE)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Parque Tecnológico de Burgos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(burgos!, "Villalonquéjar I")).toBeNull();
+    expect(zonaDeCiudad(burgos!, "Burgos Este")).toBeNull();
     expect(zonaDeCiudad(burgos!, "Calle inventada")).toBeNull();
     expect(zonaDeCiudad(aranda!, "Allendeduero")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(aranda!, "Polígono Allendeduero")?.tipo).toBe(

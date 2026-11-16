@@ -205,12 +205,27 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
 ];
 
 const POLIGONOS_BURGOS: ZonaCiudad[] = [
-  { nombre: "Villalonquéjar I", tipo: "poligono" },
-  { nombre: "Villalonquéjar II", tipo: "poligono" },
-  { nombre: "Villalonquéjar III", tipo: "poligono" },
-  { nombre: "Villalonquéjar IV", tipo: "poligono" },
-  { nombre: "Burgos Este", tipo: "poligono" },
-  { nombre: "Monte de la Abadesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villalonquéjar I", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villalonquéjar II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villalonquéjar III", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villalonquéjar IV", tipo: "poligono" },
+  { nombre: "Polígono Industrial Gamonal", tipo: "poligono" },
+  { nombre: "Polígono Industrial Gamonal-Villímar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villayuda", tipo: "poligono" },
+  { nombre: "Polígono Industrial Castañares", tipo: "poligono" },
+  { nombre: "Polígono Industrial Monte de la Abadesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pentasa I", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pentasa II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Alto de la Varga", tipo: "poligono" },
+  { nombre: "Polígono Industrial Villafría", tipo: "poligono" },
+  { nombre: "Área Industrial Fábrica Nacional de Moneda y Timbre (FNMT)", tipo: "poligono" },
+  { nombre: "Área Industrial Carretera de Madrid", tipo: "poligono" },
+  { nombre: "Polígono Empresarial Landa", tipo: "poligono" },
+  { nombre: "Polígono Empresarial Inbisa-Landa", tipo: "poligono" },
+  { nombre: "Polígono Empresarial Automoba-Hipercor", tipo: "poligono" },
+  { nombre: "Centro de Transportes de Burgos", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Burgos", tipo: "poligono" },
+  { nombre: "Centro de Actividades Económicas (CAE)", tipo: "poligono" },
 ];
 
 const BARRIOS_ARANDA: ZonaCiudad[] = [
