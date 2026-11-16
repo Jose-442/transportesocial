@@ -125,6 +125,8 @@
  * Los 11 polígonos del mapa municipal.
  * Vilanova i la Geltrú: los barrios de la página del Ayuntamiento.
  * Los 12 polígonos del censo municipal.
+ * Castelldefels: los 19 barrios del Ayuntamiento.
+ * El polígono industrial del Camí Ral.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2317,6 +2319,32 @@ const POLIGONOS_VILANOVA: ZonaCiudad[] = [
   { nombre: "Industrial La Plana", tipo: "poligono" },
 ];
 
+const BARRIOS_CASTELLDEFELS: ZonaCiudad[] = [
+  { nombre: "Baixador", tipo: "barrio" },
+  { nombre: "Bellamar", tipo: "barrio" },
+  { nombre: "Les Botigues", tipo: "barrio" },
+  { nombre: "Can Roca", tipo: "barrio" },
+  { nombre: "El Castell-Poble Vell", tipo: "barrio" },
+  { nombre: "Els Canyars", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Gran Via Mar", tipo: "barrio" },
+  { nombre: "Lluminetes", tipo: "barrio" },
+  { nombre: "Mar-i-Sol", tipo: "barrio" },
+  { nombre: "Montmar", tipo: "barrio" },
+  { nombre: "La Pineda", tipo: "barrio" },
+  { nombre: "El Poal", tipo: "barrio" },
+  { nombre: "Zona Universitària", tipo: "barrio" },
+  { nombre: "Camí Ral", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Can Bou", tipo: "barrio" },
+  { nombre: "Muntanyeta", tipo: "barrio" },
+  { nombre: "Can Vinader", tipo: "barrio" },
+];
+
+const POLIGONOS_CASTELLDEFELS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial del Camí Ral", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2673,6 +2701,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Vilanova i la Geltrú",
     etiqueta: "Vilanova i la Geltrú (Barcelona)",
     zonas: [...BARRIOS_VILANOVA, ...POLIGONOS_VILANOVA],
+  },
+  {
+    id: "castelldefels",
+    nombre: "Castelldefels",
+    etiqueta: "Castelldefels (Barcelona)",
+    zonas: [...BARRIOS_CASTELLDEFELS, ...POLIGONOS_CASTELLDEFELS],
   },
 ];
 

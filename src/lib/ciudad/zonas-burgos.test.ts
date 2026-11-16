@@ -65,6 +65,7 @@ describe("zonas de Burgos", () => {
       "santcugat",
       "rubi",
       "vilanova",
+      "castelldefels",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -611,6 +612,17 @@ describe("zonas de Burgos", () => {
     const nombresVilanova = vilanova!.zonas.map((z) => z.nombre);
     expect(new Set(nombresVilanova).size).toBe(nombresVilanova.length);
     expect(nombresVilanova.filter((n) => vilanova!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    const castelldefels = ciudadUrbana("castelldefels");
+    expect(castelldefels?.etiqueta).toBe("Castelldefels (Barcelona)");
+    expect(castelldefels?.nombre).toBe("Castelldefels");
+    expect(zonaDeCiudad(castelldefels!, "El Castell-Poble Vell")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castelldefels!, "Can Vinader")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castelldefels!, "Camí Ral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castelldefels!, "Polígono Industrial del Camí Ral")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(castelldefels!, "Can Cargol")).toBeNull();
+    const nombresCastelldefels = castelldefels!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCastelldefels).size).toBe(nombresCastelldefels.length);
+    expect(nombresCastelldefels.filter((n) => castelldefels!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(19);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
