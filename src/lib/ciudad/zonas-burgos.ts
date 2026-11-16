@@ -200,6 +200,7 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "La Cellophane", tipo: "barrio" },
   { nombre: "Los Parralillos", tipo: "barrio" },
   { nombre: "Juan XXIII", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
 ];
 
 const POLIGONOS_BURGOS: ZonaCiudad[] = [
