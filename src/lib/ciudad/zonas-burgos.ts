@@ -167,6 +167,9 @@
  * San Sebastián de los Reyes: los barrios y los polígonos de la lista.
  * Pozuelo de Alarcón: los barrios y los polígonos de la lista.
  * Valdemoro: los barrios y los polígonos de la lista.
+ * Coslada: los barrios y los polígonos de la lista.
+ * Ciudad 70 queda como Ciudad 70 (Ciudad San Pablo).
+ * Barrio del Jarama sin la nota del desarrollo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4156,6 +4159,44 @@ const POLIGONOS_VALDEMORO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Yesos Ibéricos", tipo: "poligono" },
 ];
 
+const BARRIOS_COSLADA: ZonaCiudad[] = [
+  { nombre: "Casco (Coslada Pueblo)", tipo: "barrio" },
+  { nombre: "Barrio del Puerto", tipo: "barrio" },
+  { nombre: "Valleaguado Norte", tipo: "barrio" },
+  { nombre: "Valleaguado Sur", tipo: "barrio" },
+  { nombre: "La Cañada", tipo: "barrio" },
+  { nombre: "Las Conejeras", tipo: "barrio" },
+  { nombre: "El Esparragal", tipo: "barrio" },
+  { nombre: "La Colina", tipo: "barrio" },
+  { nombre: "Ciudad 70 (Ciudad San Pablo)", tipo: "barrio" },
+  { nombre: "La Espinilla", tipo: "barrio" },
+  { nombre: "Parque Blanco", tipo: "barrio" },
+  { nombre: "Barrio de Santiago", tipo: "barrio" },
+  { nombre: "Barrio de la Estación", tipo: "barrio" },
+  { nombre: "Barrio del Jarama", tipo: "barrio" },
+  { nombre: "Zona de La Rambla", tipo: "barrio" },
+  { nombre: "Zona residencial del entorno del Hospital", tipo: "barrio" },
+  { nombre: "Zona de la Estación", tipo: "barrio" },
+];
+
+const POLIGONOS_COSLADA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Coslada", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Estación", tipo: "poligono" },
+  { nombre: "Polígono Industrial Logística", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerto Seco", tipo: "poligono" },
+  { nombre: "Zona Industrial de Coslada", tipo: "poligono" },
+  { nombre: "Centro de Transportes de Coslada (CTC)", tipo: "poligono" },
+  { nombre: "Centro Integral de Transportes (CIT)", tipo: "poligono" },
+  { nombre: "Parque Empresarial Advance", tipo: "poligono" },
+  { nombre: "Polígono Escofet", tipo: "poligono" },
+  { nombre: "SEGRO Park Coslada I", tipo: "poligono" },
+  { nombre: "SEGRO Park Coslada III", tipo: "poligono" },
+  { nombre: "Prologis Park Coslada", tipo: "poligono" },
+  { nombre: "Coslada Complex", tipo: "poligono" },
+  { nombre: "Centro de Empresas de Base Tecnológica", tipo: "poligono" },
+  { nombre: "Centro de Excelencia Empresarial de Coslada", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4722,6 +4763,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Valdemoro",
     etiqueta: "Valdemoro (Madrid)",
     zonas: [...BARRIOS_VALDEMORO, ...POLIGONOS_VALDEMORO],
+  },
+  {
+    id: "coslada",
+    nombre: "Coslada",
+    etiqueta: "Coslada (Madrid)",
+    zonas: [...BARRIOS_COSLADA, ...POLIGONOS_COSLADA],
   },
 ];
 

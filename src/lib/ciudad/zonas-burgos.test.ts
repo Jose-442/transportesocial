@@ -103,6 +103,7 @@ describe("zonas de Burgos", () => {
       "ssreyes",
       "pozuelo",
       "valdemoro",
+      "coslada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1185,6 +1186,35 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresValdemoro).size).toBe(nombresValdemoro.length);
     expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(49);
     expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
+    const coslada = ciudadUrbana("coslada");
+    expect(coslada?.etiqueta).toBe("Coslada (Madrid)");
+    expect(coslada?.nombre).toBe("Coslada");
+    expect(zonaDeCiudad(coslada!, "Casco (Coslada Pueblo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Ciudad 70 (Ciudad San Pablo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Ciudad San Pablo")).toBeNull();
+    expect(zonaDeCiudad(coslada!, "La Espinilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Parque Blanco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Barrio del Jarama")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Barrio del Jarama (nuevo desarrollo residencial)")).toBeNull();
+    expect(zonaDeCiudad(coslada!, "Zona de La Rambla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Zona residencial del entorno del Hospital")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Zona de la Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Barrio de la Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coslada!, "Polígono Industrial de Coslada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Polígono Industrial Puerto Seco")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Polígono Industrial La Estación")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Zona Industrial de Coslada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Polígono Escofet")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Centro de Transportes de Coslada (CTC)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "SEGRO Park Coslada III")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "SEGRO Park Coslada II")).toBeNull();
+    expect(zonaDeCiudad(coslada!, "Centro de Empresas de Base Tecnológica")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Centro de Excelencia Empresarial de Coslada")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coslada!, "Polígono – Puerto Seco")).toBeNull();
+    const nombresCoslada = coslada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCoslada).size).toBe(nombresCoslada.length);
+    expect(nombresCoslada.filter((n) => coslada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
+    expect(nombresCoslada.filter((n) => coslada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(15);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1203,11 +1233,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 15).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 16).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
+      "Coslada",
       "Fuenlabrada",
       "Getafe",
       "Las Rozas de Madrid",
