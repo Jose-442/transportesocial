@@ -181,6 +181,9 @@
  * Aranjuez: los barrios y los polígonos de la lista.
  * Industrial Gonzalo Chacón y Polígono Industrial Gonzalo Chacón quedan los dos.
  * Cortijo de San Isidro y Real Cortijo de San Isidro quedan los dos.
+ * Arganda del Rey: los barrios y los polígonos de la lista.
+ * Cañal, El queda con el nombre así.
+ * El Guijar queda como barrio. Polígono El Guijar como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4411,6 +4414,45 @@ const POLIGONOS_ARANJUEZ: ZonaCiudad[] = [
   { nombre: "Polígono Industrial del Automóvil", tipo: "poligono" },
 ];
 
+const BARRIOS_ARGANDA: ZonaCiudad[] = [
+  { nombre: "Área de Centralidad", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro de la Castaña", tipo: "barrio" },
+  { nombre: "Cerro de la Perlita", tipo: "barrio" },
+  { nombre: "Colonia de los Almendros", tipo: "barrio" },
+  { nombre: "El Guijar", tipo: "barrio" },
+  { nombre: "El Grillero", tipo: "barrio" },
+  { nombre: "El Romeral", tipo: "barrio" },
+  { nombre: "Ensanche de Los Villares", tipo: "barrio" },
+  { nombre: "La Campaña", tipo: "barrio" },
+  { nombre: "La Poveda", tipo: "barrio" },
+  { nombre: "Los Villares", tipo: "barrio" },
+  { nombre: "Nuevo Guijar", tipo: "barrio" },
+  { nombre: "Puerta de la Dehesa", tipo: "barrio" },
+  { nombre: "Valdemaría", tipo: "barrio" },
+  { nombre: "Valdelarcipreste", tipo: "barrio" },
+];
+
+const POLIGONOS_ARGANDA: ZonaCiudad[] = [
+  { nombre: "Borondo", tipo: "poligono" },
+  { nombre: "Cañal, El", tipo: "poligono" },
+  { nombre: "Cysa", tipo: "poligono" },
+  { nombre: "El Alquitón", tipo: "poligono" },
+  { nombre: "El Estrechillo", tipo: "poligono" },
+  { nombre: "Polígono El Guijar", tipo: "poligono" },
+  { nombre: "El Malvar", tipo: "poligono" },
+  { nombre: "El Olivar", tipo: "poligono" },
+  { nombre: "El Rincón", tipo: "poligono" },
+  { nombre: "Finanzauto", tipo: "poligono" },
+  { nombre: "José María Llanos", tipo: "poligono" },
+  { nombre: "Las Monjas", tipo: "poligono" },
+  { nombre: "Los Robles", tipo: "poligono" },
+  { nombre: "San Roque", tipo: "poligono" },
+  { nombre: "San Sebastián", tipo: "poligono" },
+  { nombre: "Valdepeñas", tipo: "poligono" },
+  { nombre: "Velasco", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5007,6 +5049,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Aranjuez",
     etiqueta: "Aranjuez (Madrid)",
     zonas: [...BARRIOS_ARANJUEZ, ...POLIGONOS_ARANJUEZ],
+  },
+  {
+    id: "arganda",
+    nombre: "Arganda del Rey",
+    etiqueta: "Arganda del Rey (Madrid)",
+    zonas: [...BARRIOS_ARGANDA, ...POLIGONOS_ARGANDA],
   },
 ];
 

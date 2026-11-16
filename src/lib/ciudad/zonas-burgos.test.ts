@@ -108,6 +108,7 @@ describe("zonas de Burgos", () => {
       "colladovillalba",
       "boadilla",
       "aranjuez",
+      "arganda",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1278,6 +1279,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAranjuez).size).toBe(nombresAranjuez.length);
     expect(nombresAranjuez.filter((n) => aranjuez!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(31);
     expect(nombresAranjuez.filter((n) => aranjuez!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const arganda = ciudadUrbana("arganda");
+    expect(arganda?.etiqueta).toBe("Arganda del Rey (Madrid)");
+    expect(arganda?.nombre).toBe("Arganda del Rey");
+    expect(zonaDeCiudad(arganda!, "Área de Centralidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Colonia de los Almendros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "El Guijar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "La Campaña")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Nuevo Guijar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Puerta de la Dehesa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Valdemaría")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "La Poveda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Los Villares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arganda!, "Cañal, El")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arganda!, "Polígono El Guijar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arganda!, "El Alquitón")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arganda!, "José María Llanos")?.tipo).toBe("poligono");
+    const nombresArganda = arganda!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresArganda).size).toBe(nombresArganda.length);
+    expect(nombresArganda.filter((n) => arganda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresArganda.filter((n) => arganda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(17);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1296,12 +1317,13 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 20).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 21).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
       "Aranjuez",
+      "Arganda del Rey",
       "Boadilla del Monte",
       "Collado Villalba",
       "Coslada",
