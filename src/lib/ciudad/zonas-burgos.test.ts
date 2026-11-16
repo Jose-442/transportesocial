@@ -100,6 +100,7 @@ describe("zonas de Burgos", () => {
       "alcobendas",
       "rivas",
       "lasrozas",
+      "ssreyes",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1118,6 +1119,28 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresRozas).size).toBe(nombresRozas.length);
     expect(nombresRozas.filter((n) => lasrozas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(44);
     expect(nombresRozas.filter((n) => lasrozas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const ssreyes = ciudadUrbana("ssreyes");
+    expect(ssreyes?.etiqueta).toBe("San Sebastián de los Reyes (Madrid)");
+    expect(ssreyes?.nombre).toBe("San Sebastián de los Reyes");
+    expect(ciudadUrbana("sansebastian")?.etiqueta).toBe("San Sebastián (Gipuzkoa)");
+    expect(zonaDeCiudad(ssreyes!, "Dehesa Vieja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Dehesa Vieja Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Dehesa Vieja Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Dehesa Vieja Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Tempranales")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Tempranales Este")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Tempranales Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Santa Bárbara-Baunatal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Moscatelares Residencial")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ssreyes!, "Polígono Industrial Moscatelares")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ssreyes!, "Polígono Industrial Norte-Los Alamillos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ssreyes!, "Zona empresarial Moscatelares Comercial")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ssreyes!, "Zona empresarial Comercial Dehesa Vieja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ssreyes!, "Alcobendas")).toBeNull();
+    const nombresReyes = ssreyes!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresReyes).size).toBe(nombresReyes.length);
+    expect(nombresReyes.filter((n) => ssreyes!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
+    expect(nombresReyes.filter((n) => ssreyes!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1136,7 +1159,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 12).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 13).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1148,6 +1171,7 @@ describe("zonas de Burgos", () => {
       "Móstoles",
       "Parla",
       "Rivas-Vaciamadrid",
+      "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
     ]);
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();

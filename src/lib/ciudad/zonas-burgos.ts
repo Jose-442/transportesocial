@@ -164,6 +164,7 @@
  * Rivas-Vaciamadrid: los barrios y los polígonos de la lista.
  * Las Rozas de Madrid: los barrios y los polígonos de la lista.
  * Európolis queda solo como polígono.
+ * San Sebastián de los Reyes: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4000,6 +4001,46 @@ const POLIGONOS_LAS_ROZAS: ZonaCiudad[] = [
   { nombre: "Parque Empresarial de Camilo José Cela", tipo: "poligono" },
 ];
 
+const BARRIOS_SS_REYES: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Sacramento", tipo: "barrio" },
+  { nombre: "El Chaparral", tipo: "barrio" },
+  { nombre: "Ensanche Este", tipo: "barrio" },
+  { nombre: "Ensanche Oeste", tipo: "barrio" },
+  { nombre: "Ensanche Autonomías", tipo: "barrio" },
+  { nombre: "Barrio de los Arroyos", tipo: "barrio" },
+  { nombre: "La Zaporra", tipo: "barrio" },
+  { nombre: "El Praderón", tipo: "barrio" },
+  { nombre: "Rosa Luxemburgo", tipo: "barrio" },
+  { nombre: "Santa Bárbara-Baunatal", tipo: "barrio" },
+  { nombre: "Dehesa Vieja", tipo: "barrio" },
+  { nombre: "Dehesa Vieja Norte", tipo: "barrio" },
+  { nombre: "Dehesa Vieja Sur", tipo: "barrio" },
+  { nombre: "Dehesa Vieja Oeste", tipo: "barrio" },
+  { nombre: "Tempranales", tipo: "barrio" },
+  { nombre: "Tempranales Este", tipo: "barrio" },
+  { nombre: "Tempranales Oeste", tipo: "barrio" },
+  { nombre: "Tejas Verdes", tipo: "barrio" },
+  { nombre: "Pilar de Abajo", tipo: "barrio" },
+  { nombre: "La Marina", tipo: "barrio" },
+  { nombre: "Moscatelares Residencial", tipo: "barrio" },
+  { nombre: "La Granjilla", tipo: "barrio" },
+  { nombre: "Fuente del Fresno", tipo: "barrio" },
+  { nombre: "Fresno Norte", tipo: "barrio" },
+  { nombre: "Club de Campo", tipo: "barrio" },
+  { nombre: "Ciudalcampo", tipo: "barrio" },
+];
+
+const POLIGONOS_SS_REYES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Norte", tipo: "poligono" },
+  { nombre: "Polígono Industrial Norte-Los Alamillos", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sur", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Hoya", tipo: "poligono" },
+  { nombre: "Polígono Industrial Moscatelares", tipo: "poligono" },
+  { nombre: "Zona empresarial Moscatelares Comercial", tipo: "poligono" },
+  { nombre: "Zona empresarial Comercial Dehesa Vieja", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4548,6 +4589,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Las Rozas de Madrid",
     etiqueta: "Rozas de Madrid, Las (Madrid)",
     zonas: [...BARRIOS_LAS_ROZAS, ...POLIGONOS_LAS_ROZAS],
+  },
+  {
+    id: "ssreyes",
+    nombre: "San Sebastián de los Reyes",
+    etiqueta: "San Sebastián de los Reyes (Madrid)",
+    zonas: [...BARRIOS_SS_REYES, ...POLIGONOS_SS_REYES],
   },
 ];
 
