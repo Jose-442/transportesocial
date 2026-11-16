@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type KeyboardEvent,
   type ReactNode,
   type SelectHTMLAttributes,
 } from "react";
@@ -13,6 +14,8 @@ export type SelectOption = {
   value: string;
   label: string;
   group?: string;
+  negrita?: boolean;
+  bajoCapital?: boolean;
 };
 
 type Props = SelectHTMLAttributes<HTMLSelectElement> & {
@@ -26,6 +29,13 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   listaDebajo?: boolean;
 };
 
+function textoBusqueda(valor: string): string {
+  return valor
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es");
+}
+
 export function Select({
   label,
   labelRight,
@@ -33,18 +43,98 @@ export function Select({
   error,
   options,
   placeholder = "Selecciona…",
-  listaDebajo = false,
+  listaDebajo: _listaDebajo = false,
   className = "",
   id,
   ...props
 }: Props) {
+  void _listaDebajo;
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const tieneVacio = options.some((opt) => opt.value === "");
-  const vacio = String(props.value ?? "").trim() === "";
+  const valor = String(props.value ?? "");
+  const vacio = valor.trim() === "";
+  const elegido = options.find((opt) => opt.value === valor);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const listaRef = useRef<HTMLDivElement>(null);
+  const [abierto, setAbierto] = useState(false);
+  const [consulta, setConsulta] = useState("");
+  const [escribiendo, setEscribiendo] = useState(false);
+  const [activo, setActivo] = useState(0);
+  const [maxAlto, setMaxAlto] = useState(280);
+
+  const filtro = escribiendo ? textoBusqueda(consulta) : "";
+  const visibles = filtro
+    ? options.filter((opt) => textoBusqueda(opt.label).includes(filtro))
+    : options;
+  const textoVisible = escribiendo ? consulta : (elegido?.label ?? "");
+
+  useEffect(() => {
+    if (!abierto) return;
+    function onDoc(e: MouseEvent) {
+      if (!boxRef.current?.contains(e.target as Node)) {
+        setAbierto(false);
+        setEscribiendo(false);
+      }
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [abierto]);
+
+  useEffect(() => {
+    if (!abierto) return;
+    const caja = boxRef.current;
+    const campo = caja?.closest("[data-campo]");
+    if (!caja || !(campo instanceof HTMLElement)) return;
+    const menu = document.querySelector("nav.fixed.bottom-0");
+    const menuAlto =
+      menu instanceof HTMLElement
+        ? Math.ceil(menu.getBoundingClientRect().height)
+        : 80;
+    const limite = window.innerHeight - menuAlto - 12;
+    const tituloTop = campo.getBoundingClientRect().top;
+    const bottom = caja.getBoundingClientRect().bottom;
+    const quiere = 240;
+    let delta = bottom + quiere > limite ? bottom + quiere - limite : 0;
+    if (tituloTop - delta < 72) delta = Math.max(0, tituloTop - 72);
+    if (delta > 8) window.scrollBy({ top: delta, behavior: "smooth" });
+    const libre = limite - (bottom - delta);
+    setMaxAlto(Math.max(140, Math.min(320, Math.floor(libre))));
+  }, [abierto, visibles.length]);
+
+  useEffect(() => {
+    setActivo(0);
+  }, [filtro, abierto]);
+
+  function elegir(opcion: SelectOption) {
+    props.onChange?.({
+      target: { value: opcion.value },
+    } as ChangeEvent<HTMLSelectElement>);
+    setConsulta("");
+    setEscribiendo(false);
+    setAbierto(false);
+  }
+
+  function alTeclado(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setAbierto(true);
+      setActivo((i) => Math.min(i + 1, Math.max(visibles.length - 1, 0)));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setAbierto(true);
+      setActivo((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter" && abierto && visibles[activo]) {
+      e.preventDefault();
+      elegir(visibles[activo]);
+    } else if (e.key === "Escape") {
+      setAbierto(false);
+      setEscribiendo(false);
+    }
+  }
 
   return (
     <label
-      htmlFor={listaDebajo ? undefined : selectId}
+      htmlFor={selectId}
       className="block space-y-1.5"
       data-campo=""
       {...(vacio ? { "data-campo-vacio": "" } : {})}
@@ -61,13 +151,10 @@ export function Select({
         <span className="text-sm font-medium text-zinc-800">{label}</span>
       )}
       <select
-        id={selectId}
-        className={[
-          "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 invalid:border-red-400 invalid:ring-2 invalid:ring-red-100 focus:invalid:border-red-500 focus:invalid:ring-red-200",
-          error ? "border-red-400 ring-2 ring-red-100" : "",
-          listaDebajo ? "md:hidden" : "",
-          className,
-        ].join(" ")}
+        id={`${selectId}-nativo`}
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden="true"
         {...props}
       >
         {!tieneVacio && (
@@ -77,22 +164,91 @@ export function Select({
         )}
         {opcionesEnGrupos(options)}
       </select>
-      {listaDebajo && (
-        <ListaDebajo
-          label={label}
-          value={String(props.value ?? "")}
-          options={options}
-          placeholder={placeholder}
+      <div ref={boxRef} className="relative">
+        <input
+          id={selectId}
+          type="text"
+          role="combobox"
+          aria-label={label}
+          aria-expanded={abierto}
+          aria-autocomplete="list"
+          aria-controls={`${selectId}-lista`}
           disabled={props.disabled}
-          error={!!error}
-          className={className}
-          onElegir={(valor) =>
-            props.onChange?.({
-              target: { value: valor },
-            } as ChangeEvent<HTMLSelectElement>)
-          }
+          placeholder={elegido?.label || placeholder}
+          value={textoVisible}
+          className={[
+            "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 pr-10 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
+            vacio && !escribiendo ? "text-zinc-400" : "",
+            error ? "border-red-400 ring-2 ring-red-100" : "",
+            className,
+          ].join(" ")}
+          onFocus={() => {
+            if (props.disabled) return;
+            setAbierto(true);
+          }}
+          onChange={(e) => {
+            setConsulta(e.target.value);
+            setEscribiendo(true);
+            setAbierto(true);
+          }}
+          onKeyDown={alTeclado}
         />
-      )}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
+        >
+          ▾
+        </span>
+        {abierto && !props.disabled && (
+          <div
+            id={`${selectId}-lista`}
+            ref={listaRef}
+            role="listbox"
+            aria-label={label}
+            className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+            style={{ maxHeight: maxAlto }}
+          >
+            {visibles.length === 0 && (
+              <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
+            )}
+            {visibles.map((opt, indice) => {
+              const marcado = opt.value === valor;
+              const tituloGrupo =
+                opt.group && visibles[indice - 1]?.group !== opt.group
+                  ? opt.group
+                  : "";
+              return (
+                <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
+                  {tituloGrupo && (
+                    <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
+                      {tituloGrupo}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={marcado}
+                    className={[
+                      "block w-full rounded-lg py-2 text-left text-base",
+                      opt.bajoCapital ? "pr-3 pl-6" : "px-3",
+                      opt.negrita ? "font-bold" : "",
+                      indice === activo
+                        ? "bg-emerald-600 text-white"
+                        : marcado
+                          ? "bg-emerald-50 text-zinc-900"
+                          : "text-zinc-900 hover:bg-emerald-50",
+                    ].join(" ")}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => elegir(opt)}
+                  >
+                    {opt.label}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
     </label>
@@ -123,143 +279,4 @@ function opcionesEnGrupos(options: SelectOption[]) {
       ))}
     </optgroup>
   ));
-}
-
-const selectClassName =
-  "w-full min-h-11 cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200";
-
-function ListaDebajo({
-  label,
-  value,
-  options,
-  placeholder,
-  disabled,
-  error,
-  className,
-  onElegir,
-}: {
-  label: string;
-  value: string;
-  options: SelectOption[];
-  placeholder: string;
-  disabled?: boolean;
-  error: boolean;
-  className: string;
-  onElegir: (valor: string) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const [maxAlto, setMaxAlto] = useState(280);
-  const boxRef = useRef<HTMLDivElement>(null);
-  const titulo =
-    options.find((opt) => opt.value === value)?.label || placeholder;
-  const vacio = value.trim() === "";
-
-  useEffect(() => {
-    if (!open) return;
-    function onDoc(e: MouseEvent) {
-      if (!boxRef.current?.contains(e.target as Node)) setOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    document.addEventListener("mousedown", onDoc);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDoc);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const caja = boxRef.current;
-    const campo = caja?.closest("[data-campo]");
-    if (!caja || !(campo instanceof HTMLElement)) return;
-    const menu = document.querySelector("nav.fixed.bottom-0");
-    const menuAlto =
-      menu instanceof HTMLElement
-        ? Math.ceil(menu.getBoundingClientRect().height)
-        : 80;
-    const limite = window.innerHeight - menuAlto - 12;
-    const tituloTop = campo.getBoundingClientRect().top;
-    const bottom = caja.getBoundingClientRect().bottom;
-    const quiere = 240;
-    let delta = bottom + quiere > limite ? bottom + quiere - limite : 0;
-    if (tituloTop - delta < 72) delta = Math.max(0, tituloTop - 72);
-    if (delta > 8) window.scrollBy({ top: delta, behavior: "smooth" });
-    const libre = limite - (bottom - delta);
-    setMaxAlto(Math.max(140, Math.min(320, Math.floor(libre))));
-  }, [open]);
-
-  return (
-    <div ref={boxRef} className="relative hidden md:block">
-      <button
-        type="button"
-        aria-label={label}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        disabled={disabled}
-        className={[
-          selectClassName,
-          "pr-10",
-          vacio ? "text-zinc-400" : "",
-          error ? "border-red-400 ring-2 ring-red-100" : "",
-          className,
-        ].join(" ")}
-        onClick={() => {
-          if (!disabled) setOpen((prev) => !prev);
-        }}
-      >
-        {titulo}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
-        >
-          ▾
-        </span>
-      </button>
-      {open && !disabled && (
-        <div
-          role="listbox"
-          aria-label={label}
-          className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-          style={{ maxHeight: maxAlto }}
-        >
-          {options.map((opt, indice) => {
-            const elegido = opt.value === value;
-            const tituloGrupo =
-              opt.group && options[indice - 1]?.group !== opt.group
-                ? opt.group
-                : "";
-            return (
-              <div key={opt.value || opt.label}>
-                {tituloGrupo && (
-                  <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
-                    {tituloGrupo}
-                  </p>
-                )}
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={elegido}
-                  className={[
-                    "block w-full rounded-lg px-3 py-2 text-left text-base",
-                    elegido
-                      ? "bg-emerald-600 font-medium text-white"
-                      : "text-zinc-900 hover:bg-emerald-50",
-                  ].join(" ")}
-                  onClick={() => {
-                    onElegir(opt.value);
-                    setOpen(false);
-                  }}
-                >
-                  {opt.label}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
 }

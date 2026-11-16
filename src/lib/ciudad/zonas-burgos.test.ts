@@ -1007,11 +1007,27 @@ describe("zonas de Burgos", () => {
     expect(ciudades.map((c) => c.value).sort()).toEqual(
       CIUDADES_URBANAS.map((c) => c.id).sort()
     );
-    for (let i = 1; i < ciudades.length; i++) {
-      expect(
-        compararTextoEs(ciudades[i - 1].label, ciudades[i].label)
-      ).toBeLessThanOrEqual(0);
+    const negritas = ciudades.filter((c) => c.negrita).map((c) => c.label);
+    for (let i = 1; i < negritas.length; i++) {
+      expect(compararTextoEs(negritas[i - 1], negritas[i])).toBeLessThanOrEqual(0);
     }
+    const burgosIdx = ciudades.findIndex((c) => c.value === "burgos");
+    expect(ciudades[burgosIdx]?.negrita).toBe(true);
+    expect(ciudades[burgosIdx + 1]?.label).toBe("Aranda de Duero");
+    expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
+    const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
+    expect(ciudades.slice(madridIdx, madridIdx + 6).map((c) => c.label)).toEqual([
+      "Madrid",
+      "Alcalá de Henares",
+      "Fuenlabrada",
+      "Getafe",
+      "Leganés",
+      "Móstoles",
+    ]);
+    expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
     for (const ciudad of CIUDADES_URBANAS) {
       const opciones = zonasParaDesplegable(ciudad);
       expect(opciones).toHaveLength(ciudad.zonas.length);

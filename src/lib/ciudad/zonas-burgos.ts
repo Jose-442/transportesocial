@@ -4257,10 +4257,73 @@ export function compararTextoEs(a: string, b: string): number {
   return a.localeCompare(b, "es", { sensitivity: "base", numeric: true });
 }
 
-export function ciudadesParaDesplegable(): { value: string; label: string }[] {
-  return [...CIUDADES_URBANAS]
-    .sort((a, b) => compararTextoEs(a.nombre, b.nombre))
-    .map((ciudad) => ({ value: ciudad.id, label: ciudad.nombre }));
+const CAPITAL_DE_PROVINCIA: Record<string, string> = {
+  Álava: "Vitoria-Gasteiz",
+  Asturias: "Oviedo",
+  Bizkaia: "Bilbao",
+  Cantabria: "Santander",
+  Gipuzkoa: "San Sebastián",
+  "La Rioja": "Logroño",
+  Navarra: "Pamplona",
+};
+
+function provinciaDeEtiqueta(etiqueta: string): string {
+  const abre = etiqueta.lastIndexOf("(");
+  const cierra = etiqueta.lastIndexOf(")");
+  if (abre >= 0 && cierra > abre) return etiqueta.slice(abre + 1, cierra);
+  return etiqueta;
+}
+
+function esCapitalProvincial(ciudad: CiudadUrbana): boolean {
+  const provincia = provinciaDeEtiqueta(ciudad.etiqueta);
+  const capital = CAPITAL_DE_PROVINCIA[provincia] ?? provincia;
+  return ciudad.nombre === capital;
+}
+
+export function ciudadesParaDesplegable(): {
+  value: string;
+  label: string;
+  negrita?: boolean;
+  bajoCapital?: boolean;
+}[] {
+  const porProvincia = new Map<string, CiudadUrbana[]>();
+  for (const ciudad of CIUDADES_URBANAS) {
+    const provincia = provinciaDeEtiqueta(ciudad.etiqueta);
+    const lista = porProvincia.get(provincia) ?? [];
+    lista.push(ciudad);
+    porProvincia.set(provincia, lista);
+  }
+  const bloques = [...porProvincia.values()].map((ciudades) => {
+    const capital = ciudades.find(esCapitalProvincial) ?? null;
+    const resto = ciudades
+      .filter((ciudad) => ciudad !== capital)
+      .sort((a, b) => compararTextoEs(a.nombre, b.nombre));
+    return { capital, resto, orden: capital?.nombre ?? resto[0]?.nombre ?? "" };
+  });
+  bloques.sort((a, b) => compararTextoEs(a.orden, b.orden));
+  const opciones: {
+    value: string;
+    label: string;
+    negrita?: boolean;
+    bajoCapital?: boolean;
+  }[] = [];
+  for (const bloque of bloques) {
+    if (bloque.capital) {
+      opciones.push({
+        value: bloque.capital.id,
+        label: bloque.capital.nombre,
+        negrita: true,
+      });
+    }
+    for (const ciudad of bloque.resto) {
+      opciones.push({
+        value: ciudad.id,
+        label: ciudad.nombre,
+        bajoCapital: Boolean(bloque.capital),
+      });
+    }
+  }
+  return opciones;
 }
 
 export function zonasParaDesplegable(
