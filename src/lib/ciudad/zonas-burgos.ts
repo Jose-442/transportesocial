@@ -170,6 +170,9 @@
  * Coslada: los barrios y los polígonos de la lista.
  * Ciudad 70 queda como Ciudad 70 (Ciudad San Pablo).
  * Barrio del Jarama sin la nota del desarrollo.
+ * Majadahonda: los barrios y los polígonos de la lista.
+ * El Carralero queda como barrio. Polígono Industrial Carralero como polígono.
+ * Los Satélites queda como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4197,6 +4200,74 @@ const POLIGONOS_COSLADA: ZonaCiudad[] = [
   { nombre: "Centro de Excelencia Empresarial de Coslada", tipo: "poligono" },
 ];
 
+const BARRIOS_MAJADAHONDA: ZonaCiudad[] = [
+  { nombre: "Airesol", tipo: "barrio" },
+  { nombre: "Airesol III", tipo: "barrio" },
+  { nombre: "Atenea", tipo: "barrio" },
+  { nombre: "Azata", tipo: "barrio" },
+  { nombre: "Bahía Blanca", tipo: "barrio" },
+  { nombre: "Baymar", tipo: "barrio" },
+  { nombre: "Cabañas, Las", tipo: "barrio" },
+  { nombre: "Camino Huerta Vieja", tipo: "barrio" },
+  { nombre: "Casas Blancas", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro de la Mina", tipo: "barrio" },
+  { nombre: "Cerro de las Norias", tipo: "barrio" },
+  { nombre: "Cerro del Aire", tipo: "barrio" },
+  { nombre: "Cerro del Espino", tipo: "barrio" },
+  { nombre: "Cleveles", tipo: "barrio" },
+  { nombre: "Colón", tipo: "barrio" },
+  { nombre: "Charaima", tipo: "barrio" },
+  { nombre: "Delfines, Los", tipo: "barrio" },
+  { nombre: "Delta", tipo: "barrio" },
+  { nombre: "Deportivo Espino", tipo: "barrio" },
+  { nombre: "El Carralero", tipo: "barrio" },
+  { nombre: "El Tejar", tipo: "barrio" },
+  { nombre: "Erillas, Las", tipo: "barrio" },
+  { nombre: "Fuente Blanca", tipo: "barrio" },
+  { nombre: "Fuente Marcela", tipo: "barrio" },
+  { nombre: "Granadilla, La", tipo: "barrio" },
+  { nombre: "Gran Vía", tipo: "barrio" },
+  { nombre: "Granja del Conde", tipo: "barrio" },
+  { nombre: "Heras, Las", tipo: "barrio" },
+  { nombre: "Herradura, La", tipo: "barrio" },
+  { nombre: "Horizonte", tipo: "barrio" },
+  { nombre: "Hospital Puerta de Hierro", tipo: "barrio" },
+  { nombre: "Huertas, Las", tipo: "barrio" },
+  { nombre: "Iberduero", tipo: "barrio" },
+  { nombre: "Interland", tipo: "barrio" },
+  { nombre: "La Sacedilla", tipo: "barrio" },
+  { nombre: "Las Mimbreras", tipo: "barrio" },
+  { nombre: "Las Norias", tipo: "barrio" },
+  { nombre: "Los Olmos", tipo: "barrio" },
+  { nombre: "Los Porches", tipo: "barrio" },
+  { nombre: "Los Robles", tipo: "barrio" },
+  { nombre: "Mavi-Deli", tipo: "barrio" },
+  { nombre: "Monte El Pinar", tipo: "barrio" },
+  { nombre: "Monte Luxor", tipo: "barrio" },
+  { nombre: "Monte del Pilar", tipo: "barrio" },
+  { nombre: "Monteclaro", tipo: "barrio" },
+  { nombre: "Negrillos", tipo: "barrio" },
+  { nombre: "Novaserra", tipo: "barrio" },
+  { nombre: "Parque Colón", tipo: "barrio" },
+  { nombre: "El Paular", tipo: "barrio" },
+  { nombre: "Pinar del Plantío", tipo: "barrio" },
+  { nombre: "Praderas, Las", tipo: "barrio" },
+  { nombre: "Puerta de Madrid", tipo: "barrio" },
+  { nombre: "Puerta Sierra", tipo: "barrio" },
+  { nombre: "Residencial Majadahonda", tipo: "barrio" },
+  { nombre: "Valle del Arcipreste", tipo: "barrio" },
+  { nombre: "Valle de la Oliva", tipo: "barrio" },
+  { nombre: "Los Satélites", tipo: "barrio" },
+  { nombre: "Roza Martín", tipo: "barrio" },
+  { nombre: "Valles de la Mina", tipo: "barrio" },
+];
+
+const POLIGONOS_MAJADAHONDA: ZonaCiudad[] = [
+  { nombre: "Paraje I+D", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carralero", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4769,6 +4840,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Coslada",
     etiqueta: "Coslada (Madrid)",
     zonas: [...BARRIOS_COSLADA, ...POLIGONOS_COSLADA],
+  },
+  {
+    id: "majadahonda",
+    nombre: "Majadahonda",
+    etiqueta: "Majadahonda (Madrid)",
+    zonas: [...BARRIOS_MAJADAHONDA, ...POLIGONOS_MAJADAHONDA],
   },
 ];
 

@@ -104,6 +104,7 @@ describe("zonas de Burgos", () => {
       "pozuelo",
       "valdemoro",
       "coslada",
+      "majadahonda",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1215,6 +1216,20 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCoslada).size).toBe(nombresCoslada.length);
     expect(nombresCoslada.filter((n) => coslada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
     expect(nombresCoslada.filter((n) => coslada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(15);
+    const majadahonda = ciudadUrbana("majadahonda");
+    expect(majadahonda?.etiqueta).toBe("Majadahonda (Madrid)");
+    expect(majadahonda?.nombre).toBe("Majadahonda");
+    expect(zonaDeCiudad(majadahonda!, "El Carralero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(majadahonda!, "Los Satélites")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(majadahonda!, "Cabañas, Las")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(majadahonda!, "Hospital Puerta de Hierro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(majadahonda!, "Polígono Industrial Carralero")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(majadahonda!, "Paraje I+D")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(majadahonda!, "Polígono Satélites")).toBeNull();
+    const nombresMaja = majadahonda!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMaja).size).toBe(nombresMaja.length);
+    expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(60);
+    expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1233,7 +1248,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 16).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 17).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1243,6 +1258,7 @@ describe("zonas de Burgos", () => {
       "Getafe",
       "Las Rozas de Madrid",
       "Leganés",
+      "Majadahonda",
       "Móstoles",
       "Parla",
       "Pozuelo de Alarcón",
