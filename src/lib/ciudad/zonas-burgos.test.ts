@@ -113,6 +113,7 @@ describe("zonas de Burgos", () => {
       "pinto",
       "trescantos",
       "sanfernando",
+      "arroyomolinos",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1372,6 +1373,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSanFernando).size).toBe(nombresSanFernando.length);
     expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
     expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
+    const arroyomolinos = ciudadUrbana("arroyomolinos");
+    expect(arroyomolinos?.etiqueta).toBe("Arroyomolinos (Madrid)");
+    expect(arroyomolinos?.nombre).toBe("Arroyomolinos");
+    expect(zonaDeCiudad(arroyomolinos!, "Castañeras, Las")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Carrizos, Los")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Castillo, El")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Dehesa, La")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Encinar, El")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "El Bosque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Ciudad Jardín Este")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Ciudad Jardín Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arroyomolinos!, "Valdearenal Norte")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arroyomolinos!, "Valdearenal Sur")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arroyomolinos!, "Valdefuentes")?.tipo).toBe("poligono");
+    const nombresArroyomolinos = arroyomolinos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresArroyomolinos).size).toBe(nombresArroyomolinos.length);
+    expect(nombresArroyomolinos.filter((n) => arroyomolinos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
+    expect(nombresArroyomolinos.filter((n) => arroyomolinos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1390,13 +1409,14 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 25).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 26).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
       "Alcorcón",
       "Aranjuez",
       "Arganda del Rey",
+      "Arroyomolinos",
       "Boadilla del Monte",
       "Collado Villalba",
       "Colmenar Viejo",

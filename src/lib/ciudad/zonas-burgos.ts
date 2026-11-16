@@ -192,6 +192,8 @@
  * Tres Cantos: los sectores y los polígonos de la lista.
  * Soto de Viñuelas queda como barrio.
  * San Fernando de Henares: los barrios y los polígonos de la lista.
+ * Arroyomolinos: los barrios y los polígonos de la lista.
+ * Castañeras, Las; Carrizos, Los; Castillo, El; Dehesa, La y Encinar, El quedan con el nombre así.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4600,6 +4602,42 @@ const POLIGONOS_SAN_FERNANDO: ZonaCiudad[] = [
   { nombre: "Prologis Park San Fernando", tipo: "poligono" },
 ];
 
+const BARRIOS_ARROYOMOLINOS: ZonaCiudad[] = [
+  { nombre: "Abedul", tipo: "barrio" },
+  { nombre: "Álamo", tipo: "barrio" },
+  { nombre: "Arroyo de la Dehesa", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Castañeras, Las", tipo: "barrio" },
+  { nombre: "Cantabria", tipo: "barrio" },
+  { nombre: "Carretera de Fuenlabrada", tipo: "barrio" },
+  { nombre: "Carrizos, Los", tipo: "barrio" },
+  { nombre: "Castillo, El", tipo: "barrio" },
+  { nombre: "Cervantes", tipo: "barrio" },
+  { nombre: "Ciudad Jardín Este", tipo: "barrio" },
+  { nombre: "Ciudad Jardín Oeste", tipo: "barrio" },
+  { nombre: "Dehesa, La", tipo: "barrio" },
+  { nombre: "El Bosque", tipo: "barrio" },
+  { nombre: "Encinar, El", tipo: "barrio" },
+  { nombre: "Javalambre", tipo: "barrio" },
+  { nombre: "La Cárcaba", tipo: "barrio" },
+  { nombre: "La Rinconada", tipo: "barrio" },
+  { nombre: "Los Mosquitos", tipo: "barrio" },
+  { nombre: "Los Monteros", tipo: "barrio" },
+  { nombre: "Montemolinos", tipo: "barrio" },
+  { nombre: "Molino Perdido", tipo: "barrio" },
+  { nombre: "Nuevo Arroyomolinos", tipo: "barrio" },
+  { nombre: "Parque Arroyomolinos", tipo: "barrio" },
+  { nombre: "Plaza Mayor", tipo: "barrio" },
+  { nombre: "Río Tajo", tipo: "barrio" },
+  { nombre: "Zarzalejo", tipo: "barrio" },
+];
+
+const POLIGONOS_ARROYOMOLINOS: ZonaCiudad[] = [
+  { nombre: "Valdearenal Norte", tipo: "poligono" },
+  { nombre: "Valdearenal Sur", tipo: "poligono" },
+  { nombre: "Valdefuentes", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5226,6 +5264,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Fernando de Henares",
     etiqueta: "San Fernando de Henares (Madrid)",
     zonas: [...BARRIOS_SAN_FERNANDO, ...POLIGONOS_SAN_FERNANDO],
+  },
+  {
+    id: "arroyomolinos",
+    nombre: "Arroyomolinos",
+    etiqueta: "Arroyomolinos (Madrid)",
+    zonas: [...BARRIOS_ARROYOMOLINOS, ...POLIGONOS_ARROYOMOLINOS],
   },
 ];
 
