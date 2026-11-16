@@ -130,6 +130,7 @@
  * Granollers: los 17 barrios del mapa municipal.
  * Los 7 polígonos de la sede electrónica.
  * Cerdanyola del Vallès: los barrios y los 9 polígonos de la lista.
+ * Mollet del Vallès: los barrios y los 5 polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2441,6 +2442,37 @@ const POLIGONOS_CERDANYOLA: ZonaCiudad[] = [
   { nombre: "Santa Anna – Xarau", tipo: "poligono" },
 ];
 
+const BARRIOS_MOLLET: ZonaCiudad[] = [
+  { nombre: "Área del Tir Olímpico", tipo: "barrio" },
+  { nombre: "Barri de Can Borrell", tipo: "barrio" },
+  { nombre: "Barri de Can Pantiquet", tipo: "barrio" },
+  { nombre: "Barri de la Casilla", tipo: "barrio" },
+  { nombre: "Barri de la Plana Lledó", tipo: "barrio" },
+  { nombre: "Barri de la Riera Seca", tipo: "barrio" },
+  { nombre: "Barri del Calderí", tipo: "barrio" },
+  { nombre: "Barri del Centre", tipo: "barrio" },
+  { nombre: "Barri de l'Estació de França", tipo: "barrio" },
+  { nombre: "Barri de l'Estació del Nord", tipo: "barrio" },
+  { nombre: "Barri dels Col·legis Nous", tipo: "barrio" },
+  { nombre: "Barri de Lourdes", tipo: "barrio" },
+  { nombre: "Barri de Santa Rosa", tipo: "barrio" },
+  { nombre: "Gallecs", tipo: "barrio" },
+  { nombre: "Mollet Centre", tipo: "barrio" },
+  { nombre: "Montseny", tipo: "barrio" },
+  { nombre: "Sant Jordi", tipo: "barrio" },
+  { nombre: "Sant Vicenç", tipo: "barrio" },
+  { nombre: "Vicenç Plantada", tipo: "barrio" },
+  { nombre: "Xarranca", tipo: "barrio" },
+];
+
+const POLIGONOS_MOLLET: ZonaCiudad[] = [
+  { nombre: "Can Magarola", tipo: "poligono" },
+  { nombre: "Can Magre", tipo: "poligono" },
+  { nombre: "Can Prat", tipo: "poligono" },
+  { nombre: "La Farinera", tipo: "poligono" },
+  { nombre: "Mas Regà", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2815,6 +2847,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cerdanyola del Vallès",
     etiqueta: "Cerdanyola del Vallès (Barcelona)",
     zonas: [...BARRIOS_CERDANYOLA, ...POLIGONOS_CERDANYOLA],
+  },
+  {
+    id: "mollet",
+    nombre: "Mollet del Vallès",
+    etiqueta: "Mollet del Vallès (Barcelona)",
+    zonas: [...BARRIOS_MOLLET, ...POLIGONOS_MOLLET],
   },
 ];
 

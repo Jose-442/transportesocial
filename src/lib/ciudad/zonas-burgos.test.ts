@@ -68,6 +68,7 @@ describe("zonas de Burgos", () => {
       "castelldefels",
       "granollers",
       "cerdanyola",
+      "mollet",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -651,6 +652,18 @@ describe("zonas de Burgos", () => {
     const nombresCerdanyola = cerdanyola!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCerdanyola).size).toBe(nombresCerdanyola.length);
     expect(nombresCerdanyola.filter((n) => cerdanyola!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(46);
+    const mollet = ciudadUrbana("mollet");
+    expect(mollet?.etiqueta).toBe("Mollet del Vallès (Barcelona)");
+    expect(mollet?.nombre).toBe("Mollet del Vallès");
+    expect(zonaDeCiudad(mollet!, "Barri de l'Estació de França")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mollet!, "Barri dels Col·legis Nous")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mollet!, "Mollet Centre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mollet!, "Can Magarola")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mollet!, "Mas Regà")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mollet!, "Can Borrell")).toBeNull();
+    const nombresMollet = mollet!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMollet).size).toBe(nombresMollet.length);
+    expect(nombresMollet.filter((n) => mollet!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
