@@ -86,6 +86,7 @@ describe("zonas de Burgos", () => {
       "avila",
       "salamanca",
       "madrid",
+      "mostoles",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -900,6 +901,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMadrid).size).toBe(nombresMadrid.length);
     expect(nombresMadrid.filter((n) => madrid!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(131);
     expect(nombresMadrid.filter((n) => madrid!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(92);
+    const mostoles = ciudadUrbana("mostoles");
+    expect(mostoles?.etiqueta).toBe("Móstoles (Madrid)");
+    expect(mostoles?.nombre).toBe("Móstoles");
+    expect(zonaDeCiudad(mostoles!, "Los Rosales")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mostoles!, "Las Nieves")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mostoles!, "Móstoles Sur (PAU-4)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mostoles!, "Parque Coimbra")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mostoles!, "Polígono Industrial Los Rosales")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mostoles!, "Polígono Industrial Arroyomolinos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mostoles!, "Polígono Industrial nº 1")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mostoles!, "Móstoles Industrial")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mostoles!, "Arroyomolinos")).toBeNull();
+    const nombresMostoles = mostoles!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMostoles).size).toBe(nombresMostoles.length);
+    expect(nombresMostoles.filter((n) => mostoles!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

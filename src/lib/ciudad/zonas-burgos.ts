@@ -148,6 +148,7 @@
  * Ávila: los barrios y los polígonos de la lista.
  * Salamanca: los barrios y los polígonos de la lista.
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
+ * Móstoles: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3465,6 +3466,46 @@ const POLIGONOS_MADRID: ZonaCiudad[] = [
   { nombre: "Ensanche de Barajas", tipo: "poligono" },
 ];
 
+const BARRIOS_MOSTOLES: ZonaCiudad[] = [
+  { nombre: "Azorín", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro Prieto", tipo: "barrio" },
+  { nombre: "El Recreo", tipo: "barrio" },
+  { nombre: "El Soto", tipo: "barrio" },
+  { nombre: "Estoril I", tipo: "barrio" },
+  { nombre: "Estoril II", tipo: "barrio" },
+  { nombre: "La Carcavilla", tipo: "barrio" },
+  { nombre: "La Loma", tipo: "barrio" },
+  { nombre: "La Luna", tipo: "barrio" },
+  { nombre: "La Princesa", tipo: "barrio" },
+  { nombre: "Las Nieves", tipo: "barrio" },
+  { nombre: "Los Rosales", tipo: "barrio" },
+  { nombre: "Parque Vosa", tipo: "barrio" },
+  { nombre: "Pinar de Móstoles", tipo: "barrio" },
+  { nombre: "Pinares Llanos", tipo: "barrio" },
+  { nombre: "San Fernando", tipo: "barrio" },
+  { nombre: "Sotoverde", tipo: "barrio" },
+  { nombre: "Villaeuropa", tipo: "barrio" },
+  { nombre: "Villafontana", tipo: "barrio" },
+  { nombre: "Móstoles Sur (PAU-4)", tipo: "barrio" },
+  { nombre: "Parque Coimbra", tipo: "barrio" },
+  { nombre: "Colonia del Guadarrama", tipo: "barrio" },
+];
+
+const POLIGONOS_MOSTOLES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Arroyomolinos", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Fuensanta", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Fuensanta II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Regordoño", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Rosales", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Nieves", tipo: "poligono" },
+  { nombre: "Polígono Industrial Expansión", tipo: "poligono" },
+  { nombre: "Polígono Industrial nº 1", tipo: "poligono" },
+  { nombre: "Móstoles Industrial", tipo: "poligono" },
+  { nombre: "Zona Industrial Las Pajarillas", tipo: "poligono" },
+  { nombre: "Zona Industrial Las Monjas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3947,6 +3988,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Madrid",
     etiqueta: "Madrid (Madrid)",
     zonas: [...BARRIOS_MADRID, ...POLIGONOS_MADRID],
+  },
+  {
+    id: "mostoles",
+    nombre: "Móstoles",
+    etiqueta: "Móstoles (Madrid)",
+    zonas: [...BARRIOS_MOSTOLES, ...POLIGONOS_MOSTOLES],
   },
 ];
 
