@@ -72,6 +72,7 @@ describe("zonas de Burgos", () => {
       "barbera",
       "manresa",
       "sitges",
+      "santpere",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -705,6 +706,17 @@ describe("zonas de Burgos", () => {
     const nombresSitges = sitges!.zonas.map((z) => z.nombre);
     expect(new Set(nombresSitges).size).toBe(nombresSitges.length);
     expect(nombresSitges.filter((n) => sitges!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(39);
+    const santpere = ciudadUrbana("santpere");
+    expect(santpere?.etiqueta).toBe("Sant Pere de Ribes (Barcelona)");
+    expect(santpere?.nombre).toBe("Sant Pere de Ribes");
+    expect(zonaDeCiudad(santpere!, "Ribes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santpere!, "Vilanoveta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santpere!, "Tecnològic – Can Puig")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santpere!, "Variant C-31")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santpere!, "Can Marcer")).toBeNull();
+    const nombresSantPere = santpere!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantPere).size).toBe(nombresSantPere.length);
+    expect(nombresSantPere.filter((n) => santpere!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

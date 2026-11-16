@@ -134,6 +134,7 @@
  * Barberà del Vallès: los barrios y los polígonos de la lista.
  * Manresa: los barrios y los polígonos de la lista.
  * Sitges: los barrios y los polígonos de la lista.
+ * Sant Pere de Ribes: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2615,6 +2616,54 @@ const POLIGONOS_SITGES: ZonaCiudad[] = [
   { nombre: "Vallcarca – Uniland", tipo: "poligono" },
 ];
 
+const BARRIOS_SANT_PERE: ZonaCiudad[] = [
+  { nombre: "Amèriques, Les", tipo: "barrio" },
+  { nombre: "Autòdrom", tipo: "barrio" },
+  { nombre: "Bòbila, La", tipo: "barrio" },
+  { nombre: "Can Girabals", tipo: "barrio" },
+  { nombre: "Can Giralt", tipo: "barrio" },
+  { nombre: "Can Jove", tipo: "barrio" },
+  { nombre: "Can Lloses – Can Marcer", tipo: "barrio" },
+  { nombre: "Can Macià", tipo: "barrio" },
+  { nombre: "Can Mestre", tipo: "barrio" },
+  { nombre: "Can Pere de la Plana", tipo: "barrio" },
+  { nombre: "Can Puig", tipo: "barrio" },
+  { nombre: "Carç, El", tipo: "barrio" },
+  { nombre: "Cards, Els", tipo: "barrio" },
+  { nombre: "Cervereta", tipo: "barrio" },
+  { nombre: "Colls, Els", tipo: "barrio" },
+  { nombre: "Garrofers, Els", tipo: "barrio" },
+  { nombre: "Mas Alba", tipo: "barrio" },
+  { nombre: "Mas d'en Serra", tipo: "barrio" },
+  { nombre: "Mas Parés de Dalt", tipo: "barrio" },
+  { nombre: "Mas Solers", tipo: "barrio" },
+  { nombre: "Mercat – Parc Central", tipo: "barrio" },
+  { nombre: "Minivilles", tipo: "barrio" },
+  { nombre: "Mirador de Sitges", tipo: "barrio" },
+  { nombre: "Palou Alt, El", tipo: "barrio" },
+  { nombre: "Parellades, Les", tipo: "barrio" },
+  { nombre: "Pineda Parc", tipo: "barrio" },
+  { nombre: "Puigmoltó", tipo: "barrio" },
+  { nombre: "Racó, El", tipo: "barrio" },
+  { nombre: "Ribes", tipo: "barrio" },
+  { nombre: "Rocamar", tipo: "barrio" },
+  { nombre: "Roquetes, Les", tipo: "barrio" },
+  { nombre: "Sant Camil (Hospital)", tipo: "barrio" },
+  { nombre: "Sota-ribes", tipo: "barrio" },
+  { nombre: "Solicrup", tipo: "barrio" },
+  { nombre: "Torre del Veguer", tipo: "barrio" },
+  { nombre: "Torres, Les", tipo: "barrio" },
+  { nombre: "Vallpineda", tipo: "barrio" },
+  { nombre: "Vilanoveta", tipo: "barrio" },
+  { nombre: "Vinyals, Els", tipo: "barrio" },
+  { nombre: "Viñedos – Can Macià", tipo: "barrio" },
+];
+
+const POLIGONOS_SANT_PERE: ZonaCiudad[] = [
+  { nombre: "Tecnològic – Can Puig", tipo: "poligono" },
+  { nombre: "Variant C-31", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3013,6 +3062,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sitges",
     etiqueta: "Sitges (Barcelona)",
     zonas: [...BARRIOS_SITGES, ...POLIGONOS_SITGES],
+  },
+  {
+    id: "santpere",
+    nombre: "Sant Pere de Ribes",
+    etiqueta: "Sant Pere de Ribes (Barcelona)",
+    zonas: [...BARRIOS_SANT_PERE, ...POLIGONOS_SANT_PERE],
   },
 ];
 
