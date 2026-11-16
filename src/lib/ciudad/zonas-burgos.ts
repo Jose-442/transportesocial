@@ -250,6 +250,8 @@
  * Villanueva de Cauche y Los Nogales entran una sola vez.
  * Ronda: los barrios, las pedanías y los polígonos de la lista.
  * Los Prados entra una sola vez. El Fuerte queda como barrio. Polígono Industrial El Fuerte como polígono.
+ * Huelva: los barrios y los polígonos de la lista. Polígono San Sebastián queda como barrio.
+ * Tartessos queda como barrio. Polígono Industrial Tartessos como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6325,6 +6327,88 @@ const POLIGONOS_RONDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Serranía", tipo: "poligono" },
 ];
 
+const BARRIOS_HUELVA: ZonaCiudad[] = [
+  { nombre: "Adoratrices", tipo: "barrio" },
+  { nombre: "Balbueno", tipo: "barrio" },
+  { nombre: "Barrio Obrero (Reina Victoria)", tipo: "barrio" },
+  { nombre: "Barrio de la Hispanidad", tipo: "barrio" },
+  { nombre: "Barrio de la Navidad", tipo: "barrio" },
+  { nombre: "Barrio de la Victoria", tipo: "barrio" },
+  { nombre: "Cardeñas", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Conquero", tipo: "barrio" },
+  { nombre: "El Higueral", tipo: "barrio" },
+  { nombre: "El Matadero", tipo: "barrio" },
+  { nombre: "El Polvorín", tipo: "barrio" },
+  { nombre: "El Rocío", tipo: "barrio" },
+  { nombre: "El Seminario", tipo: "barrio" },
+  { nombre: "El Torrejón", tipo: "barrio" },
+  { nombre: "Guadalupe", tipo: "barrio" },
+  { nombre: "Huerta Mena", tipo: "barrio" },
+  { nombre: "Isla Chica", tipo: "barrio" },
+  { nombre: "Jardines Sierra de Huelva", tipo: "barrio" },
+  { nombre: "José Antonio", tipo: "barrio" },
+  { nombre: "La Alquería", tipo: "barrio" },
+  { nombre: "La Cinta", tipo: "barrio" },
+  { nombre: "La Condesa", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Merced", tipo: "barrio" },
+  { nombre: "La Orden", tipo: "barrio" },
+  { nombre: "La Ribera", tipo: "barrio" },
+  { nombre: "Las Colonias", tipo: "barrio" },
+  { nombre: "Las Tres Ventanas", tipo: "barrio" },
+  { nombre: "Los Rosales", tipo: "barrio" },
+  { nombre: "Martín Alonso Pinzón", tipo: "barrio" },
+  { nombre: "Marismas del Odiel", tipo: "barrio" },
+  { nombre: "Marismas del Titán", tipo: "barrio" },
+  { nombre: "Molino de la Vega", tipo: "barrio" },
+  { nombre: "Parque Moret", tipo: "barrio" },
+  { nombre: "Pescadería", tipo: "barrio" },
+  { nombre: "Pérez Cubillas", tipo: "barrio" },
+  { nombre: "Pinar de Balbueno", tipo: "barrio" },
+  { nombre: "Polígono San Sebastián", tipo: "barrio" },
+  { nombre: "Príncipe Felipe", tipo: "barrio" },
+  { nombre: "Príncipe Juan Carlos", tipo: "barrio" },
+  { nombre: "Punta del Sebo", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Sebastián", tipo: "barrio" },
+  { nombre: "Santa Lucía", tipo: "barrio" },
+  { nombre: "Santa Marta", tipo: "barrio" },
+  { nombre: "Santa María del Pilar", tipo: "barrio" },
+  { nombre: "Tartessos", tipo: "barrio" },
+  { nombre: "Verdeluz", tipo: "barrio" },
+  { nombre: "Viaplana", tipo: "barrio" },
+  { nombre: "Vicente Yáñez Pinzón", tipo: "barrio" },
+  { nombre: "Vistalegre", tipo: "barrio" },
+  { nombre: "Zafra", tipo: "barrio" },
+];
+
+const POLIGONOS_HUELVA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Rincón", tipo: "poligono" },
+  { nombre: "Polígono Industrial Fortiz", tipo: "poligono" },
+  { nombre: "Polígono Industrial Francisco Montenegro", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Esperanza", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Luz", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Paz", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Yucas-Cardeñas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Marismas del Polvorín", tipo: "poligono" },
+  { nombre: "Polígono Industrial Peguerillas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pesquero Norte", tipo: "poligono" },
+  { nombre: "Polígono Industrial Polirrosa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Romeralejo", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Diego", tipo: "poligono" },
+  { nombre: "Polígono Industrial Tartessos", tipo: "poligono" },
+  { nombre: "Huelva Empresarial", tipo: "poligono" },
+  { nombre: "La Lunita", tipo: "poligono" },
+  { nombre: "Las Metas", tipo: "poligono" },
+  { nombre: "Miraval", tipo: "poligono" },
+  { nombre: "Mirador del Odiel", tipo: "poligono" },
+  { nombre: "Naviluz", tipo: "poligono" },
+  { nombre: "Pavipresa", tipo: "poligono" },
+  { nombre: "Vaciadero Norte", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7101,6 +7185,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ronda",
     etiqueta: "Ronda (Málaga)",
     zonas: [...BARRIOS_RONDA, ...POLIGONOS_RONDA],
+  },
+  {
+    id: "huelva",
+    nombre: "Huelva",
+    etiqueta: "Huelva (Huelva)",
+    zonas: [...BARRIOS_HUELVA, ...POLIGONOS_HUELVA],
   },
 ];
 

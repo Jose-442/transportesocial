@@ -138,6 +138,7 @@ describe("zonas de Burgos", () => {
       "alhaurindelatorre",
       "antequera",
       "ronda",
+      "huelva",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1862,6 +1863,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresRonda).size).toBe(nombresRonda.length);
     expect(nombresRonda.filter((n) => ronda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
     expect(nombresRonda.filter((n) => ronda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const huelva = ciudadUrbana("huelva");
+    expect(huelva?.etiqueta).toBe("Huelva (Huelva)");
+    expect(huelva?.nombre).toBe("Huelva");
+    expect(zonaDeCiudad(huelva!, "Polígono San Sebastián")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "San Sebastián")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Tartessos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Cardeñas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "El Polvorín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Balbueno")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Pinar de Balbueno")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Barrio Obrero (Reina Victoria)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huelva!, "Polígono Industrial Tartessos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huelva!, "Polígono Industrial Las Yucas-Cardeñas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huelva!, "Polígono Industrial Marismas del Polvorín")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huelva!, "Huelva Empresarial")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huelva!, "Vaciadero Norte")?.tipo).toBe("poligono");
+    const nombresHuelva = huelva!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresHuelva).size).toBe(nombresHuelva.length);
+    expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(54);
+    expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(22);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1934,6 +1955,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 10]?.negrita).toBeUndefined();
     expect(ciudades[malagaIdx + 11]?.label).toBe("Vélez-Málaga");
     expect(ciudades[malagaIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
