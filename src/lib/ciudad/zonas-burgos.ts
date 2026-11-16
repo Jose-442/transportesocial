@@ -151,6 +151,7 @@
  * Móstoles: los barrios y los polígonos de la lista.
  * Alcalá de Henares: los barrios y los polígonos de la lista.
  * Leganés: los barrios y los polígonos de la lista.
+ * Getafe: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3603,6 +3604,38 @@ const POLIGONOS_LEGANES: ZonaCiudad[] = [
   { nombre: "Puerta de Carabanchel", tipo: "poligono" },
 ];
 
+const BARRIOS_GETAFE: ZonaCiudad[] = [
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Bercial", tipo: "barrio" },
+  { nombre: "Getafe Norte", tipo: "barrio" },
+  { nombre: "Juan de la Cierva", tipo: "barrio" },
+  { nombre: "La Alhóndiga", tipo: "barrio" },
+  { nombre: "Las Margaritas", tipo: "barrio" },
+  { nombre: "Los Molinos", tipo: "barrio" },
+  { nombre: "Perales del Río", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "Sector III", tipo: "barrio" },
+  { nombre: "Arroyo Culebro", tipo: "barrio" },
+  { nombre: "El Casar", tipo: "barrio" },
+  { nombre: "El Rosón", tipo: "barrio" },
+  { nombre: "Kelvinator", tipo: "barrio" },
+];
+
+const POLIGONOS_GETAFE: ZonaCiudad[] = [
+  { nombre: "Área Empresarial Andalucía", tipo: "poligono" },
+  { nombre: "Centro Logístico de Abastecimiento (CLA)", tipo: "poligono" },
+  { nombre: "Parque Empresarial La Carpetania I", tipo: "poligono" },
+  { nombre: "Parque Empresarial La Carpetania II", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Lomo", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Culebro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Ángeles", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Gavilanes", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Olivos", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Marcos", tipo: "poligono" },
+  { nombre: "TecnoGetafe (Área Tecnológica del Sur)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4103,6 +4136,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Leganés",
     etiqueta: "Leganés (Madrid)",
     zonas: [...BARRIOS_LEGANES, ...POLIGONOS_LEGANES],
+  },
+  {
+    id: "getafe",
+    nombre: "Getafe",
+    etiqueta: "Getafe (Madrid)",
+    zonas: [...BARRIOS_GETAFE, ...POLIGONOS_GETAFE],
   },
 ];
 

@@ -89,6 +89,7 @@ describe("zonas de Burgos", () => {
       "mostoles",
       "alcala",
       "leganes",
+      "getafe",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -950,6 +951,20 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresLeganes).size).toBe(nombresLeganes.length);
     expect(nombresLeganes.filter((n) => leganes!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
     expect(nombresLeganes.filter((n) => leganes!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
+    const getafe = ciudadUrbana("getafe");
+    expect(getafe?.etiqueta).toBe("Getafe (Madrid)");
+    expect(getafe?.nombre).toBe("Getafe");
+    expect(zonaDeCiudad(getafe!, "Los Molinos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getafe!, "Arroyo Culebro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getafe!, "Kelvinator")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(getafe!, "Polígono Industrial El Culebro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(getafe!, "Centro Logístico de Abastecimiento (CLA)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(getafe!, "TecnoGetafe (Área Tecnológica del Sur)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(getafe!, "Alcorcón")).toBeNull();
+    const nombresGetafe = getafe!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGetafe).size).toBe(nombresGetafe.length);
+    expect(nombresGetafe.filter((n) => getafe!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
+    expect(nombresGetafe.filter((n) => getafe!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
