@@ -218,6 +218,7 @@
  * Los Palacios y Villafranca: los barrios y los polígonos de la lista.
  * El Trobal queda como barrio. Polígono El Trobal como polígono.
  * Maribáñez queda como barrio. Polígono Maribáñez como polígono.
+ * Coria del Río: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5208,6 +5209,29 @@ const POLIGONOS_LOS_PALACIOS: ZonaCiudad[] = [
   { nombre: "Santa Lucía", tipo: "poligono" },
 ];
 
+const BARRIOS_CORIA: ZonaCiudad[] = [
+  { nombre: "Barriada de Cuatro Caminos", tipo: "barrio" },
+  { nombre: "Barriada de La Paz", tipo: "barrio" },
+  { nombre: "Barrio del Guadalquivir", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "La Hermandad", tipo: "barrio" },
+  { nombre: "La Vega", tipo: "barrio" },
+  { nombre: "Santa Isabel", tipo: "barrio" },
+  { nombre: "Tixe", tipo: "barrio" },
+  { nombre: "Urbanización Carramolos (Los Carramolos)", tipo: "barrio" },
+  { nombre: "Urbanización Hoyo del Duende", tipo: "barrio" },
+  { nombre: "Urbanización Ugena", tipo: "barrio" },
+];
+
+const POLIGONOS_CORIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Coria", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Rocío", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Estrella", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Ladrillera", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5900,6 +5924,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Los Palacios y Villafranca",
     etiqueta: "Los Palacios y Villafranca (Sevilla)",
     zonas: [...BARRIOS_LOS_PALACIOS, ...POLIGONOS_LOS_PALACIOS],
+  },
+  {
+    id: "coria",
+    nombre: "Coria del Río",
+    etiqueta: "Coria del Río (Sevilla)",
+    zonas: [...BARRIOS_CORIA, ...POLIGONOS_CORIA],
   },
 ];
 
