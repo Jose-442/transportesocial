@@ -257,6 +257,9 @@
  * Roquetas de Mar: las dos listas de barrios y los polígonos.
  * Cortijos de Marín y La Algaida quedan como barrio.
  * Polígono Industrial Cortijos de Marín y Polígono Industrial La Algaida como polígono.
+ * El Ejido: las dos listas de barrios y los polígonos.
+ * Balerma y La Redonda quedan como barrio.
+ * Polígono Industrial Balerma y Polígono Industrial La Redonda como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6511,6 +6514,44 @@ const POLIGONOS_ROQUETAS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Algaida", tipo: "poligono" },
 ];
 
+const BARRIOS_EL_EJIDO: ZonaCiudad[] = [
+  { nombre: "Almerimar", tipo: "barrio" },
+  { nombre: "Balerma", tipo: "barrio" },
+  { nombre: "Ejido Norte", tipo: "barrio" },
+  { nombre: "Ejido Sur", tipo: "barrio" },
+  { nombre: "Ensenada de San Miguel", tipo: "barrio" },
+  { nombre: "Guardias Viejas", tipo: "barrio" },
+  { nombre: "La Redonda", tipo: "barrio" },
+  { nombre: "Las Norias de Daza", tipo: "barrio" },
+  { nombre: "Matagorda", tipo: "barrio" },
+  { nombre: "Pampanico", tipo: "barrio" },
+  { nombre: "Paraíso Al Mar", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "San Silvestre", tipo: "barrio" },
+  { nombre: "Santa María del Águila", tipo: "barrio" },
+  { nombre: "Tarambana", tipo: "barrio" },
+  { nombre: "Almerimar Centro", tipo: "barrio" },
+  { nombre: "Almerimar Playa", tipo: "barrio" },
+  { nombre: "Bahía de San Miguel", tipo: "barrio" },
+  { nombre: "Ejido Beach", tipo: "barrio" },
+  { nombre: "Ejido Norte Residencial", tipo: "barrio" },
+  { nombre: "Ejido Sur Residencial", tipo: "barrio" },
+  { nombre: "Pampanico Alto", tipo: "barrio" },
+  { nombre: "Paraíso Al Mar Residencial", tipo: "barrio" },
+  { nombre: "Urbanización Entreverde", tipo: "barrio" },
+];
+
+const POLIGONOS_EL_EJIDO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Avenida de Ciavieja", tipo: "poligono" },
+  { nombre: "Polígono Industrial Balerma", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera N-340", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ciavieja", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Costa", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Redonda", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Norias", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puesto Rubio (Las Norias)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7305,6 +7346,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Roquetas de Mar",
     etiqueta: "Roquetas de Mar (Almería)",
     zonas: [...BARRIOS_ROQUETAS, ...POLIGONOS_ROQUETAS],
+  },
+  {
+    id: "elejido",
+    nombre: "El Ejido",
+    etiqueta: "El Ejido (Almería)",
+    zonas: [...BARRIOS_EL_EJIDO, ...POLIGONOS_EL_EJIDO],
   },
 ];
 
