@@ -1,7 +1,7 @@
 /**
  * Barrios y polígonos cerrados.
  * Burgos: reglamento de distritos del Ayuntamiento, 2020.
- * Sin Centro, Centro Histórico ni Centro Sur.
+ * Sin Centro Histórico ni Centro Sur.
  * Aranda de Duero: reuniones de barrios del Ayuntamiento, 2026, más San Francisco
  * (plan general) y los polígonos del plan.
  * Miranda de Ebro: nombres que usa el Ayuntamiento; sin Miranda Sur (sigue en proyecto).
@@ -201,6 +201,7 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Los Parralillos", tipo: "barrio" },
   { nombre: "Juan XXIII", tipo: "barrio" },
   { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
 ];
 
 const POLIGONOS_BURGOS: ZonaCiudad[] = [
