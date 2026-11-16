@@ -186,6 +186,9 @@
  * El Guijar queda como barrio. Polígono El Guijar como polígono.
  * Colmenar Viejo: los barrios y los polígonos de la lista.
  * Arcos, Los y Cerrillo, El quedan con el nombre así.
+ * Pinto: los barrios y los polígonos de la lista.
+ * Rábida, La queda con el nombre así.
+ * La Estación no entra: queda Pinto-Estación.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4496,6 +4499,42 @@ const POLIGONOS_COLMENAR: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Sur", tipo: "poligono" },
 ];
 
+const BARRIOS_PINTO: ZonaCiudad[] = [
+  { nombre: "8 de Marzo", tipo: "barrio" },
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Cañada Real de Toledo", tipo: "barrio" },
+  { nombre: "Egido", tipo: "barrio" },
+  { nombre: "Ferrocarril", tipo: "barrio" },
+  { nombre: "Indiana", tipo: "barrio" },
+  { nombre: "La Calera", tipo: "barrio" },
+  { nombre: "La Cristina", tipo: "barrio" },
+  { nombre: "La Tenería", tipo: "barrio" },
+  { nombre: "La Tenería II", tipo: "barrio" },
+  { nombre: "Las Cristinas", tipo: "barrio" },
+  { nombre: "Los Cisnes", tipo: "barrio" },
+  { nombre: "Maestra María del Rosario", tipo: "barrio" },
+  { nombre: "Parque Europa", tipo: "barrio" },
+  { nombre: "Parque Norte", tipo: "barrio" },
+  { nombre: "Prado", tipo: "barrio" },
+  { nombre: "Rábida, La", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "Santo Domingo de Silos", tipo: "barrio" },
+];
+
+const POLIGONOS_PINTO: ZonaCiudad[] = [
+  { nombre: "Área Empresarial Andalucía", tipo: "poligono" },
+  { nombre: "El Cascajal", tipo: "poligono" },
+  { nombre: "El Esparragal", tipo: "poligono" },
+  { nombre: "Industrial Norte (Sector 1)", tipo: "poligono" },
+  { nombre: "Industrial Oeste (Sector 5)", tipo: "poligono" },
+  { nombre: "Las Arenas", tipo: "poligono" },
+  { nombre: "Las Chimeneas", tipo: "poligono" },
+  { nombre: "Mateu Cromo", tipo: "poligono" },
+  { nombre: "Pinto-Estación", tipo: "poligono" },
+  { nombre: "Parque Empresarial Las Aves", tipo: "poligono" },
+  { nombre: "Parque Industrial Sector 2", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5104,6 +5143,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Colmenar Viejo",
     etiqueta: "Colmenar Viejo (Madrid)",
     zonas: [...BARRIOS_COLMENAR, ...POLIGONOS_COLMENAR],
+  },
+  {
+    id: "pinto",
+    nombre: "Pinto",
+    etiqueta: "Pinto (Madrid)",
+    zonas: [...BARRIOS_PINTO, ...POLIGONOS_PINTO],
   },
 ];
 
