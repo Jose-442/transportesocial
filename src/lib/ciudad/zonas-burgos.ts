@@ -141,6 +141,7 @@
  * Tarragona: los barrios y los polígonos de la lista.
  * Reus: los barrios y los polígonos de la lista.
  * El Vendrell: los barrios y los polígonos de la lista.
+ * Cambrils: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2970,6 +2971,54 @@ const POLIGONOS_EL_VENDRELL: ZonaCiudad[] = [
   { nombre: "Les Mates", tipo: "poligono" },
 ];
 
+const BARRIOS_CAMBRILS: ZonaCiudad[] = [
+  { nombre: "Ardiaca", tipo: "barrio" },
+  { nombre: "Barri Marítim", tipo: "barrio" },
+  { nombre: "Cambrils", tipo: "barrio" },
+  { nombre: "Cambrils Badia", tipo: "barrio" },
+  { nombre: "Cambrils Mediterrània", tipo: "barrio" },
+  { nombre: "Cambrils Platja", tipo: "barrio" },
+  { nombre: "Cambrils Port", tipo: "barrio" },
+  { nombre: "Cambrils Nord", tipo: "barrio" },
+  { nombre: "Cavet", tipo: "barrio" },
+  { nombre: "El Mas d'en Bosc", tipo: "barrio" },
+  { nombre: "El Prat d'en Forés", tipo: "barrio" },
+  { nombre: "Eixample de la Platja", tipo: "barrio" },
+  { nombre: "Eixample de la Vila", tipo: "barrio" },
+  { nombre: "Els Antígons", tipo: "barrio" },
+  { nombre: "Els Tallats", tipo: "barrio" },
+  { nombre: "Estrella de Cambrils", tipo: "barrio" },
+  { nombre: "Golf de Sant Jordi", tipo: "barrio" },
+  { nombre: "Horta de Santa Maria", tipo: "barrio" },
+  { nombre: "Jardins de Vilafortuny", tipo: "barrio" },
+  { nombre: "La Cava", tipo: "barrio" },
+  { nombre: "La Dorada", tipo: "barrio" },
+  { nombre: "La Llosa", tipo: "barrio" },
+  { nombre: "L'Albereda", tipo: "barrio" },
+  { nombre: "L'Ardiaca Nord", tipo: "barrio" },
+  { nombre: "L'Hort del Cuchillo", tipo: "barrio" },
+  { nombre: "Mar de Cambrils", tipo: "barrio" },
+  { nombre: "Nou Cambrils", tipo: "barrio" },
+  { nombre: "Parc de Samà", tipo: "barrio" },
+  { nombre: "Parellada", tipo: "barrio" },
+  { nombre: "Platja de Vilafortuny", tipo: "barrio" },
+  { nombre: "Platges del Sud", tipo: "barrio" },
+  { nombre: "Proacosa", tipo: "barrio" },
+  { nombre: "Sol de Cambrils", tipo: "barrio" },
+  { nombre: "Tàrraco", tipo: "barrio" },
+  { nombre: "Urcavisa", tipo: "barrio" },
+  { nombre: "Verge del Carme", tipo: "barrio" },
+  { nombre: "Vilafortuny", tipo: "barrio" },
+  { nombre: "Vilafortuny II", tipo: "barrio" },
+];
+
+const POLIGONOS_CAMBRILS: ZonaCiudad[] = [
+  { nombre: "Belianes Nord", tipo: "poligono" },
+  { nombre: "Belianes Sud", tipo: "poligono" },
+  { nombre: "Belianes Est", tipo: "poligono" },
+  { nombre: "Les Comes", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3410,6 +3459,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "El Vendrell",
     etiqueta: "Vendrell, El (Tarragona)",
     zonas: [...BARRIOS_EL_VENDRELL, ...POLIGONOS_EL_VENDRELL],
+  },
+  {
+    id: "cambrils",
+    nombre: "Cambrils",
+    etiqueta: "Cambrils (Tarragona)",
+    zonas: [...BARRIOS_CAMBRILS, ...POLIGONOS_CAMBRILS],
   },
 ];
 

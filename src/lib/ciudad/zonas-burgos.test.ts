@@ -79,6 +79,7 @@ describe("zonas de Burgos", () => {
       "tarragona",
       "reus",
       "elvendrell",
+      "cambrils",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -801,6 +802,18 @@ describe("zonas de Burgos", () => {
     const nombresElVendrell = elVendrell!.zonas.map((z) => z.nombre);
     expect(new Set(nombresElVendrell).size).toBe(nombresElVendrell.length);
     expect(nombresElVendrell.filter((n) => elVendrell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(44);
+    const cambrils = ciudadUrbana("cambrils");
+    expect(cambrils?.etiqueta).toBe("Cambrils (Tarragona)");
+    expect(cambrils?.nombre).toBe("Cambrils");
+    expect(zonaDeCiudad(cambrils!, "Els Antígons")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cambrils!, "La Cava")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cambrils!, "El Mas d'en Bosc")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cambrils!, "Belianes Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cambrils!, "Les Comes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cambrils!, "Belianes")).toBeNull();
+    const nombresCambrils = cambrils!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCambrils).size).toBe(nombresCambrils.length);
+    expect(nombresCambrils.filter((n) => cambrils!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(38);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
