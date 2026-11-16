@@ -219,6 +219,7 @@
  * El Trobal queda como barrio. Polígono El Trobal como polígono.
  * Maribáñez queda como barrio. Polígono Maribáñez como polígono.
  * Coria del Río: los barrios y los polígonos de la lista.
+ * Carmona: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5232,6 +5233,54 @@ const POLIGONOS_CORIA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Ladrillera", tipo: "poligono" },
 ];
 
+const BARRIOS_CARMONA: ZonaCiudad[] = [
+  { nombre: "Alcázar de Arriba", tipo: "barrio" },
+  { nombre: "Anfiteatro", tipo: "barrio" },
+  { nombre: "Barrio de Arriba", tipo: "barrio" },
+  { nombre: "Barrio de San Blas", tipo: "barrio" },
+  { nombre: "Barrio de San Felipe", tipo: "barrio" },
+  { nombre: "Barrio de Santiago", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Camposol", tipo: "barrio" },
+  { nombre: "Cantera Chica", tipo: "barrio" },
+  { nombre: "El Almendral", tipo: "barrio" },
+  { nombre: "El Cerrillo", tipo: "barrio" },
+  { nombre: "El Corzo", tipo: "barrio" },
+  { nombre: "El Real", tipo: "barrio" },
+  { nombre: "El Socorro", tipo: "barrio" },
+  { nombre: "Frutales del Alcor", tipo: "barrio" },
+  { nombre: "Guadajoz", tipo: "barrio" },
+  { nombre: "Huerta Nueva", tipo: "barrio" },
+  { nombre: "La Barca", tipo: "barrio" },
+  { nombre: "La Calera", tipo: "barrio" },
+  { nombre: "La Celada", tipo: "barrio" },
+  { nombre: "La Cierva", tipo: "barrio" },
+  { nombre: "La Baronesa", tipo: "barrio" },
+  { nombre: "La Necrópolis", tipo: "barrio" },
+  { nombre: "Las Monjas", tipo: "barrio" },
+  { nombre: "Las Palmas", tipo: "barrio" },
+  { nombre: "Los Jinetes", tipo: "barrio" },
+  { nombre: "Los Nietos", tipo: "barrio" },
+  { nombre: "Los Pinos de la Algabarra", tipo: "barrio" },
+  { nombre: "Los Villas", tipo: "barrio" },
+  { nombre: "Matallana (Virgen del Rocío)", tipo: "barrio" },
+  { nombre: "Pino Grande", tipo: "barrio" },
+  { nombre: "Pradollano", tipo: "barrio" },
+  { nombre: "Residencial Norte", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "Santa Fe", tipo: "barrio" },
+  { nombre: "Torrelaguna", tipo: "barrio" },
+  { nombre: "Villarosa", tipo: "barrio" },
+];
+
+const POLIGONOS_CARMONA: ZonaCiudad[] = [
+  { nombre: "Brenes", tipo: "poligono" },
+  { nombre: "El Pilero", tipo: "poligono" },
+  { nombre: "Hytasa", tipo: "poligono" },
+  { nombre: "Parque Logístico de Carmona", tipo: "poligono" },
+  { nombre: "Parque Logístico e Industrial de Carmona", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5930,6 +5979,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Coria del Río",
     etiqueta: "Coria del Río (Sevilla)",
     zonas: [...BARRIOS_CORIA, ...POLIGONOS_CORIA],
+  },
+  {
+    id: "carmona",
+    nombre: "Carmona",
+    etiqueta: "Carmona (Sevilla)",
+    zonas: [...BARRIOS_CARMONA, ...POLIGONOS_CARMONA],
   },
 ];
 

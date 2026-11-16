@@ -125,6 +125,7 @@ describe("zonas de Burgos", () => {
       "ecija",
       "lospalacios",
       "coria",
+      "carmona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1586,6 +1587,20 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCoria).size).toBe(nombresCoria.length);
     expect(nombresCoria.filter((n) => coria!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
     expect(nombresCoria.filter((n) => coria!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const carmona = ciudadUrbana("carmona");
+    expect(carmona?.etiqueta).toBe("Carmona (Sevilla)");
+    expect(carmona?.nombre).toBe("Carmona");
+    expect(zonaDeCiudad(carmona!, "Guadajoz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carmona!, "La Barca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carmona!, "La Baronesa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carmona!, "Matallana (Virgen del Rocío)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carmona!, "Brenes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(carmona!, "Parque Logístico de Carmona")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(carmona!, "Parque Logístico e Industrial de Carmona")?.tipo).toBe("poligono");
+    const nombresCarmona = carmona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCarmona).size).toBe(nombresCarmona.length);
+    expect(nombresCarmona.filter((n) => carmona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
+    expect(nombresCarmona.filter((n) => carmona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1638,20 +1653,22 @@ describe("zonas de Burgos", () => {
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
     expect(ciudades[sevillaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 2]?.label).toBe("Coria del Río");
+    expect(ciudades[sevillaIdx + 2]?.label).toBe("Carmona");
     expect(ciudades[sevillaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 3]?.label).toBe("Dos Hermanas");
+    expect(ciudades[sevillaIdx + 3]?.label).toBe("Coria del Río");
     expect(ciudades[sevillaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 4]?.label).toBe("Écija");
+    expect(ciudades[sevillaIdx + 4]?.label).toBe("Dos Hermanas");
     expect(ciudades[sevillaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 5]?.label).toBe("La Rinconada");
+    expect(ciudades[sevillaIdx + 5]?.label).toBe("Écija");
     expect(ciudades[sevillaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 6]?.label).toBe("Los Palacios y Villafranca");
+    expect(ciudades[sevillaIdx + 6]?.label).toBe("La Rinconada");
     expect(ciudades[sevillaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 7]?.label).toBe("Mairena del Aljarafe");
+    expect(ciudades[sevillaIdx + 7]?.label).toBe("Los Palacios y Villafranca");
     expect(ciudades[sevillaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 8]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 8]?.label).toBe("Mairena del Aljarafe");
     expect(ciudades[sevillaIdx + 8]?.negrita).toBeUndefined();
+    expect(ciudades[sevillaIdx + 9]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 9]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
