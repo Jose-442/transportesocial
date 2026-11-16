@@ -101,6 +101,7 @@ describe("zonas de Burgos", () => {
       "rivas",
       "lasrozas",
       "ssreyes",
+      "pozuelo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1141,6 +1142,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresReyes).size).toBe(nombresReyes.length);
     expect(nombresReyes.filter((n) => ssreyes!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
     expect(nombresReyes.filter((n) => ssreyes!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const pozuelo = ciudadUrbana("pozuelo");
+    expect(pozuelo?.etiqueta).toBe("Pozuelo de Alarcón (Madrid)");
+    expect(pozuelo?.nombre).toBe("Pozuelo de Alarcón");
+    expect(zonaDeCiudad(pozuelo!, "Casco Urbano (Pueblo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Casablanca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Casablanca (sector residencial)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "El Montecillo (Húmera)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Ciudad de la Imagen")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "La Finca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Avenida de Europa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Cerro de los Gamos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Somosaguas A")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Somosaguas B")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(pozuelo!, "Polígono Industrial Ciudad de la Imagen")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Polígono Industrial de la M-40")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Parque Empresarial La Finca")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Parque Empresarial Avenida de Europa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Parque Empresarial Cerro de los Gamos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Parque Empresarial Ática")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(pozuelo!, "Pozuelo del Rey")).toBeNull();
+    const nombresPozuelo = pozuelo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPozuelo).size).toBe(nombresPozuelo.length);
+    expect(nombresPozuelo.filter((n) => pozuelo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
+    expect(nombresPozuelo.filter((n) => pozuelo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1159,7 +1184,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 13).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 14).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -1170,6 +1195,7 @@ describe("zonas de Burgos", () => {
       "Leganés",
       "Móstoles",
       "Parla",
+      "Pozuelo de Alarcón",
       "Rivas-Vaciamadrid",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",

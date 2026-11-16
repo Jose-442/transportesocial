@@ -165,6 +165,7 @@
  * Las Rozas de Madrid: los barrios y los polígonos de la lista.
  * Európolis queda solo como polígono.
  * San Sebastián de los Reyes: los barrios y los polígonos de la lista.
+ * Pozuelo de Alarcón: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4041,6 +4042,54 @@ const POLIGONOS_SS_REYES: ZonaCiudad[] = [
   { nombre: "Zona empresarial Comercial Dehesa Vieja", tipo: "poligono" },
 ];
 
+const BARRIOS_POZUELO: ZonaCiudad[] = [
+  { nombre: "Casco Urbano (Pueblo)", tipo: "barrio" },
+  { nombre: "Zona de la Estación", tipo: "barrio" },
+  { nombre: "Avenida de Europa", tipo: "barrio" },
+  { nombre: "Húmera", tipo: "barrio" },
+  { nombre: "Prado de Somosaguas", tipo: "barrio" },
+  { nombre: "Colonia de Los Ángeles", tipo: "barrio" },
+  { nombre: "Ciudad de la Imagen", tipo: "barrio" },
+  { nombre: "Somosaguas Centro", tipo: "barrio" },
+  { nombre: "Somosaguas Norte", tipo: "barrio" },
+  { nombre: "Somosaguas A", tipo: "barrio" },
+  { nombre: "Somosaguas B", tipo: "barrio" },
+  { nombre: "Somosaguas Sur", tipo: "barrio" },
+  { nombre: "La Finca", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+  { nombre: "Bularas", tipo: "barrio" },
+  { nombre: "Monteclaro", tipo: "barrio" },
+  { nombre: "Villas de Monteclaro", tipo: "barrio" },
+  { nombre: "Montealina", tipo: "barrio" },
+  { nombre: "Prado Largo", tipo: "barrio" },
+  { nombre: "La Cabaña", tipo: "barrio" },
+  { nombre: "Montegancedo", tipo: "barrio" },
+  { nombre: "Ampliación Casa de Campo", tipo: "barrio" },
+  { nombre: "Las Encinas", tipo: "barrio" },
+  { nombre: "Cerro de los Gamos", tipo: "barrio" },
+  { nombre: "La Alamedilla", tipo: "barrio" },
+  { nombre: "Los Horcajos", tipo: "barrio" },
+  { nombre: "Prado Real", tipo: "barrio" },
+  { nombre: "La Solana", tipo: "barrio" },
+  { nombre: "Vereda de los Pinos", tipo: "barrio" },
+  { nombre: "El Montecillo (Húmera)", tipo: "barrio" },
+  { nombre: "Los Miradores", tipo: "barrio" },
+  { nombre: "La Huerta Grande", tipo: "barrio" },
+  { nombre: "Retamares", tipo: "barrio" },
+  { nombre: "Casablanca (sector residencial)", tipo: "barrio" },
+];
+
+const POLIGONOS_POZUELO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de la M-40", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ciudad de la Imagen", tipo: "poligono" },
+  { nombre: "Parque Empresarial La Finca", tipo: "poligono" },
+  { nombre: "Parque Empresarial Ática", tipo: "poligono" },
+  { nombre: "Parque Empresarial Avenida de Europa", tipo: "poligono" },
+  { nombre: "Parque Empresarial Cerro de los Gamos", tipo: "poligono" },
+  { nombre: "Parque Empresarial Foro de Somosaguas", tipo: "poligono" },
+  { nombre: "Parque Empresarial IMCE", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4595,6 +4644,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Sebastián de los Reyes",
     etiqueta: "San Sebastián de los Reyes (Madrid)",
     zonas: [...BARRIOS_SS_REYES, ...POLIGONOS_SS_REYES],
+  },
+  {
+    id: "pozuelo",
+    nombre: "Pozuelo de Alarcón",
+    etiqueta: "Pozuelo de Alarcón (Madrid)",
+    zonas: [...BARRIOS_POZUELO, ...POLIGONOS_POZUELO],
   },
 ];
 
