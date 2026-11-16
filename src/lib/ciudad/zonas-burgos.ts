@@ -127,6 +127,8 @@
  * Los 12 polígonos del censo municipal.
  * Castelldefels: los 19 barrios del Ayuntamiento.
  * El polígono industrial del Camí Ral.
+ * Granollers: los 17 barrios del mapa municipal.
+ * Los 7 polígonos de la sede electrónica.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2345,6 +2347,36 @@ const POLIGONOS_CASTELLDEFELS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial del Camí Ral", tipo: "poligono" },
 ];
 
+const BARRIOS_GRANOLLERS: ZonaCiudad[] = [
+  { nombre: "Can Bassa", tipo: "barrio" },
+  { nombre: "Can Gili", tipo: "barrio" },
+  { nombre: "Can Mònic", tipo: "barrio" },
+  { nombre: "Centre", tipo: "barrio" },
+  { nombre: "Congost", tipo: "barrio" },
+  { nombre: "Font Verda", tipo: "barrio" },
+  { nombre: "Granollers Nord", tipo: "barrio" },
+  { nombre: "Instituts", tipo: "barrio" },
+  { nombre: "Joan Prim", tipo: "barrio" },
+  { nombre: "L'Hostal", tipo: "barrio" },
+  { nombre: "Lledoner", tipo: "barrio" },
+  { nombre: "Palou", tipo: "barrio" },
+  { nombre: "Ponent", tipo: "barrio" },
+  { nombre: "Sant Miquel", tipo: "barrio" },
+  { nombre: "Sota el Camí Ral", tipo: "barrio" },
+  { nombre: "Tres Torres", tipo: "barrio" },
+  { nombre: "Zona Industrial", tipo: "barrio" },
+];
+
+const POLIGONOS_GRANOLLERS: ZonaCiudad[] = [
+  { nombre: "El Congost", tipo: "poligono" },
+  { nombre: "Jordi Camp", tipo: "poligono" },
+  { nombre: "Palou Nord", tipo: "poligono" },
+  { nombre: "Font del Ràdium", tipo: "poligono" },
+  { nombre: "El Coll de la Manya", tipo: "poligono" },
+  { nombre: "El Ramassar", tipo: "poligono" },
+  { nombre: "Cal Gordi - Can Català", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -2707,6 +2739,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Castelldefels",
     etiqueta: "Castelldefels (Barcelona)",
     zonas: [...BARRIOS_CASTELLDEFELS, ...POLIGONOS_CASTELLDEFELS],
+  },
+  {
+    id: "granollers",
+    nombre: "Granollers",
+    etiqueta: "Granollers (Barcelona)",
+    zonas: [...BARRIOS_GRANOLLERS, ...POLIGONOS_GRANOLLERS],
   },
 ];
 

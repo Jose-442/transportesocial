@@ -66,6 +66,7 @@ describe("zonas de Burgos", () => {
       "rubi",
       "vilanova",
       "castelldefels",
+      "granollers",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -623,6 +624,18 @@ describe("zonas de Burgos", () => {
     const nombresCastelldefels = castelldefels!.zonas.map((z) => z.nombre);
     expect(new Set(nombresCastelldefels).size).toBe(nombresCastelldefels.length);
     expect(nombresCastelldefels.filter((n) => castelldefels!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(19);
+    const granollers = ciudadUrbana("granollers");
+    expect(granollers?.etiqueta).toBe("Granollers (Barcelona)");
+    expect(granollers?.nombre).toBe("Granollers");
+    expect(zonaDeCiudad(granollers!, "L'Hostal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granollers!, "Zona Industrial")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granollers!, "Palou")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granollers!, "El Congost")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(granollers!, "Palou Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(granollers!, "Bellavista")).toBeNull();
+    const nombresGranollers = granollers!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGranollers).size).toBe(nombresGranollers.length);
+    expect(nombresGranollers.filter((n) => granollers!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
