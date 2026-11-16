@@ -146,6 +146,7 @@
  * Calafell: los barrios y los polígonos de la lista.
  * Salou: los barrios de la lista.
  * Ávila: los barrios y los polígonos de la lista.
+ * Salamanca: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3172,6 +3173,68 @@ const POLIGONOS_AVILA: ZonaCiudad[] = [
   { nombre: "Centro Logístico CyLoG", tipo: "poligono" },
 ];
 
+const BARRIOS_SALAMANCA: ZonaCiudad[] = [
+  { nombre: "Alamedilla", tipo: "barrio" },
+  { nombre: "Alambres – San Buenaventura", tipo: "barrio" },
+  { nombre: "Arrabal", tipo: "barrio" },
+  { nombre: "Barrio Blanco", tipo: "barrio" },
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Capuchinos", tipo: "barrio" },
+  { nombre: "Carmelitas Oeste (Barrio del Oeste)", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Chamberí", tipo: "barrio" },
+  { nombre: "Chinchibarra", tipo: "barrio" },
+  { nombre: "Delicias", tipo: "barrio" },
+  { nombre: "Estación", tipo: "barrio" },
+  { nombre: "Fontana", tipo: "barrio" },
+  { nombre: "Garrido Norte", tipo: "barrio" },
+  { nombre: "Garrido Sur", tipo: "barrio" },
+  { nombre: "Glorieta – Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Hospital", tipo: "barrio" },
+  { nombre: "Labradores", tipo: "barrio" },
+  { nombre: "La Platina", tipo: "barrio" },
+  { nombre: "La Vega", tipo: "barrio" },
+  { nombre: "Montalvo", tipo: "barrio" },
+  { nombre: "Pizarrales", tipo: "barrio" },
+  { nombre: "Prosperidad", tipo: "barrio" },
+  { nombre: "Puente Ladrillo", tipo: "barrio" },
+  { nombre: "Rollo", tipo: "barrio" },
+  { nombre: "Salesas", tipo: "barrio" },
+  { nombre: "San Bernardo", tipo: "barrio" },
+  { nombre: "San Cristóbal – Claras", tipo: "barrio" },
+  { nombre: "San Esteban", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Vicente", tipo: "barrio" },
+  { nombre: "Sancti-Spíritus", tipo: "barrio" },
+  { nombre: "Santo Tomás", tipo: "barrio" },
+  { nombre: "Tejares", tipo: "barrio" },
+  { nombre: "Tenerías", tipo: "barrio" },
+  { nombre: "Teso de la Feria", tipo: "barrio" },
+  { nombre: "Tormes", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "Úrsulas – San Marcos", tipo: "barrio" },
+  { nombre: "Vidal", tipo: "barrio" },
+  { nombre: "Vistahermosa", tipo: "barrio" },
+  { nombre: "Zurguén", tipo: "barrio" },
+  { nombre: "Huerta Otea", tipo: "barrio" },
+  { nombre: "Campus Miguel de Unamuno", tipo: "barrio" },
+  { nombre: "Finca de Vista Hermosa", tipo: "barrio" },
+  { nombre: "Aldehuela de los Guzmanes", tipo: "barrio" },
+  { nombre: "Salas Pombo", tipo: "barrio" },
+];
+
+const POLIGONOS_SALAMANCA: ZonaCiudad[] = [
+  { nombre: "El Montalvo I", tipo: "poligono" },
+  { nombre: "El Montalvo II", tipo: "poligono" },
+  { nombre: "El Montalvo III", tipo: "poligono" },
+  { nombre: "La Serna", tipo: "poligono" },
+  { nombre: "Mercasalamanca – ZALDESA", tipo: "poligono" },
+  { nombre: "Puerto Seco de Salamanca – ZALDESA", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -3642,6 +3705,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ávila",
     etiqueta: "Ávila (Ávila)",
     zonas: [...BARRIOS_AVILA, ...POLIGONOS_AVILA],
+  },
+  {
+    id: "salamanca",
+    nombre: "Salamanca",
+    etiqueta: "Salamanca (Salamanca)",
+    zonas: [...BARRIOS_SALAMANCA, ...POLIGONOS_SALAMANCA],
   },
 ];
 

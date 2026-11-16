@@ -84,6 +84,7 @@ describe("zonas de Burgos", () => {
       "calafell",
       "salou",
       "avila",
+      "salamanca",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -870,6 +871,18 @@ describe("zonas de Burgos", () => {
     const nombresAvila = avila!.zonas.map((z) => z.nombre);
     expect(new Set(nombresAvila).size).toBe(nombresAvila.length);
     expect(nombresAvila.filter((n) => avila!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
+    const salamanca = ciudadUrbana("salamanca");
+    expect(salamanca?.etiqueta).toBe("Salamanca (Salamanca)");
+    expect(salamanca?.nombre).toBe("Salamanca");
+    expect(zonaDeCiudad(salamanca!, "Montalvo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(salamanca!, "Carmelitas Oeste (Barrio del Oeste)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(salamanca!, "El Montalvo I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(salamanca!, "Mercasalamanca – ZALDESA")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(salamanca!, "Los Villares")).toBeNull();
+    expect(zonaDeCiudad(salamanca!, "Villares de la Reina")).toBeNull();
+    const nombresSalamanca = salamanca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSalamanca).size).toBe(nombresSalamanca.length);
+    expect(nombresSalamanca.filter((n) => salamanca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(50);
   });
 
   it("el título del trayecto corto usa los barrios", () => {
