@@ -121,6 +121,7 @@ describe("zonas de Burgos", () => {
       "alcalaguadaira",
       "utrera",
       "mairenaaljarafe",
+      "larinconada",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1520,6 +1521,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMairena).size).toBe(nombresMairena.length);
     expect(nombresMairena.filter((n) => mairena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(31);
     expect(nombresMairena.filter((n) => mairena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const rinconada = ciudadUrbana("larinconada");
+    expect(rinconada?.etiqueta).toBe("La Rinconada (Sevilla)");
+    expect(rinconada?.nombre).toBe("La Rinconada");
+    expect(zonaDeCiudad(rinconada!, "La Rinconada (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rinconada!, "San José de la Rinconada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rinconada!, "El Gordillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(rinconada!, "Polígono El Gordillo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "El Cáñamo I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "El Cáñamo II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "El Cáñamo III")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "Aerópolis (Parque Tecnológico Aeroespacial de Andalucía)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "La Jarilla (Polígono Agroalimentario)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(rinconada!, "Polígono 28 de Febrero")?.tipo).toBe("poligono");
+    const nombresRinconada = rinconada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRinconada).size).toBe(nombresRinconada.length);
+    expect(nombresRinconada.filter((n) => rinconada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(14);
+    expect(nombresRinconada.filter((n) => rinconada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1574,10 +1592,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[sevillaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[sevillaIdx + 2]?.label).toBe("Dos Hermanas");
     expect(ciudades[sevillaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 3]?.label).toBe("Mairena del Aljarafe");
+    expect(ciudades[sevillaIdx + 3]?.label).toBe("La Rinconada");
     expect(ciudades[sevillaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[sevillaIdx + 4]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 4]?.label).toBe("Mairena del Aljarafe");
     expect(ciudades[sevillaIdx + 4]?.negrita).toBeUndefined();
+    expect(ciudades[sevillaIdx + 5]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);

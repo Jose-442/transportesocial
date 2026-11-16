@@ -211,6 +211,8 @@
  * Ibárrburu queda con el nombre así.
  * Mairena del Aljarafe: los barrios y los polígonos de la lista.
  * PISA entra en Mairena del Aljarafe, no en Sevilla.
+ * La Rinconada: los barrios y los polígonos de la lista.
+ * El Gordillo queda como barrio. Polígono El Gordillo como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -5103,6 +5105,40 @@ const POLIGONOS_MAIRENA_ALJARAFE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Hacienda Peralta", tipo: "poligono" },
 ];
 
+const BARRIOS_LA_RINCONADA: ZonaCiudad[] = [
+  { nombre: "Casavacas", tipo: "barrio" },
+  { nombre: "El Castellón", tipo: "barrio" },
+  { nombre: "El Gordillo", tipo: "barrio" },
+  { nombre: "El Tejar", tipo: "barrio" },
+  { nombre: "La Rinconada (casco urbano)", tipo: "barrio" },
+  { nombre: "Las Cortillas", tipo: "barrio" },
+  { nombre: "Nueva Jarilla", tipo: "barrio" },
+  { nombre: "San José de la Rinconada", tipo: "barrio" },
+  { nombre: "Tarazona", tipo: "barrio" },
+  { nombre: "Tarazonilla", tipo: "barrio" },
+  { nombre: "Urbanización La Rata", tipo: "barrio" },
+  { nombre: "Urbanización Los Abetos", tipo: "barrio" },
+  { nombre: "Urbanización Los Serafines", tipo: "barrio" },
+  { nombre: "Urbanización Verónica", tipo: "barrio" },
+];
+
+const POLIGONOS_LA_RINCONADA: ZonaCiudad[] = [
+  { nombre: "Aerópolis (Parque Tecnológico Aeroespacial de Andalucía)", tipo: "poligono" },
+  { nombre: "El Cáñamo I", tipo: "poligono" },
+  { nombre: "El Cáñamo II", tipo: "poligono" },
+  { nombre: "El Cáñamo III", tipo: "poligono" },
+  { nombre: "Polígono El Gordillo", tipo: "poligono" },
+  { nombre: "El Malecón", tipo: "poligono" },
+  { nombre: "Espartales I", tipo: "poligono" },
+  { nombre: "Espartales II", tipo: "poligono" },
+  { nombre: "La Jarilla (Polígono Agroalimentario)", tipo: "poligono" },
+  { nombre: "Majaravique", tipo: "poligono" },
+  { nombre: "NACOISA", tipo: "poligono" },
+  { nombre: "Polígono 28 de Febrero", tipo: "poligono" },
+  { nombre: "Santa Marta", tipo: "poligono" },
+  { nombre: "Torre Pavas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5777,6 +5813,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mairena del Aljarafe",
     etiqueta: "Mairena del Aljarafe (Sevilla)",
     zonas: [...BARRIOS_MAIRENA_ALJARAFE, ...POLIGONOS_MAIRENA_ALJARAFE],
+  },
+  {
+    id: "larinconada",
+    nombre: "La Rinconada",
+    etiqueta: "La Rinconada (Sevilla)",
+    zonas: [...BARRIOS_LA_RINCONADA, ...POLIGONOS_LA_RINCONADA],
   },
 ];
 
