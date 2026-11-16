@@ -159,6 +159,8 @@
  * Torrejón de Ardoz: los barrios y los polígonos de la lista.
  * Las Fronteras queda como barrio.
  * Parla: los barrios y los polígonos de la lista.
+ * Alcobendas: los barrios y los polígonos de la lista.
+ * Fuente Hito, Valdelasfuentes, Fuentelucha, Arroyo de la Vega y El Juncal quedan como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3867,6 +3869,41 @@ const POLIGONOS_PARLA: ZonaCiudad[] = [
   { nombre: "Parque Empresarial y Tecnológico Parla Progresa (PAU-5)", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCOBENDAS: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Ensanche Este", tipo: "barrio" },
+  { nombre: "Ensanche Norte", tipo: "barrio" },
+  { nombre: "Ensanche Noroeste", tipo: "barrio" },
+  { nombre: "Ensanche Oeste", tipo: "barrio" },
+  { nombre: "Ensanche Sudoeste", tipo: "barrio" },
+  { nombre: "Fuentelucha", tipo: "barrio" },
+  { nombre: "La Zaporra", tipo: "barrio" },
+  { nombre: "Valdelasfuentes", tipo: "barrio" },
+  { nombre: "Fuente Hito", tipo: "barrio" },
+  { nombre: "El Juncal", tipo: "barrio" },
+  { nombre: "Arroyo de la Vega", tipo: "barrio" },
+  { nombre: "La Carrascosa I", tipo: "barrio" },
+  { nombre: "La Carrascosa II", tipo: "barrio" },
+  { nombre: "Tupperware", tipo: "barrio" },
+  { nombre: "Carretera de Fuencarral", tipo: "barrio" },
+  { nombre: "La Moraleja", tipo: "barrio" },
+  { nombre: "El Soto de La Moraleja", tipo: "barrio" },
+  { nombre: "El Encinar de los Reyes", tipo: "barrio" },
+  { nombre: "Cuesta Blanca", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCOBENDAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Alcobendas", tipo: "poligono" },
+  { nombre: "Parque Empresarial Valdelacasa", tipo: "poligono" },
+  { nombre: "Parque Empresarial Casablanca I", tipo: "poligono" },
+  { nombre: "Parque Empresarial Casablanca II", tipo: "poligono" },
+  { nombre: "Parque Empresarial Arroyo de la Vega", tipo: "poligono" },
+  { nombre: "Parque Empresarial La Moraleja", tipo: "poligono" },
+  { nombre: "Parque Empresarial Omega", tipo: "poligono" },
+  { nombre: "Parque Empresarial Miniparc", tipo: "poligono" },
+  { nombre: "Zona empresarial El Juncal", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -4397,6 +4434,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Parla",
     etiqueta: "Parla (Madrid)",
     zonas: [...BARRIOS_PARLA, ...POLIGONOS_PARLA],
+  },
+  {
+    id: "alcobendas",
+    nombre: "Alcobendas",
+    etiqueta: "Alcobendas (Madrid)",
+    zonas: [...BARRIOS_ALCOBENDAS, ...POLIGONOS_ALCOBENDAS],
   },
 ];
 

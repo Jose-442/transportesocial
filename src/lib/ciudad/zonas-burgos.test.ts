@@ -97,6 +97,7 @@ describe("zonas de Burgos", () => {
       "alcorcon",
       "torrejon",
       "parla",
+      "alcobendas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1059,6 +1060,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresParla).size).toBe(nombresParla.length);
     expect(nombresParla.filter((n) => parla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
     expect(nombresParla.filter((n) => parla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const alcobendas = ciudadUrbana("alcobendas");
+    expect(alcobendas?.etiqueta).toBe("Alcobendas (Madrid)");
+    expect(alcobendas?.nombre).toBe("Alcobendas");
+    expect(zonaDeCiudad(alcobendas!, "Fuente Hito")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "Valdelasfuentes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "Fuentelucha")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "Arroyo de la Vega")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "El Juncal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "La Moraleja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "El Soto de La Moraleja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "El Encinar de los Reyes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "Carretera de Fuencarral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcobendas!, "Polígono Industrial de Alcobendas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcobendas!, "Parque Empresarial La Moraleja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcobendas!, "Parque Empresarial Arroyo de la Vega")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcobendas!, "Zona empresarial El Juncal")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcobendas!, "Fuencarral")).toBeNull();
+    const nombresAlcobendas = alcobendas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlcobendas).size).toBe(nombresAlcobendas.length);
+    expect(nombresAlcobendas.filter((n) => alcobendas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
+    expect(nombresAlcobendas.filter((n) => alcobendas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1077,9 +1099,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 9).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 10).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
+      "Alcobendas",
       "Alcorcón",
       "Fuenlabrada",
       "Getafe",
