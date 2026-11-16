@@ -194,6 +194,7 @@
  * San Fernando de Henares: los barrios y los polígonos de la lista.
  * Arroyomolinos: los barrios y los polígonos de la lista.
  * Castañeras, Las; Carrizos, Los; Castillo, El; Dehesa, La y Encinar, El quedan con el nombre así.
+ * Galapagar: los núcleos y las zonas empresariales de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4638,6 +4639,45 @@ const POLIGONOS_ARROYOMOLINOS: ZonaCiudad[] = [
   { nombre: "Valdefuentes", tipo: "poligono" },
 ];
 
+const BARRIOS_GALAPAGAR: ZonaCiudad[] = [
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "Colonia España", tipo: "barrio" },
+  { nombre: "Colonia Torrelodones", tipo: "barrio" },
+  { nombre: "El Encinar – San Alberto Magno", tipo: "barrio" },
+  { nombre: "El Guijo", tipo: "barrio" },
+  { nombre: "El Pocillo", tipo: "barrio" },
+  { nombre: "Fuente la Teja", tipo: "barrio" },
+  { nombre: "Galapagar Casco", tipo: "barrio" },
+  { nombre: "La Navata", tipo: "barrio" },
+  { nombre: "Las Cuestas", tipo: "barrio" },
+  { nombre: "Las Minas", tipo: "barrio" },
+  { nombre: "Los Chopos", tipo: "barrio" },
+  { nombre: "Los Jarales", tipo: "barrio" },
+  { nombre: "Los Ranchos", tipo: "barrio" },
+  { nombre: "Molino de la Hoz", tipo: "barrio" },
+  { nombre: "Parquelagos", tipo: "barrio" },
+  { nombre: "Roncesvalles", tipo: "barrio" },
+  { nombre: "Vista Nevada", tipo: "barrio" },
+  { nombre: "Vedado de la Monja", tipo: "barrio" },
+  { nombre: "Las Cuevas", tipo: "barrio" },
+  { nombre: "Congosto", tipo: "barrio" },
+  { nombre: "Colonia de los Peregrinos", tipo: "barrio" },
+  { nombre: "Riomonte", tipo: "barrio" },
+  { nombre: "Los Enebros", tipo: "barrio" },
+  { nombre: "Los Rosales", tipo: "barrio" },
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Galapark", tipo: "barrio" },
+  { nombre: "El Rincón", tipo: "barrio" },
+  { nombre: "Monte Ana", tipo: "barrio" },
+  { nombre: "Nido del Águila", tipo: "barrio" },
+];
+
+const POLIGONOS_GALAPAGAR: ZonaCiudad[] = [
+  { nombre: "Centro de Negocios de Galapagar", tipo: "poligono" },
+  { nombre: "Zona empresarial de La Navata", tipo: "poligono" },
+  { nombre: "Zona empresarial del casco urbano", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5270,6 +5310,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arroyomolinos",
     etiqueta: "Arroyomolinos (Madrid)",
     zonas: [...BARRIOS_ARROYOMOLINOS, ...POLIGONOS_ARROYOMOLINOS],
+  },
+  {
+    id: "galapagar",
+    nombre: "Galapagar",
+    etiqueta: "Galapagar (Madrid)",
+    zonas: [...BARRIOS_GALAPAGAR, ...POLIGONOS_GALAPAGAR],
   },
 ];
 
