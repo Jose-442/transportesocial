@@ -682,14 +682,17 @@ describe("zonas de Burgos", () => {
     const manresa = ciudadUrbana("manresa");
     expect(manresa?.etiqueta).toBe("Manresa (Barcelona)");
     expect(manresa?.nombre).toBe("Manresa");
-    expect(zonaDeCiudad(manresa!, "Sagrada Família")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(manresa!, "Pare Ignasi Puig")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "Barri Antic")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "El Xup")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "Els Comtals")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manresa!, "Guix")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(manresa!, "Bufalvent")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(manresa!, "Els Dolors")?.tipo).toBe("poligono");
-    expect(zonaDeCiudad(manresa!, "el Xup")).toBeNull();
+    expect(zonaDeCiudad(manresa!, "El Guix")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manresa!, "Pont Nou I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manresa!, "Pare Ignasi Puig")).toBeNull();
     const nombresManresa = manresa!.zonas.map((z) => z.nombre);
     expect(new Set(nombresManresa).size).toBe(nombresManresa.length);
-    expect(nombresManresa.filter((n) => manresa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    expect(nombresManresa.filter((n) => manresa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(36);
   });
 
   it("el título del trayecto corto usa los barrios", () => {

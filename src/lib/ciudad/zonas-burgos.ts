@@ -132,8 +132,7 @@
  * Cerdanyola del Vallès: los barrios y los 9 polígonos de la lista.
  * Mollet del Vallès: los barrios y los 5 polígonos de la lista.
  * Barberà del Vallès: los barrios y los polígonos de la lista.
- * Manresa: los 18 barrios del padrón municipal.
- * Los 4 polígonos de la página del Ayuntamiento.
+ * Manresa: los barrios y los polígonos de la lista.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -2517,30 +2516,55 @@ const POLIGONOS_BARBERA: ZonaCiudad[] = [
 
 const BARRIOS_MANRESA: ZonaCiudad[] = [
   { nombre: "Barri Antic", tipo: "barrio" },
-  { nombre: "La Balconada", tipo: "barrio" },
+  { nombre: "Balconada", tipo: "barrio" },
+  { nombre: "Bases de Manresa", tipo: "barrio" },
   { nombre: "Cal Gravat", tipo: "barrio" },
+  { nombre: "Cal Perramon", tipo: "barrio" },
+  { nombre: "Cal Sabata", tipo: "barrio" },
   { nombre: "Carretera de Santpedor", tipo: "barrio" },
+  { nombre: "Els Comtals", tipo: "barrio" },
   { nombre: "Escodines", tipo: "barrio" },
-  { nombre: "Farreres - Suanya - Comtals - Santa Caterina - l'Oller - Guia", tipo: "barrio" },
+  { nombre: "Farreres", tipo: "barrio" },
   { nombre: "Font dels Capellans", tipo: "barrio" },
-  { nombre: "Guix - Pujada Roja", tipo: "barrio" },
-  { nombre: "Mion - Puigberenguer - Miralpeix", tipo: "barrio" },
-  { nombre: "Pare Ignasi Puig", tipo: "barrio" },
+  { nombre: "Guix", tipo: "barrio" },
+  { nombre: "Guix – Pujada Roja", tipo: "barrio" },
+  { nombre: "La Guia", tipo: "barrio" },
+  { nombre: "La Parada", tipo: "barrio" },
+  { nombre: "Les Cots", tipo: "barrio" },
+  { nombre: "Mion", tipo: "barrio" },
+  { nombre: "Miralpeix", tipo: "barrio" },
+  { nombre: "Parc Tecnològic de la Catalunya Central", tipo: "barrio" },
   { nombre: "Passeig i Rodalies", tipo: "barrio" },
-  { nombre: "Plaça Catalunya - Barriada de Saldes", tipo: "barrio" },
+  { nombre: "Plaça Catalunya – Saldes", tipo: "barrio" },
+  { nombre: "Pla dels Vinyats", tipo: "barrio" },
+  { nombre: "Plana del Pont Nou", tipo: "barrio" },
   { nombre: "Poble Nou", tipo: "barrio" },
-  { nombre: "Sagrada Família", tipo: "barrio" },
+  { nombre: "Poal", tipo: "barrio" },
+  { nombre: "Puigberenguer", tipo: "barrio" },
+  { nombre: "Pujada Roja", tipo: "barrio" },
   { nombre: "Sant Pau", tipo: "barrio" },
+  { nombre: "Sagrada Família", tipo: "barrio" },
+  { nombre: "Santa Caterina", tipo: "barrio" },
+  { nombre: "Suanya", tipo: "barrio" },
+  { nombre: "Tossal dels Cigalons", tipo: "barrio" },
   { nombre: "Valldaura", tipo: "barrio" },
-  { nombre: "Vic - Remei", tipo: "barrio" },
+  { nombre: "Vic – Remei", tipo: "barrio" },
   { nombre: "Viladordis", tipo: "barrio" },
+  { nombre: "El Xup", tipo: "barrio" },
 ];
 
 const POLIGONOS_MANRESA: ZonaCiudad[] = [
   { nombre: "Bufalvent", tipo: "poligono" },
-  { nombre: "Pont Nou", tipo: "poligono" },
+  { nombre: "Comtals I", tipo: "poligono" },
+  { nombre: "Comtals II", tipo: "poligono" },
+  { nombre: "Passeig del Riu", tipo: "poligono" },
+  { nombre: "Pont Nou I", tipo: "poligono" },
+  { nombre: "Pont Nou II", tipo: "poligono" },
+  { nombre: "Sant Joan d'en Coll", tipo: "poligono" },
+  { nombre: "Trullols", tipo: "poligono" },
   { nombre: "Els Dolors", tipo: "poligono" },
-  { nombre: "Els Trullols", tipo: "poligono" },
+  { nombre: "Els Dolors II", tipo: "poligono" },
+  { nombre: "El Guix", tipo: "poligono" },
 ];
 
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
