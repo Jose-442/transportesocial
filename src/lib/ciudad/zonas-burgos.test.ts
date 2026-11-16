@@ -117,6 +117,7 @@ describe("zonas de Burgos", () => {
       "galapagar",
       "navalcarnero",
       "sevilla",
+      "doshermanas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1445,6 +1446,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSevilla).size).toBe(nombresSevilla.length);
     expect(nombresSevilla.filter((n) => sevilla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(70);
     expect(nombresSevilla.filter((n) => sevilla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(16);
+    const dosHermanas = ciudadUrbana("doshermanas");
+    expect(dosHermanas?.etiqueta).toBe("Dos Hermanas (Sevilla)");
+    expect(dosHermanas?.nombre).toBe("Dos Hermanas");
+    expect(zonaDeCiudad(dosHermanas!, "Montequinto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Condequinto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Ibarburu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Fuente del Rey")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Huerta del Pilar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Huerta del Pilar II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "La Jimena")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "La Jimena II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(dosHermanas!, "Polígono Ibarburu")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(dosHermanas!, "Polígono Fuente del Rey")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(dosHermanas!, "Parque Empresarial La Isla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(dosHermanas!, "Zona Industrial Autovía I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(dosHermanas!, "Zona Industrial Autovía II")?.tipo).toBe("poligono");
+    const nombresDosHermanas = dosHermanas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresDosHermanas).size).toBe(nombresDosHermanas.length);
+    expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(88);
+    expect(nombresDosHermanas.filter((n) => dosHermanas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1494,6 +1515,9 @@ describe("zonas de Burgos", () => {
       "Valdemoro",
     ]);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
+    const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
+    expect(ciudades[sevillaIdx + 1]?.label).toBe("Dos Hermanas");
+    expect(ciudades[sevillaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
