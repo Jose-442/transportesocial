@@ -242,6 +242,9 @@
  * Torremolinos: los barrios y los polígonos de la lista.
  * El Pinillo, La Colina y Los Pinares quedan como barrio.
  * Parque Empresarial El Pinillo, Polígono Industrial La Colina (zona productiva) y Zona Empresarial Los Pinares como polígono.
+ * Rincón de la Victoria: los barrios y las cuatro áreas de la lista.
+ * Benagalbón y Cotomar quedan como barrio.
+ * Cala del Moral (La) queda como barrio. Área comercial de La Cala del Moral como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6121,6 +6124,56 @@ const POLIGONOS_TORREMOLINOS: ZonaCiudad[] = [
   { nombre: "Zona Empresarial Los Pinares", tipo: "poligono" },
 ];
 
+const BARRIOS_RINCON_VICTORIA: ZonaCiudad[] = [
+  { nombre: "Añoreta", tipo: "barrio" },
+  { nombre: "Añoreta Baja", tipo: "barrio" },
+  { nombre: "Añoreta Golf", tipo: "barrio" },
+  { nombre: "Añoreta Golf - Paraíso del Sol", tipo: "barrio" },
+  { nombre: "Arenal Marina Golf", tipo: "barrio" },
+  { nombre: "Balcón del Golf", tipo: "barrio" },
+  { nombre: "Benagalbón", tipo: "barrio" },
+  { nombre: "Brisas del Sur", tipo: "barrio" },
+  { nombre: "Calabahía", tipo: "barrio" },
+  { nombre: "Calaflores", tipo: "barrio" },
+  { nombre: "Cala del Moral (La)", tipo: "barrio" },
+  { nombre: "Camino Viejo de Vélez", tipo: "barrio" },
+  { nombre: "Cortijo Blanco", tipo: "barrio" },
+  { nombre: "Cotomar", tipo: "barrio" },
+  { nombre: "Cumbres del Golf", tipo: "barrio" },
+  { nombre: "El Cantal", tipo: "barrio" },
+  { nombre: "El Olivar", tipo: "barrio" },
+  { nombre: "Gran Sol", tipo: "barrio" },
+  { nombre: "Jardines de la Factoria", tipo: "barrio" },
+  { nombre: "Jardines del Golf", tipo: "barrio" },
+  { nombre: "La Zenaida", tipo: "barrio" },
+  { nombre: "Las Palmas", tipo: "barrio" },
+  { nombre: "Las Pedrizas", tipo: "barrio" },
+  { nombre: "Lo Cea", tipo: "barrio" },
+  { nombre: "Los Cabreras", tipo: "barrio" },
+  { nombre: "Los Catalanes", tipo: "barrio" },
+  { nombre: "Los Cortijos", tipo: "barrio" },
+  { nombre: "Los Delgados", tipo: "barrio" },
+  { nombre: "Los Jarales", tipo: "barrio" },
+  { nombre: "Mar Paraíso Golf", tipo: "barrio" },
+  { nombre: "Montesol", tipo: "barrio" },
+  { nombre: "Parque Victoria", tipo: "barrio" },
+  { nombre: "Paraisos del Golf", tipo: "barrio" },
+  { nombre: "Pinar de Añoreta", tipo: "barrio" },
+  { nombre: "Playa del Rincón", tipo: "barrio" },
+  { nombre: "Rincón de la Victoria (Centro)", tipo: "barrio" },
+  { nombre: "Rincón del Sol", tipo: "barrio" },
+  { nombre: "Señorío de la Victoria", tipo: "barrio" },
+  { nombre: "Torre de Benagalbón", tipo: "barrio" },
+  { nombre: "Vistas del Golf", tipo: "barrio" },
+];
+
+const POLIGONOS_RINCON_VICTORIA: ZonaCiudad[] = [
+  { nombre: "Área empresarial de Benagalbón", tipo: "poligono" },
+  { nombre: "Área comercial de La Cala del Moral", tipo: "poligono" },
+  { nombre: "Área comercial de Rincón de la Victoria", tipo: "poligono" },
+  { nombre: "Zona empresarial de Cotomar", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -6873,6 +6926,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torremolinos",
     etiqueta: "Torremolinos (Málaga)",
     zonas: [...BARRIOS_TORREMOLINOS, ...POLIGONOS_TORREMOLINOS],
+  },
+  {
+    id: "rincondelavictoria",
+    nombre: "Rincón de la Victoria",
+    etiqueta: "Rincón de la Victoria (Málaga)",
+    zonas: [...BARRIOS_RINCON_VICTORIA, ...POLIGONOS_RINCON_VICTORIA],
   },
 ];
 
