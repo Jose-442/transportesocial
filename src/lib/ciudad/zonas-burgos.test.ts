@@ -119,6 +119,7 @@ describe("zonas de Burgos", () => {
       "sevilla",
       "doshermanas",
       "alcalaguadaira",
+      "utrera",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -1486,6 +1487,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcalaGuadaira).size).toBe(nombresAlcalaGuadaira.length);
     expect(nombresAlcalaGuadaira.filter((n) => alcalaGuadaira!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
     expect(nombresAlcalaGuadaira.filter((n) => alcalaGuadaira!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(36);
+    const utrera = ciudadUrbana("utrera");
+    expect(utrera?.etiqueta).toBe("Utrera (Sevilla)");
+    expect(utrera?.nombre).toBe("Utrera");
+    expect(zonaDeCiudad(utrera!, "Ibárrburu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(utrera!, "Ibarburu")).toBeNull();
+    expect(zonaDeCiudad(utrera!, "Doña Jacinta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(utrera!, "Doña Jacinta Baja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(utrera!, "Arroyo del Búho")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(utrera!, "Carretera Amarilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(utrera!, "Innovatorno")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(utrera!, "Las Marías Bajas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(utrera!, "Orippo")?.tipo).toBe("poligono");
+    const nombresUtrera = utrera!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresUtrera).size).toBe(nombresUtrera.length);
+    expect(nombresUtrera.filter((n) => utrera!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(56);
+    expect(nombresUtrera.filter((n) => utrera!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -1540,6 +1557,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[sevillaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[sevillaIdx + 2]?.label).toBe("Dos Hermanas");
     expect(ciudades[sevillaIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[sevillaIdx + 3]?.label).toBe("Utrera");
+    expect(ciudades[sevillaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);

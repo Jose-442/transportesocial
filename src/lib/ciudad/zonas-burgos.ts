@@ -207,6 +207,8 @@
  * Barrio Centro no entra: queda Casco Antiguo.
  * Alcalá de Guadaíra: los barrios y los polígonos de la lista.
  * Las Lirios no entra: queda Los Lirios.
+ * Utrera: los barrios y los polígonos de la lista.
+ * Ibárrburu queda con el nombre así.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -4990,6 +4992,76 @@ const POLIGONOS_ALCALA_GUADAIRA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Venta La Liebre", tipo: "poligono" },
 ];
 
+const BARRIOS_UTRERA: ZonaCiudad[] = [
+  { nombre: "Arroyo del Búho", tipo: "barrio" },
+  { nombre: "Bencarrón", tipo: "barrio" },
+  { nombre: "Casas Cerros", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Cerro de la Palma", tipo: "barrio" },
+  { nombre: "Coca de la Piñera", tipo: "barrio" },
+  { nombre: "Consolación", tipo: "barrio" },
+  { nombre: "Don Pablo", tipo: "barrio" },
+  { nombre: "Doña Jacinta", tipo: "barrio" },
+  { nombre: "Doña Jacinta Baja", tipo: "barrio" },
+  { nombre: "El Chaparral", tipo: "barrio" },
+  { nombre: "El Comodoro", tipo: "barrio" },
+  { nombre: "El Junquillo", tipo: "barrio" },
+  { nombre: "El Mulero", tipo: "barrio" },
+  { nombre: "El Poeta", tipo: "barrio" },
+  { nombre: "El Recuero", tipo: "barrio" },
+  { nombre: "El Saltillo", tipo: "barrio" },
+  { nombre: "El Tinte", tipo: "barrio" },
+  { nombre: "El Vicario", tipo: "barrio" },
+  { nombre: "Huerta de la Salud", tipo: "barrio" },
+  { nombre: "Ibárrburu", tipo: "barrio" },
+  { nombre: "La Alborra", tipo: "barrio" },
+  { nombre: "La Aguardientera", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "La Fontanilla", tipo: "barrio" },
+  { nombre: "La Jordana", tipo: "barrio" },
+  { nombre: "La Juncosa", tipo: "barrio" },
+  { nombre: "La Marquesita", tipo: "barrio" },
+  { nombre: "La Minilla", tipo: "barrio" },
+  { nombre: "La Novenera", tipo: "barrio" },
+  { nombre: "La Pacheca", tipo: "barrio" },
+  { nombre: "La Pachequilla", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "La Romana", tipo: "barrio" },
+  { nombre: "La Ruana", tipo: "barrio" },
+  { nombre: "La Vereda", tipo: "barrio" },
+  { nombre: "Las Cuevas", tipo: "barrio" },
+  { nombre: "Las Ganchosas", tipo: "barrio" },
+  { nombre: "Las Infantas", tipo: "barrio" },
+  { nombre: "Las Torres", tipo: "barrio" },
+  { nombre: "Los Adrianes", tipo: "barrio" },
+  { nombre: "Los Granadillos", tipo: "barrio" },
+  { nombre: "Los Hermanos", tipo: "barrio" },
+  { nombre: "Los Muleros", tipo: "barrio" },
+  { nombre: "Los Molinos", tipo: "barrio" },
+  { nombre: "Los Pinos del Nevero", tipo: "barrio" },
+  { nombre: "Los Rebolaos", tipo: "barrio" },
+  { nombre: "Los Salesianos", tipo: "barrio" },
+  { nombre: "Madres Carmelitas", tipo: "barrio" },
+  { nombre: "Mateo Pablo", tipo: "barrio" },
+  { nombre: "Nueva Andalucía", tipo: "barrio" },
+  { nombre: "Puyón", tipo: "barrio" },
+  { nombre: "Urbanización Casablanca", tipo: "barrio" },
+  { nombre: "Urbanización La Herradera", tipo: "barrio" },
+  { nombre: "Vistalegre", tipo: "barrio" },
+  { nombre: "Virgen de los Reyes", tipo: "barrio" },
+];
+
+const POLIGONOS_UTRERA: ZonaCiudad[] = [
+  { nombre: "Carretera Amarilla", tipo: "poligono" },
+  { nombre: "El Limonar", tipo: "poligono" },
+  { nombre: "El Torno", tipo: "poligono" },
+  { nombre: "Innovatorno", tipo: "poligono" },
+  { nombre: "La Aurora", tipo: "poligono" },
+  { nombre: "La Morera", tipo: "poligono" },
+  { nombre: "Las Marías Bajas", tipo: "poligono" },
+  { nombre: "Orippo", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -5652,6 +5724,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcalá de Guadaíra",
     etiqueta: "Alcalá de Guadaíra (Sevilla)",
     zonas: [...BARRIOS_ALCALA_GUADAIRA, ...POLIGONOS_ALCALA_GUADAIRA],
+  },
+  {
+    id: "utrera",
+    nombre: "Utrera",
+    etiqueta: "Utrera (Sevilla)",
+    zonas: [...BARRIOS_UTRERA, ...POLIGONOS_UTRERA],
   },
 ];
 
