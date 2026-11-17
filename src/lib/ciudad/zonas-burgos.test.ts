@@ -172,6 +172,7 @@ describe("zonas de Burgos", () => {
       "huesca",
       "teruel",
       "toledo",
+      "talaveradelareina",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2613,6 +2614,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresToledo).size).toBe(nombresToledo.length);
     expect(nombresToledo.filter((n) => toledo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
     expect(nombresToledo.filter((n) => toledo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const talavera = ciudadUrbana("talaveradelareina");
+    expect(talavera?.etiqueta).toBe("Talavera de la Reina (Toledo)");
+    expect(talavera?.nombre).toBe("Talavera de la Reina");
+    expect(zonaDeCiudad(talavera!, "Patrocinio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Patrocinio San José")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Polígono Industrial Patrocinio San José")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(talavera!, "Talavera la Nueva")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Polígono Industrial Talavera la Nueva II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(talavera!, "La Esperanza-Paredón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "San Jerónimo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Santa María")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Urbanización El Madroño")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Urbanización Ntra. Sra. del Prado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "El Casar de Talavera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(talavera!, "Polígono Industrial El Barrago")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(talavera!, "Polígono Industrial de Talavera")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(talavera!, "Polígono Industrial Torrehierro")?.tipo).toBe("poligono");
+    const nombresTalavera = talavera!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTalavera).size).toBe(nombresTalavera.length);
+    expect(nombresTalavera.filter((n) => talavera!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
+    expect(nombresTalavera.filter((n) => talavera!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2700,6 +2722,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "teruel")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "toledo")?.label).toBe("Toledo");
     expect(ciudades.find((c) => c.value === "toledo")?.negrita).toBe(true);
+    const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
+    expect(ciudades[toledoIdx + 1]?.label).toBe("Talavera de la Reina");
+    expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

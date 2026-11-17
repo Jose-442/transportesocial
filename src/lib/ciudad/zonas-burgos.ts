@@ -392,6 +392,9 @@
  * La Abadía queda como barrio. Parque Empresarial de la Abadía como polígono. En el desplegable se ve con «Polígono ·» delante.
  * Buenavista y Tres Culturas-Finca Buenavista quedan las dos, como barrio.
  * Santa María de Benquerencia (zona residencial) queda como barrio. Polígono Industrial de Santa María de Benquerencia como polígono.
+ * Talavera de la Reina: debajo de Toledo. Los barrios y los polígonos de la lista.
+ * Patrocinio queda como barrio. Patrocinio San José también, como barrio. Polígono Industrial Patrocinio San José como polígono.
+ * Talavera la Nueva queda como barrio. Polígono Industrial Talavera la Nueva II como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8127,6 +8130,47 @@ const POLIGONOS_TOLEDO: ZonaCiudad[] = [
   { nombre: "Parque Empresarial de la Abadía", tipo: "poligono" },
 ];
 
+const BARRIOS_TALAVERA: ZonaCiudad[] = [
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Esparragal", tipo: "barrio" },
+  { nombre: "El Faro", tipo: "barrio" },
+  { nombre: "El Parque", tipo: "barrio" },
+  { nombre: "Fray Hernando", tipo: "barrio" },
+  { nombre: "Gamonal", tipo: "barrio" },
+  { nombre: "Jardines del Prado-Ferial", tipo: "barrio" },
+  { nombre: "La Alameda", tipo: "barrio" },
+  { nombre: "La Esperanza-Paredón", tipo: "barrio" },
+  { nombre: "La Milagrosa", tipo: "barrio" },
+  { nombre: "La Solana", tipo: "barrio" },
+  { nombre: "Las Moreras", tipo: "barrio" },
+  { nombre: "Patrocinio", tipo: "barrio" },
+  { nombre: "Patrocinio San José", tipo: "barrio" },
+  { nombre: "Puente Romano-San Antonio", tipo: "barrio" },
+  { nombre: "Puerta de Cuartos-Ruiz de Luna", tipo: "barrio" },
+  { nombre: "Puerta de Zamora", tipo: "barrio" },
+  { nombre: "San Jerónimo", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Urbanización Almoheda", tipo: "barrio" },
+  { nombre: "Urbanización Chaparral Bajo", tipo: "barrio" },
+  { nombre: "Urbanización El Madroño", tipo: "barrio" },
+  { nombre: "Urbanización Montecarlo", tipo: "barrio" },
+  { nombre: "Urbanización Palomarejos-La Cabra", tipo: "barrio" },
+  { nombre: "Urbanización Ntra. Sra. del Prado", tipo: "barrio" },
+  { nombre: "El Casar de Talavera", tipo: "barrio" },
+  { nombre: "Talavera la Nueva", tipo: "barrio" },
+];
+
+const POLIGONOS_TALAVERA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Barrago", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Injertillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Floresta", tipo: "poligono" },
+  { nombre: "Polígono Industrial Patrocinio San José", tipo: "poligono" },
+  { nombre: "Polígono Industrial Tafasa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Talavera la Nueva II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Torrehierro", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Talavera", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9101,6 +9145,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Toledo",
     etiqueta: "Toledo (Toledo)",
     zonas: [...BARRIOS_TOLEDO, ...POLIGONOS_TOLEDO],
+  },
+  {
+    id: "talaveradelareina",
+    nombre: "Talavera de la Reina",
+    etiqueta: "Talavera de la Reina (Toledo)",
+    zonas: [...BARRIOS_TALAVERA, ...POLIGONOS_TALAVERA],
   },
 ];
 
