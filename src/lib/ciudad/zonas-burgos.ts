@@ -278,6 +278,9 @@
  * La Zarzuela queda como barrio. Polígono Industrial La Zarzuela como polígono.
  * Andújar: los barrios y los polígonos de la lista.
  * San Eufrasio queda como barrio. Sector San Eufrasio también, con ese nombre.
+ * Úbeda: los barrios y los polígonos de la lista.
+ * Urbanización Huertañalda queda como barrio. Polígono Agrícola Huertañalda como polígono.
+ * Solana de Torralba queda como barrio. Polígono Industrial Las Naves (Solana de Torralba) como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6948,6 +6951,54 @@ const POLIGONOS_ANDUJAR: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Santa Úrsula", tipo: "poligono" },
 ];
 
+const BARRIOS_UBEDA: ZonaCiudad[] = [
+  { nombre: "Ávila Rojas-El Comendador", tipo: "barrio" },
+  { nombre: "Barrio del Alcázar", tipo: "barrio" },
+  { nombre: "Barrio del Carmen", tipo: "barrio" },
+  { nombre: "Barrio de la Algarabía", tipo: "barrio" },
+  { nombre: "Barrio de la Cuesta del Gallo", tipo: "barrio" },
+  { nombre: "Barrio de San Isidoro", tipo: "barrio" },
+  { nombre: "Barrio de San Lorenzo", tipo: "barrio" },
+  { nombre: "Barrio de San Millán", tipo: "barrio" },
+  { nombre: "Barrio de San Nicolás", tipo: "barrio" },
+  { nombre: "Barrio de San Pablo", tipo: "barrio" },
+  { nombre: "Barrio de San Pedro", tipo: "barrio" },
+  { nombre: "Barrio de San Pedro Nuevo", tipo: "barrio" },
+  { nombre: "Barrio de San Marcos", tipo: "barrio" },
+  { nombre: "Barrio de Santo Domingo", tipo: "barrio" },
+  { nombre: "Barrio de Santo Tomás", tipo: "barrio" },
+  { nombre: "Barrio de la Trinidad", tipo: "barrio" },
+  { nombre: "El Alamillo", tipo: "barrio" },
+  { nombre: "El Egido de San Marcos", tipo: "barrio" },
+  { nombre: "El León", tipo: "barrio" },
+  { nombre: "La Alameda", tipo: "barrio" },
+  { nombre: "La Atalaya", tipo: "barrio" },
+  { nombre: "La Explanada", tipo: "barrio" },
+  { nombre: "La Guita", tipo: "barrio" },
+  { nombre: "Las Canteras", tipo: "barrio" },
+  { nombre: "Las Vaguadas", tipo: "barrio" },
+  { nombre: "Parque Norte", tipo: "barrio" },
+  { nombre: "Puerta del Sol", tipo: "barrio" },
+  { nombre: "Torrenueva", tipo: "barrio" },
+  { nombre: "Urbanización Bétula", tipo: "barrio" },
+  { nombre: "Urbanización El Campillo", tipo: "barrio" },
+  { nombre: "Urbanización Huertañalda", tipo: "barrio" },
+  { nombre: "Urbanización San Bartolomé", tipo: "barrio" },
+  { nombre: "Donadío", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "Santa Eulalia (Santolaya)", tipo: "barrio" },
+  { nombre: "Solana de Torralba", tipo: "barrio" },
+  { nombre: "Veracruz", tipo: "barrio" },
+];
+
+const POLIGONOS_UBEDA: ZonaCiudad[] = [
+  { nombre: "Polígono Agrícola Huertañalda", tipo: "poligono" },
+  { nombre: "Polígono Agrícola La Unión", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Alberquilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Cerros", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Naves (Solana de Torralba)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7796,6 +7847,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Andújar",
     etiqueta: "Andújar (Jaén)",
     zonas: [...BARRIOS_ANDUJAR, ...POLIGONOS_ANDUJAR],
+  },
+  {
+    id: "ubeda",
+    nombre: "Úbeda",
+    etiqueta: "Úbeda (Jaén)",
+    zonas: [...BARRIOS_UBEDA, ...POLIGONOS_UBEDA],
   },
 ];
 
