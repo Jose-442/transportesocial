@@ -362,6 +362,14 @@
  * Barrio de San Rafael queda como barrio. Parque San Rafael también, con ese nombre.
  * Salinetas queda como barrio. Polígono Industrial Salinetas y Polígono Industrial Acceso a Salinetas como polígono.
  * Guirney queda como barrio. Polígono Industrial Guirney-San Rafael como polígono.
+ * El Campello: los barrios y los polígonos de la lista.
+ * Almadraba queda como barrio. La Almadraba también, con ese nombre.
+ * Bonalba, Bonalba Alta y Bonalba Baja quedan las tres.
+ * Coveta Fumà y La Coveta Fumada quedan las dos.
+ * Muchavista queda como barrio. Urbanización Mutxavista también, con ese nombre.
+ * San Ramón queda como barrio. Polígono Industrial San Ramón como polígono.
+ * El Mesell queda como barrio. Polígono Industrial El Pla del Mesell como polígono.
+ * Puerto Pesquero de El Campello es polígono. En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7853,6 +7861,58 @@ const POLIGONOS_PETRER: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Barchell", tipo: "poligono" },
 ];
 
+const BARRIOS_EL_CAMPELLO: ZonaCiudad[] = [
+  { nombre: "Alkabir", tipo: "barrio" },
+  { nombre: "Almadraba", tipo: "barrio" },
+  { nombre: "Amerador (L'Amerador)", tipo: "barrio" },
+  { nombre: "Ballestera", tipo: "barrio" },
+  { nombre: "Banyets (Els Banyets)", tipo: "barrio" },
+  { nombre: "Barri Bonny", tipo: "barrio" },
+  { nombre: "Barri Vell", tipo: "barrio" },
+  { nombre: "Bonalba", tipo: "barrio" },
+  { nombre: "Bonalba Alta", tipo: "barrio" },
+  { nombre: "Bonalba Baja", tipo: "barrio" },
+  { nombre: "Bonanza", tipo: "barrio" },
+  { nombre: "Cala d'Or", tipo: "barrio" },
+  { nombre: "Colonia Trinidad", tipo: "barrio" },
+  { nombre: "Coveta Fumà", tipo: "barrio" },
+  { nombre: "Cotoveta", tipo: "barrio" },
+  { nombre: "El Carritxal", tipo: "barrio" },
+  { nombre: "El Campello Centro", tipo: "barrio" },
+  { nombre: "El Mesell", tipo: "barrio" },
+  { nombre: "El Poblet", tipo: "barrio" },
+  { nombre: "La Merced", tipo: "barrio" },
+  { nombre: "La Pinella", tipo: "barrio" },
+  { nombre: "La Porcha", tipo: "barrio" },
+  { nombre: "La Pismella", tipo: "barrio" },
+  { nombre: "La Coveta Fumada", tipo: "barrio" },
+  { nombre: "La Illeta", tipo: "barrio" },
+  { nombre: "La Almadraba", tipo: "barrio" },
+  { nombre: "Las Mezquitas", tipo: "barrio" },
+  { nombre: "Les Penyetes", tipo: "barrio" },
+  { nombre: "Llano de los Pastores", tipo: "barrio" },
+  { nombre: "Lloixa", tipo: "barrio" },
+  { nombre: "Muchavista", tipo: "barrio" },
+  { nombre: "Pueblo Acantilado", tipo: "barrio" },
+  { nombre: "Pueblo Español", tipo: "barrio" },
+  { nombre: "San Ramón", tipo: "barrio" },
+  { nombre: "Valle Dorado", tipo: "barrio" },
+  { nombre: "Valle Fondo", tipo: "barrio" },
+  { nombre: "Venta Lanuza", tipo: "barrio" },
+  { nombre: "Urbanización Cabo Azul", tipo: "barrio" },
+  { nombre: "Urbanización Cabo Mar", tipo: "barrio" },
+  { nombre: "Urbanización Cabo Verde", tipo: "barrio" },
+  { nombre: "Urbanización Los Patos", tipo: "barrio" },
+  { nombre: "Urbanización Mutxavista", tipo: "barrio" },
+];
+
+const POLIGONOS_EL_CAMPELLO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Pla del Mesell", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Ramón", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sector L-3", tipo: "poligono" },
+  { nombre: "Puerto Pesquero de El Campello", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8791,6 +8851,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Petrer",
     etiqueta: "Petrer (Alicante)",
     zonas: [...BARRIOS_PETRER, ...POLIGONOS_PETRER],
+  },
+  {
+    id: "elcampello",
+    nombre: "El Campello",
+    etiqueta: "El Campello (Alicante)",
+    zonas: [...BARRIOS_EL_CAMPELLO, ...POLIGONOS_EL_CAMPELLO],
   },
 ];
 
