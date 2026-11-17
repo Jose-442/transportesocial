@@ -327,6 +327,11 @@
  * San Vicente del Raspeig: los barrios y los polígonos de la lista.
  * Barrio de Santa Isabel y Colonia de Santa Isabel quedan las dos.
  * Pla Contxeta y Pla Olivera quedan las dos.
+ * Elda: los barrios y los polígonos de la lista.
+ * La Fraternidad y Nueva Fraternidad quedan las dos.
+ * Agualejas y Las Aguarejas quedan las dos.
+ * La Torreta queda como barrio. Polígono Industrial La Torreta-Río como polígono.
+ * Polígono Industrial Finca Lacy y Polígono Industrial Finca Lacy, segunda fase quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7554,6 +7559,44 @@ const POLIGONOS_SAN_VICENTE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Torregroses", tipo: "poligono" },
 ];
 
+const BARRIOS_ELDA: ZonaCiudad[] = [
+  { nombre: "Agualejas", tipo: "barrio" },
+  { nombre: "Almafrá", tipo: "barrio" },
+  { nombre: "Avenida del Mediterráneo", tipo: "barrio" },
+  { nombre: "Caliú", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Ciudad Vergel", tipo: "barrio" },
+  { nombre: "El Huerto", tipo: "barrio" },
+  { nombre: "El Progreso", tipo: "barrio" },
+  { nombre: "Estación", tipo: "barrio" },
+  { nombre: "Huerta Nueva", tipo: "barrio" },
+  { nombre: "La Ficia", tipo: "barrio" },
+  { nombre: "La Fraternidad", tipo: "barrio" },
+  { nombre: "La Melva", tipo: "barrio" },
+  { nombre: "La Prosperidad", tipo: "barrio" },
+  { nombre: "La Tafalera", tipo: "barrio" },
+  { nombre: "La Torreta", tipo: "barrio" },
+  { nombre: "Las Aguarejas", tipo: "barrio" },
+  { nombre: "Las 300", tipo: "barrio" },
+  { nombre: "Molinos de Félix", tipo: "barrio" },
+  { nombre: "Nueva Fraternidad", tipo: "barrio" },
+  { nombre: "Numancia-Tenerías", tipo: "barrio" },
+  { nombre: "Plaza de Toros", tipo: "barrio" },
+  { nombre: "Ronda-Sector 9", tipo: "barrio" },
+  { nombre: "San Francisco de Sales", tipo: "barrio" },
+  { nombre: "Trinquete", tipo: "barrio" },
+  { nombre: "Virgen de la Cabeza", tipo: "barrio" },
+  { nombre: "Virgen de la Salud", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+];
+
+const POLIGONOS_ELDA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Campo Alto", tipo: "poligono" },
+  { nombre: "Polígono Industrial Finca Lacy", tipo: "poligono" },
+  { nombre: "Polígono Industrial Finca Lacy, segunda fase", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Torreta-Río", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8456,6 +8499,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Vicente del Raspeig",
     etiqueta: "San Vicente del Raspeig (Alicante)",
     zonas: [...BARRIOS_SAN_VICENTE, ...POLIGONOS_SAN_VICENTE],
+  },
+  {
+    id: "elda",
+    nombre: "Elda",
+    etiqueta: "Elda (Alicante)",
+    zonas: [...BARRIOS_ELDA, ...POLIGONOS_ELDA],
   },
 ];
 

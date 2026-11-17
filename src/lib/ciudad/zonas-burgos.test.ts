@@ -159,6 +159,7 @@ describe("zonas de Burgos", () => {
       "benidorm",
       "alcoy",
       "sanvicentedelraspeig",
+      "elda",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2310,6 +2311,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresRaspeig).size).toBe(nombresRaspeig.length);
     expect(nombresRaspeig.filter((n) => raspeig!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
     expect(nombresRaspeig.filter((n) => raspeig!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const elda = ciudadUrbana("elda");
+    expect(elda?.etiqueta).toBe("Elda (Alicante)");
+    expect(elda?.nombre).toBe("Elda");
+    expect(zonaDeCiudad(elda!, "Agualejas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Las Aguarejas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Almafrá")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "La Fraternidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Nueva Fraternidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "La Torreta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Las 300")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Numancia-Tenerías")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Zona Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elda!, "Polígono Industrial Campo Alto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elda!, "Polígono Industrial Finca Lacy")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elda!, "Polígono Industrial Finca Lacy, segunda fase")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elda!, "Polígono Industrial La Torreta-Río")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elda!, "elda.es+3")).toBeNull();
+    const nombresElda = elda!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresElda).size).toBe(nombresElda.length);
+    expect(nombresElda.filter((n) => elda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
+    expect(nombresElda.filter((n) => elda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2429,12 +2451,14 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 3]?.label).toBe("Elche");
     expect(ciudades[alicanteIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 4]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 4]?.label).toBe("Elda");
     expect(ciudades[alicanteIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 5]?.label).toBe("San Vicente del Raspeig");
+    expect(ciudades[alicanteIdx + 5]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 6]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 6]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 7]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
