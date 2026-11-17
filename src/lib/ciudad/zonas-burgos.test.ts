@@ -174,6 +174,7 @@ describe("zonas de Burgos", () => {
       "toledo",
       "talaveradelareina",
       "illescas",
+      "sesena",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2666,6 +2667,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresIllescas).size).toBe(nombresIllescas.length);
     expect(nombresIllescas.filter((n) => illescas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
     expect(nombresIllescas.filter((n) => illescas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(17);
+    const sesena = ciudadUrbana("sesena");
+    expect(sesena?.etiqueta).toBe("Seseña (Toledo)");
+    expect(sesena?.nombre).toBe("Seseña");
+    expect(zonaDeCiudad(sesena!, "El Quiñón (Residencial Francisco Hernando)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sesena!, "La Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sesena!, "Polígono Industrial La Estación")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sesena!, "Seseña Nuevo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sesena!, "Seseña Viejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sesena!, "Vallegrande")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sesena!, "Polígono Industrial Cuesta de la Reina")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sesena!, "Polígono Industrial Nuestra Señora del Rosario")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sesena!, "Polígono Industrial San Isidro")?.tipo).toBe("poligono");
+    const nombresSesena = sesena!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSesena).size).toBe(nombresSesena.length);
+    expect(nombresSesena.filter((n) => sesena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(5);
+    expect(nombresSesena.filter((n) => sesena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2756,8 +2773,10 @@ describe("zonas de Burgos", () => {
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[toledoIdx + 2]?.label).toBe("Talavera de la Reina");
+    expect(ciudades[toledoIdx + 2]?.label).toBe("Seseña");
     expect(ciudades[toledoIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[toledoIdx + 3]?.label).toBe("Talavera de la Reina");
+    expect(ciudades[toledoIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

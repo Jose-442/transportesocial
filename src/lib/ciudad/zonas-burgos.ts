@@ -400,6 +400,9 @@
  * Los Pradillos queda como barrio. Polígono Industrial Los Pradillos como polígono.
  * Veredilla queda como barrio. Polígono Industrial La Veredilla, Polígono Industrial Veredilla II, Polígono Industrial Veredilla III y Polígono Industrial La Veredilla III quedan los cuatro.
  * Parque Industrial y Tecnológico de Illescas (ITAC) y Plataforma Central Iberum son polígono. En el desplegable se ven con «Polígono ·» delante.
+ * Seseña: debajo de Illescas y delante de Talavera de la Reina. Los barrios y los polígonos de la lista.
+ * La Estación queda como barrio. Polígono Industrial La Estación como polígono.
+ * Seseña Nuevo y Seseña Viejo quedan las dos, como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8215,6 +8218,23 @@ const POLIGONOS_ILLESCAS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Frontera", tipo: "poligono" },
 ];
 
+const BARRIOS_SESENA: ZonaCiudad[] = [
+  { nombre: "El Quiñón (Residencial Francisco Hernando)", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "Seseña Nuevo", tipo: "barrio" },
+  { nombre: "Seseña Viejo", tipo: "barrio" },
+  { nombre: "Vallegrande", tipo: "barrio" },
+];
+
+const POLIGONOS_SESENA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Cuesta de la Reina", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Estación", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Monjas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Pontones", tipo: "poligono" },
+  { nombre: "Polígono Industrial Nuestra Señora del Rosario", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Isidro", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9201,6 +9221,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Illescas",
     etiqueta: "Illescas (Toledo)",
     zonas: [...BARRIOS_ILLESCAS, ...POLIGONOS_ILLESCAS],
+  },
+  {
+    id: "sesena",
+    nombre: "Seseña",
+    etiqueta: "Seseña (Toledo)",
+    zonas: [...BARRIOS_SESENA, ...POLIGONOS_SESENA],
   },
 ];
 
