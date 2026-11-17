@@ -170,6 +170,7 @@ describe("zonas de Burgos", () => {
       "crevillent",
       "javea",
       "huesca",
+      "teruel",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2564,6 +2565,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresHuesca).size).toBe(nombresHuesca.length);
     expect(nombresHuesca.filter((n) => huesca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
     expect(nombresHuesca.filter((n) => huesca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const teruel = ciudadUrbana("teruel");
+    expect(teruel?.etiqueta).toBe("Teruel (Teruel)");
+    expect(teruel?.nombre).toBe("Teruel");
+    expect(zonaDeCiudad(teruel!, "Caudé")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(teruel!, "Centro Histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(teruel!, "San Julián")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(teruel!, "San León")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(teruel!, "Arrabal-Carrel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(teruel!, "Parque Empresarial La Paz")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(teruel!, "Plataforma Aeroportuaria de Teruel (PLATA)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(teruel!, "Plataforma Logístico-Industrial de Teruel (PLATEA)")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Empresarial La Paz", tipo: "poligono" })).toBe(
+      "Polígono · Parque Empresarial La Paz",
+    );
+    expect(etiquetaZona({ nombre: "Plataforma Aeroportuaria de Teruel (PLATA)", tipo: "poligono" })).toBe(
+      "Polígono · Plataforma Aeroportuaria de Teruel (PLATA)",
+    );
+    expect(etiquetaZona({ nombre: "Plataforma Logístico-Industrial de Teruel (PLATEA)", tipo: "poligono" })).toBe(
+      "Polígono · Plataforma Logístico-Industrial de Teruel (PLATEA)",
+    );
+    const nombresTeruel = teruel!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTeruel).size).toBe(nombresTeruel.length);
+    expect(nombresTeruel.filter((n) => teruel!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
+    expect(nombresTeruel.filter((n) => teruel!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2647,6 +2672,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "huesca")?.label).toBe("Huesca");
     expect(ciudades.find((c) => c.value === "huesca")?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "teruel")?.label).toBe("Teruel");
+    expect(ciudades.find((c) => c.value === "teruel")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

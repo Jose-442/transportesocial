@@ -386,6 +386,8 @@
  * Polígono 25 y Polígono 29 quedan como barrio, en el grupo de barrios.
  * Parque Tecnológico Walqa y Plataforma Logística Huesca Sur (PLHUS) son polígono. En el desplegable se ven con «Polígono ·» delante.
  * heraldo.es+4 es la fuente. No entra en el desplegable.
+ * Teruel: capital, en negrita. Los barrios y los polígonos de la lista.
+ * Parque Empresarial La Paz, Plataforma Aeroportuaria de Teruel (PLATA) y Plataforma Logístico-Industrial de Teruel (PLATEA) son polígono. En el desplegable se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8055,6 +8057,32 @@ const POLIGONOS_HUESCA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Monzú", tipo: "poligono" },
 ];
 
+const BARRIOS_TERUEL: ZonaCiudad[] = [
+  { nombre: "Aldehuela", tipo: "barrio" },
+  { nombre: "Arrabal-Carrel", tipo: "barrio" },
+  { nombre: "Castralvo", tipo: "barrio" },
+  { nombre: "Caudé", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "El Campillo", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Fuenfresca", tipo: "barrio" },
+  { nombre: "Las Viñas", tipo: "barrio" },
+  { nombre: "San Blas", tipo: "barrio" },
+  { nombre: "San Julián", tipo: "barrio" },
+  { nombre: "San León", tipo: "barrio" },
+  { nombre: "Concud", tipo: "barrio" },
+  { nombre: "Tortajada", tipo: "barrio" },
+  { nombre: "Valdecebro", tipo: "barrio" },
+  { nombre: "Villalba Baja", tipo: "barrio" },
+  { nombre: "Villaspesa", tipo: "barrio" },
+];
+
+const POLIGONOS_TERUEL: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial La Paz", tipo: "poligono" },
+  { nombre: "Plataforma Aeroportuaria de Teruel (PLATA)", tipo: "poligono" },
+  { nombre: "Plataforma Logístico-Industrial de Teruel (PLATEA)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9017,6 +9045,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Huesca",
     etiqueta: "Huesca (Huesca)",
     zonas: [...BARRIOS_HUESCA, ...POLIGONOS_HUESCA],
+  },
+  {
+    id: "teruel",
+    nombre: "Teruel",
+    etiqueta: "Teruel (Teruel)",
+    zonas: [...BARRIOS_TERUEL, ...POLIGONOS_TERUEL],
   },
 ];
 
