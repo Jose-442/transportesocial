@@ -332,6 +332,15 @@
  * Agualejas y Las Aguarejas quedan las dos.
  * La Torreta queda como barrio. Polígono Industrial La Torreta-Río como polígono.
  * Polígono Industrial Finca Lacy y Polígono Industrial Finca Lacy, segunda fase quedan los dos.
+ * Dénia: los barrios y los polígonos de la lista.
+ * Jesús Pobre entra una sola vez.
+ * La Pedrera entra una sola vez.
+ * Baix la Mar, Baix la Mar-Darrere del Castell y Darrere del Castell quedan los tres.
+ * Les Marines, Les Marines Nord, Les Marines Sud y Las Marinas quedan las cuatro.
+ * La Jara (La Xara) y La Xara quedan las dos.
+ * Centro-Port y Port-Centre quedan los dos.
+ * Campaments y Oeste-Campaments quedan los dos.
+ * Les Deveses y Deveses-Bassot quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7597,6 +7606,55 @@ const POLIGONOS_ELDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Torreta-Río", tipo: "poligono" },
 ];
 
+const BARRIOS_DENIA: ZonaCiudad[] = [
+  { nombre: "Baix la Mar", tipo: "barrio" },
+  { nombre: "Baix la Mar-Darrere del Castell", tipo: "barrio" },
+  { nombre: "Campaments", tipo: "barrio" },
+  { nombre: "Camp Roig", tipo: "barrio" },
+  { nombre: "Centro-Port", tipo: "barrio" },
+  { nombre: "Darrere del Castell", tipo: "barrio" },
+  { nombre: "Diana-Faroleta", tipo: "barrio" },
+  { nombre: "Jesús Pobre", tipo: "barrio" },
+  { nombre: "La Jara (La Xara)", tipo: "barrio" },
+  { nombre: "La Pedrera", tipo: "barrio" },
+  { nombre: "Les Bassetes", tipo: "barrio" },
+  { nombre: "Les Brises", tipo: "barrio" },
+  { nombre: "Les Deveses", tipo: "barrio" },
+  { nombre: "Les Marines", tipo: "barrio" },
+  { nombre: "Les Rotes", tipo: "barrio" },
+  { nombre: "Les Roques", tipo: "barrio" },
+  { nombre: "Les Fonts", tipo: "barrio" },
+  { nombre: "Montgó", tipo: "barrio" },
+  { nombre: "Oeste-Campaments", tipo: "barrio" },
+  { nombre: "París-Pedrera", tipo: "barrio" },
+  { nombre: "Port-Centre", tipo: "barrio" },
+  { nombre: "Saladar", tipo: "barrio" },
+  { nombre: "Torrecremada", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "La Sella", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "El Palmar", tipo: "barrio" },
+  { nombre: "Las Marinas", tipo: "barrio" },
+  { nombre: "Les Bovetes", tipo: "barrio" },
+  { nombre: "Les Marines Nord", tipo: "barrio" },
+  { nombre: "Les Marines Sud", tipo: "barrio" },
+  { nombre: "L'Almadrava", tipo: "barrio" },
+  { nombre: "L'Estanyó", tipo: "barrio" },
+  { nombre: "Punta dels Molins", tipo: "barrio" },
+  { nombre: "Deveses-Bassot", tipo: "barrio" },
+  { nombre: "La Marineta Cassiana", tipo: "barrio" },
+  { nombre: "Santa Llúcia", tipo: "barrio" },
+  { nombre: "Tossal Gross", tipo: "barrio" },
+  { nombre: "La Xara", tipo: "barrio" },
+];
+
+const POLIGONOS_DENIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Les Madrigueres-Juyarco", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Dénia (CV-725)", tipo: "poligono" },
+  { nombre: "Área Industrial Madrigueres Sud", tipo: "poligono" },
+  { nombre: "Área Industrial Madrigueres Nord", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8505,6 +8563,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Elda",
     etiqueta: "Elda (Alicante)",
     zonas: [...BARRIOS_ELDA, ...POLIGONOS_ELDA],
+  },
+  {
+    id: "denia",
+    nombre: "Dénia",
+    etiqueta: "Dénia (Alicante)",
+    zonas: [...BARRIOS_DENIA, ...POLIGONOS_DENIA],
   },
 ];
 

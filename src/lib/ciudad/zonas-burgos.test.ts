@@ -160,6 +160,7 @@ describe("zonas de Burgos", () => {
       "alcoy",
       "sanvicentedelraspeig",
       "elda",
+      "denia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2332,6 +2333,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresElda).size).toBe(nombresElda.length);
     expect(nombresElda.filter((n) => elda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
     expect(nombresElda.filter((n) => elda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const denia = ciudadUrbana("denia");
+    expect(denia?.etiqueta).toBe("Dénia (Alicante)");
+    expect(denia?.nombre).toBe("Dénia");
+    expect(zonaDeCiudad(denia!, "Baix la Mar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Baix la Mar-Darrere del Castell")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Darrere del Castell")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Jesús Pobre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "La Pedrera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "La Jara (La Xara)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "La Xara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Les Marines")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Les Marines Nord")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Les Marines Sud")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Las Marinas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Centro-Port")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Port-Centre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "L'Estanyó")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Santa Llúcia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(denia!, "Polígono Industrial Les Madrigueres-Juyarco")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(denia!, "Polígono Industrial de Dénia (CV-725)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(denia!, "Área Industrial Madrigueres Sud")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(denia!, "Área Industrial Madrigueres Nord")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(denia!, "policia.denia.es+4")).toBeNull();
+    const nombresDenia = denia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresDenia).size).toBe(nombresDenia.length);
+    expect(nombresDenia.filter((n) => denia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(39);
+    expect(nombresDenia.filter((n) => denia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2449,16 +2477,18 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 2]?.label).toBe("Benidorm");
     expect(ciudades[alicanteIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 3]?.label).toBe("Elche");
+    expect(ciudades[alicanteIdx + 3]?.label).toBe("Dénia");
     expect(ciudades[alicanteIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 4]?.label).toBe("Elda");
+    expect(ciudades[alicanteIdx + 4]?.label).toBe("Elche");
     expect(ciudades[alicanteIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 5]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 5]?.label).toBe("Elda");
     expect(ciudades[alicanteIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 6]?.label).toBe("San Vicente del Raspeig");
+    expect(ciudades[alicanteIdx + 6]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 7]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 7]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 8]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
