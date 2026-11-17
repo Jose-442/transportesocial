@@ -149,6 +149,7 @@ describe("zonas de Burgos", () => {
       "jaen",
       "granada",
       "linares",
+      "andujar",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2081,6 +2082,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresLinares).size).toBe(nombresLinares.length);
     expect(nombresLinares.filter((n) => linares!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
     expect(nombresLinares.filter((n) => linares!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const andujar = ciudadUrbana("andujar");
+    expect(andujar?.etiqueta).toBe("Andújar (Jaén)");
+    expect(andujar?.nombre).toBe("Andújar");
+    expect(zonaDeCiudad(andujar!, "Barrio de la Paz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "Barrio Montañés")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "San Eufrasio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "Sector San Eufrasio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "Sector Sierra de Andújar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "Zona de la Piscina Cubierta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(andujar!, "Parque Empresarial Europa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(andujar!, "Parque Comercial y Empresarial Vegas de Triana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(andujar!, "Polígono Industrial Ave María")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(andujar!, "Polígono Industrial Santa Úrsula")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(andujar!, "La Paz")).toBeNull();
+    const nombresAndujar = andujar!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAndujar).size).toBe(nombresAndujar.length);
+    expect(nombresAndujar.filter((n) => andujar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
+    expect(nombresAndujar.filter((n) => andujar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2191,8 +2210,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
     expect(ciudades.find((c) => c.value === "jaen")?.negrita).toBe(true);
     const jaenIdx = ciudades.findIndex((c) => c.value === "jaen");
-    expect(ciudades[jaenIdx + 1]?.label).toBe("Linares");
+    expect(ciudades[jaenIdx + 1]?.label).toBe("Andújar");
     expect(ciudades[jaenIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[jaenIdx + 2]?.label).toBe("Linares");
+    expect(ciudades[jaenIdx + 2]?.negrita).toBeUndefined();
     const granadaIdx = ciudades.findIndex((c) => c.value === "granada");
     expect(ciudades[granadaIdx]?.label).toBe("Granada");
     expect(ciudades[granadaIdx]?.negrita).toBe(true);

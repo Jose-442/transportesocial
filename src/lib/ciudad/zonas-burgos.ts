@@ -276,6 +276,8 @@
  * Cartuja queda como barrio. Polígono Cartuja como polígono.
  * Linares: los barrios y los polígonos de la lista.
  * La Zarzuela queda como barrio. Polígono Industrial La Zarzuela como polígono.
+ * Andújar: los barrios y los polígonos de la lista.
+ * San Eufrasio queda como barrio. Sector San Eufrasio también, con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6898,6 +6900,54 @@ const POLIGONOS_LINARES: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Carretera de Jabalquinto", tipo: "poligono" },
 ];
 
+const BARRIOS_ANDUJAR: ZonaCiudad[] = [
+  { nombre: "Barrio de la Paz", tipo: "barrio" },
+  { nombre: "Barrio de San Bartolomé", tipo: "barrio" },
+  { nombre: "Barrio Montañés", tipo: "barrio" },
+  { nombre: "Camino del Calvario", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "Corredera-Capuchinos", tipo: "barrio" },
+  { nombre: "Cuadro de la Virgen", tipo: "barrio" },
+  { nombre: "El Mercado", tipo: "barrio" },
+  { nombre: "Emperadores", tipo: "barrio" },
+  { nombre: "La Lagunilla", tipo: "barrio" },
+  { nombre: "La Pastora", tipo: "barrio" },
+  { nombre: "Las Vistillas", tipo: "barrio" },
+  { nombre: "Los Belenes", tipo: "barrio" },
+  { nombre: "Plaza de Toros", tipo: "barrio" },
+  { nombre: "San Eufrasio", tipo: "barrio" },
+  { nombre: "Sector Almería", tipo: "barrio" },
+  { nombre: "Sector Andalucía", tipo: "barrio" },
+  { nombre: "Sector Huelva", tipo: "barrio" },
+  { nombre: "Sector Málaga", tipo: "barrio" },
+  { nombre: "Sector San Eufrasio", tipo: "barrio" },
+  { nombre: "Sector San José", tipo: "barrio" },
+  { nombre: "Sector San Sebastián", tipo: "barrio" },
+  { nombre: "Sector Sevilla", tipo: "barrio" },
+  { nombre: "Sector Sierra de Andújar", tipo: "barrio" },
+  { nombre: "Sector Sierra Morena", tipo: "barrio" },
+  { nombre: "Sector Virgen de la Cabeza", tipo: "barrio" },
+  { nombre: "Urbanización Mirasierra", tipo: "barrio" },
+  { nombre: "Zona de Colón", tipo: "barrio" },
+  { nombre: "Zona de la Ronda Mestanza", tipo: "barrio" },
+  { nombre: "Zona de la Piscina Cubierta", tipo: "barrio" },
+];
+
+const POLIGONOS_ANDUJAR: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Europa", tipo: "poligono" },
+  { nombre: "Parque Comercial y Empresarial Vegas de Triana", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ave María", tipo: "poligono" },
+  { nombre: "Polígono Industrial Guadalquivir", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Ceca", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Estación", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Fundición", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Victoria", tipo: "poligono" },
+  { nombre: "Polígono Industrial Miranda", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerta de Córdoba", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerta de Madrid", tipo: "poligono" },
+  { nombre: "Polígono Industrial Santa Úrsula", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7740,6 +7790,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Linares",
     etiqueta: "Linares (Jaén)",
     zonas: [...BARRIOS_LINARES, ...POLIGONOS_LINARES],
+  },
+  {
+    id: "andujar",
+    nombre: "Andújar",
+    etiqueta: "Andújar (Jaén)",
+    zonas: [...BARRIOS_ANDUJAR, ...POLIGONOS_ANDUJAR],
   },
 ];
 
