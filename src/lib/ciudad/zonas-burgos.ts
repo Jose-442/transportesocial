@@ -352,6 +352,9 @@
  * Cala Torres, Torres I y Torres II quedan los tres.
  * La Malladeta queda como barrio. Urbanización Mirador de la Malladeta también, con ese nombre.
  * Poble Nou queda como barrio. Área Industrial Poble Nou-Camino Viejo de Valencia como polígono.
+ * Villena: los barrios y los polígonos de la lista.
+ * Barrio del Mercado y Zona del Mercado quedan los dos.
+ * Polígono Industrial El Rubial I y Polígono Industrial El Rubial II-Casa del Padre quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7752,6 +7755,50 @@ const POLIGONOS_VILLAJOYOSA: ZonaCiudad[] = [
   { nombre: "Zona Industrial de la N-332", tipo: "poligono" },
 ];
 
+const BARRIOS_VILLENA: ZonaCiudad[] = [
+  { nombre: "Barrio de la Música", tipo: "barrio" },
+  { nombre: "Barrio de San Antón", tipo: "barrio" },
+  { nombre: "Barrio de San Francisco", tipo: "barrio" },
+  { nombre: "Barrio de las Cruces", tipo: "barrio" },
+  { nombre: "Barrio de las Morerías", tipo: "barrio" },
+  { nombre: "Barrio de la Paz", tipo: "barrio" },
+  { nombre: "Barrio del Carril", tipo: "barrio" },
+  { nombre: "Barrio del Grec", tipo: "barrio" },
+  { nombre: "Barrio del Mercado", tipo: "barrio" },
+  { nombre: "Barrio del Rabal", tipo: "barrio" },
+  { nombre: "Bulevar Maestro Carrascosa", tipo: "barrio" },
+  { nombre: "El Calvario", tipo: "barrio" },
+  { nombre: "El Poblao", tipo: "barrio" },
+  { nombre: "La Encina", tipo: "barrio" },
+  { nombre: "La Morenica", tipo: "barrio" },
+  { nombre: "Las Virtudes", tipo: "barrio" },
+  { nombre: "San Benito", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Zona del Mercado", tipo: "barrio" },
+  { nombre: "Zona de la Estación", tipo: "barrio" },
+  { nombre: "La Zafra", tipo: "barrio" },
+  { nombre: "Las Tiesas", tipo: "barrio" },
+  { nombre: "La Gloria", tipo: "barrio" },
+  { nombre: "Casas de Cabanes y Las Fuentes", tipo: "barrio" },
+  { nombre: "Casas de Jordán", tipo: "barrio" },
+  { nombre: "Cascante", tipo: "barrio" },
+  { nombre: "Las Chozas", tipo: "barrio" },
+  { nombre: "El Morrón", tipo: "barrio" },
+  { nombre: "La Puentecilla", tipo: "barrio" },
+  { nombre: "San Bernabé", tipo: "barrio" },
+  { nombre: "Santa Eulalia", tipo: "barrio" },
+];
+
+const POLIGONOS_VILLENA: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Bulilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Rubial I", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Rubial II-Casa del Padre", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Condomina", tipo: "poligono" },
+  { nombre: "Zona de Servicios de la Autovía A-31", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8678,6 +8725,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Villajoyosa",
     etiqueta: "Villajoyosa (Alicante)",
     zonas: [...BARRIOS_VILLAJOYOSA, ...POLIGONOS_VILLAJOYOSA],
+  },
+  {
+    id: "villena",
+    nombre: "Villena",
+    etiqueta: "Villena (Alicante)",
+    zonas: [...BARRIOS_VILLENA, ...POLIGONOS_VILLENA],
   },
 ];
 

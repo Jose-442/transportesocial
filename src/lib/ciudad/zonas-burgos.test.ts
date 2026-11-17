@@ -163,6 +163,7 @@ describe("zonas de Burgos", () => {
       "denia",
       "santapola",
       "villajoyosa",
+      "villena",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2410,6 +2411,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresVillajoyosa).size).toBe(nombresVillajoyosa.length);
     expect(nombresVillajoyosa.filter((n) => villajoyosa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(36);
     expect(nombresVillajoyosa.filter((n) => villajoyosa!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const villena = ciudadUrbana("villena");
+    expect(villena?.etiqueta).toBe("Villena (Alicante)");
+    expect(villena?.nombre).toBe("Villena");
+    expect(zonaDeCiudad(villena!, "Barrio de la Música")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Barrio de las Morerías")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Barrio del Mercado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Zona del Mercado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Casas de Cabanes y Las Fuentes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Casas de Jordán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "El Morrón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "San Bernabé")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Santa Eulalia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villena!, "Parque Empresarial Bulilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villena!, "Polígono Industrial El Rubial I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villena!, "Polígono Industrial El Rubial II-Casa del Padre")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villena!, "Polígono Industrial La Condomina")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villena!, "Zona de Servicios de la Autovía A-31")?.tipo).toBe("poligono");
+    const nombresVillena = villena!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVillena).size).toBe(nombresVillena.length);
+    expect(nombresVillena.filter((n) => villena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
+    expect(nombresVillena.filter((n) => villena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2543,6 +2565,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 10]?.label).toBe("Villajoyosa");
     expect(ciudades[alicanteIdx + 10]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 11]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 11]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
