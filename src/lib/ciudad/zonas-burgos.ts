@@ -388,6 +388,10 @@
  * heraldo.es+4 es la fuente. No entra en el desplegable.
  * Teruel: capital, en negrita. Los barrios y los polígonos de la lista.
  * Parque Empresarial La Paz, Plataforma Aeroportuaria de Teruel (PLATA) y Plataforma Logístico-Industrial de Teruel (PLATEA) son polígono. En el desplegable se ven con «Polígono ·» delante.
+ * Toledo: capital, en negrita. Los barrios y los polígonos de la lista.
+ * La Abadía queda como barrio. Parque Empresarial de la Abadía como polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Buenavista y Tres Culturas-Finca Buenavista quedan las dos, como barrio.
+ * Santa María de Benquerencia (zona residencial) queda como barrio. Polígono Industrial de Santa María de Benquerencia como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8083,6 +8087,46 @@ const POLIGONOS_TERUEL: ZonaCiudad[] = [
   { nombre: "Plataforma Logístico-Industrial de Teruel (PLATEA)", tipo: "poligono" },
 ];
 
+const BARRIOS_TOLEDO: ZonaCiudad[] = [
+  { nombre: "Antequeruela-Covachuelas", tipo: "barrio" },
+  { nombre: "Azucaica", tipo: "barrio" },
+  { nombre: "Barrio de los Conventos", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "Cigarrales", tipo: "barrio" },
+  { nombre: "Cerro de los Palos", tipo: "barrio" },
+  { nombre: "El Beato", tipo: "barrio" },
+  { nombre: "La Abadía", tipo: "barrio" },
+  { nombre: "La Bastida", tipo: "barrio" },
+  { nombre: "La Legua", tipo: "barrio" },
+  { nombre: "Montesión", tipo: "barrio" },
+  { nombre: "Olivar de los Pozos", tipo: "barrio" },
+  { nombre: "Palomarejos", tipo: "barrio" },
+  { nombre: "San Antón-Avenida de Europa", tipo: "barrio" },
+  { nombre: "San Bernardo", tipo: "barrio" },
+  { nombre: "San Martín", tipo: "barrio" },
+  { nombre: "San Pedro el Verde", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Santa María de Benquerencia (zona residencial)", tipo: "barrio" },
+  { nombre: "Santa Teresa-Reconquista", tipo: "barrio" },
+  { nombre: "Tres Culturas-Finca Buenavista", tipo: "barrio" },
+  { nombre: "Valparaíso", tipo: "barrio" },
+  { nombre: "Vega Baja", tipo: "barrio" },
+  { nombre: "Vistahermosa", tipo: "barrio" },
+  { nombre: "Circo Romano", tipo: "barrio" },
+  { nombre: "Urbanización Casa de Campo", tipo: "barrio" },
+  { nombre: "Urbanización Parque Universidad", tipo: "barrio" },
+  { nombre: "La Sisla", tipo: "barrio" },
+];
+
+const POLIGONOS_TOLEDO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Santa María de Benquerencia", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Toledo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ventalomar", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la carretera de Madrid", tipo: "poligono" },
+  { nombre: "Parque Empresarial de la Abadía", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9051,6 +9095,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Teruel",
     etiqueta: "Teruel (Teruel)",
     zonas: [...BARRIOS_TERUEL, ...POLIGONOS_TERUEL],
+  },
+  {
+    id: "toledo",
+    nombre: "Toledo",
+    etiqueta: "Toledo (Toledo)",
+    zonas: [...BARRIOS_TOLEDO, ...POLIGONOS_TOLEDO],
   },
 ];
 
