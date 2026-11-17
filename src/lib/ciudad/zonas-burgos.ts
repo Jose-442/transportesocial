@@ -403,6 +403,16 @@
  * Seseña: debajo de Illescas y delante de Talavera de la Reina. Los barrios y los polígonos de la lista.
  * La Estación queda como barrio. Polígono Industrial La Estación como polígono.
  * Seseña Nuevo y Seseña Viejo quedan las dos, como barrio.
+ * Valencia: capital, en negrita. Los barrios y los polígonos de la lista.
+ * Faitanar estaba dos veces. Entra una sola vez.
+ * Sant Antoni y San Antonio quedan las dos.
+ * Sant Isidre queda como barrio. San Isidro también, como barrio. Polígono Industrial de San Isidro como polígono.
+ * Sant Marcel·lí y San Marcelino quedan las dos.
+ * Benimàmet queda como barrio. Polígono Industrial Benimàmet como polígono.
+ * Vara de Quart queda como barrio. Área Empresarial Vara de Quart y Polígono Industrial Vara de Quart como polígono.
+ * La Punta queda como barrio. Polígono Industrial de la Punta como polígono.
+ * Natzaret queda como barrio. Polígono Industrial de Nazaret como polígono, con esa otra escritura.
+ * Área Empresarial Vara de Quart, Parque Empresarial Fuente del Jarro, Parque Empresarial Táctica, Parque Tecnológico de València y Zona Industrial de la Avenida del Cid se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8235,6 +8245,110 @@ const POLIGONOS_SESENA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial San Isidro", tipo: "poligono" },
 ];
 
+const BARRIOS_VALENCIA: ZonaCiudad[] = [
+  { nombre: "Albors", tipo: "barrio" },
+  { nombre: "Arrancapins", tipo: "barrio" },
+  { nombre: "Aiora", tipo: "barrio" },
+  { nombre: "Benicalap", tipo: "barrio" },
+  { nombre: "Benifaraig", tipo: "barrio" },
+  { nombre: "Benimaclet", tipo: "barrio" },
+  { nombre: "Benimàmet", tipo: "barrio" },
+  { nombre: "Beteró", tipo: "barrio" },
+  { nombre: "Borbotó", tipo: "barrio" },
+  { nombre: "Cabanyal-Canyamelar", tipo: "barrio" },
+  { nombre: "Camí Fondo", tipo: "barrio" },
+  { nombre: "Camí de Vera", tipo: "barrio" },
+  { nombre: "Campanar", tipo: "barrio" },
+  { nombre: "Carpesa", tipo: "barrio" },
+  { nombre: "Cases de Bàrcena", tipo: "barrio" },
+  { nombre: "Castellar-L'Oliveral", tipo: "barrio" },
+  { nombre: "Ciutat de les Arts i les Ciències", tipo: "barrio" },
+  { nombre: "Ciutat Jardí", tipo: "barrio" },
+  { nombre: "Ciutat Universitària", tipo: "barrio" },
+  { nombre: "El Botànic", tipo: "barrio" },
+  { nombre: "El Calvari", tipo: "barrio" },
+  { nombre: "El Carme", tipo: "barrio" },
+  { nombre: "El Forn d'Alcedo", tipo: "barrio" },
+  { nombre: "El Grau", tipo: "barrio" },
+  { nombre: "El Mercat", tipo: "barrio" },
+  { nombre: "El Palmar", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "El Pla del Remei", tipo: "barrio" },
+  { nombre: "El Perellonet", tipo: "barrio" },
+  { nombre: "En Corts", tipo: "barrio" },
+  { nombre: "Exposició", tipo: "barrio" },
+  { nombre: "Faitanar", tipo: "barrio" },
+  { nombre: "Font d'En Corts", tipo: "barrio" },
+  { nombre: "Fonteta de Sant Lluís", tipo: "barrio" },
+  { nombre: "Gran Via", tipo: "barrio" },
+  { nombre: "Jaume Roig", tipo: "barrio" },
+  { nombre: "L'Amistat", tipo: "barrio" },
+  { nombre: "L'Illa Perduda", tipo: "barrio" },
+  { nombre: "L'Hort de Senabre", tipo: "barrio" },
+  { nombre: "La Carrasca", tipo: "barrio" },
+  { nombre: "La Creu del Grau", tipo: "barrio" },
+  { nombre: "La Creu Coberta", tipo: "barrio" },
+  { nombre: "La Llum", tipo: "barrio" },
+  { nombre: "La Malva-rosa", tipo: "barrio" },
+  { nombre: "La Punta", tipo: "barrio" },
+  { nombre: "La Raiosa", tipo: "barrio" },
+  { nombre: "La Roqueta", tipo: "barrio" },
+  { nombre: "La Saïdia", tipo: "barrio" },
+  { nombre: "La Seu", tipo: "barrio" },
+  { nombre: "La Torre", tipo: "barrio" },
+  { nombre: "La Xerea", tipo: "barrio" },
+  { nombre: "Les Tendetes", tipo: "barrio" },
+  { nombre: "L'Olivereta", tipo: "barrio" },
+  { nombre: "Malilla", tipo: "barrio" },
+  { nombre: "Mauella", tipo: "barrio" },
+  { nombre: "Marxalenes", tipo: "barrio" },
+  { nombre: "Massarrojos", tipo: "barrio" },
+  { nombre: "Mestalla", tipo: "barrio" },
+  { nombre: "Mont-Olivet", tipo: "barrio" },
+  { nombre: "Morvedre", tipo: "barrio" },
+  { nombre: "Na Rovella", tipo: "barrio" },
+  { nombre: "Natzaret", tipo: "barrio" },
+  { nombre: "Nou Moles", tipo: "barrio" },
+  { nombre: "Orriols", tipo: "barrio" },
+  { nombre: "Pinedo", tipo: "barrio" },
+  { nombre: "Poble Nou", tipo: "barrio" },
+  { nombre: "Russafa", tipo: "barrio" },
+  { nombre: "Sant Antoni", tipo: "barrio" },
+  { nombre: "Sant Francesc", tipo: "barrio" },
+  { nombre: "Sant Isidre", tipo: "barrio" },
+  { nombre: "Sant Llorenç", tipo: "barrio" },
+  { nombre: "Sant Marcel·lí", tipo: "barrio" },
+  { nombre: "Sant Pau", tipo: "barrio" },
+  { nombre: "Soternes", tipo: "barrio" },
+  { nombre: "Tormos", tipo: "barrio" },
+  { nombre: "Torrefiel", tipo: "barrio" },
+  { nombre: "Trinitat", tipo: "barrio" },
+  { nombre: "Tres Forques", tipo: "barrio" },
+  { nombre: "Vara de Quart", tipo: "barrio" },
+  { nombre: "La Bega Baixa", tipo: "barrio" },
+  { nombre: "La Petxina", tipo: "barrio" },
+  { nombre: "Safranar", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San Marcelino", tipo: "barrio" },
+  { nombre: "El Saler", tipo: "barrio" },
+];
+
+const POLIGONOS_VALENCIA: ZonaCiudad[] = [
+  { nombre: "Área Empresarial Vara de Quart", tipo: "poligono" },
+  { nombre: "Parque Empresarial Fuente del Jarro", tipo: "poligono" },
+  { nombre: "Parque Empresarial Táctica", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de València", tipo: "poligono" },
+  { nombre: "Polígono Industrial Benimàmet", tipo: "poligono" },
+  { nombre: "Polígono Industrial Vara de Quart", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Carretera de Barcelona", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Fuente de San Luis", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Punta", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Nazaret", tipo: "poligono" },
+  { nombre: "Polígono Industrial de San Isidro", tipo: "poligono" },
+  { nombre: "Zona Industrial de la Avenida del Cid", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9227,6 +9341,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Seseña",
     etiqueta: "Seseña (Toledo)",
     zonas: [...BARRIOS_SESENA, ...POLIGONOS_SESENA],
+  },
+  {
+    id: "valencia",
+    nombre: "Valencia",
+    etiqueta: "Valencia (Valencia)",
+    zonas: [...BARRIOS_VALENCIA, ...POLIGONOS_VALENCIA],
   },
 ];
 

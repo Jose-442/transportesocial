@@ -175,6 +175,7 @@ describe("zonas de Burgos", () => {
       "talaveradelareina",
       "illescas",
       "sesena",
+      "valencia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2683,6 +2684,41 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSesena).size).toBe(nombresSesena.length);
     expect(nombresSesena.filter((n) => sesena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(5);
     expect(nombresSesena.filter((n) => sesena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const valencia = ciudadUrbana("valencia");
+    expect(valencia?.etiqueta).toBe("Valencia (Valencia)");
+    expect(valencia?.nombre).toBe("Valencia");
+    expect(zonaDeCiudad(valencia!, "Faitanar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Sant Antoni")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "San Antonio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Sant Isidre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "San Isidro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Polígono Industrial de San Isidro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "Sant Marcel·lí")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "San Marcelino")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Benimàmet")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Polígono Industrial Benimàmet")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "Vara de Quart")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Área Empresarial Vara de Quart")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "Polígono Industrial Vara de Quart")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "La Punta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Polígono Industrial de la Punta")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "Natzaret")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Polígono Industrial de Nazaret")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "El Forn d'Alcedo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Ciutat de les Arts i les Ciències")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valencia!, "Parque Tecnológico de València")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valencia!, "Zona Industrial de la Avenida del Cid")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Tecnológico de València", tipo: "poligono" })).toBe(
+      "Polígono · Parque Tecnológico de València",
+    );
+    expect(etiquetaZona({ nombre: "Zona Industrial de la Avenida del Cid", tipo: "poligono" })).toBe(
+      "Polígono · Zona Industrial de la Avenida del Cid",
+    );
+    const nombresValencia = valencia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresValencia).size).toBe(nombresValencia.length);
+    expect(nombresValencia.filter((n) => n === "Faitanar").length).toBe(1);
+    expect(nombresValencia.filter((n) => valencia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(86);
+    expect(nombresValencia.filter((n) => valencia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2770,6 +2806,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "teruel")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "toledo")?.label).toBe("Toledo");
     expect(ciudades.find((c) => c.value === "toledo")?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "valencia")?.label).toBe("Valencia");
+    expect(ciudades.find((c) => c.value === "valencia")?.negrita).toBe(true);
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
