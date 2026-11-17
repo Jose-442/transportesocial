@@ -432,6 +432,12 @@
  * Los Monasterios queda como barrio. Urbanización Los Monasterios también, con ese nombre.
  * Puerto de Sagunto queda como barrio. Puerto Marítimo de Sagunto como polígono. En el desplegable se ve con «Polígono ·» delante.
  * Parque Empresarial Parc Sagunt I y Parque Empresarial Parc Sagunt II quedan los dos. En el desplegable se ven con «Polígono ·» delante.
+ * Alzira: debajo de Valencia, delante de Gandia. Los barrios y los polígonos de la lista.
+ * Sant Bernat queda como barrio. Urbanización San Bernat también, con ese nombre.
+ * El Pla de Corbera queda como barrio. Parque Empresarial El Pla, Polígono Industrial El Pla y Sector PPI-11 El Pla como polígono.
+ * Carretera de Albalat queda como barrio. Polígono Industrial número 2 (Carretera de Albalat) como polígono.
+ * Polígono Ciudad del Transporte y Sector PPI-08 Ciudad del Transporte quedan los dos.
+ * Parque Empresarial El Pla, Sector PPI-08 Ciudad del Transporte y Sector PPI-11 El Pla se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8532,6 +8538,58 @@ const POLIGONOS_SAGUNTO: ZonaCiudad[] = [
   { nombre: "Puerto Marítimo de Sagunto", tipo: "poligono" },
 ];
 
+const BARRIOS_ALZIRA: ZonaCiudad[] = [
+  { nombre: "Alborxí", tipo: "barrio" },
+  { nombre: "Albuixarres", tipo: "barrio" },
+  { nombre: "Alquerieta", tipo: "barrio" },
+  { nombre: "Barraca d'Aigües Vives", tipo: "barrio" },
+  { nombre: "Caputxins", tipo: "barrio" },
+  { nombre: "El Pla de Corbera", tipo: "barrio" },
+  { nombre: "El Racó", tipo: "barrio" },
+  { nombre: "El Respirall", tipo: "barrio" },
+  { nombre: "La Avenida", tipo: "barrio" },
+  { nombre: "La Garrofera", tipo: "barrio" },
+  { nombre: "La Vila", tipo: "barrio" },
+  { nombre: "Les Basses", tipo: "barrio" },
+  { nombre: "Les Barraques", tipo: "barrio" },
+  { nombre: "Sant Agustí", tipo: "barrio" },
+  { nombre: "Sant Bernat", tipo: "barrio" },
+  { nombre: "Sant Joan", tipo: "barrio" },
+  { nombre: "Sant Judes", tipo: "barrio" },
+  { nombre: "Sants Patrons", tipo: "barrio" },
+  { nombre: "Santa Maria de Bonaire", tipo: "barrio" },
+  { nombre: "Torrexo", tipo: "barrio" },
+  { nombre: "Tulell", tipo: "barrio" },
+  { nombre: "Vall d'Aigües Vives", tipo: "barrio" },
+  { nombre: "Venècia", tipo: "barrio" },
+  { nombre: "Vilella", tipo: "barrio" },
+  { nombre: "Muntanyeta", tipo: "barrio" },
+  { nombre: "Carretera de Carcaixent", tipo: "barrio" },
+  { nombre: "Carretera de Albalat", tipo: "barrio" },
+  { nombre: "Valletes de Brú", tipo: "barrio" },
+  { nombre: "Valletes del Gall", tipo: "barrio" },
+  { nombre: "Urbanización Portella de Severino", tipo: "barrio" },
+  { nombre: "Urbanización San Bernat", tipo: "barrio" },
+];
+
+const POLIGONOS_ALZIRA: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial El Pla", tipo: "poligono" },
+  { nombre: "Polígono Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "Polígono Industrial Abidesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Alzira Sur", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Pla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Fraca", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ice Cream Factory", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Granja", tipo: "poligono" },
+  { nombre: "Polígono Industrial número 1", tipo: "poligono" },
+  { nombre: "Polígono Industrial número 2 (Carretera de Albalat)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Partida Materna (Alzicoop)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Tisneres", tipo: "poligono" },
+  { nombre: "Polígono Industrial Estación RENFE", tipo: "poligono" },
+  { nombre: "Sector PPI-08 Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "Sector PPI-11 El Pla", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9554,6 +9612,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sagunto",
     etiqueta: "Sagunto (Valencia)",
     zonas: [...BARRIOS_SAGUNTO, ...POLIGONOS_SAGUNTO],
+  },
+  {
+    id: "alzira",
+    nombre: "Alzira",
+    etiqueta: "Alzira (Valencia)",
+    zonas: [...BARRIOS_ALZIRA, ...POLIGONOS_ALZIRA],
   },
 ];
 
