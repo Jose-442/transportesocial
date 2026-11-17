@@ -168,6 +168,7 @@ describe("zonas de Burgos", () => {
       "petrer",
       "elcampello",
       "crevillent",
+      "javea",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2509,6 +2510,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCrevillent).size).toBe(nombresCrevillent.length);
     expect(nombresCrevillent.filter((n) => crevillent!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
     expect(nombresCrevillent.filter((n) => crevillent!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const javea = ciudadUrbana("javea");
+    expect(javea?.etiqueta).toBe("Jávea (Xàbia) (Alicante)");
+    expect(javea?.nombre).toBe("Jávea (Xàbia)");
+    expect(zonaDeCiudad(javea!, "Cala del Portitxol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "El Portichol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Portitxol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Cala Granadella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Granadella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Costa Nova")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Costa Nova Panorama")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Cansalades")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Arenal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Puerto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Monte Jávéa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Xàbia Histórica")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(javea!, "Polígono Industrial Catarrojes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(javea!, "Polígono Industrial de la Carretera de Gata")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(javea!, "Zona Empresarial de Les Cansalades")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(javea!, "Zona Comercial y Empresarial del Arenal")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(javea!, "Zona Comercial y Empresarial del Puerto")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Zona Empresarial de Les Cansalades", tipo: "poligono" })).toBe(
+      "Polígono · Zona Empresarial de Les Cansalades",
+    );
+    const nombresJavea = javea!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresJavea).size).toBe(nombresJavea.length);
+    expect(nombresJavea.filter((n) => javea!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(51);
+    expect(nombresJavea.filter((n) => javea!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2636,20 +2664,22 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 7]?.label).toBe("Elda");
     expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 8]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 8]?.label).toBe("Jávea (Xàbia)");
     expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 9]?.label).toBe("Petrer");
+    expect(ciudades[alicanteIdx + 9]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 10]?.label).toBe("San Vicente del Raspeig");
+    expect(ciudades[alicanteIdx + 10]?.label).toBe("Petrer");
     expect(ciudades[alicanteIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 11]?.label).toBe("Santa Pola");
+    expect(ciudades[alicanteIdx + 11]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 11]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 12]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 12]?.label).toBe("Santa Pola");
     expect(ciudades[alicanteIdx + 12]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 13]?.label).toBe("Villajoyosa");
+    expect(ciudades[alicanteIdx + 13]?.label).toBe("Torrevieja");
     expect(ciudades[alicanteIdx + 13]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 14]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 14]?.label).toBe("Villajoyosa");
     expect(ciudades[alicanteIdx + 14]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 15]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 15]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");

@@ -374,6 +374,14 @@
  * Barrio de la Estación queda como barrio. I-4 (La Estación) como polígono.
  * Industrial Este e Industrial Oeste quedan los dos.
  * Ningún polígono de Crevillent empieza por «Polígono». En el desplegable se ve con «Polígono ·» delante.
+ * Jávea: el municipio sale como «Jávea (Xàbia)». Los barrios y los polígonos de la lista.
+ * Cala del Portitxol, El Portichol y Portitxol quedan los tres.
+ * Cala Granadella y Granadella quedan las dos.
+ * Costa Nova y Costa Nova Panorama quedan las dos.
+ * Cansalades queda como barrio. Zona Empresarial de Les Cansalades como polígono.
+ * Arenal queda como barrio. Zona Comercial y Empresarial del Arenal como polígono.
+ * Puerto queda como barrio. Zona Comercial y Empresarial del Puerto como polígono.
+ * Zona Empresarial de Les Cansalades, Zona Comercial y Empresarial del Arenal y Zona Comercial y Empresarial del Puerto se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7947,6 +7955,68 @@ const POLIGONOS_CREVILLENT: ZonaCiudad[] = [
   { nombre: "La Cerámica (Cerámica de la Asunción)", tipo: "poligono" },
 ];
 
+const BARRIOS_JAVEA: ZonaCiudad[] = [
+  { nombre: "Adsubia", tipo: "barrio" },
+  { nombre: "Arenal", tipo: "barrio" },
+  { nombre: "Avenida Augusta", tipo: "barrio" },
+  { nombre: "Balcón al Mar", tipo: "barrio" },
+  { nombre: "Benimadrocs", tipo: "barrio" },
+  { nombre: "Cala Blanca", tipo: "barrio" },
+  { nombre: "Cala del Portitxol", tipo: "barrio" },
+  { nombre: "Cala Granadella", tipo: "barrio" },
+  { nombre: "Camí Cabanes", tipo: "barrio" },
+  { nombre: "Camí de la Fontana", tipo: "barrio" },
+  { nombre: "Cap Martí", tipo: "barrio" },
+  { nombre: "Cap Negre", tipo: "barrio" },
+  { nombre: "Capsades", tipo: "barrio" },
+  { nombre: "Castellans", tipo: "barrio" },
+  { nombre: "Cansalades", tipo: "barrio" },
+  { nombre: "Costa Nova", tipo: "barrio" },
+  { nombre: "Costa Nova Panorama", tipo: "barrio" },
+  { nombre: "Cuesta de San Antonio", tipo: "barrio" },
+  { nombre: "Duanes de la Mar", tipo: "barrio" },
+  { nombre: "El Rafalet", tipo: "barrio" },
+  { nombre: "El Piver", tipo: "barrio" },
+  { nombre: "El Pla", tipo: "barrio" },
+  { nombre: "El Portichol", tipo: "barrio" },
+  { nombre: "El Tosalet", tipo: "barrio" },
+  { nombre: "Ermita", tipo: "barrio" },
+  { nombre: "Granadella", tipo: "barrio" },
+  { nombre: "La Corona", tipo: "barrio" },
+  { nombre: "La Lluca", tipo: "barrio" },
+  { nombre: "La Mandarina", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "Las Laderas", tipo: "barrio" },
+  { nombre: "Les Sorts", tipo: "barrio" },
+  { nombre: "Los Molinos", tipo: "barrio" },
+  { nombre: "Montgó", tipo: "barrio" },
+  { nombre: "Monte Olimpo", tipo: "barrio" },
+  { nombre: "Monte Jávéa", tipo: "barrio" },
+  { nombre: "Pinosol", tipo: "barrio" },
+  { nombre: "Pinomar", tipo: "barrio" },
+  { nombre: "Portitxol", tipo: "barrio" },
+  { nombre: "Puchol", tipo: "barrio" },
+  { nombre: "Puerto", tipo: "barrio" },
+  { nombre: "Rebaldi", tipo: "barrio" },
+  { nombre: "Senioles", tipo: "barrio" },
+  { nombre: "Sol del Este", tipo: "barrio" },
+  { nombre: "Tarraula", tipo: "barrio" },
+  { nombre: "Tesoro Park", tipo: "barrio" },
+  { nombre: "Toscamar", tipo: "barrio" },
+  { nombre: "Toscal", tipo: "barrio" },
+  { nombre: "Valle del Sol", tipo: "barrio" },
+  { nombre: "Villes del Vent", tipo: "barrio" },
+  { nombre: "Xàbia Histórica", tipo: "barrio" },
+];
+
+const POLIGONOS_JAVEA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Catarrojes", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Carretera de Gata", tipo: "poligono" },
+  { nombre: "Zona Empresarial de Les Cansalades", tipo: "poligono" },
+  { nombre: "Zona Comercial y Empresarial del Arenal", tipo: "poligono" },
+  { nombre: "Zona Comercial y Empresarial del Puerto", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8897,6 +8967,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Crevillent",
     etiqueta: "Crevillent (Alicante)",
     zonas: [...BARRIOS_CREVILLENT, ...POLIGONOS_CREVILLENT],
+  },
+  {
+    id: "javea",
+    nombre: "Jávea (Xàbia)",
+    etiqueta: "Jávea (Xàbia) (Alicante)",
+    zonas: [...BARRIOS_JAVEA, ...POLIGONOS_JAVEA],
   },
 ];
 
