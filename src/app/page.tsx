@@ -94,14 +94,14 @@ export default async function HomePage() {
                 />
               </div>
               <h1 className="min-w-0 flex-1 text-sm font-bold leading-[1.12] text-white sm:text-base md:pl-3 md:text-lg lg:text-2xl xl:text-3xl">
-                <span className="block">Viaja barato, y lleva,</span>
-                <span className="block">o que te lleven bultos y mascotas</span>
-                <span className="block">compartiendo ruta</span>
+                <span className="block">Viaja barato</span>
+                <span className="block">y con bultos y mascotas</span>
               </h1>
             </div>
             <p className="text-xs text-emerald-50 sm:text-sm lg:text-base">
               Ponemos en contacto a conductores fiables con quien necesita
-              viajar, enviar un bulto o desplazarse con su mascota.
+              viajar, enviar un bulto o desplazarse con su mascota. Compartiendo
+              ruta.
             </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
