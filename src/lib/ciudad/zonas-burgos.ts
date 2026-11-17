@@ -413,6 +413,13 @@
  * La Punta queda como barrio. Polígono Industrial de la Punta como polígono.
  * Natzaret queda como barrio. Polígono Industrial de Nazaret como polígono, con esa otra escritura.
  * Área Empresarial Vara de Quart, Parque Empresarial Fuente del Jarro, Parque Empresarial Táctica, Parque Tecnológico de València y Zona Industrial de la Avenida del Cid se ven con «Polígono ·» delante.
+ * Torrent: debajo de Valencia. Los barrios y los polígonos de la lista.
+ * 1.º Ensanche, 2.º Ensanche y 3.º Ensanche quedan los tres.
+ * Calicanto y Cumbres de Calicanto quedan las dos.
+ * El Vedat y Monte Vedat quedan las dos.
+ * El Molí está en barrios y en polígonos con el mismo nombre. Entra una sola vez, como barrio.
+ * Mas del Jutge queda como barrio. Mas del Jutge (Masía del Juez) como polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Toll i l'Alberca es polígono. En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8349,6 +8356,46 @@ const POLIGONOS_VALENCIA: ZonaCiudad[] = [
   { nombre: "Zona Industrial de la Avenida del Cid", tipo: "poligono" },
 ];
 
+const BARRIOS_TORRENT: ZonaCiudad[] = [
+  { nombre: "1.º Ensanche", tipo: "barrio" },
+  { nombre: "2.º Ensanche", tipo: "barrio" },
+  { nombre: "3.º Ensanche", tipo: "barrio" },
+  { nombre: "Barranc del Gallego", tipo: "barrio" },
+  { nombre: "Benisaet", tipo: "barrio" },
+  { nombre: "Bon Estar", tipo: "barrio" },
+  { nombre: "Buena Vista", tipo: "barrio" },
+  { nombre: "Calicanto", tipo: "barrio" },
+  { nombre: "Camí de Barbeta", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cumbres de Calicanto", tipo: "barrio" },
+  { nombre: "El Alter", tipo: "barrio" },
+  { nombre: "El Molí", tipo: "barrio" },
+  { nombre: "El Pantà", tipo: "barrio" },
+  { nombre: "El Vedat", tipo: "barrio" },
+  { nombre: "Font de Manyes", tipo: "barrio" },
+  { nombre: "La Carrasquera", tipo: "barrio" },
+  { nombre: "La Canyada d'Alonso i Birlet", tipo: "barrio" },
+  { nombre: "La Font del Sapo", tipo: "barrio" },
+  { nombre: "La Pirámide", tipo: "barrio" },
+  { nombre: "Las Américas", tipo: "barrio" },
+  { nombre: "Marxadella", tipo: "barrio" },
+  { nombre: "Mas de Pavia", tipo: "barrio" },
+  { nombre: "Mas del Jutge", tipo: "barrio" },
+  { nombre: "Monte Hermoso", tipo: "barrio" },
+  { nombre: "Monte Real", tipo: "barrio" },
+  { nombre: "Monte Vedat", tipo: "barrio" },
+  { nombre: "Poble Nou-Las Palomas", tipo: "barrio" },
+  { nombre: "Raval-Estación", tipo: "barrio" },
+  { nombre: "Santa Apolonia", tipo: "barrio" },
+  { nombre: "Santo Ángel", tipo: "barrio" },
+  { nombre: "Xenillet", tipo: "barrio" },
+];
+
+const POLIGONOS_TORRENT: ZonaCiudad[] = [
+  { nombre: "Mas del Jutge (Masía del Juez)", tipo: "poligono" },
+  { nombre: "Toll i l'Alberca", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9347,6 +9394,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Valencia",
     etiqueta: "Valencia (Valencia)",
     zonas: [...BARRIOS_VALENCIA, ...POLIGONOS_VALENCIA],
+  },
+  {
+    id: "torrent",
+    nombre: "Torrent",
+    etiqueta: "Torrent (Valencia)",
+    zonas: [...BARRIOS_TORRENT, ...POLIGONOS_TORRENT],
   },
 ];
 

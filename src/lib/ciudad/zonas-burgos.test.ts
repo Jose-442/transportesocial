@@ -176,6 +176,7 @@ describe("zonas de Burgos", () => {
       "illescas",
       "sesena",
       "valencia",
+      "torrent",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2719,6 +2720,35 @@ describe("zonas de Burgos", () => {
     expect(nombresValencia.filter((n) => n === "Faitanar").length).toBe(1);
     expect(nombresValencia.filter((n) => valencia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(86);
     expect(nombresValencia.filter((n) => valencia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
+    const torrent = ciudadUrbana("torrent");
+    expect(torrent?.etiqueta).toBe("Torrent (Valencia)");
+    expect(torrent?.nombre).toBe("Torrent");
+    expect(zonaDeCiudad(torrent!, "1.º Ensanche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "2.º Ensanche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "3.º Ensanche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Calicanto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Cumbres de Calicanto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "El Vedat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Monte Vedat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "El Molí")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "El Pantà")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Camí de Barbeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "La Canyada d'Alonso i Birlet")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "La Pirámide")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Las Américas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Santo Ángel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Mas del Jutge")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrent!, "Mas del Jutge (Masía del Juez)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrent!, "Toll i l'Alberca")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Mas del Jutge (Masía del Juez)", tipo: "poligono" })).toBe(
+      "Polígono · Mas del Jutge (Masía del Juez)",
+    );
+    expect(etiquetaZona({ nombre: "Toll i l'Alberca", tipo: "poligono" })).toBe("Polígono · Toll i l'Alberca");
+    const nombresTorrent = torrent!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorrent).size).toBe(nombresTorrent.length);
+    expect(nombresTorrent.filter((n) => n === "El Molí").length).toBe(1);
+    expect(nombresTorrent.filter((n) => torrent!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(32);
+    expect(nombresTorrent.filter((n) => torrent!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2808,6 +2838,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "toledo")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "valencia")?.label).toBe("Valencia");
     expect(ciudades.find((c) => c.value === "valencia")?.negrita).toBe(true);
+    const valenciaIdx = ciudades.findIndex((c) => c.value === "valencia");
+    expect(ciudades[valenciaIdx + 1]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
