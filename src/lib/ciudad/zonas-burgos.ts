@@ -306,6 +306,12 @@
  * El Acequión y Playa del Acequión quedan los dos.
  * Los Náufragos y Playa de los Náufragos quedan los dos.
  * Polígono Industrial Salinas de Torrevieja y Zona Industrial Salinas de Torrevieja quedan las dos.
+ * Orihuela: los barrios y los polígonos de la lista.
+ * El Escorratel queda como barrio. Zona industrial de El Escorratel (área de actividad vinculada a Puente Alto) como polígono.
+ * La Murada queda como barrio. Polígono Industrial de La Murada como polígono.
+ * Campoamor, Dehesa de Campoamor y Lomas de Campoamor quedan los tres.
+ * La Zenia y La Zenia II quedan las dos.
+ * Playa Flamenca I y Playa Flamenca II quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7344,6 +7350,96 @@ const POLIGONOS_TORREVIEJA: ZonaCiudad[] = [
   { nombre: "Zona Comercial Habaneras", tipo: "poligono" },
 ];
 
+const BARRIOS_ORIHUELA: ZonaCiudad[] = [
+  { nombre: "Barrio de Capuchinos", tipo: "barrio" },
+  { nombre: "Barrio de la Alegría", tipo: "barrio" },
+  { nombre: "Barrio de la Ascensión", tipo: "barrio" },
+  { nombre: "Barrio de las Angustias", tipo: "barrio" },
+  { nombre: "Barrio de las Espeñetas-San Francisco", tipo: "barrio" },
+  { nombre: "Barrio de los Calderones", tipo: "barrio" },
+  { nombre: "Barrio de los Cristianos", tipo: "barrio" },
+  { nombre: "Barrio de los Marines", tipo: "barrio" },
+  { nombre: "Barrio de los Morenos", tipo: "barrio" },
+  { nombre: "Barrio de los Selmas", tipo: "barrio" },
+  { nombre: "Barrio del Palmeral", tipo: "barrio" },
+  { nombre: "Barrio de San Antón", tipo: "barrio" },
+  { nombre: "Barrio de San Isidro", tipo: "barrio" },
+  { nombre: "Barrio de San Juan-La Corredera", tipo: "barrio" },
+  { nombre: "Barrio de San Pedro", tipo: "barrio" },
+  { nombre: "Barrio de Santo Domingo", tipo: "barrio" },
+  { nombre: "Barrio de Triana", tipo: "barrio" },
+  { nombre: "Barrionuevo-Calle de Arriba", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Rabaloche", tipo: "barrio" },
+  { nombre: "Rincón de Seca", tipo: "barrio" },
+  { nombre: "Ocarasa", tipo: "barrio" },
+  { nombre: "Arneva", tipo: "barrio" },
+  { nombre: "Barbarroja", tipo: "barrio" },
+  { nombre: "Camino de Beniel", tipo: "barrio" },
+  { nombre: "Camino Viejo de Callosa", tipo: "barrio" },
+  { nombre: "Correntías Altas", tipo: "barrio" },
+  { nombre: "Correntías Bajas", tipo: "barrio" },
+  { nombre: "Correntías Medias", tipo: "barrio" },
+  { nombre: "El Escorratel", tipo: "barrio" },
+  { nombre: "El Mudamiento", tipo: "barrio" },
+  { nombre: "Hurchillo", tipo: "barrio" },
+  { nombre: "La Aparecida", tipo: "barrio" },
+  { nombre: "La Campaneta", tipo: "barrio" },
+  { nombre: "La Matanza", tipo: "barrio" },
+  { nombre: "La Murada", tipo: "barrio" },
+  { nombre: "Las Norias", tipo: "barrio" },
+  { nombre: "Los Desamparados", tipo: "barrio" },
+  { nombre: "Los Huertos", tipo: "barrio" },
+  { nombre: "Media Legua", tipo: "barrio" },
+  { nombre: "Molins", tipo: "barrio" },
+  { nombre: "Molino de la Ciudad", tipo: "barrio" },
+  { nombre: "Raiguero de Bonanza", tipo: "barrio" },
+  { nombre: "Raiguero de Levante", tipo: "barrio" },
+  { nombre: "Raiguero de Poniente", tipo: "barrio" },
+  { nombre: "San Bartolomé", tipo: "barrio" },
+  { nombre: "Torremendo", tipo: "barrio" },
+  { nombre: "Orihuela Costa", tipo: "barrio" },
+  { nombre: "Aguamarina", tipo: "barrio" },
+  { nombre: "Alameda del Mar", tipo: "barrio" },
+  { nombre: "Cabo Roig", tipo: "barrio" },
+  { nombre: "Campoamor", tipo: "barrio" },
+  { nombre: "Castillo de Don Juan", tipo: "barrio" },
+  { nombre: "Dehesa de Campoamor", tipo: "barrio" },
+  { nombre: "El Barranco", tipo: "barrio" },
+  { nombre: "El Presidente", tipo: "barrio" },
+  { nombre: "Entrenaranjos", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Regia", tipo: "barrio" },
+  { nombre: "La Zenia", tipo: "barrio" },
+  { nombre: "La Zenia II", tipo: "barrio" },
+  { nombre: "Las Filipinas", tipo: "barrio" },
+  { nombre: "Las Ramblas", tipo: "barrio" },
+  { nombre: "Los Almendros", tipo: "barrio" },
+  { nombre: "Los Balcones", tipo: "barrio" },
+  { nombre: "Los Dolses", tipo: "barrio" },
+  { nombre: "Los Altos", tipo: "barrio" },
+  { nombre: "Lomas de Campoamor", tipo: "barrio" },
+  { nombre: "Mil Palmeras", tipo: "barrio" },
+  { nombre: "Montezenia-Torrezenia", tipo: "barrio" },
+  { nombre: "Playa Flamenca I", tipo: "barrio" },
+  { nombre: "Playa Flamenca II", tipo: "barrio" },
+  { nombre: "Punta Prima", tipo: "barrio" },
+  { nombre: "Pueblo Príncipe", tipo: "barrio" },
+  { nombre: "Villacosta", tipo: "barrio" },
+  { nombre: "Villamartín", tipo: "barrio" },
+  { nombre: "Villa Rosa-La Ciñuelica", tipo: "barrio" },
+  { nombre: "Vistabella Golf", tipo: "barrio" },
+];
+
+const POLIGONOS_ORIHUELA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Puente Alto", tipo: "poligono" },
+  { nombre: "Zona industrial de El Escorratel (área de actividad vinculada a Puente Alto)", tipo: "poligono" },
+  { nombre: "Polígono Industrial de La Murada", tipo: "poligono" },
+  { nombre: "Zona Industrial junto al sistema ferroviario de Orihuela", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8222,6 +8318,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torrevieja",
     etiqueta: "Torrevieja (Alicante)",
     zonas: [...BARRIOS_TORREVIEJA, ...POLIGONOS_TORREVIEJA],
+  },
+  {
+    id: "orihuela",
+    nombre: "Orihuela",
+    etiqueta: "Orihuela (Alicante)",
+    zonas: [...BARRIOS_ORIHUELA, ...POLIGONOS_ORIHUELA],
   },
 ];
 
