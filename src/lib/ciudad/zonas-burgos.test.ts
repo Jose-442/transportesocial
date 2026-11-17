@@ -161,6 +161,7 @@ describe("zonas de Burgos", () => {
       "sanvicentedelraspeig",
       "elda",
       "denia",
+      "santapola",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2360,6 +2361,28 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresDenia).size).toBe(nombresDenia.length);
     expect(nombresDenia.filter((n) => denia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(39);
     expect(nombresDenia.filter((n) => denia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const santaPola = ciudadUrbana("santapola");
+    expect(santaPola?.etiqueta).toBe("Santa Pola (Alicante)");
+    expect(santaPola?.nombre).toBe("Santa Pola");
+    expect(zonaDeCiudad(santaPola!, "Gran Alacant")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Tamarit")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Playa Tamarit")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Varadero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Ensanche Varadero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Zona de Levante")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Ensanche de Levante")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Zona de Poniente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Ensanche de Poniente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Paseo Santiago Bernabéu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Els Siprerets")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPola!, "Polígono Industrial IN-2")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santaPola!, "Polígono Industrial de Santa Pola")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santaPola!, "Zona Industrial Urbana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santaPola!, "Zona Industrial de la carretera de Elche")?.tipo).toBe("poligono");
+    const nombresSantaPola = santaPola!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantaPola).size).toBe(nombresSantaPola.length);
+    expect(nombresSantaPola.filter((n) => santaPola!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
+    expect(nombresSantaPola.filter((n) => santaPola!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2487,8 +2510,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 7]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 8]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 8]?.label).toBe("Santa Pola");
     expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 9]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");

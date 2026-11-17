@@ -341,6 +341,11 @@
  * Centro-Port y Port-Centre quedan los dos.
  * Campaments y Oeste-Campaments quedan los dos.
  * Les Deveses y Deveses-Bassot quedan las dos.
+ * Santa Pola: los barrios y los polígonos de la lista.
+ * Tamarit queda como barrio. Playa Tamarit también, con ese nombre.
+ * Varadero queda como barrio. Ensanche Varadero también, con ese nombre.
+ * Zona de Levante y Ensanche de Levante quedan las dos.
+ * Zona de Poniente y Ensanche de Poniente quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7655,6 +7660,44 @@ const POLIGONOS_DENIA: ZonaCiudad[] = [
   { nombre: "Área Industrial Madrigueres Nord", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_POLA: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Gran Alacant", tipo: "barrio" },
+  { nombre: "Gran Playa", tipo: "barrio" },
+  { nombre: "Hacienda del Barrio", tipo: "barrio" },
+  { nombre: "La Calera", tipo: "barrio" },
+  { nombre: "La Cadena", tipo: "barrio" },
+  { nombre: "La Marina", tipo: "barrio" },
+  { nombre: "Playa Lisa", tipo: "barrio" },
+  { nombre: "Playa Tamarit", tipo: "barrio" },
+  { nombre: "Pueblo Levantino", tipo: "barrio" },
+  { nombre: "Punta La Sierra", tipo: "barrio" },
+  { nombre: "Santa Pola del Este", tipo: "barrio" },
+  { nombre: "Tamarit", tipo: "barrio" },
+  { nombre: "Varadero", tipo: "barrio" },
+  { nombre: "Zona de Levante", tipo: "barrio" },
+  { nombre: "Zona de Poniente", tipo: "barrio" },
+  { nombre: "Ensanche de Levante", tipo: "barrio" },
+  { nombre: "Ensanche de Poniente", tipo: "barrio" },
+  { nombre: "Ensanche del Mar", tipo: "barrio" },
+  { nombre: "Ensanche Varadero", tipo: "barrio" },
+  { nombre: "Paseo Santiago Bernabéu", tipo: "barrio" },
+  { nombre: "Calvario", tipo: "barrio" },
+  { nombre: "Anillo Sorolla", tipo: "barrio" },
+  { nombre: "Portus Ilicitanus", tipo: "barrio" },
+  { nombre: "Salinas", tipo: "barrio" },
+  { nombre: "Meleja", tipo: "barrio" },
+  { nombre: "Els Siprerets", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_POLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial IN-2", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Santa Pola", tipo: "poligono" },
+  { nombre: "Zona Industrial Urbana", tipo: "poligono" },
+  { nombre: "Zona Industrial de la carretera de Elche", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8569,6 +8612,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Dénia",
     etiqueta: "Dénia (Alicante)",
     zonas: [...BARRIOS_DENIA, ...POLIGONOS_DENIA],
+  },
+  {
+    id: "santapola",
+    nombre: "Santa Pola",
+    etiqueta: "Santa Pola (Alicante)",
+    zonas: [...BARRIOS_SANTA_POLA, ...POLIGONOS_SANTA_POLA],
   },
 ];
 
