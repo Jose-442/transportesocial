@@ -148,6 +148,7 @@ describe("zonas de Burgos", () => {
       "motril",
       "jaen",
       "granada",
+      "linares",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2061,6 +2062,25 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresGranada).size).toBe(nombresGranada.length);
     expect(nombresGranada.filter((n) => granada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
     expect(nombresGranada.filter((n) => granada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
+    const linares = ciudadUrbana("linares");
+    expect(linares?.etiqueta).toBe("Linares (Jaén)");
+    expect(linares?.nombre).toBe("Linares");
+    expect(zonaDeCiudad(linares!, "Arrayanes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "Barriada de los Países Europeos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "Camino de Úbeda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "La Zarzuela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "Pozico Don Ramón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "Urbanización Puerta de Castro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(linares!, "Parque Científico Tecnológico del Transporte Santana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(linares!, "Polígono Agroindustrial Fuente Piedra")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(linares!, "Polígono Industrial La Zarzuela")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(linares!, "Polígono Industrial Los Rubiales II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(linares!, "Polígono Industrial Carretera de Jabalquinto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(linares!, "Zarzuela")).toBeNull();
+    const nombresLinares = linares!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLinares).size).toBe(nombresLinares.length);
+    expect(nombresLinares.filter((n) => linares!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
+    expect(nombresLinares.filter((n) => linares!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2170,6 +2190,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
     expect(ciudades.find((c) => c.value === "jaen")?.negrita).toBe(true);
+    const jaenIdx = ciudades.findIndex((c) => c.value === "jaen");
+    expect(ciudades[jaenIdx + 1]?.label).toBe("Linares");
+    expect(ciudades[jaenIdx + 1]?.negrita).toBeUndefined();
     const granadaIdx = ciudades.findIndex((c) => c.value === "granada");
     expect(ciudades[granadaIdx]?.label).toBe("Granada");
     expect(ciudades[granadaIdx]?.negrita).toBe(true);

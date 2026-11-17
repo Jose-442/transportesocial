@@ -274,6 +274,8 @@
  * Polígono del Valle queda como barrio. Polígono Industrial del Valle como polígono.
  * Granada: los barrios y los polígonos de la lista.
  * Cartuja queda como barrio. Polígono Cartuja como polígono.
+ * Linares: los barrios y los polígonos de la lista.
+ * La Zarzuela queda como barrio. Polígono Industrial La Zarzuela como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6850,6 +6852,52 @@ const POLIGONOS_GRANADA: ZonaCiudad[] = [
   { nombre: "Sierra Elvira", tipo: "poligono" },
 ];
 
+const BARRIOS_LINARES: ZonaCiudad[] = [
+  { nombre: "Arrayanes", tipo: "barrio" },
+  { nombre: "Barriada Andaluza", tipo: "barrio" },
+  { nombre: "Barriada de los Mares", tipo: "barrio" },
+  { nombre: "Barriada de los Países Europeos", tipo: "barrio" },
+  { nombre: "Barriada de San José", tipo: "barrio" },
+  { nombre: "Barriada de Santa Ana", tipo: "barrio" },
+  { nombre: "Barriada de Senda de la Moza", tipo: "barrio" },
+  { nombre: "Belén", tipo: "barrio" },
+  { nombre: "Camino de Úbeda", tipo: "barrio" },
+  { nombre: "Colonia del Sol", tipo: "barrio" },
+  { nombre: "El Cerro", tipo: "barrio" },
+  { nombre: "El Girón", tipo: "barrio" },
+  { nombre: "La Esperanza", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "La Zarzuela", tipo: "barrio" },
+  { nombre: "Linarejos", tipo: "barrio" },
+  { nombre: "Los Naranjos", tipo: "barrio" },
+  { nombre: "Los Ríos", tipo: "barrio" },
+  { nombre: "Paseo de Linarejos", tipo: "barrio" },
+  { nombre: "Pozico Don Ramón", tipo: "barrio" },
+  { nombre: "Quesitos", tipo: "barrio" },
+  { nombre: "Ronda Sur", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Toreros", tipo: "barrio" },
+  { nombre: "Villalonga", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Urbanización Puerta de Castro", tipo: "barrio" },
+];
+
+const POLIGONOS_LINARES: ZonaCiudad[] = [
+  { nombre: "Parque Científico Tecnológico del Transporte Santana", tipo: "poligono" },
+  { nombre: "Parque Empresarial Linarejos", tipo: "poligono" },
+  { nombre: "Polígono Agroindustrial Fuente Piedra", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cástulo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Zarzuela", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Jarales", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Rubiales", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Rubiales II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Santa Rosa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camino de San Luis", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Jabalquinto", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7686,6 +7734,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Granada",
     etiqueta: "Granada (Granada)",
     zonas: [...BARRIOS_GRANADA, ...POLIGONOS_GRANADA],
+  },
+  {
+    id: "linares",
+    nombre: "Linares",
+    etiqueta: "Linares (Jaén)",
+    zonas: [...BARRIOS_LINARES, ...POLIGONOS_LINARES],
   },
 ];
 
