@@ -382,6 +382,10 @@
  * Arenal queda como barrio. Zona Comercial y Empresarial del Arenal como polígono.
  * Puerto queda como barrio. Zona Comercial y Empresarial del Puerto como polígono.
  * Zona Empresarial de Les Cansalades, Zona Comercial y Empresarial del Arenal y Zona Comercial y Empresarial del Puerto se ven con «Polígono ·» delante.
+ * Huesca: capital, en negrita. Los barrios y los polígonos de la lista.
+ * Polígono 25 y Polígono 29 quedan como barrio, en el grupo de barrios.
+ * Parque Tecnológico Walqa y Plataforma Logística Huesca Sur (PLHUS) son polígono. En el desplegable se ven con «Polígono ·» delante.
+ * heraldo.es+4 es la fuente. No entra en el desplegable.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8017,6 +8021,40 @@ const POLIGONOS_JAVEA: ZonaCiudad[] = [
   { nombre: "Zona Comercial y Empresarial del Puerto", tipo: "poligono" },
 ];
 
+const BARRIOS_HUESCA: ZonaCiudad[] = [
+  { nombre: "Barrio de la Catedral", tipo: "barrio" },
+  { nombre: "Barrio de San Francisco de Asís", tipo: "barrio" },
+  { nombre: "Barrio de San José", tipo: "barrio" },
+  { nombre: "Barrio de San Lorenzo", tipo: "barrio" },
+  { nombre: "Barrio de San Pedro", tipo: "barrio" },
+  { nombre: "Barrio de Santiago", tipo: "barrio" },
+  { nombre: "Barrio de Santo Domingo y San Martín", tipo: "barrio" },
+  { nombre: "Barrio de la Encarnación", tipo: "barrio" },
+  { nombre: "Barrio del Perpetuo Socorro", tipo: "barrio" },
+  { nombre: "Barrio de María Auxiliadora", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Estrecho Quinto", tipo: "barrio" },
+  { nombre: "Polígono 25", tipo: "barrio" },
+  { nombre: "Polígono 29", tipo: "barrio" },
+  { nombre: "Zona Avenida de la Paz", tipo: "barrio" },
+  { nombre: "Zona Avenida Pirineos", tipo: "barrio" },
+  { nombre: "Zona del Parque", tipo: "barrio" },
+  { nombre: "Zona del Cerro de San Jorge", tipo: "barrio" },
+  { nombre: "Zona de los Olivos", tipo: "barrio" },
+  { nombre: "Zona de la Universidad", tipo: "barrio" },
+  { nombre: "Zona de los Porches de Galicia", tipo: "barrio" },
+];
+
+const POLIGONOS_HUESCA: ZonaCiudad[] = [
+  { nombre: "Parque Tecnológico Walqa", tipo: "poligono" },
+  { nombre: "Plataforma Logística Huesca Sur (PLHUS)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Huesca Industrial (SEPES)", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Magantina", tipo: "poligono" },
+  { nombre: "Polígono Industrial Martínez de Velasco (polígonos 26 y 27)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Monzú", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8973,6 +9011,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Jávea (Xàbia)",
     etiqueta: "Jávea (Xàbia) (Alicante)",
     zonas: [...BARRIOS_JAVEA, ...POLIGONOS_JAVEA],
+  },
+  {
+    id: "huesca",
+    nombre: "Huesca",
+    etiqueta: "Huesca (Huesca)",
+    zonas: [...BARRIOS_HUESCA, ...POLIGONOS_HUESCA],
   },
 ];
 

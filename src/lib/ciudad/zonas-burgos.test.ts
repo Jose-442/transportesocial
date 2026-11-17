@@ -169,6 +169,7 @@ describe("zonas de Burgos", () => {
       "elcampello",
       "crevillent",
       "javea",
+      "huesca",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2537,6 +2538,32 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresJavea).size).toBe(nombresJavea.length);
     expect(nombresJavea.filter((n) => javea!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(51);
     expect(nombresJavea.filter((n) => javea!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const huesca = ciudadUrbana("huesca");
+    expect(huesca?.etiqueta).toBe("Huesca (Huesca)");
+    expect(huesca?.nombre).toBe("Huesca");
+    expect(zonaDeCiudad(huesca!, "Barrio de San Francisco de Asís")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huesca!, "Barrio de María Auxiliadora")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huesca!, "Barrio de Santo Domingo y San Martín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huesca!, "Polígono 25")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huesca!, "Polígono 29")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(huesca!, "heraldo.es+4")).toBeNull();
+    expect(zonaDeCiudad(huesca!, "Parque Tecnológico Walqa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huesca!, "Plataforma Logística Huesca Sur (PLHUS)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huesca!, "Polígono Industrial Huesca Industrial (SEPES)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huesca!, "Polígono Industrial La Magantina")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huesca!, "Polígono Industrial Martínez de Velasco (polígonos 26 y 27)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(huesca!, "Polígono Industrial Monzú")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Tecnológico Walqa", tipo: "poligono" })).toBe(
+      "Polígono · Parque Tecnológico Walqa",
+    );
+    expect(etiquetaZona({ nombre: "Plataforma Logística Huesca Sur (PLHUS)", tipo: "poligono" })).toBe(
+      "Polígono · Plataforma Logística Huesca Sur (PLHUS)",
+    );
+    expect(etiquetaZona({ nombre: "Polígono 25", tipo: "barrio" })).toBe("Polígono 25");
+    const nombresHuesca = huesca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresHuesca).size).toBe(nombresHuesca.length);
+    expect(nombresHuesca.filter((n) => huesca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
+    expect(nombresHuesca.filter((n) => huesca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2618,6 +2645,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[almeriaIdx + 3]?.label).toBe("Roquetas de Mar");
     expect(ciudades[almeriaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "huesca")?.label).toBe("Huesca");
+    expect(ciudades.find((c) => c.value === "huesca")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");
