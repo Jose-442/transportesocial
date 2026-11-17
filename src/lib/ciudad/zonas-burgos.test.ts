@@ -154,6 +154,7 @@ describe("zonas de Burgos", () => {
       "cordoba",
       "alicante",
       "elche",
+      "torrevieja",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2192,6 +2193,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresElche).size).toBe(nombresElche.length);
     expect(nombresElche.filter((n) => elche!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(66);
     expect(nombresElche.filter((n) => elche!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
+    const torrevieja = ciudadUrbana("torrevieja");
+    expect(torrevieja?.etiqueta).toBe("Torrevieja (Alicante)");
+    expect(torrevieja?.nombre).toBe("Torrevieja");
+    expect(zonaDeCiudad(torrevieja!, "Aguas Nuevas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Doña Inés")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "El Acequión")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Playa del Acequión")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "La Hoya")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "La Torreta I")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "La Torreta II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "La Torreta III")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Los Náufragos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Playa de los Náufragos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Villasol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrevieja!, "Polígono Industrial Casa Grande")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Polígono Industrial Casa Grande II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Polígono Industrial La Hoya")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Polígono Industrial Salinas de Torrevieja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Zona Industrial Salinas de Torrevieja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Zona Comercial Habaneras")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrevieja!, "Acequión")).toBeNull();
+    const nombresTorrevieja = torrevieja!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorrevieja).size).toBe(nombresTorrevieja.length);
+    expect(nombresTorrevieja.filter((n) => torrevieja!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(61);
+    expect(nombresTorrevieja.filter((n) => torrevieja!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2307,6 +2333,8 @@ describe("zonas de Burgos", () => {
     const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");
     expect(ciudades[alicanteIdx + 1]?.label).toBe("Elche");
     expect(ciudades[alicanteIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 2]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");

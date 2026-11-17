@@ -301,6 +301,11 @@
  * Peña de las Águilas queda como barrio. Polígono Industrial de Peña de las Águilas como polígono.
  * Altabix queda como barrio. Área Industrial de Altabix y Polígono Industrial de Altabix como polígono.
  * Carrús queda como barrio. Área Industrial de Carrús y Polígono Industrial de Carrús como polígono.
+ * Torrevieja: los barrios y los polígonos de la lista.
+ * La Hoya queda como barrio. Polígono Industrial La Hoya como polígono.
+ * El Acequión y Playa del Acequión quedan los dos.
+ * Los Náufragos y Playa de los Náufragos quedan los dos.
+ * Polígono Industrial Salinas de Torrevieja y Zona Industrial Salinas de Torrevieja quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7266,6 +7271,79 @@ const POLIGONOS_ELCHE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Peña de las Águilas", tipo: "poligono" },
 ];
 
+const BARRIOS_TORREVIEJA: ZonaCiudad[] = [
+  { nombre: "Aguas Nuevas", tipo: "barrio" },
+  { nombre: "Avenida de las Cortes Valencianas", tipo: "barrio" },
+  { nombre: "Cabo Cervera", tipo: "barrio" },
+  { nombre: "Cala Dorada", tipo: "barrio" },
+  { nombre: "Calas Blancas", tipo: "barrio" },
+  { nombre: "Cala del Moro", tipo: "barrio" },
+  { nombre: "Centro Urbano", tipo: "barrio" },
+  { nombre: "Doña Inés", tipo: "barrio" },
+  { nombre: "Edén del Mar", tipo: "barrio" },
+  { nombre: "El Acequión", tipo: "barrio" },
+  { nombre: "El Chaparral", tipo: "barrio" },
+  { nombre: "El Dorado", tipo: "barrio" },
+  { nombre: "El Hondo", tipo: "barrio" },
+  { nombre: "El Limonar", tipo: "barrio" },
+  { nombre: "El Salado", tipo: "barrio" },
+  { nombre: "El Torrejón", tipo: "barrio" },
+  { nombre: "Jardín del Mar", tipo: "barrio" },
+  { nombre: "La Hoya", tipo: "barrio" },
+  { nombre: "La Mata", tipo: "barrio" },
+  { nombre: "La Manguilla", tipo: "barrio" },
+  { nombre: "La Rosaleda", tipo: "barrio" },
+  { nombre: "La Siesta", tipo: "barrio" },
+  { nombre: "La Torreta I", tipo: "barrio" },
+  { nombre: "La Torreta II", tipo: "barrio" },
+  { nombre: "La Torreta III", tipo: "barrio" },
+  { nombre: "La Torreta Florida", tipo: "barrio" },
+  { nombre: "La Veleta", tipo: "barrio" },
+  { nombre: "Lago Jardín", tipo: "barrio" },
+  { nombre: "Lago Sol", tipo: "barrio" },
+  { nombre: "Las Barcas", tipo: "barrio" },
+  { nombre: "Las Maravillas", tipo: "barrio" },
+  { nombre: "Las Maravillas II", tipo: "barrio" },
+  { nombre: "Lomas del Mar", tipo: "barrio" },
+  { nombre: "Los Ángeles", tipo: "barrio" },
+  { nombre: "Los Balcones", tipo: "barrio" },
+  { nombre: "Los Frutales", tipo: "barrio" },
+  { nombre: "Los Náufragos", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Mar Azul", tipo: "barrio" },
+  { nombre: "Mediterráneo", tipo: "barrio" },
+  { nombre: "Miramar", tipo: "barrio" },
+  { nombre: "Molino Blanco", tipo: "barrio" },
+  { nombre: "Montecarlo", tipo: "barrio" },
+  { nombre: "Nueva Torrevieja", tipo: "barrio" },
+  { nombre: "Panorama", tipo: "barrio" },
+  { nombre: "Parque de las Naciones", tipo: "barrio" },
+  { nombre: "Playa del Acequión", tipo: "barrio" },
+  { nombre: "Playa de los Locos", tipo: "barrio" },
+  { nombre: "Playa del Cura", tipo: "barrio" },
+  { nombre: "Playa de los Náufragos", tipo: "barrio" },
+  { nombre: "Pozo Dulce", tipo: "barrio" },
+  { nombre: "Punta Prima", tipo: "barrio" },
+  { nombre: "Rocío del Mar", tipo: "barrio" },
+  { nombre: "San Luis", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Sector 25", tipo: "barrio" },
+  { nombre: "Torreblanca", tipo: "barrio" },
+  { nombre: "Torre del Moro", tipo: "barrio" },
+  { nombre: "Villa Amalia", tipo: "barrio" },
+  { nombre: "Villa Vicenta", tipo: "barrio" },
+  { nombre: "Villasol", tipo: "barrio" },
+];
+
+const POLIGONOS_TORREVIEJA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Casa Grande", tipo: "poligono" },
+  { nombre: "Polígono Industrial Casa Grande II", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Hoya", tipo: "poligono" },
+  { nombre: "Polígono Industrial Salinas de Torrevieja", tipo: "poligono" },
+  { nombre: "Zona Industrial Salinas de Torrevieja", tipo: "poligono" },
+  { nombre: "Zona Comercial Habaneras", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8138,6 +8216,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Elche",
     etiqueta: "Elche (Alicante)",
     zonas: [...BARRIOS_ELCHE, ...POLIGONOS_ELCHE],
+  },
+  {
+    id: "torrevieja",
+    nombre: "Torrevieja",
+    etiqueta: "Torrevieja (Alicante)",
+    zonas: [...BARRIOS_TORREVIEJA, ...POLIGONOS_TORREVIEJA],
   },
 ];
 
