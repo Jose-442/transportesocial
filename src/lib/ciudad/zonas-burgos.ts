@@ -428,6 +428,10 @@
  * Paterna: debajo de Gandia y delante de Torrent. Los barrios y los polígonos de la lista.
  * Loma Llarga-Valterna y Lloma Llarga quedan las dos.
  * Parque Científico de la Universitat de València, Parque Empresarial Táctica y Parque Tecnológico de Paterna son polígono. En el desplegable se ven con «Polígono ·» delante.
+ * Sagunto: debajo de Paterna y delante de Torrent. Los barrios y los polígonos de la lista.
+ * Los Monasterios queda como barrio. Urbanización Los Monasterios también, con ese nombre.
+ * Puerto de Sagunto queda como barrio. Puerto Marítimo de Sagunto como polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Parque Empresarial Parc Sagunt I y Parque Empresarial Parc Sagunt II quedan los dos. En el desplegable se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8485,6 +8489,49 @@ const POLIGONOS_PATERNA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Boluda", tipo: "poligono" },
 ];
 
+const BARRIOS_SAGUNTO: ZonaCiudad[] = [
+  { nombre: "Almardà", tipo: "barrio" },
+  { nombre: "Antigua Morería", tipo: "barrio" },
+  { nombre: "Baladre", tipo: "barrio" },
+  { nombre: "Barrio de San José", tipo: "barrio" },
+  { nombre: "Cantera-Partidores", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "Corinto", tipo: "barrio" },
+  { nombre: "El Raval", tipo: "barrio" },
+  { nombre: "Grao Viejo", tipo: "barrio" },
+  { nombre: "La Vila", tipo: "barrio" },
+  { nombre: "Los Monasterios", tipo: "barrio" },
+  { nombre: "Norte Palancia", tipo: "barrio" },
+  { nombre: "Puerto de Sagunto", tipo: "barrio" },
+  { nombre: "Zona de la Estación", tipo: "barrio" },
+  { nombre: "Urbanización Alfinac", tipo: "barrio" },
+  { nombre: "Urbanización Bonilles", tipo: "barrio" },
+  { nombre: "Urbanización Gato Montés", tipo: "barrio" },
+  { nombre: "Urbanización Malvasur", tipo: "barrio" },
+  { nombre: "Urbanización Palmeras i Mar", tipo: "barrio" },
+  { nombre: "Urbanización Proamar", tipo: "barrio" },
+  { nombre: "Urbanización Los Monasterios", tipo: "barrio" },
+  { nombre: "Urbanización El Picayo", tipo: "barrio" },
+  { nombre: "Urbanización Vilamar", tipo: "barrio" },
+];
+
+const POLIGONOS_SAGUNTO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Bajo Vías", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camí a la Mar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camí de Llíria", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Regló", tipo: "poligono" },
+  { nombre: "Polígono Industrial Estación de les Valls", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ingruinsa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Montíber", tipo: "poligono" },
+  { nombre: "Polígono Industrial Racó de l'Horta", tipo: "poligono" },
+  { nombre: "Polígono Industrial SEPES", tipo: "poligono" },
+  { nombre: "Polígono Industrial Siderúrgico", tipo: "poligono" },
+  { nombre: "Polígono Industrial Químico", tipo: "poligono" },
+  { nombre: "Parque Empresarial Parc Sagunt I", tipo: "poligono" },
+  { nombre: "Parque Empresarial Parc Sagunt II", tipo: "poligono" },
+  { nombre: "Puerto Marítimo de Sagunto", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9501,6 +9548,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Paterna",
     etiqueta: "Paterna (Valencia)",
     zonas: [...BARRIOS_PATERNA, ...POLIGONOS_PATERNA],
+  },
+  {
+    id: "sagunto",
+    nombre: "Sagunto",
+    etiqueta: "Sagunto (Valencia)",
+    zonas: [...BARRIOS_SAGUNTO, ...POLIGONOS_SAGUNTO],
   },
 ];
 

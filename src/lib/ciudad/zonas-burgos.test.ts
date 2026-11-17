@@ -179,6 +179,7 @@ describe("zonas de Burgos", () => {
       "torrent",
       "gandia",
       "paterna",
+      "sagunto",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2812,6 +2813,40 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresPaterna).size).toBe(nombresPaterna.length);
     expect(nombresPaterna.filter((n) => paterna!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(21);
     expect(nombresPaterna.filter((n) => paterna!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
+    const sagunto = ciudadUrbana("sagunto");
+    expect(sagunto?.etiqueta).toBe("Sagunto (Valencia)");
+    expect(sagunto?.nombre).toBe("Sagunto");
+    expect(zonaDeCiudad(sagunto!, "Almardà")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Antigua Morería")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Centro Histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Los Monasterios")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Urbanización Los Monasterios")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Puerto de Sagunto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Puerto Marítimo de Sagunto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Zona de la Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Urbanización Gato Montés")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Bajo Vías")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Camí a la Mar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Camí de Llíria")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial El Regló")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Montíber")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Racó de l'Horta")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Polígono Industrial Químico")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Parque Empresarial Parc Sagunt I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sagunto!, "Parque Empresarial Parc Sagunt II")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Empresarial Parc Sagunt I", tipo: "poligono" })).toBe(
+      "Polígono · Parque Empresarial Parc Sagunt I",
+    );
+    expect(etiquetaZona({ nombre: "Parque Empresarial Parc Sagunt II", tipo: "poligono" })).toBe(
+      "Polígono · Parque Empresarial Parc Sagunt II",
+    );
+    expect(etiquetaZona({ nombre: "Puerto Marítimo de Sagunto", tipo: "poligono" })).toBe(
+      "Polígono · Puerto Marítimo de Sagunto",
+    );
+    const nombresSagunto = sagunto!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSagunto).size).toBe(nombresSagunto.length);
+    expect(nombresSagunto.filter((n) => sagunto!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresSagunto.filter((n) => sagunto!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2906,8 +2941,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[valenciaIdx + 2]?.label).toBe("Paterna");
     expect(ciudades[valenciaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 3]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 3]?.label).toBe("Sagunto");
     expect(ciudades[valenciaIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 4]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 4]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
