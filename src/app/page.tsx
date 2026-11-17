@@ -93,16 +93,18 @@ export default async function HomePage() {
                   className="w-full"
                 />
               </div>
-              <h1 className="min-w-0 flex-1 text-sm font-bold leading-[1.12] text-white sm:text-base md:pl-3 md:text-lg lg:text-2xl xl:text-3xl">
-                <span className="block">Viaja barato</span>
-                <span className="block">y con bultos y mascotas</span>
-              </h1>
+              <div className="min-w-0 flex-1 md:pl-3">
+                <h1 className="text-sm font-bold leading-[1.12] text-white sm:text-base md:text-lg lg:text-2xl xl:text-3xl">
+                  <span className="block">Viaja barato.</span>
+                  <span className="block">Y con bultos y mascotas.</span>
+                </h1>
+                <p className="mt-2 text-xs text-emerald-50 sm:text-sm lg:text-base">
+                  Ponemos en contacto a conductores fiables con quien necesita
+                  viajar, enviar un bulto o desplazarse con su mascota.
+                  Compartiendo ruta.
+                </p>
+              </div>
             </div>
-            <p className="text-xs text-emerald-50 sm:text-sm lg:text-base">
-              Ponemos en contacto a conductores fiables con quien necesita
-              viajar, enviar un bulto o desplazarse con su mascota. Compartiendo
-              ruta.
-            </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
                 href="/rutas"
