@@ -438,6 +438,9 @@
  * Carretera de Albalat queda como barrio. Polígono Industrial número 2 (Carretera de Albalat) como polígono.
  * Polígono Ciudad del Transporte y Sector PPI-08 Ciudad del Transporte quedan los dos.
  * Parque Empresarial El Pla, Sector PPI-08 Ciudad del Transporte y Sector PPI-11 El Pla se ven con «Polígono ·» delante.
+ * Mislata: debajo de Gandia y delante de Paterna. Los barrios y el polígono de la lista.
+ * Polígono Industrial Nou d'Octubre (Polígono Industrial de Mislata) queda con ese nombre.
+ * Mislata+1 es la fuente. No entra en el desplegable.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8590,6 +8593,23 @@ const POLIGONOS_ALZIRA: ZonaCiudad[] = [
   { nombre: "Sector PPI-11 El Pla", tipo: "poligono" },
 ];
 
+const BARRIOS_MISLATA: ZonaCiudad[] = [
+  { nombre: "El Cerdanet", tipo: "barrio" },
+  { nombre: "El Quint", tipo: "barrio" },
+  { nombre: "La Morería", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Zona de Almassil", tipo: "barrio" },
+  { nombre: "Zona de Gregorio Gea", tipo: "barrio" },
+  { nombre: "Zona de La Canaleta", tipo: "barrio" },
+  { nombre: "Zona de la Avenida del Cid", tipo: "barrio" },
+  { nombre: "Zona de Blasco Ibáñez", tipo: "barrio" },
+];
+
+const POLIGONOS_MISLATA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Nou d'Octubre (Polígono Industrial de Mislata)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9618,6 +9638,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alzira",
     etiqueta: "Alzira (Valencia)",
     zonas: [...BARRIOS_ALZIRA, ...POLIGONOS_ALZIRA],
+  },
+  {
+    id: "mislata",
+    nombre: "Mislata",
+    etiqueta: "Mislata (Valencia)",
+    zonas: [...BARRIOS_MISLATA, ...POLIGONOS_MISLATA],
   },
 ];
 
