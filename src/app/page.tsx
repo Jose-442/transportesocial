@@ -100,9 +100,8 @@ export default async function HomePage() {
               </h1>
             </div>
             <p className="text-xs text-emerald-50 sm:text-sm lg:text-base">
-              Cercano, práctico, útil. Ponemos en contacto a quien necesita
-              viajar, enviar un bulto o ir con su mascota con un conductor
-              particular que ya tenía previsto ese viaje.
+              Ponemos en contacto a quien necesita viajar, enviar un bulto o ir
+              con su mascota con conductores fiables.
             </p>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
@@ -142,9 +141,8 @@ export default async function HomePage() {
                 className="portada-nevera-hero"
               />
               <p className="mt-8 text-left text-lg font-semibold leading-snug text-white md:text-xl">
-                Si tu envío es más pequeño que el espacio publicado, la App le
-                da al conductor la opción de ajustar el precio. ¡Y la diferencia
-                vuelve a tu bolsillo!
+                En esta App, tienes la opción de solicitar una rebaja, ¡Y la
+                diferencia vuelve a tu bolsillo!
               </p>
             </div>
           </div>
