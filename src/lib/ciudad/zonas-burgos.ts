@@ -420,6 +420,11 @@
  * El Molí está en barrios y en polígonos con el mismo nombre. Entra una sola vez, como barrio.
  * Mas del Jutge queda como barrio. Mas del Jutge (Masía del Juez) como polígono. En el desplegable se ve con «Polígono ·» delante.
  * Toll i l'Alberca es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Gandia: debajo de Valencia, delante de Torrent. Los barrios y los polígonos de la lista.
+ * Alqueria de Martorell estaba dos veces. Entra una sola vez.
+ * L'Ermita de Marxuquera, Marxuquera Alta y Marxuquera Baixa quedan las tres.
+ * Monte Pino y Monte Sol quedan las dos.
+ * Parc de l'Alqueria Nova (Parc Sant Pere) queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8396,6 +8401,51 @@ const POLIGONOS_TORRENT: ZonaCiudad[] = [
   { nombre: "Toll i l'Alberca", tipo: "poligono" },
 ];
 
+const BARRIOS_GANDIA: ZonaCiudad[] = [
+  { nombre: "Alqueria de Martorell", tipo: "barrio" },
+  { nombre: "Beniopa", tipo: "barrio" },
+  { nombre: "Benipeixcar", tipo: "barrio" },
+  { nombre: "Bennàcer", tipo: "barrio" },
+  { nombre: "Corea", tipo: "barrio" },
+  { nombre: "El Grau", tipo: "barrio" },
+  { nombre: "El Raval", tipo: "barrio" },
+  { nombre: "Jardinet", tipo: "barrio" },
+  { nombre: "L'Estrella", tipo: "barrio" },
+  { nombre: "L'Ermita de Marxuquera", tipo: "barrio" },
+  { nombre: "Les Foies", tipo: "barrio" },
+  { nombre: "Marxuquera Alta", tipo: "barrio" },
+  { nombre: "Marxuquera Baixa", tipo: "barrio" },
+  { nombre: "Molí de Santa Maria", tipo: "barrio" },
+  { nombre: "Parc de l'Alqueria Nova (Parc Sant Pere)", tipo: "barrio" },
+  { nombre: "Playa de Gandia", tipo: "barrio" },
+  { nombre: "Plaça El·líptica", tipo: "barrio" },
+  { nombre: "Rafalcaïd", tipo: "barrio" },
+  { nombre: "Roís de Corella", tipo: "barrio" },
+  { nombre: "Santa Anna", tipo: "barrio" },
+  { nombre: "Simancas", tipo: "barrio" },
+  { nombre: "Venècia", tipo: "barrio" },
+  { nombre: "Vila-Nova", tipo: "barrio" },
+  { nombre: "Joaquín Ballester", tipo: "barrio" },
+  { nombre: "Grupo Porta (Las 500)", tipo: "barrio" },
+  { nombre: "Barranc Blanc", tipo: "barrio" },
+  { nombre: "Corral del Moliner", tipo: "barrio" },
+  { nombre: "Meravelles-Cova Negra", tipo: "barrio" },
+  { nombre: "Molló de la Creu", tipo: "barrio" },
+  { nombre: "Monte Pino", tipo: "barrio" },
+  { nombre: "Monte Sol", tipo: "barrio" },
+  { nombre: "Racó dels Frares", tipo: "barrio" },
+  { nombre: "Santa Marta", tipo: "barrio" },
+  { nombre: "Xauxa", tipo: "barrio" },
+];
+
+const POLIGONOS_GANDIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Alcodar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Benieto", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Rajolar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sanxo Llop", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de la Vital", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9400,6 +9450,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torrent",
     etiqueta: "Torrent (Valencia)",
     zonas: [...BARRIOS_TORRENT, ...POLIGONOS_TORRENT],
+  },
+  {
+    id: "gandia",
+    nombre: "Gandia",
+    etiqueta: "Gandia (Valencia)",
+    zonas: [...BARRIOS_GANDIA, ...POLIGONOS_GANDIA],
   },
 ];
 

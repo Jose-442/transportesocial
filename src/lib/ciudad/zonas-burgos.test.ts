@@ -177,6 +177,7 @@ describe("zonas de Burgos", () => {
       "sesena",
       "valencia",
       "torrent",
+      "gandia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2749,6 +2750,36 @@ describe("zonas de Burgos", () => {
     expect(nombresTorrent.filter((n) => n === "El Molí").length).toBe(1);
     expect(nombresTorrent.filter((n) => torrent!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(32);
     expect(nombresTorrent.filter((n) => torrent!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const gandia = ciudadUrbana("gandia");
+    expect(gandia?.etiqueta).toBe("Gandia (Valencia)");
+    expect(gandia?.nombre).toBe("Gandia");
+    expect(zonaDeCiudad(gandia!, "Alqueria de Martorell")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "L'Ermita de Marxuquera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Marxuquera Alta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Marxuquera Baixa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Monte Pino")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Monte Sol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Parc de l'Alqueria Nova (Parc Sant Pere)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Plaça El·líptica")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Rafalcaïd")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Roís de Corella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Venècia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Bennàcer")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Molí de Santa Maria")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Joaquín Ballester")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Grupo Porta (Las 500)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Racó dels Frares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Molló de la Creu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(gandia!, "Polígono Industrial Alcodar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gandia!, "Polígono Industrial Benieto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gandia!, "Polígono Industrial El Rajolar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gandia!, "Polígono Industrial Sanxo Llop")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(gandia!, "Polígono Industrial Carretera de la Vital")?.tipo).toBe("poligono");
+    const nombresGandia = gandia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGandia).size).toBe(nombresGandia.length);
+    expect(nombresGandia.filter((n) => n === "Alqueria de Martorell").length).toBe(1);
+    expect(nombresGandia.filter((n) => gandia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
+    expect(nombresGandia.filter((n) => gandia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2839,8 +2870,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "valencia")?.label).toBe("Valencia");
     expect(ciudades.find((c) => c.value === "valencia")?.negrita).toBe(true);
     const valenciaIdx = ciudades.findIndex((c) => c.value === "valencia");
-    expect(ciudades[valenciaIdx + 1]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 1]?.label).toBe("Gandia");
     expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 2]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 2]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
