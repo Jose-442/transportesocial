@@ -173,6 +173,7 @@ describe("zonas de Burgos", () => {
       "teruel",
       "toledo",
       "talaveradelareina",
+      "illescas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2635,6 +2636,36 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresTalavera).size).toBe(nombresTalavera.length);
     expect(nombresTalavera.filter((n) => talavera!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(27);
     expect(nombresTalavera.filter((n) => talavera!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const illescas = ciudadUrbana("illescas");
+    expect(illescas?.etiqueta).toBe("Illescas (Toledo)");
+    expect(illescas?.nombre).toBe("Illescas");
+    expect(zonaDeCiudad(illescas!, "El Señorío de Illescas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "La Alameda del Señorío")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Señorío de Illescas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Los Pradillos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Los Pradillos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Veredilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial La Veredilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Veredilla II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Veredilla III")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial La Veredilla III")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Cárcavas I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial Cárcavas II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Polígono Industrial El Paño")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Viñas Perdidas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "Urbanización El Maulón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(illescas!, "Parque Industrial y Tecnológico de Illescas (ITAC)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(illescas!, "Plataforma Central Iberum")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Industrial y Tecnológico de Illescas (ITAC)", tipo: "poligono" })).toBe(
+      "Polígono · Parque Industrial y Tecnológico de Illescas (ITAC)",
+    );
+    expect(etiquetaZona({ nombre: "Plataforma Central Iberum", tipo: "poligono" })).toBe(
+      "Polígono · Plataforma Central Iberum",
+    );
+    const nombresIllescas = illescas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresIllescas).size).toBe(nombresIllescas.length);
+    expect(nombresIllescas.filter((n) => illescas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresIllescas.filter((n) => illescas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(17);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2723,8 +2754,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "toledo")?.label).toBe("Toledo");
     expect(ciudades.find((c) => c.value === "toledo")?.negrita).toBe(true);
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
-    expect(ciudades[toledoIdx + 1]?.label).toBe("Talavera de la Reina");
+    expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[toledoIdx + 2]?.label).toBe("Talavera de la Reina");
+    expect(ciudades[toledoIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "sevilla")?.negrita).toBe(true);
     const sevillaIdx = ciudades.findIndex((c) => c.value === "sevilla");
     expect(ciudades[sevillaIdx + 1]?.label).toBe("Alcalá de Guadaíra");

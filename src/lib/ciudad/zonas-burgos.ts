@@ -395,6 +395,11 @@
  * Talavera de la Reina: debajo de Toledo. Los barrios y los polígonos de la lista.
  * Patrocinio queda como barrio. Patrocinio San José también, como barrio. Polígono Industrial Patrocinio San José como polígono.
  * Talavera la Nueva queda como barrio. Polígono Industrial Talavera la Nueva II como polígono.
+ * Illescas: debajo de Toledo, delante de Talavera de la Reina. Los barrios y los polígonos de la lista.
+ * El Señorío de Illescas queda como barrio. La Alameda del Señorío también, como barrio. Polígono Industrial Señorío de Illescas como polígono.
+ * Los Pradillos queda como barrio. Polígono Industrial Los Pradillos como polígono.
+ * Veredilla queda como barrio. Polígono Industrial La Veredilla, Polígono Industrial Veredilla II, Polígono Industrial Veredilla III y Polígono Industrial La Veredilla III quedan los cuatro.
+ * Parque Industrial y Tecnológico de Illescas (ITAC) y Plataforma Central Iberum son polígono. En el desplegable se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8171,6 +8176,45 @@ const POLIGONOS_TALAVERA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Talavera", tipo: "poligono" },
 ];
 
+const BARRIOS_ILLESCAS: ZonaCiudad[] = [
+  { nombre: "Balaguera", tipo: "barrio" },
+  { nombre: "Casco Urbano", tipo: "barrio" },
+  { nombre: "El Señorío de Illescas", tipo: "barrio" },
+  { nombre: "La Alameda del Señorío", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "Los Almorales", tipo: "barrio" },
+  { nombre: "Los Negretes", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Los Pradillos", tipo: "barrio" },
+  { nombre: "Los Yeseros", tipo: "barrio" },
+  { nombre: "Moratalaz", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "Urbanización El Maulón", tipo: "barrio" },
+  { nombre: "Urbanización Villarreal", tipo: "barrio" },
+  { nombre: "Veredilla", tipo: "barrio" },
+  { nombre: "Viñas Perdidas", tipo: "barrio" },
+];
+
+const POLIGONOS_ILLESCAS: ZonaCiudad[] = [
+  { nombre: "Parque Industrial y Tecnológico de Illescas (ITAC)", tipo: "poligono" },
+  { nombre: "Plataforma Central Iberum", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ardoz", tipo: "poligono" },
+  { nombre: "Polígono Industrial Boadilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cárcavas I", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cárcavas II", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Paño", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Arboledas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Pradillos", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Gil", tipo: "poligono" },
+  { nombre: "Polígono Industrial Señorío de Illescas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Valdelasilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Veredilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Veredilla II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Veredilla III", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Veredilla III", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Frontera", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9151,6 +9195,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Talavera de la Reina",
     etiqueta: "Talavera de la Reina (Toledo)",
     zonas: [...BARRIOS_TALAVERA, ...POLIGONOS_TALAVERA],
+  },
+  {
+    id: "illescas",
+    nombre: "Illescas",
+    etiqueta: "Illescas (Toledo)",
+    zonas: [...BARRIOS_ILLESCAS, ...POLIGONOS_ILLESCAS],
   },
 ];
 
