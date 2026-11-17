@@ -48,6 +48,7 @@ export function EditarVehiculoForm({
   const { tipo, marca, modelo, matricula, anio, distintivo } = form;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorTipo, setErrorTipo] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function EditarVehiculoForm({
 
     if (!tipo) {
       setLoading(false);
-      setError("Selecciona el tipo de vehículo.");
+      setErrorTipo("Selecciona el tipo de vehículo.");
       return;
     }
 
@@ -102,6 +103,7 @@ export function EditarVehiculoForm({
     <form
       ref={formRef}
       onSubmit={onSubmit}
+      noValidate
       className="space-y-3"
       data-salto-solo-desplegable=""
     >
@@ -109,8 +111,12 @@ export function EditarVehiculoForm({
         <Select
           label="Tipo de vehículo"
           value={tipo}
-          onChange={(e) => setForm((prev) => ({ ...prev, tipo: e.target.value }))}
+          onChange={(e) => {
+            setForm((prev) => ({ ...prev, tipo: e.target.value }));
+            if (errorTipo) setErrorTipo(null);
+          }}
           options={TIPO_VEHICULO_OPTIONS}
+          error={errorTipo ?? undefined}
           required
         />
         <Input

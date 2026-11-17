@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { deltaParaVerEntero, precioListoParaSaltar } from "@/lib/scroll-campo";
+import {
+  deltaParaVerEntero,
+  precioListoParaSaltar,
+  telefonoListoParaSaltar,
+} from "@/lib/scroll-campo";
 
 describe("deltaParaVerEntero", () => {
   const margenArriba = 72;
@@ -14,6 +18,15 @@ describe("deltaParaVerEntero", () => {
         limiteAbajo,
       })
     ).toBe(0);
+  });
+
+  it("salta el teléfono al noveno dígito", () => {
+    expect(telefonoListoParaSaltar("61234567")).toBe(false);
+    expect(telefonoListoParaSaltar("612345678")).toBe(true);
+    expect(telefonoListoParaSaltar("612 345 678")).toBe(true);
+    expect(telefonoListoParaSaltar("+34 612 345 678")).toBe(true);
+    expect(telefonoListoParaSaltar("0034612345678")).toBe(true);
+    expect(telefonoListoParaSaltar("6123456789")).toBe(false);
   });
 
   it("salta el precio solo al segundo dígito", () => {

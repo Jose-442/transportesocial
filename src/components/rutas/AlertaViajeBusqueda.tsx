@@ -61,10 +61,15 @@ export function AlertaViajeBusqueda({
 
   return (
     <div className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-      <p className="text-sm leading-snug text-emerald-950">
+      <p className="text-sm leading-snug text-emerald-950 md:hidden">
         {puesta
           ? "Te avisaremos por correo y en el móvil si un conductor publica este viaje."
           : "No hay ningún viaje para esta búsqueda. Si un conductor lo publica, te avisamos por correo y en el móvil."}
+      </p>
+      <p className="hidden text-sm leading-snug text-emerald-950 md:block">
+        {puesta
+          ? "Te avisaremos por correo si un conductor publica este viaje."
+          : "No hay ningún viaje para esta búsqueda. Si un conductor lo publica, te avisamos por correo."}
       </p>
       {!sesion ? (
         <ButtonLink href={`/login?redirect=${encodeURIComponent(volver)}`} fullWidth>

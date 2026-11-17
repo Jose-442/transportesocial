@@ -206,19 +206,13 @@ export default async function HomePage() {
                 <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
                   🏘️
                 </span>
-                (Dentro de la ciudad)
+                (Soy Conductor)
               </span>
               <span className="text-base font-semibold leading-snug sm:text-lg">
                 PUBLICAR trayecto en mi ciudad
               </span>
             </ButtonLink>
             <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
-              Burgos, Aranda de Duero, Miranda de Ebro, Logroño, Palencia,
-              Santander, Torrelavega, Castro-Urdiales, Vitoria-Gasteiz,
-              Pamplona, Tudela, León, San Andrés del Rabanedo, Ponferrada, Soria,
-              Segovia, Valladolid, Zamora, Zaragoza, Gijón, Lugo, Ourense,
-              Pontevedra, Vigo, Vilagarcía de Arousa, A Coruña, Santiago de
-              Compostela, Ferrol, Narón, Oleiros, Bilbao, Barakaldo, Getxo, Portugalete, Santurtzi, Basauri, San Sebastián, Irun, Errenteria, Barcelona, L'Hospitalet de Llobregat, Badalona, Santa Coloma de Gramenet, Cornellà de Llobregat, Sant Boi de Llobregat, Viladecans, El Prat de Llobregat, Esplugues de Llobregat, Gavà, Montcada i Reixac, Terrassa, Sabadell, Mataró, Sant Cugat del Vallès, Rubí, Vilanova i la Geltrú, Castelldefels, Granollers, Cerdanyola del Vallès, Mollet del Vallès, Barberà del Vallès, Manresa, Sitges, Sant Pere de Ribes, Vic, Igualada, Vilafranca del Penedès, Tarragona, Reus, El Vendrell, Cambrils, Tortosa, Calafell, Salou, Ávila, Salamanca, Madrid, Móstoles, Alcalá de Henares, Leganés, Getafe, Fuenlabrada, Alcorcón, Torrejón de Ardoz, Parla, Alcobendas, Rivas-Vaciamadrid, Las Rozas de Madrid, San Sebastián de los Reyes, Pozuelo de Alarcón, Valdemoro, Coslada, Majadahonda, Collado Villalba, Boadilla del Monte, Aranjuez, Arganda del Rey, Colmenar Viejo, Pinto, Tres Cantos, San Fernando de Henares, Arroyomolinos, Galapagar, Navalcarnero, Sevilla, Dos Hermanas, Alcalá de Guadaíra, Utrera, Mairena del Aljarafe, La Rinconada, Écija, Los Palacios y Villafranca, Coria del Río, Carmona, Málaga, Marbella, Mijas, Vélez-Málaga, Fuengirola, Estepona, Benalmádena, Torremolinos, Rincón de la Victoria, Alhaurín de la Torre, Antequera, Ronda, Huelva, Almería, Roquetas de Mar, El Ejido y Níjar.
               Barrio o polígono. La calle se concreta en el chat.
             </p>
           </div>

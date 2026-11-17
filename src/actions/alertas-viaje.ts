@@ -58,6 +58,7 @@ export async function crearAlertaViaje(formData: FormData) {
   }
 
   revalidatePath("/rutas");
+  revalidatePath("/cuenta");
   return { ok: true as const };
 }
 
@@ -86,5 +87,6 @@ export async function quitarAlertaViaje(formData: FormData) {
   if (error) return { error: supabaseErrorMessage(error) };
 
   revalidatePath("/rutas");
+  revalidatePath("/cuenta");
   return { ok: true as const };
 }

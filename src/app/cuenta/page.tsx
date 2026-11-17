@@ -8,6 +8,7 @@ import { isAdminUser } from "@/lib/admin";
 import { getOrCreateProfile } from "@/lib/profile";
 import { ProfilePhotoEditor } from "@/components/profile/ProfilePhotoEditor";
 import { AceptacionAutomaticaToggle } from "@/components/reservas/AceptacionAutomaticaToggle";
+import { CuentaAvisosPedidos } from "@/components/cuenta/CuentaAvisosPedidos";
 import { CuentaMisViajes } from "@/components/cuenta/CuentaMisViajes";
 import { CuentaPagos } from "@/components/cuenta/CuentaPagos";
 import { CuentaPrivacidadSection } from "@/components/cuenta/CuentaPrivacidadSection";
@@ -193,6 +194,8 @@ export default async function CuentaPage({
           }}
         />
       </Card>
+
+      <CuentaAvisosPedidos userId={user.id} />
 
       <CuentaMisViajes userId={user.id} />
 

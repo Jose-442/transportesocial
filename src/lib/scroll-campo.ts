@@ -144,3 +144,27 @@ export function scrollAlSiguienteVacio(
 export function precioListoParaSaltar(valor: string): boolean {
   return /^\d{2}$/.test(valor.trim());
 }
+
+/** Salta al escribir las 9 cifras del teléfono. Con +34 o 0034 delante, también. */
+export function telefonoListoParaSaltar(valor: string): boolean {
+  let n = valor.replace(/[^\d+]/g, "");
+  if (n.startsWith("0034")) n = n.slice(4);
+  else if (n.startsWith("+34")) n = n.slice(3);
+  const digitos = n.replace(/\D/g, "");
+  return digitos.length === 9;
+}
+
+/** Pasa el cursor al campo siguiente, aunque no esté marcado como vacío. */
+export function saltarAlSiguienteCampo(campo: HTMLElement) {
+  const raiz = campo.closest("form") ?? campo.parentElement;
+  if (!raiz) return;
+  const campos = [...raiz.querySelectorAll<HTMLElement>("[data-campo]")];
+  const indice = campos.indexOf(campo);
+  if (indice < 0) return;
+  for (const siguiente of campos.slice(indice + 1)) {
+    if (siguiente.getClientRects().length === 0) continue;
+    scrollAlCampo(siguiente);
+    enfocarControl(siguiente);
+    return;
+  }
+}

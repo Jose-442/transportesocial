@@ -3,8 +3,10 @@
 import { useEffect } from "react";
 import {
   precioListoParaSaltar,
+  saltarAlSiguienteCampo,
   scrollAlCampo,
   scrollAlSiguienteVacio,
+  telefonoListoParaSaltar,
 } from "@/lib/scroll-campo";
 
 function escribiendo(campo: HTMLElement): boolean {
@@ -155,6 +157,11 @@ export function ScrollCampoVacio() {
       window.clearTimeout(esperaTecleo);
       esperaTecleo = window.setTimeout(() => {
         const valor = el.value.trim();
+        if (el.type === "tel") {
+          if (!telefonoListoParaSaltar(valor)) return;
+          saltarAlSiguienteCampo(campo);
+          return;
+        }
         if (el.type === "number") {
           // Dos euros enteros (40) saltan. Una cifra se queda.
           // Tres cifras (100) no saltan, para poder añadir el tercer número.
@@ -183,6 +190,7 @@ export function ScrollCampoVacio() {
     function alSalir(event: FocusEvent) {
       const el = event.target;
       if (!(el instanceof HTMLElement)) return;
+      if (el instanceof HTMLInputElement && el.type === "tel") return;
       const campo = el.closest("[data-campo]");
       if (!(campo instanceof HTMLElement)) return;
       window.setTimeout(() => {

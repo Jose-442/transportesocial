@@ -150,7 +150,6 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
   }
 
   const hayFiltros = !!(origen || destino || fecha);
-  const palabra = tipo === "viajes" ? "viajes" : "portes";
 
   return (
     <form
@@ -195,9 +194,9 @@ export function ListadoFiltros({ tipo = "viajes" }: Props) {
       <p className="text-base leading-snug text-zinc-600">
         La búsqueda se hace sola.
         <br />
-        Si SOLO pones el mes, ves los de ese mes.
+        Si SOLO pones el mes, ves los viajes de ese mes.
         <br />
-        Si NO pones fecha, ves TODOS los {palabra} que todavía no han salido.
+        Si NO pones fecha, ves TODOS
       </p>
       <div className="flex gap-2">
         <Button type="submit" fullWidth>
