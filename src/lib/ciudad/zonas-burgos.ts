@@ -146,6 +146,7 @@
  * Tortosa: los barrios y los polígonos de la lista.
  * Calafell: los barrios y los polígonos de la lista.
  * Salou: los barrios de la lista.
+ * Lleida: los barrios y los polígonos de la lista.
  * Ávila: los barrios y los polígonos de la lista.
  * Salamanca: los barrios y los polígonos de la lista.
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
@@ -261,6 +262,18 @@
  * Balerma y La Redonda quedan como barrio.
  * Polígono Industrial Balerma y Polígono Industrial La Redonda como polígono.
  * Níjar: los barrios y los polígonos de la lista.
+ * Lucena: los barrios y los polígonos de la lista.
+ * La Torca queda como barrio. Polígono Industrial La Torca como polígono.
+ * Los Polvillares queda como barrio. Polígono Industrial Los Polvillares como polígono.
+ * Motril: barrios del plan general y núcleos del Ayuntamiento.
+ * Las Angustias y Las Monjas quedan juntas: Las Angustias-Las Monjas.
+ * El Pilar-Manuel Peña. San Antonio-Calle Ancha. Puerto-Varadero. Las Explanadas.
+ * Zona Comercial de La Puchilla queda como barrio.
+ * El Vadillo queda como barrio. Polígono Industrial El Vadillo como polígono.
+ * Jaén: los barrios y los polígonos de la lista.
+ * Polígono del Valle queda como barrio. Polígono Industrial del Valle como polígono.
+ * Granada: los barrios y los polígonos de la lista.
+ * Cartuja queda como barrio. Polígono Cartuja como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -3263,6 +3276,51 @@ const BARRIOS_SALOU: ZonaCiudad[] = [
 ];
 
 const POLIGONOS_SALOU: ZonaCiudad[] = [];
+
+const BARRIOS_LLEIDA: ZonaCiudad[] = [
+  { nombre: "Balàfia", tipo: "barrio" },
+  { nombre: "Barri de Noguerola", tipo: "barrio" },
+  { nombre: "Barri del Clot", tipo: "barrio" },
+  { nombre: "Barri dels Instituts", tipo: "barrio" },
+  { nombre: "Barri dels Templers", tipo: "barrio" },
+  { nombre: "Barri del Secà de Sant Pere", tipo: "barrio" },
+  { nombre: "Blocs Joan Carles", tipo: "barrio" },
+  { nombre: "Bordeta", tipo: "barrio" },
+  { nombre: "Butsènit", tipo: "barrio" },
+  { nombre: "Camp d'Esports", tipo: "barrio" },
+  { nombre: "Cappont", tipo: "barrio" },
+  { nombre: "Centre Històric", tipo: "barrio" },
+  { nombre: "Ciutat Jardí", tipo: "barrio" },
+  { nombre: "Horta de Lleida", tipo: "barrio" },
+  { nombre: "Joc de la Bola", tipo: "barrio" },
+  { nombre: "La Mariola", tipo: "barrio" },
+  { nombre: "La Sardera Alta", tipo: "barrio" },
+  { nombre: "La Sardera Baixa", tipo: "barrio" },
+  { nombre: "Llívia", tipo: "barrio" },
+  { nombre: "Mangraners", tipo: "barrio" },
+  { nombre: "Pardinyes", tipo: "barrio" },
+  { nombre: "Pius XII - Germanor", tipo: "barrio" },
+  { nombre: "Raimat", tipo: "barrio" },
+  { nombre: "Rambla de Ferran - Estació", tipo: "barrio" },
+  { nombre: "Sucs", tipo: "barrio" },
+  { nombre: "Suquets", tipo: "barrio" },
+  { nombre: "Turó de Gardeny", tipo: "barrio" },
+  { nombre: "Universitat", tipo: "barrio" },
+  { nombre: "Zona Alta - Ricard Viñes", tipo: "barrio" },
+  { nombre: "Zona de Fleming", tipo: "barrio" },
+];
+
+const POLIGONOS_LLEIDA: ZonaCiudad[] = [
+  { nombre: "Activa Park", tipo: "poligono" },
+  { nombre: "CIM Lleida", tipo: "poligono" },
+  { nombre: "Parc Agrobiotech Lleida", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camí dels Frares", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Segre", tipo: "poligono" },
+  { nombre: "Polígono Industrial Torre Solé", tipo: "poligono" },
+  { nombre: "Polígono Industrial Vilanoveta", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Gardeny", tipo: "poligono" },
+  { nombre: "Zona Industrial de la N-240", tipo: "poligono" },
+];
 
 const BARRIOS_AVILA: ZonaCiudad[] = [
   { nombre: "Academia", tipo: "barrio" },
@@ -6598,6 +6656,200 @@ const POLIGONOS_NIJAR: ZonaCiudad[] = [
   { nombre: "Parque Industrial Balsaseca", tipo: "poligono" },
 ];
 
+const BARRIOS_LUCENA: ZonaCiudad[] = [
+  { nombre: "Barrio de Araceli", tipo: "barrio" },
+  { nombre: "Barrio de San Jorge", tipo: "barrio" },
+  { nombre: "Barrio García del Barrio", tipo: "barrio" },
+  { nombre: "Campo de Aras", tipo: "barrio" },
+  { nombre: "Cristo Marroquí", tipo: "barrio" },
+  { nombre: "El Valle", tipo: "barrio" },
+  { nombre: "Era del Santo", tipo: "barrio" },
+  { nombre: "Fuensanta", tipo: "barrio" },
+  { nombre: "Hermanos Álvarez Quintero", tipo: "barrio" },
+  { nombre: "Jauja", tipo: "barrio" },
+  { nombre: "La Barrera", tipo: "barrio" },
+  { nombre: "La Campuzana", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "La Hoja", tipo: "barrio" },
+  { nombre: "La Torca", tipo: "barrio" },
+  { nombre: "Las Delicias", tipo: "barrio" },
+  { nombre: "Las Navas del Selpillar", tipo: "barrio" },
+  { nombre: "Las Poleares", tipo: "barrio" },
+  { nombre: "Las Vegas", tipo: "barrio" },
+  { nombre: "Los Olivares", tipo: "barrio" },
+  { nombre: "Los Polvillares", tipo: "barrio" },
+  { nombre: "Nela de las Nieves", tipo: "barrio" },
+  { nombre: "Quebracarreteras", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Santa Lucía", tipo: "barrio" },
+  { nombre: "Tinajerías", tipo: "barrio" },
+  { nombre: "El Zarpazo", tipo: "barrio" },
+];
+
+const POLIGONOS_LUCENA: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Príncipe Felipe", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Rute", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Puente Genil", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cerro Gordo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Torca", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Palomas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Peñuelas", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Viñuela", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Polvillares", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Santos", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Yesares", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pilar de la Dehesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puente Vadillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Río Lucena", tipo: "poligono" },
+  { nombre: "Polígono Industrial Vereda de Castro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Camino de la Torca", tipo: "poligono" },
+];
+
+const BARRIOS_MOTRIL: ZonaCiudad[] = [
+  { nombre: "Aguas del Hospital-La Matraquilla", tipo: "barrio" },
+  { nombre: "Calle Cuevas-La Fabriquilla", tipo: "barrio" },
+  { nombre: "Casas Nuevas-Divina Pastora", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Centro Comercial", tipo: "barrio" },
+  { nombre: "Cerrillo Jaime", tipo: "barrio" },
+  { nombre: "El Pilar-Manuel Peña", tipo: "barrio" },
+  { nombre: "El Vadillo", tipo: "barrio" },
+  { nombre: "Hospital-Aviación", tipo: "barrio" },
+  { nombre: "Huerto del Capitán-Piedrabuena", tipo: "barrio" },
+  { nombre: "La Garnatilla", tipo: "barrio" },
+  { nombre: "Las Angustias-Las Monjas", tipo: "barrio" },
+  { nombre: "Las Explanadas", tipo: "barrio" },
+  { nombre: "Las Ventillas", tipo: "barrio" },
+  { nombre: "Los Álamos-San Fernando", tipo: "barrio" },
+  { nombre: "Los Tablones", tipo: "barrio" },
+  { nombre: "Playa de Poniente", tipo: "barrio" },
+  { nombre: "Playa Granada", tipo: "barrio" },
+  { nombre: "Puntalón", tipo: "barrio" },
+  { nombre: "Puerto-Varadero", tipo: "barrio" },
+  { nombre: "San Antonio-Calle Ancha", tipo: "barrio" },
+  { nombre: "Santa Adela", tipo: "barrio" },
+  { nombre: "Zona Comercial de La Puchilla", tipo: "barrio" },
+];
+
+const POLIGONOS_MOTRIL: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Alborán", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Vadillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Algaidas", tipo: "poligono" },
+  { nombre: "Polígono Industrial del Puerto de Motril", tipo: "poligono" },
+  { nombre: "Zona de Actividades Logísticas del Puerto de Motril (ZAL)", tipo: "poligono" },
+];
+
+const BARRIOS_JAEN: ZonaCiudad[] = [
+  { nombre: "El Almendral", tipo: "barrio" },
+  { nombre: "El Arrabalejo", tipo: "barrio" },
+  { nombre: "El Tomillo", tipo: "barrio" },
+  { nombre: "Egido de Belén", tipo: "barrio" },
+  { nombre: "Expansión Norte", tipo: "barrio" },
+  { nombre: "Fuente de la Peña", tipo: "barrio" },
+  { nombre: "Gran Bulevar", tipo: "barrio" },
+  { nombre: "Jabalcuz", tipo: "barrio" },
+  { nombre: "Judería", tipo: "barrio" },
+  { nombre: "La Alcantarilla", tipo: "barrio" },
+  { nombre: "La Glorieta", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "La Magdalena", tipo: "barrio" },
+  { nombre: "La Merced", tipo: "barrio" },
+  { nombre: "La Victoria", tipo: "barrio" },
+  { nombre: "Las Canteras", tipo: "barrio" },
+  { nombre: "Las Fuentezuelas", tipo: "barrio" },
+  { nombre: "Las Lagunillas", tipo: "barrio" },
+  { nombre: "Loma del Royo", tipo: "barrio" },
+  { nombre: "Los Robles", tipo: "barrio" },
+  { nombre: "Marroquíes Bajos", tipo: "barrio" },
+  { nombre: "Peñamefécit", tipo: "barrio" },
+  { nombre: "Protegidas-La Concordia", tipo: "barrio" },
+  { nombre: "Puente de la Sierra", tipo: "barrio" },
+  { nombre: "Puente Jontoya", tipo: "barrio" },
+  { nombre: "Puente Nuevo", tipo: "barrio" },
+  { nombre: "Puente Tablas", tipo: "barrio" },
+  { nombre: "San Bartolomé", tipo: "barrio" },
+  { nombre: "San Felipe", tipo: "barrio" },
+  { nombre: "San Ildefonso-La Alameda", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "San Sebastián", tipo: "barrio" },
+  { nombre: "San Vicente de Paúl", tipo: "barrio" },
+  { nombre: "Santa Isabel", tipo: "barrio" },
+  { nombre: "Santa María del Valle", tipo: "barrio" },
+  { nombre: "Sagrada Familia", tipo: "barrio" },
+  { nombre: "Sagrario", tipo: "barrio" },
+  { nombre: "Tiro Nacional", tipo: "barrio" },
+  { nombre: "Valdeastillas", tipo: "barrio" },
+  { nombre: "Valparaíso", tipo: "barrio" },
+  { nombre: "Vaciacostales", tipo: "barrio" },
+  { nombre: "Cerro Molina", tipo: "barrio" },
+  { nombre: "Las Infantas", tipo: "barrio" },
+  { nombre: "La Imora", tipo: "barrio" },
+  { nombre: "El Recinto", tipo: "barrio" },
+  { nombre: "San Félix", tipo: "barrio" },
+  { nombre: "Polígono del Valle", tipo: "barrio" },
+  { nombre: "Residencial Azahar", tipo: "barrio" },
+  { nombre: "Nuevo Mundo", tipo: "barrio" },
+];
+
+const POLIGONOS_JAEN: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Nuevo Jaén", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cerro de la Cantera", tipo: "poligono" },
+  { nombre: "Polígono Industrial Jaén", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Dehesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Llanos del Valle", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Olivares", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Rosales", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pilar de la Dehesa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Quiebracántaros", tipo: "poligono" },
+  { nombre: "Polígono Industrial del Valle", tipo: "poligono" },
+];
+
+const BARRIOS_GRANADA: ZonaCiudad[] = [
+  { nombre: "Albaicín", tipo: "barrio" },
+  { nombre: "Angustias – Chana – Encina", tipo: "barrio" },
+  { nombre: "Bobadilla", tipo: "barrio" },
+  { nombre: "Bola de Oro", tipo: "barrio" },
+  { nombre: "Camino de los Neveros", tipo: "barrio" },
+  { nombre: "Campo Verde", tipo: "barrio" },
+  { nombre: "Carretera de la Sierra", tipo: "barrio" },
+  { nombre: "Cartuja", tipo: "barrio" },
+  { nombre: "Casería de Montijo", tipo: "barrio" },
+  { nombre: "Cerrillo de Maracena", tipo: "barrio" },
+  { nombre: "Centro – Sagrario", tipo: "barrio" },
+  { nombre: "Cervantes", tipo: "barrio" },
+  { nombre: "El Fargue", tipo: "barrio" },
+  { nombre: "Fígares", tipo: "barrio" },
+  { nombre: "Haza Grande", tipo: "barrio" },
+  { nombre: "Joaquina Eguaras", tipo: "barrio" },
+  { nombre: "La Cruz", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Lancha del Genil", tipo: "barrio" },
+  { nombre: "Los Pajaritos", tipo: "barrio" },
+  { nombre: "Parque Nueva Granada", tipo: "barrio" },
+  { nombre: "Plaza de Toros – Doctores – San Lázaro", tipo: "barrio" },
+  { nombre: "Realejo – San Matías", tipo: "barrio" },
+  { nombre: "Rey Badis", tipo: "barrio" },
+  { nombre: "Rosaleda", tipo: "barrio" },
+  { nombre: "Ronda", tipo: "barrio" },
+  { nombre: "Sacromonte", tipo: "barrio" },
+  { nombre: "San Francisco Javier", tipo: "barrio" },
+  { nombre: "San Ildefonso", tipo: "barrio" },
+  { nombre: "Zaidín – Vergeles", tipo: "barrio" },
+];
+
+const POLIGONOS_GRANADA: ZonaCiudad[] = [
+  { nombre: "Almanjáyar", tipo: "poligono" },
+  { nombre: "Polígono Cartuja", tipo: "poligono" },
+  { nombre: "El Florío", tipo: "poligono" },
+  { nombre: "Fatinafar", tipo: "poligono" },
+  { nombre: "La Purísima", tipo: "poligono" },
+  { nombre: "Las Algaidas", tipo: "poligono" },
+  { nombre: "Mercagranada", tipo: "poligono" },
+  { nombre: "Paraíso Industrial", tipo: "poligono" },
+  { nombre: "Sierra Elvira", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7064,6 +7316,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     zonas: [...BARRIOS_SALOU, ...POLIGONOS_SALOU],
   },
   {
+    id: "lleida",
+    nombre: "Lleida",
+    etiqueta: "Lleida (Lleida)",
+    zonas: [...BARRIOS_LLEIDA, ...POLIGONOS_LLEIDA],
+  },
+  {
     id: "avila",
     nombre: "Ávila",
     etiqueta: "Ávila (Ávila)",
@@ -7404,6 +7662,30 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Níjar",
     etiqueta: "Níjar (Almería)",
     zonas: [...BARRIOS_NIJAR, ...POLIGONOS_NIJAR],
+  },
+  {
+    id: "lucena",
+    nombre: "Lucena",
+    etiqueta: "Lucena (Córdoba)",
+    zonas: [...BARRIOS_LUCENA, ...POLIGONOS_LUCENA],
+  },
+  {
+    id: "motril",
+    nombre: "Motril",
+    etiqueta: "Motril (Granada)",
+    zonas: [...BARRIOS_MOTRIL, ...POLIGONOS_MOTRIL],
+  },
+  {
+    id: "jaen",
+    nombre: "Jaén",
+    etiqueta: "Jaén (Jaén)",
+    zonas: [...BARRIOS_JAEN, ...POLIGONOS_JAEN],
+  },
+  {
+    id: "granada",
+    nombre: "Granada",
+    etiqueta: "Granada (Granada)",
+    zonas: [...BARRIOS_GRANADA, ...POLIGONOS_GRANADA],
   },
 ];
 
