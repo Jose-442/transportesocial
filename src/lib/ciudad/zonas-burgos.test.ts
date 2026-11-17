@@ -178,6 +178,7 @@ describe("zonas de Burgos", () => {
       "valencia",
       "torrent",
       "gandia",
+      "paterna",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2780,6 +2781,37 @@ describe("zonas de Burgos", () => {
     expect(nombresGandia.filter((n) => n === "Alqueria de Martorell").length).toBe(1);
     expect(nombresGandia.filter((n) => gandia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
     expect(nombresGandia.filter((n) => gandia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const paterna = ciudadUrbana("paterna");
+    expect(paterna?.etiqueta).toBe("Paterna (Valencia)");
+    expect(paterna?.nombre).toBe("Paterna");
+    expect(zonaDeCiudad(paterna!, "Alborgí")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "El Plantío")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "La Cañada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "Loma Llarga-Valterna")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "Lloma Llarga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "Mas del Rosari")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paterna!, "Parque Científico de la Universitat de València")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Parque Empresarial Táctica")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Parque Tecnológico de Paterna")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial Fuente del Jarro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial L'Andana")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial Molí del Testar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial de Ademuz")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial Municipal")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paterna!, "Polígono Industrial Boluda")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parque Científico de la Universitat de València", tipo: "poligono" })).toBe(
+      "Polígono · Parque Científico de la Universitat de València",
+    );
+    expect(etiquetaZona({ nombre: "Parque Empresarial Táctica", tipo: "poligono" })).toBe(
+      "Polígono · Parque Empresarial Táctica",
+    );
+    expect(etiquetaZona({ nombre: "Parque Tecnológico de Paterna", tipo: "poligono" })).toBe(
+      "Polígono · Parque Tecnológico de Paterna",
+    );
+    const nombresPaterna = paterna!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPaterna).size).toBe(nombresPaterna.length);
+    expect(nombresPaterna.filter((n) => paterna!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(21);
+    expect(nombresPaterna.filter((n) => paterna!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2872,8 +2904,10 @@ describe("zonas de Burgos", () => {
     const valenciaIdx = ciudades.findIndex((c) => c.value === "valencia");
     expect(ciudades[valenciaIdx + 1]?.label).toBe("Gandia");
     expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 2]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 2]?.label).toBe("Paterna");
     expect(ciudades[valenciaIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 3]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 3]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();

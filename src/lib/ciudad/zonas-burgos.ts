@@ -425,6 +425,9 @@
  * L'Ermita de Marxuquera, Marxuquera Alta y Marxuquera Baixa quedan las tres.
  * Monte Pino y Monte Sol quedan las dos.
  * Parc de l'Alqueria Nova (Parc Sant Pere) queda con ese nombre.
+ * Paterna: debajo de Gandia y delante de Torrent. Los barrios y los polígonos de la lista.
+ * Loma Llarga-Valterna y Lloma Llarga quedan las dos.
+ * Parque Científico de la Universitat de València, Parque Empresarial Táctica y Parque Tecnológico de Paterna son polígono. En el desplegable se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8446,6 +8449,42 @@ const POLIGONOS_GANDIA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Carretera de la Vital", tipo: "poligono" },
 ];
 
+const BARRIOS_PATERNA: ZonaCiudad[] = [
+  { nombre: "Alborgí", tipo: "barrio" },
+  { nombre: "Bovalar", tipo: "barrio" },
+  { nombre: "Campamento", tipo: "barrio" },
+  { nombre: "Casas Verdes", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Cruz de Gracia", tipo: "barrio" },
+  { nombre: "El Plantío", tipo: "barrio" },
+  { nombre: "La Cañada", tipo: "barrio" },
+  { nombre: "La Coma", tipo: "barrio" },
+  { nombre: "Loma Llarga-Valterna", tipo: "barrio" },
+  { nombre: "Nueva Paterna", tipo: "barrio" },
+  { nombre: "Santa Gema", tipo: "barrio" },
+  { nombre: "Santa Rita", tipo: "barrio" },
+  { nombre: "Terramelar", tipo: "barrio" },
+  { nombre: "Cumbres de San Antonio", tipo: "barrio" },
+  { nombre: "La Vallesa", tipo: "barrio" },
+  { nombre: "Entrecruces", tipo: "barrio" },
+  { nombre: "Lloma Llarga", tipo: "barrio" },
+  { nombre: "Mas del Rosari", tipo: "barrio" },
+  { nombre: "Parc Central", tipo: "barrio" },
+  { nombre: "Sotolivar", tipo: "barrio" },
+];
+
+const POLIGONOS_PATERNA: ZonaCiudad[] = [
+  { nombre: "Parque Científico de la Universitat de València", tipo: "poligono" },
+  { nombre: "Parque Empresarial Táctica", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Paterna", tipo: "poligono" },
+  { nombre: "Polígono Industrial Fuente del Jarro", tipo: "poligono" },
+  { nombre: "Polígono Industrial L'Andana", tipo: "poligono" },
+  { nombre: "Polígono Industrial Molí del Testar", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Ademuz", tipo: "poligono" },
+  { nombre: "Polígono Industrial Municipal", tipo: "poligono" },
+  { nombre: "Polígono Industrial Boluda", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9456,6 +9495,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Gandia",
     etiqueta: "Gandia (Valencia)",
     zonas: [...BARRIOS_GANDIA, ...POLIGONOS_GANDIA],
+  },
+  {
+    id: "paterna",
+    nombre: "Paterna",
+    etiqueta: "Paterna (Valencia)",
+    zonas: [...BARRIOS_PATERNA, ...POLIGONOS_PATERNA],
   },
 ];
 
