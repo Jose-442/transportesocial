@@ -82,28 +82,28 @@ export default async function HomePage() {
         {/* Hero: en PC ocupa la mitad superior de la pantalla */}
         <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 lg:min-h-0 lg:flex-[3] lg:rounded-none">
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:px-10 lg:pt-4 lg:pb-6 xl:px-16 xl:pt-5 xl:pb-8">
-            <div className="mb-3 sm:mb-4 lg:mb-2">
-              <div className="flex min-w-0 items-start gap-3">
-                <div className="w-[40%] max-w-[9rem] shrink-0 overflow-hidden sm:max-w-[10rem] md:w-[46%] md:max-w-[16rem] lg:max-w-[18rem] xl:max-w-[20rem]">
-                  <BrandLogo
-                    size="hero"
-                    showText={false}
-                    onDark
-                    plain
-                    linked={false}
-                    className="w-full"
-                  />
-                </div>
-                <h1 className="shrink-0 text-sm font-bold leading-[1.12] text-white sm:text-base md:text-lg lg:text-2xl xl:text-3xl">
+            <div className="mb-3 flex min-w-0 items-start gap-3 sm:mb-4 lg:mb-2">
+              <div className="-mt-[4mm] -mb-[4mm] -ml-[4mm] -mr-[4mm] w-[calc(40%+8mm)] max-w-[calc(9rem+8mm)] shrink-0 -translate-x-[4mm] overflow-hidden sm:max-w-[calc(10rem+8mm)] md:w-[calc(46%+8mm)] md:max-w-[calc(16rem+8mm)] lg:max-w-[calc(18rem+8mm)] xl:max-w-[calc(20rem+8mm)]">
+                <BrandLogo
+                  size="hero"
+                  showText={false}
+                  onDark
+                  plain
+                  linked={false}
+                  className="w-full"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm font-bold leading-[1.12] text-white sm:text-base md:text-lg lg:text-2xl xl:text-3xl">
                   <span className="block whitespace-nowrap">Viaja barato.</span>
                   <span className="block whitespace-nowrap">Y con bultos y mascotas.</span>
                 </h1>
+                <p className="mt-1 text-xs text-emerald-50 sm:text-sm lg:text-base">
+                  Ponemos en contacto a conductores fiables con quien necesita
+                  viajar, enviar un bulto o desplazarse con su mascota.
+                  Compartiendo ruta.
+                </p>
               </div>
-              <p className="mt-2 text-xs text-emerald-50 sm:text-sm lg:text-base">
-                Ponemos en contacto a conductores fiables con quien necesita
-                viajar, enviar un bulto o desplazarse con su mascota.
-                Compartiendo ruta.
-              </p>
             </div>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
