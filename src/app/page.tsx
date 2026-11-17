@@ -99,9 +99,15 @@ export default async function HomePage() {
                   <span className="block whitespace-nowrap">Y con bultos y mascotas.</span>
                 </h1>
                 <p className="mt-1 text-xs text-emerald-50 sm:text-sm lg:text-base">
-                  Ponemos en contacto a conductores fiables con quien necesita
-                  viajar, enviar un bulto o desplazarse con su mascota.{" "}
-                  <span className="whitespace-nowrap">Compartiendo ruta.</span>
+                  <span className="lg:block">
+                    Ponemos en contacto a conductores fiables{" "}
+                  </span>
+                  <span className="lg:block">
+                    con quien necesita viajar, enviar un bulto o{" "}
+                  </span>
+                  <span className="lg:block lg:whitespace-nowrap">
+                    desplazarse con su mascota. Compartiendo ruta.
+                  </span>
                 </p>
               </div>
             </div>
