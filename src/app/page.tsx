@@ -100,8 +100,8 @@ export default async function HomePage() {
                 </h1>
                 <p className="mt-1 text-xs text-emerald-50 sm:text-sm lg:text-base">
                   Ponemos en contacto a conductores fiables con quien necesita
-                  viajar, enviar un bulto o desplazarse con su mascota.
-                  Compartiendo ruta.
+                  viajar, enviar un bulto o desplazarse con su mascota.{" "}
+                  <span className="whitespace-nowrap">Compartiendo ruta.</span>
                 </p>
               </div>
             </div>
