@@ -152,6 +152,7 @@ describe("zonas de Burgos", () => {
       "andujar",
       "ubeda",
       "cordoba",
+      "alicante",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2139,6 +2140,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCordoba).size).toBe(nombresCordoba.length);
     expect(nombresCordoba.filter((n) => cordoba!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(65);
     expect(nombresCordoba.filter((n) => cordoba!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const alicante = ciudadUrbana("alicante");
+    expect(alicante?.etiqueta).toBe("Alicante (Alicante)");
+    expect(alicante?.nombre).toBe("Alicante");
+    expect(zonaDeCiudad(alicante!, "Albufereta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Monnegre-Cabeçó d'Or")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Babel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Polígono Babel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Rabasa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Pla de la Vallonga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Polígono San Blas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "San Nicolás de Bari")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Lo Morant-San Nicolás de Bari")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Vistahermosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alicante!, "Área Industrial Aguamarga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Zona Industrial de Agua Amarga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Polígono Industrial de Babel")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Polígono Industrial Rabasa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Polígono Industrial Pla de la Vallonga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Polígono Industrial de San Blas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alicante!, "Agua Amarga")).toBeNull();
+    const nombresAlicante = alicante!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlicante).size).toBe(nombresAlicante.length);
+    expect(nombresAlicante.filter((n) => alicante!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(62);
+    expect(nombresAlicante.filter((n) => alicante!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2249,6 +2274,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx + 1]?.label).toBe("Lucena");
     expect(ciudades[cordobaIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
+    expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");

@@ -283,6 +283,13 @@
  * Solana de Torralba queda como barrio. Polígono Industrial Las Naves (Solana de Torralba) como polígono.
  * Córdoba: los barrios y los polígonos de la lista.
  * Polígono de Poniente queda como barrio. Polígono Industrial de Poniente como polígono.
+ * Alicante: los barrios y los polígonos de la lista.
+ * Babel queda como barrio. Polígono Babel queda como barrio. Polígono Industrial de Babel como polígono.
+ * Rabasa queda como barrio. Polígono Industrial Rabasa como polígono.
+ * Pla de la Vallonga queda como barrio. Polígono Industrial Pla de la Vallonga como polígono.
+ * Polígono San Blas queda como barrio. Polígono Industrial de San Blas como polígono.
+ * San Nicolás de Bari queda como barrio. Lo Morant-San Nicolás de Bari también, con ese nombre.
+ * Área Industrial Aguamarga y Zona Industrial de Agua Amarga quedan las dos, cada una con su nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7083,6 +7090,85 @@ const POLIGONOS_CORDOBA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Poniente", tipo: "poligono" },
 ];
 
+const BARRIOS_ALICANTE: ZonaCiudad[] = [
+  { nombre: "Albufereta", tipo: "barrio" },
+  { nombre: "Alipark", tipo: "barrio" },
+  { nombre: "Altozano-Conde Lumiares", tipo: "barrio" },
+  { nombre: "Bacarot", tipo: "barrio" },
+  { nombre: "Babel", tipo: "barrio" },
+  { nombre: "Benalúa", tipo: "barrio" },
+  { nombre: "Benisaudet", tipo: "barrio" },
+  { nombre: "Cabo de las Huertas", tipo: "barrio" },
+  { nombre: "Campoamor", tipo: "barrio" },
+  { nombre: "Cañada del Fenollar", tipo: "barrio" },
+  { nombre: "Carolinas Altas", tipo: "barrio" },
+  { nombre: "Carolinas Bajas", tipo: "barrio" },
+  { nombre: "Casco Antiguo-Santa Cruz", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Ciudad de Asís", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Colonia Requena", tipo: "barrio" },
+  { nombre: "Cuatrocientas Viviendas", tipo: "barrio" },
+  { nombre: "Divina Pastora", tipo: "barrio" },
+  { nombre: "El Boter-Valle del Sol", tipo: "barrio" },
+  { nombre: "El Palmeral", tipo: "barrio" },
+  { nombre: "El Portell", tipo: "barrio" },
+  { nombre: "Ensanche Diputación", tipo: "barrio" },
+  { nombre: "Florida Alta", tipo: "barrio" },
+  { nombre: "Florida Baja", tipo: "barrio" },
+  { nombre: "Fontcalent", tipo: "barrio" },
+  { nombre: "Garbinet", tipo: "barrio" },
+  { nombre: "Juan XXIII", tipo: "barrio" },
+  { nombre: "La Alcoraya", tipo: "barrio" },
+  { nombre: "La Goteta", tipo: "barrio" },
+  { nombre: "Lo Morant-San Nicolás de Bari", tipo: "barrio" },
+  { nombre: "Los Ángeles", tipo: "barrio" },
+  { nombre: "Mercado", tipo: "barrio" },
+  { nombre: "Monnegre-Cabeçó d'Or", tipo: "barrio" },
+  { nombre: "Moralet", tipo: "barrio" },
+  { nombre: "Nueva Tabarca", tipo: "barrio" },
+  { nombre: "Nou Alacant-Sidi Ifni", tipo: "barrio" },
+  { nombre: "Orgegia", tipo: "barrio" },
+  { nombre: "Pla de la Vallonga", tipo: "barrio" },
+  { nombre: "Pla del Bon Repós", tipo: "barrio" },
+  { nombre: "Playa de San Juan", tipo: "barrio" },
+  { nombre: "Polígono Babel", tipo: "barrio" },
+  { nombre: "Polígono San Blas", tipo: "barrio" },
+  { nombre: "Rabasa", tipo: "barrio" },
+  { nombre: "Raval Roig-Virgen del Socorro", tipo: "barrio" },
+  { nombre: "Rebolledo", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Blas-Santo Domingo", tipo: "barrio" },
+  { nombre: "San Gabriel", tipo: "barrio" },
+  { nombre: "San Nicolás de Bari", tipo: "barrio" },
+  { nombre: "Santa Faz", tipo: "barrio" },
+  { nombre: "Tángel", tipo: "barrio" },
+  { nombre: "Tómbola", tipo: "barrio" },
+  { nombre: "Urbanización Llofriu", tipo: "barrio" },
+  { nombre: "Urbanización Lo Xeperut", tipo: "barrio" },
+  { nombre: "Urbanova", tipo: "barrio" },
+  { nombre: "Verdegás", tipo: "barrio" },
+  { nombre: "Villafranqueza", tipo: "barrio" },
+  { nombre: "Virgen del Carmen", tipo: "barrio" },
+  { nombre: "Virgen del Remedio", tipo: "barrio" },
+  { nombre: "Vistahermosa", tipo: "barrio" },
+];
+
+const POLIGONOS_ALICANTE: ZonaCiudad[] = [
+  { nombre: "Área Industrial Aguamarga", tipo: "poligono" },
+  { nombre: "Área Industrial Florida", tipo: "poligono" },
+  { nombre: "Mercalicante", tipo: "poligono" },
+  { nombre: "Parque Empresarial Atalayas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Atalayas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Pla de la Vallonga", tipo: "poligono" },
+  { nombre: "Polígono Industrial Rabasa", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Babel", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Garrachico", tipo: "poligono" },
+  { nombre: "Polígono Industrial de San Blas", tipo: "poligono" },
+  { nombre: "Zona Industrial de Agua Amarga", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7943,6 +8029,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Córdoba",
     etiqueta: "Córdoba (Córdoba)",
     zonas: [...BARRIOS_CORDOBA, ...POLIGONOS_CORDOBA],
+  },
+  {
+    id: "alicante",
+    nombre: "Alicante",
+    etiqueta: "Alicante (Alicante)",
+    zonas: [...BARRIOS_ALICANTE, ...POLIGONOS_ALICANTE],
   },
 ];
 
