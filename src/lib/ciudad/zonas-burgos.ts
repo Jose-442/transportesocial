@@ -324,6 +324,9 @@
  * Alcoy: los barrios y los polígonos de la lista.
  * Baradello Gelat y Baradello de Moya quedan los dos.
  * Cotes Altes y Cotes Baixes quedan las dos.
+ * San Vicente del Raspeig: los barrios y los polígonos de la lista.
+ * Barrio de Santa Isabel y Colonia de Santa Isabel quedan las dos.
+ * Pla Contxeta y Pla Olivera quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7520,6 +7523,37 @@ const POLIGONOS_ALCOY: ZonaCiudad[] = [
   { nombre: "Santiago Payá-Sant Benet", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_VICENTE: ZonaCiudad[] = [
+  { nombre: "Alcalde Felipe Mallol", tipo: "barrio" },
+  { nombre: "Barrio de Santa Isabel", tipo: "barrio" },
+  { nombre: "Boqueres", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Colonia de Santa Isabel", tipo: "barrio" },
+  { nombre: "El Gantxo", tipo: "barrio" },
+  { nombre: "El Tubo", tipo: "barrio" },
+  { nombre: "Haygón", tipo: "barrio" },
+  { nombre: "Laborinquen", tipo: "barrio" },
+  { nombre: "Les Escoles-Lo Ramos", tipo: "barrio" },
+  { nombre: "Los Girasoles", tipo: "barrio" },
+  { nombre: "Los Manchegos", tipo: "barrio" },
+  { nombre: "L'Advocat", tipo: "barrio" },
+  { nombre: "Pla Contxeta", tipo: "barrio" },
+  { nombre: "Pla Olivera", tipo: "barrio" },
+  { nombre: "Puerta Verde", tipo: "barrio" },
+  { nombre: "Ras-Pas", tipo: "barrio" },
+  { nombre: "Sol y Luz", tipo: "barrio" },
+  { nombre: "Villamontes", tipo: "barrio" },
+  { nombre: "Zona Universidad", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_VICENTE: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Canastell", tipo: "poligono" },
+  { nombre: "Polígono Industrial Inmediaciones", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Tejas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Rodalet", tipo: "poligono" },
+  { nombre: "Polígono Industrial Torregroses", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8416,6 +8450,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcoy",
     etiqueta: "Alcoy (Alicante)",
     zonas: [...BARRIOS_ALCOY, ...POLIGONOS_ALCOY],
+  },
+  {
+    id: "sanvicentedelraspeig",
+    nombre: "San Vicente del Raspeig",
+    etiqueta: "San Vicente del Raspeig (Alicante)",
+    zonas: [...BARRIOS_SAN_VICENTE, ...POLIGONOS_SAN_VICENTE],
   },
 ];
 

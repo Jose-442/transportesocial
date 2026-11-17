@@ -158,6 +158,7 @@ describe("zonas de Burgos", () => {
       "orihuela",
       "benidorm",
       "alcoy",
+      "sanvicentedelraspeig",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2290,6 +2291,25 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcoy).size).toBe(nombresAlcoy.length);
     expect(nombresAlcoy.filter((n) => alcoy!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(14);
     expect(nombresAlcoy.filter((n) => alcoy!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const raspeig = ciudadUrbana("sanvicentedelraspeig");
+    expect(raspeig?.etiqueta).toBe("San Vicente del Raspeig (Alicante)");
+    expect(raspeig?.nombre).toBe("San Vicente del Raspeig");
+    expect(zonaDeCiudad(raspeig!, "Alcalde Felipe Mallol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Barrio de Santa Isabel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Colonia de Santa Isabel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "L'Advocat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Pla Contxeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Pla Olivera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Ras-Pas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Zona Universidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(raspeig!, "Polígono Industrial Canastell")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(raspeig!, "Polígono Industrial Inmediaciones")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(raspeig!, "Polígono Industrial Torregroses")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(raspeig!, "SEFYCU 5108665+4")).toBeNull();
+    const nombresRaspeig = raspeig!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRaspeig).size).toBe(nombresRaspeig.length);
+    expect(nombresRaspeig.filter((n) => raspeig!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
+    expect(nombresRaspeig.filter((n) => raspeig!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2411,8 +2431,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 4]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 5]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 5]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 5]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 6]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
