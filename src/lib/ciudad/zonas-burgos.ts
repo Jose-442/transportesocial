@@ -370,6 +370,10 @@
  * San Ramón queda como barrio. Polígono Industrial San Ramón como polígono.
  * El Mesell queda como barrio. Polígono Industrial El Pla del Mesell como polígono.
  * Puerto Pesquero de El Campello es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Crevillent: los barrios y los polígonos de la lista.
+ * Barrio de la Estación queda como barrio. I-4 (La Estación) como polígono.
+ * Industrial Este e Industrial Oeste quedan los dos.
+ * Ningún polígono de Crevillent empieza por «Polígono». En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7913,6 +7917,36 @@ const POLIGONOS_EL_CAMPELLO: ZonaCiudad[] = [
   { nombre: "Puerto Pesquero de El Campello", tipo: "poligono" },
 ];
 
+const BARRIOS_CREVILLENT: ZonaCiudad[] = [
+  { nombre: "Barranquet", tipo: "barrio" },
+  { nombre: "Barrio de la Estación", tipo: "barrio" },
+  { nombre: "Barrio del Pont", tipo: "barrio" },
+  { nombre: "Coves Oest", tipo: "barrio" },
+  { nombre: "El Realengo", tipo: "barrio" },
+  { nombre: "La Morería", tipo: "barrio" },
+  { nombre: "La Salut", tipo: "barrio" },
+  { nombre: "Las Casicas", tipo: "barrio" },
+  { nombre: "Núcleo Centro", tipo: "barrio" },
+  { nombre: "Rincón de los Pablos", tipo: "barrio" },
+  { nombre: "San Felipe Neri", tipo: "barrio" },
+  { nombre: "San Rafael", tipo: "barrio" },
+  { nombre: "Vila Vella", tipo: "barrio" },
+];
+
+const POLIGONOS_CREVILLENT: ZonaCiudad[] = [
+  { nombre: "Cachapets", tipo: "poligono" },
+  { nombre: "Crevillent Industrial", tipo: "poligono" },
+  { nombre: "El Boch (I-6 / I-7)", tipo: "poligono" },
+  { nombre: "Faima", tipo: "poligono" },
+  { nombre: "Industrial Este", tipo: "poligono" },
+  { nombre: "Industrial Oeste", tipo: "poligono" },
+  { nombre: "I-1, I-2 e I-3", tipo: "poligono" },
+  { nombre: "I-4 (La Estación)", tipo: "poligono" },
+  { nombre: "I-8", tipo: "poligono" },
+  { nombre: "Imperial", tipo: "poligono" },
+  { nombre: "La Cerámica (Cerámica de la Asunción)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8857,6 +8891,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "El Campello",
     etiqueta: "El Campello (Alicante)",
     zonas: [...BARRIOS_EL_CAMPELLO, ...POLIGONOS_EL_CAMPELLO],
+  },
+  {
+    id: "crevillent",
+    nombre: "Crevillent",
+    etiqueta: "Crevillent (Alicante)",
+    zonas: [...BARRIOS_CREVILLENT, ...POLIGONOS_CREVILLENT],
   },
 ];
 
