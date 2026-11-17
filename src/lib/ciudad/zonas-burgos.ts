@@ -346,6 +346,12 @@
  * Varadero queda como barrio. Ensanche Varadero también, con ese nombre.
  * Zona de Levante y Ensanche de Levante quedan las dos.
  * Zona de Poniente y Ensanche de Poniente quedan las dos.
+ * Villajoyosa: los barrios y los polígonos de la lista.
+ * El Paradís queda como barrio. Urbanización Villajoyosa Paradís también, con ese nombre.
+ * El Torres queda como barrio. Área Industrial El Torres y Parc Empresarial El Torres como polígono.
+ * Cala Torres, Torres I y Torres II quedan los tres.
+ * La Malladeta queda como barrio. Urbanización Mirador de la Malladeta también, con ese nombre.
+ * Poble Nou queda como barrio. Área Industrial Poble Nou-Camino Viejo de Valencia como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7698,6 +7704,54 @@ const POLIGONOS_SANTA_POLA: ZonaCiudad[] = [
   { nombre: "Zona Industrial de la carretera de Elche", tipo: "poligono" },
 ];
 
+const BARRIOS_VILLAJOYOSA: ZonaCiudad[] = [
+  { nombre: "Almadrava", tipo: "barrio" },
+  { nombre: "Barberes", tipo: "barrio" },
+  { nombre: "Barri dels Pescadors", tipo: "barrio" },
+  { nombre: "Cala de Finestrat", tipo: "barrio" },
+  { nombre: "Cala Saladar", tipo: "barrio" },
+  { nombre: "Cala Torres", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "El Paradís", tipo: "barrio" },
+  { nombre: "El Torres", tipo: "barrio" },
+  { nombre: "Europark", tipo: "barrio" },
+  { nombre: "Galandú", tipo: "barrio" },
+  { nombre: "Garden Curt-La Paloma", tipo: "barrio" },
+  { nombre: "La Cala", tipo: "barrio" },
+  { nombre: "La Ermita de San Antonio", tipo: "barrio" },
+  { nombre: "La Malladeta", tipo: "barrio" },
+  { nombre: "La Tellerola", tipo: "barrio" },
+  { nombre: "Montíboli", tipo: "barrio" },
+  { nombre: "Montesol", tipo: "barrio" },
+  { nombre: "Poble Nou", tipo: "barrio" },
+  { nombre: "Plans-Gasparot", tipo: "barrio" },
+  { nombre: "Puntas del Moro", tipo: "barrio" },
+  { nombre: "Racó de Conill", tipo: "barrio" },
+  { nombre: "Secanet", tipo: "barrio" },
+  { nombre: "Serrano", tipo: "barrio" },
+  { nombre: "Torres I", tipo: "barrio" },
+  { nombre: "Torres II", tipo: "barrio" },
+  { nombre: "Xarco", tipo: "barrio" },
+  { nombre: "Urbanización Charco", tipo: "barrio" },
+  { nombre: "Urbanización Sainvi", tipo: "barrio" },
+  { nombre: "Urbanización Terramar", tipo: "barrio" },
+  { nombre: "Urbanización Villajoyosa Paradís", tipo: "barrio" },
+  { nombre: "Urbanización Villagrande", tipo: "barrio" },
+  { nombre: "Urbanización Blanca", tipo: "barrio" },
+  { nombre: "Urbanización Azaleas", tipo: "barrio" },
+  { nombre: "Urbanización Mirador de la Malladeta", tipo: "barrio" },
+];
+
+const POLIGONOS_VILLAJOYOSA: ZonaCiudad[] = [
+  { nombre: "Área Industrial de la Avenida de Finestrat", tipo: "poligono" },
+  { nombre: "Área Industrial El Torres", tipo: "poligono" },
+  { nombre: "Área Industrial Poble Nou-Camino Viejo de Valencia", tipo: "poligono" },
+  { nombre: "Parc Empresarial El Torres", tipo: "poligono" },
+  { nombre: "Polígono Industrial PP-33 Bulevar", tipo: "poligono" },
+  { nombre: "Zona Industrial de la N-332", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8618,6 +8672,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santa Pola",
     etiqueta: "Santa Pola (Alicante)",
     zonas: [...BARRIOS_SANTA_POLA, ...POLIGONOS_SANTA_POLA],
+  },
+  {
+    id: "villajoyosa",
+    nombre: "Villajoyosa",
+    etiqueta: "Villajoyosa (Alicante)",
+    zonas: [...BARRIOS_VILLAJOYOSA, ...POLIGONOS_VILLAJOYOSA],
   },
 ];
 

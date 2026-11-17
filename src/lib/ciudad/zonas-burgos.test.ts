@@ -162,6 +162,7 @@ describe("zonas de Burgos", () => {
       "elda",
       "denia",
       "santapola",
+      "villajoyosa",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2383,6 +2384,32 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSantaPola).size).toBe(nombresSantaPola.length);
     expect(nombresSantaPola.filter((n) => santaPola!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(28);
     expect(nombresSantaPola.filter((n) => santaPola!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const villajoyosa = ciudadUrbana("villajoyosa");
+    expect(villajoyosa?.etiqueta).toBe("Villajoyosa (Alicante)");
+    expect(villajoyosa?.nombre).toBe("Villajoyosa");
+    expect(zonaDeCiudad(villajoyosa!, "Almadrava")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "El Paradís")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Urbanización Villajoyosa Paradís")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "El Torres")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Cala Torres")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Torres I")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Torres II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "La Malladeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Urbanización Mirador de la Malladeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Poble Nou")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Racó de Conill")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Urbanización Azaleas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villajoyosa!, "Área Industrial de la Avenida de Finestrat")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Área Industrial El Torres")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Parc Empresarial El Torres")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Área Industrial Poble Nou-Camino Viejo de Valencia")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Polígono Industrial PP-33 Bulevar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Zona Industrial de la N-332")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villajoyosa!, "Entidades Locales+4")).toBeNull();
+    const nombresVillajoyosa = villajoyosa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVillajoyosa).size).toBe(nombresVillajoyosa.length);
+    expect(nombresVillajoyosa.filter((n) => villajoyosa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(36);
+    expect(nombresVillajoyosa.filter((n) => villajoyosa!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2514,6 +2541,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 9]?.label).toBe("Torrevieja");
     expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 10]?.label).toBe("Villajoyosa");
+    expect(ciudades[alicanteIdx + 10]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
