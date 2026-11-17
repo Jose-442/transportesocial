@@ -290,6 +290,17 @@
  * Polígono San Blas queda como barrio. Polígono Industrial de San Blas como polígono.
  * San Nicolás de Bari queda como barrio. Lo Morant-San Nicolás de Bari también, con ese nombre.
  * Área Industrial Aguamarga y Zona Industrial de Agua Amarga quedan las dos, cada una con su nombre.
+ * Elche: los barrios, las pedanías y los polígonos de la lista.
+ * Altabix entra una sola vez. Altabix Nuevo-Ciudad Deportiva queda aparte.
+ * La Galia entra una sola vez.
+ * Carrús, Carrús Este y Carrús Oeste quedan los tres.
+ * San Antón y Sant Antoni quedan los dos.
+ * Saladas queda como barrio. Polígono Industrial de Las Saladas como polígono.
+ * Llano de San José queda como barrio. Polígono Industrial de Llano de San José como polígono.
+ * Matola queda como barrio. Polígono Industrial de Matola como polígono.
+ * Peña de las Águilas queda como barrio. Polígono Industrial de Peña de las Águilas como polígono.
+ * Altabix queda como barrio. Área Industrial de Altabix y Polígono Industrial de Altabix como polígono.
+ * Carrús queda como barrio. Área Industrial de Carrús y Polígono Industrial de Carrús como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7169,6 +7180,92 @@ const POLIGONOS_ALICANTE: ZonaCiudad[] = [
   { nombre: "Zona Industrial de Agua Amarga", tipo: "poligono" },
 ];
 
+const BARRIOS_ELCHE: ZonaCiudad[] = [
+  { nombre: "Altabix", tipo: "barrio" },
+  { nombre: "Altabix Nuevo-Ciudad Deportiva", tipo: "barrio" },
+  { nombre: "Avenida de la Libertad", tipo: "barrio" },
+  { nombre: "Carrús Este", tipo: "barrio" },
+  { nombre: "Carrús Oeste", tipo: "barrio" },
+  { nombre: "Casablanca-Porfirio Pascual", tipo: "barrio" },
+  { nombre: "Cementerio-Corts Valencianes", tipo: "barrio" },
+  { nombre: "Centro-La Vila", tipo: "barrio" },
+  { nombre: "El Canal", tipo: "barrio" },
+  { nombre: "El Pla", tipo: "barrio" },
+  { nombre: "El Raval", tipo: "barrio" },
+  { nombre: "El Salvador-La Glorieta", tipo: "barrio" },
+  { nombre: "El Toscar", tipo: "barrio" },
+  { nombre: "Els Palmerars", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Jesuitinas-Ripoll", tipo: "barrio" },
+  { nombre: "La Barrera", tipo: "barrio" },
+  { nombre: "La Galia", tipo: "barrio" },
+  { nombre: "La Llotja", tipo: "barrio" },
+  { nombre: "La Torre", tipo: "barrio" },
+  { nombre: "L'Algeps-Sagrada Familia", tipo: "barrio" },
+  { nombre: "L'Asil", tipo: "barrio" },
+  { nombre: "Obispo Siuri", tipo: "barrio" },
+  { nombre: "Plaza de Barcelona", tipo: "barrio" },
+  { nombre: "Plaza de Castilla", tipo: "barrio" },
+  { nombre: "Plaza de Crevillent", tipo: "barrio" },
+  { nombre: "Plaza Primero de Mayo", tipo: "barrio" },
+  { nombre: "Portes Encarnades", tipo: "barrio" },
+  { nombre: "Porfirio Pascual", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Crispín", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Sant Antoni", tipo: "barrio" },
+  { nombre: "Travalón", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "Sector V", tipo: "barrio" },
+  { nombre: "Algoda", tipo: "barrio" },
+  { nombre: "Algorós", tipo: "barrio" },
+  { nombre: "Alzabares Alto", tipo: "barrio" },
+  { nombre: "Alzabares Bajo", tipo: "barrio" },
+  { nombre: "Asprillas", tipo: "barrio" },
+  { nombre: "Arenales del Sol", tipo: "barrio" },
+  { nombre: "Balsares", tipo: "barrio" },
+  { nombre: "Carrús", tipo: "barrio" },
+  { nombre: "Daimés", tipo: "barrio" },
+  { nombre: "Derramador", tipo: "barrio" },
+  { nombre: "El Altet", tipo: "barrio" },
+  { nombre: "Ferriol", tipo: "barrio" },
+  { nombre: "Jubalcoy", tipo: "barrio" },
+  { nombre: "La Baia Alta", tipo: "barrio" },
+  { nombre: "La Baia Baja", tipo: "barrio" },
+  { nombre: "La Foia", tipo: "barrio" },
+  { nombre: "La Marina", tipo: "barrio" },
+  { nombre: "Llano de San José", tipo: "barrio" },
+  { nombre: "Maitino", tipo: "barrio" },
+  { nombre: "Matola", tipo: "barrio" },
+  { nombre: "Peña de las Águilas", tipo: "barrio" },
+  { nombre: "Perleta", tipo: "barrio" },
+  { nombre: "Pusol", tipo: "barrio" },
+  { nombre: "Saladas", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Torrellano Alto", tipo: "barrio" },
+  { nombre: "Torrellano Bajo", tipo: "barrio" },
+  { nombre: "Valverde Alto", tipo: "barrio" },
+  { nombre: "Valverde Bajo", tipo: "barrio" },
+  { nombre: "Vallongas", tipo: "barrio" },
+];
+
+const POLIGONOS_ELCHE: ZonaCiudad[] = [
+  { nombre: "Área Industrial de Carrús", tipo: "poligono" },
+  { nombre: "Área Industrial de Altabix", tipo: "poligono" },
+  { nombre: "Área Industrial de l'Aljub", tipo: "poligono" },
+  { nombre: "Elche Parque Empresarial", tipo: "poligono" },
+  { nombre: "Parque Agroalimentario de La Hoya", tipo: "poligono" },
+  { nombre: "Parque Científico y Empresarial de la UMH", tipo: "poligono" },
+  { nombre: "Parque Industrial de Torrellano", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Altabix", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Carrús", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Faima", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Las Saladas", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Llano de San José", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Matola", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Peña de las Águilas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8035,6 +8132,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alicante",
     etiqueta: "Alicante (Alicante)",
     zonas: [...BARRIOS_ALICANTE, ...POLIGONOS_ALICANTE],
+  },
+  {
+    id: "elche",
+    nombre: "Elche",
+    etiqueta: "Elche (Alicante)",
+    zonas: [...BARRIOS_ELCHE, ...POLIGONOS_ELCHE],
   },
 ];
 

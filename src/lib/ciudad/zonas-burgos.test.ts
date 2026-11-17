@@ -153,6 +153,7 @@ describe("zonas de Burgos", () => {
       "ubeda",
       "cordoba",
       "alicante",
+      "elche",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2164,6 +2165,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlicante).size).toBe(nombresAlicante.length);
     expect(nombresAlicante.filter((n) => alicante!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(62);
     expect(nombresAlicante.filter((n) => alicante!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const elche = ciudadUrbana("elche");
+    expect(elche?.etiqueta).toBe("Elche (Alicante)");
+    expect(elche?.nombre).toBe("Elche");
+    expect(zonaDeCiudad(elche!, "Altabix")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Altabix Nuevo-Ciudad Deportiva")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "La Galia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Carrús")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Carrús Este")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Carrús Oeste")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "San Antón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Sant Antoni")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "L'Algeps-Sagrada Familia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Peña de las Águilas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Saladas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Vallongas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elche!, "Área Industrial de Carrús")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Área Industrial de Altabix")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Área Industrial de l'Aljub")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Polígono Industrial de Altabix")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Polígono Industrial de Carrús")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Polígono Industrial de Las Saladas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Polígono Industrial de Peña de las Águilas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(elche!, "Aljub")).toBeNull();
+    const nombresElche = elche!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresElche).size).toBe(nombresElche.length);
+    expect(nombresElche.filter((n) => elche!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(66);
+    expect(nombresElche.filter((n) => elche!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2276,6 +2304,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cordobaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
+    const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");
+    expect(ciudades[alicanteIdx + 1]?.label).toBe("Elche");
+    expect(ciudades[alicanteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
