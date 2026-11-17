@@ -312,6 +312,15 @@
  * Campoamor, Dehesa de Campoamor y Lomas de Campoamor quedan los tres.
  * La Zenia y La Zenia II quedan las dos.
  * Playa Flamenca I y Playa Flamenca II quedan las dos.
+ * Benidorm: los barrios y los polígonos de la lista.
+ * El Rincón de Loix y Racó de l'Oix quedan los dos.
+ * Mont Benidorm queda como barrio. Urbanización Mont Benidorm también, con ese nombre.
+ * La Huerta y L'Horta quedan las dos.
+ * Levante, Ensanche Levante y Zona Playa de Levante quedan las tres.
+ * Poniente queda como barrio. Urbanización Playa de Poniente también, con ese nombre.
+ * Benidorm Centro y Zona Centro quedan los dos.
+ * Área industrial y comercial PP 3/1 y Polígono Industrial PP 3/1 «Industrial» quedan los dos.
+ * El PP 3/1 es el sector previsto, no un polígono en marcha.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7440,6 +7449,48 @@ const POLIGONOS_ORIHUELA: ZonaCiudad[] = [
   { nombre: "Zona Industrial junto al sistema ferroviario de Orihuela", tipo: "poligono" },
 ];
 
+const BARRIOS_BENIDORM: ZonaCiudad[] = [
+  { nombre: "Armanello", tipo: "barrio" },
+  { nombre: "Avenida Beniardá", tipo: "barrio" },
+  { nombre: "Avenida Europa", tipo: "barrio" },
+  { nombre: "Avenida Mediterráneo", tipo: "barrio" },
+  { nombre: "Barrina Norte", tipo: "barrio" },
+  { nombre: "Benidorm Centro", tipo: "barrio" },
+  { nombre: "Cala de Benidorm", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Colonia Madrid", tipo: "barrio" },
+  { nombre: "El Rincón de Loix", tipo: "barrio" },
+  { nombre: "Els Tolls", tipo: "barrio" },
+  { nombre: "Ensanche Levante", tipo: "barrio" },
+  { nombre: "Foietes", tipo: "barrio" },
+  { nombre: "La Cala", tipo: "barrio" },
+  { nombre: "La Huerta", tipo: "barrio" },
+  { nombre: "Levante", tipo: "barrio" },
+  { nombre: "L'Horta", tipo: "barrio" },
+  { nombre: "Mercasa", tipo: "barrio" },
+  { nombre: "Mont Benidorm", tipo: "barrio" },
+  { nombre: "Nuevos Juzgados", tipo: "barrio" },
+  { nombre: "Poniente", tipo: "barrio" },
+  { nombre: "Racó de l'Oix", tipo: "barrio" },
+  { nombre: "Rincón Alto", tipo: "barrio" },
+  { nombre: "Rincón Bajo", tipo: "barrio" },
+  { nombre: "Sierra Helada", tipo: "barrio" },
+  { nombre: "Urbanización Coblanca", tipo: "barrio" },
+  { nombre: "Urbanización Ciudad Antena", tipo: "barrio" },
+  { nombre: "Urbanización Las Lomas", tipo: "barrio" },
+  { nombre: "Urbanización Mirador del Mediterráneo", tipo: "barrio" },
+  { nombre: "Urbanización Mont Benidorm", tipo: "barrio" },
+  { nombre: "Urbanización Playa de Poniente", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Zona Puerto", tipo: "barrio" },
+  { nombre: "Zona Playa de Levante", tipo: "barrio" },
+];
+
+const POLIGONOS_BENIDORM: ZonaCiudad[] = [
+  { nombre: "Área industrial y comercial PP 3/1", tipo: "poligono" },
+  { nombre: "Polígono Industrial PP 3/1 «Industrial»", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8324,6 +8375,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Orihuela",
     etiqueta: "Orihuela (Alicante)",
     zonas: [...BARRIOS_ORIHUELA, ...POLIGONOS_ORIHUELA],
+  },
+  {
+    id: "benidorm",
+    nombre: "Benidorm",
+    etiqueta: "Benidorm (Alicante)",
+    zonas: [...BARRIOS_BENIDORM, ...POLIGONOS_BENIDORM],
   },
 ];
 

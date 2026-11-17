@@ -156,6 +156,7 @@ describe("zonas de Burgos", () => {
       "elche",
       "torrevieja",
       "orihuela",
+      "benidorm",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2244,6 +2245,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresOrihuela).size).toBe(nombresOrihuela.length);
     expect(nombresOrihuela.filter((n) => orihuela!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(80);
     expect(nombresOrihuela.filter((n) => orihuela!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const benidorm = ciudadUrbana("benidorm");
+    expect(benidorm?.etiqueta).toBe("Benidorm (Alicante)");
+    expect(benidorm?.nombre).toBe("Benidorm");
+    expect(zonaDeCiudad(benidorm!, "Armanello")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "El Rincón de Loix")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Racó de l'Oix")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Mont Benidorm")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Urbanización Mont Benidorm")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "La Huerta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "L'Horta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Levante")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Ensanche Levante")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Zona Playa de Levante")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Poniente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Urbanización Playa de Poniente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Benidorm Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Zona Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Zona Puerto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(benidorm!, "Área industrial y comercial PP 3/1")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(benidorm!, "Polígono Industrial PP 3/1 «Industrial»")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(benidorm!, "Agenda Urbana Benidorm+2")).toBeNull();
+    const nombresBenidorm = benidorm!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBenidorm).size).toBe(nombresBenidorm.length);
+    expect(nombresBenidorm.filter((n) => benidorm!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
+    expect(nombresBenidorm.filter((n) => benidorm!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2357,12 +2383,14 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
     const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");
-    expect(ciudades[alicanteIdx + 1]?.label).toBe("Elche");
+    expect(ciudades[alicanteIdx + 1]?.label).toBe("Benidorm");
     expect(ciudades[alicanteIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 2]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 2]?.label).toBe("Elche");
     expect(ciudades[alicanteIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 3]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 3]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 4]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 4]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
