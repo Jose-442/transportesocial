@@ -355,6 +355,13 @@
  * Villena: los barrios y los polígonos de la lista.
  * Barrio del Mercado y Zona del Mercado quedan los dos.
  * Polígono Industrial El Rubial I y Polígono Industrial El Rubial II-Casa del Padre quedan los dos.
+ * Petrer: los barrios y los polígonos de la lista.
+ * Almafrà queda como barrio. Almafrà Centro también, con ese nombre.
+ * Barrio de La Frontera y La Frontera quedan las dos.
+ * La Loma Badá y Lloma Bada quedan las dos.
+ * Barrio de San Rafael queda como barrio. Parque San Rafael también, con ese nombre.
+ * Salinetas queda como barrio. Polígono Industrial Salinetas y Polígono Industrial Acceso a Salinetas como polígono.
+ * Guirney queda como barrio. Polígono Industrial Guirney-San Rafael como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7799,6 +7806,53 @@ const POLIGONOS_VILLENA: ZonaCiudad[] = [
   { nombre: "Zona de Servicios de la Autovía A-31", tipo: "poligono" },
 ];
 
+const BARRIOS_PETRER: ZonaCiudad[] = [
+  { nombre: "Almafrà", tipo: "barrio" },
+  { nombre: "Almafrà Centro", tipo: "barrio" },
+  { nombre: "Barrio de La Frontera", tipo: "barrio" },
+  { nombre: "Barrio de La Isla", tipo: "barrio" },
+  { nombre: "Barrio de Los Olivos", tipo: "barrio" },
+  { nombre: "Barrio de San Rafael", tipo: "barrio" },
+  { nombre: "Bassa Perico", tipo: "barrio" },
+  { nombre: "Campico", tipo: "barrio" },
+  { nombre: "Cervantes", tipo: "barrio" },
+  { nombre: "Chimeneas", tipo: "barrio" },
+  { nombre: "El Campet", tipo: "barrio" },
+  { nombre: "El Paso", tipo: "barrio" },
+  { nombre: "Els Platans", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Felipe V", tipo: "barrio" },
+  { nombre: "Guirney", tipo: "barrio" },
+  { nombre: "La Canal", tipo: "barrio" },
+  { nombre: "La Horteta", tipo: "barrio" },
+  { nombre: "La Molineta", tipo: "barrio" },
+  { nombre: "La Loma Badá", tipo: "barrio" },
+  { nombre: "La Senyora", tipo: "barrio" },
+  { nombre: "Los Cipreses", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "Lloma Bada", tipo: "barrio" },
+  { nombre: "Médico Luis Sempere", tipo: "barrio" },
+  { nombre: "Palomaret", tipo: "barrio" },
+  { nombre: "Parque San Rafael", tipo: "barrio" },
+  { nombre: "Salinetas", tipo: "barrio" },
+  { nombre: "San Jerónimo", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "La Frontera", tipo: "barrio" },
+  { nombre: "Caprala", tipo: "barrio" },
+  { nombre: "Coves del Riu", tipo: "barrio" },
+];
+
+const POLIGONOS_PETRER: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Acceso a Salinetas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Avenida del Mediterráneo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Guirney-San Rafael", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Cantera", tipo: "poligono" },
+  { nombre: "Polígono Industrial Les Pedreres", tipo: "poligono" },
+  { nombre: "Polígono Industrial Salinetas", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Balsa del Moro", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Barchell", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8731,6 +8785,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Villena",
     etiqueta: "Villena (Alicante)",
     zonas: [...BARRIOS_VILLENA, ...POLIGONOS_VILLENA],
+  },
+  {
+    id: "petrer",
+    nombre: "Petrer",
+    etiqueta: "Petrer (Alicante)",
+    zonas: [...BARRIOS_PETRER, ...POLIGONOS_PETRER],
   },
 ];
 

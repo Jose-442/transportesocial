@@ -164,6 +164,7 @@ describe("zonas de Burgos", () => {
       "santapola",
       "villajoyosa",
       "villena",
+      "petrer",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2432,6 +2433,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresVillena).size).toBe(nombresVillena.length);
     expect(nombresVillena.filter((n) => villena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
     expect(nombresVillena.filter((n) => villena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const petrer = ciudadUrbana("petrer");
+    expect(petrer?.etiqueta).toBe("Petrer (Alicante)");
+    expect(petrer?.nombre).toBe("Petrer");
+    expect(zonaDeCiudad(petrer!, "Almafrà")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Almafrà Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Barrio de La Frontera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "La Frontera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "La Loma Badá")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Lloma Bada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Barrio de San Rafael")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Parque San Rafael")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Salinetas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Guirney")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Médico Luis Sempere")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Coves del Riu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(petrer!, "Polígono Industrial Acceso a Salinetas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(petrer!, "Polígono Industrial Salinetas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(petrer!, "Polígono Industrial Guirney-San Rafael")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(petrer!, "Polígono Industrial de Balsa del Moro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(petrer!, "Polígono Industrial de Barchell")?.tipo).toBe("poligono");
+    const nombresPetrer = petrer!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPetrer).size).toBe(nombresPetrer.length);
+    expect(nombresPetrer.filter((n) => petrer!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
+    expect(nombresPetrer.filter((n) => petrer!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2557,16 +2582,18 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 6]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 7]?.label).toBe("San Vicente del Raspeig");
+    expect(ciudades[alicanteIdx + 7]?.label).toBe("Petrer");
     expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 8]?.label).toBe("Santa Pola");
+    expect(ciudades[alicanteIdx + 8]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 9]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 9]?.label).toBe("Santa Pola");
     expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 10]?.label).toBe("Villajoyosa");
+    expect(ciudades[alicanteIdx + 10]?.label).toBe("Torrevieja");
     expect(ciudades[alicanteIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 11]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 11]?.label).toBe("Villajoyosa");
     expect(ciudades[alicanteIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 12]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 12]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
