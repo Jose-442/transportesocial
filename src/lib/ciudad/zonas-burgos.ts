@@ -281,6 +281,8 @@
  * Úbeda: los barrios y los polígonos de la lista.
  * Urbanización Huertañalda queda como barrio. Polígono Agrícola Huertañalda como polígono.
  * Solana de Torralba queda como barrio. Polígono Industrial Las Naves (Solana de Torralba) como polígono.
+ * Córdoba: los barrios y los polígonos de la lista.
+ * Polígono de Poniente queda como barrio. Polígono Industrial de Poniente como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -6999,6 +7001,88 @@ const POLIGONOS_UBEDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Las Naves (Solana de Torralba)", tipo: "poligono" },
 ];
 
+const BARRIOS_CORDOBA: ZonaCiudad[] = [
+  { nombre: "Alcolea", tipo: "barrio" },
+  { nombre: "Arcángel", tipo: "barrio" },
+  { nombre: "Arroyo del Moro", tipo: "barrio" },
+  { nombre: "Arruzafilla", tipo: "barrio" },
+  { nombre: "Asomadilla", tipo: "barrio" },
+  { nombre: "Campo de la Merced-Molinos Alta", tipo: "barrio" },
+  { nombre: "Campo de la Verdad-Miraflores", tipo: "barrio" },
+  { nombre: "Cañero", tipo: "barrio" },
+  { nombre: "Cerro Muriano", tipo: "barrio" },
+  { nombre: "Cerro de la Golondrina-Salesianos", tipo: "barrio" },
+  { nombre: "Cercadilla-Medina Azahara", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "El Arenal", tipo: "barrio" },
+  { nombre: "El Brillante", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Higuerón", tipo: "barrio" },
+  { nombre: "El Naranjo", tipo: "barrio" },
+  { nombre: "El Patriarca", tipo: "barrio" },
+  { nombre: "El Salvador y la Compañía", tipo: "barrio" },
+  { nombre: "El Tablero", tipo: "barrio" },
+  { nombre: "Electromecánicas", tipo: "barrio" },
+  { nombre: "Fátima", tipo: "barrio" },
+  { nombre: "Fray Albino", tipo: "barrio" },
+  { nombre: "Fuensantilla-Edisol", tipo: "barrio" },
+  { nombre: "Guadalquivir", tipo: "barrio" },
+  { nombre: "Huerta de la Marquesa", tipo: "barrio" },
+  { nombre: "Huerta de la Reina", tipo: "barrio" },
+  { nombre: "Huerta de Santa Isabel", tipo: "barrio" },
+  { nombre: "Huerta del Rey-Vallellano", tipo: "barrio" },
+  { nombre: "Huerta de San Rafael", tipo: "barrio" },
+  { nombre: "La Catedral", tipo: "barrio" },
+  { nombre: "La Magdalena", tipo: "barrio" },
+  { nombre: "La Trinidad", tipo: "barrio" },
+  { nombre: "Las Margaritas", tipo: "barrio" },
+  { nombre: "Levante", tipo: "barrio" },
+  { nombre: "Los Morales", tipo: "barrio" },
+  { nombre: "Miralbaida", tipo: "barrio" },
+  { nombre: "Moreras", tipo: "barrio" },
+  { nombre: "Ollerías", tipo: "barrio" },
+  { nombre: "Olivos Borrachos", tipo: "barrio" },
+  { nombre: "Palmeras", tipo: "barrio" },
+  { nombre: "Parque Azahara", tipo: "barrio" },
+  { nombre: "Parque Cruz Conde", tipo: "barrio" },
+  { nombre: "Parque Figueroa", tipo: "barrio" },
+  { nombre: "Parque Fidiana", tipo: "barrio" },
+  { nombre: "Polígono de Poniente", tipo: "barrio" },
+  { nombre: "Polígono de la Fuensanta", tipo: "barrio" },
+  { nombre: "San Andrés-San Pablo", tipo: "barrio" },
+  { nombre: "San Basilio", tipo: "barrio" },
+  { nombre: "San Francisco-Ribera", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "San Miguel-Capuchinos", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "San Rafael de la Albaida", tipo: "barrio" },
+  { nombre: "Santa Cruz", tipo: "barrio" },
+  { nombre: "Santa Marina", tipo: "barrio" },
+  { nombre: "Santa Rosa", tipo: "barrio" },
+  { nombre: "Santuario", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Sector Sur", tipo: "barrio" },
+  { nombre: "Trassierra", tipo: "barrio" },
+  { nombre: "Valdeolleros", tipo: "barrio" },
+  { nombre: "Villarrubia", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Viñuela-Rescatado", tipo: "barrio" },
+];
+
+const POLIGONOS_CORDOBA: ZonaCiudad[] = [
+  { nombre: "Área Logística de Córdoba", tipo: "poligono" },
+  { nombre: "Chinales", tipo: "poligono" },
+  { nombre: "El Granadal", tipo: "poligono" },
+  { nombre: "La Torrecilla", tipo: "poligono" },
+  { nombre: "Las Quemadas", tipo: "poligono" },
+  { nombre: "Parque Científico-Tecnológico de Córdoba (Rabanales 21)", tipo: "poligono" },
+  { nombre: "Parque Empresarial Tecnocórdoba", tipo: "poligono" },
+  { nombre: "Parque Joyero de Córdoba", tipo: "poligono" },
+  { nombre: "Parque Logístico de Córdoba", tipo: "poligono" },
+  { nombre: "Polígono Industrial Amargacena", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Poniente", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -7853,6 +7937,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Úbeda",
     etiqueta: "Úbeda (Jaén)",
     zonas: [...BARRIOS_UBEDA, ...POLIGONOS_UBEDA],
+  },
+  {
+    id: "cordoba",
+    nombre: "Córdoba",
+    etiqueta: "Córdoba (Córdoba)",
+    zonas: [...BARRIOS_CORDOBA, ...POLIGONOS_CORDOBA],
   },
 ];
 

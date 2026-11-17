@@ -151,6 +151,7 @@ describe("zonas de Burgos", () => {
       "linares",
       "andujar",
       "ubeda",
+      "cordoba",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2120,6 +2121,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresUbeda).size).toBe(nombresUbeda.length);
     expect(nombresUbeda.filter((n) => ubeda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
     expect(nombresUbeda.filter((n) => ubeda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const cordoba = ciudadUrbana("cordoba");
+    expect(cordoba?.etiqueta).toBe("Córdoba (Córdoba)");
+    expect(cordoba?.nombre).toBe("Córdoba");
+    expect(zonaDeCiudad(cordoba!, "Alcolea")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "Campo de la Merced-Molinos Alta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "El Salvador y la Compañía")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "Polígono de Poniente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "Polígono de la Fuensanta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "Viñuela-Rescatado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cordoba!, "Área Logística de Córdoba")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cordoba!, "Parque Científico-Tecnológico de Córdoba (Rabanales 21)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cordoba!, "Polígono Industrial de Poniente")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cordoba!, "Polígono Industrial Amargacena")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cordoba!, "Poniente")).toBeNull();
+    const nombresCordoba = cordoba!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCordoba).size).toBe(nombresCordoba.length);
+    expect(nombresCordoba.filter((n) => cordoba!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(65);
+    expect(nombresCordoba.filter((n) => cordoba!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2225,6 +2244,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "lleida")?.label).toBe("Lleida");
     expect(ciudades.find((c) => c.value === "lucena")?.label).toBe("Lucena");
     expect(ciudades.find((c) => c.value === "lucena")?.negrita).toBeUndefined();
+    const cordobaIdx = ciudades.findIndex((c) => c.value === "cordoba");
+    expect(ciudades[cordobaIdx]?.label).toBe("Córdoba");
+    expect(ciudades[cordobaIdx]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx + 1]?.label).toBe("Lucena");
+    expect(ciudades[cordobaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
