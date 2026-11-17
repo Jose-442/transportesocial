@@ -321,6 +321,9 @@
  * Benidorm Centro y Zona Centro quedan los dos.
  * Área industrial y comercial PP 3/1 y Polígono Industrial PP 3/1 «Industrial» quedan los dos.
  * El PP 3/1 es el sector previsto, no un polígono en marcha.
+ * Alcoy: los barrios y los polígonos de la lista.
+ * Baradello Gelat y Baradello de Moya quedan los dos.
+ * Cotes Altes y Cotes Baixes quedan las dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -7491,6 +7494,32 @@ const POLIGONOS_BENIDORM: ZonaCiudad[] = [
   { nombre: "Polígono Industrial PP 3/1 «Industrial»", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCOY: ZonaCiudad[] = [
+  { nombre: "Batoi", tipo: "barrio" },
+  { nombre: "Baradello Gelat", tipo: "barrio" },
+  { nombre: "Baradello de Moya", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Estepar", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Font Roja", tipo: "barrio" },
+  { nombre: "La Zona Alta", tipo: "barrio" },
+  { nombre: "Montesol", tipo: "barrio" },
+  { nombre: "Zona Norte", tipo: "barrio" },
+  { nombre: "Santa Rosa", tipo: "barrio" },
+  { nombre: "Sol i Camp", tipo: "barrio" },
+  { nombre: "Cases del Salt", tipo: "barrio" },
+  { nombre: "Sargento", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCOY: ZonaCiudad[] = [
+  { nombre: "Cotes Altes", tipo: "poligono" },
+  { nombre: "Cotes Baixes", tipo: "poligono" },
+  { nombre: "El Castellar", tipo: "poligono" },
+  { nombre: "El Clérigo", tipo: "poligono" },
+  { nombre: "La Beniata", tipo: "poligono" },
+  { nombre: "Santiago Payá-Sant Benet", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -8381,6 +8410,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Benidorm",
     etiqueta: "Benidorm (Alicante)",
     zonas: [...BARRIOS_BENIDORM, ...POLIGONOS_BENIDORM],
+  },
+  {
+    id: "alcoy",
+    nombre: "Alcoy",
+    etiqueta: "Alcoy (Alicante)",
+    zonas: [...BARRIOS_ALCOY, ...POLIGONOS_ALCOY],
   },
 ];
 

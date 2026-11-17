@@ -157,6 +157,7 @@ describe("zonas de Burgos", () => {
       "torrevieja",
       "orihuela",
       "benidorm",
+      "alcoy",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2270,6 +2271,25 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresBenidorm).size).toBe(nombresBenidorm.length);
     expect(nombresBenidorm.filter((n) => benidorm!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
     expect(nombresBenidorm.filter((n) => benidorm!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const alcoy = ciudadUrbana("alcoy");
+    expect(alcoy?.etiqueta).toBe("Alcoy (Alicante)");
+    expect(alcoy?.nombre).toBe("Alcoy");
+    expect(zonaDeCiudad(alcoy!, "Batoi")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Baradello Gelat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Baradello de Moya")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "El Estepar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Sol i Camp")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Cases del Salt")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Sargento")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alcoy!, "Cotes Altes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcoy!, "Cotes Baixes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcoy!, "El Clérigo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcoy!, "Santiago Payá-Sant Benet")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alcoy!, "Ayuntamiento de Alcoy+4")).toBeNull();
+    const nombresAlcoy = alcoy!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlcoy).size).toBe(nombresAlcoy.length);
+    expect(nombresAlcoy.filter((n) => alcoy!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(14);
+    expect(nombresAlcoy.filter((n) => alcoy!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -2383,14 +2403,16 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
     const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");
-    expect(ciudades[alicanteIdx + 1]?.label).toBe("Benidorm");
+    expect(ciudades[alicanteIdx + 1]?.label).toBe("Alcoy");
     expect(ciudades[alicanteIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 2]?.label).toBe("Elche");
+    expect(ciudades[alicanteIdx + 2]?.label).toBe("Benidorm");
     expect(ciudades[alicanteIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 3]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 3]?.label).toBe("Elche");
     expect(ciudades[alicanteIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 4]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 4]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 4]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 5]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
