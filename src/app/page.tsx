@@ -126,15 +126,15 @@ export default async function HomePage() {
               </div>
             </div>
             <p
-              className={`${anuncioFont.className} portada-anuncio mt-2 text-sm leading-snug sm:text-base`}
+              className={`${anuncioFont.className} portada-anuncio mt-2 min-w-0 max-w-full text-sm leading-snug sm:text-base`}
             >
-              <span className="block whitespace-nowrap">
+              <span className="block lg:whitespace-nowrap">
                 📍 Arrancamos en la provincia de Burgos, en la conexión Burgos ↔ Madrid,
               </span>
-              <span className="block whitespace-nowrap">
+              <span className="block lg:whitespace-nowrap">
                 y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
               </span>
-              <span className="block whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
+              <span className="block lg:whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
             </p>
             </div>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
