@@ -30,7 +30,7 @@ export function HomeSofaHighlight() {
         <br />
         Tienes tambien la opción
         <br />
-        de solicitar una rebaja,
+        de solicitar una rebaja
         <br />
         ¡Y la diferencia vuelve a tu bolsillo!
       </p>
