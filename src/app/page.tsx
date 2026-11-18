@@ -11,6 +11,11 @@ const camaraFont = Libre_Baskerville({
   subsets: ["latin"],
 });
 
+const anuncioFont = Libre_Baskerville({
+  weight: "700",
+  subsets: ["latin"],
+});
+
 export default async function HomePage() {
   return (
     <>
@@ -82,7 +87,8 @@ export default async function HomePage() {
         {/* Hero: en PC ocupa la mitad superior de la pantalla */}
         <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 lg:min-h-0 lg:flex-[3] lg:rounded-none">
           <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:px-10 lg:pt-4 lg:pb-6 xl:px-16 xl:pt-5 xl:pb-8">
-            <div className="mb-3 flex min-w-0 items-start gap-3 sm:mb-4 lg:mb-2">
+            <div className="mb-3 sm:mb-4 lg:mb-2">
+            <div className="flex min-w-0 items-start gap-3">
               <div className="-mt-[4mm] -mb-[4mm] -ml-[4mm] -mr-[4mm] w-[calc(40%+8mm)] max-w-[calc(9rem+8mm)] shrink-0 -translate-x-[4mm] overflow-hidden sm:max-w-[calc(10rem+8mm)] md:w-[calc(46%+8mm)] md:max-w-[calc(16rem+8mm)] lg:max-w-[calc(18rem+8mm)] xl:max-w-[calc(20rem+8mm)]">
                 <BrandLogo
                   size="hero"
@@ -110,6 +116,19 @@ export default async function HomePage() {
                   </span>
                 </p>
               </div>
+            </div>
+            <p
+              className={`${anuncioFont.className} mt-2 text-sm leading-snug text-orange-400 sm:text-base`}
+            >
+              <span className="block whitespace-nowrap">
+                📍 Arrancamos en la provincia de Burgos,
+              </span>
+              <span className="block whitespace-nowrap">en Burgos ↔ Madrid,</span>
+              <span className="block whitespace-nowrap">
+                Y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
+              </span>
+              <span className="block whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
+            </p>
             </div>
             <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
               <ButtonLink
