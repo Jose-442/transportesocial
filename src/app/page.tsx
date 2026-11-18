@@ -214,9 +214,9 @@ export default async function HomePage() {
                   Solo se paga para reservar un viaje: además la App retiene y
                   custodia el importe hasta confirmar que el viaje ha ido bien.
                 </p>
-                <p className="mt-1 hidden md:block">
-                  Además la App custodia el importe del viaje hasta confirmar
-                  que todo ha ido bien.
+                <p className="mt-1 hidden whitespace-nowrap md:block">
+                  Además custodiamos el importe del viaje hasta confirmar que
+                  todo ha ido bien.
                 </p>
               </div>
               <div className="mt-4 hidden w-full md:block">
