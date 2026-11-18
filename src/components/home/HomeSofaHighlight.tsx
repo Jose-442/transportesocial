@@ -7,9 +7,13 @@ export function HomeSofaHighlight() {
   return (
     <div className="flex min-w-0 max-w-full flex-col items-stretch gap-4 overflow-x-hidden px-1 sm:gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-6 lg:px-0">
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        ¡¡Aprovechando los viajes!!
+        ¡¡Compartiendo gastos!!
         <br />
-        más económico, más eficiente, más rápido, viaja, envía lo que necesites, puedes acompañar a tu envío
+        Más económico, más
+        <br />
+        eficiente, menos tiempo
+        <br />
+        ¡Ahorra en cada trayecto!!
       </p>
       <div className="mx-auto flex w-full max-w-[19rem] shrink-0 justify-center leading-none sm:max-w-[22rem] lg:max-w-[36rem]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
