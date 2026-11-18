@@ -190,9 +190,6 @@ export default async function HomePage() {
                   PUBLICAR trayecto en mi ciudad
                 </span>
               </ButtonLink>
-              <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
-                Barrio o polígono. La calle se concreta en el chat.
-              </p>
             </div>
           </div>
           <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
