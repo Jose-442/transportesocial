@@ -156,6 +156,7 @@ export default async function HomePage() {
               <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
                 Podrás editar el viaje mientras no haya reservas.
               </p>
+              <div className="md:hidden">
               <ButtonLink
                 href="/bultos/nuevo?entrada=portada"
                 variant="secondary"
@@ -172,6 +173,7 @@ export default async function HomePage() {
                   AVISARME si un conductor hace esta ruta
                 </span>
               </ButtonLink>
+              </div>
               <ButtonLink
                 href="/ciudad/nueva"
                 variant="secondary"
@@ -208,10 +210,32 @@ export default async function HomePage() {
                   </span>
                   Usar Transporte Social es gratis
                 </p>
-                <p className="mt-1">
+                <p className="mt-1 md:hidden">
                   Solo se paga para reservar un viaje: además la App retiene y
                   custodia el importe hasta confirmar que el viaje ha ido bien.
                 </p>
+                <p className="mt-1 hidden md:block">
+                  Además la App custodia el importe del viaje hasta confirmar
+                  que todo ha ido bien.
+                </p>
+              </div>
+              <div className="mt-4 hidden w-full md:block">
+              <ButtonLink
+                href="/bultos/nuevo?entrada=portada"
+                variant="secondary"
+                fullWidth
+                className="!h-auto !items-start !justify-start flex-col gap-1 border-emerald-300 bg-emerald-400 px-3 py-2.5 text-left text-emerald-950 hover:border-emerald-200 hover:bg-emerald-300"
+              >
+                <span className="flex items-center gap-2 text-xs font-semibold text-emerald-900 sm:text-sm">
+                  <span className="text-2xl leading-none" aria-hidden>
+                    📦
+                  </span>
+                  (Soy Remitente/Pasajero)
+                </span>
+                <span className="text-sm font-semibold leading-snug sm:text-base">
+                  AVISARME si un conductor hace esta ruta
+                </span>
+              </ButtonLink>
               </div>
             </div>
           </div>
