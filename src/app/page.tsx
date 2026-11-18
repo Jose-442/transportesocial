@@ -129,10 +129,10 @@ export default async function HomePage() {
               className={`${anuncioFont.className} portada-anuncio mt-2 min-w-0 max-w-full text-sm leading-snug sm:text-base`}
             >
               <span className="block lg:whitespace-nowrap">
-                📍 Arrancamos en la provincia de Burgos, en la conexión Burgos ↔ Madrid,
+                📍 Arrancamos en la provincia de Burgos, en la conexión Burgos ↔ Madrid.
               </span>
               <span className="block lg:whitespace-nowrap">
-                y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
+                Y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
               </span>
               <span className="block lg:whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
             </p>
