@@ -2,7 +2,6 @@ import { Libre_Baskerville } from "next/font/google";
 import { ButtonLink } from "@/components/ui/Button";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { HomeSofaHighlight } from "@/components/home/HomeSofaHighlight";
-import { HomeSubscriptionBanner } from "@/components/home/HomeSubscriptionBanner";
 import { BRAND } from "@/lib/brand";
 
 const camaraFont = Libre_Baskerville({
@@ -174,10 +173,18 @@ export default async function HomePage() {
                 alt=""
                 className="portada-nevera-hero"
               />
-              <p className="mt-8 text-left text-lg font-semibold leading-snug text-white md:text-xl">
-                En esta App, tienes la opción de solicitar una rebaja, ¡Y la
-                diferencia vuelve a tu bolsillo!
-              </p>
+              <div className="mt-8 text-left text-lg leading-snug text-white md:text-xl">
+                <p className="font-semibold">
+                  <span className="text-[#00b4c4]" aria-hidden>
+                    ✓{" "}
+                  </span>
+                  Usar Transporte Social es gratis
+                </p>
+                <p className="mt-1">
+                  Solo se paga para reservar un viaje: además la App retiene y
+                  custodia el importe hasta confirmar que el viaje ha ido bien.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -185,9 +192,6 @@ export default async function HomePage() {
         {/* Nevera + botones de búsqueda */}
         <section className="mt-0 space-y-0 md:pb-8 lg:flex lg:flex-[2] lg:flex-col lg:justify-start lg:gap-0 lg:px-10 lg:pt-0 lg:pb-12 xl:px-16">
           <HomeSofaHighlight />
-          <div className="mb-4 lg:mb-5">
-            <HomeSubscriptionBanner />
-          </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:gap-5">
             <div className="space-y-2">
               <ButtonLink
