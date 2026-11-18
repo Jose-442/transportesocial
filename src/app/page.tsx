@@ -79,6 +79,14 @@ export default async function HomePage() {
               max-width: none;
               margin: 0;
             }
+            .portada-anuncio {
+              color: #9af7ef;
+              text-shadow:
+                0 0 1px rgba(0, 30, 30, 0.9),
+                0 1px 1px rgba(0, 20, 20, 0.75),
+                0 0 8px rgba(80, 255, 230, 0.95),
+                0 0 18px rgba(0, 210, 190, 0.8);
+            }
           `,
         }}
       />
@@ -118,14 +126,13 @@ export default async function HomePage() {
               </div>
             </div>
             <p
-              className={`${anuncioFont.className} mt-2 text-sm leading-snug text-orange-400 sm:text-base`}
+              className={`${anuncioFont.className} portada-anuncio mt-2 text-sm leading-snug sm:text-base`}
             >
               <span className="block whitespace-nowrap">
-                📍 Arrancamos en la provincia de Burgos,
+                📍 Arrancamos en la provincia de Burgos, en la conexión Burgos ↔ Madrid,
               </span>
-              <span className="block whitespace-nowrap">en Burgos ↔ Madrid,</span>
               <span className="block whitespace-nowrap">
-                Y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
+                y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
               </span>
               <span className="block whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
             </p>
