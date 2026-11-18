@@ -24,13 +24,15 @@ export function HomeSofaHighlight() {
         />
       </div>
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        ¡¡Compartiendo gastos!!
-        <br />
         ¡¡De tú a tú!!
         <br />
         ¡¡Pasajeros, bultos y mascotas!!
         <br />
-        ¡¡Ahorra en cada trayecto!!
+        Tienes tambien la opción
+        <br />
+        de solicitar una rebaja,
+        <br />
+        ¡Y la diferencia vuelve a tu bolsillo!
       </p>
     </div>
   );
