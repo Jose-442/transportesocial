@@ -136,33 +136,61 @@ export default async function HomePage() {
               <span className="block lg:whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
             </p>
             </div>
-            <div className="mt-4 grid flex-1 content-end gap-2 sm:mt-5 sm:gap-3 lg:mb-2 lg:mt-2 lg:max-w-xl lg:gap-2">
+            <div className="mt-3 grid gap-2 lg:mb-2 lg:mt-3 lg:max-w-xl">
               <ButtonLink
-                href="/rutas"
+                href="/rutas/nueva"
+                variant="primary"
+                fullWidth
+                className="!h-auto !items-start !justify-start flex-col gap-1 px-3 py-2.5 text-left"
+              >
+                <span className="flex items-center gap-2 text-xs font-semibold text-amber-200 sm:text-sm">
+                  <span className="text-2xl leading-none" aria-hidden>
+                    🚚
+                  </span>
+                  (Soy Conductor)
+                </span>
+                <span className="text-sm font-semibold leading-snug sm:text-base">
+                  PUBLICAR mi ruta con el espacio y asientos libres
+                </span>
+              </ButtonLink>
+              <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
+                Podrás editar el viaje mientras no haya reservas.
+              </p>
+              <ButtonLink
+                href="/bultos/nuevo?entrada=portada"
                 variant="secondary"
                 fullWidth
-                className="!h-auto flex-col gap-1 px-4 py-3"
+                className="!h-auto !items-start !justify-start flex-col gap-1 border-emerald-300 bg-emerald-400 px-3 py-2.5 text-left text-emerald-950 hover:border-emerald-200 hover:bg-emerald-300"
               >
-                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
-                    🔍
+                <span className="flex items-center gap-2 text-xs font-semibold text-emerald-900 sm:text-sm">
+                  <span className="text-2xl leading-none" aria-hidden>
+                    📦
                   </span>
-                  Buscar conductor con viaje previsto
+                  (Soy Remitente/Pasajero)
+                </span>
+                <span className="text-sm font-semibold leading-snug sm:text-base">
+                  AVISARME si un conductor hace esta ruta
                 </span>
               </ButtonLink>
               <ButtonLink
-                href="/ciudad"
+                href="/ciudad/nueva"
                 variant="secondary"
                 fullWidth
-                className="!h-auto flex-col gap-1 border-white/30 bg-white/10 px-4 py-3 text-white hover:bg-white/20"
+                className="!h-auto !items-start !justify-start flex-col gap-1 border-white bg-white px-3 py-2.5 text-left text-emerald-950 hover:bg-emerald-50"
               >
-                <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                  <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                <span className="flex items-center gap-2 text-xs font-semibold text-emerald-800 sm:text-sm">
+                  <span className="text-2xl leading-none" aria-hidden>
                     🏘️
                   </span>
-                  Buscar ruta dentro de mi municipio.
+                  (Soy Conductor)
+                </span>
+                <span className="text-sm font-semibold leading-snug sm:text-base">
+                  PUBLICAR trayecto en mi ciudad
                 </span>
               </ButtonLink>
+              <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
+                Barrio o polígono. La calle se concreta en el chat.
+              </p>
             </div>
           </div>
           <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
@@ -192,65 +220,33 @@ export default async function HomePage() {
         {/* Nevera + botones de búsqueda */}
         <section className="mt-0 space-y-0 md:pb-8 lg:flex lg:flex-[2] lg:flex-col lg:justify-start lg:gap-0 lg:px-10 lg:pt-0 lg:pb-12 xl:px-16">
           <HomeSofaHighlight />
-          <div className="grid gap-3 sm:grid-cols-2 lg:gap-5">
-            <div className="space-y-2">
-              <ButtonLink
-                href="/rutas/nueva"
-                variant="primary"
-                fullWidth
-                className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 px-3 py-4 text-left sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
-              >
-                <span className="flex items-center gap-2 text-sm font-semibold text-amber-200 sm:text-base">
-                  <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
-                    🚚
-                  </span>
-                  (Soy Conductor)
-                </span>
-                <span className="text-base font-semibold leading-snug sm:text-lg">
-                  PUBLICAR mi ruta con el espacio y asientos libres
-                </span>
-              </ButtonLink>
-              <p className="px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
-                Podrás editar el viaje mientras no haya reservas.
-              </p>
-            </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:mt-5 lg:gap-5">
             <ButtonLink
-              href="/bultos/nuevo?entrada=portada"
+              href="/rutas"
               variant="secondary"
               fullWidth
-              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-500 bg-emerald-400 px-3 py-4 text-left text-emerald-950 hover:border-emerald-600 hover:bg-emerald-500 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
+              className="!h-auto flex-col gap-1 px-4 py-3"
             >
-              <span className="flex items-center gap-2 text-sm font-semibold text-emerald-900 sm:text-base">
-                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
-                  📦
+              <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
+                <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                  🔍
                 </span>
-                (Soy Remitente/Pasajero)
-              </span>
-              <span className="text-base font-semibold leading-snug sm:text-lg">
-                AVISARME si un conductor hace esta ruta
+                Buscar conductor con viaje previsto
               </span>
             </ButtonLink>
-          </div>
-          <div className="mt-3 lg:mt-5">
             <ButtonLink
-              href="/ciudad/nueva"
-              variant="secondary"
+              href="/ciudad"
+              variant="primary"
               fullWidth
-              className="min-h-[6.5rem] !items-start !justify-start flex-col gap-4 border-emerald-700 bg-white px-3 py-4 text-left text-emerald-950 hover:bg-emerald-50 sm:min-h-[7.5rem] sm:gap-5 sm:px-4"
+              className="!h-auto flex-col gap-1 px-4 py-3"
             >
-              <span className="flex items-center gap-2 text-sm font-semibold text-emerald-800 sm:text-base">
-                <span className="text-3xl leading-none sm:text-4xl" aria-hidden>
+              <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
+                <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
                   🏘️
                 </span>
-                (Soy Conductor)
-              </span>
-              <span className="text-base font-semibold leading-snug sm:text-lg">
-                PUBLICAR trayecto en mi ciudad
+                Buscar ruta dentro de mi municipio.
               </span>
             </ButtonLink>
-            <p className="mt-2 px-1 text-center text-base text-emerald-900 sm:text-left sm:text-lg">
-              Barrio o polígono. La calle se concreta en el chat.
-            </p>
           </div>
           <p
             className={`${camaraFont.className} mt-6 text-center text-lg italic leading-snug text-orange-500 sm:mt-8 sm:text-xl`}
