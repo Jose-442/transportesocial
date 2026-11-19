@@ -214,6 +214,7 @@ describe("zonas de Burgos", () => {
       "puertollano",
       "tomelloso",
       "alcazardesanjuan",
+      "valdepenas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3757,6 +3758,32 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcazar).size).toBe(nombresAlcazar.length);
     expect(nombresAlcazar.filter((n) => alcazar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
     expect(nombresAlcazar.filter((n) => alcazar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const valdepenas = ciudadUrbana("valdepenas");
+    expect(valdepenas?.etiqueta).toBe("Valdepeñas (Ciudad Real)");
+    expect(valdepenas?.nombre).toBe("Valdepeñas");
+    expect(zonaDeCiudad(valdepenas!, "Fátima")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "La Manzana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "El Cristo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "El Lucero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "Cachiporro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "Consolación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "Zona Paseo de la Estación-Calle Cristo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(valdepenas!, "Barrio de Fátima")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Cristo")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Lucero")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Barrio Zona Centro")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Valdepeñas")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial Entrecaminos I")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial Entrecaminos II")).toBeNull();
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial Avenida del Vino")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial El Cachiporro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial Entrecaminos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdepenas!, "Polígono Industrial 1575")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(valdepenas!, "Polígono Logístico de Consolación")?.tipo).toBe("poligono");
+    const nombresValdepenas = valdepenas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresValdepenas).size).toBe(nombresValdepenas.length);
+    expect(nombresValdepenas.filter((n) => valdepenas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(19);
+    expect(nombresValdepenas.filter((n) => valdepenas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3907,13 +3934,15 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "lucena")?.label).toBe("Lucena");
     expect(ciudades.find((c) => c.value === "lucena")?.negrita).toBeUndefined();
     const cordobaIdx = ciudades.findIndex((c) => c.value === "cordoba");
-    expect(ciudades[cordobaIdx - 4]?.label).toBe("Ciudad Real");
-    expect(ciudades[cordobaIdx - 4]?.negrita).toBe(true);
-    expect(ciudades[cordobaIdx - 3]?.label).toBe("Alcázar de San Juan");
+    expect(ciudades[cordobaIdx - 5]?.label).toBe("Ciudad Real");
+    expect(ciudades[cordobaIdx - 5]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx - 4]?.label).toBe("Alcázar de San Juan");
+    expect(ciudades[cordobaIdx - 4]?.negrita).toBeUndefined();
+    expect(ciudades[cordobaIdx - 3]?.label).toBe("Puertollano");
     expect(ciudades[cordobaIdx - 3]?.negrita).toBeUndefined();
-    expect(ciudades[cordobaIdx - 2]?.label).toBe("Puertollano");
+    expect(ciudades[cordobaIdx - 2]?.label).toBe("Tomelloso");
     expect(ciudades[cordobaIdx - 2]?.negrita).toBeUndefined();
-    expect(ciudades[cordobaIdx - 1]?.label).toBe("Tomelloso");
+    expect(ciudades[cordobaIdx - 1]?.label).toBe("Valdepeñas");
     expect(ciudades[cordobaIdx - 1]?.negrita).toBeUndefined();
     expect(ciudades[cordobaIdx]?.label).toBe("Córdoba");
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);

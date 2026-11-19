@@ -727,6 +727,13 @@
  * Urbanización Avenida Pablo Iglesias queda con ese nombre. También se escribe Urbanización Av. Pablo Iglesias.
  * Polígono Industrial Alces queda con ese nombre. Las fases I, II y III son el mismo polígono.
  * Polígono Industrial Emilio Castro queda con ese nombre. Las fases son el mismo polígono.
+ * Valdepeñas: debajo de Ciudad Real, detrás de Tomelloso. Los barrios de la lista y los ocho polígonos.
+ * Fátima, Juan Alcaide, La Manzana, Los Llanos, Virgen de la Cabeza y Zona Centro quedan con ese nombre. La palabra Barrio no entra.
+ * El Cristo es el barrio del Cristo. Cristo no entra aparte.
+ * El Lucero es el barrio del Lucero. Lucero no entra aparte.
+ * Cachiporro sigue como barrio. El polígono se llama Polígono Industrial El Cachiporro.
+ * Consolación sigue como barrio. El polígono se llama Polígono Logístico de Consolación.
+ * Polígono Industrial Entrecaminos queda con ese nombre. Las fases I y II son el mismo polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10017,6 +10024,39 @@ const POLIGONOS_ALCAZAR_DE_SAN_JUAN: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Emilio Castro", tipo: "poligono" },
 ];
 
+const BARRIOS_VALDEPENAS: ZonaCiudad[] = [
+  { nombre: "Fátima", tipo: "barrio" },
+  { nombre: "Juan Alcaide", tipo: "barrio" },
+  { nombre: "La Manzana", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "El Cristo", tipo: "barrio" },
+  { nombre: "El Lucero", tipo: "barrio" },
+  { nombre: "Virgen de la Cabeza", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Baños del Peral", tipo: "barrio" },
+  { nombre: "Cachiporro", tipo: "barrio" },
+  { nombre: "Consolación", tipo: "barrio" },
+  { nombre: "El Ángel", tipo: "barrio" },
+  { nombre: "El Molino", tipo: "barrio" },
+  { nombre: "El Peral", tipo: "barrio" },
+  { nombre: "Nuevo Valdepeñas", tipo: "barrio" },
+  { nombre: "Parque de las Infantas-Magdalena", tipo: "barrio" },
+  { nombre: "Parque del Vino", tipo: "barrio" },
+  { nombre: "Zona Norte", tipo: "barrio" },
+  { nombre: "Zona Paseo de la Estación-Calle Cristo", tipo: "barrio" },
+];
+
+const POLIGONOS_VALDEPENAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Avenida del Vino", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Cachiporro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Entrecaminos", tipo: "poligono" },
+  { nombre: "Polígono Industrial 1575", tipo: "poligono" },
+  { nombre: "Polígono Industrial Virgen de la Paz", tipo: "poligono" },
+  { nombre: "Polígono Industrial Travesía Colombia", tipo: "poligono" },
+  { nombre: "Polígono Terciario de la carretera de San Carlos", tipo: "poligono" },
+  { nombre: "Polígono Logístico de Consolación", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11243,6 +11283,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcázar de San Juan",
     etiqueta: "Alcázar de San Juan (Ciudad Real)",
     zonas: [...BARRIOS_ALCAZAR_DE_SAN_JUAN, ...POLIGONOS_ALCAZAR_DE_SAN_JUAN],
+  },
+  {
+    id: "valdepenas",
+    nombre: "Valdepeñas",
+    etiqueta: "Valdepeñas (Ciudad Real)",
+    zonas: [...BARRIOS_VALDEPENAS, ...POLIGONOS_VALDEPENAS],
   },
 ];
 
