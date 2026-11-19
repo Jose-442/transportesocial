@@ -641,6 +641,16 @@
  * Polígono Industrial Los Prados, Polígono Industrial Sierra Ascoy y Polígono del Búho quedan los tres. Los Prados y El Búho no son el mismo.
  * El polígono de Ascoy entra como Polígono Industrial Sierra Ascoy.
  * Cieza Norte no entra. Sigue en proyecto.
+ * Mazarrón: debajo de Murcia, entre Lorca y Molina de Segura. El núcleo, el Puerto, Bolnuevo y las pedanías del padrón.
+ * El núcleo del padrón entra como Mazarrón. Es el casco.
+ * Puerto de Mazarrón entra. No es pedanía. Es el otro núcleo.
+ * Bolnuevo entra. La pedanía del padrón es Moreras. Bolnuevo es el pueblo de la costa.
+ * Las Moreras entra como Moreras. La Majada entra como Majada. El Saladillo entra como Saladillo. La Atalaya entra como Atalaya.
+ * El Alamillo, Las Balsicas y Los Lorentes no entran aparte. Quedan en Balsicas.
+ * Ifre y Cañada de Gallego entran juntos, como Ifre-Cañada de Gallego. Ifre y Pastrana entran juntos, como Ifre-Pastrana.
+ * Camposol no entra aparte. Queda en Saladillo.
+ * El Margajón no entra. No tiene habitantes.
+ * No hay un polígono con nombre propio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9656,6 +9666,25 @@ const POLIGONOS_CIEZA: ZonaCiudad[] = [
   { nombre: "Polígono del Búho", tipo: "poligono" },
 ];
 
+const BARRIOS_MAZARRON: ZonaCiudad[] = [
+  { nombre: "Mazarrón", tipo: "barrio" },
+  { nombre: "Puerto de Mazarrón", tipo: "barrio" },
+  { nombre: "Bolnuevo", tipo: "barrio" },
+  { nombre: "Atalaya", tipo: "barrio" },
+  { nombre: "Balsicas", tipo: "barrio" },
+  { nombre: "Cañadas del Romero", tipo: "barrio" },
+  { nombre: "Gañuelas", tipo: "barrio" },
+  { nombre: "Garrobo", tipo: "barrio" },
+  { nombre: "Ifre-Cañada de Gallego", tipo: "barrio" },
+  { nombre: "Ifre-Pastrana", tipo: "barrio" },
+  { nombre: "Leiva", tipo: "barrio" },
+  { nombre: "Majada", tipo: "barrio" },
+  { nombre: "Mingrano", tipo: "barrio" },
+  { nombre: "Moreras", tipo: "barrio" },
+  { nombre: "Rincones", tipo: "barrio" },
+  { nombre: "Saladillo", tipo: "barrio" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10834,6 +10863,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cieza",
     etiqueta: "Cieza (Murcia)",
     zonas: [...BARRIOS_CIEZA, ...POLIGONOS_CIEZA],
+  },
+  {
+    id: "mazarron",
+    nombre: "Mazarrón",
+    etiqueta: "Mazarrón (Murcia)",
+    zonas: [...BARRIOS_MAZARRON],
   },
 ];
 
