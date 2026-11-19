@@ -622,6 +622,13 @@
  * El Hornillo queda con ese nombre. Costas del Hornillo es el mismo.
  * Las Majadas y Las Molinetas quedan las dos. El cementerio viejo no entra aparte.
  * Polígono Industrial El Labradorcico queda con ese nombre. También se llama Las Majadas. El barrio Las Majadas entra aparte.
+ * Yecla: debajo de Murcia, después de Torre-Pacheco. Los barrios del casco, Raspay y el campo. Los tres polígonos.
+ * García Lorca queda con ese nombre. También se llama Federico García Lorca. Entra una sola vez.
+ * Las Herratillas queda con ese nombre. También se escribe Herratillas. Entra una sola vez.
+ * El Sol queda con ese nombre.
+ * Santa Bárbara y La Pedrera quedan las dos. Casas Altas no entra aparte.
+ * Raspay es la pedanía. Campo Abajo y Campo Arriba quedan las dos.
+ * Polígono Industrial Urbayecla, Polígono Industrial Las Teresas y Polígono Industrial La Herrada quedan los tres.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9562,6 +9569,29 @@ const POLIGONOS_AGUILAS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial El Labradorcico", tipo: "poligono" },
 ];
 
+const BARRIOS_YECLA: ZonaCiudad[] = [
+  { nombre: "García Lorca", tipo: "barrio" },
+  { nombre: "Las Herratillas", tipo: "barrio" },
+  { nombre: "La Alameda", tipo: "barrio" },
+  { nombre: "San Cristóbal", tipo: "barrio" },
+  { nombre: "Justina", tipo: "barrio" },
+  { nombre: "Cayetano de Mergelina", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "El Sol", tipo: "barrio" },
+  { nombre: "La Pedrera", tipo: "barrio" },
+  { nombre: "Raspay", tipo: "barrio" },
+  { nombre: "Campo Abajo", tipo: "barrio" },
+  { nombre: "Campo Arriba", tipo: "barrio" },
+];
+
+const POLIGONOS_YECLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Urbayecla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Teresas", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Herrada", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10722,6 +10752,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Águilas",
     etiqueta: "Águilas (Murcia)",
     zonas: [...BARRIOS_AGUILAS, ...POLIGONOS_AGUILAS],
+  },
+  {
+    id: "yecla",
+    nombre: "Yecla",
+    etiqueta: "Yecla (Murcia)",
+    zonas: [...BARRIOS_YECLA, ...POLIGONOS_YECLA],
   },
 ];
 
