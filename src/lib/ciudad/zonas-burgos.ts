@@ -734,6 +734,10 @@
  * Cachiporro sigue como barrio. El polígono se llama Polígono Industrial El Cachiporro.
  * Consolación sigue como barrio. El polígono se llama Polígono Logístico de Consolación.
  * Polígono Industrial Entrecaminos queda con ese nombre. Las fases I y II son el mismo polígono.
+ * Cuenca: capital, en negrita, detrás de Lucena y delante de Granada. Los barrios de la lista y los diez polígonos.
+ * Cerro de la Estrella queda con ese nombre. Antes se llamaba Cerro de la Horca. No entra aparte.
+ * Cólliga y Colliguilla quedan las dos.
+ * Los Tiradores Altos y Los Tiradores Bajos quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10057,6 +10061,48 @@ const POLIGONOS_VALDEPENAS: ZonaCiudad[] = [
   { nombre: "Polígono Logístico de Consolación", tipo: "poligono" },
 ];
 
+const BARRIOS_CUENCA: ZonaCiudad[] = [
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro de la Estrella", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Los Tiradores Altos", tipo: "barrio" },
+  { nombre: "Los Tiradores Bajos", tipo: "barrio" },
+  { nombre: "Los Moralejos", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Fernando", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Santa Teresa", tipo: "barrio" },
+  { nombre: "Villa Román", tipo: "barrio" },
+  { nombre: "Siglo XXI", tipo: "barrio" },
+  { nombre: "Cañadillas", tipo: "barrio" },
+  { nombre: "Fuente del Oro", tipo: "barrio" },
+  { nombre: "Las Quinientas", tipo: "barrio" },
+  { nombre: "Residencial Universidad", tipo: "barrio" },
+  { nombre: "Nohales", tipo: "barrio" },
+  { nombre: "La Melgosa", tipo: "barrio" },
+  { nombre: "Mohorte", tipo: "barrio" },
+  { nombre: "Tondos", tipo: "barrio" },
+  { nombre: "Villanueva de los Escuderos", tipo: "barrio" },
+  { nombre: "Valdecabras", tipo: "barrio" },
+  { nombre: "Cólliga", tipo: "barrio" },
+  { nombre: "Colliguilla", tipo: "barrio" },
+];
+
+const POLIGONOS_CUENCA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Campsa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Alcázar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Motilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cuberg", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Cantorral", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Cerrajera", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Palancares", tipo: "poligono" },
+  { nombre: "Polígono Industrial SEPES", tipo: "poligono" },
+  { nombre: "Zona Industrial Carretera de Madrid", tipo: "poligono" },
+  { nombre: "Zona Industrial Avenida de los Alfares", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11289,6 +11335,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Valdepeñas",
     etiqueta: "Valdepeñas (Ciudad Real)",
     zonas: [...BARRIOS_VALDEPENAS, ...POLIGONOS_VALDEPENAS],
+  },
+  {
+    id: "cuenca",
+    nombre: "Cuenca",
+    etiqueta: "Cuenca (Cuenca)",
+    zonas: [...BARRIOS_CUENCA, ...POLIGONOS_CUENCA],
   },
 ];
 
