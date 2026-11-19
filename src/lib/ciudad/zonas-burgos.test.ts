@@ -195,6 +195,8 @@ describe("zonas de Burgos", () => {
       "donbenito",
       "almendralejo",
       "caceres",
+      "plasencia",
+      "murcia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3244,6 +3246,46 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCaceres).size).toBe(nombresCaceres.length);
     expect(nombresCaceres.filter((n) => caceres!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(72);
     expect(nombresCaceres.filter((n) => caceres!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const plasencia = ciudadUrbana("plasencia");
+    expect(plasencia?.etiqueta).toBe("Plasencia (Cáceres)");
+    expect(plasencia?.nombre).toBe("Plasencia");
+    expect(zonaDeCiudad(plasencia!, "Intramuros de Plasencia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(plasencia!, "San Juan")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(plasencia!, "San Gil")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(plasencia!, "Pradochano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(plasencia!, "Cepansa")).toBeNull();
+    expect(zonaDeCiudad(plasencia!, "Dehesa de los Caballos")).toBeNull();
+    expect(zonaDeCiudad(plasencia!, "Polígono Industrial de Plasencia")?.tipo).toBe("poligono");
+    const nombresPlasencia = plasencia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPlasencia).size).toBe(nombresPlasencia.length);
+    expect(nombresPlasencia.filter((n) => plasencia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(25);
+    expect(nombresPlasencia.filter((n) => plasencia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
+    const murcia = ciudadUrbana("murcia");
+    expect(murcia?.etiqueta).toBe("Murcia (Murcia)");
+    expect(murcia?.nombre).toBe("Murcia");
+    expect(zonaDeCiudad(murcia!, "El Carmen")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "La Catedral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Espinardo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "La Paz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Vistabella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "San Basilio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Santa María de Gracia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "El Palmar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Sangonera la Verde")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Zeneta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(murcia!, "Infante Don Juan Manuel")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "Guadalupe de Maciascoque")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "El Lugarico")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "Alberca de las Torres")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "San Benito-Progreso")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "Valladolises")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "Cabezo Cortado I")).toBeNull();
+    expect(zonaDeCiudad(murcia!, "Polígono Industrial Oeste")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(murcia!, "Polígono Industrial Cabezo Cortado")?.tipo).toBe("poligono");
+    const nombresMurcia = murcia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMurcia).size).toBe(nombresMurcia.length);
+    expect(nombresMurcia.filter((n) => murcia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(83);
+    expect(nombresMurcia.filter((n) => murcia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3454,6 +3496,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "caceres")?.label).toBe("Cáceres");
     expect(ciudades.find((c) => c.value === "caceres")?.negrita).toBe(true);
+    const caceresIdx = ciudades.findIndex((c) => c.value === "caceres");
+    expect(ciudades[caceresIdx + 1]?.label).toBe("Plasencia");
+    expect(ciudades[caceresIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "murcia")?.label).toBe("Murcia");
+    expect(ciudades.find((c) => c.value === "murcia")?.negrita).toBe(true);
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");

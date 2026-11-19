@@ -536,6 +536,19 @@
  * Pinilla no entra aparte. Dehesa de los Caballos tampoco.
  * Charca Musia, Aldea Moret, La Mejostilla y Las Capellanías entran como polígono. Mejostilla, el barrio, queda aparte.
  * Polígono Ganadero queda con ese nombre. Las Capellanías también se escribe Capellanías. Entra una sola vez.
+ * Plasencia: debajo de Cáceres. Los veinticinco barrios. El polígono.
+ * San Gil y Pradochano quedan como barrio. Son las dos pedanías.
+ * Polígono Industrial de Plasencia entra una sola vez. Cepansa y Dehesa de los Caballos son el mismo polígono.
+ * Murcia: capital, en negrita. Los veintiocho barrios del núcleo y las cincuenta y cinco pedanías. Los dos polígonos.
+ * La Paz y Vistabella quedan los dos. San Basilio y Santa María de Gracia quedan los dos.
+ * Infante Juan Manuel queda con ese nombre. El distrito también escribe Infante Don Juan Manuel. Entra una sola vez.
+ * Guadalupe queda con ese nombre. También se llama Guadalupe de Maciascoque. Entra una sola vez.
+ * Javalí Viejo queda con ese nombre. También se llama El Lugarico. Entra una sola vez.
+ * La Alberca queda con ese nombre. También se escribe Alberca de las Torres. Entra una sola vez.
+ * San Benito-Barrio del Progreso queda con ese nombre. El mapa también escribe San Benito-Progreso. Entra una sola vez.
+ * Valladolises y Lo Jurado queda con ese nombre.
+ * Espinardo queda como barrio. Ya no es pedanía.
+ * Polígono Industrial Oeste y Polígono Industrial Cabezo Cortado quedan los dos. Cabezo Cortado I es el mismo. El Oeste entra en Murcia.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9092,6 +9105,129 @@ const POLIGONOS_CACERES: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Charca Musia", tipo: "poligono" },
 ];
 
+const BARRIOS_PLASENCIA: ZonaCiudad[] = [
+  { nombre: "Colonia Virgen de Guadalupe - La Amistad", tipo: "barrio" },
+  { nombre: "Río Jerte", tipo: "barrio" },
+  { nombre: "Cotillo de San Antón - Barrio del Pilar", tipo: "barrio" },
+  { nombre: "Cerro San Miguel - La Unión", tipo: "barrio" },
+  { nombre: "La Esperanza", tipo: "barrio" },
+  { nombre: "Sierra Santa Bárbara", tipo: "barrio" },
+  { nombre: "Los Mártires", tipo: "barrio" },
+  { nombre: "Vera-Elena", tipo: "barrio" },
+  { nombre: "Los Alamitos", tipo: "barrio" },
+  { nombre: "Miralvalle", tipo: "barrio" },
+  { nombre: "Los Majuelos", tipo: "barrio" },
+  { nombre: "Valle-Isla", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "La Data", tipo: "barrio" },
+  { nombre: "Rosal de Ayala", tipo: "barrio" },
+  { nombre: "Cuatro Calzadas", tipo: "barrio" },
+  { nombre: "Ribera del Valle", tipo: "barrio" },
+  { nombre: "Rubén Darío - Gabriel y Galán", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Ciudad Jardín San Antón", tipo: "barrio" },
+  { nombre: "Valcorchero", tipo: "barrio" },
+  { nombre: "Los Monjes", tipo: "barrio" },
+  { nombre: "Intramuros de Plasencia", tipo: "barrio" },
+  { nombre: "San Gil", tipo: "barrio" },
+  { nombre: "Pradochano", tipo: "barrio" },
+];
+
+const POLIGONOS_PLASENCIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Plasencia", tipo: "poligono" },
+];
+
+const BARRIOS_MURCIA: ZonaCiudad[] = [
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "La Catedral", tipo: "barrio" },
+  { nombre: "Espinardo", tipo: "barrio" },
+  { nombre: "La Fama", tipo: "barrio" },
+  { nombre: "La Flota", tipo: "barrio" },
+  { nombre: "Infante Juan Manuel", tipo: "barrio" },
+  { nombre: "Nuestra Señora de la Fuensanta", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "La Purísima-Barriomar", tipo: "barrio" },
+  { nombre: "El Ranero", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "San Antolín", tipo: "barrio" },
+  { nombre: "San Antón", tipo: "barrio" },
+  { nombre: "San Bartolomé", tipo: "barrio" },
+  { nombre: "San Basilio", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "San Nicolás", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "San Pío X", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Santa Eulalia", tipo: "barrio" },
+  { nombre: "Santa María de Gracia", tipo: "barrio" },
+  { nombre: "Santiago el Mayor", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Vistabella", tipo: "barrio" },
+  { nombre: "Algezares", tipo: "barrio" },
+  { nombre: "Aljucer", tipo: "barrio" },
+  { nombre: "Alquerías", tipo: "barrio" },
+  { nombre: "Barqueros", tipo: "barrio" },
+  { nombre: "Baños y Mendigo", tipo: "barrio" },
+  { nombre: "Beniaján", tipo: "barrio" },
+  { nombre: "Cabezo de Torres", tipo: "barrio" },
+  { nombre: "Carrascoy-La Murta", tipo: "barrio" },
+  { nombre: "Casillas", tipo: "barrio" },
+  { nombre: "Cañada Hermosa", tipo: "barrio" },
+  { nombre: "Cañadas de San Pedro", tipo: "barrio" },
+  { nombre: "Churra", tipo: "barrio" },
+  { nombre: "Cobatillas", tipo: "barrio" },
+  { nombre: "Corvera", tipo: "barrio" },
+  { nombre: "El Esparragal", tipo: "barrio" },
+  { nombre: "El Palmar", tipo: "barrio" },
+  { nombre: "El Puntal", tipo: "barrio" },
+  { nombre: "El Raal", tipo: "barrio" },
+  { nombre: "Era Alta", tipo: "barrio" },
+  { nombre: "Garres y Lages", tipo: "barrio" },
+  { nombre: "Gea y Truyols", tipo: "barrio" },
+  { nombre: "Guadalupe", tipo: "barrio" },
+  { nombre: "Javalí Nuevo", tipo: "barrio" },
+  { nombre: "Javalí Viejo", tipo: "barrio" },
+  { nombre: "Jerónimo y Avileses", tipo: "barrio" },
+  { nombre: "La Albatalía", tipo: "barrio" },
+  { nombre: "La Alberca", tipo: "barrio" },
+  { nombre: "La Arboleja", tipo: "barrio" },
+  { nombre: "La Raya", tipo: "barrio" },
+  { nombre: "La Ñora", tipo: "barrio" },
+  { nombre: "Llano de Brujas", tipo: "barrio" },
+  { nombre: "Lobosillo", tipo: "barrio" },
+  { nombre: "Los Dolores", tipo: "barrio" },
+  { nombre: "Los Martínez del Puerto", tipo: "barrio" },
+  { nombre: "Los Ramos", tipo: "barrio" },
+  { nombre: "Monteagudo", tipo: "barrio" },
+  { nombre: "Nonduermas", tipo: "barrio" },
+  { nombre: "Puebla de Soto", tipo: "barrio" },
+  { nombre: "Puente Tocinos", tipo: "barrio" },
+  { nombre: "Rincón de Beniscornia", tipo: "barrio" },
+  { nombre: "Rincón de Seca", tipo: "barrio" },
+  { nombre: "San Benito-Patiño", tipo: "barrio" },
+  { nombre: "San Benito-Barrio del Progreso", tipo: "barrio" },
+  { nombre: "San Ginés", tipo: "barrio" },
+  { nombre: "San José de la Vega", tipo: "barrio" },
+  { nombre: "Sangonera la Seca", tipo: "barrio" },
+  { nombre: "Sangonera la Verde", tipo: "barrio" },
+  { nombre: "Santa Cruz", tipo: "barrio" },
+  { nombre: "Santiago y Zaraiche", tipo: "barrio" },
+  { nombre: "Santo Ángel", tipo: "barrio" },
+  { nombre: "Sucina", tipo: "barrio" },
+  { nombre: "Torreagüera", tipo: "barrio" },
+  { nombre: "Valladolises y Lo Jurado", tipo: "barrio" },
+  { nombre: "Zarandona", tipo: "barrio" },
+  { nombre: "Zeneta", tipo: "barrio" },
+];
+
+const POLIGONOS_MURCIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Oeste", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cabezo Cortado", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10204,6 +10340,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cáceres",
     etiqueta: "Cáceres (Cáceres)",
     zonas: [...BARRIOS_CACERES, ...POLIGONOS_CACERES],
+  },
+  {
+    id: "plasencia",
+    nombre: "Plasencia",
+    etiqueta: "Plasencia (Cáceres)",
+    zonas: [...BARRIOS_PLASENCIA, ...POLIGONOS_PLASENCIA],
+  },
+  {
+    id: "murcia",
+    nombre: "Murcia",
+    etiqueta: "Murcia (Murcia)",
+    zonas: [...BARRIOS_MURCIA, ...POLIGONOS_MURCIA],
   },
 ];
 
