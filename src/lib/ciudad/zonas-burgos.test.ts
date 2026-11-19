@@ -189,6 +189,7 @@ describe("zonas de Burgos", () => {
       "xirivella",
       "xativa",
       "catarroja",
+      "alaquas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3075,6 +3076,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCatarroja).size).toBe(nombresCatarroja.length);
     expect(nombresCatarroja.filter((n) => catarroja!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(8);
     expect(nombresCatarroja.filter((n) => catarroja!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
+    const alaquas = ciudadUrbana("alaquas");
+    expect(alaquas?.etiqueta).toBe("Alaquàs (Valencia)");
+    expect(alaquas?.nombre).toBe("Alaquàs");
+    expect(zonaDeCiudad(alaquas!, "Centro Histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barrio de Ave María")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barri de Sant Vicent")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barri de San Fermín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barri del Carme")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barri Roig")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "El Olivar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alaquas!, "Barrio del Ave María")).toBeNull();
+    expect(zonaDeCiudad(alaquas!, "El Bovalar")).toBeNull();
+    expect(zonaDeCiudad(alaquas!, "Polígono Industrial El Bovalar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(alaquas!, "Polígono Industrial Els Mollons")?.tipo).toBe("poligono");
+    const nombresAlaquas = alaquas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlaquas).size).toBe(nombresAlaquas.length);
+    expect(nombresAlaquas.filter((n) => alaquas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
+    expect(nombresAlaquas.filter((n) => alaquas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3165,32 +3184,34 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "valencia")?.label).toBe("Valencia");
     expect(ciudades.find((c) => c.value === "valencia")?.negrita).toBe(true);
     const valenciaIdx = ciudades.findIndex((c) => c.value === "valencia");
-    expect(ciudades[valenciaIdx + 1]?.label).toBe("Aldaia");
+    expect(ciudades[valenciaIdx + 1]?.label).toBe("Alaquàs");
     expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 2]?.label).toBe("Alzira");
+    expect(ciudades[valenciaIdx + 2]?.label).toBe("Aldaia");
     expect(ciudades[valenciaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 3]?.label).toBe("Burjassot");
+    expect(ciudades[valenciaIdx + 3]?.label).toBe("Alzira");
     expect(ciudades[valenciaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 4]?.label).toBe("Catarroja");
+    expect(ciudades[valenciaIdx + 4]?.label).toBe("Burjassot");
     expect(ciudades[valenciaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 5]?.label).toBe("Gandia");
+    expect(ciudades[valenciaIdx + 5]?.label).toBe("Catarroja");
     expect(ciudades[valenciaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 6]?.label).toBe("Manises");
+    expect(ciudades[valenciaIdx + 6]?.label).toBe("Gandia");
     expect(ciudades[valenciaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 7]?.label).toBe("Mislata");
+    expect(ciudades[valenciaIdx + 7]?.label).toBe("Manises");
     expect(ciudades[valenciaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 8]?.label).toBe("Ontinyent");
+    expect(ciudades[valenciaIdx + 8]?.label).toBe("Mislata");
     expect(ciudades[valenciaIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 9]?.label).toBe("Paterna");
+    expect(ciudades[valenciaIdx + 9]?.label).toBe("Ontinyent");
     expect(ciudades[valenciaIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 10]?.label).toBe("Sagunto");
+    expect(ciudades[valenciaIdx + 10]?.label).toBe("Paterna");
     expect(ciudades[valenciaIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 11]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 11]?.label).toBe("Sagunto");
     expect(ciudades[valenciaIdx + 11]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 12]?.label).toBe("Xàtiva");
+    expect(ciudades[valenciaIdx + 12]?.label).toBe("Torrent");
     expect(ciudades[valenciaIdx + 12]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 13]?.label).toBe("Xirivella");
+    expect(ciudades[valenciaIdx + 13]?.label).toBe("Xàtiva");
     expect(ciudades[valenciaIdx + 13]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 14]?.label).toBe("Xirivella");
+    expect(ciudades[valenciaIdx + 14]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();

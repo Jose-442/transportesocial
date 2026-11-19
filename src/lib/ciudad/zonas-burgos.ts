@@ -452,7 +452,7 @@
  * Polígono Industrial El Pla y Polígono Industrial El Pla Área 27 y 30 bis quedan los dos.
  * Polígono Industrial Área 45 Pla de Sant Vicent es el de Sant Vicent.
  * Polígono Terciario AH-37 es el de la carretera de Valencia. El plan antiguo lo llamaba polígono Avenida de Valencia. Entra una sola vez, con el nombre del censo.
- * Aldaia: debajo de Valencia, delante de Alzira. Los barrios y los polígonos del plan de emergencias del Ayuntamiento.
+ * Aldaia: debajo de Alaquàs y delante de Alzira. Los barrios y los polígonos del plan de emergencias del Ayuntamiento.
  * Sant Antoni-Sant Miquel-Santa Rita, Tama, Brillantina, Casc Antic y Colonia-Mercat quedan los cinco.
  * Barri del Cristo queda como barrio. Polígono Industrial Del Cristo como polígono.
  * Barri del Cayo, Barranquet Alto y Calle Sur quedan los tres. Hort de Melcior es el diseminado de esa zona. Entra como Calle Sur.
@@ -485,6 +485,12 @@
  * Fumeral-Institut queda con ese nombre. El Ayuntamiento también lo llama Instituto-Fumeral. Entra una sola vez.
  * El Port queda como barrio.
  * Polígono Industrial El Bony es el único del censo.
+ * Alaquàs: debajo de Valencia y delante de Aldaia. Los barrios del plan general, más El Olivar, y los dos polígonos del censo.
+ * Centro Histórico queda con ese nombre.
+ * Barrio de Ave María queda con ese nombre. El plan también escribe Barrio del Ave María. Entra una sola vez.
+ * Barri de Sant Vicent, Barri de San Fermín, Barri del Carme y Barri Roig quedan los cuatro.
+ * El Olivar queda como barrio.
+ * Polígono Industrial El Bovalar y Polígono Industrial Els Mollons quedan los dos. El Bovalar no entra como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8789,6 +8795,21 @@ const POLIGONOS_CATARROJA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial El Bony", tipo: "poligono" },
 ];
 
+const BARRIOS_ALAQUAS: ZonaCiudad[] = [
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "Barrio de Ave María", tipo: "barrio" },
+  { nombre: "Barri de Sant Vicent", tipo: "barrio" },
+  { nombre: "Barri de San Fermín", tipo: "barrio" },
+  { nombre: "Barri del Carme", tipo: "barrio" },
+  { nombre: "Barri Roig", tipo: "barrio" },
+  { nombre: "El Olivar", tipo: "barrio" },
+];
+
+const POLIGONOS_ALAQUAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Bovalar", tipo: "poligono" },
+  { nombre: "Polígono Industrial Els Mollons", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9865,6 +9886,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Catarroja",
     etiqueta: "Catarroja (Valencia)",
     zonas: [...BARRIOS_CATARROJA, ...POLIGONOS_CATARROJA],
+  },
+  {
+    id: "alaquas",
+    nombre: "Alaquàs",
+    etiqueta: "Alaquàs (Valencia)",
+    zonas: [...BARRIOS_ALAQUAS, ...POLIGONOS_ALAQUAS],
   },
 ];
 
