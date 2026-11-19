@@ -605,6 +605,15 @@
  * El Potrox queda como barrio.
  * Polígono Industrial Cabezo Verde, Polígono Industrial La Coroneja y Parque Empresarial San Andrés quedan los tres.
  * El Polígono Industrial Oeste ya está en Murcia. No entra otra vez.
+ * Torre-Pacheco: debajo de Murcia, después de Molina de Segura. Los barrios del casco y las once pedanías. Los seis polígonos.
+ * Los Olmos-Hoyamorena queda con ese nombre. Los Olmos y Hoyamorena son la misma pedanía.
+ * Dolores de Pacheco queda con ese nombre. También se escribe Dolores. Entra una sola vez.
+ * Los Meroños queda con ese nombre. También se escribe Meroños. Entra una sola vez.
+ * La Hortichuela queda con ese nombre. También se escribe Hortichuela. Entra una sola vez.
+ * Camachos queda con ese nombre. También se escribe Los Camachos. Entra una sola vez.
+ * Los Infiernos no entra. No está entre las once pedanías.
+ * Parque Industrial Polaris queda con ese nombre. También se llama Polaris World. Entra una sola vez.
+ * La ampliación de La Estrella es el mismo polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9491,6 +9500,36 @@ const POLIGONOS_ALCANTARILLA: ZonaCiudad[] = [
   { nombre: "Parque Empresarial San Andrés", tipo: "poligono" },
 ];
 
+const BARRIOS_TORRE_PACHECO: ZonaCiudad[] = [
+  { nombre: "Casco", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Urbanización Club de Tenis", tipo: "barrio" },
+  { nombre: "El Pasico", tipo: "barrio" },
+  { nombre: "Las Morrastellas", tipo: "barrio" },
+  { nombre: "El Albardinal", tipo: "barrio" },
+  { nombre: "Santa Rosalía", tipo: "barrio" },
+  { nombre: "San Cayetano", tipo: "barrio" },
+  { nombre: "Roldán", tipo: "barrio" },
+  { nombre: "Los Meroños", tipo: "barrio" },
+  { nombre: "El Jimenado", tipo: "barrio" },
+  { nombre: "Los Olmos-Hoyamorena", tipo: "barrio" },
+  { nombre: "La Hortichuela", tipo: "barrio" },
+  { nombre: "Dolores de Pacheco", tipo: "barrio" },
+  { nombre: "Camachos", tipo: "barrio" },
+  { nombre: "Balsicas", tipo: "barrio" },
+];
+
+const POLIGONOS_TORRE_PACHECO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Estrella", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Hita", tipo: "poligono" },
+  { nombre: "Polígono Industrial Municipal de Balsicas", tipo: "poligono" },
+  { nombre: "Polígono Industrial AUI Nº6 de Roldán", tipo: "poligono" },
+  { nombre: "Polígono Industrial Municipal de Dolores de Pacheco", tipo: "poligono" },
+  { nombre: "Parque Industrial Polaris", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10639,6 +10678,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alcantarilla",
     etiqueta: "Alcantarilla (Murcia)",
     zonas: [...BARRIOS_ALCANTARILLA, ...POLIGONOS_ALCANTARILLA],
+  },
+  {
+    id: "torrepacheco",
+    nombre: "Torre-Pacheco",
+    etiqueta: "Torre-Pacheco (Murcia)",
+    zonas: [...BARRIOS_TORRE_PACHECO, ...POLIGONOS_TORRE_PACHECO],
   },
 ];
 

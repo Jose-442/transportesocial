@@ -201,6 +201,7 @@ describe("zonas de Burgos", () => {
       "lorca",
       "molinadesegura",
       "alcantarilla",
+      "torrepacheco",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3413,6 +3414,34 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlcantarilla).size).toBe(nombresAlcantarilla.length);
     expect(nombresAlcantarilla.filter((n) => alcantarilla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
     expect(nombresAlcantarilla.filter((n) => alcantarilla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const torrepacheco = ciudadUrbana("torrepacheco");
+    expect(torrepacheco?.etiqueta).toBe("Torre-Pacheco (Murcia)");
+    expect(torrepacheco?.nombre).toBe("Torre-Pacheco");
+    expect(zonaDeCiudad(torrepacheco!, "Casco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrepacheco!, "Roldán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrepacheco!, "Balsicas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrepacheco!, "Dolores de Pacheco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrepacheco!, "Los Olmos-Hoyamorena")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrepacheco!, "Dolores")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Meroños")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Hortichuela")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Los Camachos")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Los Olmos")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Hoyamorena")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Los Infiernos")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Polaris World")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial de Balsicas")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial de Dolores de Pacheco")).toBeNull();
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial La Estrella")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial La Hita")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial Municipal de Balsicas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial AUI Nº6 de Roldán")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrepacheco!, "Polígono Industrial Municipal de Dolores de Pacheco")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(torrepacheco!, "Parque Industrial Polaris")?.tipo).toBe("poligono");
+    const nombresTorre = torrepacheco!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorre).size).toBe(nombresTorre.length);
+    expect(nombresTorre.filter((n) => torrepacheco!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    expect(nombresTorre.filter((n) => torrepacheco!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3637,6 +3666,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[murciaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[murciaIdx + 4]?.label).toBe("Molina de Segura");
     expect(ciudades[murciaIdx + 4]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 5]?.label).toBe("Torre-Pacheco");
+    expect(ciudades[murciaIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");
