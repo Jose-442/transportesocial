@@ -592,6 +592,19 @@
  * Polígono Industrial El Tapiado, Polígono Industrial La Serreta, Polígono Industrial La Polvorista, Polígono Industrial La Estrella y Polígono Industrial Hercas quedan los cinco.
  * La Serreta Este y La Serreta Oeste son el mismo polígono. La Polvorista Norte y La Polvorista Sur también.
  * Molina Norte y Profusa no entran. Siguen en proyecto.
+ * Alcantarilla: debajo de Murcia, antes de Cartagena. Los barrios de la web y los del plano de delegados. Tres polígonos.
+ * Campoamor queda con ese nombre. Norte y Sur no entran aparte.
+ * Vistabella queda con ese nombre. Este y Oeste no entran aparte.
+ * Las Tejeras queda con ese nombre. El plano también escribe Tejeras. Entra una sola vez.
+ * Cayitas queda con ese nombre. También se llama La Esencia. Entra una sola vez.
+ * San José Obrero queda con ese nombre. Campico no entra aparte.
+ * Huerto de los Frailes y San Francisco queda con ese nombre.
+ * Santa María queda con ese nombre. Javalí Nuevo es de Murcia.
+ * Cabezo Gordo queda con ese nombre. La carretera de Barqueros no entra aparte.
+ * Cabezo Verde queda como barrio. El polígono entra aparte.
+ * El Potrox queda como barrio.
+ * Polígono Industrial Cabezo Verde, Polígono Industrial La Coroneja y Parque Empresarial San Andrés quedan los tres.
+ * El Polígono Industrial Oeste ya está en Murcia. No entra otra vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9449,6 +9462,35 @@ const POLIGONOS_MOLINA_DE_SEGURA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Hercas", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCANTARILLA: ZonaCiudad[] = [
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Campoamor", tipo: "barrio" },
+  { nombre: "San José Obrero", tipo: "barrio" },
+  { nombre: "Las Tejeras", tipo: "barrio" },
+  { nombre: "Florentino Gómez", tipo: "barrio" },
+  { nombre: "La Torrica", tipo: "barrio" },
+  { nombre: "Cayitas", tipo: "barrio" },
+  { nombre: "Vistabella", tipo: "barrio" },
+  { nombre: "Cabezo Negro", tipo: "barrio" },
+  { nombre: "Cabezo Verde", tipo: "barrio" },
+  { nombre: "Santa Rosa de Lima", tipo: "barrio" },
+  { nombre: "El Potrox", tipo: "barrio" },
+  { nombre: "El Llano", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+  { nombre: "Entrevías", tipo: "barrio" },
+  { nombre: "Huerto de los Frailes y San Francisco", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Cabezo Gordo", tipo: "barrio" },
+  { nombre: "Puebla de Soto", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCANTARILLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Cabezo Verde", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Coroneja", tipo: "poligono" },
+  { nombre: "Parque Empresarial San Andrés", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10591,6 +10633,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Molina de Segura",
     etiqueta: "Molina de Segura (Murcia)",
     zonas: [...BARRIOS_MOLINA_DE_SEGURA, ...POLIGONOS_MOLINA_DE_SEGURA],
+  },
+  {
+    id: "alcantarilla",
+    nombre: "Alcantarilla",
+    etiqueta: "Alcantarilla (Murcia)",
+    zonas: [...BARRIOS_ALCANTARILLA, ...POLIGONOS_ALCANTARILLA],
   },
 ];
 
