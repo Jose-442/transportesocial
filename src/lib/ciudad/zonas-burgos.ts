@@ -464,6 +464,16 @@
  * Sant Francesc queda con ese nombre. San Francisco es el mismo barrio. Entra una sola vez.
  * La Cova queda como barrio. Polígono Industrial La Cova como polígono.
  * Parc Empresarial Aeroport es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Xirivella: debajo de Torrent. Los barrios del plan de emergencias del Ayuntamiento, más El Cano, y los tres polígonos del censo de la Generalitat.
+ * Barri Sant Ramon y Mont de Pietat quedan los dos. El plan también escribe Barri Mont Pietat. Entra como Mont de Pietat.
+ * Barri de la Llum y Vicentica La Serrana quedan las dos.
+ * El Cano queda como barrio.
+ * Sant Josep desapareció. No entra. Alqueria Nova es parte del Barri de la Llum. No entra aparte.
+ * Verge de la Salut, Mare de Déu de la Salut y Virgen de La Salud son el mismo polígono. Entra una sola vez, como Polígono Industrial Verge de la Salut.
+ * Els Oficis es la ampliación y queda aparte. Zamarra queda con ese nombre. La finca Samarra no entra.
+ * Sector D y Sector E son de esa zona industrial. No entran aparte.
+ * Vara de Quart sigue en Valencia. No entra en Xirivella.
+ * Centro Comercial Gran Turia es polígono. En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8714,6 +8724,21 @@ const POLIGONOS_MANISES: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Cova", tipo: "poligono" },
 ];
 
+const BARRIOS_XIRIVELLA: ZonaCiudad[] = [
+  { nombre: "Barri Sant Ramon", tipo: "barrio" },
+  { nombre: "Mont de Pietat", tipo: "barrio" },
+  { nombre: "Barri de la Llum", tipo: "barrio" },
+  { nombre: "Vicentica La Serrana", tipo: "barrio" },
+  { nombre: "El Cano", tipo: "barrio" },
+];
+
+const POLIGONOS_XIRIVELLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Verge de la Salut", tipo: "poligono" },
+  { nombre: "Polígono Industrial Els Oficis", tipo: "poligono" },
+  { nombre: "Polígono Industrial Zamarra", tipo: "poligono" },
+  { nombre: "Centro Comercial Gran Turia", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9772,6 +9797,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Manises",
     etiqueta: "Manises (Valencia)",
     zonas: [...BARRIOS_MANISES, ...POLIGONOS_MANISES],
+  },
+  {
+    id: "xirivella",
+    nombre: "Xirivella",
+    etiqueta: "Xirivella (Valencia)",
+    zonas: [...BARRIOS_XIRIVELLA, ...POLIGONOS_XIRIVELLA],
   },
 ];
 

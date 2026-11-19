@@ -186,6 +186,7 @@ describe("zonas de Burgos", () => {
       "ontinyent",
       "aldaia",
       "manises",
+      "xirivella",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3000,6 +3001,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresManises).size).toBe(nombresManises.length);
     expect(nombresManises.filter((n) => manises!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
     expect(nombresManises.filter((n) => manises!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const xirivella = ciudadUrbana("xirivella");
+    expect(xirivella?.etiqueta).toBe("Xirivella (Valencia)");
+    expect(xirivella?.nombre).toBe("Xirivella");
+    expect(zonaDeCiudad(xirivella!, "Barri Sant Ramon")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xirivella!, "Mont de Pietat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xirivella!, "Barri de la Llum")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xirivella!, "Vicentica La Serrana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xirivella!, "El Cano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xirivella!, "Sant Josep")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Alqueria Nova")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Polígono Industrial Verge de la Salut")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(xirivella!, "Polígono Industrial Els Oficis")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(xirivella!, "Polígono Industrial Zamarra")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(xirivella!, "Mare de Déu de la Salut")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Virgen de La Salud")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Sector D")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Vara de Quart")).toBeNull();
+    expect(zonaDeCiudad(xirivella!, "Centro Comercial Gran Turia")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Centro Comercial Gran Turia", tipo: "poligono" })).toBe(
+      "Polígono · Centro Comercial Gran Turia",
+    );
+    const nombresXirivella = xirivella!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresXirivella).size).toBe(nombresXirivella.length);
+    expect(nombresXirivella.filter((n) => xirivella!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(5);
+    expect(nombresXirivella.filter((n) => xirivella!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3110,6 +3136,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[valenciaIdx + 9]?.negrita).toBeUndefined();
     expect(ciudades[valenciaIdx + 10]?.label).toBe("Torrent");
     expect(ciudades[valenciaIdx + 10]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 11]?.label).toBe("Xirivella");
+    expect(ciudades[valenciaIdx + 11]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
