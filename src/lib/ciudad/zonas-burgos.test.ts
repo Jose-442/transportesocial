@@ -187,6 +187,7 @@ describe("zonas de Burgos", () => {
       "aldaia",
       "manises",
       "xirivella",
+      "xativa",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3026,6 +3027,35 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresXirivella).size).toBe(nombresXirivella.length);
     expect(nombresXirivella.filter((n) => xirivella!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(5);
     expect(nombresXirivella.filter((n) => xirivella!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const xativa = ciudadUrbana("xativa");
+    expect(xativa?.etiqueta).toBe("Xàtiva (Valencia)");
+    expect(xativa?.nombre).toBe("Xàtiva");
+    expect(zonaDeCiudad(xativa!, "Núcleo histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Las Santas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "San Pedro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "San José")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Alto del Raval")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Raval de San Juan")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Las Barreras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Ensanche")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Camino dels Dos Molins")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Carmen")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "La Murta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Huertos del Raval")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Torre de Lloris")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Anahuir")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Sorió")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "El Realengo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(xativa!, "Distrito Ciudad")).toBeNull();
+    expect(zonaDeCiudad(xativa!, "Camí de l'Estret")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(xativa!, "Polígono A")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Camí de l'Estret", tipo: "poligono" })).toBe(
+      "Polígono · Camí de l'Estret",
+    );
+    const nombresXativa = xativa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresXativa).size).toBe(nombresXativa.length);
+    expect(nombresXativa.filter((n) => xativa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresXativa.filter((n) => xativa!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3136,8 +3166,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[valenciaIdx + 9]?.negrita).toBeUndefined();
     expect(ciudades[valenciaIdx + 10]?.label).toBe("Torrent");
     expect(ciudades[valenciaIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 11]?.label).toBe("Xirivella");
+    expect(ciudades[valenciaIdx + 11]?.label).toBe("Xàtiva");
     expect(ciudades[valenciaIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 12]?.label).toBe("Xirivella");
+    expect(ciudades[valenciaIdx + 12]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();

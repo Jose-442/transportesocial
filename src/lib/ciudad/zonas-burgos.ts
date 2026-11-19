@@ -464,7 +464,7 @@
  * Sant Francesc queda con ese nombre. San Francisco es el mismo barrio. Entra una sola vez.
  * La Cova queda como barrio. Polígono Industrial La Cova como polígono.
  * Parc Empresarial Aeroport es polígono. En el desplegable se ve con «Polígono ·» delante.
- * Xirivella: debajo de Torrent. Los barrios del plan de emergencias del Ayuntamiento, más El Cano, y los tres polígonos del censo de la Generalitat.
+ * Xirivella: debajo de Xàtiva. Los barrios del plan de emergencias del Ayuntamiento, más El Cano, y los tres polígonos del censo de la Generalitat.
  * Barri Sant Ramon y Mont de Pietat quedan los dos. El plan también escribe Barri Mont Pietat. Entra como Mont de Pietat.
  * Barri de la Llum y Vicentica La Serrana quedan las dos.
  * El Cano queda como barrio.
@@ -474,6 +474,11 @@
  * Sector D y Sector E son de esa zona industrial. No entran aparte.
  * Vara de Quart sigue en Valencia. No entra en Xirivella.
  * Centro Comercial Gran Turia es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Xàtiva: debajo de Torrent y delante de Xirivella. Los doce barrios y las cuatro pedanías.
+ * Núcleo histórico es el barrio de Santa María. Distrito Ciudad es el mismo. Entra una sola vez.
+ * Torre de Lloris, Anahuir, Sorió y El Realengo quedan las cuatro, como barrio.
+ * Camí de l'Estret es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Polígono A queda con ese nombre. El censo de 2023 solo deja estos dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8739,6 +8744,30 @@ const POLIGONOS_XIRIVELLA: ZonaCiudad[] = [
   { nombre: "Centro Comercial Gran Turia", tipo: "poligono" },
 ];
 
+const BARRIOS_XATIVA: ZonaCiudad[] = [
+  { nombre: "Núcleo histórico", tipo: "barrio" },
+  { nombre: "Las Santas", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Alto del Raval", tipo: "barrio" },
+  { nombre: "Raval de San Juan", tipo: "barrio" },
+  { nombre: "Las Barreras", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "Camino dels Dos Molins", tipo: "barrio" },
+  { nombre: "Carmen", tipo: "barrio" },
+  { nombre: "La Murta", tipo: "barrio" },
+  { nombre: "Huertos del Raval", tipo: "barrio" },
+  { nombre: "Torre de Lloris", tipo: "barrio" },
+  { nombre: "Anahuir", tipo: "barrio" },
+  { nombre: "Sorió", tipo: "barrio" },
+  { nombre: "El Realengo", tipo: "barrio" },
+];
+
+const POLIGONOS_XATIVA: ZonaCiudad[] = [
+  { nombre: "Camí de l'Estret", tipo: "poligono" },
+  { nombre: "Polígono A", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9803,6 +9832,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Xirivella",
     etiqueta: "Xirivella (Valencia)",
     zonas: [...BARRIOS_XIRIVELLA, ...POLIGONOS_XIRIVELLA],
+  },
+  {
+    id: "xativa",
+    nombre: "Xàtiva",
+    etiqueta: "Xàtiva (Valencia)",
+    zonas: [...BARRIOS_XATIVA, ...POLIGONOS_XATIVA],
   },
 ];
 
