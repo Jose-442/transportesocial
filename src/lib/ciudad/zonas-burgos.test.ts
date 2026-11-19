@@ -211,6 +211,7 @@ describe("zonas de Burgos", () => {
       "albacete",
       "hellin",
       "ciudadreal",
+      "puertollano",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3657,6 +3658,36 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCiudadReal).size).toBe(nombresCiudadReal.length);
     expect(nombresCiudadReal.filter((n) => ciudadreal!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
     expect(nombresCiudadReal.filter((n) => ciudadreal!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const puertollano = ciudadUrbana("puertollano");
+    expect(puertollano?.etiqueta).toBe("Puertollano (Ciudad Real)");
+    expect(puertollano?.nombre).toBe("Puertollano");
+    expect(zonaDeCiudad(puertollano!, "Santa Ana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "Las Mercedes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "Fraternidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "El Villar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "Constitución")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "Centro Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertollano!, "El Pino")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Las 600")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "El Villar de Puertollano")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Abulagar")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "La Constitución")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Centro")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Puertollano")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "La Nava I")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "La Nava III")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Polígono Industrial de La Nava")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Polígono Industrial de Sepes")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Polígono Industrial Aragonesas")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Industrias Aragonesas")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Complejo Industrial")).toBeNull();
+    expect(zonaDeCiudad(puertollano!, "Polígono Industrial La Nava")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(puertollano!, "Polígono Industrial Sepes")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(puertollano!, "Polígono Aragonesas")?.tipo).toBe("poligono");
+    const nombresPuertollano = puertollano!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPuertollano).size).toBe(nombresPuertollano.length);
+    expect(nombresPuertollano.filter((n) => puertollano!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(11);
+    expect(nombresPuertollano.filter((n) => puertollano!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3807,8 +3838,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "lucena")?.label).toBe("Lucena");
     expect(ciudades.find((c) => c.value === "lucena")?.negrita).toBeUndefined();
     const cordobaIdx = ciudades.findIndex((c) => c.value === "cordoba");
-    expect(ciudades[cordobaIdx - 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[cordobaIdx - 1]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx - 2]?.label).toBe("Ciudad Real");
+    expect(ciudades[cordobaIdx - 2]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx - 1]?.label).toBe("Puertollano");
+    expect(ciudades[cordobaIdx - 1]?.negrita).toBeUndefined();
     expect(ciudades[cordobaIdx]?.label).toBe("Córdoba");
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx + 1]?.label).toBe("Lucena");

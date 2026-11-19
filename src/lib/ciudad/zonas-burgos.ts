@@ -694,6 +694,16 @@
  * Pío XII y Jacobo Roldán no entran. No están en la delimitación.
  * Polígono Industrial Avanzado queda con ese nombre. También se llama polígono de la Carretera de Carrión. Puerta del AVE no entra aparte.
  * Polígono Industrial Larache y Polígono Industrial Puerta de Toledo quedan los dos. Larache y Puerta de Toledo-Atalaya siguen como barrios.
+ * Puertollano: debajo de Ciudad Real, justo detrás de la capital. Los once barrios del Ayuntamiento y los tres polígonos.
+ * Las Mercedes queda con ese nombre. También se llama El Pino.
+ * Fraternidad queda con ese nombre. Las 600 son una zona de ese barrio. No entran aparte.
+ * El Villar queda con ese nombre. También se escribe El Villar de Puertollano.
+ * Constitución queda con ese nombre. También se llama Abulagar y La Constitución.
+ * Centro Sur queda con ese nombre. Centro no entra aparte.
+ * Polígono Industrial La Nava queda con ese nombre. También se escribe polígono industrial de La Nava. La Nava I y La Nava III son el mismo polígono.
+ * Polígono Industrial Sepes queda con ese nombre. También se escribe Polígono Industrial de Sepes.
+ * Polígono Aragonesas queda con ese nombre. Industrias Aragonesas es la empresa. No entra aparte.
+ * El complejo de Repsol no entra. No es un polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9906,6 +9916,26 @@ const POLIGONOS_CIUDAD_REAL: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Puerta de Toledo", tipo: "poligono" },
 ];
 
+const BARRIOS_PUERTOLLANO: ZonaCiudad[] = [
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Libertad", tipo: "barrio" },
+  { nombre: "Las Mercedes", tipo: "barrio" },
+  { nombre: "Fraternidad", tipo: "barrio" },
+  { nombre: "El Villar", tipo: "barrio" },
+  { nombre: "El Poblado", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Constitución", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Centro Sur", tipo: "barrio" },
+  { nombre: "Cañamares", tipo: "barrio" },
+];
+
+const POLIGONOS_PUERTOLLANO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Nava", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sepes", tipo: "poligono" },
+  { nombre: "Polígono Aragonesas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11114,6 +11144,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ciudad Real",
     etiqueta: "Ciudad Real (Ciudad Real)",
     zonas: [...BARRIOS_CIUDAD_REAL, ...POLIGONOS_CIUDAD_REAL],
+  },
+  {
+    id: "puertollano",
+    nombre: "Puertollano",
+    etiqueta: "Puertollano (Ciudad Real)",
+    zonas: [...BARRIOS_PUERTOLLANO, ...POLIGONOS_PUERTOLLANO],
   },
 ];
 
