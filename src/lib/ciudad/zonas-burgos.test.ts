@@ -207,6 +207,7 @@ describe("zonas de Burgos", () => {
       "sanjavier",
       "cieza",
       "mazarron",
+      "totana",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3546,6 +3547,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMazarron).size).toBe(nombresMazarron.length);
     expect(nombresMazarron.filter((n) => mazarron!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
     expect(nombresMazarron.filter((n) => mazarron!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(0);
+    const totana = ciudadUrbana("totana");
+    expect(totana?.etiqueta).toBe("Totana (Murcia)");
+    expect(totana?.nombre).toBe("Totana");
+    expect(zonaDeCiudad(totana!, "Triana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "Sevilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "La Era Alta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "El Paretón-Cantareros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "Lébor")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "Ñorica")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(totana!, "Era Alta")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Barrio de San José")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Paretón")).toBeNull();
+    expect(zonaDeCiudad(totana!, "El Paretón")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Cantareros")).toBeNull();
+    expect(zonaDeCiudad(totana!, "La Ñorica")).toBeNull();
+    expect(zonaDeCiudad(totana!, "El Raiguero")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Raiguero Bajo")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Lebor")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Carivete")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Totana")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Polígono Industrial de Totana")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Polígono de la Cruz")).toBeNull();
+    expect(zonaDeCiudad(totana!, "Polígono Industrial El Saladar")?.tipo).toBe("poligono");
+    const nombresTotana = totana!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTotana).size).toBe(nombresTotana.length);
+    expect(nombresTotana.filter((n) => totana!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
+    expect(nombresTotana.filter((n) => totana!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3780,8 +3808,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[murciaIdx + 8]?.negrita).toBeUndefined();
     expect(ciudades[murciaIdx + 9]?.label).toBe("Torre-Pacheco");
     expect(ciudades[murciaIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 10]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 10]?.label).toBe("Totana");
     expect(ciudades[murciaIdx + 10]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 11]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 11]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");

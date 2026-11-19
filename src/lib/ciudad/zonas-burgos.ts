@@ -651,6 +651,15 @@
  * Camposol no entra aparte. Queda en Saladillo.
  * El Margajón no entra. No tiene habitantes.
  * No hay un polígono con nombre propio.
+ * Totana: debajo de Murcia, entre Torre-Pacheco y Yecla. Los barrios del casco y las ocho pedanías. El polígono.
+ * La Era Alta queda con ese nombre. También se escribe Era Alta. Entra una sola vez.
+ * San José queda con ese nombre. También se escribe Barrio de San José. Entra una sola vez.
+ * El Paretón-Cantareros queda con ese nombre. El padrón lo escribe Paretón. También se escribe El Paretón. Cantareros no entra aparte.
+ * Ñorica queda con ese nombre. También se escribe La Ñorica. Entra una sola vez.
+ * Raiguero queda con ese nombre. También se escribe El Raiguero. Raiguero Bajo no entra aparte.
+ * Lébor queda con ese nombre. También se escribe Lebor. Entra una sola vez.
+ * Carivete no entra aparte. Queda en Las Viñas.
+ * Polígono Industrial El Saladar queda con ese nombre. También se llama Polígono Industrial de Totana. Las calles del polígono no entran aparte.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9685,6 +9694,35 @@ const BARRIOS_MAZARRON: ZonaCiudad[] = [
   { nombre: "Saladillo", tipo: "barrio" },
 ];
 
+const BARRIOS_TOTANA: ZonaCiudad[] = [
+  { nombre: "Triana", tipo: "barrio" },
+  { nombre: "Sevilla", tipo: "barrio" },
+  { nombre: "La Era Alta", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "El Parral", tipo: "barrio" },
+  { nombre: "Tirol-Camilleri", tipo: "barrio" },
+  { nombre: "La Ramblica", tipo: "barrio" },
+  { nombre: "Las Peras", tipo: "barrio" },
+  { nombre: "Olímpico", tipo: "barrio" },
+  { nombre: "Estación", tipo: "barrio" },
+  { nombre: "Triptolemos", tipo: "barrio" },
+  { nombre: "La Báscula", tipo: "barrio" },
+  { nombre: "La Huerta", tipo: "barrio" },
+  { nombre: "Lébor", tipo: "barrio" },
+  { nombre: "Mortí", tipo: "barrio" },
+  { nombre: "Ñorica", tipo: "barrio" },
+  { nombre: "El Paretón-Cantareros", tipo: "barrio" },
+  { nombre: "Raiguero", tipo: "barrio" },
+  { nombre: "La Sierra", tipo: "barrio" },
+  { nombre: "Las Viñas", tipo: "barrio" },
+];
+
+const POLIGONOS_TOTANA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Saladar", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10869,6 +10907,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mazarrón",
     etiqueta: "Mazarrón (Murcia)",
     zonas: [...BARRIOS_MAZARRON],
+  },
+  {
+    id: "totana",
+    nombre: "Totana",
+    etiqueta: "Totana (Murcia)",
+    zonas: [...BARRIOS_TOTANA, ...POLIGONOS_TOTANA],
   },
 ];
 
