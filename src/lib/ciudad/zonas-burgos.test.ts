@@ -191,6 +191,7 @@ describe("zonas de Burgos", () => {
       "catarroja",
       "alaquas",
       "badajoz",
+      "merida",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3123,6 +3124,39 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresBadajoz).size).toBe(nombresBadajoz.length);
     expect(nombresBadajoz.filter((n) => badajoz!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(42);
     expect(nombresBadajoz.filter((n) => badajoz!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const merida = ciudadUrbana("merida");
+    expect(merida?.etiqueta).toBe("Mérida (Badajoz)");
+    expect(merida?.nombre).toBe("Mérida");
+    expect(zonaDeCiudad(merida!, "Casco Histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Nueva Ciudad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Miralrío")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Nuestra Señora de la Antigua")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Estación de El Carrascalejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "El Prado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Reina Sofía")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Carrión")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(merida!, "Centro")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Miralrio")).toBeNull();
+    expect(zonaDeCiudad(merida!, "La Antigua")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Estación de El Carrascal")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Estación de Carrascalejo")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Polígono Nueva Ciudad")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Polígono Industrial La Casera")).toBeNull();
+    expect(zonaDeCiudad(merida!, "El Prado Ampliación")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Polígono Industrial El Prado")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial Reina Sofía")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial Las Palmeras")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial Albarregas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial Carrión")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial CEPANSA")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Polígono Industrial ExpacioMérida")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(merida!, "Cepansa")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Albarregás")).toBeNull();
+    expect(zonaDeCiudad(merida!, "Expacio Mérida")).toBeNull();
+    const nombresMerida = merida!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMerida).size).toBe(nombresMerida.length);
+    expect(nombresMerida.filter((n) => merida!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(46);
+    expect(nombresMerida.filter((n) => merida!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3328,8 +3362,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[granadaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
-    expect(ciudades.find((c) => c.value === "badajoz")?.label).toBe("Badajoz");
-    expect(ciudades.find((c) => c.value === "badajoz")?.negrita).toBe(true);
+    const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
+    expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
+    expect(ciudades[badajozIdx]?.negrita).toBe(true);
+    expect(ciudades[badajozIdx + 1]?.label).toBe("Mérida");
+    expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
     for (const ciudad of CIUDADES_URBANAS) {
       const opciones = zonasParaDesplegable(ciudad);

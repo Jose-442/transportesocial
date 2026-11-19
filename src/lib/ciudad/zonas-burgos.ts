@@ -497,6 +497,17 @@
  * Alcazaba, Alvarado, Balboa, Gévora, Novelda del Guadiana, Sagrajas, Valdebótoa y Villafranco del Guadiana quedan las ocho, como barrio.
  * Bótoa queda como barrio. Es la aldea.
  * Plataforma Logística del Suroeste Europeo y Parque Científico y Tecnológico de Extremadura son polígono. En el desplegable se ven con «Polígono ·» delante.
+ * Mérida: debajo de Badajoz. Los barrios de los distritos y los núcleos del padrón. Los siete polígonos.
+ * Casco Histórico queda con ese nombre. El centro es el mismo sitio. Entra una sola vez.
+ * Miralrío queda con ese nombre. El padrón también escribe Miralrio. Entra una sola vez.
+ * Nuestra Señora de la Antigua queda con ese nombre. El plano también dice La Antigua. Entra una sola vez.
+ * Estación de El Carrascalejo queda con ese nombre. También se escribe Estación de El Carrascal y Estación de Carrascalejo. Entra una sola vez.
+ * Nueva Ciudad queda como barrio. No entra como polígono.
+ * El Prado, Reina Sofía y Carrión quedan como barrio y, aparte, como polígono.
+ * Polígono Industrial El Prado entra una sola vez. La ampliación es el mismo polígono.
+ * Polígono Industrial CEPANSA queda con esas siglas. También se escribe Cepansa. Entra una sola vez.
+ * Polígono Industrial Albarregas queda sin acento. Polígono Industrial ExpacioMérida queda junto. También se escribe Expacio Mérida. Entra una sola vez.
+ * La Casera no entra. El plano de 2016 la rotula y la agenda urbana no la cuenta entre los polígonos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8867,6 +8878,65 @@ const POLIGONOS_BADAJOZ: ZonaCiudad[] = [
   { nombre: "Parque Científico y Tecnológico de Extremadura", tipo: "poligono" },
 ];
 
+const BARRIOS_MERIDA: ZonaCiudad[] = [
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "El Barrio", tipo: "barrio" },
+  { nombre: "San Albín", tipo: "barrio" },
+  { nombre: "República Argentina", tipo: "barrio" },
+  { nombre: "San Luis", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Nuestra Señora de la Antigua", tipo: "barrio" },
+  { nombre: "María Auxiliadora", tipo: "barrio" },
+  { nombre: "San Lázaro", tipo: "barrio" },
+  { nombre: "Santa Isabel", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Los Milagros", tipo: "barrio" },
+  { nombre: "Santa Eulalia", tipo: "barrio" },
+  { nombre: "Las Abadías", tipo: "barrio" },
+  { nombre: "San Bartolomé", tipo: "barrio" },
+  { nombre: "Jardín de Mérida", tipo: "barrio" },
+  { nombre: "Juan Canet", tipo: "barrio" },
+  { nombre: "Proserpina", tipo: "barrio" },
+  { nombre: "Montealto", tipo: "barrio" },
+  { nombre: "La Corchera", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "Tierno Galván", tipo: "barrio" },
+  { nombre: "Vía de la Plata", tipo: "barrio" },
+  { nombre: "La Calzada", tipo: "barrio" },
+  { nombre: "Zona Sur", tipo: "barrio" },
+  { nombre: "Los Bodegones", tipo: "barrio" },
+  { nombre: "Nuevo Bodegones", tipo: "barrio" },
+  { nombre: "Plantonal de Vera", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "Reina Sofía", tipo: "barrio" },
+  { nombre: "Salesianos", tipo: "barrio" },
+  { nombre: "Nueva Ciudad", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Cruzcampo", tipo: "barrio" },
+  { nombre: "Miralrío", tipo: "barrio" },
+  { nombre: "La Heredad", tipo: "barrio" },
+  { nombre: "Prado Viejo", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "El Prado", tipo: "barrio" },
+  { nombre: "Campomanes", tipo: "barrio" },
+  { nombre: "Carrión", tipo: "barrio" },
+  { nombre: "El Vivero", tipo: "barrio" },
+  { nombre: "Estación de Aljucén", tipo: "barrio" },
+  { nombre: "Estación de El Carrascalejo", tipo: "barrio" },
+  { nombre: "Psiquiátrico", tipo: "barrio" },
+  { nombre: "Virgen de la Luz", tipo: "barrio" },
+];
+
+const POLIGONOS_MERIDA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Prado", tipo: "poligono" },
+  { nombre: "Polígono Industrial Reina Sofía", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Palmeras", tipo: "poligono" },
+  { nombre: "Polígono Industrial Albarregas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carrión", tipo: "poligono" },
+  { nombre: "Polígono Industrial CEPANSA", tipo: "poligono" },
+  { nombre: "Polígono Industrial ExpacioMérida", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9955,6 +10025,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Badajoz",
     etiqueta: "Badajoz (Badajoz)",
     zonas: [...BARRIOS_BADAJOZ, ...POLIGONOS_BADAJOZ],
+  },
+  {
+    id: "merida",
+    nombre: "Mérida",
+    etiqueta: "Mérida (Badajoz)",
+    zonas: [...BARRIOS_MERIDA, ...POLIGONOS_MERIDA],
   },
 ];
 
