@@ -684,6 +684,16 @@
  * Polígono Industrial La Losilla queda con ese nombre. Las fases son el mismo polígono.
  * Polígono Industrial de la Fuente queda con ese nombre.
  * Polígono Industrial San Rafael queda con ese nombre. La tercera fase es el mismo. El barrio San Rafael entra aparte.
+ * Ciudad Real: capital, en negrita, delante de Córdoba. Los veinte barrios de la delimitación de 2016 y los tres polígonos.
+ * Plaza Mayor, Los Ángeles y El Perchel entran una sola vez. El distrito los parte, pero son el mismo barrio.
+ * Puerta de Toledo-Atalaya queda con ese nombre. Puerta de Toledo y Atalaya no entran aparte.
+ * Puerta de Santa María queda con ese nombre. También se escribe Puerta Santa María.
+ * Santa María, San Pedro y Santiago son los barrios antiguos. No entran aparte.
+ * Oriente y La Corredera son el mismo sitio. No entran aparte.
+ * Poniente, Alarcos y La Peseta son el mismo barrio antiguo. Entra Camino de Alarcos.
+ * Pío XII y Jacobo Roldán no entran. No están en la delimitación.
+ * Polígono Industrial Avanzado queda con ese nombre. También se llama polígono de la Carretera de Carrión. Puerta del AVE no entra aparte.
+ * Polígono Industrial Larache y Polígono Industrial Puerta de Toledo quedan los dos. Larache y Puerta de Toledo-Atalaya siguen como barrios.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9867,6 +9877,35 @@ const POLIGONOS_HELLIN: ZonaCiudad[] = [
   { nombre: "Polígono Industrial San Rafael", tipo: "poligono" },
 ];
 
+const BARRIOS_CIUDAD_REAL: ZonaCiudad[] = [
+  { nombre: "Plaza Mayor", tipo: "barrio" },
+  { nombre: "La Morería", tipo: "barrio" },
+  { nombre: "Plaza de Toros", tipo: "barrio" },
+  { nombre: "El Perchel", tipo: "barrio" },
+  { nombre: "El Torreón", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "Nuevo Parque", tipo: "barrio" },
+  { nombre: "Los Ángeles", tipo: "barrio" },
+  { nombre: "Larache", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "Camino de Alarcos", tipo: "barrio" },
+  { nombre: "Puerta de Santa María", tipo: "barrio" },
+  { nombre: "Puerta de Toledo-Atalaya", tipo: "barrio" },
+  { nombre: "Los Rosales", tipo: "barrio" },
+  { nombre: "La Guija", tipo: "barrio" },
+  { nombre: "Nuevo Hospital", tipo: "barrio" },
+  { nombre: "Las Casas", tipo: "barrio" },
+  { nombre: "Valverde", tipo: "barrio" },
+  { nombre: "La Poblachuela", tipo: "barrio" },
+];
+
+const POLIGONOS_CIUDAD_REAL: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Avanzado", tipo: "poligono" },
+  { nombre: "Polígono Industrial Larache", tipo: "poligono" },
+  { nombre: "Polígono Industrial Puerta de Toledo", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11069,6 +11108,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Hellín",
     etiqueta: "Hellín (Albacete)",
     zonas: [...BARRIOS_HELLIN, ...POLIGONOS_HELLIN],
+  },
+  {
+    id: "ciudadreal",
+    nombre: "Ciudad Real",
+    etiqueta: "Ciudad Real (Ciudad Real)",
+    zonas: [...BARRIOS_CIUDAD_REAL, ...POLIGONOS_CIUDAD_REAL],
   },
 ];
 

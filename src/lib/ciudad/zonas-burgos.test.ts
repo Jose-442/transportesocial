@@ -210,6 +210,7 @@ describe("zonas de Burgos", () => {
       "totana",
       "albacete",
       "hellin",
+      "ciudadreal",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3625,6 +3626,37 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresHellin).size).toBe(nombresHellin.length);
     expect(nombresHellin.filter((n) => hellin!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
     expect(nombresHellin.filter((n) => hellin!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const ciudadreal = ciudadUrbana("ciudadreal");
+    expect(ciudadreal?.etiqueta).toBe("Ciudad Real (Ciudad Real)");
+    expect(ciudadreal?.nombre).toBe("Ciudad Real");
+    expect(zonaDeCiudad(ciudadreal!, "Plaza Mayor")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "El Torreón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "Puerta de Toledo-Atalaya")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "Las Casas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "La Poblachuela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "Larache")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciudadreal!, "Santa María")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "San Pedro")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Santiago")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Oriente")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "La Corredera")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Poniente")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Alarcos")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "La Peseta")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Pío XII")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Jacobo Roldán")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Puerta de Toledo")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Atalaya")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Puerta Santa María")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Puerta del AVE")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Polígono Industrial Carretera de Carrión")).toBeNull();
+    expect(zonaDeCiudad(ciudadreal!, "Polígono Industrial Avanzado")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ciudadreal!, "Polígono Industrial Larache")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ciudadreal!, "Polígono Industrial Puerta de Toledo")?.tipo).toBe("poligono");
+    const nombresCiudadReal = ciudadreal!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCiudadReal).size).toBe(nombresCiudadReal.length);
+    expect(nombresCiudadReal.filter((n) => ciudadreal!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(20);
+    expect(nombresCiudadReal.filter((n) => ciudadreal!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3775,6 +3807,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "lucena")?.label).toBe("Lucena");
     expect(ciudades.find((c) => c.value === "lucena")?.negrita).toBeUndefined();
     const cordobaIdx = ciudades.findIndex((c) => c.value === "cordoba");
+    expect(ciudades[cordobaIdx - 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[cordobaIdx - 1]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx]?.label).toBe("Córdoba");
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx + 1]?.label).toBe("Lucena");
