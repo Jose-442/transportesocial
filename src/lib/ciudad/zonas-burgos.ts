@@ -479,6 +479,12 @@
  * Torre de Lloris, Anahuir, Sorió y El Realengo quedan las cuatro, como barrio.
  * Camí de l'Estret es polígono. En el desplegable se ve con «Polígono ·» delante.
  * Polígono A queda con ese nombre. El censo de 2023 solo deja estos dos.
+ * Catarroja: debajo de Burjassot y delante de Gandia. Los siete barrios del plan de servicios sociales y El Port.
+ * Raval-Pilar queda con ese nombre. El Raval es el mismo barrio. Entra una sola vez.
+ * Regió-Florida-Villa Carme queda con ese nombre.
+ * Fumeral-Institut queda con ese nombre. El Ayuntamiento también lo llama Instituto-Fumeral. Entra una sola vez.
+ * El Port queda como barrio.
+ * Polígono Industrial El Bony es el único del censo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8768,6 +8774,21 @@ const POLIGONOS_XATIVA: ZonaCiudad[] = [
   { nombre: "Polígono A", tipo: "poligono" },
 ];
 
+const BARRIOS_CATARROJA: ZonaCiudad[] = [
+  { nombre: "Barraques", tipo: "barrio" },
+  { nombre: "Raval-Pilar", tipo: "barrio" },
+  { nombre: "Regió-Florida-Villa Carme", tipo: "barrio" },
+  { nombre: "Horteta-Vila Romana", tipo: "barrio" },
+  { nombre: "Fumeral-Institut", tipo: "barrio" },
+  { nombre: "Charco Tranviaris", tipo: "barrio" },
+  { nombre: "Mercat", tipo: "barrio" },
+  { nombre: "El Port", tipo: "barrio" },
+];
+
+const POLIGONOS_CATARROJA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Bony", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9838,6 +9859,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Xàtiva",
     etiqueta: "Xàtiva (Valencia)",
     zonas: [...BARRIOS_XATIVA, ...POLIGONOS_XATIVA],
+  },
+  {
+    id: "catarroja",
+    nombre: "Catarroja",
+    etiqueta: "Catarroja (Valencia)",
+    zonas: [...BARRIOS_CATARROJA, ...POLIGONOS_CATARROJA],
   },
 ];
 
