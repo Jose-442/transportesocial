@@ -491,6 +491,12 @@
  * Barri de Sant Vicent, Barri de San Fermín, Barri del Carme y Barri Roig quedan los cuatro.
  * El Olivar queda como barrio.
  * Polígono Industrial El Bovalar y Polígono Industrial Els Mollons quedan los dos. El Bovalar no entra como barrio.
+ * Badajoz: capital, en negrita. Los barrios del listado, las ocho pedanías y Bótoa. Los tres polígonos.
+ * Cerro Gordo y Mirador de Cerro Gordo quedan los dos.
+ * La U.V.A. queda como barrio. Santa Engracia también.
+ * Alcazaba, Alvarado, Balboa, Gévora, Novelda del Guadiana, Sagrajas, Valdebótoa y Villafranco del Guadiana quedan las ocho, como barrio.
+ * Bótoa queda como barrio. Es la aldea.
+ * Plataforma Logística del Suroeste Europeo y Parque Científico y Tecnológico de Extremadura son polígono. En el desplegable se ven con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8810,6 +8816,57 @@ const POLIGONOS_ALAQUAS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Els Mollons", tipo: "poligono" },
 ];
 
+const BARRIOS_BADAJOZ: ZonaCiudad[] = [
+  { nombre: "Antonio Domínguez", tipo: "barrio" },
+  { nombre: "Barriada de Llera", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Cerro de Reyes", tipo: "barrio" },
+  { nombre: "Cerro de San Miguel", tipo: "barrio" },
+  { nombre: "Cerro del Viento", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Corazón de Jesús", tipo: "barrio" },
+  { nombre: "El Gurugú", tipo: "barrio" },
+  { nombre: "Huerta Rosales", tipo: "barrio" },
+  { nombre: "Jardines del Guadiana", tipo: "barrio" },
+  { nombre: "La Atalaya", tipo: "barrio" },
+  { nombre: "La Banasta", tipo: "barrio" },
+  { nombre: "La Pilara", tipo: "barrio" },
+  { nombre: "Las Moreras", tipo: "barrio" },
+  { nombre: "La U.V.A.", tipo: "barrio" },
+  { nombre: "Los Montitos", tipo: "barrio" },
+  { nombre: "Los Ordenandos", tipo: "barrio" },
+  { nombre: "María Auxiliadora", tipo: "barrio" },
+  { nombre: "Mirador de Cerro Gordo", tipo: "barrio" },
+  { nombre: "Pardaleras", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "El Progreso", tipo: "barrio" },
+  { nombre: "San Fernando", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "San Salvador", tipo: "barrio" },
+  { nombre: "Santa Marina", tipo: "barrio" },
+  { nombre: "Suerte de Saavedra", tipo: "barrio" },
+  { nombre: "Las Vaguadas", tipo: "barrio" },
+  { nombre: "Urbanización Guadiana", tipo: "barrio" },
+  { nombre: "Valdepasillas", tipo: "barrio" },
+  { nombre: "Cerro Gordo", tipo: "barrio" },
+  { nombre: "Santa Engracia", tipo: "barrio" },
+  { nombre: "Alcazaba", tipo: "barrio" },
+  { nombre: "Alvarado", tipo: "barrio" },
+  { nombre: "Balboa", tipo: "barrio" },
+  { nombre: "Gévora", tipo: "barrio" },
+  { nombre: "Novelda del Guadiana", tipo: "barrio" },
+  { nombre: "Sagrajas", tipo: "barrio" },
+  { nombre: "Valdebótoa", tipo: "barrio" },
+  { nombre: "Villafranco del Guadiana", tipo: "barrio" },
+  { nombre: "Bótoa", tipo: "barrio" },
+];
+
+const POLIGONOS_BADAJOZ: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Nevero", tipo: "poligono" },
+  { nombre: "Plataforma Logística del Suroeste Europeo", tipo: "poligono" },
+  { nombre: "Parque Científico y Tecnológico de Extremadura", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9892,6 +9949,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alaquàs",
     etiqueta: "Alaquàs (Valencia)",
     zonas: [...BARRIOS_ALAQUAS, ...POLIGONOS_ALAQUAS],
+  },
+  {
+    id: "badajoz",
+    nombre: "Badajoz",
+    etiqueta: "Badajoz (Badajoz)",
+    zonas: [...BARRIOS_BADAJOZ, ...POLIGONOS_BADAJOZ],
   },
 ];
 

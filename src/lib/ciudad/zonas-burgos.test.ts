@@ -190,6 +190,7 @@ describe("zonas de Burgos", () => {
       "xativa",
       "catarroja",
       "alaquas",
+      "badajoz",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3094,6 +3095,34 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlaquas).size).toBe(nombresAlaquas.length);
     expect(nombresAlaquas.filter((n) => alaquas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
     expect(nombresAlaquas.filter((n) => alaquas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const badajoz = ciudadUrbana("badajoz");
+    expect(badajoz?.etiqueta).toBe("Badajoz (Badajoz)");
+    expect(badajoz?.nombre).toBe("Badajoz");
+    expect(zonaDeCiudad(badajoz!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "San Roque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Cerro Gordo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Mirador de Cerro Gordo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "La U.V.A.")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Santa Engracia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Valdepasillas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Gévora")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Valdebótoa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Villafranco del Guadiana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Bótoa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(badajoz!, "Guadiana del Caudillo")).toBeNull();
+    expect(zonaDeCiudad(badajoz!, "Polígono Industrial El Nevero")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(badajoz!, "Plataforma Logística del Suroeste Europeo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(badajoz!, "Parque Científico y Tecnológico de Extremadura")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Plataforma Logística del Suroeste Europeo", tipo: "poligono" })).toBe(
+      "Polígono · Plataforma Logística del Suroeste Europeo",
+    );
+    expect(etiquetaZona({ nombre: "Parque Científico y Tecnológico de Extremadura", tipo: "poligono" })).toBe(
+      "Polígono · Parque Científico y Tecnológico de Extremadura",
+    );
+    const nombresBadajoz = badajoz!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresBadajoz).size).toBe(nombresBadajoz.length);
+    expect(nombresBadajoz.filter((n) => badajoz!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(42);
+    expect(nombresBadajoz.filter((n) => badajoz!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3299,6 +3328,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[granadaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "badajoz")?.label).toBe("Badajoz");
+    expect(ciudades.find((c) => c.value === "badajoz")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
     for (const ciudad of CIUDADES_URBANAS) {
       const opciones = zonasParaDesplegable(ciudad);
