@@ -194,6 +194,7 @@ describe("zonas de Burgos", () => {
       "merida",
       "donbenito",
       "almendralejo",
+      "caceres",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3213,6 +3214,36 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlmendralejo).size).toBe(nombresAlmendralejo.length);
     expect(nombresAlmendralejo.filter((n) => almendralejo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
     expect(nombresAlmendralejo.filter((n) => almendralejo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const caceres = ciudadUrbana("caceres");
+    expect(caceres?.etiqueta).toBe("Cáceres (Cáceres)");
+    expect(caceres?.nombre).toBe("Cáceres");
+    expect(zonaDeCiudad(caceres!, "Ciudad Monumental")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Mejostilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Cabezarubia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Cánovas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Nuevo Cáceres")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Vistahermosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "R-66-A (El Arco)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Estación Arroyo-Malpartida")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Rincón de Ballesteros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Valdesalor")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(caceres!, "Cabezarrubia")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "San Antonio")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Vista Hermosa")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Pinilla")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Dehesa de los Caballos")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Aldea Moret")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Capellanías")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Charca Musia")).toBeNull();
+    expect(zonaDeCiudad(caceres!, "Polígono Industrial Aldea Moret")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(caceres!, "Polígono Industrial La Mejostilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(caceres!, "Polígono Industrial Las Capellanías")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(caceres!, "Polígono Ganadero")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(caceres!, "Polígono Industrial Charca Musia")?.tipo).toBe("poligono");
+    const nombresCaceres = caceres!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCaceres).size).toBe(nombresCaceres.length);
+    expect(nombresCaceres.filter((n) => caceres!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(72);
+    expect(nombresCaceres.filter((n) => caceres!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3421,6 +3452,8 @@ describe("zonas de Burgos", () => {
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "caceres")?.label).toBe("Cáceres");
+    expect(ciudades.find((c) => c.value === "caceres")?.negrita).toBe(true);
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");

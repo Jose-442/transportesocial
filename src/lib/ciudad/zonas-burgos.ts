@@ -525,6 +525,17 @@
  * Polígono Industrial Las Picadas entra una sola vez. Las Picadas I y Las Picadas II son el mismo polígono.
  * Polígono Industrial Tierra de Barros y Polígono Industrial Carretera de Badajoz quedan los dos.
  * El margen ferroviario no entra como barrio.
+ * Cáceres: capital, en negrita. Los barrios del callejero del Ayuntamiento y las tres pedanías. Los cinco polígonos.
+ * Cabezarubia queda con una erre. También se escribe Cabezarrubia. Entra una sola vez.
+ * Cánovas, Espíritu Santo, Estación, Nuevo Cáceres, Parque del Príncipe y Río Tinto quedan con acento.
+ * Casa Plata queda separado. El callejero lo escribe junto.
+ * Nuevo Cáceres queda con ese nombre. También se llama San Antonio. Entra una sola vez.
+ * Vistahermosa queda junto. El distrito también escribe Vista Hermosa. Entra una sola vez.
+ * R-66-A (El Arco) y R-66-B (Parque del Príncipe) quedan con ese nombre.
+ * Estación Arroyo-Malpartida, Rincón de Ballesteros y Valdesalor quedan las tres, como barrio.
+ * Pinilla no entra aparte. Dehesa de los Caballos tampoco.
+ * Charca Musia, Aldea Moret, La Mejostilla y Las Capellanías entran como polígono. Mejostilla, el barrio, queda aparte.
+ * Polígono Ganadero queda con ese nombre. Las Capellanías también se escribe Capellanías. Entra una sola vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8998,6 +9009,89 @@ const POLIGONOS_ALMENDRALEJO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Carretera de Badajoz", tipo: "poligono" },
 ];
 
+const BARRIOS_CACERES: ZonaCiudad[] = [
+  { nombre: "Aguas Vivas", tipo: "barrio" },
+  { nombre: "Argentina", tipo: "barrio" },
+  { nombre: "Barriada Minera", tipo: "barrio" },
+  { nombre: "Cabezarubia", tipo: "barrio" },
+  { nombre: "Cáceres el Viejo", tipo: "barrio" },
+  { nombre: "Campus Universitario", tipo: "barrio" },
+  { nombre: "Cánovas", tipo: "barrio" },
+  { nombre: "Casa Plata", tipo: "barrio" },
+  { nombre: "Casas Baratas", tipo: "barrio" },
+  { nombre: "Cementerio", tipo: "barrio" },
+  { nombre: "Ceres Golf", tipo: "barrio" },
+  { nombre: "Ciudad Monumental", tipo: "barrio" },
+  { nombre: "El Junquillo", tipo: "barrio" },
+  { nombre: "El Perú", tipo: "barrio" },
+  { nombre: "El Rodeo", tipo: "barrio" },
+  { nombre: "El Vivero", tipo: "barrio" },
+  { nombre: "Espíritu Santo", tipo: "barrio" },
+  { nombre: "Estación", tipo: "barrio" },
+  { nombre: "Estación Arroyo-Malpartida", tipo: "barrio" },
+  { nombre: "Gredos", tipo: "barrio" },
+  { nombre: "Hernán Cortés", tipo: "barrio" },
+  { nombre: "Hernández Pacheco", tipo: "barrio" },
+  { nombre: "Huertas", tipo: "barrio" },
+  { nombre: "Infanta Isabel", tipo: "barrio" },
+  { nombre: "La Abundancia", tipo: "barrio" },
+  { nombre: "La Bondad", tipo: "barrio" },
+  { nombre: "La Cañada", tipo: "barrio" },
+  { nombre: "La Madrila", tipo: "barrio" },
+  { nombre: "La Paloma", tipo: "barrio" },
+  { nombre: "La Sierrilla", tipo: "barrio" },
+  { nombre: "La Zambomba", tipo: "barrio" },
+  { nombre: "Las Candelas", tipo: "barrio" },
+  { nombre: "Las Trescientas", tipo: "barrio" },
+  { nombre: "Llopis Ivorra", tipo: "barrio" },
+  { nombre: "Los Castellanos", tipo: "barrio" },
+  { nombre: "Los Fratres", tipo: "barrio" },
+  { nombre: "Macondo", tipo: "barrio" },
+  { nombre: "Maltravieso", tipo: "barrio" },
+  { nombre: "Margallo", tipo: "barrio" },
+  { nombre: "Mejostilla", tipo: "barrio" },
+  { nombre: "Moctezuma", tipo: "barrio" },
+  { nombre: "Montesol", tipo: "barrio" },
+  { nombre: "Nueva Ciudad", tipo: "barrio" },
+  { nombre: "Nuevo Cáceres", tipo: "barrio" },
+  { nombre: "Parque del Príncipe", tipo: "barrio" },
+  { nombre: "Paseo Alto", tipo: "barrio" },
+  { nombre: "Peña Redonda", tipo: "barrio" },
+  { nombre: "Plaza Mayor", tipo: "barrio" },
+  { nombre: "R-66-A (El Arco)", tipo: "barrio" },
+  { nombre: "R-66-B (Parque del Príncipe)", tipo: "barrio" },
+  { nombre: "Recinto Ferial", tipo: "barrio" },
+  { nombre: "Residencial Universidad", tipo: "barrio" },
+  { nombre: "Reyes Huertas", tipo: "barrio" },
+  { nombre: "Ribera del Marco", tipo: "barrio" },
+  { nombre: "Rincón de Ballesteros", tipo: "barrio" },
+  { nombre: "Río Tinto", tipo: "barrio" },
+  { nombre: "Ronda", tipo: "barrio" },
+  { nombre: "San Blas", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "San Jorge", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Justo", tipo: "barrio" },
+  { nombre: "San Marquino", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Seminario", tipo: "barrio" },
+  { nombre: "Valdesalor", tipo: "barrio" },
+  { nombre: "Vegas del Mocho", tipo: "barrio" },
+  { nombre: "Vera Cruz", tipo: "barrio" },
+  { nombre: "Virgen de Guadalupe", tipo: "barrio" },
+  { nombre: "Virgen de la Montaña", tipo: "barrio" },
+  { nombre: "Vistahermosa", tipo: "barrio" },
+];
+
+const POLIGONOS_CACERES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Aldea Moret", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Mejostilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Capellanías", tipo: "poligono" },
+  { nombre: "Polígono Ganadero", tipo: "poligono" },
+  { nombre: "Polígono Industrial Charca Musia", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10104,6 +10198,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Almendralejo",
     etiqueta: "Almendralejo (Badajoz)",
     zonas: [...BARRIOS_ALMENDRALEJO, ...POLIGONOS_ALMENDRALEJO],
+  },
+  {
+    id: "caceres",
+    nombre: "Cáceres",
+    etiqueta: "Cáceres (Cáceres)",
+    zonas: [...BARRIOS_CACERES, ...POLIGONOS_CACERES],
   },
 ];
 
