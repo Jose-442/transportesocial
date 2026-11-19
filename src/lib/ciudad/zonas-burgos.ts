@@ -457,6 +457,13 @@
  * Barri del Cristo queda como barrio. Polígono Industrial Del Cristo como polígono.
  * Barri del Cayo, Barranquet Alto y Calle Sur quedan los tres. Hort de Melcior es el diseminado de esa zona. Entra como Calle Sur.
  * Centro Comercial Bonaire es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Manises: debajo de Gandia y delante de Mislata. Los barrios que nombra el Ayuntamiento y los tres polígonos del censo de la Generalitat.
+ * El Carme queda con ese nombre. El Carmen es el mismo barrio. Entra una sola vez.
+ * Socusa queda con ese nombre.
+ * Sant Jeroni es la parte de Manises. La barriada sigue al otro lado, en Quart de Poblet.
+ * Sant Francesc queda con ese nombre. San Francisco es el mismo barrio. Entra una sola vez.
+ * La Cova queda como barrio. Polígono Industrial La Cova como polígono.
+ * Parc Empresarial Aeroport es polígono. En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8688,6 +8695,25 @@ const POLIGONOS_ALDAIA: ZonaCiudad[] = [
   { nombre: "Centro Comercial Bonaire", tipo: "poligono" },
 ];
 
+const BARRIOS_MANISES: ZonaCiudad[] = [
+  { nombre: "El Carme", tipo: "barrio" },
+  { nombre: "Socusa", tipo: "barrio" },
+  { nombre: "Obradors", tipo: "barrio" },
+  { nombre: "Sant Jeroni", tipo: "barrio" },
+  { nombre: "Santa Félix", tipo: "barrio" },
+  { nombre: "Alameda Parc", tipo: "barrio" },
+  { nombre: "Sant Francesc", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "La Presa", tipo: "barrio" },
+  { nombre: "La Cova", tipo: "barrio" },
+];
+
+const POLIGONOS_MANISES: ZonaCiudad[] = [
+  { nombre: "Parc Empresarial Aeroport", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Barranquet", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Cova", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9740,6 +9766,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Aldaia",
     etiqueta: "Aldaia (Valencia)",
     zonas: [...BARRIOS_ALDAIA, ...POLIGONOS_ALDAIA],
+  },
+  {
+    id: "manises",
+    nombre: "Manises",
+    etiqueta: "Manises (Valencia)",
+    zonas: [...BARRIOS_MANISES, ...POLIGONOS_MANISES],
   },
 ];
 

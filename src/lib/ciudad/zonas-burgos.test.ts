@@ -185,6 +185,7 @@ describe("zonas de Burgos", () => {
       "burjassot",
       "ontinyent",
       "aldaia",
+      "manises",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2974,6 +2975,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAldaia).size).toBe(nombresAldaia.length);
     expect(nombresAldaia.filter((n) => aldaia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(9);
     expect(nombresAldaia.filter((n) => aldaia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const manises = ciudadUrbana("manises");
+    expect(manises?.etiqueta).toBe("Manises (Valencia)");
+    expect(manises?.nombre).toBe("Manises");
+    expect(zonaDeCiudad(manises!, "El Carme")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Socusa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Obradors")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Sant Jeroni")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Santa Félix")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Alameda Parc")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Sant Francesc")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "La Presa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "La Cova")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manises!, "El Carmen")).toBeNull();
+    expect(zonaDeCiudad(manises!, "San Francisco")).toBeNull();
+    expect(zonaDeCiudad(manises!, "Parc Empresarial Aeroport")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manises!, "Polígono Industrial El Barranquet")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(manises!, "Polígono Industrial La Cova")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Parc Empresarial Aeroport", tipo: "poligono" })).toBe(
+      "Polígono · Parc Empresarial Aeroport",
+    );
+    const nombresManises = manises!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresManises).size).toBe(nombresManises.length);
+    expect(nombresManises.filter((n) => manises!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    expect(nombresManises.filter((n) => manises!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3072,16 +3098,18 @@ describe("zonas de Burgos", () => {
     expect(ciudades[valenciaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[valenciaIdx + 4]?.label).toBe("Gandia");
     expect(ciudades[valenciaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 5]?.label).toBe("Mislata");
+    expect(ciudades[valenciaIdx + 5]?.label).toBe("Manises");
     expect(ciudades[valenciaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 6]?.label).toBe("Ontinyent");
+    expect(ciudades[valenciaIdx + 6]?.label).toBe("Mislata");
     expect(ciudades[valenciaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 7]?.label).toBe("Paterna");
+    expect(ciudades[valenciaIdx + 7]?.label).toBe("Ontinyent");
     expect(ciudades[valenciaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 8]?.label).toBe("Sagunto");
+    expect(ciudades[valenciaIdx + 8]?.label).toBe("Paterna");
     expect(ciudades[valenciaIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 9]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 9]?.label).toBe("Sagunto");
     expect(ciudades[valenciaIdx + 9]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 10]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 10]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();
