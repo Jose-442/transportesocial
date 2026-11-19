@@ -634,6 +634,13 @@
  * Los Cabos queda con ese nombre.
  * La Manga del Mar Menor entra en San Javier. En Cartagena ya está la suya.
  * Polígono Industrial Venta del Pino y Polígono Industrial Los Urreas quedan los dos. Las fases de Los Urreas son el mismo polígono.
+ * Cieza: debajo de Murcia, entre Cartagena y Lorca. Los seis barrios del mapa y las pedanías del padrón. Los tres polígonos.
+ * La Era-La Asunción queda con ese nombre. También se escribe La Era-Asunción. Entra una sola vez.
+ * Residencial Ascoy queda como barrio. Ascoy queda como pedanía.
+ * Cabezo de la Fuensantilla no entra aparte. Queda en La Horta. Fuensantilla entra como núcleo.
+ * Polígono Industrial Los Prados, Polígono Industrial Sierra Ascoy y Polígono del Búho quedan los tres. Los Prados y El Búho no son el mismo.
+ * El polígono de Ascoy entra como Polígono Industrial Sierra Ascoy.
+ * Cieza Norte no entra. Sigue en proyecto.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9623,6 +9630,32 @@ const POLIGONOS_SAN_JAVIER: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Los Urreas", tipo: "poligono" },
 ];
 
+const BARRIOS_CIEZA: ZonaCiudad[] = [
+  { nombre: "San Joaquín", tipo: "barrio" },
+  { nombre: "La Era-La Asunción", tipo: "barrio" },
+  { nombre: "La Horta", tipo: "barrio" },
+  { nombre: "San Juan Bosco", tipo: "barrio" },
+  { nombre: "San José Obrero", tipo: "barrio" },
+  { nombre: "Residencial Ascoy", tipo: "barrio" },
+  { nombre: "Ascoy", tipo: "barrio" },
+  { nombre: "Barratera", tipo: "barrio" },
+  { nombre: "Bolvax", tipo: "barrio" },
+  { nombre: "Canadillo", tipo: "barrio" },
+  { nombre: "Fuensantilla", tipo: "barrio" },
+  { nombre: "Ginete", tipo: "barrio" },
+  { nombre: "Horno", tipo: "barrio" },
+  { nombre: "Maripinar", tipo: "barrio" },
+  { nombre: "La Parra", tipo: "barrio" },
+  { nombre: "Perdiguera", tipo: "barrio" },
+  { nombre: "Las Ramblas", tipo: "barrio" },
+];
+
+const POLIGONOS_CIEZA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Los Prados", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sierra Ascoy", tipo: "poligono" },
+  { nombre: "Polígono del Búho", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10795,6 +10828,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Javier",
     etiqueta: "San Javier (Murcia)",
     zonas: [...BARRIOS_SAN_JAVIER, ...POLIGONOS_SAN_JAVIER],
+  },
+  {
+    id: "cieza",
+    nombre: "Cieza",
+    etiqueta: "Cieza (Murcia)",
+    zonas: [...BARRIOS_CIEZA, ...POLIGONOS_CIEZA],
   },
 ];
 
