@@ -576,6 +576,22 @@
  * Polígono Industrial Saprelorca queda con ese nombre. También se llama Polígono Industrial de Lorca. Las fases son el mismo polígono.
  * Polígono La Serrata queda con ese nombre. Los sectores son el mismo polígono.
  * Polígono Industrial La Hoya queda como polígono. La Hoya del pueblo queda como pedanía.
+ * Molina de Segura: debajo de Murcia, después de Lorca. Los barrios de la ordenanza, las urbanizaciones y las pedanías. Los cinco polígonos.
+ * Fátima-Sifón queda con ese nombre. Fátima y El Sifón no entran aparte.
+ * San José-Los Ángeles queda con ese nombre. San José y Los Ángeles no entran aparte.
+ * Santa Rita queda con ese nombre. También se llama Balsa del Lino. Entra una sola vez.
+ * La Molineta queda con ese nombre. Las Yeseras y La Barceloneta no entran aparte.
+ * Cañada de las Eras no entra aparte. Queda en San Antonio y en San Miguel.
+ * El Panderón queda con ese nombre. El Panderón II es el mismo.
+ * La Quinta queda con ese nombre. También se llama Tierra Cálida. Entra una sola vez.
+ * Casa de Maximino queda con ese nombre. También se llama Finca Maximino. Entra una sola vez.
+ * La Torrealta queda con ese nombre. También se escribe Torrealta. Entra una sola vez.
+ * La Ribera queda con ese nombre. También se llama Ribera de Molina. Entra una sola vez.
+ * El Llano queda con ese nombre. También se llama Llano de Molina. Entra una sola vez.
+ * Campotéjar Alta y Campotéjar Baja quedan las dos.
+ * Polígono Industrial El Tapiado, Polígono Industrial La Serreta, Polígono Industrial La Polvorista, Polígono Industrial La Estrella y Polígono Industrial Hercas quedan los cinco.
+ * La Serreta Este y La Serreta Oeste son el mismo polígono. La Polvorista Norte y La Polvorista Sur también.
+ * Molina Norte y Profusa no entran. Siguen en proyecto.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9381,6 +9397,58 @@ const POLIGONOS_LORCA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Hoya", tipo: "poligono" },
 ];
 
+const BARRIOS_MOLINA_DE_SEGURA: ZonaCiudad[] = [
+  { nombre: "Fátima-Sifón", tipo: "barrio" },
+  { nombre: "Punta del Lugar", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Castillo", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Santa Rita", tipo: "barrio" },
+  { nombre: "La Ermita", tipo: "barrio" },
+  { nombre: "El Panderón", tipo: "barrio" },
+  { nombre: "San José-Los Ángeles", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "Sagrado Corazón", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "Casa Ros", tipo: "barrio" },
+  { nombre: "La Molineta", tipo: "barrio" },
+  { nombre: "Los Vientos", tipo: "barrio" },
+  { nombre: "El Chorrico", tipo: "barrio" },
+  { nombre: "Altorreal", tipo: "barrio" },
+  { nombre: "La Alcayna", tipo: "barrio" },
+  { nombre: "Montepríncipe", tipo: "barrio" },
+  { nombre: "Los Conejos", tipo: "barrio" },
+  { nombre: "La Quinta", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "El Pino", tipo: "barrio" },
+  { nombre: "Casa de Maximino", tipo: "barrio" },
+  { nombre: "Mirador de Agridulce II", tipo: "barrio" },
+  { nombre: "El Llano", tipo: "barrio" },
+  { nombre: "La Torrealta", tipo: "barrio" },
+  { nombre: "La Ribera", tipo: "barrio" },
+  { nombre: "El Fenazar", tipo: "barrio" },
+  { nombre: "Los Valientes", tipo: "barrio" },
+  { nombre: "El Romeral", tipo: "barrio" },
+  { nombre: "La Hornera", tipo: "barrio" },
+  { nombre: "Comala", tipo: "barrio" },
+  { nombre: "El Rellano", tipo: "barrio" },
+  { nombre: "Campotéjar Alta", tipo: "barrio" },
+  { nombre: "Campotéjar Baja", tipo: "barrio" },
+  { nombre: "La Hurona", tipo: "barrio" },
+  { nombre: "La Espada", tipo: "barrio" },
+  { nombre: "La Albarda", tipo: "barrio" },
+];
+
+const POLIGONOS_MOLINA_DE_SEGURA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Tapiado", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Serreta", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Polvorista", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Estrella", tipo: "poligono" },
+  { nombre: "Polígono Industrial Hercas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10517,6 +10585,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Lorca",
     etiqueta: "Lorca (Murcia)",
     zonas: [...BARRIOS_LORCA, ...POLIGONOS_LORCA],
+  },
+  {
+    id: "molinadesegura",
+    nombre: "Molina de Segura",
+    etiqueta: "Molina de Segura (Murcia)",
+    zonas: [...BARRIOS_MOLINA_DE_SEGURA, ...POLIGONOS_MOLINA_DE_SEGURA],
   },
 ];
 
