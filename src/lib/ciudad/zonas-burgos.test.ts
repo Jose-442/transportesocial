@@ -184,6 +184,7 @@ describe("zonas de Burgos", () => {
       "mislata",
       "burjassot",
       "ontinyent",
+      "aldaia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -2946,6 +2947,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresOntinyent).size).toBe(nombresOntinyent.length);
     expect(nombresOntinyent.filter((n) => ontinyent!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
     expect(nombresOntinyent.filter((n) => ontinyent!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const aldaia = ciudadUrbana("aldaia");
+    expect(aldaia?.etiqueta).toBe("Aldaia (Valencia)");
+    expect(aldaia?.nombre).toBe("Aldaia");
+    expect(zonaDeCiudad(aldaia!, "Sant Antoni-Sant Miquel-Santa Rita")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Tama")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Brillantina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Casc Antic")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Colonia-Mercat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Barri del Cristo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Barri del Cayo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Barranquet Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Calle Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aldaia!, "Hort de Melcior")).toBeNull();
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial La Lloma")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial El Pou")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial Coscollar/Encreullades")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial Del Cristo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial La Fillola")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Polígono Industrial Cementeri Vell")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(aldaia!, "Centro Comercial Bonaire")?.tipo).toBe("poligono");
+    expect(etiquetaZona({ nombre: "Centro Comercial Bonaire", tipo: "poligono" })).toBe(
+      "Polígono · Centro Comercial Bonaire",
+    );
+    const nombresAldaia = aldaia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAldaia).size).toBe(nombresAldaia.length);
+    expect(nombresAldaia.filter((n) => aldaia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(9);
+    expect(nombresAldaia.filter((n) => aldaia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3036,22 +3064,24 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "valencia")?.label).toBe("Valencia");
     expect(ciudades.find((c) => c.value === "valencia")?.negrita).toBe(true);
     const valenciaIdx = ciudades.findIndex((c) => c.value === "valencia");
-    expect(ciudades[valenciaIdx + 1]?.label).toBe("Alzira");
+    expect(ciudades[valenciaIdx + 1]?.label).toBe("Aldaia");
     expect(ciudades[valenciaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 2]?.label).toBe("Burjassot");
+    expect(ciudades[valenciaIdx + 2]?.label).toBe("Alzira");
     expect(ciudades[valenciaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 3]?.label).toBe("Gandia");
+    expect(ciudades[valenciaIdx + 3]?.label).toBe("Burjassot");
     expect(ciudades[valenciaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 4]?.label).toBe("Mislata");
+    expect(ciudades[valenciaIdx + 4]?.label).toBe("Gandia");
     expect(ciudades[valenciaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 5]?.label).toBe("Ontinyent");
+    expect(ciudades[valenciaIdx + 5]?.label).toBe("Mislata");
     expect(ciudades[valenciaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 6]?.label).toBe("Paterna");
+    expect(ciudades[valenciaIdx + 6]?.label).toBe("Ontinyent");
     expect(ciudades[valenciaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 7]?.label).toBe("Sagunto");
+    expect(ciudades[valenciaIdx + 7]?.label).toBe("Paterna");
     expect(ciudades[valenciaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[valenciaIdx + 8]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 8]?.label).toBe("Sagunto");
     expect(ciudades[valenciaIdx + 8]?.negrita).toBeUndefined();
+    expect(ciudades[valenciaIdx + 9]?.label).toBe("Torrent");
+    expect(ciudades[valenciaIdx + 9]?.negrita).toBeUndefined();
     const toledoIdx = ciudades.findIndex((c) => c.value === "toledo");
     expect(ciudades[toledoIdx + 1]?.label).toBe("Illescas");
     expect(ciudades[toledoIdx + 1]?.negrita).toBeUndefined();

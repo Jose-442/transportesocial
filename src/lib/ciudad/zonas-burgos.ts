@@ -452,6 +452,11 @@
  * Polígono Industrial El Pla y Polígono Industrial El Pla Área 27 y 30 bis quedan los dos.
  * Polígono Industrial Área 45 Pla de Sant Vicent es el de Sant Vicent.
  * Polígono Terciario AH-37 es el de la carretera de Valencia. El plan antiguo lo llamaba polígono Avenida de Valencia. Entra una sola vez, con el nombre del censo.
+ * Aldaia: debajo de Valencia, delante de Alzira. Los barrios y los polígonos del plan de emergencias del Ayuntamiento.
+ * Sant Antoni-Sant Miquel-Santa Rita, Tama, Brillantina, Casc Antic y Colonia-Mercat quedan los cinco.
+ * Barri del Cristo queda como barrio. Polígono Industrial Del Cristo como polígono.
+ * Barri del Cayo, Barranquet Alto y Calle Sur quedan los tres. Hort de Melcior es el diseminado de esa zona. Entra como Calle Sur.
+ * Centro Comercial Bonaire es polígono. En el desplegable se ve con «Polígono ·» delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8661,6 +8666,28 @@ const POLIGONOS_ONTINYENT: ZonaCiudad[] = [
   { nombre: "Polígono Terciario AH-37", tipo: "poligono" },
 ];
 
+const BARRIOS_ALDAIA: ZonaCiudad[] = [
+  { nombre: "Sant Antoni-Sant Miquel-Santa Rita", tipo: "barrio" },
+  { nombre: "Tama", tipo: "barrio" },
+  { nombre: "Brillantina", tipo: "barrio" },
+  { nombre: "Casc Antic", tipo: "barrio" },
+  { nombre: "Colonia-Mercat", tipo: "barrio" },
+  { nombre: "Barri del Cristo", tipo: "barrio" },
+  { nombre: "Barri del Cayo", tipo: "barrio" },
+  { nombre: "Barranquet Alto", tipo: "barrio" },
+  { nombre: "Calle Sur", tipo: "barrio" },
+];
+
+const POLIGONOS_ALDAIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Lloma", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Pou", tipo: "poligono" },
+  { nombre: "Polígono Industrial Coscollar/Encreullades", tipo: "poligono" },
+  { nombre: "Polígono Industrial Del Cristo", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Fillola", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cementeri Vell", tipo: "poligono" },
+  { nombre: "Centro Comercial Bonaire", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9707,6 +9734,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ontinyent",
     etiqueta: "Ontinyent (Valencia)",
     zonas: [...BARRIOS_ONTINYENT, ...POLIGONOS_ONTINYENT],
+  },
+  {
+    id: "aldaia",
+    nombre: "Aldaia",
+    etiqueta: "Aldaia (Valencia)",
+    zonas: [...BARRIOS_ALDAIA, ...POLIGONOS_ALDAIA],
   },
 ];
 
