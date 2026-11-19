@@ -204,6 +204,7 @@ describe("zonas de Burgos", () => {
       "torrepacheco",
       "aguilas",
       "yecla",
+      "sanjavier",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3483,6 +3484,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresYecla).size).toBe(nombresYecla.length);
     expect(nombresYecla.filter((n) => yecla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(14);
     expect(nombresYecla.filter((n) => yecla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const sanjavier = ciudadUrbana("sanjavier");
+    expect(sanjavier?.etiqueta).toBe("San Javier (Murcia)");
+    expect(sanjavier?.nombre).toBe("San Javier");
+    expect(zonaDeCiudad(sanjavier!, "Santiago de la Ribera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanjavier!, "La Manga del Mar Menor")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanjavier!, "El Mirador")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanjavier!, "Ciudad del Aire")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanjavier!, "Los Cabos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanjavier!, "Colonia Julio Ruiz de Alda")).toBeNull();
+    expect(zonaDeCiudad(sanjavier!, "Los Urreas III")).toBeNull();
+    expect(zonaDeCiudad(sanjavier!, "Polígono Industrial Venta del Pino")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(sanjavier!, "Polígono Industrial Los Urreas")?.tipo).toBe("poligono");
+    const nombresSanJavier = sanjavier!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanJavier).size).toBe(nombresSanJavier.length);
+    expect(nombresSanJavier.filter((n) => sanjavier!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
+    expect(nombresSanJavier.filter((n) => sanjavier!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3709,10 +3726,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[murciaIdx + 4]?.negrita).toBeUndefined();
     expect(ciudades[murciaIdx + 5]?.label).toBe("Molina de Segura");
     expect(ciudades[murciaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 6]?.label).toBe("Torre-Pacheco");
+    expect(ciudades[murciaIdx + 6]?.label).toBe("San Javier");
     expect(ciudades[murciaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 7]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 7]?.label).toBe("Torre-Pacheco");
     expect(ciudades[murciaIdx + 7]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 8]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 8]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");

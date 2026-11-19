@@ -629,6 +629,11 @@
  * Santa Bárbara y La Pedrera quedan las dos. Casas Altas no entra aparte.
  * Raspay es la pedanía. Campo Abajo y Campo Arriba quedan las dos.
  * Polígono Industrial Urbayecla, Polígono Industrial Las Teresas y Polígono Industrial La Herrada quedan los tres.
+ * San Javier: debajo de Murcia, entre Molina de Segura y Torre-Pacheco. Las pedanías y los barrios. Los dos polígonos.
+ * Ciudad del Aire queda con ese nombre. También se llama Colonia Julio Ruiz de Alda. Entra una sola vez.
+ * Los Cabos queda con ese nombre.
+ * La Manga del Mar Menor entra en San Javier. En Cartagena ya está la suya.
+ * Polígono Industrial Venta del Pino y Polígono Industrial Los Urreas quedan los dos. Las fases de Los Urreas son el mismo polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9592,6 +9597,32 @@ const POLIGONOS_YECLA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Herrada", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_JAVIER: ZonaCiudad[] = [
+  { nombre: "Santiago de la Ribera", tipo: "barrio" },
+  { nombre: "La Manga del Mar Menor", tipo: "barrio" },
+  { nombre: "El Mirador", tipo: "barrio" },
+  { nombre: "La Grajuela", tipo: "barrio" },
+  { nombre: "San Cayetano", tipo: "barrio" },
+  { nombre: "Roda", tipo: "barrio" },
+  { nombre: "Pozo Aledo", tipo: "barrio" },
+  { nombre: "Castejón", tipo: "barrio" },
+  { nombre: "Los Migalos", tipo: "barrio" },
+  { nombre: "Los Cabos", tipo: "barrio" },
+  { nombre: "Los Ríos", tipo: "barrio" },
+  { nombre: "San Blas", tipo: "barrio" },
+  { nombre: "Mil Flores", tipo: "barrio" },
+  { nombre: "Los Pescadores", tipo: "barrio" },
+  { nombre: "Ciudad del Aire", tipo: "barrio" },
+  { nombre: "Los Arcos", tipo: "barrio" },
+  { nombre: "Los Pozuelos", tipo: "barrio" },
+  { nombre: "Los Garcías de Abajo", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_JAVIER: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Venta del Pino", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Urreas", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10758,6 +10789,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Yecla",
     etiqueta: "Yecla (Murcia)",
     zonas: [...BARRIOS_YECLA, ...POLIGONOS_YECLA],
+  },
+  {
+    id: "sanjavier",
+    nombre: "San Javier",
+    etiqueta: "San Javier (Murcia)",
+    zonas: [...BARRIOS_SAN_JAVIER, ...POLIGONOS_SAN_JAVIER],
   },
 ];
 
