@@ -193,6 +193,7 @@ describe("zonas de Burgos", () => {
       "badajoz",
       "merida",
       "donbenito",
+      "almendralejo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3185,6 +3186,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresDonBenito).size).toBe(nombresDonBenito.length);
     expect(nombresDonBenito.filter((n) => donbenito!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
     expect(nombresDonBenito.filter((n) => donbenito!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const almendralejo = ciudadUrbana("almendralejo");
+    expect(almendralejo?.etiqueta).toBe("Almendralejo (Badajoz)");
+    expect(almendralejo?.nombre).toBe("Almendralejo");
+    expect(zonaDeCiudad(almendralejo!, "San José")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "Las Mercedes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "El Mercado")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "San Roque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "La Paz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "La Florida")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "San Marcos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "Cantalgallo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "La Farola")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "San Antonio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "Santiago")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almendralejo!, "Ensanche Sur")).toBeNull();
+    expect(zonaDeCiudad(almendralejo!, "Barrio del Mercado")).toBeNull();
+    expect(zonaDeCiudad(almendralejo!, "Alberca")).toBeNull();
+    expect(zonaDeCiudad(almendralejo!, "Las Picadas I")).toBeNull();
+    expect(zonaDeCiudad(almendralejo!, "Las Picadas II")).toBeNull();
+    expect(zonaDeCiudad(almendralejo!, "Polígono Industrial Tierra de Barros")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almendralejo!, "Polígono Industrial Las Picadas")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almendralejo!, "Polígono Industrial Carretera de Badajoz")?.tipo).toBe("poligono");
+    const nombresAlmendralejo = almendralejo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlmendralejo).size).toBe(nombresAlmendralejo.length);
+    expect(nombresAlmendralejo.filter((n) => almendralejo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
+    expect(nombresAlmendralejo.filter((n) => almendralejo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3393,10 +3421,12 @@ describe("zonas de Burgos", () => {
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
-    expect(ciudades[badajozIdx + 1]?.label).toBe("Don Benito");
+    expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[badajozIdx + 2]?.label).toBe("Mérida");
+    expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");
     expect(ciudades[badajozIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[badajozIdx + 3]?.label).toBe("Mérida");
+    expect(ciudades[badajozIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
     for (const ciudad of CIUDADES_URBANAS) {
       const opciones = zonasParaDesplegable(ciudad);

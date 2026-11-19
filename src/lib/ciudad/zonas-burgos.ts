@@ -517,6 +517,14 @@
  * Polígono Industrial San Isidro entra una sola vez. Las fases son el mismo polígono.
  * Polígono Industrial Cepansa, Polígono Industrial Isaac Peral y Polígono Industrial Las Cumbres quedan los tres. Cepansa entra una sola vez.
  * Las Albercas es el parque y no entra como barrio. El polígono de Avante es un proyecto y no entra.
+ * Almendralejo: debajo de Badajoz y delante de Don Benito. Los doce barrios del listado. Los tres polígonos.
+ * San José queda con ese nombre. El ensanche sur es el mismo barrio.
+ * Santiago queda con ese nombre. Alberca-Santiago es la zona norte.
+ * San Marcos queda una sola vez. Es la colonia.
+ * El Mercado queda con ese nombre. La agenda también dice Barrio del Mercado. Entra una sola vez.
+ * Polígono Industrial Las Picadas entra una sola vez. Las Picadas I y Las Picadas II son el mismo polígono.
+ * Polígono Industrial Tierra de Barros y Polígono Industrial Carretera de Badajoz quedan los dos.
+ * El margen ferroviario no entra como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8969,6 +8977,27 @@ const POLIGONOS_DON_BENITO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Las Cumbres", tipo: "poligono" },
 ];
 
+const BARRIOS_ALMENDRALEJO: ZonaCiudad[] = [
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "Las Mercedes", tipo: "barrio" },
+  { nombre: "El Mercado", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "San Marcos", tipo: "barrio" },
+  { nombre: "Cantalgallo", tipo: "barrio" },
+  { nombre: "La Farola", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+];
+
+const POLIGONOS_ALMENDRALEJO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Tierra de Barros", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Picadas", tipo: "poligono" },
+  { nombre: "Polígono Industrial Carretera de Badajoz", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10069,6 +10098,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Don Benito",
     etiqueta: "Don Benito (Badajoz)",
     zonas: [...BARRIOS_DON_BENITO, ...POLIGONOS_DON_BENITO],
+  },
+  {
+    id: "almendralejo",
+    nombre: "Almendralejo",
+    etiqueta: "Almendralejo (Badajoz)",
+    zonas: [...BARRIOS_ALMENDRALEJO, ...POLIGONOS_ALMENDRALEJO],
   },
 ];
 
