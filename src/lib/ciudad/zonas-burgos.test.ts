@@ -208,6 +208,7 @@ describe("zonas de Burgos", () => {
       "cieza",
       "mazarron",
       "totana",
+      "albacete",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3574,6 +3575,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresTotana).size).toBe(nombresTotana.length);
     expect(nombresTotana.filter((n) => totana!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
     expect(nombresTotana.filter((n) => totana!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
+    const albacete = ciudadUrbana("albacete");
+    expect(albacete?.etiqueta).toBe("Albacete (Albacete)");
+    expect(albacete?.nombre).toBe("Albacete");
+    expect(zonaDeCiudad(albacete!, "Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Fátima")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Polígono San Antón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Campollano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Aguas Nuevas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Cerrolobo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Urbanización Centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(albacete!, "Ensanche")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Cañicas")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Cerro Lobo")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Parque Empresarial de Campollano")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Polígono Industrial de Romica")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Ajusa")).toBeNull();
+    expect(zonaDeCiudad(albacete!, "Parque Empresarial Campollano")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(albacete!, "Polígono Industrial Romica")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(albacete!, "Polígono Industrial de la Automoción")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(albacete!, "Parque Aeronáutico y Logístico de Albacete")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(albacete!, "Parque Científico y Tecnológico de Castilla-La Mancha")?.tipo).toBe("poligono");
+    const nombresAlbacete = albacete!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlbacete).size).toBe(nombresAlbacete.length);
+    expect(nombresAlbacete.filter((n) => albacete!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(85);
+    expect(nombresAlbacete.filter((n) => albacete!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3728,6 +3754,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx + 1]?.label).toBe("Lucena");
     expect(ciudades[cordobaIdx + 1]?.negrita).toBeUndefined();
+    const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
+    expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
+    expect(ciudades[albaceteIdx]?.negrita).toBe(true);
+    expect(ciudades[albaceteIdx - 1]?.label).toBe("Santiago de Compostela");
+    expect(ciudades[albaceteIdx + 1]?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
     const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");

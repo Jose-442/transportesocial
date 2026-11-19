@@ -660,6 +660,19 @@
  * Lébor queda con ese nombre. También se escribe Lebor. Entra una sola vez.
  * Carivete no entra aparte. Queda en Las Viñas.
  * Polígono Industrial El Saladar queda con ese nombre. También se llama Polígono Industrial de Totana. Las calles del polígono no entran aparte.
+ * Albacete: capital, en negrita, delante de Alicante. Los barrios de los distritos y los núcleos del padrón. Los polígonos del municipio.
+ * Fátima y Franciscanos quedan con ese nombre. El Ensanche no entra aparte.
+ * Polígono San Antón es barrio. Está en dos distritos. Entra una sola vez.
+ * Campollano es barrio. El polígono entra como Parque Empresarial Campollano. También se escribe Parque Empresarial de Campollano.
+ * Polígono Industrial Romica queda con ese nombre. También se escribe Polígono Industrial de Romica.
+ * Cerrolobo queda con ese nombre. También se escribe Cerro Lobo.
+ * Los Llanos, Los Llanos del Águila y la Base Aérea de Los Llanos quedan los tres.
+ * San Antonio y San Antonio Abad quedan los dos.
+ * Centro es el casco. La urbanización entra como Urbanización Centro.
+ * Huerta de Monroy entra una sola vez.
+ * Las Cañicas queda con ese nombre. También se escribe Cañicas.
+ * El polígono de Ajusa entra como Polígono Industrial de la Automoción.
+ * Los polígonos de los pueblos de al lado no entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9723,6 +9736,102 @@ const POLIGONOS_TOTANA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial El Saladar", tipo: "poligono" },
 ];
 
+const BARRIOS_ALBACETE: ZonaCiudad[] = [
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Industria", tipo: "barrio" },
+  { nombre: "La Pajarita", tipo: "barrio" },
+  { nombre: "Nuestra Señora de Cubas", tipo: "barrio" },
+  { nombre: "Santa Cruz", tipo: "barrio" },
+  { nombre: "Los Llanos del Águila", tipo: "barrio" },
+  { nombre: "Campollano", tipo: "barrio" },
+  { nombre: "Polígono San Antón", tipo: "barrio" },
+  { nombre: "San Antonio Abad", tipo: "barrio" },
+  { nombre: "Villacerrada", tipo: "barrio" },
+  { nombre: "Fátima", tipo: "barrio" },
+  { nombre: "Franciscanos", tipo: "barrio" },
+  { nombre: "Parque Sur", tipo: "barrio" },
+  { nombre: "Pedro Lamata", tipo: "barrio" },
+  { nombre: "San Pedro-Mortero", tipo: "barrio" },
+  { nombre: "Santa Teresa", tipo: "barrio" },
+  { nombre: "Casas Baratas", tipo: "barrio" },
+  { nombre: "Sepulcro-Bolera", tipo: "barrio" },
+  { nombre: "Vereda", tipo: "barrio" },
+  { nombre: "Universidad", tipo: "barrio" },
+  { nombre: "Hermanos Falcó", tipo: "barrio" },
+  { nombre: "Hoya de San Ginés", tipo: "barrio" },
+  { nombre: "Huerta de Monroy", tipo: "barrio" },
+  { nombre: "Medicina", tipo: "barrio" },
+  { nombre: "Hospital", tipo: "barrio" },
+  { nombre: "Carretas-Huerta de Marzo", tipo: "barrio" },
+  { nombre: "La Estrella", tipo: "barrio" },
+  { nombre: "La Milagrosa", tipo: "barrio" },
+  { nombre: "Miguel Ángel Blanco", tipo: "barrio" },
+  { nombre: "Canal de María Cristina", tipo: "barrio" },
+  { nombre: "Congo", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "Feria", tipo: "barrio" },
+  { nombre: "Las Cañicas", tipo: "barrio" },
+  { nombre: "Imaginalia", tipo: "barrio" },
+  { nombre: "San Pablo", tipo: "barrio" },
+  { nombre: "El Salobral", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Bacariza", tipo: "barrio" },
+  { nombre: "Argamasón", tipo: "barrio" },
+  { nombre: "Tinajeros", tipo: "barrio" },
+  { nombre: "Campillo de las Doblas", tipo: "barrio" },
+  { nombre: "Los Anguijes", tipo: "barrio" },
+  { nombre: "Abuzaderas", tipo: "barrio" },
+  { nombre: "Cerrolobo", tipo: "barrio" },
+  { nombre: "Casa de las Monjas", tipo: "barrio" },
+  { nombre: "Casa Capitán", tipo: "barrio" },
+  { nombre: "Casa Grande", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "La Pulgosa", tipo: "barrio" },
+  { nombre: "La Torrecica", tipo: "barrio" },
+  { nombre: "Villar de Pozo Rubio", tipo: "barrio" },
+  { nombre: "Aguas Nuevas", tipo: "barrio" },
+  { nombre: "El Peñascal", tipo: "barrio" },
+  { nombre: "Los Rosales", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "El Pinatar", tipo: "barrio" },
+  { nombre: "La Hoya de Casa Juárez", tipo: "barrio" },
+  { nombre: "Las Palomas", tipo: "barrio" },
+  { nombre: "Las Rosas", tipo: "barrio" },
+  { nombre: "Osuna", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "Altos de Escucha", tipo: "barrio" },
+  { nombre: "Casas Viejas", tipo: "barrio" },
+  { nombre: "El Plantío", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "Las Viñas", tipo: "barrio" },
+  { nombre: "Los Chopos", tipo: "barrio" },
+  { nombre: "Los Prados", tipo: "barrio" },
+  { nombre: "Molino Ojo de San Jorge", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Aguacampada-Las Culebras", tipo: "barrio" },
+  { nombre: "Urbanización Centro", tipo: "barrio" },
+  { nombre: "El Palo", tipo: "barrio" },
+  { nombre: "El Trigal", tipo: "barrio" },
+  { nombre: "Base Aérea de Los Llanos", tipo: "barrio" },
+  { nombre: "Aguasol", tipo: "barrio" },
+  { nombre: "La Pérgola", tipo: "barrio" },
+  { nombre: "La Humosa", tipo: "barrio" },
+  { nombre: "Riachuelos 1", tipo: "barrio" },
+  { nombre: "Riachuelos 2", tipo: "barrio" },
+  { nombre: "Miralcampo", tipo: "barrio" },
+  { nombre: "Campoalegre", tipo: "barrio" },
+  { nombre: "Pinares del Júcar", tipo: "barrio" },
+];
+
+const POLIGONOS_ALBACETE: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Campollano", tipo: "poligono" },
+  { nombre: "Polígono Industrial Romica", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Automoción", tipo: "poligono" },
+  { nombre: "Parque Aeronáutico y Logístico de Albacete", tipo: "poligono" },
+  { nombre: "Parque Científico y Tecnológico de Castilla-La Mancha", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10913,6 +11022,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Totana",
     etiqueta: "Totana (Murcia)",
     zonas: [...BARRIOS_TOTANA, ...POLIGONOS_TOTANA],
+  },
+  {
+    id: "albacete",
+    nombre: "Albacete",
+    etiqueta: "Albacete (Albacete)",
+    zonas: [...BARRIOS_ALBACETE, ...POLIGONOS_ALBACETE],
   },
 ];
 
