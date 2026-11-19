@@ -549,6 +549,17 @@
  * Valladolises y Lo Jurado queda con ese nombre.
  * Espinardo queda como barrio. Ya no es pedanía.
  * Polígono Industrial Oeste y Polígono Industrial Cabezo Cortado quedan los dos. Cabezo Cortado I es el mismo. El Oeste entra en Murcia.
+ * Cartagena: debajo de Murcia. Las diputaciones, el casco y las localidades grandes. Los tres polígonos.
+ * Casco Antiguo queda con ese nombre. El padrón llama Cartagena a ese núcleo.
+ * San Antonio Abad queda con ese nombre. También se llama San Antón. Entra una sola vez.
+ * El Lentiscar queda con ese nombre. El padrón también escribe Lentiscar. Entra una sola vez.
+ * El Beal queda con ese nombre. El padrón también escribe Beal. Entra una sola vez.
+ * Los Gabatos queda con ese nombre. También se escribe Los Gatos. Entra una sola vez.
+ * La Manga del Mar Menor queda con ese nombre. El padrón también escribe La Manga. Entra una sola vez.
+ * El Estrecho de San Ginés queda con ese nombre.
+ * Polígono de Santa Ana queda como barrio.
+ * Polígono Industrial Cabezo Beaza, Polígono Industrial Los Camachos y Polígono Industrial La Palma quedan los tres. Las fases son el mismo polígono.
+ * Escombreras queda como diputación. El valle no entra aparte.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9228,6 +9239,73 @@ const POLIGONOS_MURCIA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Cabezo Cortado", tipo: "poligono" },
 ];
 
+const BARRIOS_CARTAGENA: ZonaCiudad[] = [
+  { nombre: "Campo Nubla", tipo: "barrio" },
+  { nombre: "Canteras", tipo: "barrio" },
+  { nombre: "La Magdalena", tipo: "barrio" },
+  { nombre: "Los Puertos", tipo: "barrio" },
+  { nombre: "Perín", tipo: "barrio" },
+  { nombre: "El Albujón", tipo: "barrio" },
+  { nombre: "La Aljorra", tipo: "barrio" },
+  { nombre: "Los Médicos", tipo: "barrio" },
+  { nombre: "Miranda", tipo: "barrio" },
+  { nombre: "Pozo Estrecho", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "El Plan", tipo: "barrio" },
+  { nombre: "San Félix", tipo: "barrio" },
+  { nombre: "San Antonio Abad", tipo: "barrio" },
+  { nombre: "Alumbres", tipo: "barrio" },
+  { nombre: "El Hondón", tipo: "barrio" },
+  { nombre: "Escombreras", tipo: "barrio" },
+  { nombre: "Santa Lucía", tipo: "barrio" },
+  { nombre: "El Lentiscar", tipo: "barrio" },
+  { nombre: "La Palma", tipo: "barrio" },
+  { nombre: "El Algar", tipo: "barrio" },
+  { nombre: "El Beal", tipo: "barrio" },
+  { nombre: "Rincón de San Ginés", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Ensanche-Almarjal", tipo: "barrio" },
+  { nombre: "Barriada Virgen de la Caridad", tipo: "barrio" },
+  { nombre: "San Ginés", tipo: "barrio" },
+  { nombre: "Barrio de la Concepción", tipo: "barrio" },
+  { nombre: "Barrio de Peral", tipo: "barrio" },
+  { nombre: "Los Dolores", tipo: "barrio" },
+  { nombre: "Los Barreros", tipo: "barrio" },
+  { nombre: "La Baña", tipo: "barrio" },
+  { nombre: "Los Gabatos", tipo: "barrio" },
+  { nombre: "Barriada Cuatro Santos", tipo: "barrio" },
+  { nombre: "Polígono de Santa Ana", tipo: "barrio" },
+  { nombre: "Los Mateos", tipo: "barrio" },
+  { nombre: "Lo Campano", tipo: "barrio" },
+  { nombre: "La Manga del Mar Menor", tipo: "barrio" },
+  { nombre: "Cabo de Palos", tipo: "barrio" },
+  { nombre: "Los Belones", tipo: "barrio" },
+  { nombre: "Mar de Cristal", tipo: "barrio" },
+  { nombre: "Los Nietos", tipo: "barrio" },
+  { nombre: "Los Urrutias", tipo: "barrio" },
+  { nombre: "Isla Plana", tipo: "barrio" },
+  { nombre: "La Azohía", tipo: "barrio" },
+  { nombre: "El Portús", tipo: "barrio" },
+  { nombre: "Llano del Beal", tipo: "barrio" },
+  { nombre: "Molinos Marfagones", tipo: "barrio" },
+  { nombre: "Torreciega", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+  { nombre: "La Aparecida", tipo: "barrio" },
+  { nombre: "Playa Honda", tipo: "barrio" },
+  { nombre: "Los Nietos Viejos", tipo: "barrio" },
+  { nombre: "Atamaría", tipo: "barrio" },
+  { nombre: "Cala Reona", tipo: "barrio" },
+  { nombre: "Islas Menores", tipo: "barrio" },
+  { nombre: "El Estrecho de San Ginés", tipo: "barrio" },
+  { nombre: "La Puebla", tipo: "barrio" },
+];
+
+const POLIGONOS_CARTAGENA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Cabezo Beaza", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Camachos", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Palma", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10352,6 +10430,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Murcia",
     etiqueta: "Murcia (Murcia)",
     zonas: [...BARRIOS_MURCIA, ...POLIGONOS_MURCIA],
+  },
+  {
+    id: "cartagena",
+    nombre: "Cartagena",
+    etiqueta: "Cartagena (Murcia)",
+    zonas: [...BARRIOS_CARTAGENA, ...POLIGONOS_CARTAGENA],
   },
 ];
 

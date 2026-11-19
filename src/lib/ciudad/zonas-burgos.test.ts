@@ -197,6 +197,7 @@ describe("zonas de Burgos", () => {
       "caceres",
       "plasencia",
       "murcia",
+      "cartagena",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3286,6 +3287,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMurcia).size).toBe(nombresMurcia.length);
     expect(nombresMurcia.filter((n) => murcia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(83);
     expect(nombresMurcia.filter((n) => murcia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const cartagena = ciudadUrbana("cartagena");
+    expect(cartagena?.etiqueta).toBe("Cartagena (Murcia)");
+    expect(cartagena?.nombre).toBe("Cartagena");
+    expect(zonaDeCiudad(cartagena!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "San Antonio Abad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "Santa Lucía")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "Los Dolores")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "La Manga del Mar Menor")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "Cabo de Palos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "Polígono de Santa Ana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "Escombreras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cartagena!, "San Antón")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Los Gatos")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "La Manga")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Lentiscar")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Beal")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Los Camachos")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Valle de Escombreras")).toBeNull();
+    expect(zonaDeCiudad(cartagena!, "Polígono Industrial Cabezo Beaza")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cartagena!, "Polígono Industrial Los Camachos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(cartagena!, "Polígono Industrial La Palma")?.tipo).toBe("poligono");
+    const nombresCartagena = cartagena!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCartagena).size).toBe(nombresCartagena.length);
+    expect(nombresCartagena.filter((n) => cartagena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(58);
+    expect(nombresCartagena.filter((n) => cartagena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3501,6 +3527,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[caceresIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "murcia")?.label).toBe("Murcia");
     expect(ciudades.find((c) => c.value === "murcia")?.negrita).toBe(true);
+    const murciaIdx = ciudades.findIndex((c) => c.value === "murcia");
+    expect(ciudades[murciaIdx + 1]?.label).toBe("Cartagena");
+    expect(ciudades[murciaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");
