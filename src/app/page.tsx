@@ -118,7 +118,7 @@ export default async function HomePage() {
                   <span className="lg:block">
                     con quienes necesitan viajar, enviar un paquete o{" "}
                   </span>
-                  <span className="lg:block lg:whitespace-nowrap">
+                  <span className="lg:block">
                     desplazarse con su mascota compartiendo ruta.
                   </span>
                 </p>
@@ -172,10 +172,6 @@ export default async function HomePage() {
                   PUBLICAR trayecto en mi ciudad
                 </span>
               </ButtonLink>
-              <p className="px-1 text-lg leading-snug text-white md:hidden">
-                Además la App reteiene y custodia el importe del viaje hasta
-                confirmar que todo ha ido bien
-              </p>
             </div>
           </div>
           <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
@@ -211,7 +207,7 @@ export default async function HomePage() {
                   </span>
                   Usar Transporte Social es gratis
                 </p>
-                <p className="mt-1 hidden whitespace-nowrap md:block md:-translate-x-[2.5cm]">
+                <p className="mt-1 md:whitespace-nowrap md:-translate-x-[2.5cm]">
                   Además custodiamos el importe del viaje hasta confirmar que todo ha ido bien.
                 </p>
               </div>
