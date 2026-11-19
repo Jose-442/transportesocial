@@ -212,6 +212,7 @@ describe("zonas de Burgos", () => {
       "hellin",
       "ciudadreal",
       "puertollano",
+      "tomelloso",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3688,6 +3689,45 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresPuertollano).size).toBe(nombresPuertollano.length);
     expect(nombresPuertollano.filter((n) => puertollano!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(11);
     expect(nombresPuertollano.filter((n) => puertollano!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const tomelloso = ciudadUrbana("tomelloso");
+    expect(tomelloso?.etiqueta).toBe("Tomelloso (Ciudad Real)");
+    expect(tomelloso?.nombre).toBe("Tomelloso");
+    expect(zonaDeCiudad(tomelloso!, "San José Obrero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "Nuevo Tomelloso")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "José María del Moral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "El Carmen")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "El Pilar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "Maternidad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "Europa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(tomelloso!, "De San José Obrero")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "De San Antonio")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Del Nuevo Tomelloso")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "José María Del Moral")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Del Carmen")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Carmen")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Del Pilar")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Pilar")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "De Maternidad")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "De San Juan")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "De Europa")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Centro")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Tomelloso")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Parque Empresarial Los Portales")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Polígono SEPES Los Portales")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Polígono de Los Portales")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Polígono El Bombo")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial 23-32")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Virgen de las Viñas")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Bodegas Fundador")).toBeNull();
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial El Bombo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial Los Portales")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial 22")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial 23")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(tomelloso!, "Polígono Industrial 32")?.tipo).toBe("poligono");
+    const nombresTomelloso = tomelloso!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTomelloso).size).toBe(nombresTomelloso.length);
+    expect(nombresTomelloso.filter((n) => tomelloso!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(9);
+    expect(nombresTomelloso.filter((n) => tomelloso!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3838,9 +3878,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "lucena")?.label).toBe("Lucena");
     expect(ciudades.find((c) => c.value === "lucena")?.negrita).toBeUndefined();
     const cordobaIdx = ciudades.findIndex((c) => c.value === "cordoba");
-    expect(ciudades[cordobaIdx - 2]?.label).toBe("Ciudad Real");
-    expect(ciudades[cordobaIdx - 2]?.negrita).toBe(true);
-    expect(ciudades[cordobaIdx - 1]?.label).toBe("Puertollano");
+    expect(ciudades[cordobaIdx - 3]?.label).toBe("Ciudad Real");
+    expect(ciudades[cordobaIdx - 3]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx - 2]?.label).toBe("Puertollano");
+    expect(ciudades[cordobaIdx - 2]?.negrita).toBeUndefined();
+    expect(ciudades[cordobaIdx - 1]?.label).toBe("Tomelloso");
     expect(ciudades[cordobaIdx - 1]?.negrita).toBeUndefined();
     expect(ciudades[cordobaIdx]?.label).toBe("Córdoba");
     expect(ciudades[cordobaIdx]?.negrita).toBe(true);

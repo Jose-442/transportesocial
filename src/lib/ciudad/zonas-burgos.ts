@@ -704,6 +704,20 @@
  * Polígono Industrial Sepes queda con ese nombre. También se escribe Polígono Industrial de Sepes.
  * Polígono Aragonesas queda con ese nombre. Industrias Aragonesas es la empresa. No entra aparte.
  * El complejo de Repsol no entra. No es un polígono.
+ * Tomelloso: debajo de Ciudad Real, detrás de Puertollano. Los nueve barrios del pleno y los polígonos del centro de empresas.
+ * San José Obrero queda con ese nombre. También se escribe de San José Obrero.
+ * San Antonio queda con ese nombre. También se escribe de San Antonio.
+ * Nuevo Tomelloso queda con ese nombre. También se escribe del Nuevo Tomelloso.
+ * José María del Moral queda con ese nombre. La mayúscula de Del es el mismo barrio.
+ * El Carmen es el barrio del Carmen. Carmen y Del Carmen no entran aparte.
+ * El Pilar es el barrio del Pilar. Pilar y Del Pilar no entran aparte.
+ * Maternidad es el barrio de Maternidad. De Maternidad no entra aparte.
+ * San Juan es el barrio de San Juan. De San Juan no entra aparte.
+ * Europa queda con ese nombre. También se escribe de Europa.
+ * Polígono Industrial Los Portales queda con ese nombre. También se llama Parque Empresarial Los Portales y polígono SEPES.
+ * Polígono Industrial El Bombo queda con ese nombre. También se escribe Polígono El Bombo.
+ * El 23 y el 32 son dos polígonos. El folleto los escribe juntos como 23-32. No entran con ese nombre.
+ * Virgen de las Viñas y Bodegas Fundador son bodegas. No entran aparte.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9936,6 +9950,30 @@ const POLIGONOS_PUERTOLLANO: ZonaCiudad[] = [
   { nombre: "Polígono Aragonesas", tipo: "poligono" },
 ];
 
+const BARRIOS_TOMELLOSO: ZonaCiudad[] = [
+  { nombre: "San José Obrero", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "Nuevo Tomelloso", tipo: "barrio" },
+  { nombre: "José María del Moral", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "Maternidad", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Europa", tipo: "barrio" },
+];
+
+const POLIGONOS_TOMELLOSO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Bombo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Los Portales", tipo: "poligono" },
+  { nombre: "Polígono Industrial 22", tipo: "poligono" },
+  { nombre: "Polígono Industrial 25", tipo: "poligono" },
+  { nombre: "Polígono Industrial 28", tipo: "poligono" },
+  { nombre: "Polígono Industrial 30", tipo: "poligono" },
+  { nombre: "Polígono Industrial 31", tipo: "poligono" },
+  { nombre: "Polígono Industrial 23", tipo: "poligono" },
+  { nombre: "Polígono Industrial 32", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11150,6 +11188,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Puertollano",
     etiqueta: "Puertollano (Ciudad Real)",
     zonas: [...BARRIOS_PUERTOLLANO, ...POLIGONOS_PUERTOLLANO],
+  },
+  {
+    id: "tomelloso",
+    nombre: "Tomelloso",
+    etiqueta: "Tomelloso (Ciudad Real)",
+    zonas: [...BARRIOS_TOMELLOSO, ...POLIGONOS_TOMELLOSO],
   },
 ];
 
