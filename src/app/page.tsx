@@ -113,13 +113,13 @@ export default async function HomePage() {
                 </h1>
                 <p className="mt-1 text-xs text-emerald-50 sm:text-sm lg:text-base">
                   <span className="lg:block">
-                    Ponemos en contacto a conductores fiables{" "}
+                    Conectamos conductores fiables{" "}
                   </span>
                   <span className="lg:block">
-                    con quien necesita viajar, enviar un bulto o{" "}
+                    con quienes necesitan viajar, enviar un paquete o{" "}
                   </span>
                   <span className="lg:block lg:whitespace-nowrap">
-                    desplazarse con su mascota. Compartiendo ruta.
+                    desplazarse con su mascota compartiendo ruta.
                   </span>
                 </p>
               </div>
