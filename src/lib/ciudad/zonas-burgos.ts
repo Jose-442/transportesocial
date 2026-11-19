@@ -614,6 +614,14 @@
  * Los Infiernos no entra. No está entre las once pedanías.
  * Parque Industrial Polaris queda con ese nombre. También se llama Polaris World. Entra una sola vez.
  * La ampliación de La Estrella es el mismo polígono.
+ * Águilas: debajo de Murcia, antes de Alcantarilla. Las diputaciones, las localidades y los barrios del casco. Un polígono.
+ * Barranco queda con ese nombre. También se escribe Barranco de los Asensios. Entra una sola vez.
+ * El Cocón queda con ese nombre. También se escribe Cocón. Entra una sola vez.
+ * Cope queda con ese nombre. Marina de Cope, Cuesta de Gos y El Garrobillo no entran aparte.
+ * Campo es la diputación. Las localidades entran con su nombre.
+ * El Hornillo queda con ese nombre. Costas del Hornillo es el mismo.
+ * Las Majadas y Las Molinetas quedan las dos. El cementerio viejo no entra aparte.
+ * Polígono Industrial El Labradorcico queda con ese nombre. También se llama Las Majadas. El barrio Las Majadas entra aparte.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9530,6 +9538,30 @@ const POLIGONOS_TORRE_PACHECO: ZonaCiudad[] = [
   { nombre: "Parque Industrial Polaris", tipo: "poligono" },
 ];
 
+const BARRIOS_AGUILAS: ZonaCiudad[] = [
+  { nombre: "Barranco", tipo: "barrio" },
+  { nombre: "Los Melenchones", tipo: "barrio" },
+  { nombre: "Peñaranda", tipo: "barrio" },
+  { nombre: "Todosol", tipo: "barrio" },
+  { nombre: "Las Zurraderas", tipo: "barrio" },
+  { nombre: "Los Geráneos", tipo: "barrio" },
+  { nombre: "Los Arejos", tipo: "barrio" },
+  { nombre: "Calarreona", tipo: "barrio" },
+  { nombre: "El Cocón", tipo: "barrio" },
+  { nombre: "Los Gallegos", tipo: "barrio" },
+  { nombre: "Los Mayorales", tipo: "barrio" },
+  { nombre: "Calabardina", tipo: "barrio" },
+  { nombre: "Cope", tipo: "barrio" },
+  { nombre: "Tébar", tipo: "barrio" },
+  { nombre: "El Hornillo", tipo: "barrio" },
+  { nombre: "Las Majadas", tipo: "barrio" },
+  { nombre: "Las Molinetas", tipo: "barrio" },
+];
+
+const POLIGONOS_AGUILAS: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Labradorcico", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10684,6 +10716,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torre-Pacheco",
     etiqueta: "Torre-Pacheco (Murcia)",
     zonas: [...BARRIOS_TORRE_PACHECO, ...POLIGONOS_TORRE_PACHECO],
+  },
+  {
+    id: "aguilas",
+    nombre: "Águilas",
+    etiqueta: "Águilas (Murcia)",
+    zonas: [...BARRIOS_AGUILAS, ...POLIGONOS_AGUILAS],
   },
 ];
 

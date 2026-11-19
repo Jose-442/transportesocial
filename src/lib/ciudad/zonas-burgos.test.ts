@@ -202,6 +202,7 @@ describe("zonas de Burgos", () => {
       "molinadesegura",
       "alcantarilla",
       "torrepacheco",
+      "aguilas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3442,6 +3443,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresTorre).size).toBe(nombresTorre.length);
     expect(nombresTorre.filter((n) => torrepacheco!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
     expect(nombresTorre.filter((n) => torrepacheco!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const aguilas = ciudadUrbana("aguilas");
+    expect(aguilas?.etiqueta).toBe("Águilas (Murcia)");
+    expect(aguilas?.nombre).toBe("Águilas");
+    expect(zonaDeCiudad(aguilas!, "Calabardina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguilas!, "Cope")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguilas!, "El Hornillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguilas!, "Las Majadas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguilas!, "Los Arejos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguilas!, "Barranco de los Asensios")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Cocón")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Marina de Cope")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Cuesta de Gos")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "El Garrobillo")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Costas del Hornillo")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Cementerio Viejo")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Polígono Industrial Las Majadas")).toBeNull();
+    expect(zonaDeCiudad(aguilas!, "Polígono Industrial El Labradorcico")?.tipo).toBe("poligono");
+    const nombresAguilas = aguilas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAguilas).size).toBe(nombresAguilas.length);
+    expect(nombresAguilas.filter((n) => aguilas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
+    expect(nombresAguilas.filter((n) => aguilas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3658,16 +3680,18 @@ describe("zonas de Burgos", () => {
     expect(ciudades.find((c) => c.value === "murcia")?.label).toBe("Murcia");
     expect(ciudades.find((c) => c.value === "murcia")?.negrita).toBe(true);
     const murciaIdx = ciudades.findIndex((c) => c.value === "murcia");
-    expect(ciudades[murciaIdx + 1]?.label).toBe("Alcantarilla");
+    expect(ciudades[murciaIdx + 1]?.label).toBe("Águilas");
     expect(ciudades[murciaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 2]?.label).toBe("Cartagena");
+    expect(ciudades[murciaIdx + 2]?.label).toBe("Alcantarilla");
     expect(ciudades[murciaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 3]?.label).toBe("Lorca");
+    expect(ciudades[murciaIdx + 3]?.label).toBe("Cartagena");
     expect(ciudades[murciaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 4]?.label).toBe("Molina de Segura");
+    expect(ciudades[murciaIdx + 4]?.label).toBe("Lorca");
     expect(ciudades[murciaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 5]?.label).toBe("Torre-Pacheco");
+    expect(ciudades[murciaIdx + 5]?.label).toBe("Molina de Segura");
     expect(ciudades[murciaIdx + 5]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 6]?.label).toBe("Torre-Pacheco");
+    expect(ciudades[murciaIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");
