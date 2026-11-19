@@ -508,6 +508,15 @@
  * Polígono Industrial CEPANSA queda con esas siglas. También se escribe Cepansa. Entra una sola vez.
  * Polígono Industrial Albarregas queda sin acento. Polígono Industrial ExpacioMérida queda junto. También se escribe Expacio Mérida. Entra una sola vez.
  * La Casera no entra. El plano de 2016 la rotula y la agenda urbana no la cuenta entre los polígonos.
+ * Don Benito: debajo de Badajoz y delante de Mérida. Los seis barrios de las fiestas y los siete poblados. Los cuatro polígonos.
+ * San Gregorio queda con ese nombre. También se llama Santa María. Entra una sola vez.
+ * La Piedad queda con ese nombre.
+ * El Torviscal queda con ese nombre. También se escribe Torviscal. Entra una sola vez.
+ * Gargáligas queda con acento.
+ * San Isidro queda como barrio y, aparte, como polígono.
+ * Polígono Industrial San Isidro entra una sola vez. Las fases son el mismo polígono.
+ * Polígono Industrial Cepansa, Polígono Industrial Isaac Peral y Polígono Industrial Las Cumbres quedan los tres. Cepansa entra una sola vez.
+ * Las Albercas es el parque y no entra como barrio. El polígono de Avante es un proyecto y no entra.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8937,6 +8946,29 @@ const POLIGONOS_MERIDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial ExpacioMérida", tipo: "poligono" },
 ];
 
+const BARRIOS_DON_BENITO: ZonaCiudad[] = [
+  { nombre: "San Sebastián", tipo: "barrio" },
+  { nombre: "La Piedad", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San Gregorio", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Conquista del Guadiana", tipo: "barrio" },
+  { nombre: "Gargáligas", tipo: "barrio" },
+  { nombre: "Hernán Cortés", tipo: "barrio" },
+  { nombre: "Ruecas", tipo: "barrio" },
+  { nombre: "El Torviscal", tipo: "barrio" },
+  { nombre: "Valdehornillos", tipo: "barrio" },
+  { nombre: "Vivares", tipo: "barrio" },
+];
+
+const POLIGONOS_DON_BENITO: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial San Isidro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Isaac Peral", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cepansa", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Cumbres", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10031,6 +10063,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mérida",
     etiqueta: "Mérida (Badajoz)",
     zonas: [...BARRIOS_MERIDA, ...POLIGONOS_MERIDA],
+  },
+  {
+    id: "donbenito",
+    nombre: "Don Benito",
+    etiqueta: "Don Benito (Badajoz)",
+    zonas: [...BARRIOS_DON_BENITO, ...POLIGONOS_DON_BENITO],
   },
 ];
 

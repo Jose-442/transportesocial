@@ -192,6 +192,7 @@ describe("zonas de Burgos", () => {
       "alaquas",
       "badajoz",
       "merida",
+      "donbenito",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3157,6 +3158,33 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMerida).size).toBe(nombresMerida.length);
     expect(nombresMerida.filter((n) => merida!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(46);
     expect(nombresMerida.filter((n) => merida!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const donbenito = ciudadUrbana("donbenito");
+    expect(donbenito?.etiqueta).toBe("Don Benito (Badajoz)");
+    expect(donbenito?.nombre).toBe("Don Benito");
+    expect(zonaDeCiudad(donbenito!, "San Sebastián")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "La Piedad")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "San Isidro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "San Gregorio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "San Juan")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "Santiago")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "Conquista del Guadiana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "Gargáligas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "El Torviscal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "Vivares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(donbenito!, "Santa María")).toBeNull();
+    expect(zonaDeCiudad(donbenito!, "Torviscal")).toBeNull();
+    expect(zonaDeCiudad(donbenito!, "Gargaligas")).toBeNull();
+    expect(zonaDeCiudad(donbenito!, "Las Albercas")).toBeNull();
+    expect(zonaDeCiudad(donbenito!, "Polígono Industrial Avante")).toBeNull();
+    expect(zonaDeCiudad(donbenito!, "Polígono Industrial San Isidro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(donbenito!, "Polígono Industrial Isaac Peral")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(donbenito!, "Polígono Industrial Cepansa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(donbenito!, "Polígono Industrial Las Cumbres")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(donbenito!, "CEPANSA")).toBeNull();
+    const nombresDonBenito = donbenito!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresDonBenito).size).toBe(nombresDonBenito.length);
+    expect(nombresDonBenito.filter((n) => donbenito!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
+    expect(nombresDonBenito.filter((n) => donbenito!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3365,8 +3393,10 @@ describe("zonas de Burgos", () => {
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
-    expect(ciudades[badajozIdx + 1]?.label).toBe("Mérida");
+    expect(ciudades[badajozIdx + 1]?.label).toBe("Don Benito");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[badajozIdx + 2]?.label).toBe("Mérida");
+    expect(ciudades[badajozIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "vitoria")?.negrita).toBe(true);
     for (const ciudad of CIUDADES_URBANAS) {
       const opciones = zonasParaDesplegable(ciudad);
