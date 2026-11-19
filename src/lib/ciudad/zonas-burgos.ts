@@ -560,6 +560,22 @@
  * Polígono de Santa Ana queda como barrio.
  * Polígono Industrial Cabezo Beaza, Polígono Industrial Los Camachos y Polígono Industrial La Palma quedan los tres. Las fases son el mismo polígono.
  * Escombreras queda como diputación. El valle no entra aparte.
+ * Lorca: debajo de Murcia, después de Cartagena. Los doce barrios del padrón y las pedanías. Los tres polígonos.
+ * Los Ángeles-Apolonia queda con ese nombre. Apolonia, Los Ángeles y Fuerzas Armadas no entran aparte.
+ * San José queda con ese nombre. Alfonso X no entra aparte.
+ * Santiago queda con ese nombre. San Juan no entra aparte.
+ * Santa Quiteria y Virgen de las Huertas quedan las dos.
+ * Sutullena queda como barrio. San Fernando no entra aparte.
+ * Tiata-La Granja queda con ese nombre. Tiata y La Granja son la misma pedanía.
+ * La Escucha queda con ese nombre. El padrón también escribe Escucha. Entra una sola vez.
+ * El Río queda con ese nombre.
+ * La Torrecilla queda con ese nombre. El padrón también escribe Torrecilla. Entra una sola vez.
+ * Hinojar queda con ese nombre. También se escribe Hinójar. Entra una sola vez.
+ * Pozo Higuera queda con ese nombre. También se escribe Pozo de la Higuera. Entra una sola vez.
+ * Culebrina queda. Está en el catálogo de pedanías.
+ * Polígono Industrial Saprelorca queda con ese nombre. También se llama Polígono Industrial de Lorca. Las fases son el mismo polígono.
+ * Polígono La Serrata queda con ese nombre. Los sectores son el mismo polígono.
+ * Polígono Industrial La Hoya queda como polígono. La Hoya del pueblo queda como pedanía.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9306,6 +9322,65 @@ const POLIGONOS_CARTAGENA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Palma", tipo: "poligono" },
 ];
 
+const BARRIOS_LORCA: ZonaCiudad[] = [
+  { nombre: "Los Ángeles-Apolonia", tipo: "barrio" },
+  { nombre: "Corazón de María", tipo: "barrio" },
+  { nombre: "Parroquias Altas", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Cristóbal", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Mateo", tipo: "barrio" },
+  { nombre: "Santa Quiteria", tipo: "barrio" },
+  { nombre: "Santiago", tipo: "barrio" },
+  { nombre: "Sutullena", tipo: "barrio" },
+  { nombre: "La Viña", tipo: "barrio" },
+  { nombre: "Virgen de las Huertas", tipo: "barrio" },
+  { nombre: "Aguaderas", tipo: "barrio" },
+  { nombre: "Almendricos", tipo: "barrio" },
+  { nombre: "Avilés", tipo: "barrio" },
+  { nombre: "Barranco Hondo", tipo: "barrio" },
+  { nombre: "Béjar", tipo: "barrio" },
+  { nombre: "Campillo", tipo: "barrio" },
+  { nombre: "Carrasquilla", tipo: "barrio" },
+  { nombre: "Cazalla", tipo: "barrio" },
+  { nombre: "Coy", tipo: "barrio" },
+  { nombre: "Culebrina", tipo: "barrio" },
+  { nombre: "Doña Inés", tipo: "barrio" },
+  { nombre: "La Escucha", tipo: "barrio" },
+  { nombre: "Fontanares", tipo: "barrio" },
+  { nombre: "Garrobillo", tipo: "barrio" },
+  { nombre: "Hinojar", tipo: "barrio" },
+  { nombre: "La Hoya", tipo: "barrio" },
+  { nombre: "Humbrías", tipo: "barrio" },
+  { nombre: "Jarales", tipo: "barrio" },
+  { nombre: "Marchena", tipo: "barrio" },
+  { nombre: "Morata", tipo: "barrio" },
+  { nombre: "Nogalte", tipo: "barrio" },
+  { nombre: "Ortillo", tipo: "barrio" },
+  { nombre: "La Paca", tipo: "barrio" },
+  { nombre: "Parrilla", tipo: "barrio" },
+  { nombre: "Pozo Higuera", tipo: "barrio" },
+  { nombre: "Pulgara", tipo: "barrio" },
+  { nombre: "Puntarrón", tipo: "barrio" },
+  { nombre: "Purias", tipo: "barrio" },
+  { nombre: "Ramonete", tipo: "barrio" },
+  { nombre: "El Río", tipo: "barrio" },
+  { nombre: "Tercia", tipo: "barrio" },
+  { nombre: "Tiata-La Granja", tipo: "barrio" },
+  { nombre: "Torrealvilla", tipo: "barrio" },
+  { nombre: "La Torrecilla", tipo: "barrio" },
+  { nombre: "La Tova", tipo: "barrio" },
+  { nombre: "Zarcilla de Ramos", tipo: "barrio" },
+  { nombre: "Zarzadilla de Totana", tipo: "barrio" },
+  { nombre: "Zarzalico", tipo: "barrio" },
+];
+
+const POLIGONOS_LORCA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Saprelorca", tipo: "poligono" },
+  { nombre: "Polígono La Serrata", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Hoya", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -10436,6 +10511,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cartagena",
     etiqueta: "Cartagena (Murcia)",
     zonas: [...BARRIOS_CARTAGENA, ...POLIGONOS_CARTAGENA],
+  },
+  {
+    id: "lorca",
+    nombre: "Lorca",
+    etiqueta: "Lorca (Murcia)",
+    zonas: [...BARRIOS_LORCA, ...POLIGONOS_LORCA],
   },
 ];
 

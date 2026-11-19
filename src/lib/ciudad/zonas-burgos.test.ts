@@ -198,6 +198,7 @@ describe("zonas de Burgos", () => {
       "plasencia",
       "murcia",
       "cartagena",
+      "lorca",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3312,6 +3313,38 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCartagena).size).toBe(nombresCartagena.length);
     expect(nombresCartagena.filter((n) => cartagena!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(58);
     expect(nombresCartagena.filter((n) => cartagena!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const lorca = ciudadUrbana("lorca");
+    expect(lorca?.etiqueta).toBe("Lorca (Murcia)");
+    expect(lorca?.nombre).toBe("Lorca");
+    expect(zonaDeCiudad(lorca!, "Los Ángeles-Apolonia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "San Cristóbal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Sutullena")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "La Hoya")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Campillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Purias")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Tiata-La Granja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Culebrina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lorca!, "Apolonia")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Los Ángeles")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Alfonso X")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "San Juan")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "San Fernando")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Tiata")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "La Granja")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Escucha")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Torrecilla")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Hinójar")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Pozo de la Higuera")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Polígono Industrial de Lorca")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Serrata")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Polígono Industrial de La Hoya")).toBeNull();
+    expect(zonaDeCiudad(lorca!, "Polígono Industrial Saprelorca")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(lorca!, "Polígono La Serrata")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(lorca!, "Polígono Industrial La Hoya")?.tipo).toBe("poligono");
+    const nombresLorca = lorca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLorca).size).toBe(nombresLorca.length);
+    expect(nombresLorca.filter((n) => lorca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(50);
+    expect(nombresLorca.filter((n) => lorca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3530,6 +3563,8 @@ describe("zonas de Burgos", () => {
     const murciaIdx = ciudades.findIndex((c) => c.value === "murcia");
     expect(ciudades[murciaIdx + 1]?.label).toBe("Cartagena");
     expect(ciudades[murciaIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 2]?.label).toBe("Lorca");
+    expect(ciudades[murciaIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");
