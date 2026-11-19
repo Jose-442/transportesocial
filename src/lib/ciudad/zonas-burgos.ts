@@ -718,6 +718,15 @@
  * Polígono Industrial El Bombo queda con ese nombre. También se escribe Polígono El Bombo.
  * El 23 y el 32 son dos polígonos. El folleto los escribe juntos como 23-32. No entran con ese nombre.
  * Virgen de las Viñas y Bodegas Fundador son bodegas. No entran aparte.
+ * Alcázar de San Juan: debajo de Ciudad Real, delante de Puertollano. Los barrios de la lista y los dos polígonos.
+ * Goya, La Pradera, La Paz, Los Devis, Los Multicines, San Francisco y Santa María quedan con ese nombre. La palabra Barrio no entra.
+ * El Arenal es el barrio del Arenal. Arenal no entra aparte.
+ * Casco Antiguo queda con ese nombre. También se escribe Barrio del Casco Antiguo.
+ * El Porvenir es el barrio del Porvenir. Porvenir no entra aparte.
+ * Parque Viejo, Castelar, Cruz Roja y Zona Centro quedan con ese nombre. La palabra Barrio no entra.
+ * Urbanización Avenida Pablo Iglesias queda con ese nombre. También se escribe Urbanización Av. Pablo Iglesias.
+ * Polígono Industrial Alces queda con ese nombre. Las fases I, II y III son el mismo polígono.
+ * Polígono Industrial Emilio Castro queda con ese nombre. Las fases son el mismo polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9974,6 +9983,40 @@ const POLIGONOS_TOMELLOSO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial 32", tipo: "poligono" },
 ];
 
+const BARRIOS_ALCAZAR_DE_SAN_JUAN: ZonaCiudad[] = [
+  { nombre: "Goya", tipo: "barrio" },
+  { nombre: "La Pradera", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Los Devis", tipo: "barrio" },
+  { nombre: "Los Multicines", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "El Arenal", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "El Porvenir", tipo: "barrio" },
+  { nombre: "Parque Viejo", tipo: "barrio" },
+  { nombre: "Castelar", tipo: "barrio" },
+  { nombre: "Cruz Roja", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "El Santo", tipo: "barrio" },
+  { nombre: "Urbanización Avenida Pablo Iglesias", tipo: "barrio" },
+  { nombre: "La Platera", tipo: "barrio" },
+  { nombre: "Los Parrales", tipo: "barrio" },
+  { nombre: "Suerte Peña", tipo: "barrio" },
+  { nombre: "El Comino", tipo: "barrio" },
+  { nombre: "Cañada del Ratón", tipo: "barrio" },
+  { nombre: "Alameda de Cervera", tipo: "barrio" },
+  { nombre: "Casas de Párraga", tipo: "barrio" },
+  { nombre: "Los Molinos", tipo: "barrio" },
+  { nombre: "Cinco Casas", tipo: "barrio" },
+];
+
+const POLIGONOS_ALCAZAR_DE_SAN_JUAN: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Alces", tipo: "poligono" },
+  { nombre: "Polígono Industrial Emilio Castro", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11194,6 +11237,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Tomelloso",
     etiqueta: "Tomelloso (Ciudad Real)",
     zonas: [...BARRIOS_TOMELLOSO, ...POLIGONOS_TOMELLOSO],
+  },
+  {
+    id: "alcazardesanjuan",
+    nombre: "Alcázar de San Juan",
+    etiqueta: "Alcázar de San Juan (Ciudad Real)",
+    zonas: [...BARRIOS_ALCAZAR_DE_SAN_JUAN, ...POLIGONOS_ALCAZAR_DE_SAN_JUAN],
   },
 ];
 
