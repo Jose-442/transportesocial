@@ -441,6 +441,17 @@
  * Mislata: debajo de Gandia y delante de Paterna. Los barrios y el polígono de la lista.
  * Polígono Industrial Nou d'Octubre (Polígono Industrial de Mislata) queda con ese nombre.
  * Mislata+1 es la fuente. No entra en el desplegable.
+ * Burjassot: debajo de Alzira y delante de Gandia. Los barrios y los polígonos de la lista.
+ * Zona de Parque Albán queda como barrio. Zona Empresarial Parque Albán como polígono. En el desplegable se ve con «Polígono ·» delante.
+ * Parque Comercial Ademuz es polígono. En el desplegable se ve con «Polígono ·» delante.
+ * transparencia.burjassot.org+3 es la fuente. No entra en el desplegable.
+ * Ontinyent: debajo de Mislata y delante de Paterna. Los barrios del plan de movilidad del Ayuntamiento y los cinco polígonos del censo de la Generalitat.
+ * La Vila, El Raval-Poble Nou y Cantereria quedan los tres.
+ * Sant Josep, Sant Rafael y El Llombo quedan los tres.
+ * Les Casetes queda como barrio. El Ayuntamiento también las llama Las Casitas. Entra una sola vez.
+ * Polígono Industrial El Pla y Polígono Industrial El Pla Área 27 y 30 bis quedan los dos.
+ * Polígono Industrial Área 45 Pla de Sant Vicent es el de Sant Vicent.
+ * Polígono Terciario AH-37 es el de la carretera de Valencia. El plan antiguo lo llamaba polígono Avenida de Valencia. Entra una sola vez, con el nombre del censo.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -8610,6 +8621,46 @@ const POLIGONOS_MISLATA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Nou d'Octubre (Polígono Industrial de Mislata)", tipo: "poligono" },
 ];
 
+const BARRIOS_BURJASSOT: ZonaCiudad[] = [
+  { nombre: "613 Viviendas-Rajolar", tipo: "barrio" },
+  { nombre: "Empalme", tipo: "barrio" },
+  { nombre: "Escalante-Lucense", tipo: "barrio" },
+  { nombre: "Isaac Peral-Santa Gema", tipo: "barrio" },
+  { nombre: "Lauri Volpi-Eixereta", tipo: "barrio" },
+  { nombre: "Maestro Lope y adyacentes", tipo: "barrio" },
+  { nombre: "Nucli Antic-L'Almara", tipo: "barrio" },
+  { nombre: "San Juan-La Granja", tipo: "barrio" },
+  { nombre: "El Calvari", tipo: "barrio" },
+  { nombre: "Sant Roc", tipo: "barrio" },
+  { nombre: "La Sarrassina", tipo: "barrio" },
+  { nombre: "Zona Universitaria", tipo: "barrio" },
+  { nombre: "Zona de Parque Albán", tipo: "barrio" },
+];
+
+const POLIGONOS_BURJASSOT: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Burjassot", tipo: "poligono" },
+  { nombre: "Zona Empresarial Parque Albán", tipo: "poligono" },
+  { nombre: "Parque Comercial Ademuz", tipo: "poligono" },
+];
+
+const BARRIOS_ONTINYENT: ZonaCiudad[] = [
+  { nombre: "La Vila", tipo: "barrio" },
+  { nombre: "El Raval-Poble Nou", tipo: "barrio" },
+  { nombre: "Cantereria", tipo: "barrio" },
+  { nombre: "Sant Josep", tipo: "barrio" },
+  { nombre: "Sant Rafael", tipo: "barrio" },
+  { nombre: "El Llombo", tipo: "barrio" },
+  { nombre: "Les Casetes", tipo: "barrio" },
+];
+
+const POLIGONOS_ONTINYENT: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial El Pla", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Pla Área 27 y 30 bis", tipo: "poligono" },
+  { nombre: "Polígono Industrial Área 45 Pla de Sant Vicent", tipo: "poligono" },
+  { nombre: "Polígono Industrial L'Altet", tipo: "poligono" },
+  { nombre: "Polígono Terciario AH-37", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -9644,6 +9695,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mislata",
     etiqueta: "Mislata (Valencia)",
     zonas: [...BARRIOS_MISLATA, ...POLIGONOS_MISLATA],
+  },
+  {
+    id: "burjassot",
+    nombre: "Burjassot",
+    etiqueta: "Burjassot (Valencia)",
+    zonas: [...BARRIOS_BURJASSOT, ...POLIGONOS_BURJASSOT],
+  },
+  {
+    id: "ontinyent",
+    nombre: "Ontinyent",
+    etiqueta: "Ontinyent (Valencia)",
+    zonas: [...BARRIOS_ONTINYENT, ...POLIGONOS_ONTINYENT],
   },
 ];
 
