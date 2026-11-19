@@ -673,6 +673,17 @@
  * Las Cañicas queda con ese nombre. También se escribe Cañicas.
  * El polígono de Ajusa entra como Polígono Industrial de la Automoción.
  * Los polígonos de los pueblos de al lado no entran.
+ * Hellín: debajo de Albacete, justo detrás de la capital. El barrio de San Rafael, El Calvario, Santa Bárbara y las doce pedanías. Los tres polígonos.
+ * El Calvario queda con ese nombre. Las dos partes del catastro son el mismo barrio.
+ * Las Minas queda con ese nombre. También se escribe Minas.
+ * La Horca queda con ese nombre. También se escribe Horca.
+ * Nava de Campaña queda con ese nombre. También se escribe Nava de Campana.
+ * Torre Uchea queda con ese nombre. También se escribe Uchea.
+ * Rincón del Moro queda con ese nombre.
+ * El Lugarico no entra aparte. Queda en Agra.
+ * Polígono Industrial La Losilla queda con ese nombre. Las fases son el mismo polígono.
+ * Polígono Industrial de la Fuente queda con ese nombre.
+ * Polígono Industrial San Rafael queda con ese nombre. La tercera fase es el mismo. El barrio San Rafael entra aparte.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -9832,6 +9843,30 @@ const POLIGONOS_ALBACETE: ZonaCiudad[] = [
   { nombre: "Parque Científico y Tecnológico de Castilla-La Mancha", tipo: "poligono" },
 ];
 
+const BARRIOS_HELLIN: ZonaCiudad[] = [
+  { nombre: "San Rafael", tipo: "barrio" },
+  { nombre: "El Calvario", tipo: "barrio" },
+  { nombre: "Santa Bárbara", tipo: "barrio" },
+  { nombre: "Agramón", tipo: "barrio" },
+  { nombre: "Cancarix", tipo: "barrio" },
+  { nombre: "Agra", tipo: "barrio" },
+  { nombre: "Cañada de Agra", tipo: "barrio" },
+  { nombre: "Isso", tipo: "barrio" },
+  { nombre: "Las Minas", tipo: "barrio" },
+  { nombre: "Minateda", tipo: "barrio" },
+  { nombre: "La Horca", tipo: "barrio" },
+  { nombre: "Mingogil", tipo: "barrio" },
+  { nombre: "Nava de Campaña", tipo: "barrio" },
+  { nombre: "Torre Uchea", tipo: "barrio" },
+  { nombre: "Rincón del Moro", tipo: "barrio" },
+];
+
+const POLIGONOS_HELLIN: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial La Losilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial de la Fuente", tipo: "poligono" },
+  { nombre: "Polígono Industrial San Rafael", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11028,6 +11063,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Albacete",
     etiqueta: "Albacete (Albacete)",
     zonas: [...BARRIOS_ALBACETE, ...POLIGONOS_ALBACETE],
+  },
+  {
+    id: "hellin",
+    nombre: "Hellín",
+    etiqueta: "Hellín (Albacete)",
+    zonas: [...BARRIOS_HELLIN, ...POLIGONOS_HELLIN],
   },
 ];
 

@@ -209,6 +209,7 @@ describe("zonas de Burgos", () => {
       "mazarron",
       "totana",
       "albacete",
+      "hellin",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3600,6 +3601,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlbacete).size).toBe(nombresAlbacete.length);
     expect(nombresAlbacete.filter((n) => albacete!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(85);
     expect(nombresAlbacete.filter((n) => albacete!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const hellin = ciudadUrbana("hellin");
+    expect(hellin?.etiqueta).toBe("Hellín (Albacete)");
+    expect(hellin?.nombre).toBe("Hellín");
+    expect(zonaDeCiudad(hellin!, "San Rafael")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "El Calvario")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Santa Bárbara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Agramón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Las Minas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Nava de Campaña")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Torre Uchea")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(hellin!, "Minas")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "Horca")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "Nava de Campana")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "Uchea")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "El Lugarico")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "Calvario")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "San Rafael 3ª Fase")).toBeNull();
+    expect(zonaDeCiudad(hellin!, "Polígono Industrial La Losilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(hellin!, "Polígono Industrial de la Fuente")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(hellin!, "Polígono Industrial San Rafael")?.tipo).toBe("poligono");
+    const nombresHellin = hellin!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresHellin).size).toBe(nombresHellin.length);
+    expect(nombresHellin.filter((n) => hellin!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
+    expect(nombresHellin.filter((n) => hellin!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -3758,7 +3783,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
     expect(ciudades[albaceteIdx - 1]?.label).toBe("Santiago de Compostela");
-    expect(ciudades[albaceteIdx + 1]?.label).toBe("Alicante");
+    expect(ciudades[albaceteIdx + 1]?.label).toBe("Hellín");
+    expect(ciudades[albaceteIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[albaceteIdx + 2]?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.label).toBe("Alicante");
     expect(ciudades.find((c) => c.value === "alicante")?.negrita).toBe(true);
     const alicanteIdx = ciudades.findIndex((c) => c.value === "alicante");
