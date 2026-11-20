@@ -748,6 +748,11 @@
  * El Vallejo es el barrio del Vallejo. Vallejo no entra aparte. Parque del Vallejo entra aparte.
  * El Foro es el barrio del Foro. Foro no entra aparte.
  * Polígono Industrial Aida I y Polígono Industrial Aida II quedan los dos.
+ * Oviedo: capital de Asturias, en negrita, detrás de Ourense y delante de Gijón. Los barrios de la lista y los nueve polígonos.
+ * Olloniego sigue como barrio. El polígono se llama Polígono Industrial Olloniego.
+ * Tudela Veguín sigue como barrio. El polígono se llama Polígono Industrial de Tudela Veguín.
+ * Trubia sigue como barrio. El área industrial entra aparte.
+ * Área Industrial de Olloniego-Tudela y Polígono Industrial de Olloniego-Tudela quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10177,6 +10182,64 @@ const POLIGONOS_AZUQUECA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Sena", tipo: "poligono" },
 ];
 
+const BARRIOS_OVIEDO: ZonaCiudad[] = [
+  { nombre: "Antiguo-Casco Histórico", tipo: "barrio" },
+  { nombre: "Argañosa", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Ciudad Naranco", tipo: "barrio" },
+  { nombre: "Colloto", tipo: "barrio" },
+  { nombre: "El Cristo", tipo: "barrio" },
+  { nombre: "El Milán", tipo: "barrio" },
+  { nombre: "El Pontón de Vaqueros", tipo: "barrio" },
+  { nombre: "Fitoria", tipo: "barrio" },
+  { nombre: "Fozaneldi", tipo: "barrio" },
+  { nombre: "Guillén-La Fuerza", tipo: "barrio" },
+  { nombre: "La Corredoria", tipo: "barrio" },
+  { nombre: "La Ería", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Monxina", tipo: "barrio" },
+  { nombre: "Las Campas", tipo: "barrio" },
+  { nombre: "Montecerrao", tipo: "barrio" },
+  { nombre: "Olivares", tipo: "barrio" },
+  { nombre: "Otero", tipo: "barrio" },
+  { nombre: "Pando", tipo: "barrio" },
+  { nombre: "Parque de Invierno", tipo: "barrio" },
+  { nombre: "Pumarín", tipo: "barrio" },
+  { nombre: "San Claudio", tipo: "barrio" },
+  { nombre: "San Lázaro", tipo: "barrio" },
+  { nombre: "Teatinos", tipo: "barrio" },
+  { nombre: "Tenderina", tipo: "barrio" },
+  { nombre: "Vallobín", tipo: "barrio" },
+  { nombre: "Ventanielles", tipo: "barrio" },
+  { nombre: "Villafría", tipo: "barrio" },
+  { nombre: "La Manjoya", tipo: "barrio" },
+  { nombre: "Trubia", tipo: "barrio" },
+  { nombre: "Olloniego", tipo: "barrio" },
+  { nombre: "Tudela Veguín", tipo: "barrio" },
+  { nombre: "Caces", tipo: "barrio" },
+  { nombre: "Las Caldas", tipo: "barrio" },
+  { nombre: "Latores", tipo: "barrio" },
+  { nombre: "Limanes", tipo: "barrio" },
+  { nombre: "Manzaneda", tipo: "barrio" },
+  { nombre: "Naranco Rural", tipo: "barrio" },
+  { nombre: "Sograndio", tipo: "barrio" },
+  { nombre: "Udrión", tipo: "barrio" },
+  { nombre: "Villapérez", tipo: "barrio" },
+  { nombre: "Villamiana", tipo: "barrio" },
+];
+
+const POLIGONOS_OVIEDO: ZonaCiudad[] = [
+  { nombre: "Área Industrial de Olloniego-Tudela", tipo: "poligono" },
+  { nombre: "Área Industrial de Tudela Agüeria", tipo: "poligono" },
+  { nombre: "Área Industrial de Trubia", tipo: "poligono" },
+  { nombre: "Polígono Industrial Cerdeño", tipo: "poligono" },
+  { nombre: "Polígono Industrial Espíritu Santo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ferreros", tipo: "poligono" },
+  { nombre: "Polígono Industrial Olloniego", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Olloniego-Tudela", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Tudela Veguín", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11427,6 +11490,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Azuqueca de Henares",
     etiqueta: "Azuqueca de Henares (Guadalajara)",
     zonas: [...BARRIOS_AZUQUECA, ...POLIGONOS_AZUQUECA],
+  },
+  {
+    id: "oviedo",
+    nombre: "Oviedo",
+    etiqueta: "Oviedo (Asturias)",
+    zonas: [...BARRIOS_OVIEDO, ...POLIGONOS_OVIEDO],
   },
 ];
 
