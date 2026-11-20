@@ -254,8 +254,9 @@ export default async function HomePage() {
               className="!h-auto flex-col gap-1 px-4 py-3"
             >
               <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                <span className="text-3xl leading-none sm:text-3xl" aria-hidden>
-                  🏘️
+                <span className="inline-flex items-center leading-none" aria-hidden>
+                  <img src="/brand/casitas.png" alt="" className="h-8 w-auto sm:hidden" />
+                  <span className="hidden text-3xl sm:inline">🏘️</span>
                 </span>
                 Buscar ruta dentro de mi municipio.
               </span>
