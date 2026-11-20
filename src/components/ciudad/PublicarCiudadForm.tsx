@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { crearRutaCiudad } from "@/actions/rutas-ciudad";
+import { DeclaracionConductor } from "@/components/rutas/DeclaracionConductor";
+import { MENSAJE_DECLARACION_CONDUCTOR } from "@/lib/declaracion-conductor";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
@@ -51,6 +53,7 @@ export function PublicarCiudadForm() {
   const [plazas, setPlazas] = useState("");
   const [precioPlaza, setPrecioPlaza] = useState("");
   const [mascotas, setMascotas] = useState<"" | "si" | "no">("");
+  const [declaracionAceptada, setDeclaracionAceptada] = useState(false);
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
 
@@ -72,6 +75,10 @@ export function PublicarCiudadForm() {
       setError("Elige el municipio.");
       return;
     }
+    if (!declaracionAceptada) {
+      setError(MENSAJE_DECLARACION_CONDUCTOR);
+      return;
+    }
     setError("");
     setEnviando(true);
     const formData = new FormData();
@@ -86,6 +93,7 @@ export function PublicarCiudadForm() {
     formData.set("plazas_acompanante", plazas);
     formData.set("precio_neto_plaza", precioPlaza);
     formData.set("acepta_mascotas", mascotas);
+    formData.set("declaracion_conductor", "1");
     try {
       const result = await crearRutaCiudad(formData);
       if ("error" in result && result.error) {
@@ -234,6 +242,10 @@ export function PublicarCiudadForm() {
         </div>
       </div>
 
+      <DeclaracionConductor
+        aceptada={declaracionAceptada}
+        onChange={setDeclaracionAceptada}
+      />
       {error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-800">
           {error}

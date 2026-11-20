@@ -10,6 +10,8 @@ import { Select } from "@/components/ui/Select";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { crearRuta } from "@/actions/rutas";
+import { DeclaracionConductor } from "@/components/rutas/DeclaracionConductor";
+import { MENSAJE_DECLARACION_CONDUCTOR } from "@/lib/declaracion-conductor";
 import { cerrarSesion } from "@/actions/auth";
 import { cuentaHrefConVolver } from "@/lib/cuenta-volver";
 import { guardarIdentidadParaPagar } from "@/lib/guardar-identidad-pago";
@@ -133,6 +135,7 @@ export function NuevaRutaForm({
   const [errorTelefono, setErrorTelefono] = useState<string | null>(null);
   const [errorDocumento, setErrorDocumento] = useState<string | null>(null);
   const [errorIdentidad, setErrorIdentidad] = useState<string | null>(null);
+  const [declaracionAceptada, setDeclaracionAceptada] = useState(false);
   /** Avisos suaves: índices de parada cuya hora el usuario confirma. */
   const [horasParadaConfirmadas, setHorasParadaConfirmadas] = useState<
     Record<number, boolean>
@@ -538,6 +541,12 @@ export function NuevaRutaForm({
       return;
     }
 
+    if (!declaracionAceptada) {
+      setError(MENSAJE_DECLARACION_CONDUCTOR);
+      soltarEnvio();
+      return;
+    }
+
     const validationErrors = validateForm();
     const bajoBulto = llevaBulto ? avisoPrecioBajo(publicado) : null;
     const bajoPlaza = llevaPasajeros ? avisoPrecioBajo(publicadoPlaza) : null;
@@ -647,6 +656,7 @@ export function NuevaRutaForm({
     formData.set("precio_neto_plaza", form.precio_neto_plaza);
     formData.set("precio_neto", form.precio_neto);
     formData.set("acepta_mascotas", form.acepta_mascotas);
+    formData.set("declaracion_conductor", "1");
 
     if (faltaIdentidad) {
       setErrorTelefono(null);
@@ -706,6 +716,10 @@ export function NuevaRutaForm({
 
   const botonPublicar = (
     <div className="space-y-2">
+      <DeclaracionConductor
+        aceptada={declaracionAceptada}
+        onChange={setDeclaracionAceptada}
+      />
       <Button
         type="submit"
         fullWidth

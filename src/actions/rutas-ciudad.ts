@@ -26,6 +26,10 @@ import {
   consumePublicationCredit,
   shouldConsumePublicationCredit,
 } from "@/actions/publication-fee";
+import {
+  declaracionConductorAceptada,
+  MENSAJE_DECLARACION_CONDUCTOR,
+} from "@/lib/declaracion-conductor";
 
 export async function crearRutaCiudad(formData: FormData) {
   const supabase = await createClient();
@@ -34,6 +38,10 @@ export async function crearRutaCiudad(formData: FormData) {
   } = await supabase.auth.getUser();
 
   if (!user) return { error: "Debes iniciar sesión para publicar." };
+
+  if (!declaracionConductorAceptada(formData.get("declaracion_conductor"))) {
+    return { error: MENSAJE_DECLARACION_CONDUCTOR };
+  }
 
   const profileResult = await getOrCreateProfile(supabase, user);
   if (profileResult.error || !profileResult.profile) {

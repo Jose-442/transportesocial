@@ -33,6 +33,10 @@ import {
   parseParadasJson,
   prepararParadasParaGuardar,
 } from "@/lib/rutas/paradas";
+import {
+  declaracionConductorAceptada,
+  MENSAJE_DECLARACION_CONDUCTOR,
+} from "@/lib/declaracion-conductor";
 
 async function rollbackRutaTrasFallo(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -60,6 +64,10 @@ export async function crearRuta(formData: FormData) {
   } = await supabase.auth.getUser();
 
   if (!user) return { error: "Debes iniciar sesión para publicar." };
+
+  if (!declaracionConductorAceptada(formData.get("declaracion_conductor"))) {
+    return { error: MENSAJE_DECLARACION_CONDUCTOR };
+  }
 
   const profileResult = await getOrCreateProfile(supabase, user);
   if (profileResult.error || !profileResult.profile) {
