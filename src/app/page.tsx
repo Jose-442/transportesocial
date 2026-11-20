@@ -247,7 +247,7 @@ export default async function HomePage() {
                 <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
                   🔍
                 </span>
-                Buscar viaje entre localidades
+                Buscar viaje de una localidad a otra
               </span>
             </ButtonLink>
             <ButtonLink
