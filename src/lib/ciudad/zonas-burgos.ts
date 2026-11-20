@@ -762,9 +762,14 @@
  * Morás sigue como barrio. El parque empresarial entra aparte.
  * Suevos sigue como barrio. El parque empresarial entra aparte. Suevos de Abaixo y Suevos de Arriba quedan los dos.
  * Barrañán y Barrañán de Arriba quedan los dos. Igual Chamín, Oseiro y Sol y Mar con su zona de al lado.
- * Carballo: debajo de A Coruña, detrás de Arteixo y delante de Ferrol. Los barrios de la lista y los tres polígonos.
+ * Carballo: debajo de A Coruña, detrás de Arteixo y delante de Culleredo. Los barrios de la lista y los tres polígonos.
  * Carballo entra también como barrio, como lo escribiste.
  * Bértoa sigue como barrio. Parque Empresarial de Bértoa queda con ese nombre. Las fases I y II son el mismo polígono.
+ * Culleredo: debajo de A Coruña, detrás de Carballo y delante de Ferrol. Los barrios de la lista y los cinco polígonos.
+ * Culleredo entra también como barrio, como lo escribiste.
+ * A Marisqueira sigue como barrio. El polígono se llama Polígono Industrial A Marisqueira.
+ * Alvedro sigue como barrio. El parque empresarial entra aparte.
+ * Ledoño sigue como barrio. El centro logístico y la zona industrial entran aparte, los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10357,6 +10362,41 @@ const POLIGONOS_CARBALLO: ZonaCiudad[] = [
   { nombre: "Zona Industrial de Industrias Calvo", tipo: "poligono" },
 ];
 
+const BARRIOS_CULLEREDO: ZonaCiudad[] = [
+  { nombre: "Almeiras", tipo: "barrio" },
+  { nombre: "A Marisqueira", tipo: "barrio" },
+  { nombre: "A Xira", tipo: "barrio" },
+  { nombre: "Boedo", tipo: "barrio" },
+  { nombre: "Celas", tipo: "barrio" },
+  { nombre: "Cordeda", tipo: "barrio" },
+  { nombre: "Culleredo", tipo: "barrio" },
+  { nombre: "Ledoño", tipo: "barrio" },
+  { nombre: "O Burgo", tipo: "barrio" },
+  { nombre: "Orro", tipo: "barrio" },
+  { nombre: "Rutis", tipo: "barrio" },
+  { nombre: "San Martiño de Sésamo", tipo: "barrio" },
+  { nombre: "Sueiro", tipo: "barrio" },
+  { nombre: "Tarrío", tipo: "barrio" },
+  { nombre: "Veiga", tipo: "barrio" },
+  { nombre: "Vilaboa", tipo: "barrio" },
+  { nombre: "Alvedro", tipo: "barrio" },
+  { nombre: "Fonteculler", tipo: "barrio" },
+  { nombre: "O Portádego", tipo: "barrio" },
+  { nombre: "A Corveira", tipo: "barrio" },
+  { nombre: "A Zapateira", tipo: "barrio" },
+  { nombre: "Acea de Ama", tipo: "barrio" },
+  { nombre: "Castro Laxe", tipo: "barrio" },
+  { nombre: "Monte Xalo", tipo: "barrio" },
+];
+
+const POLIGONOS_CULLEREDO: ZonaCiudad[] = [
+  { nombre: "Centro Logístico de Transporte de Ledoño", tipo: "poligono" },
+  { nombre: "Parque Empresarial de Alvedro", tipo: "poligono" },
+  { nombre: "Polígono Industrial A Granxa", tipo: "poligono" },
+  { nombre: "Polígono Industrial A Marisqueira", tipo: "poligono" },
+  { nombre: "Zona Industrial de Ledoño", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11631,6 +11671,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Carballo",
     etiqueta: "Carballo (A Coruña)",
     zonas: [...BARRIOS_CARBALLO, ...POLIGONOS_CARBALLO],
+  },
+  {
+    id: "culleredo",
+    nombre: "Culleredo",
+    etiqueta: "Culleredo (A Coruña)",
+    zonas: [...BARRIOS_CULLEREDO, ...POLIGONOS_CULLEREDO],
   },
 ];
 

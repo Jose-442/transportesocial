@@ -222,6 +222,7 @@ describe("zonas de Burgos", () => {
       "ames",
       "arteixo",
       "carballo",
+      "culleredo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3924,6 +3925,24 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCarballo).size).toBe(nombresCarballo.length);
     expect(nombresCarballo.filter((n) => carballo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
     expect(nombresCarballo.filter((n) => carballo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
+    const culleredo = ciudadUrbana("culleredo");
+    expect(culleredo?.etiqueta).toBe("Culleredo (A Coruña)");
+    expect(culleredo?.nombre).toBe("Culleredo");
+    expect(zonaDeCiudad(culleredo!, "Almeiras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "A Marisqueira")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Culleredo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Ledoño")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Alvedro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Monte Xalo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Centro Logístico de Transporte de Ledoño")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(culleredo!, "Parque Empresarial de Alvedro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(culleredo!, "Polígono Industrial A Granxa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(culleredo!, "Polígono Industrial A Marisqueira")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(culleredo!, "Zona Industrial de Ledoño")?.tipo).toBe("poligono");
+    const nombresCulleredo = culleredo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCulleredo).size).toBe(nombresCulleredo.length);
+    expect(nombresCulleredo.filter((n) => culleredo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
+    expect(nombresCulleredo.filter((n) => culleredo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4108,7 +4127,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[amesIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[amesIdx + 2]?.label).toBe("Carballo");
     expect(ciudades[amesIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[amesIdx + 3]?.label).toBe("Ferrol");
+    expect(ciudades[amesIdx + 3]?.label).toBe("Culleredo");
+    expect(ciudades[amesIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades[amesIdx + 4]?.label).toBe("Ferrol");
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
