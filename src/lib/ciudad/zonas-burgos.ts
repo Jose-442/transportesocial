@@ -784,6 +784,10 @@
  * Valliniello sigue como barrio. El polígono se llama Polígono Industrial de Valliniello.
  * San Juan de Nieva sigue como barrio. La zona industrial entra aparte.
  * Parque Empresarial Principado de Asturias (PEPA) queda con ese nombre. PEPA es el mismo parque.
+ * Langreo: debajo de Oviedo, detrás de Gijón y delante de Palencia. Los barrios de la lista y los once polígonos.
+ * La Felguera sigue como barrio. La Felguera - Barrio Urquijo, La Felguera - Grupo San Pedro y La Felguera - Grupo La Concordia quedan las tres.
+ * Barros y Riaño y Lada siguen como barrios. Sus polígonos entran aparte.
+ * Polígono Industrial Riaño I, Riaño II y Riaño III quedan los tres.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10534,6 +10538,51 @@ const POLIGONOS_AVILES: ZonaCiudad[] = [
   { nombre: "Zona Industrial de San Juan de Nieva", tipo: "poligono" },
 ];
 
+const BARRIOS_LANGREO: ZonaCiudad[] = [
+  { nombre: "Barros", tipo: "barrio" },
+  { nombre: "Ciaño", tipo: "barrio" },
+  { nombre: "El Puente", tipo: "barrio" },
+  { nombre: "La Felguera", tipo: "barrio" },
+  { nombre: "Lada", tipo: "barrio" },
+  { nombre: "La Nueva", tipo: "barrio" },
+  { nombre: "Les Pieces", tipo: "barrio" },
+  { nombre: "Pando", tipo: "barrio" },
+  { nombre: "Pampiedra", tipo: "barrio" },
+  { nombre: "Riaño", tipo: "barrio" },
+  { nombre: "Sama", tipo: "barrio" },
+  { nombre: "Tuilla", tipo: "barrio" },
+  { nombre: "La Mudrera", tipo: "barrio" },
+  { nombre: "La Nava", tipo: "barrio" },
+  { nombre: "El Entrego", tipo: "barrio" },
+  { nombre: "La Joécara", tipo: "barrio" },
+  { nombre: "La Pomar", tipo: "barrio" },
+  { nombre: "La Reguera", tipo: "barrio" },
+  { nombre: "La Oscura", tipo: "barrio" },
+  { nombre: "La Braña", tipo: "barrio" },
+  { nombre: "La Inverniza", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "La Hueria de Carrocera", tipo: "barrio" },
+  { nombre: "La Hueria de San Xuan", tipo: "barrio" },
+  { nombre: "El Viso", tipo: "barrio" },
+  { nombre: "La Felguera - Barrio Urquijo", tipo: "barrio" },
+  { nombre: "La Felguera - Grupo San Pedro", tipo: "barrio" },
+  { nombre: "La Felguera - Grupo La Concordia", tipo: "barrio" },
+];
+
+const POLIGONOS_LANGREO: ZonaCiudad[] = [
+  { nombre: "Ciudad Industrial Valnalón", tipo: "poligono" },
+  { nombre: "Planta Industrial Alas Iberia", tipo: "poligono" },
+  { nombre: "Planta Industrial Industrial Química del Nalón", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Cadavíu", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Moral", tipo: "poligono" },
+  { nombre: "Polígono Industrial Lada-Meriñán", tipo: "poligono" },
+  { nombre: "Polígono Industrial Modesta", tipo: "poligono" },
+  { nombre: "Polígono Industrial Riaño I", tipo: "poligono" },
+  { nombre: "Polígono Industrial Riaño II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Riaño III", tipo: "poligono" },
+  { nombre: "Zona Industrial de Barros", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11832,6 +11881,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Avilés",
     etiqueta: "Avilés (Asturias)",
     zonas: [...BARRIOS_AVILES, ...POLIGONOS_AVILES],
+  },
+  {
+    id: "langreo",
+    nombre: "Langreo",
+    etiqueta: "Langreo (Asturias)",
+    zonas: [...BARRIOS_LANGREO, ...POLIGONOS_LANGREO],
   },
 ];
 
