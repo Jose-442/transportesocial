@@ -247,7 +247,7 @@ export default async function HomePage() {
                 <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
                   🔍
                 </span>
-                Buscar conductor con viaje previsto
+                Buscar viaje entre localidades
               </span>
             </ButtonLink>
             <ButtonLink
