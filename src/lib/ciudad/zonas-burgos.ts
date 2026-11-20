@@ -774,6 +774,11 @@
  * Ribeira (Santa Uxía) queda con ese nombre. Ribeira no entra aparte.
  * Oleiros y Palmeira siguen como barrios. El polígono nuevo entra aparte, con el nombre entero.
  * Areeiros y Areeiros de Carreira quedan los dos. Deán Grande y Deán Pequeno quedan los dos.
+ * La Nucía: debajo de Alicante, detrás de Jávea (Xàbia) y delante de Orihuela. Los barrios de la lista y un polígono.
+ * La Nucía Pueblo queda con ese nombre. La Nucía no entra aparte.
+ * Colina, La queda con ese nombre, como lo escribiste.
+ * Nou Espai I y Nou Espai II quedan los dos.
+ * Arcos Este, Arcos Norte y Los Arcos quedan los tres. Pinar de Garaita y Pla de Garaita quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10435,6 +10440,56 @@ const POLIGONOS_RIBEIRA: ZonaCiudad[] = [
   { nombre: "Nuevo Polígono Industrial de Ribeira (Oleiros-Palmeira)", tipo: "poligono" },
 ];
 
+const BARRIOS_LA_NUCIA: ZonaCiudad[] = [
+  { nombre: "Arcos Este", tipo: "barrio" },
+  { nombre: "Arcos Norte", tipo: "barrio" },
+  { nombre: "Barranc Fondo", tipo: "barrio" },
+  { nombre: "Bello Horizonte", tipo: "barrio" },
+  { nombre: "Caravana", tipo: "barrio" },
+  { nombre: "Cautivador", tipo: "barrio" },
+  { nombre: "Colina, La", tipo: "barrio" },
+  { nombre: "Coloma", tipo: "barrio" },
+  { nombre: "Convent de les Monges", tipo: "barrio" },
+  { nombre: "Copet", tipo: "barrio" },
+  { nombre: "El Dorado", tipo: "barrio" },
+  { nombre: "El Tossal", tipo: "barrio" },
+  { nombre: "Entrepinos", tipo: "barrio" },
+  { nombre: "Floriana", tipo: "barrio" },
+  { nombre: "Hapimag", tipo: "barrio" },
+  { nombre: "Holiday Club", tipo: "barrio" },
+  { nombre: "Kristal", tipo: "barrio" },
+  { nombre: "La Nucía Pueblo", tipo: "barrio" },
+  { nombre: "La Perla", tipo: "barrio" },
+  { nombre: "La Torre", tipo: "barrio" },
+  { nombre: "Las Orquídeas", tipo: "barrio" },
+  { nombre: "Las Vegas", tipo: "barrio" },
+  { nombre: "Los Arcos", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Maylan", tipo: "barrio" },
+  { nombre: "Montahud", tipo: "barrio" },
+  { nombre: "Montecasino", tipo: "barrio" },
+  { nombre: "Montebello", tipo: "barrio" },
+  { nombre: "Nou Espai I", tipo: "barrio" },
+  { nombre: "Nou Espai II", tipo: "barrio" },
+  { nombre: "Nucía Hills", tipo: "barrio" },
+  { nombre: "Nucía Park", tipo: "barrio" },
+  { nombre: "Panorama", tipo: "barrio" },
+  { nombre: "Patrax", tipo: "barrio" },
+  { nombre: "Patricia", tipo: "barrio" },
+  { nombre: "Pinar de Garaita", tipo: "barrio" },
+  { nombre: "Pla de Garaita", tipo: "barrio" },
+  { nombre: "Puerto Azul", tipo: "barrio" },
+  { nombre: "Puerta de Hierro", tipo: "barrio" },
+  { nombre: "Rosales", tipo: "barrio" },
+  { nombre: "San Rafael", tipo: "barrio" },
+  { nombre: "Sol Saliente", tipo: "barrio" },
+  { nombre: "Varadero", tipo: "barrio" },
+];
+
+const POLIGONOS_LA_NUCIA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial L'Alberca", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11721,6 +11776,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ribeira",
     etiqueta: "Ribeira (A Coruña)",
     zonas: [...BARRIOS_RIBEIRA, ...POLIGONOS_RIBEIRA],
+  },
+  {
+    id: "lanucia",
+    nombre: "La Nucía",
+    etiqueta: "La Nucía (Alicante)",
+    zonas: [...BARRIOS_LA_NUCIA, ...POLIGONOS_LA_NUCIA],
   },
 ];
 

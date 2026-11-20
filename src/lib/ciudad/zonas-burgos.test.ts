@@ -224,6 +224,7 @@ describe("zonas de Burgos", () => {
       "carballo",
       "culleredo",
       "ribeira",
+      "lanucia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3961,6 +3962,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresRibeira).size).toBe(nombresRibeira.length);
     expect(nombresRibeira.filter((n) => ribeira!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
     expect(nombresRibeira.filter((n) => ribeira!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const lanucia = ciudadUrbana("lanucia");
+    expect(lanucia?.etiqueta).toBe("La Nucía (Alicante)");
+    expect(lanucia?.nombre).toBe("La Nucía");
+    expect(zonaDeCiudad(lanucia!, "Arcos Este")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "Colina, La")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "La Nucía Pueblo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "Nou Espai I")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "Nou Espai II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "Varadero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lanucia!, "La Nucía")).toBeNull();
+    expect(zonaDeCiudad(lanucia!, "Polígono Industrial L'Alberca")?.tipo).toBe("poligono");
+    const nombresLaNucia = lanucia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLaNucia).size).toBe(nombresLaNucia.length);
+    expect(nombresLaNucia.filter((n) => lanucia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(43);
+    expect(nombresLaNucia.filter((n) => lanucia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4179,20 +4195,22 @@ describe("zonas de Burgos", () => {
     expect(ciudades[alicanteIdx + 7]?.negrita).toBeUndefined();
     expect(ciudades[alicanteIdx + 8]?.label).toBe("Jávea (Xàbia)");
     expect(ciudades[alicanteIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 9]?.label).toBe("Orihuela");
+    expect(ciudades[alicanteIdx + 9]?.label).toBe("La Nucía");
     expect(ciudades[alicanteIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 10]?.label).toBe("Petrer");
+    expect(ciudades[alicanteIdx + 10]?.label).toBe("Orihuela");
     expect(ciudades[alicanteIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 11]?.label).toBe("San Vicente del Raspeig");
+    expect(ciudades[alicanteIdx + 11]?.label).toBe("Petrer");
     expect(ciudades[alicanteIdx + 11]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 12]?.label).toBe("Santa Pola");
+    expect(ciudades[alicanteIdx + 12]?.label).toBe("San Vicente del Raspeig");
     expect(ciudades[alicanteIdx + 12]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 13]?.label).toBe("Torrevieja");
+    expect(ciudades[alicanteIdx + 13]?.label).toBe("Santa Pola");
     expect(ciudades[alicanteIdx + 13]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 14]?.label).toBe("Villajoyosa");
+    expect(ciudades[alicanteIdx + 14]?.label).toBe("Torrevieja");
     expect(ciudades[alicanteIdx + 14]?.negrita).toBeUndefined();
-    expect(ciudades[alicanteIdx + 15]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 15]?.label).toBe("Villajoyosa");
     expect(ciudades[alicanteIdx + 15]?.negrita).toBeUndefined();
+    expect(ciudades[alicanteIdx + 16]?.label).toBe("Villena");
+    expect(ciudades[alicanteIdx + 16]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "motril")?.label).toBe("Motril");
     expect(ciudades.find((c) => c.value === "motril")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "jaen")?.label).toBe("Jaén");
