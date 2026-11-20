@@ -82,6 +82,11 @@
  * Polígonos Balparda y El Árbol.
  * Basauri: barrios de EUSTAT 2025. Kareaga es Careaga. Bidebieta es la Estación.
  * Polígono Industrial Artunduaga.
+ * Durango: debajo de Bilbao, detrás de Basauri y delante de Getxo. Los barrios de la lista y los ocho polígonos.
+ * Montorreta, San Roke y Tabira están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Landako es barrio. Landako Elkartegia entra aparte.
+ * Arriandi, Mallabiena y Trañapadura no entran. Son de Iurreta o de Abadiño.
+ * Durango no entra como barrio.
  * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
  * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
  * Irun: barrios de EUSTAT 2025 y los que recorre el Ayuntamiento.
@@ -2303,6 +2308,33 @@ const BARRIOS_BASAURI: ZonaCiudad[] = [
 
 const POLIGONOS_BASAURI: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Artunduaga", tipo: "poligono" },
+];
+
+const BARRIOS_DURANGO: ZonaCiudad[] = [
+  { nombre: "Aramotz", tipo: "barrio" },
+  { nombre: "Ezkurdi", tipo: "barrio" },
+  { nombre: "Errotaritxuena", tipo: "barrio" },
+  { nombre: "Ibaizabal", tipo: "barrio" },
+  { nombre: "Landako", tipo: "barrio" },
+  { nombre: "Madalena", tipo: "barrio" },
+  { nombre: "Montorreta", tipo: "barrio" },
+  { nombre: "San Fausto", tipo: "barrio" },
+  { nombre: "San Ignacio", tipo: "barrio" },
+  { nombre: "San Roke", tipo: "barrio" },
+  { nombre: "Tabira", tipo: "barrio" },
+  { nombre: "Txibitena", tipo: "barrio" },
+  { nombre: "Zabalarra", tipo: "barrio" },
+];
+
+const POLIGONOS_DURANGO: ZonaCiudad[] = [
+  { nombre: "Aliendalde", tipo: "poligono" },
+  { nombre: "Astolabeitia", tipo: "poligono" },
+  { nombre: "Eguzkitza", tipo: "poligono" },
+  { nombre: "Landako Elkartegia", tipo: "poligono" },
+  { nombre: "Polígono · Montorreta", tipo: "poligono" },
+  { nombre: "Polígono · San Roke", tipo: "poligono" },
+  { nombre: "Polígono · Tabira", tipo: "poligono" },
+  { nombre: "Urbitarte", tipo: "poligono" },
 ];
 
 const BARRIOS_SAN_SEBASTIAN: ZonaCiudad[] = [
@@ -10990,6 +11022,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Basauri",
     etiqueta: "Basauri (Bizkaia)",
     zonas: [...BARRIOS_BASAURI, ...POLIGONOS_BASAURI],
+  },
+  {
+    id: "durango",
+    nombre: "Durango",
+    etiqueta: "Durango (Bizkaia)",
+    zonas: [...BARRIOS_DURANGO, ...POLIGONOS_DURANGO],
   },
   {
     id: "sansebastian",
