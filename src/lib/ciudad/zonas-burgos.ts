@@ -784,10 +784,15 @@
  * Valliniello sigue como barrio. El polígono se llama Polígono Industrial de Valliniello.
  * San Juan de Nieva sigue como barrio. La zona industrial entra aparte.
  * Parque Empresarial Principado de Asturias (PEPA) queda con ese nombre. PEPA es el mismo parque.
- * Langreo: debajo de Oviedo, detrás de Gijón y delante de Palencia. Los barrios de la lista y los once polígonos.
+ * Langreo: debajo de Oviedo, detrás de Gijón y delante de Mieres. Los barrios de la lista y los once polígonos.
  * La Felguera sigue como barrio. La Felguera - Barrio Urquijo, La Felguera - Grupo San Pedro y La Felguera - Grupo La Concordia quedan las tres.
  * Barros y Riaño y Lada siguen como barrios. Sus polígonos entran aparte.
  * Polígono Industrial Riaño I, Riaño II y Riaño III quedan los tres.
+ * Mieres: debajo de Oviedo, detrás de Langreo y delante de Palencia. Los barrios de la lista y los once polígonos.
+ * Mieres del Camín queda con ese nombre. Mieres no entra aparte.
+ * Ablaña, Baiña, Loredo, Ujo y Vega de Arriba siguen como barrios. Sus polígonos entran aparte.
+ * Polígono Industrial Baiña (Vega de Baiña) queda con ese nombre. Vega de Baiña no entra aparte.
+ * Polígono Industrial Las Lleras (Ujo) queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10583,6 +10588,40 @@ const POLIGONOS_LANGREO: ZonaCiudad[] = [
   { nombre: "Zona Industrial de Barros", tipo: "poligono" },
 ];
 
+const BARRIOS_MIERES: ZonaCiudad[] = [
+  { nombre: "Ablaña", tipo: "barrio" },
+  { nombre: "Baiña", tipo: "barrio" },
+  { nombre: "Bustiello", tipo: "barrio" },
+  { nombre: "Figaredo", tipo: "barrio" },
+  { nombre: "La Peña", tipo: "barrio" },
+  { nombre: "La Rebollá", tipo: "barrio" },
+  { nombre: "Loredo", tipo: "barrio" },
+  { nombre: "Mieres del Camín", tipo: "barrio" },
+  { nombre: "Santa Cruz", tipo: "barrio" },
+  { nombre: "Santuyano", tipo: "barrio" },
+  { nombre: "Siana", tipo: "barrio" },
+  { nombre: "Turón", tipo: "barrio" },
+  { nombre: "Ujo", tipo: "barrio" },
+  { nombre: "Urbiés", tipo: "barrio" },
+  { nombre: "Valdecuna", tipo: "barrio" },
+  { nombre: "Valdefarrucos", tipo: "barrio" },
+  { nombre: "Vega de Arriba", tipo: "barrio" },
+];
+
+const POLIGONOS_MIERES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Ablaña", tipo: "poligono" },
+  { nombre: "Polígono Industrial Baiña (Vega de Baiña)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Fábrica de Mieres", tipo: "poligono" },
+  { nombre: "Polígono Industrial Gonzalín", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Cuadriella", tipo: "poligono" },
+  { nombre: "Polígono Industrial La Gerencia", tipo: "poligono" },
+  { nombre: "Polígono Industrial Las Lleras (Ujo)", tipo: "poligono" },
+  { nombre: "Polígono Industrial Loredo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Reicastro", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sovilla", tipo: "poligono" },
+  { nombre: "Polígono Industrial Vega de Arriba", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11887,6 +11926,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Langreo",
     etiqueta: "Langreo (Asturias)",
     zonas: [...BARRIOS_LANGREO, ...POLIGONOS_LANGREO],
+  },
+  {
+    id: "mieres",
+    nombre: "Mieres",
+    etiqueta: "Mieres (Asturias)",
+    zonas: [...BARRIOS_MIERES, ...POLIGONOS_MIERES],
   },
 ];
 
