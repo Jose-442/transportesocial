@@ -799,6 +799,11 @@
  * El Berrón sigue como barrio. Berrón Este, Berrón Oeste y Berrón Sur quedan los tres.
  * Bobes, Lieres y Lugones siguen como barrios. Bobes-San Miguel, Lieres-Solvay, Lugones Norte y Lugones Sur entran aparte.
  * Carbayín Alto, Carbayín Bajo y Santa Marta de Carbayín quedan los tres.
+ * Martorell: debajo de Barcelona, detrás de Manresa y delante de Mataró. Los barrios de la lista y los ocho polígonos.
+ * Martorell Vell (La Vila) queda con ese nombre. Martorell no entra aparte.
+ * Can Bros y Rosanes están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Can Cases sigue como barrio. Can Cases–Can Sunyol entra aparte.
+ * Polígono SEAT y Polígono Solvay quedan con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10691,6 +10696,33 @@ const POLIGONOS_SIERO: ZonaCiudad[] = [
   { nombre: "Polígono · Viella", tipo: "poligono" },
 ];
 
+const BARRIOS_MARTORELL: ZonaCiudad[] = [
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Camí Fondo", tipo: "barrio" },
+  { nombre: "Can Carreres", tipo: "barrio" },
+  { nombre: "Can Cases", tipo: "barrio" },
+  { nombre: "Can Bros", tipo: "barrio" },
+  { nombre: "El Pla", tipo: "barrio" },
+  { nombre: "La Sínia", tipo: "barrio" },
+  { nombre: "Les Bòbiles", tipo: "barrio" },
+  { nombre: "Martorell Vell (La Vila)", tipo: "barrio" },
+  { nombre: "Pou del Merlí", tipo: "barrio" },
+  { nombre: "Rosanes", tipo: "barrio" },
+  { nombre: "Torrent de Llops", tipo: "barrio" },
+  { nombre: "Verge del Carme", tipo: "barrio" },
+];
+
+const POLIGONOS_MARTORELL: ZonaCiudad[] = [
+  { nombre: "Polígono · Can Bros", tipo: "poligono" },
+  { nombre: "Can Cases–Can Sunyol", tipo: "poligono" },
+  { nombre: "El Congost", tipo: "poligono" },
+  { nombre: "L'Empalme", tipo: "poligono" },
+  { nombre: "La Torre", tipo: "poligono" },
+  { nombre: "Polígono SEAT", tipo: "poligono" },
+  { nombre: "Polígono Solvay", tipo: "poligono" },
+  { nombre: "Polígono · Rosanes", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -12007,6 +12039,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Siero",
     etiqueta: "Siero (Asturias)",
     zonas: [...BARRIOS_SIERO, ...POLIGONOS_SIERO],
+  },
+  {
+    id: "martorell",
+    nombre: "Martorell",
+    etiqueta: "Martorell (Barcelona)",
+    zonas: [...BARRIOS_MARTORELL, ...POLIGONOS_MARTORELL],
   },
 ];
 

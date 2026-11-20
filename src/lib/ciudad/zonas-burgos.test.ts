@@ -229,6 +229,7 @@ describe("zonas de Burgos", () => {
       "langreo",
       "mieres",
       "siero",
+      "martorell",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4064,6 +4065,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSiero).size).toBe(nombresSiero.length);
     expect(nombresSiero.filter((n) => siero!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
     expect(nombresSiero.filter((n) => siero!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(23);
+    const martorell = ciudadUrbana("martorell");
+    expect(martorell?.etiqueta).toBe("Martorell (Barcelona)");
+    expect(martorell?.nombre).toBe("Martorell");
+    expect(zonaDeCiudad(martorell!, "Buenos Aires")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(martorell!, "Martorell Vell (La Vila)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(martorell!, "Can Bros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(martorell!, "Can Cases")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(martorell!, "Rosanes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(martorell!, "Martorell")).toBeNull();
+    expect(zonaDeCiudad(martorell!, "Can Cases–Can Sunyol")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "Can Cases–Can Sunyol")!)).toBe("Polígono · Can Cases–Can Sunyol");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "El Congost")!)).toBe("Polígono · El Congost");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "L'Empalme")!)).toBe("Polígono · L'Empalme");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "La Torre")!)).toBe("Polígono · La Torre");
+    expect(zonaDeCiudad(martorell!, "Polígono SEAT")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "Polígono SEAT")!)).toBe("Polígono SEAT");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "Polígono Solvay")!)).toBe("Polígono Solvay");
+    expect(zonaDeCiudad(martorell!, "Polígono · Can Bros")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "Polígono · Can Bros")!)).toBe("Polígono · Can Bros");
+    expect(zonaDeCiudad(martorell!, "Polígono · Rosanes")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(martorell!, "Polígono · Rosanes")!)).toBe("Polígono · Rosanes");
+    const nombresMartorell = martorell!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMartorell).size).toBe(nombresMartorell.length);
+    expect(nombresMartorell.filter((n) => martorell!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
+    expect(nombresMartorell.filter((n) => martorell!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4247,6 +4273,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[oviedoIdx + 5]?.label).toBe("Siero");
     expect(ciudades[oviedoIdx + 5]?.negrita).toBeUndefined();
     expect(ciudades[oviedoIdx + 6]?.label).toBe("Palencia");
+    const martorellIdx = ciudades.findIndex((c) => c.value === "martorell");
+    expect(ciudades[martorellIdx]?.label).toBe("Martorell");
+    expect(ciudades[martorellIdx]?.negrita).toBeUndefined();
+    expect(ciudades[martorellIdx - 1]?.label).toBe("Manresa");
+    expect(ciudades[martorellIdx + 1]?.label).toBe("Mataró");
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
