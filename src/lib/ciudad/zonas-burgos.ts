@@ -87,10 +87,16 @@
  * Landako es barrio. Landako Elkartegia entra aparte.
  * Arriandi, Mallabiena y Trañapadura no entran. Son de Iurreta o de Abadiño.
  * Durango no entra como barrio.
- * Erandio: debajo de Bilbao, detrás de Durango y delante de Getxo. Los siete barrios y los dos polígonos nombrados.
+ * Erandio: debajo de Bilbao, detrás de Durango y delante de Galdakao. Los siete barrios y los dos polígonos nombrados.
  * Axpe y Axpe-Industrialdeak quedan los dos.
  * Los otros espacios de actividad económica no entran. No vienen con nombre en la lista.
  * Erandio no entra como barrio.
+ * Galdakao: debajo de Bilbao, detrás de Erandio y delante de Getxo. Los barrios de la lista y los diez polígonos.
+ * Aperribai está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Izaga e Itzaga quedan los dos.
+ * Urreta es polígono. Urreta-Egia es barrio.
+ * Zuhatzu es barrio. Zuhatzu-Zuazo es polígono.
+ * Galdakao no entra como barrio.
  * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
  * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
  * Irun: barrios de EUSTAT 2025 y los que recorre el Ayuntamiento.
@@ -2354,6 +2360,37 @@ const BARRIOS_ERANDIO: ZonaCiudad[] = [
 const POLIGONOS_ERANDIO: ZonaCiudad[] = [
   { nombre: "Axpe", tipo: "poligono" },
   { nombre: "Axpe-Industrialdeak", tipo: "poligono" },
+];
+
+const BARRIOS_GALDAKAO: ZonaCiudad[] = [
+  { nombre: "Aperribai", tipo: "barrio" },
+  { nombre: "Bekea", tipo: "barrio" },
+  { nombre: "Bengoetxe", tipo: "barrio" },
+  { nombre: "Elexalde", tipo: "barrio" },
+  { nombre: "Eitzaga", tipo: "barrio" },
+  { nombre: "Jugo", tipo: "barrio" },
+  { nombre: "Kurtzea (Kurutze)", tipo: "barrio" },
+  { nombre: "Olabarrieta", tipo: "barrio" },
+  { nombre: "Plazakoetxe", tipo: "barrio" },
+  { nombre: "Urreta-Egia", tipo: "barrio" },
+  { nombre: "Zabalea", tipo: "barrio" },
+  { nombre: "Zamakoa", tipo: "barrio" },
+  { nombre: "Zuhatzu", tipo: "barrio" },
+  { nombre: "Zuatzaurre", tipo: "barrio" },
+  { nombre: "Tximelarre", tipo: "barrio" },
+];
+
+const POLIGONOS_GALDAKAO: ZonaCiudad[] = [
+  { nombre: "Polígono · Aperribai", tipo: "poligono" },
+  { nombre: "Erletxe", tipo: "poligono" },
+  { nombre: "Guturribai", tipo: "poligono" },
+  { nombre: "Iru-Bide", tipo: "poligono" },
+  { nombre: "Izaga", tipo: "poligono" },
+  { nombre: "Itzaga", tipo: "poligono" },
+  { nombre: "Merkadillo", tipo: "poligono" },
+  { nombre: "Urreta", tipo: "poligono" },
+  { nombre: "Usansolo industrial", tipo: "poligono" },
+  { nombre: "Zuhatzu-Zuazo", tipo: "poligono" },
 ];
 
 const BARRIOS_SAN_SEBASTIAN: ZonaCiudad[] = [
@@ -11053,6 +11090,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Erandio",
     etiqueta: "Erandio (Bizkaia)",
     zonas: [...BARRIOS_ERANDIO, ...POLIGONOS_ERANDIO],
+  },
+  {
+    id: "galdakao",
+    nombre: "Galdakao",
+    etiqueta: "Galdakao (Bizkaia)",
+    zonas: [...BARRIOS_GALDAKAO, ...POLIGONOS_GALDAKAO],
   },
   {
     id: "sansebastian",

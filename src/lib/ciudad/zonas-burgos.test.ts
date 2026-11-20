@@ -51,6 +51,7 @@ describe("zonas de Burgos", () => {
       "basauri",
       "durango",
       "erandio",
+      "galdakao",
       "sansebastian",
       "irun",
       "errenteria",
@@ -610,6 +611,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresErandio).size).toBe(nombresErandio.length);
     expect(nombresErandio.filter((n) => erandio!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
     expect(nombresErandio.filter((n) => erandio!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const galdakao = ciudadUrbana("galdakao");
+    expect(galdakao?.etiqueta).toBe("Galdakao (Bizkaia)");
+    expect(galdakao?.nombre).toBe("Galdakao");
+    expect(zonaDeCiudad(galdakao!, "Aperribai")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(galdakao!, "Kurtzea (Kurutze)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(galdakao!, "Urreta-Egia")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(galdakao!, "Zuhatzu")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(galdakao!, "Galdakao")).toBeNull();
+    expect(zonaDeCiudad(galdakao!, "Polígono · Aperribai")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(galdakao!, "Polígono · Aperribai")!)).toBe("Polígono · Aperribai");
+    expect(zonaDeCiudad(galdakao!, "Izaga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(galdakao!, "Itzaga")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(galdakao!, "Urreta")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(galdakao!, "Urreta")!)).toBe("Polígono · Urreta");
+    expect(zonaDeCiudad(galdakao!, "Zuhatzu-Zuazo")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(galdakao!, "Usansolo industrial")!)).toBe("Polígono · Usansolo industrial");
+    const nombresGaldakao = galdakao!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGaldakao).size).toBe(nombresGaldakao.length);
+    expect(nombresGaldakao.filter((n) => galdakao!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
+    expect(nombresGaldakao.filter((n) => galdakao!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
     const sanSebastian = ciudadUrbana("sansebastian");
     expect(sanSebastian?.etiqueta).toBe("San Sebastián (Gipuzkoa)");
     expect(zonaDeCiudad(sanSebastian!, "Gros")?.tipo).toBe("barrio");
@@ -4438,7 +4459,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[erandioIdx]?.label).toBe("Erandio");
     expect(ciudades[erandioIdx]?.negrita).toBeUndefined();
     expect(ciudades[erandioIdx - 1]?.label).toBe("Durango");
-    expect(ciudades[erandioIdx + 1]?.label).toBe("Getxo");
+    expect(ciudades[erandioIdx + 1]?.label).toBe("Galdakao");
+    const galdakaoIdx = ciudades.findIndex((c) => c.value === "galdakao");
+    expect(ciudades[galdakaoIdx]?.label).toBe("Galdakao");
+    expect(ciudades[galdakaoIdx]?.negrita).toBeUndefined();
+    expect(ciudades[galdakaoIdx - 1]?.label).toBe("Erandio");
+    expect(ciudades[galdakaoIdx + 1]?.label).toBe("Getxo");
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
