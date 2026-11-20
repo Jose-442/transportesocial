@@ -804,6 +804,11 @@
  * Can Bros y Rosanes están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Can Cases sigue como barrio. Can Cases–Can Sunyol entra aparte.
  * Polígono SEAT y Polígono Solvay quedan con ese nombre.
+ * Santa Perpètua de Mogoda: debajo de Barcelona, detrás de Santa Coloma de Gramenet y delante de Sitges. Los barrios de la lista y los doce polígonos.
+ * Mogoda queda como barrio. Santa Perpètua de Mogoda no entra aparte.
+ * La Florida y Santiga están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Can Vinyalets y Can Vinyals quedan los dos.
+ * El sector Alstom de la visita de mayo de 2026 no entra. La lista más reciente tiene doce polígonos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10723,6 +10728,32 @@ const POLIGONOS_MARTORELL: ZonaCiudad[] = [
   { nombre: "Polígono · Rosanes", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_PERPETUA: ZonaCiudad[] = [
+  { nombre: "Can Folguera", tipo: "barrio" },
+  { nombre: "Can Taió", tipo: "barrio" },
+  { nombre: "Centre Vila", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "Mas Costa", tipo: "barrio" },
+  { nombre: "Mogoda", tipo: "barrio" },
+  { nombre: "Santiga", tipo: "barrio" },
+  { nombre: "Terrablanca", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_PERPETUA: ZonaCiudad[] = [
+  { nombre: "Ca n’Oller", tipo: "poligono" },
+  { nombre: "Camp de les Pereres", tipo: "poligono" },
+  { nombre: "Can Banús", tipo: "poligono" },
+  { nombre: "Can Bernades-Subirà", tipo: "poligono" },
+  { nombre: "Can Vinyalets", tipo: "poligono" },
+  { nombre: "Can Vinyals", tipo: "poligono" },
+  { nombre: "CIM Vallès – Les Minetes", tipo: "poligono" },
+  { nombre: "La Creueta", tipo: "poligono" },
+  { nombre: "Polígono · La Florida", tipo: "poligono" },
+  { nombre: "Les Vinyes de Mogoda", tipo: "poligono" },
+  { nombre: "Polígono · Santiga", tipo: "poligono" },
+  { nombre: "Torre del Rector", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -12045,6 +12076,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Martorell",
     etiqueta: "Martorell (Barcelona)",
     zonas: [...BARRIOS_MARTORELL, ...POLIGONOS_MARTORELL],
+  },
+  {
+    id: "santaperpetua",
+    nombre: "Santa Perpètua de Mogoda",
+    etiqueta: "Santa Perpètua de Mogoda (Barcelona)",
+    zonas: [...BARRIOS_SANTA_PERPETUA, ...POLIGONOS_SANTA_PERPETUA],
   },
 ];
 

@@ -230,6 +230,7 @@ describe("zonas de Burgos", () => {
       "mieres",
       "siero",
       "martorell",
+      "santaperpetua",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4278,6 +4279,35 @@ describe("zonas de Burgos", () => {
     expect(ciudades[martorellIdx]?.negrita).toBeUndefined();
     expect(ciudades[martorellIdx - 1]?.label).toBe("Manresa");
     expect(ciudades[martorellIdx + 1]?.label).toBe("Mataró");
+    const santaPerpetua = ciudadUrbana("santaperpetua");
+    expect(santaPerpetua?.etiqueta).toBe("Santa Perpètua de Mogoda (Barcelona)");
+    expect(santaPerpetua?.nombre).toBe("Santa Perpètua de Mogoda");
+    expect(zonaDeCiudad(santaPerpetua!, "Can Folguera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPerpetua!, "Centre Vila")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPerpetua!, "La Florida")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPerpetua!, "Mogoda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPerpetua!, "Santiga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaPerpetua!, "Santa Perpètua de Mogoda")).toBeNull();
+    expect(zonaDeCiudad(santaPerpetua!, "Alstom")).toBeNull();
+    expect(zonaDeCiudad(santaPerpetua!, "Ca n’Oller")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(santaPerpetua!, "Ca n’Oller")!)).toBe("Polígono · Ca n’Oller");
+    expect(etiquetaZona(zonaDeCiudad(santaPerpetua!, "Can Bernades-Subirà")!)).toBe("Polígono · Can Bernades-Subirà");
+    expect(zonaDeCiudad(santaPerpetua!, "Can Vinyalets")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(santaPerpetua!, "Can Vinyals")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(santaPerpetua!, "CIM Vallès – Les Minetes")!)).toBe("Polígono · CIM Vallès – Les Minetes");
+    expect(zonaDeCiudad(santaPerpetua!, "Polígono · La Florida")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(santaPerpetua!, "Polígono · La Florida")!)).toBe("Polígono · La Florida");
+    expect(zonaDeCiudad(santaPerpetua!, "Polígono · Santiga")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(santaPerpetua!, "Polígono · Santiga")!)).toBe("Polígono · Santiga");
+    const nombresSantaPerpetua = santaPerpetua!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantaPerpetua).size).toBe(nombresSantaPerpetua.length);
+    expect(nombresSantaPerpetua.filter((n) => santaPerpetua!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(8);
+    expect(nombresSantaPerpetua.filter((n) => santaPerpetua!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(12);
+    const santaPerpetuaIdx = ciudades.findIndex((c) => c.value === "santaperpetua");
+    expect(ciudades[santaPerpetuaIdx]?.label).toBe("Santa Perpètua de Mogoda");
+    expect(ciudades[santaPerpetuaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[santaPerpetuaIdx - 1]?.label).toBe("Santa Coloma de Gramenet");
+    expect(ciudades[santaPerpetuaIdx + 1]?.label).toBe("Sitges");
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
