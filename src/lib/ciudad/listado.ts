@@ -25,7 +25,7 @@ export function parseFiltrosCiudad(
     return typeof v === "string" ? v.trim() : "";
   };
   return {
-    ciudad: pick("ciudad") || "burgos",
+    ciudad: pick("ciudad"),
     desde: pick("desde"),
     hasta: pick("hasta"),
     fecha: pick("fecha"),

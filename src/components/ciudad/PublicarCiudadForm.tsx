@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/Input";
 import { DatePickerInput, TimePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import {
-  CIUDADES_URBANAS,
   ETIQUETA_MUNICIPIO_URBANO,
   ciudadesParaDesplegable,
   ciudadUrbana,
@@ -41,7 +40,7 @@ function botonClase(activo: boolean): string {
 
 export function PublicarCiudadForm() {
   const router = useRouter();
-  const [ciudad, setCiudad] = useState("burgos");
+  const [ciudad, setCiudad] = useState("");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
   const [fecha, setFecha] = useState("");
@@ -55,8 +54,8 @@ export function PublicarCiudadForm() {
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  const actual = ciudadUrbana(ciudad) ?? CIUDADES_URBANAS[0];
-  const opcionesZona = zonasParaDesplegable(actual);
+  const actual = ciudadUrbana(ciudad);
+  const opcionesZona = actual ? zonasParaDesplegable(actual) : [];
   const opcionesCiudad = ciudadesParaDesplegable();
   const llevaBulto = tipoOfertaLlevaBulto(tipo);
   const llevaPlaza = tipoOfertaLlevaPasajeros(tipo);
@@ -69,6 +68,10 @@ export function PublicarCiudadForm() {
 
   async function publicar() {
     if (enviando) return;
+    if (!actual) {
+      setError("Elige el municipio.");
+      return;
+    }
     setError("");
     setEnviando(true);
     const formData = new FormData();
@@ -107,7 +110,7 @@ export function PublicarCiudadForm() {
     <div className="space-y-4">
       <Select
         label={ETIQUETA_MUNICIPIO_URBANO}
-        value={actual.id}
+        value={actual?.id ?? ""}
         options={opcionesCiudad}
         onChange={(e) => {
           setCiudad(e.target.value);

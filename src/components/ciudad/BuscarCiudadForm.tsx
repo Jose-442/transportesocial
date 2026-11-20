@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { DatePickerInput } from "@/components/ui/PickerInput";
 import { Select } from "@/components/ui/Select";
 import {
-  CIUDADES_URBANAS,
   ETIQUETA_MUNICIPIO_URBANO,
   ciudadesParaDesplegable,
   ciudadUrbana,
@@ -16,17 +15,21 @@ import type { FiltrosCiudad } from "@/lib/ciudad/listado";
 
 export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
   const router = useRouter();
-  const [ciudad, setCiudad] = useState(inicial.ciudad || "burgos");
+  const [ciudad, setCiudad] = useState(inicial.ciudad);
   const [desde, setDesde] = useState(inicial.desde);
   const [hasta, setHasta] = useState(inicial.hasta);
   const [fecha, setFecha] = useState(inicial.fecha);
   const [error, setError] = useState("");
 
-  const actual = ciudadUrbana(ciudad) ?? CIUDADES_URBANAS[0];
-  const opcionesZona = zonasParaDesplegable(actual);
+  const actual = ciudadUrbana(ciudad);
+  const opcionesZona = actual ? zonasParaDesplegable(actual) : [];
   const opcionesCiudad = ciudadesParaDesplegable();
 
   function buscar() {
+    if (!actual) {
+      setError("Elige el municipio.");
+      return;
+    }
     if (!desde || !hasta) {
       setError("Elige desde dónde sales y hasta dónde.");
       return;
@@ -44,7 +47,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4">
       <Select
         label={ETIQUETA_MUNICIPIO_URBANO}
-        value={actual.id}
+        value={actual?.id ?? ""}
         options={opcionesCiudad}
         onChange={(e) => {
           setCiudad(e.target.value);
