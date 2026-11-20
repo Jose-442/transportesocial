@@ -137,20 +137,20 @@ export default async function HomePage() {
             </p>
             </div>
             <div className="mt-3 grid gap-2 lg:mb-2 lg:mt-3 lg:max-w-xl">
+              <p className="px-1 text-sm font-semibold leading-snug text-white sm:text-base">
+                Anuncia tu espacio y asientos libres
+              </p>
               <ButtonLink
                 href="/rutas/nueva"
                 variant="primary"
                 fullWidth
                 className="!h-auto !items-start !justify-start flex-col gap-1 px-3 py-2.5 text-left"
               >
-                <span className="flex items-center gap-2 text-xs font-semibold text-amber-200 sm:text-sm">
+                <span className="flex items-center gap-2 text-sm font-semibold leading-snug sm:text-base">
                   <span className="text-2xl leading-none" aria-hidden>
                     🚚
                   </span>
-                  (Soy Conductor)
-                </span>
-                <span className="text-sm font-semibold leading-snug sm:text-base">
-                  PUBLICAR mi ruta con el espacio y asientos libres
+                  PUBLICAR ruta de una localidad a otra
                 </span>
               </ButtonLink>
               <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
@@ -162,14 +162,11 @@ export default async function HomePage() {
                 fullWidth
                 className="!h-auto !items-start !justify-start flex-col gap-1 border-white bg-white px-3 py-2.5 text-left text-emerald-950 hover:bg-emerald-50"
               >
-                <span className="flex items-center gap-2 text-xs font-semibold text-emerald-800 sm:text-sm">
+                <span className="flex items-center gap-2 text-sm font-semibold leading-snug text-emerald-950 sm:text-base">
                   <span className="text-2xl leading-none" aria-hidden>
                     🏘️
                   </span>
-                  (Soy Conductor)
-                </span>
-                <span className="text-sm font-semibold leading-snug sm:text-base">
-                  PUBLICAR trayecto en mi ciudad
+                  PUBLICAR ruta dentro de mi municipio
                 </span>
               </ButtonLink>
             </div>
