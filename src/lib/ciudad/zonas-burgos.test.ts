@@ -223,6 +223,7 @@ describe("zonas de Burgos", () => {
       "arteixo",
       "carballo",
       "culleredo",
+      "ribeira",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3943,6 +3944,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCulleredo).size).toBe(nombresCulleredo.length);
     expect(nombresCulleredo.filter((n) => culleredo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
     expect(nombresCulleredo.filter((n) => culleredo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const ribeira = ciudadUrbana("ribeira");
+    expect(ribeira?.etiqueta).toBe("Ribeira (A Coruña)");
+    expect(ribeira?.nombre).toBe("Ribeira");
+    expect(zonaDeCiudad(ribeira!, "Aguiño")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Ribeira (Santa Uxía)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Oleiros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Palmeira")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Areeiros")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Areeiros de Carreira")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ribeira!, "Ribeira")).toBeNull();
+    expect(zonaDeCiudad(ribeira!, "Santa Uxía")).toBeNull();
+    expect(zonaDeCiudad(ribeira!, "Polígono Industrial de Xarás")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(ribeira!, "Nuevo Polígono Industrial de Ribeira (Oleiros-Palmeira)")?.tipo).toBe("poligono");
+    const nombresRibeira = ribeira!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresRibeira).size).toBe(nombresRibeira.length);
+    expect(nombresRibeira.filter((n) => ribeira!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
+    expect(nombresRibeira.filter((n) => ribeira!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4130,6 +4148,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[amesIdx + 3]?.label).toBe("Culleredo");
     expect(ciudades[amesIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[amesIdx + 4]?.label).toBe("Ferrol");
+    const ribeiraIdx = ciudades.findIndex((c) => c.value === "ribeira");
+    expect(ciudades[ribeiraIdx]?.label).toBe("Ribeira");
+    expect(ciudades[ribeiraIdx]?.negrita).toBeUndefined();
+    expect(ciudades[ribeiraIdx - 1]?.label).toBe("Oleiros");
+    expect(ciudades[ribeiraIdx + 1]?.label).toBe("Santiago de Compostela");
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);

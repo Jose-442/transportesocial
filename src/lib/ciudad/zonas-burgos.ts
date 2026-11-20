@@ -770,6 +770,10 @@
  * A Marisqueira sigue como barrio. El polígono se llama Polígono Industrial A Marisqueira.
  * Alvedro sigue como barrio. El parque empresarial entra aparte.
  * Ledoño sigue como barrio. El centro logístico y la zona industrial entran aparte, los dos.
+ * Ribeira: debajo de A Coruña, detrás de Oleiros y delante de Santiago de Compostela. Los barrios de la lista y los dos polígonos.
+ * Ribeira (Santa Uxía) queda con ese nombre. Ribeira no entra aparte.
+ * Oleiros y Palmeira siguen como barrios. El polígono nuevo entra aparte, con el nombre entero.
+ * Areeiros y Areeiros de Carreira quedan los dos. Deán Grande y Deán Pequeno quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10397,6 +10401,40 @@ const POLIGONOS_CULLEREDO: ZonaCiudad[] = [
   { nombre: "Zona Industrial de Ledoño", tipo: "poligono" },
 ];
 
+const BARRIOS_RIBEIRA: ZonaCiudad[] = [
+  { nombre: "Aguiño", tipo: "barrio" },
+  { nombre: "Artes", tipo: "barrio" },
+  { nombre: "As Avesadas", tipo: "barrio" },
+  { nombre: "Carreira", tipo: "barrio" },
+  { nombre: "Castiñeiras", tipo: "barrio" },
+  { nombre: "Corrubedo", tipo: "barrio" },
+  { nombre: "Deán Grande", tipo: "barrio" },
+  { nombre: "Deán Pequeno", tipo: "barrio" },
+  { nombre: "Frións", tipo: "barrio" },
+  { nombre: "Olveira", tipo: "barrio" },
+  { nombre: "Palmeira", tipo: "barrio" },
+  { nombre: "Ribeira (Santa Uxía)", tipo: "barrio" },
+  { nombre: "Sirves", tipo: "barrio" },
+  { nombre: "Oleiros", tipo: "barrio" },
+  { nombre: "Vixán", tipo: "barrio" },
+  { nombre: "O Touro", tipo: "barrio" },
+  { nombre: "Areeiros", tipo: "barrio" },
+  { nombre: "A Graña", tipo: "barrio" },
+  { nombre: "A Capela", tipo: "barrio" },
+  { nombre: "A Laxe", tipo: "barrio" },
+  { nombre: "A Pedra Pateira", tipo: "barrio" },
+  { nombre: "O Vilar", tipo: "barrio" },
+  { nombre: "A Ameixida", tipo: "barrio" },
+  { nombre: "O Porto", tipo: "barrio" },
+  { nombre: "A Cobasa", tipo: "barrio" },
+  { nombre: "Areeiros de Carreira", tipo: "barrio" },
+];
+
+const POLIGONOS_RIBEIRA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Xarás", tipo: "poligono" },
+  { nombre: "Nuevo Polígono Industrial de Ribeira (Oleiros-Palmeira)", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11677,6 +11715,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Culleredo",
     etiqueta: "Culleredo (A Coruña)",
     zonas: [...BARRIOS_CULLEREDO, ...POLIGONOS_CULLEREDO],
+  },
+  {
+    id: "ribeira",
+    nombre: "Ribeira",
+    etiqueta: "Ribeira (A Coruña)",
+    zonas: [...BARRIOS_RIBEIRA, ...POLIGONOS_RIBEIRA],
   },
 ];
 
