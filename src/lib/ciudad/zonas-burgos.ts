@@ -97,6 +97,12 @@
  * Urreta es polígono. Urreta-Egia es barrio.
  * Zuhatzu es barrio. Zuhatzu-Zuazo es polígono.
  * Galdakao no entra como barrio.
+ * Leioa: debajo de Bilbao, detrás de Getxo y delante de Portugalete. Los barrios de la lista y los nueve polígonos.
+ * Ibaiondo está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Parque Empresarial Ibaiondo entra aparte.
+ * Lamiako es polígono. Lamiako-Txopoeta es barrio.
+ * Las zonas de al lado que no están en la lista no entran.
+ * Leioa no entra como barrio.
  * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
  * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
  * Irun: barrios de EUSTAT 2025 y los que recorre el Ayuntamiento.
@@ -2391,6 +2397,43 @@ const POLIGONOS_GALDAKAO: ZonaCiudad[] = [
   { nombre: "Urreta", tipo: "poligono" },
   { nombre: "Usansolo industrial", tipo: "poligono" },
   { nombre: "Zuhatzu-Zuazo", tipo: "poligono" },
+];
+
+const BARRIOS_LEIOA: ZonaCiudad[] = [
+  { nombre: "Aketxe", tipo: "barrio" },
+  { nombre: "Aldekoena", tipo: "barrio" },
+  { nombre: "Artatza", tipo: "barrio" },
+  { nombre: "Artatzagana", tipo: "barrio" },
+  { nombre: "Basaez", tipo: "barrio" },
+  { nombre: "Elexalde", tipo: "barrio" },
+  { nombre: "Ibaiondo", tipo: "barrio" },
+  { nombre: "Ikea", tipo: "barrio" },
+  { nombre: "Iturribide", tipo: "barrio" },
+  { nombre: "Lamiako-Txopoeta", tipo: "barrio" },
+  { nombre: "Lertutza", tipo: "barrio" },
+  { nombre: "Mendibil", tipo: "barrio" },
+  { nombre: "Ondiz", tipo: "barrio" },
+  { nombre: "Peruri", tipo: "barrio" },
+  { nombre: "Pinueta", tipo: "barrio" },
+  { nombre: "Santi Mami", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Santsoena", tipo: "barrio" },
+  { nombre: "Sarriena", tipo: "barrio" },
+  { nombre: "Tellería", tipo: "barrio" },
+  { nombre: "Udondo", tipo: "barrio" },
+  { nombre: "Zuhatzu", tipo: "barrio" },
+];
+
+const POLIGONOS_LEIOA: ZonaCiudad[] = [
+  { nombre: "Dow Chemical", tipo: "poligono" },
+  { nombre: "Polígono · Ibaiondo", tipo: "poligono" },
+  { nombre: "Ibarabarri", tipo: "poligono" },
+  { nombre: "Iparraguirre", tipo: "poligono" },
+  { nombre: "Lamiako", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Euskadi – Campus Leioa", tipo: "poligono" },
+  { nombre: "Ribera de Axpe", tipo: "poligono" },
+  { nombre: "Peri Astrabudua", tipo: "poligono" },
+  { nombre: "Parque Empresarial Ibaiondo", tipo: "poligono" },
 ];
 
 const BARRIOS_SAN_SEBASTIAN: ZonaCiudad[] = [
@@ -11096,6 +11139,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Galdakao",
     etiqueta: "Galdakao (Bizkaia)",
     zonas: [...BARRIOS_GALDAKAO, ...POLIGONOS_GALDAKAO],
+  },
+  {
+    id: "leioa",
+    nombre: "Leioa",
+    etiqueta: "Leioa (Bizkaia)",
+    zonas: [...BARRIOS_LEIOA, ...POLIGONOS_LEIOA],
   },
   {
     id: "sansebastian",

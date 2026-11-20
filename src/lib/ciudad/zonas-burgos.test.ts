@@ -52,6 +52,7 @@ describe("zonas de Burgos", () => {
       "durango",
       "erandio",
       "galdakao",
+      "leioa",
       "sansebastian",
       "irun",
       "errenteria",
@@ -631,6 +632,27 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresGaldakao).size).toBe(nombresGaldakao.length);
     expect(nombresGaldakao.filter((n) => galdakao!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(15);
     expect(nombresGaldakao.filter((n) => galdakao!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
+    const leioa = ciudadUrbana("leioa");
+    expect(leioa?.etiqueta).toBe("Leioa (Bizkaia)");
+    expect(leioa?.nombre).toBe("Leioa");
+    expect(zonaDeCiudad(leioa!, "Aketxe")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leioa!, "Ibaiondo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leioa!, "Lamiako-Txopoeta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leioa!, "Tellería")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(leioa!, "Leioa")).toBeNull();
+    expect(zonaDeCiudad(leioa!, "Dow Chemical")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(leioa!, "Polígono · Ibaiondo")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(leioa!, "Polígono · Ibaiondo")!)).toBe("Polígono · Ibaiondo");
+    expect(zonaDeCiudad(leioa!, "Parque Empresarial Ibaiondo")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(leioa!, "Parque Empresarial Ibaiondo")!)).toBe("Polígono · Parque Empresarial Ibaiondo");
+    expect(zonaDeCiudad(leioa!, "Lamiako")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(leioa!, "Parque Tecnológico de Euskadi – Campus Leioa")!)).toBe("Polígono · Parque Tecnológico de Euskadi – Campus Leioa");
+    expect(zonaDeCiudad(leioa!, "Ribera de Axpe")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(leioa!, "Peri Astrabudua")?.tipo).toBe("poligono");
+    const nombresLeioa = leioa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLeioa).size).toBe(nombresLeioa.length);
+    expect(nombresLeioa.filter((n) => leioa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
+    expect(nombresLeioa.filter((n) => leioa!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
     const sanSebastian = ciudadUrbana("sansebastian");
     expect(sanSebastian?.etiqueta).toBe("San Sebastián (Gipuzkoa)");
     expect(zonaDeCiudad(sanSebastian!, "Gros")?.tipo).toBe("barrio");
@@ -4465,6 +4487,11 @@ describe("zonas de Burgos", () => {
     expect(ciudades[galdakaoIdx]?.negrita).toBeUndefined();
     expect(ciudades[galdakaoIdx - 1]?.label).toBe("Erandio");
     expect(ciudades[galdakaoIdx + 1]?.label).toBe("Getxo");
+    const leioaIdx = ciudades.findIndex((c) => c.value === "leioa");
+    expect(ciudades[leioaIdx]?.label).toBe("Leioa");
+    expect(ciudades[leioaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[leioaIdx - 1]?.label).toBe("Getxo");
+    expect(ciudades[leioaIdx + 1]?.label).toBe("Portugalete");
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
