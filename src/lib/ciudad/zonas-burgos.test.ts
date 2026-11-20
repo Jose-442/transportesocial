@@ -151,6 +151,7 @@ describe("zonas de Burgos", () => {
       "nijar",
       "lucena",
       "motril",
+      "almunecar",
       "jaen",
       "granada",
       "linares",
@@ -2194,6 +2195,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMotril).size).toBe(nombresMotril.length);
     expect(nombresMotril.filter((n) => motril!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
     expect(nombresMotril.filter((n) => motril!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const almunecar = ciudadUrbana("almunecar");
+    expect(almunecar?.etiqueta).toBe("Almuñécar (Granada)");
+    expect(almunecar?.nombre).toBe("Almuñécar");
+    expect(zonaDeCiudad(almunecar!, "Almuñécar centro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almunecar!, "La Herradura")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almunecar!, "La Paloma")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almunecar!, "Las Palomas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almunecar!, "Taramay")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almunecar!, "Almuñécar")).toBeNull();
+    expect(zonaDeCiudad(almunecar!, "Polígono · La Paloma")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(almunecar!, "Polígono · La Paloma")!)).toBe("Polígono · La Paloma");
+    expect(zonaDeCiudad(almunecar!, "Polígono Industrial Taramay")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(almunecar!, "Polígono Industrial Taramay")!)).toBe("Polígono Industrial Taramay");
+    const nombresAlmunecar = almunecar!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlmunecar).size).toBe(nombresAlmunecar.length);
+    expect(nombresAlmunecar.filter((n) => almunecar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(24);
+    expect(nombresAlmunecar.filter((n) => almunecar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const jaen = ciudadUrbana("jaen");
     expect(jaen?.etiqueta).toBe("Jaén (Jaén)");
     expect(jaen?.nombre).toBe("Jaén");
@@ -4463,12 +4481,14 @@ describe("zonas de Burgos", () => {
     const granadaIdx = ciudades.findIndex((c) => c.value === "granada");
     expect(ciudades[granadaIdx]?.label).toBe("Granada");
     expect(ciudades[granadaIdx]?.negrita).toBe(true);
-    expect(ciudades[granadaIdx + 1]?.label).toBe("Motril");
+    expect(ciudades[granadaIdx + 1]?.label).toBe("Almuñécar");
     expect(ciudades[granadaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[granadaIdx + 2]?.label).toBe("Guadalajara");
-    expect(ciudades[granadaIdx + 2]?.negrita).toBe(true);
-    expect(ciudades[granadaIdx + 3]?.label).toBe("Azuqueca de Henares");
-    expect(ciudades[granadaIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades[granadaIdx + 2]?.label).toBe("Motril");
+    expect(ciudades[granadaIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[granadaIdx + 3]?.label).toBe("Guadalajara");
+    expect(ciudades[granadaIdx + 3]?.negrita).toBe(true);
+    expect(ciudades[granadaIdx + 4]?.label).toBe("Azuqueca de Henares");
+    expect(ciudades[granadaIdx + 4]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "huelva") && ciudades[ciudades.findIndex((c) => c.value === "huelva") - 1]?.label).toBe("Azuqueca de Henares");
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);

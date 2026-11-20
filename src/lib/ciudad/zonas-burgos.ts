@@ -295,6 +295,10 @@
  * Polígono del Valle queda como barrio. Polígono Industrial del Valle como polígono.
  * Granada: los barrios y los polígonos de la lista.
  * Cartuja queda como barrio. Polígono Cartuja como polígono.
+ * Almuñécar: debajo de Granada, detrás de la capital y delante de Motril. Los barrios de la lista y los dos polígonos.
+ * La Paloma está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Taramay es barrio. Polígono Industrial Taramay entra aparte.
+ * Almuñécar no entra como barrio.
  * Linares: los barrios y los polígonos de la lista.
  * La Zarzuela queda como barrio. Polígono Industrial La Zarzuela como polígono.
  * Andújar: los barrios y los polígonos de la lista.
@@ -7405,6 +7409,38 @@ const POLIGONOS_MOTRIL: ZonaCiudad[] = [
   { nombre: "Zona de Actividades Logísticas del Puerto de Motril (ZAL)", tipo: "poligono" },
 ];
 
+const BARRIOS_ALMUNECAR: ZonaCiudad[] = [
+  { nombre: "Almuñécar centro", tipo: "barrio" },
+  { nombre: "Barrio de San Miguel", tipo: "barrio" },
+  { nombre: "Barrio de San Sebastián", tipo: "barrio" },
+  { nombre: "Cabria", tipo: "barrio" },
+  { nombre: "Campo de Tiro", tipo: "barrio" },
+  { nombre: "Cantarriján", tipo: "barrio" },
+  { nombre: "Cerro Gordo", tipo: "barrio" },
+  { nombre: "Cotobro", tipo: "barrio" },
+  { nombre: "Curumbico", tipo: "barrio" },
+  { nombre: "La Herradura", tipo: "barrio" },
+  { nombre: "La Paloma", tipo: "barrio" },
+  { nombre: "La Galera", tipo: "barrio" },
+  { nombre: "Las Golondrinas", tipo: "barrio" },
+  { nombre: "Las Palomas", tipo: "barrio" },
+  { nombre: "Los Berengueles", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "Lo Colorado", tipo: "barrio" },
+  { nombre: "Marina del Este", tipo: "barrio" },
+  { nombre: "Punta de la Mona", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Nicolás", tipo: "barrio" },
+  { nombre: "Taramay", tipo: "barrio" },
+  { nombre: "Torrecuevas", tipo: "barrio" },
+  { nombre: "Velilla", tipo: "barrio" },
+];
+
+const POLIGONOS_ALMUNECAR: ZonaCiudad[] = [
+  { nombre: "Polígono · La Paloma", tipo: "poligono" },
+  { nombre: "Polígono Industrial Taramay", tipo: "poligono" },
+];
+
 const BARRIOS_JAEN: ZonaCiudad[] = [
   { nombre: "El Almendral", tipo: "barrio" },
   { nombre: "El Arrabalejo", tipo: "barrio" },
@@ -11733,6 +11769,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Motril",
     etiqueta: "Motril (Granada)",
     zonas: [...BARRIOS_MOTRIL, ...POLIGONOS_MOTRIL],
+  },
+  {
+    id: "almunecar",
+    nombre: "Almuñécar",
+    etiqueta: "Almuñécar (Granada)",
+    zonas: [...BARRIOS_ALMUNECAR, ...POLIGONOS_ALMUNECAR],
   },
   {
     id: "jaen",
