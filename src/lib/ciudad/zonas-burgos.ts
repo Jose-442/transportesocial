@@ -748,7 +748,7 @@
  * El Vallejo es el barrio del Vallejo. Vallejo no entra aparte. Parque del Vallejo entra aparte.
  * El Foro es el barrio del Foro. Foro no entra aparte.
  * Polígono Industrial Aida I y Polígono Industrial Aida II quedan los dos.
- * Oviedo: capital de Asturias, en negrita, detrás de Ourense y delante de Gijón. Los barrios de la lista y los nueve polígonos.
+ * Oviedo: capital de Asturias, en negrita, detrás de Ourense y delante de Avilés. Los barrios de la lista y los nueve polígonos.
  * Olloniego sigue como barrio. El polígono se llama Polígono Industrial Olloniego.
  * Tudela Veguín sigue como barrio. El polígono se llama Polígono Industrial de Tudela Veguín.
  * Trubia sigue como barrio. El área industrial entra aparte.
@@ -779,6 +779,11 @@
  * Colina, La queda con ese nombre, como lo escribiste.
  * Nou Espai I y Nou Espai II quedan los dos.
  * Arcos Este, Arcos Norte y Los Arcos quedan los tres. Pinar de Garaita y Pla de Garaita quedan los dos.
+ * Avilés: debajo de Oviedo, justo detrás de la capital y delante de Gijón. Los barrios de la lista y los seis polígonos.
+ * Polígono de La Magdalena queda como barrio. El polígono se llama Polígono Industrial de La Magdalena.
+ * Valliniello sigue como barrio. El polígono se llama Polígono Industrial de Valliniello.
+ * San Juan de Nieva sigue como barrio. La zona industrial entra aparte.
+ * Parque Empresarial Principado de Asturias (PEPA) queda con ese nombre. PEPA es el mismo parque.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10490,6 +10495,45 @@ const POLIGONOS_LA_NUCIA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial L'Alberca", tipo: "poligono" },
 ];
 
+const BARRIOS_AVILES: ZonaCiudad[] = [
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Bustiello", tipo: "barrio" },
+  { nombre: "El Alfaraz", tipo: "barrio" },
+  { nombre: "El Carbayedo", tipo: "barrio" },
+  { nombre: "El Nodo", tipo: "barrio" },
+  { nombre: "El Pozón", tipo: "barrio" },
+  { nombre: "Heros", tipo: "barrio" },
+  { nombre: "Jardín de Cantos", tipo: "barrio" },
+  { nombre: "La Carriona", tipo: "barrio" },
+  { nombre: "La Grandiella", tipo: "barrio" },
+  { nombre: "La Luz", tipo: "barrio" },
+  { nombre: "La Maruca", tipo: "barrio" },
+  { nombre: "La Texera", tipo: "barrio" },
+  { nombre: "La Villa", tipo: "barrio" },
+  { nombre: "Las Meanas", tipo: "barrio" },
+  { nombre: "Llaranes", tipo: "barrio" },
+  { nombre: "Miranda", tipo: "barrio" },
+  { nombre: "Polígono de La Magdalena", tipo: "barrio" },
+  { nombre: "Sabugo", tipo: "barrio" },
+  { nombre: "San Cristóbal", tipo: "barrio" },
+  { nombre: "Valliniello", tipo: "barrio" },
+  { nombre: "Valgranda", tipo: "barrio" },
+  { nombre: "Versalles", tipo: "barrio" },
+  { nombre: "Villalegre", tipo: "barrio" },
+  { nombre: "Puerta de la Villa", tipo: "barrio" },
+  { nombre: "El Arbolón", tipo: "barrio" },
+  { nombre: "San Juan de Nieva", tipo: "barrio" },
+];
+
+const POLIGONOS_AVILES: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial Principado de Asturias (PEPA)", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Las Arobias", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Maqua", tipo: "poligono" },
+  { nombre: "Polígono Industrial de La Magdalena", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Valliniello", tipo: "poligono" },
+  { nombre: "Zona Industrial de San Juan de Nieva", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11782,6 +11826,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "La Nucía",
     etiqueta: "La Nucía (Alicante)",
     zonas: [...BARRIOS_LA_NUCIA, ...POLIGONOS_LA_NUCIA],
+  },
+  {
+    id: "aviles",
+    nombre: "Avilés",
+    etiqueta: "Avilés (Asturias)",
+    zonas: [...BARRIOS_AVILES, ...POLIGONOS_AVILES],
   },
 ];
 
