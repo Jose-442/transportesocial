@@ -738,6 +738,11 @@
  * Cerro de la Estrella queda con ese nombre. Antes se llamaba Cerro de la Horca. No entra aparte.
  * Cólliga y Colliguilla quedan las dos.
  * Los Tiradores Altos y Los Tiradores Bajos quedan los dos.
+ * Guadalajara: capital, en negrita, detrás de Motril y delante de Huelva. Los barrios de la lista y los seis polígonos.
+ * Los Escritores queda con ese nombre. La palabra Barrio no entra.
+ * Balconcillo sigue como barrio. El polígono se llama Polígono Industrial El Balconcillo.
+ * Taracena sigue como barrio. La zona industrial entra aparte.
+ * Polígono Industrial El Henares y Polígono Industrial El Henares-Ampliación quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10103,6 +10108,41 @@ const POLIGONOS_CUENCA: ZonaCiudad[] = [
   { nombre: "Zona Industrial Avenida de los Alfares", tipo: "poligono" },
 ];
 
+const BARRIOS_GUADALAJARA: ZonaCiudad[] = [
+  { nombre: "Aguas Vivas", tipo: "barrio" },
+  { nombre: "Alamín", tipo: "barrio" },
+  { nombre: "Balconcillo", tipo: "barrio" },
+  { nombre: "Los Escritores", tipo: "barrio" },
+  { nombre: "Bejanque", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "El Clavín", tipo: "barrio" },
+  { nombre: "Estación-Manantiales", tipo: "barrio" },
+  { nombre: "Iriépal", tipo: "barrio" },
+  { nombre: "La Chopera", tipo: "barrio" },
+  { nombre: "La Esperanza", tipo: "barrio" },
+  { nombre: "La Muñeca-Salinera", tipo: "barrio" },
+  { nombre: "La Rambla", tipo: "barrio" },
+  { nombre: "Las Adoratrices", tipo: "barrio" },
+  { nombre: "Las Cañas", tipo: "barrio" },
+  { nombre: "Llanilla", tipo: "barrio" },
+  { nombre: "Los Valles-Sanz Vázquez", tipo: "barrio" },
+  { nombre: "Panteón-El Ferial", tipo: "barrio" },
+  { nombre: "Plan Sur", tipo: "barrio" },
+  { nombre: "Río Henares", tipo: "barrio" },
+  { nombre: "Taracena", tipo: "barrio" },
+  { nombre: "Usanos", tipo: "barrio" },
+  { nombre: "Valdenoches", tipo: "barrio" },
+];
+
+const POLIGONOS_GUADALAJARA: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial El Ruiseñor", tipo: "poligono" },
+  { nombre: "Parque Logístico Puerta Centro-Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Balconcillo", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Henares", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Henares-Ampliación", tipo: "poligono" },
+  { nombre: "Zona Industrial de Taracena", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11341,6 +11381,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cuenca",
     etiqueta: "Cuenca (Cuenca)",
     zonas: [...BARRIOS_CUENCA, ...POLIGONOS_CUENCA],
+  },
+  {
+    id: "guadalajara",
+    nombre: "Guadalajara",
+    etiqueta: "Guadalajara (Guadalajara)",
+    zonas: [...BARRIOS_GUADALAJARA, ...POLIGONOS_GUADALAJARA],
   },
 ];
 

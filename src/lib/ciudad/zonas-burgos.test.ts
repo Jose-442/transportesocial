@@ -216,6 +216,7 @@ describe("zonas de Burgos", () => {
       "alcazardesanjuan",
       "valdepenas",
       "cuenca",
+      "guadalajara",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3804,6 +3805,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCuenca).size).toBe(nombresCuenca.length);
     expect(nombresCuenca.filter((n) => cuenca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
     expect(nombresCuenca.filter((n) => cuenca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
+    const guadalajara = ciudadUrbana("guadalajara");
+    expect(guadalajara?.etiqueta).toBe("Guadalajara (Guadalajara)");
+    expect(guadalajara?.nombre).toBe("Guadalajara");
+    expect(zonaDeCiudad(guadalajara!, "Aguas Vivas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(guadalajara!, "Los Escritores")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(guadalajara!, "Balconcillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(guadalajara!, "Taracena")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(guadalajara!, "Río Henares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(guadalajara!, "Barrio de los Escritores")).toBeNull();
+    expect(zonaDeCiudad(guadalajara!, "Guadalajara")).toBeNull();
+    expect(zonaDeCiudad(guadalajara!, "Parque Empresarial El Ruiseñor")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(guadalajara!, "Parque Logístico Puerta Centro-Ciudad del Transporte")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(guadalajara!, "Polígono Industrial El Balconcillo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(guadalajara!, "Polígono Industrial El Henares")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(guadalajara!, "Polígono Industrial El Henares-Ampliación")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(guadalajara!, "Zona Industrial de Taracena")?.tipo).toBe("poligono");
+    const nombresGuadalajara = guadalajara!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGuadalajara).size).toBe(nombresGuadalajara.length);
+    expect(nombresGuadalajara.filter((n) => guadalajara!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresGuadalajara.filter((n) => guadalajara!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4027,6 +4048,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[granadaIdx]?.negrita).toBe(true);
     expect(ciudades[granadaIdx + 1]?.label).toBe("Motril");
     expect(ciudades[granadaIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[granadaIdx + 2]?.label).toBe("Guadalajara");
+    expect(ciudades[granadaIdx + 2]?.negrita).toBe(true);
+    expect(ciudades.find((c) => c.value === "huelva") && ciudades[ciudades.findIndex((c) => c.value === "huelva") - 1]?.label).toBe("Guadalajara");
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
