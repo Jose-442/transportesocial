@@ -217,6 +217,7 @@ describe("zonas de Burgos", () => {
       "valdepenas",
       "cuenca",
       "guadalajara",
+      "azuqueca",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3825,6 +3826,29 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresGuadalajara).size).toBe(nombresGuadalajara.length);
     expect(nombresGuadalajara.filter((n) => guadalajara!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
     expect(nombresGuadalajara.filter((n) => guadalajara!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const azuqueca = ciudadUrbana("azuqueca");
+    expect(azuqueca?.etiqueta).toBe("Azuqueca de Henares (Guadalajara)");
+    expect(azuqueca?.nombre).toBe("Azuqueca de Henares");
+    expect(zonaDeCiudad(azuqueca!, "Asfain")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "La Estación")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "El Vallejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "El Foro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "Parque del Vallejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "Azuqueca Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(azuqueca!, "Barrio de La Estación")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Barrio del Vallejo")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Vallejo")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Barrio del Foro")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Foro")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Azuqueca de Henares")).toBeNull();
+    expect(zonaDeCiudad(azuqueca!, "Polígono Industrial Aida I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(azuqueca!, "Polígono Industrial Aida II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(azuqueca!, "Polígono Industrial Miralcampo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(azuqueca!, "Polígono Industrial Sena")?.tipo).toBe("poligono");
+    const nombresAzuqueca = azuqueca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAzuqueca).size).toBe(nombresAzuqueca.length);
+    expect(nombresAzuqueca.filter((n) => azuqueca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(16);
+    expect(nombresAzuqueca.filter((n) => azuqueca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4050,7 +4074,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[granadaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[granadaIdx + 2]?.label).toBe("Guadalajara");
     expect(ciudades[granadaIdx + 2]?.negrita).toBe(true);
-    expect(ciudades.find((c) => c.value === "huelva") && ciudades[ciudades.findIndex((c) => c.value === "huelva") - 1]?.label).toBe("Guadalajara");
+    expect(ciudades[granadaIdx + 3]?.label).toBe("Azuqueca de Henares");
+    expect(ciudades[granadaIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades.find((c) => c.value === "huelva") && ciudades[ciudades.findIndex((c) => c.value === "huelva") - 1]?.label).toBe("Azuqueca de Henares");
     expect(ciudades.find((c) => c.value === "gijon")?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "bilbao")?.negrita).toBe(true);
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");

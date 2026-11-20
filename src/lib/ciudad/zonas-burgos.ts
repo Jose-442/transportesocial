@@ -738,11 +738,16 @@
  * Cerro de la Estrella queda con ese nombre. Antes se llamaba Cerro de la Horca. No entra aparte.
  * Cólliga y Colliguilla quedan las dos.
  * Los Tiradores Altos y Los Tiradores Bajos quedan los dos.
- * Guadalajara: capital, en negrita, detrás de Motril y delante de Huelva. Los barrios de la lista y los seis polígonos.
+ * Guadalajara: capital, en negrita, detrás de Motril. Los barrios de la lista y los seis polígonos.
  * Los Escritores queda con ese nombre. La palabra Barrio no entra.
  * Balconcillo sigue como barrio. El polígono se llama Polígono Industrial El Balconcillo.
  * Taracena sigue como barrio. La zona industrial entra aparte.
  * Polígono Industrial El Henares y Polígono Industrial El Henares-Ampliación quedan los dos.
+ * Azuqueca de Henares: debajo de Guadalajara, justo detrás de la capital. Los barrios de la lista y los siete polígonos.
+ * La Estación queda con ese nombre. La palabra Barrio no entra.
+ * El Vallejo es el barrio del Vallejo. Vallejo no entra aparte. Parque del Vallejo entra aparte.
+ * El Foro es el barrio del Foro. Foro no entra aparte.
+ * Polígono Industrial Aida I y Polígono Industrial Aida II quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10143,6 +10148,35 @@ const POLIGONOS_GUADALAJARA: ZonaCiudad[] = [
   { nombre: "Zona Industrial de Taracena", tipo: "poligono" },
 ];
 
+const BARRIOS_AZUQUECA: ZonaCiudad[] = [
+  { nombre: "Asfain", tipo: "barrio" },
+  { nombre: "La Estación", tipo: "barrio" },
+  { nombre: "El Vallejo", tipo: "barrio" },
+  { nombre: "El Foro", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "La Quebradilla", tipo: "barrio" },
+  { nombre: "La Paloma", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Vallehermoso", tipo: "barrio" },
+  { nombre: "El Mirador", tipo: "barrio" },
+  { nombre: "Parque del Vallejo", tipo: "barrio" },
+  { nombre: "Residencial Siglo XXI", tipo: "barrio" },
+  { nombre: "Residencial Parque Arcipreste", tipo: "barrio" },
+  { nombre: "Residencial Alhucema", tipo: "barrio" },
+  { nombre: "Residencial Los Jardines", tipo: "barrio" },
+  { nombre: "Azuqueca Norte", tipo: "barrio" },
+];
+
+const POLIGONOS_AZUQUECA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Aida I", tipo: "poligono" },
+  { nombre: "Polígono Industrial Aida II", tipo: "poligono" },
+  { nombre: "Polígono Industrial Comendador", tipo: "poligono" },
+  { nombre: "Polígono Industrial Garona", tipo: "poligono" },
+  { nombre: "Polígono Industrial Miralcampo", tipo: "poligono" },
+  { nombre: "Polígono Industrial Ródano", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sena", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11387,6 +11421,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Guadalajara",
     etiqueta: "Guadalajara (Guadalajara)",
     zonas: [...BARRIOS_GUADALAJARA, ...POLIGONOS_GUADALAJARA],
+  },
+  {
+    id: "azuqueca",
+    nombre: "Azuqueca de Henares",
+    etiqueta: "Azuqueca de Henares (Guadalajara)",
+    zonas: [...BARRIOS_AZUQUECA, ...POLIGONOS_AZUQUECA],
   },
 ];
 
