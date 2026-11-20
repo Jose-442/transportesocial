@@ -757,11 +757,14 @@
  * Parque Empresarial Novo Milladoiro queda con ese nombre. Polígono Industrial de O Milladoiro es el mismo sitio. No entra aparte.
  * O Milladoiro sigue como barrio.
  * Bertamiráns y Bertamiráns – O Bosque quedan los dos. Igual Bugallido, Ortoño y Piñeiro con su zona de al lado.
- * Arteixo: debajo de A Coruña, detrás de Ames y delante de Ferrol. Los barrios de la lista y los cinco polígonos.
+ * Arteixo: debajo de A Coruña, detrás de Ames y delante de Carballo. Los barrios de la lista y los cinco polígonos.
  * Arteixo entra también como barrio, como lo escribiste.
  * Morás sigue como barrio. El parque empresarial entra aparte.
  * Suevos sigue como barrio. El parque empresarial entra aparte. Suevos de Abaixo y Suevos de Arriba quedan los dos.
  * Barrañán y Barrañán de Arriba quedan los dos. Igual Chamín, Oseiro y Sol y Mar con su zona de al lado.
+ * Carballo: debajo de A Coruña, detrás de Arteixo y delante de Ferrol. Los barrios de la lista y los tres polígonos.
+ * Carballo entra también como barrio, como lo escribiste.
+ * Bértoa sigue como barrio. Parque Empresarial de Bértoa queda con ese nombre. Las fases I y II son el mismo polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10322,6 +10325,38 @@ const POLIGONOS_ARTEIXO: ZonaCiudad[] = [
   { nombre: "Puerto Exterior de Punta Langosteira", tipo: "poligono" },
 ];
 
+const BARRIOS_CARBALLO: ZonaCiudad[] = [
+  { nombre: "A Granxa", tipo: "barrio" },
+  { nombre: "A Milagrosa", tipo: "barrio" },
+  { nombre: "A Ponte Rosende", tipo: "barrio" },
+  { nombre: "A Vila", tipo: "barrio" },
+  { nombre: "Aldemunde", tipo: "barrio" },
+  { nombre: "Ardaña", tipo: "barrio" },
+  { nombre: "Artes", tipo: "barrio" },
+  { nombre: "Berdillo", tipo: "barrio" },
+  { nombre: "Bértoa", tipo: "barrio" },
+  { nombre: "Cances", tipo: "barrio" },
+  { nombre: "Carballo", tipo: "barrio" },
+  { nombre: "Entrecruces", tipo: "barrio" },
+  { nombre: "Goiáns", tipo: "barrio" },
+  { nombre: "Hospital", tipo: "barrio" },
+  { nombre: "Lema", tipo: "barrio" },
+  { nombre: "Noicela", tipo: "barrio" },
+  { nombre: "Oza", tipo: "barrio" },
+  { nombre: "Razo", tipo: "barrio" },
+  { nombre: "Rebordelos", tipo: "barrio" },
+  { nombre: "Rus", tipo: "barrio" },
+  { nombre: "Sísamo", tipo: "barrio" },
+  { nombre: "Sofán", tipo: "barrio" },
+  { nombre: "Vilela", tipo: "barrio" },
+];
+
+const POLIGONOS_CARBALLO: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial de Bértoa", tipo: "poligono" },
+  { nombre: "Zona Industrial de Queo de Arriba", tipo: "poligono" },
+  { nombre: "Zona Industrial de Industrias Calvo", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11590,6 +11625,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arteixo",
     etiqueta: "Arteixo (A Coruña)",
     zonas: [...BARRIOS_ARTEIXO, ...POLIGONOS_ARTEIXO],
+  },
+  {
+    id: "carballo",
+    nombre: "Carballo",
+    etiqueta: "Carballo (A Coruña)",
+    zonas: [...BARRIOS_CARBALLO, ...POLIGONOS_CARBALLO],
   },
 ];
 

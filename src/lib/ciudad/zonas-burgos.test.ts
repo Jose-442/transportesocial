@@ -221,6 +221,7 @@ describe("zonas de Burgos", () => {
       "oviedo",
       "ames",
       "arteixo",
+      "carballo",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3907,6 +3908,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresArteixo).size).toBe(nombresArteixo.length);
     expect(nombresArteixo.filter((n) => arteixo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(29);
     expect(nombresArteixo.filter((n) => arteixo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
+    const carballo = ciudadUrbana("carballo");
+    expect(carballo?.etiqueta).toBe("Carballo (A Coruña)");
+    expect(carballo?.nombre).toBe("Carballo");
+    expect(zonaDeCiudad(carballo!, "A Granxa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carballo!, "Bértoa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carballo!, "Carballo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carballo!, "Vilela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carballo!, "Parque Empresarial de Bértoa fase I")).toBeNull();
+    expect(zonaDeCiudad(carballo!, "Parque Empresarial de Bértoa fase II")).toBeNull();
+    expect(zonaDeCiudad(carballo!, "Parque Empresarial de Bértoa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(carballo!, "Zona Industrial de Queo de Arriba")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(carballo!, "Zona Industrial de Industrias Calvo")?.tipo).toBe("poligono");
+    const nombresCarballo = carballo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCarballo).size).toBe(nombresCarballo.length);
+    expect(nombresCarballo.filter((n) => carballo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresCarballo.filter((n) => carballo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4089,7 +4106,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[amesIdx - 1]?.negrita).toBe(true);
     expect(ciudades[amesIdx + 1]?.label).toBe("Arteixo");
     expect(ciudades[amesIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[amesIdx + 2]?.label).toBe("Ferrol");
+    expect(ciudades[amesIdx + 2]?.label).toBe("Carballo");
+    expect(ciudades[amesIdx + 2]?.negrita).toBeUndefined();
+    expect(ciudades[amesIdx + 3]?.label).toBe("Ferrol");
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
