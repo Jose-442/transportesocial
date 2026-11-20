@@ -5,5 +5,5 @@ export const BRAND = {
   heroSofa: "/brand/ilustracion-sofa.jpg",
   heroNevera: "/brand/ilustracion-nevera.jpg",
   quienesSomosNevera: "/brand/quienes-somos-nevera.png",
-  quienesSomosCamion: "/brand/quienes-somos-camion.png",
+  jose: "/brand/jose.png",
 } as const;

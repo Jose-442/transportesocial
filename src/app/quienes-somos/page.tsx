@@ -18,6 +18,32 @@ export default function QuienesSomosPage() {
         Quiénes somos y cómo funcionamos
       </h1>
 
+      <div className="mb-8 flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:gap-6">
+        <Image
+          src={BRAND.jose}
+          alt="Jose"
+          width={319}
+          height={290}
+          unoptimized
+          className="h-auto w-52 shrink-0"
+        />
+        <div className="space-y-4 text-base leading-relaxed sm:text-lg">
+          <p>
+            Hola, me llamo Jose y este es un pequeño resumen de mi historia y
+            de por qué creé Transporte Social
+          </p>
+          <p>
+            Llevo más de 34 años conociendo personalmente el transporte
+            profesional y sé de primera mano las carencias, los sobrecostes,
+            los tiempos de espera y los problemas que surgen en el día a día.
+            Por eso creé Transporte Social: para aprovechar trayectos que ya se
+            van a hacer, conectar a personas con conductores fiables para
+            pasajeros, bultos o mascotas, y proteger el dinero de todos hasta
+            que el viaje o el envío salga bien.
+          </p>
+        </div>
+      </div>
+
       <Image
         src={BRAND.quienesSomosNevera}
         alt="Portes para todos… o casi todos"
@@ -48,15 +74,6 @@ export default function QuienesSomosPage() {
         </p>
         <p>¡Así de fácil! Un éxito para ambas partes.</p>
       </div>
-
-      <Image
-        src={BRAND.quienesSomosCamion}
-        alt="Transporte Social — compartiendo ruta"
-        width={1200}
-        height={800}
-        unoptimized
-        className="mx-auto mb-6 h-auto w-full max-w-2xl"
-      />
 
       <h2 className="mb-3 text-lg font-semibold">Tarifas y condiciones</h2>
       <p className="mb-6 text-base leading-relaxed text-zinc-700 sm:text-lg">
