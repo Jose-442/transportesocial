@@ -753,10 +753,15 @@
  * Tudela Veguín sigue como barrio. El polígono se llama Polígono Industrial de Tudela Veguín.
  * Trubia sigue como barrio. El área industrial entra aparte.
  * Área Industrial de Olloniego-Tudela y Polígono Industrial de Olloniego-Tudela quedan los dos.
- * Ames: debajo de A Coruña, justo detrás de la capital y delante de Ferrol. Los barrios de la lista y un polígono.
+ * Ames: debajo de A Coruña, justo detrás de la capital y delante de Arteixo. Los barrios de la lista y un polígono.
  * Parque Empresarial Novo Milladoiro queda con ese nombre. Polígono Industrial de O Milladoiro es el mismo sitio. No entra aparte.
  * O Milladoiro sigue como barrio.
  * Bertamiráns y Bertamiráns – O Bosque quedan los dos. Igual Bugallido, Ortoño y Piñeiro con su zona de al lado.
+ * Arteixo: debajo de A Coruña, detrás de Ames y delante de Ferrol. Los barrios de la lista y los cinco polígonos.
+ * Arteixo entra también como barrio, como lo escribiste.
+ * Morás sigue como barrio. El parque empresarial entra aparte.
+ * Suevos sigue como barrio. El parque empresarial entra aparte. Suevos de Abaixo y Suevos de Arriba quedan los dos.
+ * Barrañán y Barrañán de Arriba quedan los dos. Igual Chamín, Oseiro y Sol y Mar con su zona de al lado.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10277,6 +10282,46 @@ const POLIGONOS_AMES: ZonaCiudad[] = [
   { nombre: "Parque Empresarial Novo Milladoiro", tipo: "poligono" },
 ];
 
+const BARRIOS_ARTEIXO: ZonaCiudad[] = [
+  { nombre: "A Baiuca", tipo: "barrio" },
+  { nombre: "Arteixo", tipo: "barrio" },
+  { nombre: "Barrañán", tipo: "barrio" },
+  { nombre: "Chamín", tipo: "barrio" },
+  { nombre: "Froxel", tipo: "barrio" },
+  { nombre: "Larín", tipo: "barrio" },
+  { nombre: "Loureda", tipo: "barrio" },
+  { nombre: "Meicende", tipo: "barrio" },
+  { nombre: "Morás", tipo: "barrio" },
+  { nombre: "Oseiro", tipo: "barrio" },
+  { nombre: "Pastoriza", tipo: "barrio" },
+  { nombre: "Suevos", tipo: "barrio" },
+  { nombre: "Vilarrodís", tipo: "barrio" },
+  { nombre: "Sol y Mar", tipo: "barrio" },
+  { nombre: "Añas", tipo: "barrio" },
+  { nombre: "Armentón", tipo: "barrio" },
+  { nombre: "A Xesteira", tipo: "barrio" },
+  { nombre: "Barrañán de Arriba", tipo: "barrio" },
+  { nombre: "Candame", tipo: "barrio" },
+  { nombre: "Chamín de Arriba", tipo: "barrio" },
+  { nombre: "Lañas", tipo: "barrio" },
+  { nombre: "Monteagudo", tipo: "barrio" },
+  { nombre: "Oseiro de Abaixo", tipo: "barrio" },
+  { nombre: "Rañobre", tipo: "barrio" },
+  { nombre: "Sorrizo", tipo: "barrio" },
+  { nombre: "Suevos de Abaixo", tipo: "barrio" },
+  { nombre: "Suevos de Arriba", tipo: "barrio" },
+  { nombre: "Urbanización Sol y Mar", tipo: "barrio" },
+  { nombre: "Vioño", tipo: "barrio" },
+];
+
+const POLIGONOS_ARTEIXO: ZonaCiudad[] = [
+  { nombre: "Parque Empresarial de Morás", tipo: "poligono" },
+  { nombre: "Parque Empresarial de Suevos", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Sabón", tipo: "poligono" },
+  { nombre: "Polígono Industrial O Petón", tipo: "poligono" },
+  { nombre: "Puerto Exterior de Punta Langosteira", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11539,6 +11584,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ames",
     etiqueta: "Ames (A Coruña)",
     zonas: [...BARRIOS_AMES, ...POLIGONOS_AMES],
+  },
+  {
+    id: "arteixo",
+    nombre: "Arteixo",
+    etiqueta: "Arteixo (A Coruña)",
+    zonas: [...BARRIOS_ARTEIXO, ...POLIGONOS_ARTEIXO],
   },
 ];
 
