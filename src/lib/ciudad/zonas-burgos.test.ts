@@ -219,6 +219,7 @@ describe("zonas de Burgos", () => {
       "guadalajara",
       "azuqueca",
       "oviedo",
+      "ames",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -3869,6 +3870,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresOviedo).size).toBe(nombresOviedo.length);
     expect(nombresOviedo.filter((n) => oviedo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(43);
     expect(nombresOviedo.filter((n) => oviedo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
+    const ames = ciudadUrbana("ames");
+    expect(ames?.etiqueta).toBe("Ames (A Coruña)");
+    expect(ames?.nombre).toBe("Ames");
+    expect(zonaDeCiudad(ames!, "Agrón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "O Milladoiro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "Ames (San Tomé)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "Bertamiráns")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "Bertamiráns – O Bosque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "Ventín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ames!, "Ames")).toBeNull();
+    expect(zonaDeCiudad(ames!, "Polígono Industrial de O Milladoiro")).toBeNull();
+    expect(zonaDeCiudad(ames!, "Parque Empresarial Novo Milladoiro")?.tipo).toBe("poligono");
+    const nombresAmes = ames!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAmes).size).toBe(nombresAmes.length);
+    expect(nombresAmes.filter((n) => ames!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(26);
+    expect(nombresAmes.filter((n) => ames!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4044,6 +4061,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[oviedoIdx + 1]?.label).toBe("Gijón");
     expect(ciudades[oviedoIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[oviedoIdx + 2]?.label).toBe("Palencia");
+    const amesIdx = ciudades.findIndex((c) => c.value === "ames");
+    expect(ciudades[amesIdx]?.label).toBe("Ames");
+    expect(ciudades[amesIdx]?.negrita).toBeUndefined();
+    expect(ciudades[amesIdx - 1]?.label).toBe("A Coruña");
+    expect(ciudades[amesIdx - 1]?.negrita).toBe(true);
+    expect(ciudades[amesIdx + 1]?.label).toBe("Ferrol");
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
