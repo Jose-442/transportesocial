@@ -58,6 +58,7 @@ export async function transferirAlConductor(input: {
   destinationAccountId: string;
   paymentIntentId: string;
   reservaId: string;
+  idempotencyKey?: string;
 }): Promise<Stripe.Transfer> {
   const stripe = getStripeServer();
   const paymentIntent = await stripe.paymentIntents.retrieve(
@@ -77,13 +78,16 @@ export async function transferirAlConductor(input: {
     throw new Error("Importe de transferencia inválido.");
   }
 
-  return stripe.transfers.create({
-    amount: amountCents,
-    currency: "eur",
-    destination: input.destinationAccountId,
-    source_transaction: chargeId,
-    metadata: {
-      reserva_id: input.reservaId,
+  return stripe.transfers.create(
+    {
+      amount: amountCents,
+      currency: "eur",
+      destination: input.destinationAccountId,
+      source_transaction: chargeId,
+      metadata: {
+        reserva_id: input.reservaId,
+      },
     },
-  });
+    input.idempotencyKey ? { idempotencyKey: input.idempotencyKey } : undefined
+  );
 }

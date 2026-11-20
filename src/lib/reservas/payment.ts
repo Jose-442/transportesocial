@@ -505,23 +505,48 @@ export async function reembolsarReserva(
     .maybeSingle();
 
   if (tx?.stripe_payment_intent_id && tx.estado_escrow === "retenido") {
-    const { reembolsarPaymentIntent } = await import("@/lib/stripe/refund");
-    await reembolsarPaymentIntent(tx.stripe_payment_intent_id);
-    await admin
+    const { data: cogido } = await admin
       .from("transacciones")
       .update({ estado_escrow: "reembolsado" })
       .eq("reserva_id", reservaId)
-      .eq("tipo", "cobro_viaje");
+      .eq("tipo", "cobro_viaje")
+      .eq("estado_escrow", "retenido")
+      .select("id")
+      .maybeSingle();
+
+    if (cogido) {
+      const { reembolsarPaymentIntent, reembolsoYaHecho } = await import(
+        "@/lib/stripe/refund"
+      );
+      try {
+        await reembolsarPaymentIntent(tx.stripe_payment_intent_id, {
+          idempotencyKey: `reembolso-${reservaId}`,
+        });
+      } catch (err) {
+        if (!reembolsoYaHecho(err)) {
+          await admin
+            .from("transacciones")
+            .update({ estado_escrow: "retenido" })
+            .eq("reserva_id", reservaId)
+            .eq("tipo", "cobro_viaje")
+            .eq("estado_escrow", "reembolsado");
+          throw err;
+        }
+      }
+    }
   }
 
-  await admin
+  const { data: cancelada } = await admin
     .from("reservas")
     .update({
       estado: "cancelado",
       cancelada_en: new Date().toISOString(),
       motivo_cancelacion: motivo,
     })
-    .eq("id", reservaId);
+    .eq("id", reservaId)
+    .neq("estado", "cancelado")
+    .select("id")
+    .maybeSingle();
 
   const estadosConPlazasOcupadas = [
     "pendiente_aprobacion",
@@ -532,6 +557,7 @@ export async function reembolsarReserva(
   ];
 
   if (
+    cancelada &&
     reservaAntes?.tipo === "capacidad_extra" &&
     reservaAntes.oferta_capacidad_id &&
     estadosConPlazasOcupadas.includes(reservaAntes.estado)
@@ -603,6 +629,7 @@ export async function liberarPagoConductor(
           destinationAccountId: perfil.stripe_connect_account_id,
           paymentIntentId: tx.stripe_payment_intent_id,
           reservaId: reserva.id,
+          idempotencyKey: `liberar-${reserva.id}`,
         });
         transferId = transfer.id;
         mensajePago = `Se han transferido ${neto.toFixed(2)} € a tu cuenta bancaria.`;
@@ -612,20 +639,25 @@ export async function liberarPagoConductor(
     }
   }
 
+  const { data: cogido } = await admin
+    .from("transacciones")
+    .update({
+      estado_escrow: "liberado",
+      ...(transferId ? { stripe_transfer_id: transferId } : {}),
+    })
+    .eq("id", tx.id)
+    .eq("estado_escrow", "retenido")
+    .select("id")
+    .maybeSingle();
+
+  if (!cogido) return;
+
   if (!transferId) {
     await admin
       .from("profiles")
       .update({ saldo_acumulado: saldoActual + neto })
       .eq("id", reserva.transportista_id);
   }
-
-  await admin
-    .from("transacciones")
-    .update({
-      estado_escrow: "liberado",
-      ...(transferId ? { stripe_transfer_id: transferId } : {}),
-    })
-    .eq("id", tx.id);
 
   const ahora = new Date();
   const plazoResena = plazoResenaDesde(ahora);
