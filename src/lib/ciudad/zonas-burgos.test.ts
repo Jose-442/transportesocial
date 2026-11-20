@@ -228,6 +228,7 @@ describe("zonas de Burgos", () => {
       "aviles",
       "langreo",
       "mieres",
+      "siero",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4039,6 +4040,30 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMieres).size).toBe(nombresMieres.length);
     expect(nombresMieres.filter((n) => mieres!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
     expect(nombresMieres.filter((n) => mieres!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
+    const siero = ciudadUrbana("siero");
+    expect(siero?.etiqueta).toBe("Siero (Asturias)");
+    expect(siero?.nombre).toBe("Siero");
+    expect(zonaDeCiudad(siero!, "Anes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "La Pola Siero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "Granda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "Viella")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "El Berrón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "Lugones")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(siero!, "Siero")).toBeNull();
+    expect(zonaDeCiudad(siero!, "Águila del Nora")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(siero!, "Águila del Nora")!)).toBe("Polígono · Águila del Nora");
+    expect(zonaDeCiudad(siero!, "Berrón Este")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(siero!, "Berrón Oeste")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(siero!, "Berrón Sur")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(siero!, "Polígono · Granda")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(siero!, "Polígono · Granda")!)).toBe("Polígono · Granda");
+    expect(zonaDeCiudad(siero!, "Polígono · Viella")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(siero!, "Lugones Norte")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(siero!, "Lugones Sur")?.tipo).toBe("poligono");
+    const nombresSiero = siero!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSiero).size).toBe(nombresSiero.length);
+    expect(nombresSiero.filter((n) => siero!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(34);
+    expect(nombresSiero.filter((n) => siero!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(23);
   });
 
   it("los desplegables van de la A a la Z y conservan todos los nombres", () => {
@@ -4219,7 +4244,9 @@ describe("zonas de Burgos", () => {
     expect(ciudades[oviedoIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades[oviedoIdx + 4]?.label).toBe("Mieres");
     expect(ciudades[oviedoIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[oviedoIdx + 5]?.label).toBe("Palencia");
+    expect(ciudades[oviedoIdx + 5]?.label).toBe("Siero");
+    expect(ciudades[oviedoIdx + 5]?.negrita).toBeUndefined();
+    expect(ciudades[oviedoIdx + 6]?.label).toBe("Palencia");
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

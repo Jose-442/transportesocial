@@ -788,11 +788,17 @@
  * La Felguera sigue como barrio. La Felguera - Barrio Urquijo, La Felguera - Grupo San Pedro y La Felguera - Grupo La Concordia quedan las tres.
  * Barros y Riaño y Lada siguen como barrios. Sus polígonos entran aparte.
  * Polígono Industrial Riaño I, Riaño II y Riaño III quedan los tres.
- * Mieres: debajo de Oviedo, detrás de Langreo y delante de Palencia. Los barrios de la lista y los once polígonos.
+ * Mieres: debajo de Oviedo, detrás de Langreo y delante de Siero. Los barrios de la lista y los once polígonos.
  * Mieres del Camín queda con ese nombre. Mieres no entra aparte.
  * Ablaña, Baiña, Loredo, Ujo y Vega de Arriba siguen como barrios. Sus polígonos entran aparte.
  * Polígono Industrial Baiña (Vega de Baiña) queda con ese nombre. Vega de Baiña no entra aparte.
  * Polígono Industrial Las Lleras (Ujo) queda con ese nombre.
+ * Siero: debajo de Oviedo, detrás de Mieres y delante de Palencia. Los barrios de la lista y los veintitrés polígonos.
+ * La Pola Siero queda con ese nombre. Siero no entra aparte.
+ * Granda y Viella están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * El Berrón sigue como barrio. Berrón Este, Berrón Oeste y Berrón Sur quedan los tres.
+ * Bobes, Lieres y Lugones siguen como barrios. Bobes-San Miguel, Lieres-Solvay, Lugones Norte y Lugones Sur entran aparte.
+ * Carbayín Alto, Carbayín Bajo y Santa Marta de Carbayín quedan los tres.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -10622,6 +10628,69 @@ const POLIGONOS_MIERES: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Vega de Arriba", tipo: "poligono" },
 ];
 
+const BARRIOS_SIERO: ZonaCiudad[] = [
+  { nombre: "Anes", tipo: "barrio" },
+  { nombre: "Argüelles", tipo: "barrio" },
+  { nombre: "Aramil", tipo: "barrio" },
+  { nombre: "Bobes", tipo: "barrio" },
+  { nombre: "Carbayín Alto", tipo: "barrio" },
+  { nombre: "Carbayín Bajo", tipo: "barrio" },
+  { nombre: "Celles", tipo: "barrio" },
+  { nombre: "Collado", tipo: "barrio" },
+  { nombre: "El Berrón", tipo: "barrio" },
+  { nombre: "El Cuto", tipo: "barrio" },
+  { nombre: "Feleches", tipo: "barrio" },
+  { nombre: "Granda", tipo: "barrio" },
+  { nombre: "Hevia", tipo: "barrio" },
+  { nombre: "La Carrera", tipo: "barrio" },
+  { nombre: "La Fresneda", tipo: "barrio" },
+  { nombre: "La Pola Siero", tipo: "barrio" },
+  { nombre: "La Secada", tipo: "barrio" },
+  { nombre: "La Collá", tipo: "barrio" },
+  { nombre: "Lieres", tipo: "barrio" },
+  { nombre: "Llimanes", tipo: "barrio" },
+  { nombre: "Lugones", tipo: "barrio" },
+  { nombre: "Marcenao", tipo: "barrio" },
+  { nombre: "Muñó", tipo: "barrio" },
+  { nombre: "Santa Marta de Carbayín", tipo: "barrio" },
+  { nombre: "Santa Marina", tipo: "barrio" },
+  { nombre: "Santolaya de Vixil", tipo: "barrio" },
+  { nombre: "Santolaya de Turiellos", tipo: "barrio" },
+  { nombre: "Samartindianes", tipo: "barrio" },
+  { nombre: "Samartino", tipo: "barrio" },
+  { nombre: "Santiago de Arenas", tipo: "barrio" },
+  { nombre: "Trespando", tipo: "barrio" },
+  { nombre: "Tiñana", tipo: "barrio" },
+  { nombre: "Valdesoto", tipo: "barrio" },
+  { nombre: "Viella", tipo: "barrio" },
+];
+
+const POLIGONOS_SIERO: ZonaCiudad[] = [
+  { nombre: "Águila del Nora", tipo: "poligono" },
+  { nombre: "Bravo", tipo: "poligono" },
+  { nombre: "Buenavista", tipo: "poligono" },
+  { nombre: "Berrón Este", tipo: "poligono" },
+  { nombre: "Berrón Oeste", tipo: "poligono" },
+  { nombre: "Berrón Sur", tipo: "poligono" },
+  { nombre: "Bobes-San Miguel", tipo: "poligono" },
+  { nombre: "Colloto", tipo: "poligono" },
+  { nombre: "El Castro", tipo: "poligono" },
+  { nombre: "Polígono · Granda", tipo: "poligono" },
+  { nombre: "La Meana", tipo: "poligono" },
+  { nombre: "La Tejera", tipo: "poligono" },
+  { nombre: "Las Peñes", tipo: "poligono" },
+  { nombre: "Las Vías", tipo: "poligono" },
+  { nombre: "Lieres-Solvay", tipo: "poligono" },
+  { nombre: "Lugones Norte", tipo: "poligono" },
+  { nombre: "Lugones Sur", tipo: "poligono" },
+  { nombre: "Meres-Proni", tipo: "poligono" },
+  { nombre: "Naón", tipo: "poligono" },
+  { nombre: "Perográn", tipo: "poligono" },
+  { nombre: "Puente Nora", tipo: "poligono" },
+  { nombre: "Sía Copper", tipo: "poligono" },
+  { nombre: "Polígono · Viella", tipo: "poligono" },
+];
+
 const BARRIOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Ciutat Cooperativa i Molí Nou", tipo: "barrio" },
   { nombre: "Marianao", tipo: "barrio" },
@@ -11932,6 +12001,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Mieres",
     etiqueta: "Mieres (Asturias)",
     zonas: [...BARRIOS_MIERES, ...POLIGONOS_MIERES],
+  },
+  {
+    id: "siero",
+    nombre: "Siero",
+    etiqueta: "Siero (Asturias)",
+    zonas: [...BARRIOS_SIERO, ...POLIGONOS_SIERO],
   },
 ];
 
