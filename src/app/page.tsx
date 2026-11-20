@@ -254,7 +254,7 @@ export default async function HomePage() {
               className="!h-auto flex-col gap-1 px-4 py-3"
             >
               <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
+                <span className="text-3xl leading-none sm:text-3xl" aria-hidden>
                   🏘️
                 </span>
                 Buscar ruta dentro de mi municipio.
