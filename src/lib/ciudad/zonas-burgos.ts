@@ -82,11 +82,15 @@
  * Polígonos Balparda y El Árbol.
  * Basauri: barrios de EUSTAT 2025. Kareaga es Careaga. Bidebieta es la Estación.
  * Polígono Industrial Artunduaga.
- * Durango: debajo de Bilbao, detrás de Basauri y delante de Getxo. Los barrios de la lista y los ocho polígonos.
+ * Durango: debajo de Bilbao, detrás de Basauri y delante de Erandio. Los barrios de la lista y los ocho polígonos.
  * Montorreta, San Roke y Tabira están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Landako es barrio. Landako Elkartegia entra aparte.
  * Arriandi, Mallabiena y Trañapadura no entran. Son de Iurreta o de Abadiño.
  * Durango no entra como barrio.
+ * Erandio: debajo de Bilbao, detrás de Durango y delante de Getxo. Los siete barrios y los dos polígonos nombrados.
+ * Axpe y Axpe-Industrialdeak quedan los dos.
+ * Los otros espacios de actividad económica no entran. No vienen con nombre en la lista.
+ * Erandio no entra como barrio.
  * San Sebastián: los 19 barrios del Ayuntamiento. Centro es Erdialdea.
  * Polígonos del directorio de Gipuzkoa. El 27 es Torrua Zahar.
  * Irun: barrios de EUSTAT 2025 y los que recorre el Ayuntamiento.
@@ -2335,6 +2339,21 @@ const POLIGONOS_DURANGO: ZonaCiudad[] = [
   { nombre: "Polígono · San Roke", tipo: "poligono" },
   { nombre: "Polígono · Tabira", tipo: "poligono" },
   { nombre: "Urbitarte", tipo: "poligono" },
+];
+
+const BARRIOS_ERANDIO: ZonaCiudad[] = [
+  { nombre: "Altzaga", tipo: "barrio" },
+  { nombre: "Arriaga", tipo: "barrio" },
+  { nombre: "Asua", tipo: "barrio" },
+  { nombre: "Astrabudua", tipo: "barrio" },
+  { nombre: "Erandiogoikoa", tipo: "barrio" },
+  { nombre: "Goierri", tipo: "barrio" },
+  { nombre: "Lutxana-Enekuri", tipo: "barrio" },
+];
+
+const POLIGONOS_ERANDIO: ZonaCiudad[] = [
+  { nombre: "Axpe", tipo: "poligono" },
+  { nombre: "Axpe-Industrialdeak", tipo: "poligono" },
 ];
 
 const BARRIOS_SAN_SEBASTIAN: ZonaCiudad[] = [
@@ -11028,6 +11047,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Durango",
     etiqueta: "Durango (Bizkaia)",
     zonas: [...BARRIOS_DURANGO, ...POLIGONOS_DURANGO],
+  },
+  {
+    id: "erandio",
+    nombre: "Erandio",
+    etiqueta: "Erandio (Bizkaia)",
+    zonas: [...BARRIOS_ERANDIO, ...POLIGONOS_ERANDIO],
   },
   {
     id: "sansebastian",

@@ -50,6 +50,7 @@ describe("zonas de Burgos", () => {
       "santurtzi",
       "basauri",
       "durango",
+      "erandio",
       "sansebastian",
       "irun",
       "errenteria",
@@ -594,6 +595,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresDurango).size).toBe(nombresDurango.length);
     expect(nombresDurango.filter((n) => durango!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
     expect(nombresDurango.filter((n) => durango!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(8);
+    const erandio = ciudadUrbana("erandio");
+    expect(erandio?.etiqueta).toBe("Erandio (Bizkaia)");
+    expect(erandio?.nombre).toBe("Erandio");
+    expect(zonaDeCiudad(erandio!, "Altzaga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(erandio!, "Astrabudua")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(erandio!, "Lutxana-Enekuri")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(erandio!, "Erandio")).toBeNull();
+    expect(zonaDeCiudad(erandio!, "Axpe")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(erandio!, "Axpe-Industrialdeak")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(erandio!, "Axpe")!)).toBe("Polígono · Axpe");
+    expect(etiquetaZona(zonaDeCiudad(erandio!, "Axpe-Industrialdeak")!)).toBe("Polígono · Axpe-Industrialdeak");
+    const nombresErandio = erandio!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresErandio).size).toBe(nombresErandio.length);
+    expect(nombresErandio.filter((n) => erandio!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(7);
+    expect(nombresErandio.filter((n) => erandio!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const sanSebastian = ciudadUrbana("sansebastian");
     expect(sanSebastian?.etiqueta).toBe("San Sebastián (Gipuzkoa)");
     expect(zonaDeCiudad(sanSebastian!, "Gros")?.tipo).toBe("barrio");
@@ -4417,7 +4433,12 @@ describe("zonas de Burgos", () => {
     expect(ciudades[durangoIdx]?.label).toBe("Durango");
     expect(ciudades[durangoIdx]?.negrita).toBeUndefined();
     expect(ciudades[durangoIdx - 1]?.label).toBe("Basauri");
-    expect(ciudades[durangoIdx + 1]?.label).toBe("Getxo");
+    expect(ciudades[durangoIdx + 1]?.label).toBe("Erandio");
+    const erandioIdx = ciudades.findIndex((c) => c.value === "erandio");
+    expect(ciudades[erandioIdx]?.label).toBe("Erandio");
+    expect(ciudades[erandioIdx]?.negrita).toBeUndefined();
+    expect(ciudades[erandioIdx - 1]?.label).toBe("Durango");
+    expect(ciudades[erandioIdx + 1]?.label).toBe("Getxo");
     const badajozIdx = ciudades.findIndex((c) => c.value === "badajoz");
     expect(ciudades[badajozIdx]?.label).toBe("Badajoz");
     expect(ciudades[badajozIdx]?.negrita).toBe(true);
