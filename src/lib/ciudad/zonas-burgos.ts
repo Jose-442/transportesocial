@@ -274,6 +274,10 @@
  * Los Prados entra una sola vez. El Fuerte queda como barrio. Polígono Industrial El Fuerte como polígono.
  * Huelva: los barrios y los polígonos de la lista. Polígono San Sebastián queda como barrio.
  * Tartessos queda como barrio. Polígono Industrial Tartessos como polígono.
+ * Almonte: debajo de Huelva, detrás de la capital y delante de Huesca. El casco, los tres núcleos y los cuatro polígonos.
+ * Almonte (casco urbano) es el casco. Cabezudos, El Rocío y Matalascañas entran como zonas del municipio.
+ * Ballestares entra como polígono.
+ * Almonte no entra como barrio.
  * Almería: los barrios y los polígonos de la lista.
  * El Puche queda como barrio. Polígono El Puche como polígono.
  * Roquetas de Mar: las dos listas de barrios y los polígonos.
@@ -7146,6 +7150,20 @@ const POLIGONOS_HUELVA: ZonaCiudad[] = [
   { nombre: "Vaciadero Norte", tipo: "poligono" },
 ];
 
+const BARRIOS_ALMONTE: ZonaCiudad[] = [
+  { nombre: "Almonte (casco urbano)", tipo: "barrio" },
+  { nombre: "Cabezudos", tipo: "barrio" },
+  { nombre: "El Rocío", tipo: "barrio" },
+  { nombre: "Matalascañas", tipo: "barrio" },
+];
+
+const POLIGONOS_ALMONTE: ZonaCiudad[] = [
+  { nombre: "Ballestares", tipo: "poligono" },
+  { nombre: "Camino Alto", tipo: "poligono" },
+  { nombre: "El Tomillar", tipo: "poligono" },
+  { nombre: "Matalagrana", tipo: "poligono" },
+];
+
 const BARRIOS_ALMERIA: ZonaCiudad[] = [
   { nombre: "500 Viviendas", tipo: "barrio" },
   { nombre: "Altamira", tipo: "barrio" },
@@ -11733,6 +11751,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Huelva",
     etiqueta: "Huelva (Huelva)",
     zonas: [...BARRIOS_HUELVA, ...POLIGONOS_HUELVA],
+  },
+  {
+    id: "almonte",
+    nombre: "Almonte",
+    etiqueta: "Almonte (Huelva)",
+    zonas: [...BARRIOS_ALMONTE, ...POLIGONOS_ALMONTE],
   },
   {
     id: "almeria",

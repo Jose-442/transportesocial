@@ -145,6 +145,7 @@ describe("zonas de Burgos", () => {
       "antequera",
       "ronda",
       "huelva",
+      "almonte",
       "almeria",
       "roquetas",
       "elejido",
@@ -2076,6 +2077,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresHuelva).size).toBe(nombresHuelva.length);
     expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(54);
     expect(nombresHuelva.filter((n) => huelva!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(22);
+    const almonte = ciudadUrbana("almonte");
+    expect(almonte?.etiqueta).toBe("Almonte (Huelva)");
+    expect(almonte?.nombre).toBe("Almonte");
+    expect(zonaDeCiudad(almonte!, "Almonte (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almonte!, "Cabezudos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almonte!, "El Rocío")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almonte!, "Matalascañas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(almonte!, "Almonte")).toBeNull();
+    expect(zonaDeCiudad(almonte!, "Ballestares")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(almonte!, "Ballestares")!)).toBe("Polígono · Ballestares");
+    expect(zonaDeCiudad(almonte!, "Camino Alto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almonte!, "El Tomillar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(almonte!, "Matalagrana")?.tipo).toBe("poligono");
+    const nombresAlmonte = almonte!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlmonte).size).toBe(nombresAlmonte.length);
+    expect(nombresAlmonte.filter((n) => almonte!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(4);
+    expect(nombresAlmonte.filter((n) => almonte!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
     const almeria = ciudadUrbana("almeria");
     expect(almeria?.etiqueta).toBe("Almería (Almería)");
     expect(almeria?.nombre).toBe("Almería");
@@ -4272,6 +4290,13 @@ describe("zonas de Burgos", () => {
     expect(ciudades[almeriaIdx + 3]?.label).toBe("Roquetas de Mar");
     expect(ciudades[almeriaIdx + 3]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "huelva")?.negrita).toBe(true);
+    const almonteIdx = ciudades.findIndex((c) => c.value === "almonte");
+    expect(ciudades[almonteIdx]?.label).toBe("Almonte");
+    expect(ciudades[almonteIdx]?.negrita).toBeUndefined();
+    expect(ciudades[almonteIdx - 1]?.label).toBe("Huelva");
+    expect(ciudades[almonteIdx - 1]?.negrita).toBe(true);
+    expect(ciudades[almonteIdx + 1]?.label).toBe("Huesca");
+    expect(ciudades[almonteIdx + 1]?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "huesca")?.label).toBe("Huesca");
     expect(ciudades.find((c) => c.value === "huesca")?.negrita).toBe(true);
     expect(ciudades.find((c) => c.value === "teruel")?.label).toBe("Teruel");
