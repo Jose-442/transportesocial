@@ -883,12 +883,15 @@
  * La Florida y Santiga están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Can Vinyalets y Can Vinyals quedan los dos.
  * El sector Alstom de la visita de mayo de 2026 no entra. La lista más reciente tiene doce polígonos.
- * Calvià: primera de Illes Balears, detrás de Plasencia y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Calvià: primera de Illes Balears, detrás de Plasencia y delante de Ciutadella de Menorca. Los barrios de la lista y un polígono.
  * Calvià Vila queda con ese nombre. Calvià no entra aparte.
  * Son Bugadelles queda como polígono.
- * Ciutadella de Menorca: debajo de Illes Balears, detrás de Calvià y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Ciutadella de Menorca: debajo de Illes Balears, detrás de Calvià y delante de Llucmajor. Los barrios de la lista y un polígono.
  * Ciutadella (casco urbano) queda con ese nombre. Ciutadella de Menorca no entra aparte.
  * Polígono Industrial de Ciutadella (POICI) queda con ese nombre.
+ * Llucmajor: debajo de Illes Balears, detrás de Ciutadella de Menorca y delante de Ciudad Real. Los barrios de la lista y dos polígonos.
+ * Llucmajor (casco urbano) queda con ese nombre. Llucmajor no entra aparte.
+ * Son Noguera y Son Fosquet quedan como polígonos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11468,6 +11471,31 @@ const POLIGONOS_CIUTADELLA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Ciutadella (POICI)", tipo: "poligono" },
 ];
 
+const BARRIOS_LLUCMAJOR: ZonaCiudad[] = [
+  { nombre: "Badia Blava", tipo: "barrio" },
+  { nombre: "Badia Gran", tipo: "barrio" },
+  { nombre: "Bellavista", tipo: "barrio" },
+  { nombre: "Cala Blava", tipo: "barrio" },
+  { nombre: "Cala Pi", tipo: "barrio" },
+  { nombre: "Es Pas de Vallgornera", tipo: "barrio" },
+  { nombre: "Es Puigderrós", tipo: "barrio" },
+  { nombre: "Les Palmeres", tipo: "barrio" },
+  { nombre: "Llucmajor (casco urbano)", tipo: "barrio" },
+  { nombre: "Maioris Dècima", tipo: "barrio" },
+  { nombre: "S'Arenal", tipo: "barrio" },
+  { nombre: "Sa Torre", tipo: "barrio" },
+  { nombre: "S'Estanyol de Migjorn", tipo: "barrio" },
+  { nombre: "Son Bieló", tipo: "barrio" },
+  { nombre: "Son Verí Nou", tipo: "barrio" },
+  { nombre: "Son Verí Vell", tipo: "barrio" },
+  { nombre: "Tolleric", tipo: "barrio" },
+];
+
+const POLIGONOS_LLUCMAJOR: ZonaCiudad[] = [
+  { nombre: "Son Noguera", tipo: "poligono" },
+  { nombre: "Son Fosquet", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -12920,6 +12948,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ciutadella de Menorca",
     etiqueta: "Ciutadella de Menorca (Illes Balears)",
     zonas: [...BARRIOS_CIUTADELLA, ...POLIGONOS_CIUTADELLA],
+  },
+  {
+    id: "llucmajor",
+    nombre: "Llucmajor",
+    etiqueta: "Llucmajor (Illes Balears)",
+    zonas: [...BARRIOS_LLUCMAJOR, ...POLIGONOS_LLUCMAJOR],
   },
 ];
 

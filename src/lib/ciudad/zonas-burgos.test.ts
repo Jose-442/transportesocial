@@ -255,6 +255,7 @@ describe("zonas de Burgos", () => {
       "santaperpetua",
       "calvia",
       "ciutadella",
+      "llucmajor",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4817,8 +4818,43 @@ describe("zonas de Burgos", () => {
     expect(ciudades[ciutadellaIdx]?.label).toBe("Ciutadella de Menorca");
     expect(ciudades[ciutadellaIdx]?.negrita).toBeUndefined();
     expect(ciudades[ciutadellaIdx - 1]?.label).toBe("Calvià");
-    expect(ciudades[ciutadellaIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[ciutadellaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[ciutadellaIdx + 1]?.label).toBe("Llucmajor");
+    expect(ciudades[ciutadellaIdx + 1]?.negrita).toBeUndefined();
+    const llucmajor = ciudadUrbana("llucmajor");
+    expect(llucmajor?.etiqueta).toBe("Llucmajor (Illes Balears)");
+    expect(llucmajor?.nombre).toBe("Llucmajor");
+    expect(zonaDeCiudad(llucmajor!, "Badia Gran")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(llucmajor!, "Llucmajor (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(llucmajor!, "S'Arenal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(llucmajor!, "S'Estanyol de Migjorn")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(llucmajor!, "Maioris Dècima")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(llucmajor!, "Llucmajor")).toBeNull();
+    expect(zonaDeCiudad(llucmajor!, "Son Noguera")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(llucmajor!, "Son Noguera")!)).toBe(
+      "Polígono · Son Noguera"
+    );
+    expect(zonaDeCiudad(llucmajor!, "Son Fosquet")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(llucmajor!, "Son Fosquet")!)).toBe(
+      "Polígono · Son Fosquet"
+    );
+    const nombresLlucmajor = llucmajor!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLlucmajor).size).toBe(nombresLlucmajor.length);
+    expect(
+      nombresLlucmajor.filter(
+        (n) => llucmajor!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(17);
+    expect(
+      nombresLlucmajor.filter(
+        (n) => llucmajor!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const llucmajorIdx = ciudades.findIndex((c) => c.value === "llucmajor");
+    expect(ciudades[llucmajorIdx]?.label).toBe("Llucmajor");
+    expect(ciudades[llucmajorIdx]?.negrita).toBeUndefined();
+    expect(ciudades[llucmajorIdx - 1]?.label).toBe("Ciutadella de Menorca");
+    expect(ciudades[llucmajorIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[llucmajorIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
