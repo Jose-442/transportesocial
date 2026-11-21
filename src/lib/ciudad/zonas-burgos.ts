@@ -974,12 +974,16 @@
  * San Bartolomé de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de Puerto del Rosario y delante de Santa Lucía de Tirajana. Los barrios de la lista y dos polígonos.
  * San Bartolomé (Tunte) y Tunte quedan las dos. San Bartolomé de Tirajana no entra como barrio.
  * El Tablero es barrio. Polígono Industrial El Tablero es polígono. Juan Grande es barrio. Juan Grande Industrial es polígono.
- * Santa Lucía de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de San Bartolomé de Tirajana y delante de León. Los barrios de la lista y tres polígonos.
+ * Santa Lucía de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de San Bartolomé de Tirajana y delante de Telde. Los barrios de la lista y tres polígonos.
  * Santa Lucía (casco) queda con ese nombre. Santa Lucía de Tirajana no entra como barrio.
  * Rosiana, Rosiana Alta y Rosiana Baja quedan las tres.
  * El Doctoral es barrio. El Doctoral Industrial es polígono. La Blanca es barrio. La Blanca – Zona Industrial Agrícola es polígono.
  * El Parque Tecnológico de Santa Lucía no entra: sigue urbanizable en desarrollo.
  * TI_V1_MEM_INF.docx+5 es la fuente. No entra en el desplegable.
+ * Telde: debajo de Las Palmas de Gran Canaria, detrás de Santa Lucía de Tirajana y delante de León. Los barrios de la lista y catorce polígonos.
+ * El Goro y Jinámar están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * El Goro II y El Goro III quedan los dos. Salinetas es barrio. Las Salinetas es polígono.
+ * Telde no entra como barrio. Ayuntamiento de Telde+1 y Ayuntamiento de Telde+6 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12786,6 +12790,100 @@ const POLIGONOS_SANTA_LUCIA: ZonaCiudad[] = [
   { nombre: "Santa Lucía 1 Industrial", tipo: "poligono" },
 ];
 
+const BARRIOS_TELDE: ZonaCiudad[] = [
+  { nombre: "Cañada de los Perros", tipo: "barrio" },
+  { nombre: "Callejón del Castillo", tipo: "barrio" },
+  { nombre: "Casas Nuevas", tipo: "barrio" },
+  { nombre: "Caserones Alto", tipo: "barrio" },
+  { nombre: "Caserones Bajo", tipo: "barrio" },
+  { nombre: "Cazadores", tipo: "barrio" },
+  { nombre: "Cendro", tipo: "barrio" },
+  { nombre: "Clavellinas", tipo: "barrio" },
+  { nombre: "Cuatro Puertas", tipo: "barrio" },
+  { nombre: "El Calero Alto", tipo: "barrio" },
+  { nombre: "El Calero Bajo", tipo: "barrio" },
+  { nombre: "El Caracol", tipo: "barrio" },
+  { nombre: "El Contrapeso", tipo: "barrio" },
+  { nombre: "El Ejido", tipo: "barrio" },
+  { nombre: "El Goro", tipo: "barrio" },
+  { nombre: "Gando", tipo: "barrio" },
+  { nombre: "Hoya Aguedita", tipo: "barrio" },
+  { nombre: "Hoya Pozuelo", tipo: "barrio" },
+  { nombre: "Hornos del Rey", tipo: "barrio" },
+  { nombre: "Jinámar", tipo: "barrio" },
+  { nombre: "La Breña", tipo: "barrio" },
+  { nombre: "La Colomba", tipo: "barrio" },
+  { nombre: "La Estrella", tipo: "barrio" },
+  { nombre: "La Garita", tipo: "barrio" },
+  { nombre: "La Gavia", tipo: "barrio" },
+  { nombre: "La Higuera Canaria", tipo: "barrio" },
+  { nombre: "La Majadilla", tipo: "barrio" },
+  { nombre: "La Matanza", tipo: "barrio" },
+  { nombre: "La Pardilla", tipo: "barrio" },
+  { nombre: "La Primavera", tipo: "barrio" },
+  { nombre: "La Solana", tipo: "barrio" },
+  { nombre: "La Viña", tipo: "barrio" },
+  { nombre: "Las Bachilleras", tipo: "barrio" },
+  { nombre: "Las Goteras", tipo: "barrio" },
+  { nombre: "Las Haciendas", tipo: "barrio" },
+  { nombre: "Las Huesas", tipo: "barrio" },
+  { nombre: "Las Medianías", tipo: "barrio" },
+  { nombre: "Las Remudas", tipo: "barrio" },
+  { nombre: "Lomo Blanco", tipo: "barrio" },
+  { nombre: "Lomo Bristol", tipo: "barrio" },
+  { nombre: "Lomo Catela", tipo: "barrio" },
+  { nombre: "Lomo Cementerio", tipo: "barrio" },
+  { nombre: "Lomo de la Herradura", tipo: "barrio" },
+  { nombre: "Lomo los Frailes", tipo: "barrio" },
+  { nombre: "Lomo Magullo", tipo: "barrio" },
+  { nombre: "Lomo Salas", tipo: "barrio" },
+  { nombre: "Los Arenales", tipo: "barrio" },
+  { nombre: "Los Melones", tipo: "barrio" },
+  { nombre: "Marpequeña", tipo: "barrio" },
+  { nombre: "Melenara", tipo: "barrio" },
+  { nombre: "Montaña las Huesas", tipo: "barrio" },
+  { nombre: "Montaña las Palmas", tipo: "barrio" },
+  { nombre: "Montañeta del Calero", tipo: "barrio" },
+  { nombre: "Ojos de Garza", tipo: "barrio" },
+  { nombre: "Piletillas", tipo: "barrio" },
+  { nombre: "Playa de Ojos de Garza", tipo: "barrio" },
+  { nombre: "Playa del Hombre", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Borondón", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "San Gregorio", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San José de las Longueras", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "Salinetas", tipo: "barrio" },
+  { nombre: "Taliarte", tipo: "barrio" },
+  { nombre: "Tara", tipo: "barrio" },
+  { nombre: "Tecén", tipo: "barrio" },
+  { nombre: "Tufia", tipo: "barrio" },
+  { nombre: "Urb. de Jerez", tipo: "barrio" },
+  { nombre: "Valle Casares", tipo: "barrio" },
+  { nombre: "Valle de Jinámar", tipo: "barrio" },
+  { nombre: "Valle de los Nueve", tipo: "barrio" },
+  { nombre: "Valle de los Nueve Alto", tipo: "barrio" },
+];
+
+const POLIGONOS_TELDE: ZonaCiudad[] = [
+  { nombre: "Aguadulce", tipo: "poligono" },
+  { nombre: "Bocabarranco", tipo: "poligono" },
+  { nombre: "Cruz de la Gallina", tipo: "poligono" },
+  { nombre: "Polígono · El Goro", tipo: "poligono" },
+  { nombre: "El Goro II", tipo: "poligono" },
+  { nombre: "El Goro III", tipo: "poligono" },
+  { nombre: "Polígono · Jinámar", tipo: "poligono" },
+  { nombre: "La Francia", tipo: "poligono" },
+  { nombre: "La Jardinera", tipo: "poligono" },
+  { nombre: "Maipez", tipo: "poligono" },
+  { nombre: "Parque Empresarial Melenara", tipo: "poligono" },
+  { nombre: "Plaza de Toros", tipo: "poligono" },
+  { nombre: "Las Salinetas", tipo: "poligono" },
+  { nombre: "Silva", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14412,6 +14510,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santa Lucía de Tirajana",
     etiqueta: "Santa Lucía de Tirajana (Las Palmas)",
     zonas: [...BARRIOS_SANTA_LUCIA, ...POLIGONOS_SANTA_LUCIA],
+  },
+  {
+    id: "telde",
+    nombre: "Telde",
+    etiqueta: "Telde (Las Palmas)",
+    zonas: [...BARRIOS_TELDE, ...POLIGONOS_TELDE],
   },
 ];
 

@@ -284,6 +284,7 @@ describe("zonas de Burgos", () => {
       "puertorosario",
       "tirajana",
       "santalucia",
+      "telde",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5972,8 +5973,48 @@ describe("zonas de Burgos", () => {
     expect(ciudades[santaLuciaIdx - 1]?.label).toBe(
       "San Bartolomé de Tirajana"
     );
-    expect(ciudades[santaLuciaIdx + 1]?.label).toBe("León");
-    expect(ciudades[santaLuciaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[santaLuciaIdx + 1]?.label).toBe("Telde");
+    expect(ciudades[santaLuciaIdx + 1]?.negrita).toBeUndefined();
+    const telde = ciudadUrbana("telde");
+    expect(telde?.etiqueta).toBe("Telde (Las Palmas)");
+    expect(telde?.nombre).toBe("Telde");
+    expect(zonaDeCiudad(telde!, "Jinámar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(telde!, "El Goro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(telde!, "Melenara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(telde!, "Salinetas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(telde!, "Valle de los Nueve Alto")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(telde!, "Telde")).toBeNull();
+    expect(zonaDeCiudad(telde!, "Polígono · El Goro")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(telde!, "El Goro II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(telde!, "El Goro III")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(telde!, "Polígono · Jinámar")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(telde!, "Parque Empresarial Melenara")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(telde!, "Las Salinetas")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(telde!, "Polígono · El Goro")!)).toBe(
+      "Polígono · El Goro"
+    );
+    const nombresTelde = telde!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTelde).size).toBe(nombresTelde.length);
+    expect(
+      nombresTelde.filter(
+        (n) => telde!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(74);
+    expect(
+      nombresTelde.filter(
+        (n) => telde!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(14);
+    const teldeIdx = ciudades.findIndex((c) => c.value === "telde");
+    expect(ciudades[teldeIdx]?.label).toBe("Telde");
+    expect(ciudades[teldeIdx]?.negrita).toBeUndefined();
+    expect(ciudades[teldeIdx - 1]?.label).toBe("Santa Lucía de Tirajana");
+    expect(ciudades[teldeIdx + 1]?.label).toBe("León");
+    expect(ciudades[teldeIdx + 1]?.negrita).toBe(true);
     const lasPalmas = ciudadUrbana("laspalmas");
     expect(lasPalmas?.etiqueta).toBe(
       "Las Palmas de Gran Canaria (Las Palmas)"
@@ -6031,8 +6072,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[lasPalmasIdx + 6]?.negrita).toBeUndefined();
     expect(ciudades[lasPalmasIdx + 7]?.label).toBe("Santa Lucía de Tirajana");
     expect(ciudades[lasPalmasIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[lasPalmasIdx + 8]?.label).toBe("León");
-    expect(ciudades[lasPalmasIdx + 8]?.negrita).toBe(true);
+    expect(ciudades[lasPalmasIdx + 8]?.label).toBe("Telde");
+    expect(ciudades[lasPalmasIdx + 8]?.negrita).toBeUndefined();
+    expect(ciudades[lasPalmasIdx + 9]?.label).toBe("León");
+    expect(ciudades[lasPalmasIdx + 9]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
