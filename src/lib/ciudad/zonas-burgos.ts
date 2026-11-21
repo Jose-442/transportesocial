@@ -570,6 +570,12 @@
  * Censal y Sensal quedan las dos. Grao (Grau) queda con ese nombre.
  * Grupo San Agustín y San Agustín quedan los dos. Grupo San Lorenzo y San Lorenzo quedan los dos.
  * Castellón de la Plana no entra como barrio.
+ * Vila-real: debajo de Castellón de la Plana, detrás de la capital y delante de Vinaròs. Los barrios de la lista y nueve polígonos.
+ * Melilla (Casas Capote) queda con ese nombre. Vila-real no entra como barrio.
+ * Vinaròs: debajo de Castellón de la Plana, detrás de Vila-real y delante de Ciudad Real. Los barrios de la lista y cinco polígonos.
+ * Ensanche – Avenida Juan XXIII y Ensanche – Zona Cementerio quedan las dos.
+ * Zona Hospital–Estación, Zona Norte, Zona Sur y Zona del Puig quedan las cuatro.
+ * Vinaròs no entra como barrio.
  * Badajoz: capital, en negrita. Los barrios del listado, las ocho pedanías y Bótoa. Los tres polígonos.
  * Cerro Gordo y Mirador de Cerro Gordo quedan los dos.
  * La U.V.A. queda como barrio. Santa Engracia también.
@@ -9877,6 +9883,65 @@ const POLIGONOS_CASTELLON: ZonaCiudad[] = [
   { nombre: "San Lorenzo", tipo: "poligono" },
 ];
 
+const BARRIOS_VILAREAL: ZonaCiudad[] = [
+  { nombre: "Ávila", tipo: "barrio" },
+  { nombre: "Cariñena", tipo: "barrio" },
+  { nombre: "Cedre", tipo: "barrio" },
+  { nombre: "El Madrigal", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "El Zorro", tipo: "barrio" },
+  { nombre: "La Huerta", tipo: "barrio" },
+  { nombre: "Melilla (Casas Capote)", tipo: "barrio" },
+  { nombre: "Poi d'Amorós", tipo: "barrio" },
+  { nombre: "Santa Águeda", tipo: "barrio" },
+  { nombre: "Santa Sofía", tipo: "barrio" },
+  { nombre: "Sant Pasqual", tipo: "barrio" },
+  { nombre: "Los Evangelistas", tipo: "barrio" },
+  { nombre: "San Gil", tipo: "barrio" },
+];
+
+const POLIGONOS_VILAREAL: ZonaCiudad[] = [
+  { nombre: "Carretera de Onda", tipo: "poligono" },
+  { nombre: "El Canal (Reg Nou)", tipo: "poligono" },
+  { nombre: "La Florida", tipo: "poligono" },
+  { nombre: "Les Voltes", tipo: "poligono" },
+  { nombre: "Miralcamp", tipo: "poligono" },
+  { nombre: "Molí Nou", tipo: "poligono" },
+  { nombre: "Zona Norte", tipo: "poligono" },
+  { nombre: "Zona Renfe", tipo: "poligono" },
+  { nombre: "Zona Sur", tipo: "poligono" },
+];
+
+const BARRIOS_VINAROS: ZonaCiudad[] = [
+  { nombre: "Ameradors", tipo: "barrio" },
+  { nombre: "Barbiguera", tipo: "barrio" },
+  { nombre: "Boverals", tipo: "barrio" },
+  { nombre: "Cala del Puntal", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Centro Histórico", tipo: "barrio" },
+  { nombre: "Deveses", tipo: "barrio" },
+  { nombre: "Ensanche – Avenida Juan XXIII", tipo: "barrio" },
+  { nombre: "Ensanche – Zona Cementerio", tipo: "barrio" },
+  { nombre: "Les Cales", tipo: "barrio" },
+  { nombre: "Les Salines", tipo: "barrio" },
+  { nombre: "Lo Saldonar", tipo: "barrio" },
+  { nombre: "Lo Triador", tipo: "barrio" },
+  { nombre: "María Auxiliadora", tipo: "barrio" },
+  { nombre: "Zona Hospital–Estación", tipo: "barrio" },
+  { nombre: "Zona Norte", tipo: "barrio" },
+  { nombre: "Zona Sur", tipo: "barrio" },
+  { nombre: "Zona del Puig", tipo: "barrio" },
+  { nombre: "Vistabella", tipo: "barrio" },
+];
+
+const POLIGONOS_VINAROS: ZonaCiudad[] = [
+  { nombre: "Carretera de Ulldecona", tipo: "poligono" },
+  { nombre: "Les Capçades", tipo: "poligono" },
+  { nombre: "Planes Altes", tipo: "poligono" },
+  { nombre: "Portal del Mediterráneo", tipo: "poligono" },
+  { nombre: "Saldonar Oeste", tipo: "poligono" },
+];
+
 const BARRIOS_BADAJOZ: ZonaCiudad[] = [
   { nombre: "Antonio Domínguez", tipo: "barrio" },
   { nombre: "Barriada de Llera", tipo: "barrio" },
@@ -13410,6 +13475,18 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Castellón de la Plana",
     etiqueta: "Castellón de la Plana (Castellón)",
     zonas: [...BARRIOS_CASTELLON, ...POLIGONOS_CASTELLON],
+  },
+  {
+    id: "vilareal",
+    nombre: "Vila-real",
+    etiqueta: "Vila-real (Castellón)",
+    zonas: [...BARRIOS_VILAREAL, ...POLIGONOS_VILAREAL],
+  },
+  {
+    id: "vinaros",
+    nombre: "Vinaròs",
+    etiqueta: "Vinaròs (Castellón)",
+    zonas: [...BARRIOS_VINAROS, ...POLIGONOS_VINAROS],
   },
   {
     id: "badajoz",

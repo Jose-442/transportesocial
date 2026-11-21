@@ -213,6 +213,8 @@ describe("zonas de Burgos", () => {
       "catarroja",
       "alaquas",
       "castellon",
+      "vilareal",
+      "vinaros",
       "badajoz",
       "merida",
       "donbenito",
@@ -5510,8 +5512,80 @@ describe("zonas de Burgos", () => {
     expect(ciudades[castellonIdx]?.label).toBe("Castellón de la Plana");
     expect(ciudades[castellonIdx]?.negrita).toBe(true);
     expect(ciudades[castellonIdx - 1]?.label).toBe("Sanlúcar de Barrameda");
-    expect(ciudades[castellonIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[castellonIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[castellonIdx + 1]?.label).toBe("Vila-real");
+    expect(ciudades[castellonIdx + 1]?.negrita).toBeUndefined();
+    const vilareal = ciudadUrbana("vilareal");
+    expect(vilareal?.etiqueta).toBe("Vila-real (Castellón)");
+    expect(vilareal?.nombre).toBe("Vila-real");
+    expect(zonaDeCiudad(vilareal!, "El Madrigal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilareal!, "Melilla (Casas Capote)")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(vilareal!, "Poi d'Amorós")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilareal!, "Sant Pasqual")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilareal!, "Vila-real")).toBeNull();
+    expect(zonaDeCiudad(vilareal!, "El Canal (Reg Nou)")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilareal!, "Miralcamp")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilareal!, "Zona Renfe")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(vilareal!, "Miralcamp")!)).toBe(
+      "Polígono · Miralcamp"
+    );
+    const nombresVilareal = vilareal!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVilareal).size).toBe(nombresVilareal.length);
+    expect(
+      nombresVilareal.filter(
+        (n) => vilareal!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(14);
+    expect(
+      nombresVilareal.filter(
+        (n) => vilareal!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(9);
+    const vilarealIdx = ciudades.findIndex((c) => c.value === "vilareal");
+    expect(ciudades[vilarealIdx]?.label).toBe("Vila-real");
+    expect(ciudades[vilarealIdx]?.negrita).toBeUndefined();
+    expect(ciudades[vilarealIdx - 1]?.label).toBe("Castellón de la Plana");
+    expect(ciudades[vilarealIdx + 1]?.label).toBe("Vinaròs");
+    expect(ciudades[vilarealIdx + 1]?.negrita).toBeUndefined();
+    const vinaros = ciudadUrbana("vinaros");
+    expect(vinaros?.etiqueta).toBe("Vinaròs (Castellón)");
+    expect(vinaros?.nombre).toBe("Vinaròs");
+    expect(zonaDeCiudad(vinaros!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vinaros!, "Centro Histórico")?.tipo).toBe("barrio");
+    expect(
+      zonaDeCiudad(vinaros!, "Ensanche – Avenida Juan XXIII")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(vinaros!, "Zona Hospital–Estación")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(vinaros!, "Vinaròs")).toBeNull();
+    expect(zonaDeCiudad(vinaros!, "Les Capçades")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vinaros!, "Portal del Mediterráneo")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(vinaros!, "Saldonar Oeste")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(vinaros!, "Planes Altes")!)).toBe(
+      "Polígono · Planes Altes"
+    );
+    const nombresVinaros = vinaros!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVinaros).size).toBe(nombresVinaros.length);
+    expect(
+      nombresVinaros.filter(
+        (n) => vinaros!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(19);
+    expect(
+      nombresVinaros.filter(
+        (n) => vinaros!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(5);
+    const vinarosIdx = ciudades.findIndex((c) => c.value === "vinaros");
+    expect(ciudades[vinarosIdx]?.label).toBe("Vinaròs");
+    expect(ciudades[vinarosIdx]?.negrita).toBeUndefined();
+    expect(ciudades[vinarosIdx - 1]?.label).toBe("Vila-real");
+    expect(ciudades[vinarosIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[vinarosIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
