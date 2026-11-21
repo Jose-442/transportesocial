@@ -900,8 +900,11 @@
  * Maó: debajo de Illes Balears, detrás de Manacor y delante de Marratxí. Los barrios de la lista y un polígono.
  * Maó (casco urbano) queda con ese nombre. Maó no entra aparte.
  * POIMA (Polígono Industrial de Maó) queda con ese nombre.
- * Marratxí: debajo de Illes Balears, detrás de Maó y delante de Pamplona. Los barrios de la lista y dos polígonos.
+ * Marratxí: debajo de Illes Balears, detrás de Maó y delante de Santa Eulària des Riu. Los barrios de la lista y dos polígonos.
  * Can Rubiol queda como polígono. Polígono Industrial de Marratxí queda con ese nombre.
+ * Santa Eulària des Riu: debajo de Illes Balears, detrás de Marratxí y delante de Pamplona. Los barrios de la lista y seis polígonos.
+ * Santa Eulària des Riu (casco urbano) queda con ese nombre. Santa Eulària des Riu no entra aparte.
+ * Can Negre está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11660,6 +11663,35 @@ const POLIGONOS_PALMA: ZonaCiudad[] = [
   { nombre: "Son Valentí", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_EULARIA: ZonaCiudad[] = [
+  { nombre: "Cala Llonga", tipo: "barrio" },
+  { nombre: "Cala Martina", tipo: "barrio" },
+  { nombre: "Cala Pada", tipo: "barrio" },
+  { nombre: "Cala Llenya", tipo: "barrio" },
+  { nombre: "Can Fornet", tipo: "barrio" },
+  { nombre: "Can Negre", tipo: "barrio" },
+  { nombre: "Can Ramón", tipo: "barrio" },
+  { nombre: "Es Canar", tipo: "barrio" },
+  { nombre: "Es Figueral", tipo: "barrio" },
+  { nombre: "Jesús", tipo: "barrio" },
+  { nombre: "Puig d’en Valls", tipo: "barrio" },
+  { nombre: "Roca Llisa", tipo: "barrio" },
+  { nombre: "Sant Carles de Peralta", tipo: "barrio" },
+  { nombre: "Santa Eulària des Riu (casco urbano)", tipo: "barrio" },
+  { nombre: "Santa Gertrudis de Fruitera", tipo: "barrio" },
+  { nombre: "Siesta", tipo: "barrio" },
+  { nombre: "Valverde", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_EULARIA: ZonaCiudad[] = [
+  { nombre: "Ca na Negreta", tipo: "poligono" },
+  { nombre: "Ca na Palava", tipo: "poligono" },
+  { nombre: "Can Bufí", tipo: "poligono" },
+  { nombre: "Polígono · Can Negre", tipo: "poligono" },
+  { nombre: "Cas Corb", tipo: "poligono" },
+  { nombre: "Can Xiquet Pou", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13142,6 +13174,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Marratxí",
     etiqueta: "Marratxí (Illes Balears)",
     zonas: [...BARRIOS_MARRATXI, ...POLIGONOS_MARRATXI],
+  },
+  {
+    id: "santaeularia",
+    nombre: "Santa Eulària des Riu",
+    etiqueta: "Santa Eulària des Riu (Illes Balears)",
+    zonas: [...BARRIOS_SANTA_EULARIA, ...POLIGONOS_SANTA_EULARIA],
   },
 ];
 

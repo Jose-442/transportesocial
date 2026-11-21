@@ -260,6 +260,7 @@ describe("zonas de Burgos", () => {
       "manacor",
       "mao",
       "marratxi",
+      "santaeularia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5013,8 +5014,49 @@ describe("zonas de Burgos", () => {
     expect(ciudades[marratxiIdx]?.label).toBe("Marratxí");
     expect(ciudades[marratxiIdx]?.negrita).toBeUndefined();
     expect(ciudades[marratxiIdx - 1]?.label).toBe("Maó");
-    expect(ciudades[marratxiIdx + 1]?.label).toBe("Pamplona");
-    expect(ciudades[marratxiIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[marratxiIdx + 1]?.label).toBe("Santa Eulària des Riu");
+    expect(ciudades[marratxiIdx + 1]?.negrita).toBeUndefined();
+    const santaEularia = ciudadUrbana("santaeularia");
+    expect(santaEularia?.etiqueta).toBe("Santa Eulària des Riu (Illes Balears)");
+    expect(santaEularia?.nombre).toBe("Santa Eulària des Riu");
+    expect(zonaDeCiudad(santaEularia!, "Cala Llonga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaEularia!, "Es Canar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaEularia!, "Can Negre")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaEularia!, "Puig d’en Valls")?.tipo).toBe("barrio");
+    expect(
+      zonaDeCiudad(santaEularia!, "Santa Eulària des Riu (casco urbano)")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(santaEularia!, "Santa Eulària des Riu")).toBeNull();
+    expect(zonaDeCiudad(santaEularia!, "Ca na Negreta")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(santaEularia!, "Ca na Negreta")!)).toBe(
+      "Polígono · Ca na Negreta"
+    );
+    expect(zonaDeCiudad(santaEularia!, "Polígono · Can Negre")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(santaEularia!, "Polígono · Can Negre")!)).toBe(
+      "Polígono · Can Negre"
+    );
+    expect(zonaDeCiudad(santaEularia!, "Can Bufí")?.tipo).toBe("poligono");
+    const nombresSantaEularia = santaEularia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantaEularia).size).toBe(nombresSantaEularia.length);
+    expect(
+      nombresSantaEularia.filter(
+        (n) => santaEularia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(17);
+    expect(
+      nombresSantaEularia.filter(
+        (n) =>
+          santaEularia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(6);
+    const santaEulariaIdx = ciudades.findIndex((c) => c.value === "santaeularia");
+    expect(ciudades[santaEulariaIdx]?.label).toBe("Santa Eulària des Riu");
+    expect(ciudades[santaEulariaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[santaEulariaIdx - 1]?.label).toBe("Marratxí");
+    expect(ciudades[santaEulariaIdx + 1]?.label).toBe("Pamplona");
+    expect(ciudades[santaEulariaIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
