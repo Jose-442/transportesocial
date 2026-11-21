@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { iniciarOnboardingStripeConnect } from "@/actions/stripe-connect";
 import { Button } from "@/components/ui/Button";
-import { TEXTO_CONECTAR_BANCO_PUBLICAR } from "@/lib/stripe/conductor-cobro";
+import {
+  TEXTO_CONECTAR_BANCO_PUBLICAR,
+  TEXTO_PRIMER_VIAJE_MAS_LARGO,
+} from "@/lib/stripe/conductor-cobro";
 
 export function ConectarBancoAlPublicar({
   payoutsEnabled,
@@ -43,6 +46,7 @@ export function ConectarBancoAlPublicar({
   return (
     <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3">
       <p className="text-sm text-zinc-800">{TEXTO_CONECTAR_BANCO_PUBLICAR}</p>
+      <p className="text-sm text-zinc-700">{TEXTO_PRIMER_VIAJE_MAS_LARGO}</p>
       <Button
         type="button"
         variant="secondary"
