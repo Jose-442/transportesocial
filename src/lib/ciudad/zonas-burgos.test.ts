@@ -281,6 +281,7 @@ describe("zonas de Burgos", () => {
       "ingenio",
       "laoliva",
       "laspalmas",
+      "puertorosario",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5836,8 +5837,53 @@ describe("zonas de Burgos", () => {
     expect(ciudades[laOlivaIdx]?.label).toBe("La Oliva");
     expect(ciudades[laOlivaIdx]?.negrita).toBeUndefined();
     expect(ciudades[laOlivaIdx - 1]?.label).toBe("Ingenio");
-    expect(ciudades[laOlivaIdx + 1]?.label).toBe("León");
-    expect(ciudades[laOlivaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[laOlivaIdx + 1]?.label).toBe("Puerto del Rosario");
+    expect(ciudades[laOlivaIdx + 1]?.negrita).toBeUndefined();
+    const puertoRosario = ciudadUrbana("puertorosario");
+    expect(puertoRosario?.etiqueta).toBe("Puerto del Rosario (Las Palmas)");
+    expect(puertoRosario?.nombre).toBe("Puerto del Rosario");
+    expect(
+      zonaDeCiudad(puertoRosario!, "Puerto del Rosario (casco urbano)")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(puertoRosario!, "Casillas del Ángel")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(puertoRosario!, "El Matorral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(puertoRosario!, "Puerto del Rosario")).toBeNull();
+    expect(zonaDeCiudad(puertoRosario!, "Polígono · El Matorral")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(puertoRosario!, "Risco Prieto")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(puertoRosario!, "La Hondura")?.tipo).toBe("poligono");
+    expect(
+      zonaDeCiudad(puertoRosario!, "Parque Tecnológico de Fuerteventura")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(puertoRosario!, "Barranco de Negrín")).toBeNull();
+    expect(etiquetaZona(zonaDeCiudad(puertoRosario!, "Polígono · El Matorral")!)).toBe(
+      "Polígono · El Matorral"
+    );
+    const nombresPuertoRosario = puertoRosario!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPuertoRosario).size).toBe(nombresPuertoRosario.length);
+    expect(
+      nombresPuertoRosario.filter(
+        (n) =>
+          puertoRosario!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(27);
+    expect(
+      nombresPuertoRosario.filter(
+        (n) =>
+          puertoRosario!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(6);
+    const puertoRosarioIdx = ciudades.findIndex(
+      (c) => c.value === "puertorosario"
+    );
+    expect(ciudades[puertoRosarioIdx]?.label).toBe("Puerto del Rosario");
+    expect(ciudades[puertoRosarioIdx]?.negrita).toBeUndefined();
+    expect(ciudades[puertoRosarioIdx - 1]?.label).toBe("La Oliva");
+    expect(ciudades[puertoRosarioIdx + 1]?.label).toBe("León");
+    expect(ciudades[puertoRosarioIdx + 1]?.negrita).toBe(true);
     const lasPalmas = ciudadUrbana("laspalmas");
     expect(lasPalmas?.etiqueta).toBe(
       "Las Palmas de Gran Canaria (Las Palmas)"
@@ -5887,8 +5933,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[lasPalmasIdx - 1]?.label).toBe("Úbeda");
     expect(ciudades[lasPalmasIdx + 1]?.label).toBe("Agüimes");
     expect(ciudades[lasPalmasIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[lasPalmasIdx + 5]?.label).toBe("León");
-    expect(ciudades[lasPalmasIdx + 5]?.negrita).toBe(true);
+    expect(ciudades[lasPalmasIdx + 5]?.label).toBe("Puerto del Rosario");
+    expect(ciudades[lasPalmasIdx + 5]?.negrita).toBeUndefined();
+    expect(ciudades[lasPalmasIdx + 6]?.label).toBe("León");
+    expect(ciudades[lasPalmasIdx + 6]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);

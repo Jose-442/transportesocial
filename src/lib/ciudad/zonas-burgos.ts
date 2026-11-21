@@ -963,9 +963,14 @@
  * Ingenio (casco urbano) queda con ese nombre. Ingenio no entra aparte.
  * La Pasadilla y Pasadilla quedan las dos. Las Majoreras es barrio. Las Majoreras – Lomo el Cardón es polígono.
  * transparencia.ingenio.es+5 es la fuente. No entra en el desplegable.
- * La Oliva: debajo de Las Palmas de Gran Canaria, detrás de Ingenio y delante de León. Los barrios de la lista y dos polígonos.
+ * La Oliva: debajo de Las Palmas de Gran Canaria, detrás de Ingenio y delante de Puerto del Rosario. Los barrios de la lista y dos polígonos.
  * La Oliva (casco) queda con ese nombre. La Oliva no entra aparte.
  * El Cotillo (Tostón) queda con ese nombre.
+ * Puerto del Rosario: debajo de Las Palmas de Gran Canaria, detrás de La Oliva y delante de León. Los barrios de la lista y seis polígonos.
+ * Puerto del Rosario (casco urbano) queda con ese nombre. Puerto del Rosario no entra aparte.
+ * El Matorral está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Barranco de Negrín no entra: sigue en urbanización junto a Risco Prieto.
+ * Ayuntamiento de Puerto del Rosario Fuerteventura+5 es la fuente. No entra en el desplegable.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12653,6 +12658,45 @@ const POLIGONOS_LAS_PALMAS: ZonaCiudad[] = [
   { nombre: "Polígono · Miller Bajo", tipo: "poligono" },
 ];
 
+const BARRIOS_PUERTO_ROSARIO: ZonaCiudad[] = [
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Barrio Nuevo", tipo: "barrio" },
+  { nombre: "Casillas del Ángel", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "El Charco", tipo: "barrio" },
+  { nombre: "El Matorral", tipo: "barrio" },
+  { nombre: "Fabelo", tipo: "barrio" },
+  { nombre: "Guisguey", tipo: "barrio" },
+  { nombre: "La Asomada", tipo: "barrio" },
+  { nombre: "La Ampuyenta", tipo: "barrio" },
+  { nombre: "La Matilla", tipo: "barrio" },
+  { nombre: "Las Granadas", tipo: "barrio" },
+  { nombre: "Los Estancos", tipo: "barrio" },
+  { nombre: "Los Llanos de la Concepción", tipo: "barrio" },
+  { nombre: "Los Llanos Pelados", tipo: "barrio" },
+  { nombre: "Los Pozos", tipo: "barrio" },
+  { nombre: "Majada Marcial", tipo: "barrio" },
+  { nombre: "Puerto Lajas", tipo: "barrio" },
+  { nombre: "Puerto del Rosario (casco urbano)", tipo: "barrio" },
+  { nombre: "Rosa Vila", tipo: "barrio" },
+  { nombre: "Tefía", tipo: "barrio" },
+  { nombre: "Tesjuates", tipo: "barrio" },
+  { nombre: "Tetir", tipo: "barrio" },
+  { nombre: "Valle de Santa Inés", tipo: "barrio" },
+  { nombre: "El Time", tipo: "barrio" },
+  { nombre: "El Puertito de los Molinos", tipo: "barrio" },
+  { nombre: "Colonia Rural García Escámez", tipo: "barrio" },
+];
+
+const POLIGONOS_PUERTO_ROSARIO: ZonaCiudad[] = [
+  { nombre: "Polígono · El Matorral", tipo: "poligono" },
+  { nombre: "La Hondura", tipo: "poligono" },
+  { nombre: "Las Cristinas", tipo: "poligono" },
+  { nombre: "Las Salinas", tipo: "poligono" },
+  { nombre: "Parque Tecnológico de Fuerteventura", tipo: "poligono" },
+  { nombre: "Risco Prieto", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14261,6 +14305,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Las Palmas de Gran Canaria",
     etiqueta: "Las Palmas de Gran Canaria (Las Palmas)",
     zonas: [...BARRIOS_LAS_PALMAS, ...POLIGONOS_LAS_PALMAS],
+  },
+  {
+    id: "puertorosario",
+    nombre: "Puerto del Rosario",
+    etiqueta: "Puerto del Rosario (Las Palmas)",
+    zonas: [...BARRIOS_PUERTO_ROSARIO, ...POLIGONOS_PUERTO_ROSARIO],
   },
 ];
 
