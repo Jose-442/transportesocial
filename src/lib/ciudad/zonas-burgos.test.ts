@@ -253,6 +253,7 @@ describe("zonas de Burgos", () => {
       "siero",
       "martorell",
       "santaperpetua",
+      "calvia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4756,6 +4757,31 @@ describe("zonas de Burgos", () => {
     expect(ciudades[santaPerpetuaIdx]?.negrita).toBeUndefined();
     expect(ciudades[santaPerpetuaIdx - 1]?.label).toBe("Santa Coloma de Gramenet");
     expect(ciudades[santaPerpetuaIdx + 1]?.label).toBe("Sitges");
+    const calvia = ciudadUrbana("calvia");
+    expect(calvia?.etiqueta).toBe("Calvià (Illes Balears)");
+    expect(calvia?.nombre).toBe("Calvià");
+    expect(zonaDeCiudad(calvia!, "Bendinat")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Calvià Vila")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Magaluf")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Palmanova")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Peguera")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Santa Ponça")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Costa d'en Blanes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(calvia!, "Calvià")).toBeNull();
+    expect(zonaDeCiudad(calvia!, "Son Bugadelles")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(calvia!, "Son Bugadelles")!)).toBe(
+      "Polígono · Son Bugadelles"
+    );
+    const nombresCalvia = calvia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCalvia).size).toBe(nombresCalvia.length);
+    expect(nombresCalvia.filter((n) => calvia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(22);
+    expect(nombresCalvia.filter((n) => calvia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
+    const calviaIdx = ciudades.findIndex((c) => c.value === "calvia");
+    expect(ciudades[calviaIdx]?.label).toBe("Calvià");
+    expect(ciudades[calviaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[calviaIdx - 1]?.label).toBe("Plasencia");
+    expect(ciudades[calviaIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[calviaIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

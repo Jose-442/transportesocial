@@ -883,6 +883,9 @@
  * La Florida y Santiga están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Can Vinyalets y Can Vinyals quedan los dos.
  * El sector Alstom de la visita de mayo de 2026 no entra. La lista más reciente tiene doce polígonos.
+ * Calvià: primera de Illes Balears, detrás de Plasencia y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Calvià Vila queda con ese nombre. Calvià no entra aparte.
+ * Son Bugadelles queda como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11414,6 +11417,35 @@ const POLIGONOS_SANT_BOI: ZonaCiudad[] = [
   { nombre: "Sector Comercial Alcampo", tipo: "poligono" },
 ];
 
+const BARRIOS_CALVIA: ZonaCiudad[] = [
+  { nombre: "Bendinat", tipo: "barrio" },
+  { nombre: "Cala Fornells", tipo: "barrio" },
+  { nombre: "Cala Vinyes", tipo: "barrio" },
+  { nombre: "Calvià Vila", tipo: "barrio" },
+  { nombre: "Cas Català", tipo: "barrio" },
+  { nombre: "Costa d'en Blanes", tipo: "barrio" },
+  { nombre: "Costa de la Calma", tipo: "barrio" },
+  { nombre: "El Toro", tipo: "barrio" },
+  { nombre: "Es Capdellà", tipo: "barrio" },
+  { nombre: "Galatzó", tipo: "barrio" },
+  { nombre: "Illetes", tipo: "barrio" },
+  { nombre: "Magaluf", tipo: "barrio" },
+  { nombre: "Nova Santa Ponça", tipo: "barrio" },
+  { nombre: "Palmanova", tipo: "barrio" },
+  { nombre: "Peguera", tipo: "barrio" },
+  { nombre: "Portals Nous", tipo: "barrio" },
+  { nombre: "Portals Vells", tipo: "barrio" },
+  { nombre: "Santa Ponça", tipo: "barrio" },
+  { nombre: "Son Caliu", tipo: "barrio" },
+  { nombre: "Son Ferrer", tipo: "barrio" },
+  { nombre: "Sol de Mallorca", tipo: "barrio" },
+  { nombre: "Torrenova", tipo: "barrio" },
+];
+
+const POLIGONOS_CALVIA: ZonaCiudad[] = [
+  { nombre: "Son Bugadelles", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -12854,6 +12886,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santa Perpètua de Mogoda",
     etiqueta: "Santa Perpètua de Mogoda (Barcelona)",
     zonas: [...BARRIOS_SANTA_PERPETUA, ...POLIGONOS_SANTA_PERPETUA],
+  },
+  {
+    id: "calvia",
+    nombre: "Calvià",
+    etiqueta: "Calvià (Illes Balears)",
+    zonas: [...BARRIOS_CALVIA, ...POLIGONOS_CALVIA],
   },
 ];
 
