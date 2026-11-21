@@ -966,11 +966,14 @@
  * La Oliva: debajo de Las Palmas de Gran Canaria, detrás de Ingenio y delante de Puerto del Rosario. Los barrios de la lista y dos polígonos.
  * La Oliva (casco) queda con ese nombre. La Oliva no entra aparte.
  * El Cotillo (Tostón) queda con ese nombre.
- * Puerto del Rosario: debajo de Las Palmas de Gran Canaria, detrás de La Oliva y delante de León. Los barrios de la lista y seis polígonos.
+ * Puerto del Rosario: debajo de Las Palmas de Gran Canaria, detrás de La Oliva y delante de San Bartolomé de Tirajana. Los barrios de la lista y seis polígonos.
  * Puerto del Rosario (casco urbano) queda con ese nombre. Puerto del Rosario no entra aparte.
  * El Matorral está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Barranco de Negrín no entra: sigue en urbanización junto a Risco Prieto.
  * Ayuntamiento de Puerto del Rosario Fuerteventura+5 es la fuente. No entra en el desplegable.
+ * San Bartolomé de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de Puerto del Rosario y delante de León. Los barrios de la lista y dos polígonos.
+ * San Bartolomé (Tunte) y Tunte quedan las dos. San Bartolomé de Tirajana no entra como barrio.
+ * El Tablero es barrio. Polígono Industrial El Tablero es polígono. Juan Grande es barrio. Juan Grande Industrial es polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12697,6 +12700,49 @@ const POLIGONOS_PUERTO_ROSARIO: ZonaCiudad[] = [
   { nombre: "Risco Prieto", tipo: "poligono" },
 ];
 
+const BARRIOS_TIRAJANA: ZonaCiudad[] = [
+  { nombre: "Aldea Blanca", tipo: "barrio" },
+  { nombre: "Ayagaures", tipo: "barrio" },
+  { nombre: "Bahía Feliz", tipo: "barrio" },
+  { nombre: "Calderín", tipo: "barrio" },
+  { nombre: "Campo Internacional", tipo: "barrio" },
+  { nombre: "Casas Blancas", tipo: "barrio" },
+  { nombre: "Castillo del Romeral", tipo: "barrio" },
+  { nombre: "Cercados de Araña", tipo: "barrio" },
+  { nombre: "Cercados de Espino", tipo: "barrio" },
+  { nombre: "Ciudad de Lima", tipo: "barrio" },
+  { nombre: "El Matorral", tipo: "barrio" },
+  { nombre: "El Pajar", tipo: "barrio" },
+  { nombre: "El Salobre", tipo: "barrio" },
+  { nombre: "El Sequero", tipo: "barrio" },
+  { nombre: "El Tablero", tipo: "barrio" },
+  { nombre: "Fataga", tipo: "barrio" },
+  { nombre: "Hoya de Tunte", tipo: "barrio" },
+  { nombre: "Hoya Grande", tipo: "barrio" },
+  { nombre: "Juan Grande", tipo: "barrio" },
+  { nombre: "La Culata", tipo: "barrio" },
+  { nombre: "La Montaña", tipo: "barrio" },
+  { nombre: "La Plata", tipo: "barrio" },
+  { nombre: "Las Casas", tipo: "barrio" },
+  { nombre: "Las Salinas", tipo: "barrio" },
+  { nombre: "Meloneras", tipo: "barrio" },
+  { nombre: "Montaña La Data", tipo: "barrio" },
+  { nombre: "Monteleón", tipo: "barrio" },
+  { nombre: "Pasito Blanco", tipo: "barrio" },
+  { nombre: "Playa del Águila", tipo: "barrio" },
+  { nombre: "Playa del Inglés", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "San Bartolomé (Tunte)", tipo: "barrio" },
+  { nombre: "San Fernando de Maspalomas", tipo: "barrio" },
+  { nombre: "Sonneland", tipo: "barrio" },
+  { nombre: "Tunte", tipo: "barrio" },
+];
+
+const POLIGONOS_TIRAJANA: ZonaCiudad[] = [
+  { nombre: "Juan Grande Industrial", tipo: "poligono" },
+  { nombre: "Polígono Industrial El Tablero", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14311,6 +14357,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Puerto del Rosario",
     etiqueta: "Puerto del Rosario (Las Palmas)",
     zonas: [...BARRIOS_PUERTO_ROSARIO, ...POLIGONOS_PUERTO_ROSARIO],
+  },
+  {
+    id: "tirajana",
+    nombre: "San Bartolomé de Tirajana",
+    etiqueta: "San Bartolomé de Tirajana (Las Palmas)",
+    zonas: [...BARRIOS_TIRAJANA, ...POLIGONOS_TIRAJANA],
   },
 ];
 
