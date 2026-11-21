@@ -16,6 +16,8 @@
  * Polígono Tanos-Viérnoles. Las Excavadas y La Hilera siguen en proyecto.
  * Castro-Urdiales: juntas vecinales, pedanías y barrios que nombra el Ayuntamiento.
  * Polígonos Vallegón y La Tejera.
+ * Camargo: debajo de Santander, detrás de la capital y delante de Castro-Urdiales. Los barrios de la lista y doce polígonos.
+ * Camargo está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Vitoria-Gasteiz: 28 barrios del plano municipal (sin las tres «zonas rurales»,
  * porque los pueblos van con su nombre) y los núcleos del Ayuntamiento.
  * Ocho polígonos de la página de industria del Ayuntamiento.
@@ -1200,6 +1202,32 @@ const BARRIOS_CASTRO: ZonaCiudad[] = [
 const POLIGONOS_CASTRO: ZonaCiudad[] = [
   { nombre: "Vallegón", tipo: "poligono" },
   { nombre: "La Tejera", tipo: "poligono" },
+];
+
+const BARRIOS_CAMARGO: ZonaCiudad[] = [
+  { nombre: "Cacicedo", tipo: "barrio" },
+  { nombre: "Camargo", tipo: "barrio" },
+  { nombre: "Escobedo", tipo: "barrio" },
+  { nombre: "Herrera", tipo: "barrio" },
+  { nombre: "Igollo", tipo: "barrio" },
+  { nombre: "Maliaño", tipo: "barrio" },
+  { nombre: "Muriedas", tipo: "barrio" },
+  { nombre: "Revilla", tipo: "barrio" },
+];
+
+const POLIGONOS_CAMARGO: ZonaCiudad[] = [
+  { nombre: "Polígono · Camargo", tipo: "poligono" },
+  { nombre: "Cross", tipo: "poligono" },
+  { nombre: "Elegarcu", tipo: "poligono" },
+  { nombre: "La Cerrada", tipo: "poligono" },
+  { nombre: "La Esprilla", tipo: "poligono" },
+  { nombre: "La Maruca", tipo: "poligono" },
+  { nombre: "La Verde", tipo: "poligono" },
+  { nombre: "Ojaiz", tipo: "poligono" },
+  { nombre: "Parayas", tipo: "poligono" },
+  { nombre: "Raos", tipo: "poligono" },
+  { nombre: "Ría del Carmen", tipo: "poligono" },
+  { nombre: "Trascueto", tipo: "poligono" },
 ];
 
 const BARRIOS_VITORIA: ZonaCiudad[] = [
@@ -12177,6 +12205,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Castro-Urdiales",
     etiqueta: "Castro-Urdiales (Cantabria)",
     zonas: [...BARRIOS_CASTRO, ...POLIGONOS_CASTRO],
+  },
+  {
+    id: "camargo",
+    nombre: "Camargo",
+    etiqueta: "Camargo (Cantabria)",
+    zonas: [...BARRIOS_CAMARGO, ...POLIGONOS_CAMARGO],
   },
   {
     id: "vitoria",

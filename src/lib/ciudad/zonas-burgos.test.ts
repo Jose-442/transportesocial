@@ -21,6 +21,7 @@ describe("zonas de Burgos", () => {
       "santander",
       "torrelavega",
       "castro",
+      "camargo",
       "vitoria",
       "pamplona",
       "tudela",
@@ -323,13 +324,37 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(santander!, "Pedreña")).toBeNull();
     const torrelavega = ciudadUrbana("torrelavega");
     const castro = ciudadUrbana("castro");
+    const camargo = ciudadUrbana("camargo");
     expect(torrelavega?.etiqueta).toBe("Torrelavega (Cantabria)");
     expect(castro?.etiqueta).toBe("Castro-Urdiales (Cantabria)");
+    expect(camargo?.etiqueta).toBe("Camargo (Cantabria)");
+    expect(camargo?.nombre).toBe("Camargo");
     expect(zonaDeCiudad(torrelavega!, "Barreda")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(torrelavega!, "Tanos-Viérnoles")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(torrelavega!, "Las Excavadas")).toBeNull();
     expect(zonaDeCiudad(castro!, "Los Marineros")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(castro!, "Vallegón")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(camargo!, "Maliaño")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(camargo!, "Muriedas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(camargo!, "Camargo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(camargo!, "Polígono · Camargo")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(camargo!, "Polígono · Camargo")!)).toBe(
+      "Polígono · Camargo"
+    );
+    expect(zonaDeCiudad(camargo!, "Ría del Carmen")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(camargo!, "Trascueto")?.tipo).toBe("poligono");
+    const nombresCamargo = camargo!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCamargo).size).toBe(nombresCamargo.length);
+    expect(
+      nombresCamargo.filter(
+        (n) => camargo!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(8);
+    expect(
+      nombresCamargo.filter(
+        (n) => camargo!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(12);
     const vitoria = ciudadUrbana("vitoria");
     expect(vitoria?.etiqueta).toBe("Vitoria-Gasteiz (Álava)");
     expect(zonaDeCiudad(vitoria!, "Salburua")?.tipo).toBe("barrio");
@@ -4554,6 +4579,13 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.label).toBe("Aranda de Duero");
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
+    const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
+    expect(ciudades[santanderIdx]?.label).toBe("Santander");
+    expect(ciudades[santanderIdx]?.negrita).toBe(true);
+    expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
+    expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");
+    expect(ciudades[santanderIdx + 3]?.label).toBe("Torrelavega");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
     expect(ciudades.slice(madridIdx, madridIdx + 34).map((c) => c.label)).toEqual([
       "Madrid",
