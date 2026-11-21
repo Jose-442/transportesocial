@@ -121,6 +121,7 @@ describe("zonas de Burgos", () => {
       "pinto",
       "trescantos",
       "sanfernando",
+      "sanmartinvega",
       "arroyomolinos",
       "galapagar",
       "navalcarnero",
@@ -1630,6 +1631,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSanFernando).size).toBe(nombresSanFernando.length);
     expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
     expect(nombresSanFernando.filter((n) => sanFernando!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(14);
+    const sanMartinVega = ciudadUrbana("sanmartinvega");
+    expect(sanMartinVega?.etiqueta).toBe("San Martín de la Vega (Madrid)");
+    expect(sanMartinVega?.nombre).toBe("San Martín de la Vega");
+    expect(zonaDeCiudad(sanMartinVega!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanMartinVega!, "El Quiñón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanMartinVega!, "Vallequillas Norte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanMartinVega!, "Vallequillas Sur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanMartinVega!, "El Pingarrón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanMartinVega!, "San Martín de la Vega")).toBeNull();
+    expect(zonaDeCiudad(sanMartinVega!, "Aimayr (Almayr)")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(sanMartinVega!, "Aimayr (Almayr)")!)).toBe("Polígono · Aimayr (Almayr)");
+    const nombresSanMartinVega = sanMartinVega!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanMartinVega).size).toBe(nombresSanMartinVega.length);
+    expect(nombresSanMartinVega.filter((n) => sanMartinVega!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    expect(nombresSanMartinVega.filter((n) => sanMartinVega!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
     const arroyomolinos = ciudadUrbana("arroyomolinos");
     expect(arroyomolinos?.etiqueta).toBe("Arroyomolinos (Madrid)");
     expect(arroyomolinos?.nombre).toBe("Arroyomolinos");
@@ -4265,7 +4281,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 30).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 31).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4292,6 +4308,7 @@ describe("zonas de Burgos", () => {
       "Pozuelo de Alarcón",
       "Rivas-Vaciamadrid",
       "San Fernando de Henares",
+      "San Martín de la Vega",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
       "Tres Cantos",

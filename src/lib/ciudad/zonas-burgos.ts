@@ -201,6 +201,9 @@
  * Paracuellos de Jarama: debajo de Madrid, detrás de Navalcarnero y delante de Parla. Los barrios de la lista y los nueve polígonos.
  * El Cervellón I, II y III quedan los tres.
  * Paracuellos de Jarama no entra como barrio.
+ * San Martín de la Vega: debajo de Madrid, detrás de San Fernando de Henares y delante de San Sebastián de los Reyes. Los barrios de la lista y el polígono Aimayr (Almayr).
+ * Las fábricas de dentro de Aimayr no entran aparte.
+ * San Martín de la Vega no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -5461,6 +5464,23 @@ const POLIGONOS_SAN_FERNANDO: ZonaCiudad[] = [
   { nombre: "Parque Industrial SUE-5", tipo: "poligono" },
   { nombre: "Polígono Industrial Puerta de Madrid", tipo: "poligono" },
   { nombre: "Prologis Park San Fernando", tipo: "poligono" },
+];
+
+const BARRIOS_SAN_MARTIN_VEGA: ZonaCiudad[] = [
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "El Jardín", tipo: "barrio" },
+  { nombre: "El Quiñón", tipo: "barrio" },
+  { nombre: "El Ensanche", tipo: "barrio" },
+  { nombre: "La Cañada", tipo: "barrio" },
+  { nombre: "Los Hoteles", tipo: "barrio" },
+  { nombre: "Santa Elena", tipo: "barrio" },
+  { nombre: "Vallequillas Norte", tipo: "barrio" },
+  { nombre: "Vallequillas Sur", tipo: "barrio" },
+  { nombre: "El Pingarrón", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_MARTIN_VEGA: ZonaCiudad[] = [
+  { nombre: "Aimayr (Almayr)", tipo: "poligono" },
 ];
 
 const BARRIOS_ARROYOMOLINOS: ZonaCiudad[] = [
@@ -11669,6 +11689,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Fernando de Henares",
     etiqueta: "San Fernando de Henares (Madrid)",
     zonas: [...BARRIOS_SAN_FERNANDO, ...POLIGONOS_SAN_FERNANDO],
+  },
+  {
+    id: "sanmartinvega",
+    nombre: "San Martín de la Vega",
+    etiqueta: "San Martín de la Vega (Madrid)",
+    zonas: [...BARRIOS_SAN_MARTIN_VEGA, ...POLIGONOS_SAN_MARTIN_VEGA],
   },
   {
     id: "arroyomolinos",
