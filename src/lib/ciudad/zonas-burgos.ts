@@ -883,7 +883,9 @@
  * La Florida y Santiga están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Can Vinyalets y Can Vinyals quedan los dos.
  * El sector Alstom de la visita de mayo de 2026 no entra. La lista más reciente tiene doce polígonos.
- * Calvià: primera de Illes Balears, detrás de Plasencia y delante de Ciutadella de Menorca. Los barrios de la lista y un polígono.
+ * Palma: capital de Illes Balears, detrás de Palencia y delante de Pamplona. Los 62 barrios de la lista y once polígonos.
+ * Son Ferriol está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Calvià: debajo de Illes Balears, detrás de Palma y delante de Ciutadella de Menorca. Los barrios de la lista y un polígono.
  * Calvià Vila queda con ese nombre. Calvià no entra aparte.
  * Son Bugadelles queda como polígono.
  * Ciutadella de Menorca: debajo de Illes Balears, detrás de Calvià y delante de Llucmajor. Los barrios de la lista y un polígono.
@@ -898,7 +900,7 @@
  * Maó: debajo de Illes Balears, detrás de Manacor y delante de Marratxí. Los barrios de la lista y un polígono.
  * Maó (casco urbano) queda con ese nombre. Maó no entra aparte.
  * POIMA (Polígono Industrial de Maó) queda con ese nombre.
- * Marratxí: debajo de Illes Balears, detrás de Maó y delante de Ciudad Real. Los barrios de la lista y dos polígonos.
+ * Marratxí: debajo de Illes Balears, detrás de Maó y delante de Pamplona. Los barrios de la lista y dos polígonos.
  * Can Rubiol queda como polígono. Polígono Industrial de Marratxí queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
@@ -11579,6 +11581,85 @@ const POLIGONOS_MARRATXI: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Marratxí", tipo: "poligono" },
 ];
 
+const BARRIOS_PALMA: ZonaCiudad[] = [
+  { nombre: "Aeroport", tipo: "barrio" },
+  { nombre: "Arxiduc", tipo: "barrio" },
+  { nombre: "Bons Aires", tipo: "barrio" },
+  { nombre: "Cala Major", tipo: "barrio" },
+  { nombre: "Cal Capiscol", tipo: "barrio" },
+  { nombre: "Can Capes", tipo: "barrio" },
+  { nombre: "Can Pastilla", tipo: "barrio" },
+  { nombre: "Can Pere Antoni", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Coll d’en Rabassa", tipo: "barrio" },
+  { nombre: "Cort", tipo: "barrio" },
+  { nombre: "El Amanecer", tipo: "barrio" },
+  { nombre: "El Camp d’en Serralta", tipo: "barrio" },
+  { nombre: "El Camp Redó", tipo: "barrio" },
+  { nombre: "El Jonquet", tipo: "barrio" },
+  { nombre: "El Molinar", tipo: "barrio" },
+  { nombre: "El Rafal Nou", tipo: "barrio" },
+  { nombre: "El Rafal Vell", tipo: "barrio" },
+  { nombre: "El Terreno", tipo: "barrio" },
+  { nombre: "Els Hostalets", tipo: "barrio" },
+  { nombre: "Establiments", tipo: "barrio" },
+  { nombre: "Foners", tipo: "barrio" },
+  { nombre: "Gènova", tipo: "barrio" },
+  { nombre: "La Bonanova", tipo: "barrio" },
+  { nombre: "La Calatrava", tipo: "barrio" },
+  { nombre: "La Indioteria", tipo: "barrio" },
+  { nombre: "La Llotja-El Born", tipo: "barrio" },
+  { nombre: "La Missió", tipo: "barrio" },
+  { nombre: "La Soledat Nord", tipo: "barrio" },
+  { nombre: "La Soledat Sud", tipo: "barrio" },
+  { nombre: "La Teulera", tipo: "barrio" },
+  { nombre: "Les Meravelles", tipo: "barrio" },
+  { nombre: "L’Arenal", tipo: "barrio" },
+  { nombre: "L’Aranjassa", tipo: "barrio" },
+  { nombre: "Monti-sion", tipo: "barrio" },
+  { nombre: "Nou Llevant", tipo: "barrio" },
+  { nombre: "Plaça de Toros", tipo: "barrio" },
+  { nombre: "Plaça dels Patins", tipo: "barrio" },
+  { nombre: "Portopí", tipo: "barrio" },
+  { nombre: "Pere Garau", tipo: "barrio" },
+  { nombre: "Sant Agustí", tipo: "barrio" },
+  { nombre: "Sant Jaume", tipo: "barrio" },
+  { nombre: "Sant Nicolau", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Sant Jordi", tipo: "barrio" },
+  { nombre: "Son Armadans", tipo: "barrio" },
+  { nombre: "Son Cotoner", tipo: "barrio" },
+  { nombre: "Son Cladera", tipo: "barrio" },
+  { nombre: "Son Dureta", tipo: "barrio" },
+  { nombre: "Son Espanyolet", tipo: "barrio" },
+  { nombre: "Son Ferriol", tipo: "barrio" },
+  { nombre: "Son Fortesa Nord", tipo: "barrio" },
+  { nombre: "Son Fortesa Sud", tipo: "barrio" },
+  { nombre: "Son Gotleu", tipo: "barrio" },
+  { nombre: "Son Oliva", tipo: "barrio" },
+  { nombre: "Son Rapinya", tipo: "barrio" },
+  { nombre: "Son Roca", tipo: "barrio" },
+  { nombre: "Son Rutlan", tipo: "barrio" },
+  { nombre: "Son Sardina", tipo: "barrio" },
+  { nombre: "Son Serra-La Vileta", tipo: "barrio" },
+  { nombre: "Son Ximelis", tipo: "barrio" },
+  { nombre: "Zona Portuària", tipo: "barrio" },
+];
+
+const POLIGONOS_PALMA: ZonaCiudad[] = [
+  { nombre: "Can Valero", tipo: "poligono" },
+  { nombre: "Ciudad Jardín", tipo: "poligono" },
+  { nombre: "Llevant", tipo: "poligono" },
+  { nombre: "Parc Bit", tipo: "poligono" },
+  { nombre: "Son Castelló", tipo: "poligono" },
+  { nombre: "Polígono · Son Ferriol", tipo: "poligono" },
+  { nombre: "Son Fuster", tipo: "poligono" },
+  { nombre: "Son Morro", tipo: "poligono" },
+  { nombre: "Son Oms", tipo: "poligono" },
+  { nombre: "Son Rossinyol", tipo: "poligono" },
+  { nombre: "Son Valentí", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13021,6 +13102,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     zonas: [...BARRIOS_SANTA_PERPETUA, ...POLIGONOS_SANTA_PERPETUA],
   },
   {
+    id: "palma",
+    nombre: "Palma",
+    etiqueta: "Palma (Illes Balears)",
+    zonas: [...BARRIOS_PALMA, ...POLIGONOS_PALMA],
+  },
+  {
     id: "calvia",
     nombre: "Calvià",
     etiqueta: "Calvià (Illes Balears)",
@@ -13080,6 +13167,7 @@ const CAPITAL_DE_PROVINCIA: Record<string, string> = {
   Bizkaia: "Bilbao",
   Cantabria: "Santander",
   Gipuzkoa: "San Sebastián",
+  "Illes Balears": "Palma",
   "La Rioja": "Logroño",
   Navarra: "Pamplona",
 };

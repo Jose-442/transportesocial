@@ -253,6 +253,7 @@ describe("zonas de Burgos", () => {
       "siero",
       "martorell",
       "santaperpetua",
+      "palma",
       "calvia",
       "ciutadella",
       "llucmajor",
@@ -4762,6 +4763,44 @@ describe("zonas de Burgos", () => {
     expect(ciudades[santaPerpetuaIdx]?.negrita).toBeUndefined();
     expect(ciudades[santaPerpetuaIdx - 1]?.label).toBe("Santa Coloma de Gramenet");
     expect(ciudades[santaPerpetuaIdx + 1]?.label).toBe("Sitges");
+    const palma = ciudadUrbana("palma");
+    expect(palma?.etiqueta).toBe("Palma (Illes Balears)");
+    expect(palma?.nombre).toBe("Palma");
+    expect(zonaDeCiudad(palma!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palma!, "Santa Catalina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palma!, "Coll d’en Rabassa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palma!, "L’Arenal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palma!, "Son Ferriol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(palma!, "Palma")).toBeNull();
+    expect(zonaDeCiudad(palma!, "Can Valero")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(palma!, "Can Valero")!)).toBe(
+      "Polígono · Can Valero"
+    );
+    expect(zonaDeCiudad(palma!, "Parc Bit")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(palma!, "Polígono · Son Ferriol")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(palma!, "Polígono · Son Ferriol")!)).toBe(
+      "Polígono · Son Ferriol"
+    );
+    expect(zonaDeCiudad(palma!, "Son Castelló")?.tipo).toBe("poligono");
+    const nombresPalma = palma!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresPalma).size).toBe(nombresPalma.length);
+    expect(
+      nombresPalma.filter(
+        (n) => palma!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(62);
+    expect(
+      nombresPalma.filter(
+        (n) => palma!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(11);
+    const palmaIdx = ciudades.findIndex((c) => c.value === "palma");
+    expect(ciudades[palmaIdx]?.label).toBe("Palma");
+    expect(ciudades[palmaIdx]?.negrita).toBe(true);
+    expect(ciudades[palmaIdx - 1]?.label).toBe("Palencia");
+    expect(ciudades[palmaIdx - 1]?.negrita).toBe(true);
+    expect(ciudades[palmaIdx + 1]?.label).toBe("Calvià");
+    expect(ciudades[palmaIdx + 1]?.negrita).toBeUndefined();
     const calvia = ciudadUrbana("calvia");
     expect(calvia?.etiqueta).toBe("Calvià (Illes Balears)");
     expect(calvia?.nombre).toBe("Calvià");
@@ -4784,7 +4823,8 @@ describe("zonas de Burgos", () => {
     const calviaIdx = ciudades.findIndex((c) => c.value === "calvia");
     expect(ciudades[calviaIdx]?.label).toBe("Calvià");
     expect(ciudades[calviaIdx]?.negrita).toBeUndefined();
-    expect(ciudades[calviaIdx - 1]?.label).toBe("Plasencia");
+    expect(ciudades[calviaIdx - 1]?.label).toBe("Palma");
+    expect(ciudades[calviaIdx - 1]?.negrita).toBe(true);
     expect(ciudades[calviaIdx + 1]?.label).toBe("Ciutadella de Menorca");
     expect(ciudades[calviaIdx + 1]?.negrita).toBeUndefined();
     const ciutadella = ciudadUrbana("ciutadella");
@@ -4973,7 +5013,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[marratxiIdx]?.label).toBe("Marratxí");
     expect(ciudades[marratxiIdx]?.negrita).toBeUndefined();
     expect(ciudades[marratxiIdx - 1]?.label).toBe("Maó");
-    expect(ciudades[marratxiIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[marratxiIdx + 1]?.label).toBe("Pamplona");
     expect(ciudades[marratxiIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
