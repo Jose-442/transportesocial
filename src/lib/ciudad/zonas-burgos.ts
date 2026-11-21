@@ -915,8 +915,10 @@
  * Pelagatos I y Pelagatos II (Miralrío) quedan los dos.
  * El Puerto de Santa María: debajo de Cádiz, detrás de Chiclana de la Frontera y delante de Jerez de la Frontera. Los barrios de la lista y once polígonos.
  * Las Salinas de Levante, Poniente, San José Alto y San José Bajo quedan las cuatro.
- * Jerez de la Frontera: debajo de Cádiz, detrás de El Puerto de Santa María y delante de Ciudad Real. Los barrios y núcleos de la lista y diecinueve polígonos.
+ * Jerez de la Frontera: debajo de Cádiz, detrás de El Puerto de Santa María y delante de Puerto Real. Los barrios y núcleos de la lista y diecinueve polígonos.
  * El Portal, Estella del Marqués y Pozoalbero están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Puerto Real: debajo de Cádiz, detrás de Jerez de la Frontera y delante de Ciudad Real. Los barrios de la lista y cinco polígonos.
+ * Río San Pedro sigue como barrio. El polígono se llama Río San Pedro – Zona Industrial.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12020,6 +12022,26 @@ const POLIGONOS_JEREZ: ZonaCiudad[] = [
   { nombre: "Bodegas Las Copas", tipo: "poligono" },
 ];
 
+const BARRIOS_PUERTO_REAL: ZonaCiudad[] = [
+  { nombre: "Barrio Jarana", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "El Almendral", tipo: "barrio" },
+  { nombre: "El Marquesado", tipo: "barrio" },
+  { nombre: "La Chacona", tipo: "barrio" },
+  { nombre: "Meadero de la Reina", tipo: "barrio" },
+  { nombre: "Río San Pedro", tipo: "barrio" },
+  { nombre: "Torre Alta", tipo: "barrio" },
+  { nombre: "Villanueva–Aldea Real", tipo: "barrio" },
+];
+
+const POLIGONOS_PUERTO_REAL: ZonaCiudad[] = [
+  { nombre: "Astilleros (Matagorda)", tipo: "poligono" },
+  { nombre: "La Cabezuela", tipo: "poligono" },
+  { nombre: "Río San Pedro – Zona Industrial", tipo: "poligono" },
+  { nombre: "Trocadero", tipo: "poligono" },
+  { nombre: "Tres Caminos", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13544,6 +13566,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Jerez de la Frontera",
     etiqueta: "Jerez de la Frontera (Cádiz)",
     zonas: [...BARRIOS_JEREZ, ...POLIGONOS_JEREZ],
+  },
+  {
+    id: "puertoreal",
+    nombre: "Puerto Real",
+    etiqueta: "Puerto Real (Cádiz)",
+    zonas: [...BARRIOS_PUERTO_REAL, ...POLIGONOS_PUERTO_REAL],
   },
 ];
 
