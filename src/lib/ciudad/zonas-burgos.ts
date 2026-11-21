@@ -911,8 +911,10 @@
  * Algeciras: debajo de Cádiz, justo detrás de la capital y delante de Arcos de la Frontera. Los barrios de la lista y cuatro polígonos.
  * Arcos de la Frontera: debajo de Cádiz, detrás de Algeciras y delante de Chiclana de la Frontera. Los barrios de la lista y cuatro polígonos.
  * El Retiro y Jédula están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
- * Chiclana de la Frontera: debajo de Cádiz, detrás de Arcos de la Frontera y delante de Ciudad Real. Los barrios de la lista y seis polígonos.
+ * Chiclana de la Frontera: debajo de Cádiz, detrás de Arcos de la Frontera y delante de El Puerto de Santa María. Los barrios de la lista y seis polígonos.
  * Pelagatos I y Pelagatos II (Miralrío) quedan los dos.
+ * El Puerto de Santa María: debajo de Cádiz, detrás de Chiclana de la Frontera y delante de Ciudad Real. Los barrios de la lista y once polígonos.
+ * Las Salinas de Levante, Poniente, San José Alto y San José Bajo quedan las cuatro.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11848,6 +11850,47 @@ const POLIGONOS_CHICLANA: ZonaCiudad[] = [
   { nombre: "Carretera Nacional 340 – Avenida del Mueble", tipo: "poligono" },
 ];
 
+const BARRIOS_EL_PUERTO: ZonaCiudad[] = [
+  { nombre: "Barriada de La Vid", tipo: "barrio" },
+  { nombre: "Barriada de Malacara", tipo: "barrio" },
+  { nombre: "Barriada Nuestra Señora del Mar", tipo: "barrio" },
+  { nombre: "Barriada Fermesa", tipo: "barrio" },
+  { nombre: "Barriada Francisco García", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Costa Oeste", tipo: "barrio" },
+  { nombre: "Doña Blanca", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Juncal", tipo: "barrio" },
+  { nombre: "El Tomillar", tipo: "barrio" },
+  { nombre: "La Andreíta", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Hijuela", tipo: "barrio" },
+  { nombre: "Las Redes", tipo: "barrio" },
+  { nombre: "Los Frailes", tipo: "barrio" },
+  { nombre: "Poblado de Doña Blanca", tipo: "barrio" },
+  { nombre: "Poblado Naval", tipo: "barrio" },
+  { nombre: "Puerto Sherry", tipo: "barrio" },
+  { nombre: "Puerto Bajo", tipo: "barrio" },
+  { nombre: "Sudamérica", tipo: "barrio" },
+  { nombre: "Valdelagrana", tipo: "barrio" },
+  { nombre: "Vallealto", tipo: "barrio" },
+  { nombre: "Vistahermosa", tipo: "barrio" },
+];
+
+const POLIGONOS_EL_PUERTO: ZonaCiudad[] = [
+  { nombre: "Bahía de Cádiz", tipo: "poligono" },
+  { nombre: "El Martillo", tipo: "poligono" },
+  { nombre: "El Palmar", tipo: "poligono" },
+  { nombre: "Guadalete", tipo: "poligono" },
+  { nombre: "Las Salinas de Levante", tipo: "poligono" },
+  { nombre: "Las Salinas de Poniente", tipo: "poligono" },
+  { nombre: "Las Salinas de San José Alto", tipo: "poligono" },
+  { nombre: "Las Salinas de San José Bajo", tipo: "poligono" },
+  { nombre: "San Ignacio-Sierra", tipo: "poligono" },
+  { nombre: "TecnoBahía (Parque Tecnológico)", tipo: "poligono" },
+  { nombre: "Parque Comercial La Isleta", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13360,6 +13403,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Chiclana de la Frontera",
     etiqueta: "Chiclana de la Frontera (Cádiz)",
     zonas: [...BARRIOS_CHICLANA, ...POLIGONOS_CHICLANA],
+  },
+  {
+    id: "elpuerto",
+    nombre: "El Puerto de Santa María",
+    etiqueta: "El Puerto de Santa María (Cádiz)",
+    zonas: [...BARRIOS_EL_PUERTO, ...POLIGONOS_EL_PUERTO],
   },
 ];
 

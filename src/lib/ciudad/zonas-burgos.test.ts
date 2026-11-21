@@ -265,6 +265,7 @@ describe("zonas de Burgos", () => {
       "algeciras",
       "arcos",
       "chiclana",
+      "elpuerto",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5214,8 +5215,50 @@ describe("zonas de Burgos", () => {
     expect(ciudades[chiclanaIdx]?.label).toBe("Chiclana de la Frontera");
     expect(ciudades[chiclanaIdx]?.negrita).toBeUndefined();
     expect(ciudades[chiclanaIdx - 1]?.label).toBe("Arcos de la Frontera");
-    expect(ciudades[chiclanaIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[chiclanaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[chiclanaIdx + 1]?.label).toBe("El Puerto de Santa María");
+    expect(ciudades[chiclanaIdx + 1]?.negrita).toBeUndefined();
+    const elPuerto = ciudadUrbana("elpuerto");
+    expect(elPuerto?.etiqueta).toBe("El Puerto de Santa María (Cádiz)");
+    expect(elPuerto?.nombre).toBe("El Puerto de Santa María");
+    expect(zonaDeCiudad(elPuerto!, "Casco Antiguo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elPuerto!, "Valdelagrana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elPuerto!, "Puerto Sherry")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elPuerto!, "Vistahermosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(elPuerto!, "El Puerto de Santa María")).toBeNull();
+    expect(zonaDeCiudad(elPuerto!, "Bahía de Cádiz")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(elPuerto!, "Bahía de Cádiz")!)).toBe(
+      "Polígono · Bahía de Cádiz"
+    );
+    expect(zonaDeCiudad(elPuerto!, "Las Salinas de Levante")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(elPuerto!, "Las Salinas de San José Bajo")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(elPuerto!, "TecnoBahía (Parque Tecnológico)")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(elPuerto!, "Parque Comercial La Isleta")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresElPuerto = elPuerto!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresElPuerto).size).toBe(nombresElPuerto.length);
+    expect(
+      nombresElPuerto.filter(
+        (n) => elPuerto!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(24);
+    expect(
+      nombresElPuerto.filter(
+        (n) => elPuerto!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(11);
+    const elPuertoIdx = ciudades.findIndex((c) => c.value === "elpuerto");
+    expect(ciudades[elPuertoIdx]?.label).toBe("El Puerto de Santa María");
+    expect(ciudades[elPuertoIdx]?.negrita).toBeUndefined();
+    expect(ciudades[elPuertoIdx - 1]?.label).toBe("Chiclana de la Frontera");
+    expect(ciudades[elPuertoIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[elPuertoIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
