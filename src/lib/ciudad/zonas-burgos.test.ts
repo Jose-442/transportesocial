@@ -266,6 +266,7 @@ describe("zonas de Burgos", () => {
       "arcos",
       "chiclana",
       "elpuerto",
+      "jerez",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5257,8 +5258,50 @@ describe("zonas de Burgos", () => {
     expect(ciudades[elPuertoIdx]?.label).toBe("El Puerto de Santa María");
     expect(ciudades[elPuertoIdx]?.negrita).toBeUndefined();
     expect(ciudades[elPuertoIdx - 1]?.label).toBe("Chiclana de la Frontera");
-    expect(ciudades[elPuertoIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[elPuertoIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[elPuertoIdx + 1]?.label).toBe("Jerez de la Frontera");
+    expect(ciudades[elPuertoIdx + 1]?.negrita).toBeUndefined();
+    const jerez = ciudadUrbana("jerez");
+    expect(jerez?.etiqueta).toBe("Jerez de la Frontera (Cádiz)");
+    expect(jerez?.nombre).toBe("Jerez de la Frontera");
+    expect(zonaDeCiudad(jerez!, "Santiago")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "La Plata")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "Guadalcacín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "El Portal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "Pozoalbero")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "Estella del Marqués")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(jerez!, "Jerez de la Frontera")).toBeNull();
+    expect(zonaDeCiudad(jerez!, "Polígono · El Portal")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(jerez!, "Polígono · El Portal")!)).toBe(
+      "Polígono · El Portal"
+    );
+    expect(zonaDeCiudad(jerez!, "Polígono · Estella del Marqués")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(jerez!, "Polígono · Pozoalbero")?.tipo).toBe("poligono");
+    expect(
+      zonaDeCiudad(jerez!, "Ciudad del Transporte – Cañada Ancha")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(jerez!, "Parque Empresarial de Jerez")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresJerez = jerez!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresJerez).size).toBe(nombresJerez.length);
+    expect(
+      nombresJerez.filter(
+        (n) => jerez!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(102);
+    expect(
+      nombresJerez.filter(
+        (n) => jerez!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(19);
+    const jerezIdx = ciudades.findIndex((c) => c.value === "jerez");
+    expect(ciudades[jerezIdx]?.label).toBe("Jerez de la Frontera");
+    expect(ciudades[jerezIdx]?.negrita).toBeUndefined();
+    expect(ciudades[jerezIdx - 1]?.label).toBe("El Puerto de Santa María");
+    expect(ciudades[jerezIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[jerezIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
