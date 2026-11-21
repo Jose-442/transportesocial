@@ -1,3 +1,4 @@
+// @ts-nocheck — archivo enorme: sin esto el build de Vercel petaba (Maximum call stack size exceeded).
 /**
  * Barrios y polígonos cerrados.
  * Burgos: reglamento de distritos del Ayuntamiento, 2020.
