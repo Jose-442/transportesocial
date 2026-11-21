@@ -278,6 +278,7 @@ describe("zonas de Burgos", () => {
       "sanlucar",
       "aguimes",
       "arucas",
+      "ingenio",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5761,12 +5762,51 @@ describe("zonas de Burgos", () => {
     expect(ciudades[arucasIdx]?.label).toBe("Arucas");
     expect(ciudades[arucasIdx]?.negrita).toBeUndefined();
     expect(ciudades[arucasIdx - 1]?.label).toBe("Agüimes");
-    expect(ciudades[arucasIdx + 1]?.label).toBe("Albacete");
-    expect(ciudades[arucasIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[arucasIdx + 1]?.label).toBe("Ingenio");
+    expect(ciudades[arucasIdx + 1]?.negrita).toBeUndefined();
+    const ingenio = ciudadUrbana("ingenio");
+    expect(ingenio?.etiqueta).toBe("Ingenio (Las Palmas)");
+    expect(ingenio?.nombre).toBe("Ingenio");
+    expect(zonaDeCiudad(ingenio!, "Ingenio (casco urbano)")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(ingenio!, "El Carrizal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ingenio!, "Las Majoreras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ingenio!, "La Pasadilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ingenio!, "Pasadilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ingenio!, "Ingenio")).toBeNull();
+    expect(zonaDeCiudad(ingenio!, "Capellanía del Lozano")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(ingenio!, "Las Majoreras – Lomo el Cardón")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(ingenio!, "Lomo Cementerio")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(ingenio!, "Lomo Cementerio")!)).toBe(
+      "Polígono · Lomo Cementerio"
+    );
+    const nombresIngenio = ingenio!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresIngenio).size).toBe(nombresIngenio.length);
+    expect(
+      nombresIngenio.filter(
+        (n) => ingenio!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(30);
+    expect(
+      nombresIngenio.filter(
+        (n) => ingenio!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const ingenioIdx = ciudades.findIndex((c) => c.value === "ingenio");
+    expect(ciudades[ingenioIdx]?.label).toBe("Ingenio");
+    expect(ciudades[ingenioIdx]?.negrita).toBeUndefined();
+    expect(ciudades[ingenioIdx - 1]?.label).toBe("Arucas");
+    expect(ciudades[ingenioIdx + 1]?.label).toBe("Albacete");
+    expect(ciudades[ingenioIdx + 1]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
-    expect(ciudades[albaceteIdx - 1]?.label).toBe("Arucas");
+    expect(ciudades[albaceteIdx - 1]?.label).toBe("Ingenio");
     expect(ciudades[albaceteIdx + 1]?.label).toBe("Hellín");
     expect(ciudades[albaceteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[albaceteIdx + 2]?.label).toBe("Alicante");

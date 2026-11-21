@@ -951,9 +951,13 @@
  * Agüimes (casco) queda con ese nombre. Agüimes no entra aparte.
  * Polígono Residencial de Arinaga es barrio. Polígono Industrial de Arinaga es polígono.
  * Espinales (Los) es barrio. Espinales Industrial es polígono.
- * Arucas: Las Palmas, detrás de Agüimes y delante de Albacete. Los barrios de la lista. Sin polígonos.
+ * Arucas: Las Palmas, detrás de Agüimes y delante de Ingenio. Los barrios de la lista. Sin polígonos.
  * Arucas (casco) queda con ese nombre. Arucas no entra aparte.
  * El Portichuelo, Hoya López y Rosa Silva entran. Montaña Blanca entra una sola vez.
+ * Ingenio: Las Palmas, detrás de Arucas y delante de Albacete. Los barrios de la lista y tres polígonos.
+ * Ingenio (casco urbano) queda con ese nombre. Ingenio no entra aparte.
+ * La Pasadilla y Pasadilla quedan las dos. Las Majoreras es barrio. Las Majoreras – Lomo el Cardón es polígono.
+ * transparencia.ingenio.es+5 es la fuente. No entra en el desplegable.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12462,6 +12466,45 @@ const BARRIOS_ARUCAS: ZonaCiudad[] = [
 
 const POLIGONOS_ARUCAS: ZonaCiudad[] = [];
 
+const BARRIOS_INGENIO: ZonaCiudad[] = [
+  { nombre: "Aguatona", tipo: "barrio" },
+  { nombre: "Barrio Nuevo", tipo: "barrio" },
+  { nombre: "Barranco de Guayadeque", tipo: "barrio" },
+  { nombre: "Cuesta Caballero", tipo: "barrio" },
+  { nombre: "El Burrero", tipo: "barrio" },
+  { nombre: "El Carrión", tipo: "barrio" },
+  { nombre: "El Carrizal", tipo: "barrio" },
+  { nombre: "El Cristo", tipo: "barrio" },
+  { nombre: "El Cuarto", tipo: "barrio" },
+  { nombre: "El Lirón", tipo: "barrio" },
+  { nombre: "El Sequero", tipo: "barrio" },
+  { nombre: "Ingenio (casco urbano)", tipo: "barrio" },
+  { nombre: "La Capellanía", tipo: "barrio" },
+  { nombre: "La Hoyeta", tipo: "barrio" },
+  { nombre: "La Jurada", tipo: "barrio" },
+  { nombre: "La Longuera", tipo: "barrio" },
+  { nombre: "La Montañeta", tipo: "barrio" },
+  { nombre: "La Pasadilla", tipo: "barrio" },
+  { nombre: "La Tarifa", tipo: "barrio" },
+  { nombre: "Las Majoreras", tipo: "barrio" },
+  { nombre: "Las Mejías", tipo: "barrio" },
+  { nombre: "Las Puntillas", tipo: "barrio" },
+  { nombre: "Lomo Algodones", tipo: "barrio" },
+  { nombre: "Lomo Cardón", tipo: "barrio" },
+  { nombre: "Lomo del Hospital", tipo: "barrio" },
+  { nombre: "Lomo Juan", tipo: "barrio" },
+  { nombre: "Los Molinillos", tipo: "barrio" },
+  { nombre: "Marfú", tipo: "barrio" },
+  { nombre: "Mondragón", tipo: "barrio" },
+  { nombre: "Pasadilla", tipo: "barrio" },
+];
+
+const POLIGONOS_INGENIO: ZonaCiudad[] = [
+  { nombre: "Capellanía del Lozano", tipo: "poligono" },
+  { nombre: "Las Majoreras – Lomo el Cardón", tipo: "poligono" },
+  { nombre: "Lomo Cementerio", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14052,6 +14095,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arucas",
     etiqueta: "Arucas (Las Palmas)",
     zonas: [...BARRIOS_ARUCAS, ...POLIGONOS_ARUCAS],
+  },
+  {
+    id: "ingenio",
+    nombre: "Ingenio",
+    etiqueta: "Ingenio (Las Palmas)",
+    zonas: [...BARRIOS_INGENIO, ...POLIGONOS_INGENIO],
   },
 ];
 
