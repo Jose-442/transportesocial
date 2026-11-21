@@ -36,6 +36,7 @@ describe("zonas de Burgos", () => {
       "lugo",
       "ourense",
       "pontevedra",
+      "aestrada",
       "vigo",
       "vilagarcia",
       "coruna",
@@ -445,6 +446,25 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(pontevedra!, "O Vao")?.tipo).toBe("poligono");
     const nombresPontevedra = pontevedra!.zonas.map((z) => z.nombre);
     expect(new Set(nombresPontevedra).size).toBe(nombresPontevedra.length);
+    const aEstrada = ciudadUrbana("aestrada");
+    expect(aEstrada?.etiqueta).toBe("A Estrada (Pontevedra)");
+    expect(aEstrada?.nombre).toBe("A Estrada");
+    expect(zonaDeCiudad(aEstrada!, "A Estrada (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "Codeseda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "Parada")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "Paradela")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "Ribeira")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "Toedo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "A Somoza")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aEstrada!, "A Estrada")).toBeNull();
+    expect(zonaDeCiudad(aEstrada!, "Polígono Industrial de Toedo")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(aEstrada!, "Polígono Industrial de Toedo")!)).toBe("Polígono Industrial de Toedo");
+    expect(zonaDeCiudad(aEstrada!, "Polígono Industrial de Ribeira")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(aEstrada!, "Polígono Industrial de Ribeira")!)).toBe("Polígono Industrial de Ribeira");
+    const nombresAEstrada = aEstrada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAEstrada).size).toBe(nombresAEstrada.length);
+    expect(nombresAEstrada.filter((n) => aEstrada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(51);
+    expect(nombresAEstrada.filter((n) => aEstrada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const vigo = ciudadUrbana("vigo");
     expect(vigo?.etiqueta).toBe("Vigo (Pontevedra)");
     expect(zonaDeCiudad(vigo!, "Casco Vello")?.tipo).toBe("barrio");
@@ -470,6 +490,13 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(vilagarcia!, "O Pousadoiro")?.tipo).toBe("poligono");
     const nombresVilagarcia = vilagarcia!.zonas.map((z) => z.nombre);
     expect(new Set(nombresVilagarcia).size).toBe(nombresVilagarcia.length);
+    const aEstradaIdx = ciudadesParaDesplegable().findIndex((c) => c.value === "aestrada");
+    const ciudadesPontevedra = ciudadesParaDesplegable();
+    expect(ciudadesPontevedra[aEstradaIdx]?.label).toBe("A Estrada");
+    expect(ciudadesPontevedra[aEstradaIdx]?.negrita).toBeUndefined();
+    expect(ciudadesPontevedra[aEstradaIdx - 1]?.label).toBe("Pontevedra");
+    expect(ciudadesPontevedra[aEstradaIdx - 1]?.negrita).toBe(true);
+    expect(ciudadesPontevedra[aEstradaIdx + 1]?.label).toBe("Vigo");
     const coruna = ciudadUrbana("coruna");
     expect(coruna?.etiqueta).toBe("A Coruña (A Coruña)");
     expect(zonaDeCiudad(coruna!, "Cidade Vella")?.tipo).toBe("barrio");

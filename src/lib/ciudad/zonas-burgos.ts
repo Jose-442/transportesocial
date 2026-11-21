@@ -60,6 +60,11 @@
  * Polígonos Balaídos y el parque tecnológico de Valadares.
  * Vilagarcía de Arousa: parroquias del nomenclátor de Galicia de 2026, más Vilaxoán.
  * Polígonos Bamio, Trabanca y O Pousadoiro.
+ * A Estrada: debajo de Pontevedra, detrás de la capital y delante de Vigo. Las parroquias de la lista y los dos polígonos.
+ * A Estrada (casco urbano) es el casco. A Estrada no entra aparte.
+ * Ribeira es barrio. Polígono Industrial de Ribeira entra aparte.
+ * Toedo es barrio. Polígono Industrial de Toedo entra aparte.
+ * Parada y Paradela quedan las dos.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
  * Santiago de Compostela: zonas del Concello y parroquias del padrón.
@@ -1933,6 +1938,65 @@ const POLIGONOS_VILAGARCIA: ZonaCiudad[] = [
   { nombre: "Polígono Bamio", tipo: "poligono" },
   { nombre: "Trabanca", tipo: "poligono" },
   { nombre: "O Pousadoiro", tipo: "poligono" },
+];
+
+const BARRIOS_A_ESTRADA: ZonaCiudad[] = [
+  { nombre: "A Estrada (casco urbano)", tipo: "barrio" },
+  { nombre: "Agar", tipo: "barrio" },
+  { nombre: "Aguións", tipo: "barrio" },
+  { nombre: "Arca", tipo: "barrio" },
+  { nombre: "Arnois", tipo: "barrio" },
+  { nombre: "Baloira", tipo: "barrio" },
+  { nombre: "Barbude", tipo: "barrio" },
+  { nombre: "Barcala", tipo: "barrio" },
+  { nombre: "Berres", tipo: "barrio" },
+  { nombre: "Callobre", tipo: "barrio" },
+  { nombre: "Cereixo", tipo: "barrio" },
+  { nombre: "Codeseda", tipo: "barrio" },
+  { nombre: "Cora", tipo: "barrio" },
+  { nombre: "Couso", tipo: "barrio" },
+  { nombre: "Curantes", tipo: "barrio" },
+  { nombre: "Frades", tipo: "barrio" },
+  { nombre: "Guimarei", tipo: "barrio" },
+  { nombre: "Lagartóns", tipo: "barrio" },
+  { nombre: "Lamas", tipo: "barrio" },
+  { nombre: "Liripio", tipo: "barrio" },
+  { nombre: "Loimil", tipo: "barrio" },
+  { nombre: "Matalobos", tipo: "barrio" },
+  { nombre: "Moreira", tipo: "barrio" },
+  { nombre: "Nigoi", tipo: "barrio" },
+  { nombre: "Oca", tipo: "barrio" },
+  { nombre: "Olives", tipo: "barrio" },
+  { nombre: "Orazo", tipo: "barrio" },
+  { nombre: "Ouzande", tipo: "barrio" },
+  { nombre: "Parada", tipo: "barrio" },
+  { nombre: "Paradela", tipo: "barrio" },
+  { nombre: "Pardemarín", tipo: "barrio" },
+  { nombre: "Remesar", tipo: "barrio" },
+  { nombre: "Ribeira", tipo: "barrio" },
+  { nombre: "Ribela", tipo: "barrio" },
+  { nombre: "Riobó", tipo: "barrio" },
+  { nombre: "Rubín", tipo: "barrio" },
+  { nombre: "Sabucedo", tipo: "barrio" },
+  { nombre: "San Miguel de Barcala", tipo: "barrio" },
+  { nombre: "San Miguel de Castro", tipo: "barrio" },
+  { nombre: "San Pedro de Ancorados", tipo: "barrio" },
+  { nombre: "San Tomé de Ancorados", tipo: "barrio" },
+  { nombre: "San Xiao de Vea", tipo: "barrio" },
+  { nombre: "San Xurxo de Vea", tipo: "barrio" },
+  { nombre: "Santa Cristina de Vea", tipo: "barrio" },
+  { nombre: "Santeles", tipo: "barrio" },
+  { nombre: "Santo André de Vea", tipo: "barrio" },
+  { nombre: "A Somoza", tipo: "barrio" },
+  { nombre: "Souto", tipo: "barrio" },
+  { nombre: "Tabeirós", tipo: "barrio" },
+  { nombre: "Toedo", tipo: "barrio" },
+  { nombre: "Vinseiro", tipo: "barrio" },
+];
+
+const POLIGONOS_A_ESTRADA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Toedo", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Ribeira", tipo: "poligono" },
 ];
 
 const BARRIOS_CORUNA: ZonaCiudad[] = [
@@ -11336,6 +11400,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Pontevedra",
     etiqueta: "Pontevedra (Pontevedra)",
     zonas: [...BARRIOS_PONTEVEDRA, ...POLIGONOS_PONTEVEDRA],
+  },
+  {
+    id: "aestrada",
+    nombre: "A Estrada",
+    etiqueta: "A Estrada (Pontevedra)",
+    zonas: [...BARRIOS_A_ESTRADA, ...POLIGONOS_A_ESTRADA],
   },
   {
     id: "vigo",
