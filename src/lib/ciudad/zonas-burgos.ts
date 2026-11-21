@@ -892,9 +892,12 @@
  * Llucmajor: debajo de Illes Balears, detrás de Ciutadella de Menorca y delante de Manacor. Los barrios de la lista y dos polígonos.
  * Llucmajor (casco urbano) queda con ese nombre. Llucmajor no entra aparte.
  * Son Noguera y Son Fosquet quedan como polígonos.
- * Manacor: debajo de Illes Balears, detrás de Llucmajor y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
+ * Manacor: debajo de Illes Balears, detrás de Llucmajor y delante de Maó. Los barrios de la lista y tres polígonos.
  * Manacor (casco urbano) queda con ese nombre. Manacor no entra aparte.
  * s’Illot queda con ese nombre. Son Talent queda como polígono.
+ * Maó: debajo de Illes Balears, detrás de Manacor y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Maó (casco urbano) queda con ese nombre. Maó no entra aparte.
+ * POIMA (Polígono Industrial de Maó) queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11517,6 +11520,33 @@ const POLIGONOS_MANACOR: ZonaCiudad[] = [
   { nombre: "Son Talent (zona de servicios y actividad económica)", tipo: "poligono" },
 ];
 
+const BARRIOS_MAO: ZonaCiudad[] = [
+  { nombre: "Binixíquer", tipo: "barrio" },
+  { nombre: "Cala Llonga", tipo: "barrio" },
+  { nombre: "Cala Mesquida", tipo: "barrio" },
+  { nombre: "Cala Rata", tipo: "barrio" },
+  { nombre: "Camí d’en Barrotes", tipo: "barrio" },
+  { nombre: "Dalt Sant Joan", tipo: "barrio" },
+  { nombre: "Es Canutells", tipo: "barrio" },
+  { nombre: "Es Grau", tipo: "barrio" },
+  { nombre: "Es Murtar", tipo: "barrio" },
+  { nombre: "Fort de l’Eau", tipo: "barrio" },
+  { nombre: "Llucmaçanes", tipo: "barrio" },
+  { nombre: "Malbúger", tipo: "barrio" },
+  { nombre: "Maó (casco urbano)", tipo: "barrio" },
+  { nombre: "Sa Mesquida", tipo: "barrio" },
+  { nombre: "Sant Climent", tipo: "barrio" },
+  { nombre: "Sínia Costabella", tipo: "barrio" },
+  { nombre: "Sínia Morera", tipo: "barrio" },
+  { nombre: "Ses Vinyes", tipo: "barrio" },
+  { nombre: "S’altra Banda", tipo: "barrio" },
+  { nombre: "Binidalí", tipo: "barrio" },
+];
+
+const POLIGONOS_MAO: ZonaCiudad[] = [
+  { nombre: "POIMA (Polígono Industrial de Maó)", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -12981,6 +13011,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Manacor",
     etiqueta: "Manacor (Illes Balears)",
     zonas: [...BARRIOS_MANACOR, ...POLIGONOS_MANACOR],
+  },
+  {
+    id: "mao",
+    nombre: "Maó",
+    etiqueta: "Maó (Illes Balears)",
+    zonas: [...BARRIOS_MAO, ...POLIGONOS_MAO],
   },
 ];
 

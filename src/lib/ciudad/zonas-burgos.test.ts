@@ -257,6 +257,7 @@ describe("zonas de Burgos", () => {
       "ciutadella",
       "llucmajor",
       "manacor",
+      "mao",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4901,8 +4902,43 @@ describe("zonas de Burgos", () => {
     expect(ciudades[manacorIdx]?.label).toBe("Manacor");
     expect(ciudades[manacorIdx]?.negrita).toBeUndefined();
     expect(ciudades[manacorIdx - 1]?.label).toBe("Llucmajor");
-    expect(ciudades[manacorIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[manacorIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[manacorIdx + 1]?.label).toBe("Maó");
+    expect(ciudades[manacorIdx + 1]?.negrita).toBeUndefined();
+    const mao = ciudadUrbana("mao");
+    expect(mao?.etiqueta).toBe("Maó (Illes Balears)");
+    expect(mao?.nombre).toBe("Maó");
+    expect(zonaDeCiudad(mao!, "Binixíquer")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Maó (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Es Grau")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Camí d’en Barrotes")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Fort de l’Eau")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "S’altra Banda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Binidalí")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mao!, "Maó")).toBeNull();
+    expect(zonaDeCiudad(mao!, "POIMA (Polígono Industrial de Maó)")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      etiquetaZona(zonaDeCiudad(mao!, "POIMA (Polígono Industrial de Maó)")!)
+    ).toBe("Polígono · POIMA (Polígono Industrial de Maó)");
+    const nombresMao = mao!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMao).size).toBe(nombresMao.length);
+    expect(
+      nombresMao.filter(
+        (n) => mao!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(20);
+    expect(
+      nombresMao.filter(
+        (n) => mao!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(1);
+    const maoIdx = ciudades.findIndex((c) => c.value === "mao");
+    expect(ciudades[maoIdx]?.label).toBe("Maó");
+    expect(ciudades[maoIdx]?.negrita).toBeUndefined();
+    expect(ciudades[maoIdx - 1]?.label).toBe("Manacor");
+    expect(ciudades[maoIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[maoIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
