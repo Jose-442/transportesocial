@@ -908,7 +908,9 @@
  * Can Negre está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Cádiz: capital, detrás de Plasencia y delante de Algeciras. Los barrios de la lista y cuatro polígonos.
  * Recinto Exterior de la Zona Franca y Recinto Interior de la Zona Franca quedan los dos.
- * Algeciras: debajo de Cádiz, justo detrás de la capital y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * Algeciras: debajo de Cádiz, justo detrás de la capital y delante de Arcos de la Frontera. Los barrios de la lista y cuatro polígonos.
+ * Arcos de la Frontera: debajo de Cádiz, detrás de Algeciras y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * El Retiro y Jédula están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11773,6 +11775,31 @@ const POLIGONOS_ALGECIRAS: ZonaCiudad[] = [
   { nombre: "Parque Empresarial Bahía de Algeciras", tipo: "poligono" },
 ];
 
+const BARRIOS_ARCOS: ZonaCiudad[] = [
+  { nombre: "Barrio Alto", tipo: "barrio" },
+  { nombre: "Barrio Bajo", tipo: "barrio" },
+  { nombre: "Casco Histórico", tipo: "barrio" },
+  { nombre: "El Portichuelo", tipo: "barrio" },
+  { nombre: "El Santiscal", tipo: "barrio" },
+  { nombre: "El Retiro", tipo: "barrio" },
+  { nombre: "La Angorrilla", tipo: "barrio" },
+  { nombre: "La Verbena", tipo: "barrio" },
+  { nombre: "Las Canteras", tipo: "barrio" },
+  { nombre: "Las Nieves", tipo: "barrio" },
+  { nombre: "San Jorge", tipo: "barrio" },
+  { nombre: "Vega de los Molinos", tipo: "barrio" },
+  { nombre: "Jédula", tipo: "barrio" },
+  { nombre: "Junta de los Ríos", tipo: "barrio" },
+  { nombre: "La Perdiz", tipo: "barrio" },
+];
+
+const POLIGONOS_ARCOS: ZonaCiudad[] = [
+  { nombre: "El Peral (Parque Empresarial)", tipo: "poligono" },
+  { nombre: "Polígono · El Retiro", tipo: "poligono" },
+  { nombre: "Jadramil", tipo: "poligono" },
+  { nombre: "Polígono · Jédula", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13273,6 +13300,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Algeciras",
     etiqueta: "Algeciras (Cádiz)",
     zonas: [...BARRIOS_ALGECIRAS, ...POLIGONOS_ALGECIRAS],
+  },
+  {
+    id: "arcos",
+    nombre: "Arcos de la Frontera",
+    etiqueta: "Arcos de la Frontera (Cádiz)",
+    zonas: [...BARRIOS_ARCOS, ...POLIGONOS_ARCOS],
   },
 ];
 

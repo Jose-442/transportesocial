@@ -263,6 +263,7 @@ describe("zonas de Burgos", () => {
       "santaeularia",
       "cadiz",
       "algeciras",
+      "arcos",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5136,8 +5137,43 @@ describe("zonas de Burgos", () => {
     expect(ciudades[algecirasIdx]?.negrita).toBeUndefined();
     expect(ciudades[algecirasIdx - 1]?.label).toBe("Cádiz");
     expect(ciudades[algecirasIdx - 1]?.negrita).toBe(true);
-    expect(ciudades[algecirasIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[algecirasIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[algecirasIdx + 1]?.label).toBe("Arcos de la Frontera");
+    expect(ciudades[algecirasIdx + 1]?.negrita).toBeUndefined();
+    const arcos = ciudadUrbana("arcos");
+    expect(arcos?.etiqueta).toBe("Arcos de la Frontera (Cádiz)");
+    expect(arcos?.nombre).toBe("Arcos de la Frontera");
+    expect(zonaDeCiudad(arcos!, "Casco Histórico")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arcos!, "El Retiro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arcos!, "Jédula")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arcos!, "La Perdiz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arcos!, "Arcos de la Frontera")).toBeNull();
+    expect(zonaDeCiudad(arcos!, "El Peral (Parque Empresarial)")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(arcos!, "Polígono · El Retiro")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(arcos!, "Polígono · El Retiro")!)).toBe(
+      "Polígono · El Retiro"
+    );
+    expect(zonaDeCiudad(arcos!, "Jadramil")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(arcos!, "Polígono · Jédula")?.tipo).toBe("poligono");
+    const nombresArcos = arcos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresArcos).size).toBe(nombresArcos.length);
+    expect(
+      nombresArcos.filter(
+        (n) => arcos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(15);
+    expect(
+      nombresArcos.filter(
+        (n) => arcos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(4);
+    const arcosIdx = ciudades.findIndex((c) => c.value === "arcos");
+    expect(ciudades[arcosIdx]?.label).toBe("Arcos de la Frontera");
+    expect(ciudades[arcosIdx]?.negrita).toBeUndefined();
+    expect(ciudades[arcosIdx - 1]?.label).toBe("Algeciras");
+    expect(ciudades[arcosIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[arcosIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
