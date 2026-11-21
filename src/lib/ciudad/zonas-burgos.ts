@@ -1001,10 +1001,14 @@
  * Granadilla de Abona (casco) queda con ese nombre. Granadilla de Abona no entra aparte.
  * Polígono Industrial de Granadilla entra una sola vez. SP2-01, SP2-02, ITER, Parque Tecnológico y el puerto no entran aparte.
  * Ayuntamiento de Granadilla de Abona+3, Gobierno de Canarias+3 y polgran.com+3 son fuentes. No entran.
- * La Orotava: debajo de Santa Cruz de Tenerife, detrás de Granadilla de Abona y delante de Santander. Los barrios de la lista y un polígono.
+ * La Orotava: debajo de Santa Cruz de Tenerife, detrás de Granadilla de Abona y delante de Los Realejos. Los barrios de la lista y un polígono.
  * La Orotava (casco histórico y centro) queda con ese nombre. La Orotava no entra aparte.
  * Pinolere y Pinoleris quedan las dos. San Jerónimo es barrio. Polígono Industrial San Jerónimo es polígono.
  * El Trompo y La Villa no entran: son áreas comerciales. Ayuntamiento de La Orotava+3 y Vitalinaves+3 son fuentes. No entran.
+ * Los Realejos: debajo de Santa Cruz de Tenerife, detrás de La Orotava y delante de Santander. Los barrios de la lista y dos polígonos.
+ * Realejo Alto y Realejo Bajo quedan las dos. Los Realejos no entra como barrio.
+ * San Benito está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * La Gañanía y San Benito son dos polígonos distintos. Los Realejos+3 y occet.es+2 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -13172,6 +13176,35 @@ const POLIGONOS_LA_OROTAVA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial San Jerónimo", tipo: "poligono" },
 ];
 
+const BARRIOS_LOS_REALEJOS: ZonaCiudad[] = [
+  { nombre: "Icod el Alto", tipo: "barrio" },
+  { nombre: "La Carrera", tipo: "barrio" },
+  { nombre: "La Cartaya", tipo: "barrio" },
+  { nombre: "La Cruz Santa", tipo: "barrio" },
+  { nombre: "La Ferruja", tipo: "barrio" },
+  { nombre: "La Grimona", tipo: "barrio" },
+  { nombre: "La Higuerita", tipo: "barrio" },
+  { nombre: "La Longuera", tipo: "barrio" },
+  { nombre: "La Montañeta", tipo: "barrio" },
+  { nombre: "La Zamora", tipo: "barrio" },
+  { nombre: "Las Llanadas", tipo: "barrio" },
+  { nombre: "Palo Blanco", tipo: "barrio" },
+  { nombre: "Realejo Alto", tipo: "barrio" },
+  { nombre: "Realejo Bajo", tipo: "barrio" },
+  { nombre: "San Agustín", tipo: "barrio" },
+  { nombre: "San Benito", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San Vicente", tipo: "barrio" },
+  { nombre: "Tigaiga", tipo: "barrio" },
+  { nombre: "El Jardín", tipo: "barrio" },
+  { nombre: "El Toscal", tipo: "barrio" },
+];
+
+const POLIGONOS_LOS_REALEJOS: ZonaCiudad[] = [
+  { nombre: "La Gañanía", tipo: "poligono" },
+  { nombre: "Polígono · San Benito", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14837,6 +14870,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "La Orotava",
     etiqueta: "La Orotava (Santa Cruz de Tenerife)",
     zonas: [...BARRIOS_LA_OROTAVA, ...POLIGONOS_LA_OROTAVA],
+  },
+  {
+    id: "losrealejos",
+    nombre: "Los Realejos",
+    etiqueta: "Los Realejos (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_LOS_REALEJOS, ...POLIGONOS_LOS_REALEJOS],
   },
 ];
 

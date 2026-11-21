@@ -290,6 +290,7 @@ describe("zonas de Burgos", () => {
       "arona",
       "granadilla",
       "laorotava",
+      "losrealejos",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4813,12 +4814,49 @@ describe("zonas de Burgos", () => {
     expect(ciudades[laOrotavaIdx]?.label).toBe("La Orotava");
     expect(ciudades[laOrotavaIdx]?.negrita).toBeUndefined();
     expect(ciudades[laOrotavaIdx - 1]?.label).toBe("Granadilla de Abona");
-    expect(ciudades[laOrotavaIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[laOrotavaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[laOrotavaIdx + 1]?.label).toBe("Los Realejos");
+    expect(ciudades[laOrotavaIdx + 1]?.negrita).toBeUndefined();
+    const losRealejos = ciudadUrbana("losrealejos");
+    expect(losRealejos?.etiqueta).toBe(
+      "Los Realejos (Santa Cruz de Tenerife)"
+    );
+    expect(losRealejos?.nombre).toBe("Los Realejos");
+    expect(zonaDeCiudad(losRealejos!, "Realejo Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(losRealejos!, "Realejo Bajo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(losRealejos!, "Icod el Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(losRealejos!, "San Benito")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(losRealejos!, "Los Realejos")).toBeNull();
+    expect(zonaDeCiudad(losRealejos!, "La Gañanía")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(losRealejos!, "Polígono · San Benito")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(losRealejos!, "Polígono · San Benito")!)).toBe(
+      "Polígono · San Benito"
+    );
+    const nombresLosRealejos = losRealejos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLosRealejos).size).toBe(nombresLosRealejos.length);
+    expect(
+      nombresLosRealejos.filter(
+        (n) =>
+          losRealejos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(21);
+    expect(
+      nombresLosRealejos.filter(
+        (n) =>
+          losRealejos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const losRealejosIdx = ciudades.findIndex((c) => c.value === "losrealejos");
+    expect(ciudades[losRealejosIdx]?.label).toBe("Los Realejos");
+    expect(ciudades[losRealejosIdx]?.negrita).toBeUndefined();
+    expect(ciudades[losRealejosIdx - 1]?.label).toBe("La Orotava");
+    expect(ciudades[losRealejosIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[losRealejosIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("La Orotava");
+    expect(ciudades[santanderIdx - 1]?.label).toBe("Los Realejos");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");
