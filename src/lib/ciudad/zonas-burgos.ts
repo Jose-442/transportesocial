@@ -886,6 +886,9 @@
  * Calvià: primera de Illes Balears, detrás de Plasencia y delante de Ciudad Real. Los barrios de la lista y un polígono.
  * Calvià Vila queda con ese nombre. Calvià no entra aparte.
  * Son Bugadelles queda como polígono.
+ * Ciutadella de Menorca: debajo de Illes Balears, detrás de Calvià y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Ciutadella (casco urbano) queda con ese nombre. Ciutadella de Menorca no entra aparte.
+ * Polígono Industrial de Ciutadella (POICI) queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11446,6 +11449,25 @@ const POLIGONOS_CALVIA: ZonaCiudad[] = [
   { nombre: "Son Bugadelles", tipo: "poligono" },
 ];
 
+const BARRIOS_CIUTADELLA: ZonaCiudad[] = [
+  { nombre: "Cala Blanca", tipo: "barrio" },
+  { nombre: "Cala en Blanes", tipo: "barrio" },
+  { nombre: "Cala en Bosch", tipo: "barrio" },
+  { nombre: "Cala en Forcat", tipo: "barrio" },
+  { nombre: "Cala Morell", tipo: "barrio" },
+  { nombre: "Cap d'Artrutx", tipo: "barrio" },
+  { nombre: "Ciutadella (casco urbano)", tipo: "barrio" },
+  { nombre: "Sa Caleta", tipo: "barrio" },
+  { nombre: "Santandria", tipo: "barrio" },
+  { nombre: "Son Oleo", tipo: "barrio" },
+  { nombre: "Son Xoriguer", tipo: "barrio" },
+  { nombre: "Torre del Ram", tipo: "barrio" },
+];
+
+const POLIGONOS_CIUTADELLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Ciutadella (POICI)", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -12892,6 +12914,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Calvià",
     etiqueta: "Calvià (Illes Balears)",
     zonas: [...BARRIOS_CALVIA, ...POLIGONOS_CALVIA],
+  },
+  {
+    id: "ciutadella",
+    nombre: "Ciutadella de Menorca",
+    etiqueta: "Ciutadella de Menorca (Illes Balears)",
+    zonas: [...BARRIOS_CIUTADELLA, ...POLIGONOS_CIUTADELLA],
   },
 ];
 

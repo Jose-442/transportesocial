@@ -254,6 +254,7 @@ describe("zonas de Burgos", () => {
       "martorell",
       "santaperpetua",
       "calvia",
+      "ciutadella",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4780,8 +4781,44 @@ describe("zonas de Burgos", () => {
     expect(ciudades[calviaIdx]?.label).toBe("Calvià");
     expect(ciudades[calviaIdx]?.negrita).toBeUndefined();
     expect(ciudades[calviaIdx - 1]?.label).toBe("Plasencia");
-    expect(ciudades[calviaIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[calviaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[calviaIdx + 1]?.label).toBe("Ciutadella de Menorca");
+    expect(ciudades[calviaIdx + 1]?.negrita).toBeUndefined();
+    const ciutadella = ciudadUrbana("ciutadella");
+    expect(ciutadella?.etiqueta).toBe("Ciutadella de Menorca (Illes Balears)");
+    expect(ciutadella?.nombre).toBe("Ciutadella de Menorca");
+    expect(zonaDeCiudad(ciutadella!, "Cala Blanca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciutadella!, "Cala en Bosch")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciutadella!, "Ciutadella (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciutadella!, "Son Xoriguer")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciutadella!, "Cap d'Artrutx")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(ciutadella!, "Ciutadella de Menorca")).toBeNull();
+    expect(zonaDeCiudad(ciutadella!, "Ciutadella")).toBeNull();
+    expect(
+      zonaDeCiudad(ciutadella!, "Polígono Industrial de Ciutadella (POICI)")?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(ciutadella!, "Polígono Industrial de Ciutadella (POICI)")!
+      )
+    ).toBe("Polígono Industrial de Ciutadella (POICI)");
+    const nombresCiutadella = ciutadella!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCiutadella).size).toBe(nombresCiutadella.length);
+    expect(
+      nombresCiutadella.filter(
+        (n) => ciutadella!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(12);
+    expect(
+      nombresCiutadella.filter(
+        (n) => ciutadella!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(1);
+    const ciutadellaIdx = ciudades.findIndex((c) => c.value === "ciutadella");
+    expect(ciudades[ciutadellaIdx]?.label).toBe("Ciutadella de Menorca");
+    expect(ciudades[ciutadellaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[ciutadellaIdx - 1]?.label).toBe("Calvià");
+    expect(ciudades[ciutadellaIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[ciutadellaIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
