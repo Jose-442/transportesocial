@@ -37,6 +37,7 @@ describe("zonas de Burgos", () => {
       "ourense",
       "pontevedra",
       "aestrada",
+      "cangas",
       "vigo",
       "vilagarcia",
       "coruna",
@@ -465,6 +466,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAEstrada).size).toBe(nombresAEstrada.length);
     expect(nombresAEstrada.filter((n) => aEstrada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(51);
     expect(nombresAEstrada.filter((n) => aEstrada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const cangas = ciudadUrbana("cangas");
+    expect(cangas?.etiqueta).toBe("Cangas (Pontevedra)");
+    expect(cangas?.nombre).toBe("Cangas");
+    expect(zonaDeCiudad(cangas!, "Cangas (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cangas!, "Aldán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cangas!, "A Serra de Nacente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cangas!, "A Serra de Poente")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cangas!, "Donón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cangas!, "Cangas")).toBeNull();
+    expect(zonaDeCiudad(cangas!, "A Portela")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(cangas!, "A Portela")!)).toBe("Polígono · A Portela");
+    expect(zonaDeCiudad(cangas!, "Alto de San Cosme")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(cangas!, "Alto de San Cosme")!)).toBe("Polígono · Alto de San Cosme");
+    const nombresCangas = cangas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCangas).size).toBe(nombresCangas.length);
+    expect(nombresCangas.filter((n) => cangas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
+    expect(nombresCangas.filter((n) => cangas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const vigo = ciudadUrbana("vigo");
     expect(vigo?.etiqueta).toBe("Vigo (Pontevedra)");
     expect(zonaDeCiudad(vigo!, "Casco Vello")?.tipo).toBe("barrio");
@@ -496,7 +514,12 @@ describe("zonas de Burgos", () => {
     expect(ciudadesPontevedra[aEstradaIdx]?.negrita).toBeUndefined();
     expect(ciudadesPontevedra[aEstradaIdx - 1]?.label).toBe("Pontevedra");
     expect(ciudadesPontevedra[aEstradaIdx - 1]?.negrita).toBe(true);
-    expect(ciudadesPontevedra[aEstradaIdx + 1]?.label).toBe("Vigo");
+    expect(ciudadesPontevedra[aEstradaIdx + 1]?.label).toBe("Cangas");
+    const cangasIdx = ciudadesPontevedra.findIndex((c) => c.value === "cangas");
+    expect(ciudadesPontevedra[cangasIdx]?.label).toBe("Cangas");
+    expect(ciudadesPontevedra[cangasIdx]?.negrita).toBeUndefined();
+    expect(ciudadesPontevedra[cangasIdx - 1]?.label).toBe("A Estrada");
+    expect(ciudadesPontevedra[cangasIdx + 1]?.label).toBe("Vigo");
     const coruna = ciudadUrbana("coruna");
     expect(coruna?.etiqueta).toBe("A Coruña (A Coruña)");
     expect(zonaDeCiudad(coruna!, "Cidade Vella")?.tipo).toBe("barrio");

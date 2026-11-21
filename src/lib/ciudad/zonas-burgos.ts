@@ -60,11 +60,14 @@
  * Polígonos Balaídos y el parque tecnológico de Valadares.
  * Vilagarcía de Arousa: parroquias del nomenclátor de Galicia de 2026, más Vilaxoán.
  * Polígonos Bamio, Trabanca y O Pousadoiro.
- * A Estrada: debajo de Pontevedra, detrás de la capital y delante de Vigo. Las parroquias de la lista y los dos polígonos.
+ * A Estrada: debajo de Pontevedra, detrás de la capital y delante de Cangas. Las parroquias de la lista y los dos polígonos.
  * A Estrada (casco urbano) es el casco. A Estrada no entra aparte.
  * Ribeira es barrio. Polígono Industrial de Ribeira entra aparte.
  * Toedo es barrio. Polígono Industrial de Toedo entra aparte.
  * Parada y Paradela quedan las dos.
+ * Cangas: debajo de Pontevedra, detrás de A Estrada y delante de Vigo. Los barrios de la lista y los dos polígonos.
+ * Cangas (casco urbano) es el casco. Cangas no entra aparte.
+ * A Serra de Nacente y A Serra de Poente quedan las dos.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
  * Santiago de Compostela: zonas del Concello y parroquias del padrón.
@@ -1997,6 +2000,51 @@ const BARRIOS_A_ESTRADA: ZonaCiudad[] = [
 const POLIGONOS_A_ESTRADA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Toedo", tipo: "poligono" },
   { nombre: "Polígono Industrial de Ribeira", tipo: "poligono" },
+];
+
+const BARRIOS_CANGAS: ZonaCiudad[] = [
+  { nombre: "A Alada", tipo: "barrio" },
+  { nombre: "A Madalena", tipo: "barrio" },
+  { nombre: "A Parada", tipo: "barrio" },
+  { nombre: "A Pedreira", tipo: "barrio" },
+  { nombre: "A Retirosa", tipo: "barrio" },
+  { nombre: "A Rozada", tipo: "barrio" },
+  { nombre: "A Serra de Nacente", tipo: "barrio" },
+  { nombre: "A Serra de Poente", tipo: "barrio" },
+  { nombre: "Aldán", tipo: "barrio" },
+  { nombre: "Ameixide", tipo: "barrio" },
+  { nombre: "Arneles", tipo: "barrio" },
+  { nombre: "Balea", tipo: "barrio" },
+  { nombre: "Cangas (casco urbano)", tipo: "barrio" },
+  { nombre: "Cimadevila", tipo: "barrio" },
+  { nombre: "Cunchido", tipo: "barrio" },
+  { nombre: "Donón", tipo: "barrio" },
+  { nombre: "Erbello", tipo: "barrio" },
+  { nombre: "Gandón", tipo: "barrio" },
+  { nombre: "Liméns", tipo: "barrio" },
+  { nombre: "Menduiña", tipo: "barrio" },
+  { nombre: "Nerga", tipo: "barrio" },
+  { nombre: "O Castelo", tipo: "barrio" },
+  { nombre: "O Carballal", tipo: "barrio" },
+  { nombre: "O Cruceiro", tipo: "barrio" },
+  { nombre: "O Outeiro", tipo: "barrio" },
+  { nombre: "O Piñeiro", tipo: "barrio" },
+  { nombre: "O Seixo", tipo: "barrio" },
+  { nombre: "O Viso", tipo: "barrio" },
+  { nombre: "O Igrexario", tipo: "barrio" },
+  { nombre: "Pinténs", tipo: "barrio" },
+  { nombre: "Romarigo", tipo: "barrio" },
+  { nombre: "San Pedro", tipo: "barrio" },
+  { nombre: "San Roque do Monte", tipo: "barrio" },
+  { nombre: "Santa Marta", tipo: "barrio" },
+  { nombre: "Vilanova", tipo: "barrio" },
+  { nombre: "Vilariño", tipo: "barrio" },
+  { nombre: "Viñó", tipo: "barrio" },
+];
+
+const POLIGONOS_CANGAS: ZonaCiudad[] = [
+  { nombre: "A Portela", tipo: "poligono" },
+  { nombre: "Alto de San Cosme", tipo: "poligono" },
 ];
 
 const BARRIOS_CORUNA: ZonaCiudad[] = [
@@ -11406,6 +11454,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "A Estrada",
     etiqueta: "A Estrada (Pontevedra)",
     zonas: [...BARRIOS_A_ESTRADA, ...POLIGONOS_A_ESTRADA],
+  },
+  {
+    id: "cangas",
+    nombre: "Cangas",
+    etiqueta: "Cangas (Pontevedra)",
+    zonas: [...BARRIOS_CANGAS, ...POLIGONOS_CANGAS],
   },
   {
     id: "vigo",
