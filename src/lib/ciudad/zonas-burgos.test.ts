@@ -283,6 +283,7 @@ describe("zonas de Burgos", () => {
       "laspalmas",
       "puertorosario",
       "tirajana",
+      "santalucia",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5925,8 +5926,54 @@ describe("zonas de Burgos", () => {
     expect(ciudades[tirajanaIdx]?.label).toBe("San Bartolomé de Tirajana");
     expect(ciudades[tirajanaIdx]?.negrita).toBeUndefined();
     expect(ciudades[tirajanaIdx - 1]?.label).toBe("Puerto del Rosario");
-    expect(ciudades[tirajanaIdx + 1]?.label).toBe("León");
-    expect(ciudades[tirajanaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[tirajanaIdx + 1]?.label).toBe("Santa Lucía de Tirajana");
+    expect(ciudades[tirajanaIdx + 1]?.negrita).toBeUndefined();
+    const santaLucia = ciudadUrbana("santalucia");
+    expect(santaLucia?.etiqueta).toBe(
+      "Santa Lucía de Tirajana (Las Palmas)"
+    );
+    expect(santaLucia?.nombre).toBe("Santa Lucía de Tirajana");
+    expect(zonaDeCiudad(santaLucia!, "Vecindario")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "Santa Lucía (casco)")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(santaLucia!, "Pozo Izquierdo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "Rosiana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "Rosiana Alta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "Rosiana Baja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "El Doctoral")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaLucia!, "Santa Lucía de Tirajana")).toBeNull();
+    expect(zonaDeCiudad(santaLucia!, "El Doctoral Industrial")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(santaLucia!, "La Blanca – Zona Industrial Agrícola")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(santaLucia!, "Santa Lucía 1 Industrial")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(santaLucia!, "Parque Tecnológico de Santa Lucía")).toBeNull();
+    const nombresSantaLucia = santaLucia!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantaLucia).size).toBe(nombresSantaLucia.length);
+    expect(
+      nombresSantaLucia.filter(
+        (n) => santaLucia!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(28);
+    expect(
+      nombresSantaLucia.filter(
+        (n) =>
+          santaLucia!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const santaLuciaIdx = ciudades.findIndex((c) => c.value === "santalucia");
+    expect(ciudades[santaLuciaIdx]?.label).toBe("Santa Lucía de Tirajana");
+    expect(ciudades[santaLuciaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[santaLuciaIdx - 1]?.label).toBe(
+      "San Bartolomé de Tirajana"
+    );
+    expect(ciudades[santaLuciaIdx + 1]?.label).toBe("León");
+    expect(ciudades[santaLuciaIdx + 1]?.negrita).toBe(true);
     const lasPalmas = ciudadUrbana("laspalmas");
     expect(lasPalmas?.etiqueta).toBe(
       "Las Palmas de Gran Canaria (Las Palmas)"
@@ -5982,8 +6029,10 @@ describe("zonas de Burgos", () => {
       "San Bartolomé de Tirajana"
     );
     expect(ciudades[lasPalmasIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[lasPalmasIdx + 7]?.label).toBe("León");
-    expect(ciudades[lasPalmasIdx + 7]?.negrita).toBe(true);
+    expect(ciudades[lasPalmasIdx + 7]?.label).toBe("Santa Lucía de Tirajana");
+    expect(ciudades[lasPalmasIdx + 7]?.negrita).toBeUndefined();
+    expect(ciudades[lasPalmasIdx + 8]?.label).toBe("León");
+    expect(ciudades[lasPalmasIdx + 8]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);

@@ -971,9 +971,15 @@
  * El Matorral está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Barranco de Negrín no entra: sigue en urbanización junto a Risco Prieto.
  * Ayuntamiento de Puerto del Rosario Fuerteventura+5 es la fuente. No entra en el desplegable.
- * San Bartolomé de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de Puerto del Rosario y delante de León. Los barrios de la lista y dos polígonos.
+ * San Bartolomé de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de Puerto del Rosario y delante de Santa Lucía de Tirajana. Los barrios de la lista y dos polígonos.
  * San Bartolomé (Tunte) y Tunte quedan las dos. San Bartolomé de Tirajana no entra como barrio.
  * El Tablero es barrio. Polígono Industrial El Tablero es polígono. Juan Grande es barrio. Juan Grande Industrial es polígono.
+ * Santa Lucía de Tirajana: debajo de Las Palmas de Gran Canaria, detrás de San Bartolomé de Tirajana y delante de León. Los barrios de la lista y tres polígonos.
+ * Santa Lucía (casco) queda con ese nombre. Santa Lucía de Tirajana no entra como barrio.
+ * Rosiana, Rosiana Alta y Rosiana Baja quedan las tres.
+ * El Doctoral es barrio. El Doctoral Industrial es polígono. La Blanca es barrio. La Blanca – Zona Industrial Agrícola es polígono.
+ * El Parque Tecnológico de Santa Lucía no entra: sigue urbanizable en desarrollo.
+ * TI_V1_MEM_INF.docx+5 es la fuente. No entra en el desplegable.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12743,6 +12749,43 @@ const POLIGONOS_TIRAJANA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial El Tablero", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_LUCIA: ZonaCiudad[] = [
+  { nombre: "Balos", tipo: "barrio" },
+  { nombre: "Casa Pastores", tipo: "barrio" },
+  { nombre: "El Canario", tipo: "barrio" },
+  { nombre: "El Doctoral", tipo: "barrio" },
+  { nombre: "El Ingenio", tipo: "barrio" },
+  { nombre: "El Morisco", tipo: "barrio" },
+  { nombre: "El Mundillo", tipo: "barrio" },
+  { nombre: "El Parralillo", tipo: "barrio" },
+  { nombre: "El Rincón", tipo: "barrio" },
+  { nombre: "El Valle", tipo: "barrio" },
+  { nombre: "Ingenio de Arriba", tipo: "barrio" },
+  { nombre: "La Blanca", tipo: "barrio" },
+  { nombre: "La Carraca", tipo: "barrio" },
+  { nombre: "La Orilla Baja", tipo: "barrio" },
+  { nombre: "La Sorrueda", tipo: "barrio" },
+  { nombre: "Las Huertecillas", tipo: "barrio" },
+  { nombre: "Las Lagunas", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Los Marteles", tipo: "barrio" },
+  { nombre: "Maronda", tipo: "barrio" },
+  { nombre: "Parral Grande", tipo: "barrio" },
+  { nombre: "Pozo Izquierdo", tipo: "barrio" },
+  { nombre: "Rosiana", tipo: "barrio" },
+  { nombre: "Rosiana Alta", tipo: "barrio" },
+  { nombre: "Rosiana Baja", tipo: "barrio" },
+  { nombre: "Sardina del Sur", tipo: "barrio" },
+  { nombre: "Santa Lucía (casco)", tipo: "barrio" },
+  { nombre: "Vecindario", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_LUCIA: ZonaCiudad[] = [
+  { nombre: "El Doctoral Industrial", tipo: "poligono" },
+  { nombre: "La Blanca – Zona Industrial Agrícola", tipo: "poligono" },
+  { nombre: "Santa Lucía 1 Industrial", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14363,6 +14406,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Bartolomé de Tirajana",
     etiqueta: "San Bartolomé de Tirajana (Las Palmas)",
     zonas: [...BARRIOS_TIRAJANA, ...POLIGONOS_TIRAJANA],
+  },
+  {
+    id: "santalucia",
+    nombre: "Santa Lucía de Tirajana",
+    etiqueta: "Santa Lucía de Tirajana (Las Palmas)",
+    zonas: [...BARRIOS_SANTA_LUCIA, ...POLIGONOS_SANTA_LUCIA],
   },
 ];
 
