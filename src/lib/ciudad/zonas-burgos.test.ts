@@ -264,6 +264,7 @@ describe("zonas de Burgos", () => {
       "cadiz",
       "algeciras",
       "arcos",
+      "chiclana",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5172,8 +5173,49 @@ describe("zonas de Burgos", () => {
     expect(ciudades[arcosIdx]?.label).toBe("Arcos de la Frontera");
     expect(ciudades[arcosIdx]?.negrita).toBeUndefined();
     expect(ciudades[arcosIdx - 1]?.label).toBe("Algeciras");
-    expect(ciudades[arcosIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[arcosIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[arcosIdx + 1]?.label).toBe("Chiclana de la Frontera");
+    expect(ciudades[arcosIdx + 1]?.negrita).toBeUndefined();
+    const chiclana = ciudadUrbana("chiclana");
+    expect(chiclana?.etiqueta).toBe("Chiclana de la Frontera (Cádiz)");
+    expect(chiclana?.nombre).toBe("Chiclana de la Frontera");
+    expect(zonaDeCiudad(chiclana!, "La Barrosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(chiclana!, "Novo Sancti Petri")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(chiclana!, "Fuente Amarga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(chiclana!, "Urbisur")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(chiclana!, "Chiclana de la Frontera")).toBeNull();
+    expect(zonaDeCiudad(chiclana!, "El Torno")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(chiclana!, "El Torno")!)).toBe(
+      "Polígono · El Torno"
+    );
+    expect(zonaDeCiudad(chiclana!, "Pelagatos I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(chiclana!, "Pelagatos II (Miralrío)")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(chiclana!, "Parque Comercial e Industrial Urbisur")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(chiclana!, "Carretera Nacional 340 – Avenida del Mueble")
+        ?.tipo
+    ).toBe("poligono");
+    const nombresChiclana = chiclana!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresChiclana).size).toBe(nombresChiclana.length);
+    expect(
+      nombresChiclana.filter(
+        (n) => chiclana!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(34);
+    expect(
+      nombresChiclana.filter(
+        (n) => chiclana!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(6);
+    const chiclanaIdx = ciudades.findIndex((c) => c.value === "chiclana");
+    expect(ciudades[chiclanaIdx]?.label).toBe("Chiclana de la Frontera");
+    expect(ciudades[chiclanaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[chiclanaIdx - 1]?.label).toBe("Arcos de la Frontera");
+    expect(ciudades[chiclanaIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[chiclanaIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

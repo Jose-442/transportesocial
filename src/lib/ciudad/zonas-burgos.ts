@@ -909,8 +909,10 @@
  * Cádiz: capital, detrás de Plasencia y delante de Algeciras. Los barrios de la lista y cuatro polígonos.
  * Recinto Exterior de la Zona Franca y Recinto Interior de la Zona Franca quedan los dos.
  * Algeciras: debajo de Cádiz, justo detrás de la capital y delante de Arcos de la Frontera. Los barrios de la lista y cuatro polígonos.
- * Arcos de la Frontera: debajo de Cádiz, detrás de Algeciras y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * Arcos de la Frontera: debajo de Cádiz, detrás de Algeciras y delante de Chiclana de la Frontera. Los barrios de la lista y cuatro polígonos.
  * El Retiro y Jédula están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Chiclana de la Frontera: debajo de Cádiz, detrás de Arcos de la Frontera y delante de Ciudad Real. Los barrios de la lista y seis polígonos.
+ * Pelagatos I y Pelagatos II (Miralrío) quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11800,6 +11802,52 @@ const POLIGONOS_ARCOS: ZonaCiudad[] = [
   { nombre: "Polígono · Jédula", tipo: "poligono" },
 ];
 
+const BARRIOS_CHICLANA: ZonaCiudad[] = [
+  { nombre: "Carabina", tipo: "barrio" },
+  { nombre: "Carboneros", tipo: "barrio" },
+  { nombre: "Cerro del Moro", tipo: "barrio" },
+  { nombre: "Ciudad Jardín", tipo: "barrio" },
+  { nombre: "Costa Sancti Petri", tipo: "barrio" },
+  { nombre: "El Arenal", tipo: "barrio" },
+  { nombre: "El Castillo", tipo: "barrio" },
+  { nombre: "El Carmen", tipo: "barrio" },
+  { nombre: "El Marquesado", tipo: "barrio" },
+  { nombre: "El Pilar", tipo: "barrio" },
+  { nombre: "El Retortillo", tipo: "barrio" },
+  { nombre: "Fuente Amarga", tipo: "barrio" },
+  { nombre: "Huerta del Rosario", tipo: "barrio" },
+  { nombre: "La Barrosa", tipo: "barrio" },
+  { nombre: "La Coquina", tipo: "barrio" },
+  { nombre: "La Pedrera", tipo: "barrio" },
+  { nombre: "La Soledad", tipo: "barrio" },
+  { nombre: "Las Albinas", tipo: "barrio" },
+  { nombre: "Las Bolas", tipo: "barrio" },
+  { nombre: "Las Conejeras", tipo: "barrio" },
+  { nombre: "Las Mogarizas", tipo: "barrio" },
+  { nombre: "Los Gallos", tipo: "barrio" },
+  { nombre: "Los Esteros", tipo: "barrio" },
+  { nombre: "Novo Sancti Petri", tipo: "barrio" },
+  { nombre: "Pago del Humo", tipo: "barrio" },
+  { nombre: "Pago Melilla", tipo: "barrio" },
+  { nombre: "Pinar de los Franceses", tipo: "barrio" },
+  { nombre: "Pinar del Hierro-Espartosa", tipo: "barrio" },
+  { nombre: "Rana Verde", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Santo Cristo", tipo: "barrio" },
+  { nombre: "Solagitas", tipo: "barrio" },
+  { nombre: "Solano", tipo: "barrio" },
+  { nombre: "Urbisur", tipo: "barrio" },
+];
+
+const POLIGONOS_CHICLANA: ZonaCiudad[] = [
+  { nombre: "El Torno", tipo: "poligono" },
+  { nombre: "La Hoya", tipo: "poligono" },
+  { nombre: "Pelagatos I", tipo: "poligono" },
+  { nombre: "Pelagatos II (Miralrío)", tipo: "poligono" },
+  { nombre: "Parque Comercial e Industrial Urbisur", tipo: "poligono" },
+  { nombre: "Carretera Nacional 340 – Avenida del Mueble", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13306,6 +13354,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arcos de la Frontera",
     etiqueta: "Arcos de la Frontera (Cádiz)",
     zonas: [...BARRIOS_ARCOS, ...POLIGONOS_ARCOS],
+  },
+  {
+    id: "chiclana",
+    nombre: "Chiclana de la Frontera",
+    etiqueta: "Chiclana de la Frontera (Cádiz)",
+    zonas: [...BARRIOS_CHICLANA, ...POLIGONOS_CHICLANA],
   },
 ];
 
