@@ -286,6 +286,7 @@ describe("zonas de Burgos", () => {
       "santalucia",
       "telde",
       "santacruztenerife",
+      "adeje",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4653,12 +4654,47 @@ describe("zonas de Burgos", () => {
     expect(ciudades[santaCruzTfIdx]?.label).toBe("Santa Cruz de Tenerife");
     expect(ciudades[santaCruzTfIdx]?.negrita).toBe(true);
     expect(ciudades[santaCruzTfIdx - 1]?.label).toBe("Irun");
-    expect(ciudades[santaCruzTfIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[santaCruzTfIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[santaCruzTfIdx + 1]?.label).toBe("Adeje");
+    expect(ciudades[santaCruzTfIdx + 1]?.negrita).toBeUndefined();
+    const adeje = ciudadUrbana("adeje");
+    expect(adeje?.etiqueta).toBe("Adeje (Santa Cruz de Tenerife)");
+    expect(adeje?.nombre).toBe("Adeje");
+    expect(zonaDeCiudad(adeje!, "Adeje Casco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(adeje!, "Costa Adeje")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(adeje!, "Los Olivos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(adeje!, "Sueño Azul")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(adeje!, "Adeje")).toBeNull();
+    expect(
+      zonaDeCiudad(adeje!, "La Atalaya – Barranco de las Torres")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(adeje!, "Polígono · Los Olivos")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(adeje!, "Polígono · Los Olivos")!)).toBe(
+      "Polígono · Los Olivos"
+    );
+    const nombresAdeje = adeje!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAdeje).size).toBe(nombresAdeje.length);
+    expect(
+      nombresAdeje.filter(
+        (n) => adeje!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(29);
+    expect(
+      nombresAdeje.filter(
+        (n) => adeje!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const adejeIdx = ciudades.findIndex((c) => c.value === "adeje");
+    expect(ciudades[adejeIdx]?.label).toBe("Adeje");
+    expect(ciudades[adejeIdx]?.negrita).toBeUndefined();
+    expect(ciudades[adejeIdx - 1]?.label).toBe("Santa Cruz de Tenerife");
+    expect(ciudades[adejeIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[adejeIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("Santa Cruz de Tenerife");
+    expect(ciudades[santanderIdx - 1]?.label).toBe("Adeje");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");

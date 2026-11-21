@@ -989,6 +989,10 @@
  * Mayorazgo es barrio. El Mayorazgo (polígono industrial) es polígono. Moraditas es barrio. Las Moraditas (zona industrial) es polígono.
  * Costa Sur y El Mayorazgo son los dos polígonos propiamente dichos; el resto entran como zonas industriales.
  * Santa Cruz de Tenerife no entra como barrio. Urbanismo Santa Cruz+1 y Santa Cruz de Tenerife+2 son fuentes. No entran.
+ * Adeje: debajo de Santa Cruz de Tenerife, detrás de la capital y delante de Santander. Los barrios de la lista y dos polígonos.
+ * Adeje Casco queda con ese nombre. Adeje no entra aparte.
+ * Los Olivos está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Las fases de La Atalaya no entran aparte. Gobierno de Canarias+2 y Ayuntamiento de Adeje+1 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12989,6 +12993,43 @@ const POLIGONOS_SANTA_CRUZ_TENERIFE: ZonaCiudad[] = [
   { nombre: "Montaña de Taco (zona industrial)", tipo: "poligono" },
 ];
 
+const BARRIOS_ADEJE: ZonaCiudad[] = [
+  { nombre: "Adeje Casco", tipo: "barrio" },
+  { nombre: "Armeñime", tipo: "barrio" },
+  { nombre: "Callao Salvaje", tipo: "barrio" },
+  { nombre: "Costa Adeje", tipo: "barrio" },
+  { nombre: "El Beril", tipo: "barrio" },
+  { nombre: "El Galeón", tipo: "barrio" },
+  { nombre: "El Puertito", tipo: "barrio" },
+  { nombre: "Fañabé", tipo: "barrio" },
+  { nombre: "La Caldera", tipo: "barrio" },
+  { nombre: "La Caleta", tipo: "barrio" },
+  { nombre: "La Concepción", tipo: "barrio" },
+  { nombre: "La Postura", tipo: "barrio" },
+  { nombre: "La Quinta", tipo: "barrio" },
+  { nombre: "Las Cancelas", tipo: "barrio" },
+  { nombre: "Las Moraditas", tipo: "barrio" },
+  { nombre: "Las Nieves", tipo: "barrio" },
+  { nombre: "Las Rosas", tipo: "barrio" },
+  { nombre: "Las Torres", tipo: "barrio" },
+  { nombre: "Los Menores", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Marazul", tipo: "barrio" },
+  { nombre: "Miraverde", tipo: "barrio" },
+  { nombre: "Playa Paraíso", tipo: "barrio" },
+  { nombre: "San Eugenio", tipo: "barrio" },
+  { nombre: "Taucho", tipo: "barrio" },
+  { nombre: "Tijoco Alto", tipo: "barrio" },
+  { nombre: "Tijoco Bajo", tipo: "barrio" },
+  { nombre: "Torviscas", tipo: "barrio" },
+  { nombre: "Sueño Azul", tipo: "barrio" },
+];
+
+const POLIGONOS_ADEJE: ZonaCiudad[] = [
+  { nombre: "La Atalaya – Barranco de las Torres", tipo: "poligono" },
+  { nombre: "Polígono · Los Olivos", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14630,6 +14671,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
       ...BARRIOS_SANTA_CRUZ_TENERIFE,
       ...POLIGONOS_SANTA_CRUZ_TENERIFE,
     ],
+  },
+  {
+    id: "adeje",
+    nombre: "Adeje",
+    etiqueta: "Adeje (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_ADEJE, ...POLIGONOS_ADEJE],
   },
 ];
 
