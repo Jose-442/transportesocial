@@ -183,6 +183,9 @@
  * Tortosa: los barrios y los polígonos de la lista.
  * Calafell: los barrios y los polígonos de la lista.
  * Salou: los barrios de la lista.
+ * Vila-seca: debajo de Tarragona, detrás de Tortosa. Los barrios de la lista y los siete polígonos.
+ * Gran Indústria I y Gran Indústria II quedan las dos.
+ * Vila-seca no entra como barrio.
  * Lleida: los barrios y los polígonos de la lista.
  * Ávila: los barrios y los polígonos de la lista.
  * Salamanca: los barrios y los polígonos de la lista.
@@ -4170,6 +4173,25 @@ const BARRIOS_SALOU: ZonaCiudad[] = [
 ];
 
 const POLIGONOS_SALOU: ZonaCiudad[] = [];
+
+const BARRIOS_VILA_SECA: ZonaCiudad[] = [
+  { nombre: "El Colomí", tipo: "barrio" },
+  { nombre: "La Formiga", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "La Pineda", tipo: "barrio" },
+  { nombre: "Miramar", tipo: "barrio" },
+  { nombre: "Nucli Antic (casco antiguo)", tipo: "barrio" },
+];
+
+const POLIGONOS_VILA_SECA: ZonaCiudad[] = [
+  { nombre: "Creu de la Beguda", tipo: "poligono" },
+  { nombre: "Gran Indústria I", tipo: "poligono" },
+  { nombre: "Gran Indústria II", tipo: "poligono" },
+  { nombre: "L'Alba (Parque Tecnológico y de Servicios)", tipo: "poligono" },
+  { nombre: "L'Estació", tipo: "poligono" },
+  { nombre: "Polígono Químico Sur", tipo: "poligono" },
+  { nombre: "Zona industrial de la avenida de Ramon d'Olzina", tipo: "poligono" },
+];
 
 const BARRIOS_LLEIDA: ZonaCiudad[] = [
   { nombre: "Balàfia", tipo: "barrio" },
@@ -11890,6 +11912,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Salou",
     etiqueta: "Salou (Tarragona)",
     zonas: [...BARRIOS_SALOU, ...POLIGONOS_SALOU],
+  },
+  {
+    id: "vilaseca",
+    nombre: "Vila-seca",
+    etiqueta: "Vila-seca (Tarragona)",
+    zonas: [...BARRIOS_VILA_SECA, ...POLIGONOS_VILA_SECA],
   },
   {
     id: "lleida",

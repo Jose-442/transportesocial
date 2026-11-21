@@ -96,6 +96,7 @@ describe("zonas de Burgos", () => {
       "tortosa",
       "calafell",
       "salou",
+      "vilaseca",
       "lleida",
       "avila",
       "salamanca",
@@ -1226,6 +1227,31 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSalou).size).toBe(nombresSalou.length);
     expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(33);
     expect(nombresSalou.filter((n) => salou!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(0);
+    const vilaseca = ciudadUrbana("vilaseca");
+    expect(vilaseca?.etiqueta).toBe("Vila-seca (Tarragona)");
+    expect(vilaseca?.nombre).toBe("Vila-seca");
+    expect(zonaDeCiudad(vilaseca!, "La Pineda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilaseca!, "Nucli Antic (casco antiguo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilaseca!, "Miramar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(vilaseca!, "Vila-seca")).toBeNull();
+    expect(zonaDeCiudad(vilaseca!, "Creu de la Beguda")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilaseca!, "Gran Indústria I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(vilaseca!, "Gran Indústria II")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(vilaseca!, "L'Alba (Parque Tecnológico y de Servicios)")!)).toBe("Polígono · L'Alba (Parque Tecnológico y de Servicios)");
+    expect(zonaDeCiudad(vilaseca!, "L'Estació")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(vilaseca!, "Polígono Químico Sur")!)).toBe("Polígono Químico Sur");
+    expect(zonaDeCiudad(vilaseca!, "Zona industrial de la avenida de Ramon d'Olzina")?.tipo).toBe("poligono");
+    const nombresVilaseca = vilaseca!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVilaseca).size).toBe(nombresVilaseca.length);
+    expect(nombresVilaseca.filter((n) => vilaseca!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(6);
+    expect(nombresVilaseca.filter((n) => vilaseca!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(7);
+    const vilasecaIdx = ciudadesParaDesplegable().findIndex((c) => c.value === "vilaseca");
+    const ciudadesTarragona = ciudadesParaDesplegable();
+    expect(ciudadesTarragona[vilasecaIdx]?.label).toBe("Vila-seca");
+    expect(ciudadesTarragona[vilasecaIdx]?.negrita).toBeUndefined();
+    expect(ciudadesTarragona[vilasecaIdx - 1]?.label).toBe("Tortosa");
+    expect(ciudadesTarragona[vilasecaIdx + 1]?.label).toBe("Teruel");
+    expect(ciudadesTarragona[vilasecaIdx + 1]?.negrita).toBe(true);
     const lleida = ciudadUrbana("lleida");
     expect(lleida?.etiqueta).toBe("Lleida (Lleida)");
     expect(lleida?.nombre).toBe("Lleida");
