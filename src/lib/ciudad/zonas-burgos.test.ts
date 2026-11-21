@@ -212,6 +212,7 @@ describe("zonas de Burgos", () => {
       "xativa",
       "catarroja",
       "alaquas",
+      "castellon",
       "badajoz",
       "merida",
       "donbenito",
@@ -5468,8 +5469,49 @@ describe("zonas de Burgos", () => {
     expect(ciudades[sanlucarIdx]?.label).toBe("Sanlúcar de Barrameda");
     expect(ciudades[sanlucarIdx]?.negrita).toBeUndefined();
     expect(ciudades[sanlucarIdx - 1]?.label).toBe("San Roque");
-    expect(ciudades[sanlucarIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[sanlucarIdx + 1]?.label).toBe("Castellón de la Plana");
     expect(ciudades[sanlucarIdx + 1]?.negrita).toBe(true);
+    const castellon = ciudadUrbana("castellon");
+    expect(castellon?.etiqueta).toBe("Castellón de la Plana (Castellón)");
+    expect(castellon?.nombre).toBe("Castellón de la Plana");
+    expect(zonaDeCiudad(castellon!, "Grao (Grau)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castellon!, "Censal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castellon!, "Sensal")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castellon!, "Grupo San Agustín")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castellon!, "San Agustín")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(castellon!, "Grupo San Lorenzo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(castellon!, "San Lorenzo")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(castellon!, "Castellón de la Plana")).toBeNull();
+    expect(zonaDeCiudad(castellon!, "La Ratlla i l'Estepar")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(castellon!, "Los Cipreses (Els Ciprers)")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(castellon!, "Ciudad del Transporte")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(castellon!, "Ciudad del Transporte")!)).toBe(
+      "Polígono · Ciudad del Transporte"
+    );
+    const nombresCastellon = castellon!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCastellon).size).toBe(nombresCastellon.length);
+    expect(
+      nombresCastellon.filter(
+        (n) => castellon!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(25);
+    expect(
+      nombresCastellon.filter(
+        (n) => castellon!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(18);
+    const castellonIdx = ciudades.findIndex((c) => c.value === "castellon");
+    expect(ciudades[castellonIdx]?.label).toBe("Castellón de la Plana");
+    expect(ciudades[castellonIdx]?.negrita).toBe(true);
+    expect(ciudades[castellonIdx - 1]?.label).toBe("Sanlúcar de Barrameda");
+    expect(ciudades[castellonIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[castellonIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

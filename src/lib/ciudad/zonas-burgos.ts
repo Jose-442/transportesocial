@@ -566,6 +566,10 @@
  * Barri de Sant Vicent, Barri de San Fermín, Barri del Carme y Barri Roig quedan los cuatro.
  * El Olivar queda como barrio.
  * Polígono Industrial El Bovalar y Polígono Industrial Els Mollons quedan los dos. El Bovalar no entra como barrio.
+ * Castellón de la Plana: capital de Castellón, en negrita, detrás de Cádiz y delante de Ciudad Real. Los barrios de la lista y dieciocho polígonos.
+ * Censal y Sensal quedan las dos. Grao (Grau) queda con ese nombre.
+ * Grupo San Agustín y San Agustín quedan los dos. Grupo San Lorenzo y San Lorenzo quedan los dos.
+ * Castellón de la Plana no entra como barrio.
  * Badajoz: capital, en negrita. Los barrios del listado, las ocho pedanías y Bótoa. Los tres polígonos.
  * Cerro Gordo y Mirador de Cerro Gordo quedan los dos.
  * La U.V.A. queda como barrio. Santa Engracia también.
@@ -9824,6 +9828,55 @@ const POLIGONOS_ALAQUAS: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Els Mollons", tipo: "poligono" },
 ];
 
+const BARRIOS_CASTELLON: ZonaCiudad[] = [
+  { nombre: "Almalafa", tipo: "barrio" },
+  { nombre: "Avenida del Mar", tipo: "barrio" },
+  { nombre: "Benadresa", tipo: "barrio" },
+  { nombre: "Boera", tipo: "barrio" },
+  { nombre: "Censal", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
+  { nombre: "Crémor", tipo: "barrio" },
+  { nombre: "Estepar", tipo: "barrio" },
+  { nombre: "Grupo Lourdes", tipo: "barrio" },
+  { nombre: "Grupo Reyes", tipo: "barrio" },
+  { nombre: "Grupo San Agustín", tipo: "barrio" },
+  { nombre: "Grupo San José Obrero", tipo: "barrio" },
+  { nombre: "Grupo San Lorenzo", tipo: "barrio" },
+  { nombre: "Grupo San Marcos", tipo: "barrio" },
+  { nombre: "Grupo Santa Teresa", tipo: "barrio" },
+  { nombre: "Grupo Roquetes", tipo: "barrio" },
+  { nombre: "Grao (Grau)", tipo: "barrio" },
+  { nombre: "La Guinea", tipo: "barrio" },
+  { nombre: "La Marjalería", tipo: "barrio" },
+  { nombre: "La Plana", tipo: "barrio" },
+  { nombre: "Rafalafena", tipo: "barrio" },
+  { nombre: "Raval Universitari", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Sensal", tipo: "barrio" },
+  { nombre: "Tombatossals", tipo: "barrio" },
+];
+
+const POLIGONOS_CASTELLON: ZonaCiudad[] = [
+  { nombre: "Autopista-Sur", tipo: "poligono" },
+  { nombre: "Avenida de Valencia", tipo: "poligono" },
+  { nombre: "Basala i la Residencia", tipo: "poligono" },
+  { nombre: "Ciudad del Transporte", tipo: "poligono" },
+  { nombre: "El Serrallo", tipo: "poligono" },
+  { nombre: "Fadrell", tipo: "poligono" },
+  { nombre: "Giner", tipo: "poligono" },
+  { nombre: "Gros", tipo: "poligono" },
+  { nombre: "La Magdalena", tipo: "poligono" },
+  { nombre: "La Ratlla i l'Estepar", tipo: "poligono" },
+  { nombre: "Los Cipreses (Els Ciprers)", tipo: "poligono" },
+  { nombre: "PERI 11", tipo: "poligono" },
+  { nombre: "Pi Gros", tipo: "poligono" },
+  { nombre: "Plataforma Logística", tipo: "poligono" },
+  { nombre: "Pullman", tipo: "poligono" },
+  { nombre: "Ronda Sur", tipo: "poligono" },
+  { nombre: "San Agustín", tipo: "poligono" },
+  { nombre: "San Lorenzo", tipo: "poligono" },
+];
+
 const BARRIOS_BADAJOZ: ZonaCiudad[] = [
   { nombre: "Antonio Domínguez", tipo: "barrio" },
   { nombre: "Barriada de Llera", tipo: "barrio" },
@@ -13353,6 +13406,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     zonas: [...BARRIOS_ALAQUAS, ...POLIGONOS_ALAQUAS],
   },
   {
+    id: "castellon",
+    nombre: "Castellón de la Plana",
+    etiqueta: "Castellón de la Plana (Castellón)",
+    zonas: [...BARRIOS_CASTELLON, ...POLIGONOS_CASTELLON],
+  },
+  {
     id: "badajoz",
     nombre: "Badajoz",
     etiqueta: "Badajoz (Badajoz)",
@@ -13729,6 +13788,7 @@ const CAPITAL_DE_PROVINCIA: Record<string, string> = {
   Asturias: "Oviedo",
   Bizkaia: "Bilbao",
   Cantabria: "Santander",
+  Castellón: "Castellón de la Plana",
   Gipuzkoa: "San Sebastián",
   "Illes Balears": "Palma",
   "La Rioja": "Logroño",
