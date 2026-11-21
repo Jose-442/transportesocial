@@ -947,18 +947,23 @@
  * Sanlúcar de Barrameda: debajo de Cádiz, detrás de San Roque y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
  * La Gallarda y Las Palmeras están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Sanlúcar de Barrameda no entra como barrio.
- * Agüimes: Las Palmas, detrás de A Coruña y delante de Arucas. Los barrios de la lista y dos polígonos.
+ * Las Palmas de Gran Canaria: capital de Las Palmas, en negrita, detrás de Jaén y delante de León. Los barrios de la lista y ocho polígonos.
+ * Barranco Seco, Escaleritas y Miller Bajo están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Las Torres – Lomo Blanco queda como una sola zona industrial.
+ * Ayuntamiento de Las Palmas+3 y Ayuntamiento de Las Palmas+2 son fuentes. No entran en el desplegable.
+ * Las Palmas de Gran Canaria no entra como barrio.
+ * Agüimes: debajo de Las Palmas de Gran Canaria, detrás de la capital y delante de Arucas. Los barrios de la lista y dos polígonos.
  * Agüimes (casco) queda con ese nombre. Agüimes no entra aparte.
  * Polígono Residencial de Arinaga es barrio. Polígono Industrial de Arinaga es polígono.
  * Espinales (Los) es barrio. Espinales Industrial es polígono.
- * Arucas: Las Palmas, detrás de Agüimes y delante de Ingenio. Los barrios de la lista. Sin polígonos.
+ * Arucas: debajo de Las Palmas de Gran Canaria, detrás de Agüimes y delante de Ingenio. Los barrios de la lista. Sin polígonos.
  * Arucas (casco) queda con ese nombre. Arucas no entra aparte.
  * El Portichuelo, Hoya López y Rosa Silva entran. Montaña Blanca entra una sola vez.
- * Ingenio: Las Palmas, detrás de Arucas y delante de La Oliva. Los barrios de la lista y tres polígonos.
+ * Ingenio: debajo de Las Palmas de Gran Canaria, detrás de Arucas y delante de La Oliva. Los barrios de la lista y tres polígonos.
  * Ingenio (casco urbano) queda con ese nombre. Ingenio no entra aparte.
  * La Pasadilla y Pasadilla quedan las dos. Las Majoreras es barrio. Las Majoreras – Lomo el Cardón es polígono.
  * transparencia.ingenio.es+5 es la fuente. No entra en el desplegable.
- * La Oliva: Las Palmas, detrás de Ingenio y delante de Albacete. Los barrios de la lista y dos polígonos.
+ * La Oliva: debajo de Las Palmas de Gran Canaria, detrás de Ingenio y delante de León. Los barrios de la lista y dos polígonos.
  * La Oliva (casco) queda con ese nombre. La Oliva no entra aparte.
  * El Cotillo (Tostón) queda con ese nombre.
  */
@@ -12528,6 +12533,126 @@ const POLIGONOS_LA_OLIVA: ZonaCiudad[] = [
   { nombre: "SAU PSI-2 La Oliva", tipo: "poligono" },
 ];
 
+const BARRIOS_LAS_PALMAS: ZonaCiudad[] = [
+  { nombre: "Alcaravaneras", tipo: "barrio" },
+  { nombre: "Almatriche", tipo: "barrio" },
+  { nombre: "Altavista", tipo: "barrio" },
+  { nombre: "Bandama", tipo: "barrio" },
+  { nombre: "Barranco Seco", tipo: "barrio" },
+  { nombre: "Barranquillo Don Zoilo", tipo: "barrio" },
+  { nombre: "Barracones de Pedro Hidalgo", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Canalejas", tipo: "barrio" },
+  { nombre: "Carretera de Chile", tipo: "barrio" },
+  { nombre: "Carretera de Mata", tipo: "barrio" },
+  { nombre: "Casablanca I", tipo: "barrio" },
+  { nombre: "Casablanca III", tipo: "barrio" },
+  { nombre: "Casa Ayala", tipo: "barrio" },
+  { nombre: "Cueva Torres", tipo: "barrio" },
+  { nombre: "Cruz de Piedra", tipo: "barrio" },
+  { nombre: "Cuesta Blanca", tipo: "barrio" },
+  { nombre: "Cuesta Ramón", tipo: "barrio" },
+  { nombre: "Dragonal Alto", tipo: "barrio" },
+  { nombre: "Dragonal Bajo", tipo: "barrio" },
+  { nombre: "El Batán", tipo: "barrio" },
+  { nombre: "El Cardón", tipo: "barrio" },
+  { nombre: "El Confital", tipo: "barrio" },
+  { nombre: "El Fondillo", tipo: "barrio" },
+  { nombre: "El Lasso", tipo: "barrio" },
+  { nombre: "El Polvorín", tipo: "barrio" },
+  { nombre: "El Roque", tipo: "barrio" },
+  { nombre: "El Román", tipo: "barrio" },
+  { nombre: "El Secadero", tipo: "barrio" },
+  { nombre: "El Toscón", tipo: "barrio" },
+  { nombre: "El Zardo", tipo: "barrio" },
+  { nombre: "Escaleritas", tipo: "barrio" },
+  { nombre: "Fase III del Polígono de Jinámar", tipo: "barrio" },
+  { nombre: "Fincas Unidas", tipo: "barrio" },
+  { nombre: "Guanarteme", tipo: "barrio" },
+  { nombre: "Hoya Andrea", tipo: "barrio" },
+  { nombre: "Hoya de la Plata", tipo: "barrio" },
+  { nombre: "Hoya de Parrado", tipo: "barrio" },
+  { nombre: "La Calzada", tipo: "barrio" },
+  { nombre: "La Galera", tipo: "barrio" },
+  { nombre: "La Isleta", tipo: "barrio" },
+  { nombre: "La Matula", tipo: "barrio" },
+  { nombre: "La Milagrosa", tipo: "barrio" },
+  { nombre: "La Montañeta", tipo: "barrio" },
+  { nombre: "La Paterna", tipo: "barrio" },
+  { nombre: "La Suerte", tipo: "barrio" },
+  { nombre: "Ladera Alta", tipo: "barrio" },
+  { nombre: "Las Canteras", tipo: "barrio" },
+  { nombre: "Las Coloradas", tipo: "barrio" },
+  { nombre: "Las Filipinas", tipo: "barrio" },
+  { nombre: "Las Majadillas", tipo: "barrio" },
+  { nombre: "Las Mesas", tipo: "barrio" },
+  { nombre: "Las Perreras", tipo: "barrio" },
+  { nombre: "Las Ramblas", tipo: "barrio" },
+  { nombre: "Las Rehoyas", tipo: "barrio" },
+  { nombre: "Las Torres", tipo: "barrio" },
+  { nombre: "Lomo Apolinario", tipo: "barrio" },
+  { nombre: "Lomo Blanco", tipo: "barrio" },
+  { nombre: "Lomo del Capón", tipo: "barrio" },
+  { nombre: "Lomo del Sabinal", tipo: "barrio" },
+  { nombre: "Lomo los Frailes", tipo: "barrio" },
+  { nombre: "Los Giles", tipo: "barrio" },
+  { nombre: "Los Hoyos", tipo: "barrio" },
+  { nombre: "Los Lirios", tipo: "barrio" },
+  { nombre: "Lugo", tipo: "barrio" },
+  { nombre: "Marzagán", tipo: "barrio" },
+  { nombre: "Mirador del Atlántico", tipo: "barrio" },
+  { nombre: "Mirador del Valle", tipo: "barrio" },
+  { nombre: "Miller Bajo", tipo: "barrio" },
+  { nombre: "Monte Quemado", tipo: "barrio" },
+  { nombre: "Nueva Isleta", tipo: "barrio" },
+  { nombre: "Nueva Paterna", tipo: "barrio" },
+  { nombre: "Parque Atlántico", tipo: "barrio" },
+  { nombre: "Parque Central", tipo: "barrio" },
+  { nombre: "Pedro Hidalgo", tipo: "barrio" },
+  { nombre: "Pico Viento", tipo: "barrio" },
+  { nombre: "Piletas", tipo: "barrio" },
+  { nombre: "Polígono Residencial Cruz de Piedra", tipo: "barrio" },
+  { nombre: "Salto del Negro", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Cristóbal", tipo: "barrio" },
+  { nombre: "San Francisco", tipo: "barrio" },
+  { nombre: "San Francisco de Paula", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Lorenzo", tipo: "barrio" },
+  { nombre: "San Nicolás", tipo: "barrio" },
+  { nombre: "San Roque", tipo: "barrio" },
+  { nombre: "Santa Catalina", tipo: "barrio" },
+  { nombre: "Schamann", tipo: "barrio" },
+  { nombre: "Siete Puertas", tipo: "barrio" },
+  { nombre: "Siete Palmas", tipo: "barrio" },
+  { nombre: "Tafira Alta", tipo: "barrio" },
+  { nombre: "Tafira Baja", tipo: "barrio" },
+  { nombre: "Tamaraceite", tipo: "barrio" },
+  { nombre: "Tarahales", tipo: "barrio" },
+  { nombre: "Tenoya", tipo: "barrio" },
+  { nombre: "Tres Palmas", tipo: "barrio" },
+  { nombre: "Triana", tipo: "barrio" },
+  { nombre: "Urbanización Cinco Continentes", tipo: "barrio" },
+  { nombre: "Urbanización de 60 viviendas", tipo: "barrio" },
+  { nombre: "Urbanización Sansofé", tipo: "barrio" },
+  { nombre: "Vega de San José", tipo: "barrio" },
+  { nombre: "Vegueta", tipo: "barrio" },
+  { nombre: "Zárate", tipo: "barrio" },
+  { nombre: "Zurbarán", tipo: "barrio" },
+];
+
+const POLIGONOS_LAS_PALMAS: ZonaCiudad[] = [
+  { nombre: "Polígono · Barranco Seco", tipo: "poligono" },
+  { nombre: "Díaz Casanova (Vista Hermosa)", tipo: "poligono" },
+  { nombre: "El Sebadal", tipo: "poligono" },
+  { nombre: "Polígono · Escaleritas", tipo: "poligono" },
+  { nombre: "La Cazuela", tipo: "poligono" },
+  { nombre: "Las Torres – Lomo Blanco", tipo: "poligono" },
+  { nombre: "Los Tarahales", tipo: "poligono" },
+  { nombre: "Polígono · Miller Bajo", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14131,6 +14256,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     etiqueta: "La Oliva (Las Palmas)",
     zonas: [...BARRIOS_LA_OLIVA, ...POLIGONOS_LA_OLIVA],
   },
+  {
+    id: "laspalmas",
+    nombre: "Las Palmas de Gran Canaria",
+    etiqueta: "Las Palmas de Gran Canaria (Las Palmas)",
+    zonas: [...BARRIOS_LAS_PALMAS, ...POLIGONOS_LAS_PALMAS],
+  },
 ];
 
 export function ciudadUrbana(id: string): CiudadUrbana | null {
@@ -14158,6 +14289,7 @@ const CAPITAL_DE_PROVINCIA: Record<string, string> = {
   Gipuzkoa: "San Sebastián",
   "Illes Balears": "Palma",
   "La Rioja": "Logroño",
+  "Las Palmas": "Las Palmas de Gran Canaria",
   Navarra: "Pamplona",
 };
 

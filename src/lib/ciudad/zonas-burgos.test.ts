@@ -280,6 +280,7 @@ describe("zonas de Burgos", () => {
       "arucas",
       "ingenio",
       "laoliva",
+      "laspalmas",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5732,7 +5733,8 @@ describe("zonas de Burgos", () => {
     const aguimesIdx = ciudades.findIndex((c) => c.value === "aguimes");
     expect(ciudades[aguimesIdx]?.label).toBe("Agüimes");
     expect(ciudades[aguimesIdx]?.negrita).toBeUndefined();
-    expect(ciudades[aguimesIdx - 1]?.label).toBe("Santiago de Compostela");
+    expect(ciudades[aguimesIdx - 1]?.label).toBe("Las Palmas de Gran Canaria");
+    expect(ciudades[aguimesIdx - 1]?.negrita).toBe(true);
     expect(ciudades[aguimesIdx + 1]?.label).toBe("Arucas");
     expect(ciudades[aguimesIdx + 1]?.negrita).toBeUndefined();
     const arucas = ciudadUrbana("arucas");
@@ -5834,12 +5836,63 @@ describe("zonas de Burgos", () => {
     expect(ciudades[laOlivaIdx]?.label).toBe("La Oliva");
     expect(ciudades[laOlivaIdx]?.negrita).toBeUndefined();
     expect(ciudades[laOlivaIdx - 1]?.label).toBe("Ingenio");
-    expect(ciudades[laOlivaIdx + 1]?.label).toBe("Albacete");
+    expect(ciudades[laOlivaIdx + 1]?.label).toBe("León");
     expect(ciudades[laOlivaIdx + 1]?.negrita).toBe(true);
+    const lasPalmas = ciudadUrbana("laspalmas");
+    expect(lasPalmas?.etiqueta).toBe(
+      "Las Palmas de Gran Canaria (Las Palmas)"
+    );
+    expect(lasPalmas?.nombre).toBe("Las Palmas de Gran Canaria");
+    expect(zonaDeCiudad(lasPalmas!, "Vegueta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Triana")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Las Canteras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Barranco Seco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Escaleritas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Miller Bajo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lasPalmas!, "Las Palmas de Gran Canaria")).toBeNull();
+    expect(zonaDeCiudad(lasPalmas!, "Polígono · Barranco Seco")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(lasPalmas!, "Polígono · Escaleritas")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(lasPalmas!, "Polígono · Miller Bajo")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(lasPalmas!, "Díaz Casanova (Vista Hermosa)")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(lasPalmas!, "Las Torres – Lomo Blanco")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(lasPalmas!, "El Sebadal")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(lasPalmas!, "Polígono · Barranco Seco")!)).toBe(
+      "Polígono · Barranco Seco"
+    );
+    const nombresLasPalmas = lasPalmas!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLasPalmas).size).toBe(nombresLasPalmas.length);
+    expect(
+      nombresLasPalmas.filter(
+        (n) => lasPalmas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(106);
+    expect(
+      nombresLasPalmas.filter(
+        (n) => lasPalmas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(8);
+    const lasPalmasIdx = ciudades.findIndex((c) => c.value === "laspalmas");
+    expect(ciudades[lasPalmasIdx]?.label).toBe("Las Palmas de Gran Canaria");
+    expect(ciudades[lasPalmasIdx]?.negrita).toBe(true);
+    expect(ciudades[lasPalmasIdx - 1]?.label).toBe("Úbeda");
+    expect(ciudades[lasPalmasIdx + 1]?.label).toBe("Agüimes");
+    expect(ciudades[lasPalmasIdx + 1]?.negrita).toBeUndefined();
+    expect(ciudades[lasPalmasIdx + 5]?.label).toBe("León");
+    expect(ciudades[lasPalmasIdx + 5]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
-    expect(ciudades[albaceteIdx - 1]?.label).toBe("La Oliva");
+    expect(ciudades[albaceteIdx - 1]?.label).toBe("Santiago de Compostela");
     expect(ciudades[albaceteIdx + 1]?.label).toBe("Hellín");
     expect(ciudades[albaceteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[albaceteIdx + 2]?.label).toBe("Alicante");
@@ -5889,6 +5942,8 @@ describe("zonas de Burgos", () => {
     expect(ciudades[jaenIdx + 2]?.negrita).toBeUndefined();
     expect(ciudades[jaenIdx + 3]?.label).toBe("Úbeda");
     expect(ciudades[jaenIdx + 3]?.negrita).toBeUndefined();
+    expect(ciudades[jaenIdx + 4]?.label).toBe("Las Palmas de Gran Canaria");
+    expect(ciudades[jaenIdx + 4]?.negrita).toBe(true);
     const granadaIdx = ciudades.findIndex((c) => c.value === "granada");
     expect(ciudades[granadaIdx]?.label).toBe("Granada");
     expect(ciudades[granadaIdx]?.negrita).toBe(true);
