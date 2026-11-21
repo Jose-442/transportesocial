@@ -984,6 +984,11 @@
  * El Goro y Jinámar están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * El Goro II y El Goro III quedan los dos. Salinetas es barrio. Las Salinetas es polígono.
  * Telde no entra como barrio. Ayuntamiento de Telde+1 y Ayuntamiento de Telde+6 son fuentes. No entran.
+ * Santa Cruz de Tenerife: capital de Santa Cruz de Tenerife, en negrita, detrás de San Sebastián y delante de Santander. Los barrios de la lista y doce polígonos.
+ * Chamberí y Cueva Bermeja están en barrio y en zona industrial, con nombre distinto en el polígono.
+ * Mayorazgo es barrio. El Mayorazgo (polígono industrial) es polígono. Moraditas es barrio. Las Moraditas (zona industrial) es polígono.
+ * Costa Sur y El Mayorazgo son los dos polígonos propiamente dichos; el resto entran como zonas industriales.
+ * Santa Cruz de Tenerife no entra como barrio. Urbanismo Santa Cruz+1 y Santa Cruz de Tenerife+2 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12884,6 +12889,106 @@ const POLIGONOS_TELDE: ZonaCiudad[] = [
   { nombre: "Silva", tipo: "poligono" },
 ];
 
+const BARRIOS_SANTA_CRUZ_TENERIFE: ZonaCiudad[] = [
+  { nombre: "Acorán", tipo: "barrio" },
+  { nombre: "Afur", tipo: "barrio" },
+  { nombre: "Alisios", tipo: "barrio" },
+  { nombre: "Almáciga", tipo: "barrio" },
+  { nombre: "Añaza", tipo: "barrio" },
+  { nombre: "Barrio Nuevo", tipo: "barrio" },
+  { nombre: "Barranco Grande", tipo: "barrio" },
+  { nombre: "Benijo", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "Buenos Aires", tipo: "barrio" },
+  { nombre: "Camino del Hierro", tipo: "barrio" },
+  { nombre: "Casas de la Cumbre", tipo: "barrio" },
+  { nombre: "Catalanes", tipo: "barrio" },
+  { nombre: "César Casariego", tipo: "barrio" },
+  { nombre: "Chamberí", tipo: "barrio" },
+  { nombre: "Chamorga", tipo: "barrio" },
+  { nombre: "Chapatal", tipo: "barrio" },
+  { nombre: "Chimisay", tipo: "barrio" },
+  { nombre: "Cruz del Señor", tipo: "barrio" },
+  { nombre: "Cuatro Torres", tipo: "barrio" },
+  { nombre: "Cuesta de Piedra", tipo: "barrio" },
+  { nombre: "Cueva Bermeja", tipo: "barrio" },
+  { nombre: "El Bailadero", tipo: "barrio" },
+  { nombre: "El Cabo", tipo: "barrio" },
+  { nombre: "El Chorrillo", tipo: "barrio" },
+  { nombre: "El Draguillo", tipo: "barrio" },
+  { nombre: "El Perú", tipo: "barrio" },
+  { nombre: "El Rosarito", tipo: "barrio" },
+  { nombre: "El Suculum", tipo: "barrio" },
+  { nombre: "El Sobradillo", tipo: "barrio" },
+  { nombre: "El Tablero", tipo: "barrio" },
+  { nombre: "Finca La Multa", tipo: "barrio" },
+  { nombre: "García Escámez", tipo: "barrio" },
+  { nombre: "Ifara", tipo: "barrio" },
+  { nombre: "Igueste de San Andrés", tipo: "barrio" },
+  { nombre: "Juan XXIII", tipo: "barrio" },
+  { nombre: "La Alegría", tipo: "barrio" },
+  { nombre: "La Gallega", tipo: "barrio" },
+  { nombre: "La Salle", tipo: "barrio" },
+  { nombre: "La Salud", tipo: "barrio" },
+  { nombre: "La Victoria", tipo: "barrio" },
+  { nombre: "Las Acacias", tipo: "barrio" },
+  { nombre: "Las Cabritas", tipo: "barrio" },
+  { nombre: "Las Delicias", tipo: "barrio" },
+  { nombre: "Las Mimosas", tipo: "barrio" },
+  { nombre: "Las Retamas", tipo: "barrio" },
+  { nombre: "Llano del Moro", tipo: "barrio" },
+  { nombre: "Lomo de las Bodegas-La Cumbrilla", tipo: "barrio" },
+  { nombre: "Los Campitos", tipo: "barrio" },
+  { nombre: "Los Gladiolos", tipo: "barrio" },
+  { nombre: "Los Hoteles", tipo: "barrio" },
+  { nombre: "Los Lavaderos", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "María Jiménez", tipo: "barrio" },
+  { nombre: "Mayorazgo", tipo: "barrio" },
+  { nombre: "Miramar", tipo: "barrio" },
+  { nombre: "Moraditas", tipo: "barrio" },
+  { nombre: "Nuevo Obrero", tipo: "barrio" },
+  { nombre: "Roque Negro", tipo: "barrio" },
+  { nombre: "Salamanca", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Pío X", tipo: "barrio" },
+  { nombre: "San Sebastián", tipo: "barrio" },
+  { nombre: "Santa Clara", tipo: "barrio" },
+  { nombre: "Santa María del Mar", tipo: "barrio" },
+  { nombre: "Somosierra", tipo: "barrio" },
+  { nombre: "Taborno", tipo: "barrio" },
+  { nombre: "Taganana", tipo: "barrio" },
+  { nombre: "Tíncer", tipo: "barrio" },
+  { nombre: "Tío Pino", tipo: "barrio" },
+  { nombre: "Toscal", tipo: "barrio" },
+  { nombre: "Tristán", tipo: "barrio" },
+  { nombre: "Urbanización Anaga", tipo: "barrio" },
+  { nombre: "Uruguay", tipo: "barrio" },
+  { nombre: "Valle Tahodio", tipo: "barrio" },
+  { nombre: "Valleseco", tipo: "barrio" },
+  { nombre: "Villa Ascensión", tipo: "barrio" },
+  { nombre: "Villa Benítez", tipo: "barrio" },
+  { nombre: "Vistabella", tipo: "barrio" },
+  { nombre: "Zona Centro", tipo: "barrio" },
+  { nombre: "Zona Rambla", tipo: "barrio" },
+];
+
+const POLIGONOS_SANTA_CRUZ_TENERIFE: ZonaCiudad[] = [
+  { nombre: "Chamberí (zona industrial)", tipo: "poligono" },
+  { nombre: "Costa Sur (polígono industrial)", tipo: "poligono" },
+  { nombre: "Cueva Bermeja (zona industrial)", tipo: "poligono" },
+  { nombre: "Dársena Norte-Puerto (zona industrial portuaria)", tipo: "poligono" },
+  { nombre: "El Mayorazgo (polígono industrial)", tipo: "poligono" },
+  { nombre: "El Molino (zona industrial)", tipo: "poligono" },
+  { nombre: "El Pilar (zona industrial)", tipo: "poligono" },
+  { nombre: "Jagua (zona industrial)", tipo: "poligono" },
+  { nombre: "La Cervera (zona industrial)", tipo: "poligono" },
+  { nombre: "Las Moraditas (zona industrial)", tipo: "poligono" },
+  { nombre: "Mercatenerife (zona industrial)", tipo: "poligono" },
+  { nombre: "Montaña de Taco (zona industrial)", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14516,6 +14621,15 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Telde",
     etiqueta: "Telde (Las Palmas)",
     zonas: [...BARRIOS_TELDE, ...POLIGONOS_TELDE],
+  },
+  {
+    id: "santacruztenerife",
+    nombre: "Santa Cruz de Tenerife",
+    etiqueta: "Santa Cruz de Tenerife (Santa Cruz de Tenerife)",
+    zonas: [
+      ...BARRIOS_SANTA_CRUZ_TENERIFE,
+      ...POLIGONOS_SANTA_CRUZ_TENERIFE,
+    ],
   },
 ];
 

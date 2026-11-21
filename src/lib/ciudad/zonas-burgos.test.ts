@@ -285,6 +285,7 @@ describe("zonas de Burgos", () => {
       "tirajana",
       "santalucia",
       "telde",
+      "santacruztenerife",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4593,9 +4594,71 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.label).toBe("Aranda de Duero");
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
+    const santaCruzTenerife = ciudadUrbana("santacruztenerife");
+    expect(santaCruzTenerife?.etiqueta).toBe(
+      "Santa Cruz de Tenerife (Santa Cruz de Tenerife)"
+    );
+    expect(santaCruzTenerife?.nombre).toBe("Santa Cruz de Tenerife");
+    expect(zonaDeCiudad(santaCruzTenerife!, "Añaza")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaCruzTenerife!, "Chamberí")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaCruzTenerife!, "Cueva Bermeja")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(santaCruzTenerife!, "Mayorazgo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaCruzTenerife!, "Moraditas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(santaCruzTenerife!, "Zona Centro")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(santaCruzTenerife!, "Santa Cruz de Tenerife")).toBeNull();
+    expect(
+      zonaDeCiudad(santaCruzTenerife!, "Chamberí (zona industrial)")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(santaCruzTenerife!, "Costa Sur (polígono industrial)")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(santaCruzTenerife!, "Cueva Bermeja (zona industrial)")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(santaCruzTenerife!, "El Mayorazgo (polígono industrial)")
+        ?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(santaCruzTenerife!, "Las Moraditas (zona industrial)")?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(santaCruzTenerife!, "Costa Sur (polígono industrial)")!
+      )
+    ).toBe("Polígono · Costa Sur (polígono industrial)");
+    const nombresSantaCruzTf = santaCruzTenerife!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSantaCruzTf).size).toBe(nombresSantaCruzTf.length);
+    expect(
+      nombresSantaCruzTf.filter(
+        (n) =>
+          santaCruzTenerife!.zonas.find((z) => z.nombre === n)?.tipo ===
+          "barrio"
+      ).length
+    ).toBe(82);
+    expect(
+      nombresSantaCruzTf.filter(
+        (n) =>
+          santaCruzTenerife!.zonas.find((z) => z.nombre === n)?.tipo ===
+          "poligono"
+      ).length
+    ).toBe(12);
+    const santaCruzTfIdx = ciudades.findIndex(
+      (c) => c.value === "santacruztenerife"
+    );
+    expect(ciudades[santaCruzTfIdx]?.label).toBe("Santa Cruz de Tenerife");
+    expect(ciudades[santaCruzTfIdx]?.negrita).toBe(true);
+    expect(ciudades[santaCruzTfIdx - 1]?.label).toBe("Irun");
+    expect(ciudades[santaCruzTfIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[santaCruzTfIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
+    expect(ciudades[santanderIdx - 1]?.label).toBe("Santa Cruz de Tenerife");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");
