@@ -287,6 +287,9 @@
  * Alhaurín de la Torre: los barrios y los polígonos de la lista.
  * Alhaurín el Grande: debajo de Málaga, detrás de Alhaurín de la Torre y delante de Antequera. Los barrios de la lista y los dos polígonos.
  * Alhaurín el Grande no entra como barrio.
+ * Cártama: debajo de Málaga, detrás de Benalmádena y delante de Estepona. Los barrios de la lista y los dos polígonos.
+ * Aljaima y Nueva Aljaima quedan los dos.
+ * Cártama no entra como barrio.
  * Antequera: los barrios, los núcleos rurales y los polígonos de la lista.
  * Villanueva de Cauche y Los Nogales entran una sola vez.
  * Ronda: los barrios, las pedanías y los polígonos de la lista.
@@ -6986,6 +6989,24 @@ const POLIGONOS_BENALMADENA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial La Léala", tipo: "poligono" },
 ];
 
+const BARRIOS_CARTAMA: ZonaCiudad[] = [
+  { nombre: "Aljaima", tipo: "barrio" },
+  { nombre: "Cártama Pueblo", tipo: "barrio" },
+  { nombre: "Cártama Estación", tipo: "barrio" },
+  { nombre: "Doñana", tipo: "barrio" },
+  { nombre: "El Sexmo", tipo: "barrio" },
+  { nombre: "Nueva Aljaima", tipo: "barrio" },
+  { nombre: "Sierra de Gibralgalia", tipo: "barrio" },
+  { nombre: "Sierra Llana", tipo: "barrio" },
+  { nombre: "Tres Leguas", tipo: "barrio" },
+  { nombre: "Atalaya de Cártama", tipo: "barrio" },
+];
+
+const POLIGONOS_CARTAMA: ZonaCiudad[] = [
+  { nombre: "El Cerro", tipo: "poligono" },
+  { nombre: "Fahala", tipo: "poligono" },
+];
+
 const BARRIOS_TORREMOLINOS: ZonaCiudad[] = [
   { nombre: "Altos del Olivar", tipo: "barrio" },
   { nombre: "Altos del Toril", tipo: "barrio" },
@@ -11925,6 +11946,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Benalmádena",
     etiqueta: "Benalmádena (Málaga)",
     zonas: [...BARRIOS_BENALMADENA, ...POLIGONOS_BENALMADENA],
+  },
+  {
+    id: "cartama",
+    nombre: "Cártama",
+    etiqueta: "Cártama (Málaga)",
+    zonas: [...BARRIOS_CARTAMA, ...POLIGONOS_CARTAMA],
   },
   {
     id: "torremolinos",
