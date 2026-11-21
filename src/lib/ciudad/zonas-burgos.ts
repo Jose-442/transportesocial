@@ -68,9 +68,11 @@
  * Cangas: debajo de Pontevedra, detrás de A Estrada y delante de Lalín. Los barrios de la lista y los dos polígonos.
  * Cangas (casco urbano) es el casco. Cangas no entra aparte.
  * A Serra de Nacente y A Serra de Poente quedan las dos.
- * Lalín: debajo de Pontevedra, detrás de Cangas y delante de Vigo. Los barrios de la lista y las dos áreas industriales.
+ * Lalín: debajo de Pontevedra, detrás de Cangas y delante de Marín. Los barrios de la lista y las dos áreas industriales.
  * Lalín (casco urbano) es el casco. Lalín no entra aparte.
  * Botos es barrio. Polígono Industrial de Botos entra aparte.
+ * Marín: debajo de Pontevedra, detrás de Lalín y delante de Vigo. Los barrios de la lista y la zona industrial del puerto.
+ * Marín no entra como barrio.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
  * Santiago de Compostela: zonas del Concello y parroquias del padrón.
@@ -2073,6 +2075,32 @@ const BARRIOS_LALIN: ZonaCiudad[] = [
 const POLIGONOS_LALIN: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Botos", tipo: "poligono" },
   { nombre: "Parque Empresarial Lalín 2000", tipo: "poligono" },
+];
+
+const BARRIOS_MARIN: ZonaCiudad[] = [
+  { nombre: "A Cañota", tipo: "barrio" },
+  { nombre: "A Lameira", tipo: "barrio" },
+  { nombre: "A Pedreira", tipo: "barrio" },
+  { nombre: "A Raña", tipo: "barrio" },
+  { nombre: "A Veigaverde", tipo: "barrio" },
+  { nombre: "Aguete", tipo: "barrio" },
+  { nombre: "Ardán", tipo: "barrio" },
+  { nombre: "Barriada de la Maestranza", tipo: "barrio" },
+  { nombre: "Barriada de San Pedro", tipo: "barrio" },
+  { nombre: "Cantodarea", tipo: "barrio" },
+  { nombre: "Casco Vello", tipo: "barrio" },
+  { nombre: "Mogor", tipo: "barrio" },
+  { nombre: "O Campo", tipo: "barrio" },
+  { nombre: "O Igrexario", tipo: "barrio" },
+  { nombre: "O Sequelo", tipo: "barrio" },
+  { nombre: "San Xián", tipo: "barrio" },
+  { nombre: "Seixo", tipo: "barrio" },
+  { nombre: "Sete Espadas", tipo: "barrio" },
+  { nombre: "Vista Alegre", tipo: "barrio" },
+];
+
+const POLIGONOS_MARIN: ZonaCiudad[] = [
+  { nombre: "Puerto de Marín (zona industrial y logística portuaria)", tipo: "poligono" },
 ];
 
 const BARRIOS_CORUNA: ZonaCiudad[] = [
@@ -11494,6 +11522,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Lalín",
     etiqueta: "Lalín (Pontevedra)",
     zonas: [...BARRIOS_LALIN, ...POLIGONOS_LALIN],
+  },
+  {
+    id: "marin",
+    nombre: "Marín",
+    etiqueta: "Marín (Pontevedra)",
+    zonas: [...BARRIOS_MARIN, ...POLIGONOS_MARIN],
   },
   {
     id: "vigo",
