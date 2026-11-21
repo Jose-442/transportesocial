@@ -64,7 +64,9 @@ export async function sincronizarStripeConnectPorCuenta(
     .eq("stripe_connect_account_id", accountId);
 }
 
-export async function iniciarOnboardingStripeConnect(): Promise<{
+export async function iniciarOnboardingStripeConnect(opts?: {
+  returnPath?: string;
+}): Promise<{
   error?: string;
   url?: string;
 }> {
@@ -104,6 +106,10 @@ export async function iniciarOnboardingStripeConnect(): Promise<{
   }
 
   const origin = await getRequestOrigin();
-  const url = await crearEnlaceOnboardingConnect(accountId, origin);
+  const url = await crearEnlaceOnboardingConnect(
+    accountId,
+    origin,
+    opts?.returnPath
+  );
   return { url };
 }

@@ -44,6 +44,13 @@ import { loadPerfilPublico } from "@/lib/profile";
 import { datosVehiculoVisibles } from "@/lib/vehiculo";
 import { chatPermitido } from "@/lib/reservas/labels";
 import { fraseQuedaLibre, fraseReservado } from "@/lib/oferta-ruta-labels";
+import {
+  conductorPuedeRecibirReservas,
+  MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA,
+} from "@/lib/stripe/conductor-cobro";
+import { ConectarBancoAlPublicar } from "@/components/stripe/ConectarBancoAlPublicar";
+import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import {
   esBusquedaDeTramo,
@@ -113,10 +120,19 @@ export default async function RutaDetallePage({
   const loginHref = hrefLoginConVuelta(
     listadoQs ? `/rutas/${id}?${listadoQs}` : `/rutas/${id}`
   );
+  const connectParam = Array.isArray(resolvedSearchParams.connect)
+    ? resolvedSearchParams.connect[0]
+    : resolvedSearchParams.connect;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (
+    user &&
+    (connectParam === "return" || connectParam === "refresh")
+  ) {
+    await sincronizarStripeConnectUsuario(user.id);
+  }
 
   let reservaPendienteId: string | null = null;
   let reservaMiaId: string | null = null;
@@ -212,6 +228,21 @@ export default async function RutaDetallePage({
   const esTramo = esTramoBusqueda || reservaMiaEsTramo;
   const esPropio = user?.id === ruta.user_id;
   const proponente = await loadPerfilPublico(supabase, ruta.user_id);
+  const conductorAceptaReservas = await conductorPuedeRecibirReservas(
+    ruta.user_id
+  );
+  let bancoAccountIdPropio: string | null = null;
+  if (esPropio && user && !conductorAceptaReservas) {
+    const admin = createAdminClient();
+    const { data: propioBanco } = admin
+      ? await admin
+          .from("profiles")
+          .select("stripe_connect_account_id")
+          .eq("id", user.id)
+          .maybeSingle()
+      : { data: null };
+    bancoAccountIdPropio = propioBanco?.stripe_connect_account_id ?? null;
+  }
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
   const comentarioConductor = proponente?.sobre_ti?.trim() || "";
   const datosVehiculo = proponente ? datosVehiculoVisibles(proponente) : [];
@@ -287,6 +318,7 @@ export default async function RutaDetallePage({
   const mostrarFormulario =
     Boolean(!esPropio && user && !reservaMiaId) &&
     ruta.estado === "activa" &&
+    conductorAceptaReservas &&
     (ofreceBulto || plazasAsientoLibres);
 
   const ampliarMuestraPlaza =
@@ -688,7 +720,8 @@ export default async function RutaDetallePage({
       !esPropio &&
       user &&
       reservaMiaId &&
-      !reservaPendienteId ? (
+      !reservaPendienteId &&
+      conductorAceptaReservas ? (
         <Card className="space-y-4 bg-zinc-50 p-3 md:p-4">
           <p className="text-base font-semibold text-zinc-900">
             Modificar mi reserva
@@ -782,9 +815,20 @@ export default async function RutaDetallePage({
       )}
 
       {!esPropio &&
+        !reservaMiaId &&
+        !conductorAceptaReservas &&
+        (ruta.estado === "activa" || ruta.estado === "reservada") &&
+        (ofreceBulto || plazasAsientoLibres || ofertasDisponibles.length > 0) && (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-center text-sm text-amber-950">
+          {MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA}
+        </p>
+      )}
+
+      {!esPropio &&
         user &&
         !reservaMiaId &&
         ruta.estado === "reservada" &&
+        conductorAceptaReservas &&
         ofertasDisponibles.length > 0 && (
         <Card className="bg-zinc-50">
           <OfertasCapacidadReserva
@@ -795,6 +839,14 @@ export default async function RutaDetallePage({
             salidaIso={ruta.fecha_llegada_prevista}
           />
         </Card>
+      )}
+
+      {esPropio && !conductorAceptaReservas && ruta.estado === "activa" && (
+        <ConectarBancoAlPublicar
+          payoutsEnabled={false}
+          accountId={bancoAccountIdPropio}
+          returnPath={`/rutas/${ruta.id}`}
+        />
       )}
 
       {esPropio && puedeAnadirCapacidad && (
@@ -844,6 +896,7 @@ export default async function RutaDetallePage({
 
       {!esPropio &&
         !user &&
+        conductorAceptaReservas &&
         (ruta.estado === "activa" || plazasAsientoLibres || tieneCapacidadExtra) && (
         <p className="mb-4 text-center text-2xl font-bold leading-snug text-zinc-800">
           <Link

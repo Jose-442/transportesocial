@@ -36,6 +36,7 @@ import { datosCaeAlCrearReserva } from "@/lib/cae-reserva";
 import { leerDeclaracionPorteReserva } from "@/lib/porte-reserva";
 import { textoDescripcionBulto } from "@/lib/reservas/labels";
 import { identidadListaParaPagar } from "@/lib/identidad-pago";
+import { errorSiConductorNoPuedeRecibirReservas } from "@/lib/stripe/conductor-cobro";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import { esTramoElegido, puntosRuta } from "@/lib/rutas/paradas";
 
@@ -198,6 +199,9 @@ export async function solicitarReservaRuta(formData: FormData) {
     return { error: "No puedes reservar tu propio viaje." };
   }
 
+  const faltaBanco = await errorSiConductorNoPuedeRecibirReservas(ruta.user_id);
+  if (faltaBanco) return { error: faltaBanco };
+
   const { data: activa } = await supabase
     .from("reservas")
     .select("id")
@@ -295,6 +299,9 @@ export async function solicitarReservaViaje(formData: FormData) {
   if (ruta.user_id === user.id) {
     return { error: "No puedes reservar tu propio viaje." };
   }
+
+  const faltaBanco = await errorSiConductorNoPuedeRecibirReservas(ruta.user_id);
+  if (faltaBanco) return { error: faltaBanco };
 
   const ofreceBulto = rutaOfreceBulto(ruta.espacio_disponible);
   const conBulto = ofreceBulto && quiereBulto;
@@ -753,6 +760,11 @@ export async function prepararReservaBulto(ofertaId: string) {
     return { error: "No autorizado." };
   }
 
+  const faltaBanco = await errorSiConductorNoPuedeRecibirReservas(
+    oferta.conductor_id
+  );
+  if (faltaBanco) return { error: faltaBanco };
+
   const faltaIdentidad = await errorSiFaltaIdentidadParaPagar(supabase, user.id);
   if (faltaIdentidad) return { error: faltaIdentidad };
 
@@ -916,6 +928,9 @@ export async function solicitarReservaCapacidad(
   if (ruta.user_id === user.id) {
     return { error: "No puedes reservar tu propio viaje." };
   }
+
+  const faltaBanco = await errorSiConductorNoPuedeRecibirReservas(ruta.user_id);
+  if (faltaBanco) return { error: faltaBanco };
 
   const { data: ocupandoUsuario } = await supabase
     .from("reservas")

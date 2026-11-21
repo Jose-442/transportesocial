@@ -24,6 +24,7 @@ import {
   tipoOfertaLlevaPasajeros,
   type TipoOfertaRuta,
 } from "@/lib/ruta-oferta";
+import { ConectarBancoAlPublicar } from "@/components/stripe/ConectarBancoAlPublicar";
 
 const TIPOS: { value: TipoOfertaRuta; label: string }[] = [
   { value: "solo_bulto", label: "Solo para bulto" },
@@ -40,7 +41,13 @@ function botonClase(activo: boolean): string {
   ].join(" ");
 }
 
-export function PublicarCiudadForm() {
+export function PublicarCiudadForm({
+  bancoListo = false,
+  bancoAccountId = null,
+}: {
+  bancoListo?: boolean;
+  bancoAccountId?: string | null;
+} = {}) {
   const router = useRouter();
   const [ciudad, setCiudad] = useState("");
   const [desde, setDesde] = useState("");
@@ -217,6 +224,14 @@ export function PublicarCiudadForm() {
             </p>
           )}
         </div>
+      )}
+
+      {(llevaBulto || llevaPlaza) && (
+        <ConectarBancoAlPublicar
+          payoutsEnabled={bancoListo}
+          accountId={bancoAccountId}
+          returnPath="/ciudad/nueva"
+        />
       )}
 
       <div className="space-y-2">

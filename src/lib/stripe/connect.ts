@@ -15,16 +15,23 @@ export async function crearCuentaConnectExpress(
   });
 }
 
+function rutaVueltaConnect(path: string | undefined, query: string): string {
+  const base = (path ?? "/cuenta").trim() || "/cuenta";
+  const limpia = base.startsWith("/") ? base.split("?")[0] : "/cuenta";
+  return `${limpia}?${query}`;
+}
+
 export async function crearEnlaceOnboardingConnect(
   accountId: string,
-  origin: string
+  origin: string,
+  returnPath?: string
 ): Promise<string> {
   const stripe = getStripeServer();
   const account = await stripe.accounts.retrieve(accountId);
   const link = await stripe.accountLinks.create({
     account: accountId,
-    refresh_url: `${origin}/cuenta?connect=refresh`,
-    return_url: `${origin}/cuenta?connect=return`,
+    refresh_url: `${origin}${rutaVueltaConnect(returnPath, "connect=refresh")}`,
+    return_url: `${origin}${rutaVueltaConnect(returnPath, "connect=return")}`,
     type: account.details_submitted ? "account_update" : "account_onboarding",
   });
   if (!link.url) {

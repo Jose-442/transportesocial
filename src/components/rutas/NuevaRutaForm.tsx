@@ -54,6 +54,7 @@ import {
   avisosTiempoAprox,
   juntarAvisosParadas,
 } from "@/lib/rutas/tiempos-paradas";
+import { ConectarBancoAlPublicar } from "@/components/stripe/ConectarBancoAlPublicar";
 
 type RutaFieldKey =
   | "origen"
@@ -98,11 +99,15 @@ export function NuevaRutaForm({
   identidadInicial = { phone: "", documento_identidad: "" },
   mostrarAvisoVehiculo = false,
   desdeVehiculo = false,
+  bancoListo = false,
+  bancoAccountId = null,
 }: {
   mostrarAvisoIdentidad?: boolean;
   identidadInicial?: { phone: string; documento_identidad: string };
   mostrarAvisoVehiculo?: boolean;
   desdeVehiculo?: boolean;
+  bancoListo?: boolean;
+  bancoAccountId?: string | null;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1029,6 +1034,14 @@ export function NuevaRutaForm({
             </>
           )}
         </div>
+      )}
+
+      {(llevaBulto || llevaPasajeros) && (
+        <ConectarBancoAlPublicar
+          payoutsEnabled={bancoListo}
+          accountId={bancoAccountId}
+          returnPath="/rutas/nueva"
+        />
       )}
 
       <fieldset
