@@ -268,6 +268,7 @@ describe("zonas de Burgos", () => {
       "elpuerto",
       "jerez",
       "puertoreal",
+      "sanroque",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5341,8 +5342,52 @@ describe("zonas de Burgos", () => {
     expect(ciudades[puertoRealIdx]?.label).toBe("Puerto Real");
     expect(ciudades[puertoRealIdx]?.negrita).toBeUndefined();
     expect(ciudades[puertoRealIdx - 1]?.label).toBe("Jerez de la Frontera");
-    expect(ciudades[puertoRealIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[puertoRealIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[puertoRealIdx + 1]?.label).toBe("San Roque");
+    expect(ciudades[puertoRealIdx + 1]?.negrita).toBeUndefined();
+    const sanRoque = ciudadUrbana("sanroque");
+    expect(sanRoque?.etiqueta).toBe("San Roque (Cádiz)");
+    expect(sanRoque?.nombre).toBe("San Roque");
+    expect(zonaDeCiudad(sanRoque!, "Sotogrande")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanRoque!, "San Roque (casco urbano)")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(sanRoque!, "Guadarranque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanRoque!, "Campamento")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanRoque!, "San Roque")).toBeNull();
+    expect(zonaDeCiudad(sanRoque!, "Campamento (Incosur)")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(sanRoque!, "Polígono · Guadarranque")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(sanRoque!, "Polígono · Guadarranque")!)).toBe(
+      "Polígono · Guadarranque"
+    );
+    expect(zonaDeCiudad(sanRoque!, "SEPES (Taraguilla)")?.tipo).toBe("poligono");
+    expect(
+      zonaDeCiudad(
+        sanRoque!,
+        "Zona de Actividades Logísticas (ZAL) del Campo de Gibraltar – Sector San Roque"
+      )?.tipo
+    ).toBe("poligono");
+    const nombresSanRoque = sanRoque!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanRoque).size).toBe(nombresSanRoque.length);
+    expect(
+      nombresSanRoque.filter(
+        (n) => sanRoque!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(18);
+    expect(
+      nombresSanRoque.filter(
+        (n) => sanRoque!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(4);
+    const sanRoqueIdx = ciudades.findIndex((c) => c.value === "sanroque");
+    expect(ciudades[sanRoqueIdx]?.label).toBe("San Roque");
+    expect(ciudades[sanRoqueIdx]?.negrita).toBeUndefined();
+    expect(ciudades[sanRoqueIdx - 1]?.label).toBe("Puerto Real");
+    expect(ciudades[sanRoqueIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[sanRoqueIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

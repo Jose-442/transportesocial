@@ -917,8 +917,12 @@
  * Las Salinas de Levante, Poniente, San José Alto y San José Bajo quedan las cuatro.
  * Jerez de la Frontera: debajo de Cádiz, detrás de El Puerto de Santa María y delante de Puerto Real. Los barrios y núcleos de la lista y diecinueve polígonos.
  * El Portal, Estella del Marqués y Pozoalbero están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
- * Puerto Real: debajo de Cádiz, detrás de Jerez de la Frontera y delante de Ciudad Real. Los barrios de la lista y cinco polígonos.
+ * Puerto Real: debajo de Cádiz, detrás de Jerez de la Frontera y delante de San Roque. Los barrios de la lista y cinco polígonos.
  * Río San Pedro sigue como barrio. El polígono se llama Río San Pedro – Zona Industrial.
+ * San Roque: debajo de Cádiz, detrás de Puerto Real y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * San Roque (casco urbano) queda con ese nombre. San Roque no entra aparte.
+ * Guadarranque está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Campamento sigue como barrio. El polígono se llama Campamento (Incosur).
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12042,6 +12046,38 @@ const POLIGONOS_PUERTO_REAL: ZonaCiudad[] = [
   { nombre: "Tres Caminos", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_ROQUE: ZonaCiudad[] = [
+  { nombre: "Alcaidesa", tipo: "barrio" },
+  { nombre: "Campamento", tipo: "barrio" },
+  { nombre: "Estación de San Roque", tipo: "barrio" },
+  { nombre: "Fuente María España", tipo: "barrio" },
+  { nombre: "Guadarranque", tipo: "barrio" },
+  { nombre: "Guadiaro", tipo: "barrio" },
+  { nombre: "La Ermita", tipo: "barrio" },
+  { nombre: "La Paz", tipo: "barrio" },
+  { nombre: "Miraflores", tipo: "barrio" },
+  { nombre: "Pueblo Nuevo de Guadiaro", tipo: "barrio" },
+  { nombre: "Puente Mayorga", tipo: "barrio" },
+  { nombre: "San Enrique de Guadiaro", tipo: "barrio" },
+  { nombre: "San Roque (casco urbano)", tipo: "barrio" },
+  { nombre: "Santa Ana", tipo: "barrio" },
+  { nombre: "Simón Susarte", tipo: "barrio" },
+  { nombre: "Sotogrande", tipo: "barrio" },
+  { nombre: "Taraguilla", tipo: "barrio" },
+  { nombre: "Torreguadiaro", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_ROQUE: ZonaCiudad[] = [
+  { nombre: "Campamento (Incosur)", tipo: "poligono" },
+  { nombre: "Polígono · Guadarranque", tipo: "poligono" },
+  { nombre: "SEPES (Taraguilla)", tipo: "poligono" },
+  {
+    nombre:
+      "Zona de Actividades Logísticas (ZAL) del Campo de Gibraltar – Sector San Roque",
+    tipo: "poligono",
+  },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13572,6 +13608,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Puerto Real",
     etiqueta: "Puerto Real (Cádiz)",
     zonas: [...BARRIOS_PUERTO_REAL, ...POLIGONOS_PUERTO_REAL],
+  },
+  {
+    id: "sanroque",
+    nombre: "San Roque",
+    etiqueta: "San Roque (Cádiz)",
+    zonas: [...BARRIOS_SAN_ROQUE, ...POLIGONOS_SAN_ROQUE],
   },
 ];
 
