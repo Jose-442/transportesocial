@@ -146,6 +146,7 @@ describe("zonas de Burgos", () => {
       "estepona",
       "benalmadena",
       "cartama",
+      "coin",
       "torremolinos",
       "rincondelavictoria",
       "alhaurindelatorre",
@@ -2085,6 +2086,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCartama).size).toBe(nombresCartama.length);
     expect(nombresCartama.filter((n) => cartama!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
     expect(nombresCartama.filter((n) => cartama!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const coin = ciudadUrbana("coin");
+    expect(coin?.etiqueta).toBe("Coín (Málaga)");
+    expect(coin?.nombre).toBe("Coín");
+    expect(zonaDeCiudad(coin!, "Alberos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coin!, "Jardines del Guadalhorce")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coin!, "Viña Borrego")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(coin!, "Coín")).toBeNull();
+    expect(zonaDeCiudad(coin!, "Cantarranas")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(coin!, "Cantarranas")!)).toBe("Polígono · Cantarranas");
+    expect(zonaDeCiudad(coin!, "La Trocha")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(coin!, "Parque Empresarial Coín")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(coin!, "Parque Empresarial Coín")!)).toBe("Polígono · Parque Empresarial Coín");
+    expect(zonaDeCiudad(coin!, "Río Cuevas")?.tipo).toBe("poligono");
+    const nombresCoin = coin!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCoin).size).toBe(nombresCoin.length);
+    expect(nombresCoin.filter((n) => coin!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(14);
+    expect(nombresCoin.filter((n) => coin!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(5);
     const torremolinos = ciudadUrbana("torremolinos");
     expect(torremolinos?.etiqueta).toBe("Torremolinos (Málaga)");
     expect(torremolinos?.nombre).toBe("Torremolinos");
@@ -4414,22 +4432,24 @@ describe("zonas de Burgos", () => {
     expect(ciudades[malagaIdx + 4]?.negrita).toBeUndefined();
     expect(ciudades[malagaIdx + 5]?.label).toBe("Cártama");
     expect(ciudades[malagaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 6]?.label).toBe("Estepona");
+    expect(ciudades[malagaIdx + 6]?.label).toBe("Coín");
     expect(ciudades[malagaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 7]?.label).toBe("Fuengirola");
+    expect(ciudades[malagaIdx + 7]?.label).toBe("Estepona");
     expect(ciudades[malagaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 8]?.label).toBe("Marbella");
+    expect(ciudades[malagaIdx + 8]?.label).toBe("Fuengirola");
     expect(ciudades[malagaIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 9]?.label).toBe("Mijas");
+    expect(ciudades[malagaIdx + 9]?.label).toBe("Marbella");
     expect(ciudades[malagaIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 10]?.label).toBe("Rincón de la Victoria");
+    expect(ciudades[malagaIdx + 10]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 11]?.label).toBe("Ronda");
+    expect(ciudades[malagaIdx + 11]?.label).toBe("Rincón de la Victoria");
     expect(ciudades[malagaIdx + 11]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 12]?.label).toBe("Torremolinos");
+    expect(ciudades[malagaIdx + 12]?.label).toBe("Ronda");
     expect(ciudades[malagaIdx + 12]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 13]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 13]?.label).toBe("Torremolinos");
     expect(ciudades[malagaIdx + 13]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 14]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 14]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "almeria")?.negrita).toBe(true);
     const almeriaIdx = ciudades.findIndex((c) => c.value === "almeria");
     expect(ciudades[almeriaIdx + 1]?.label).toBe("El Ejido");

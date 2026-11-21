@@ -287,9 +287,11 @@
  * Alhaurín de la Torre: los barrios y los polígonos de la lista.
  * Alhaurín el Grande: debajo de Málaga, detrás de Alhaurín de la Torre y delante de Antequera. Los barrios de la lista y los dos polígonos.
  * Alhaurín el Grande no entra como barrio.
- * Cártama: debajo de Málaga, detrás de Benalmádena y delante de Estepona. Los barrios de la lista y los dos polígonos.
+ * Cártama: debajo de Málaga, detrás de Benalmádena y delante de Coín. Los barrios de la lista y los dos polígonos.
  * Aljaima y Nueva Aljaima quedan los dos.
  * Cártama no entra como barrio.
+ * Coín: debajo de Málaga, detrás de Cártama y delante de Estepona. Los barrios de la lista y los cinco polígonos.
+ * Coín no entra como barrio.
  * Antequera: los barrios, los núcleos rurales y los polígonos de la lista.
  * Villanueva de Cauche y Los Nogales entran una sola vez.
  * Ronda: los barrios, las pedanías y los polígonos de la lista.
@@ -7007,6 +7009,31 @@ const POLIGONOS_CARTAMA: ZonaCiudad[] = [
   { nombre: "Fahala", tipo: "poligono" },
 ];
 
+const BARRIOS_COIN: ZonaCiudad[] = [
+  { nombre: "Alberos", tipo: "barrio" },
+  { nombre: "Caballo Blanco", tipo: "barrio" },
+  { nombre: "El Rodeo", tipo: "barrio" },
+  { nombre: "Huertas Viejas", tipo: "barrio" },
+  { nombre: "Jardines del Guadalhorce", tipo: "barrio" },
+  { nombre: "Las Delicias", tipo: "barrio" },
+  { nombre: "Los Montecillos", tipo: "barrio" },
+  { nombre: "Los Nebrales", tipo: "barrio" },
+  { nombre: "Miralmonte", tipo: "barrio" },
+  { nombre: "Miravalle", tipo: "barrio" },
+  { nombre: "Río Garrote", tipo: "barrio" },
+  { nombre: "Sierra Chica", tipo: "barrio" },
+  { nombre: "Sierra Gorda", tipo: "barrio" },
+  { nombre: "Viña Borrego", tipo: "barrio" },
+];
+
+const POLIGONOS_COIN: ZonaCiudad[] = [
+  { nombre: "Cantarranas", tipo: "poligono" },
+  { nombre: "La Trocha", tipo: "poligono" },
+  { nombre: "Nuestra Señora de Lourdes", tipo: "poligono" },
+  { nombre: "Parque Empresarial Coín", tipo: "poligono" },
+  { nombre: "Río Cuevas", tipo: "poligono" },
+];
+
 const BARRIOS_TORREMOLINOS: ZonaCiudad[] = [
   { nombre: "Altos del Olivar", tipo: "barrio" },
   { nombre: "Altos del Toril", tipo: "barrio" },
@@ -11952,6 +11979,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cártama",
     etiqueta: "Cártama (Málaga)",
     zonas: [...BARRIOS_CARTAMA, ...POLIGONOS_CARTAMA],
+  },
+  {
+    id: "coin",
+    nombre: "Coín",
+    etiqueta: "Coín (Málaga)",
+    zonas: [...BARRIOS_COIN, ...POLIGONOS_COIN],
   },
   {
     id: "torremolinos",
