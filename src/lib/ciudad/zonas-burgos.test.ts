@@ -38,6 +38,7 @@ describe("zonas de Burgos", () => {
       "pontevedra",
       "aestrada",
       "cangas",
+      "lalin",
       "vigo",
       "vilagarcia",
       "coruna",
@@ -483,6 +484,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresCangas).size).toBe(nombresCangas.length);
     expect(nombresCangas.filter((n) => cangas!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(37);
     expect(nombresCangas.filter((n) => cangas!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const lalin = ciudadUrbana("lalin");
+    expect(lalin?.etiqueta).toBe("Lalín (Pontevedra)");
+    expect(lalin?.nombre).toBe("Lalín");
+    expect(zonaDeCiudad(lalin!, "Lalín (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lalin!, "Botos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lalin!, "Catasós")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lalin!, "Vilatuxe")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lalin!, "Lalín")).toBeNull();
+    expect(zonaDeCiudad(lalin!, "Polígono Industrial de Botos")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(lalin!, "Polígono Industrial de Botos")!)).toBe("Polígono Industrial de Botos");
+    expect(zonaDeCiudad(lalin!, "Parque Empresarial Lalín 2000")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(lalin!, "Parque Empresarial Lalín 2000")!)).toBe("Polígono · Parque Empresarial Lalín 2000");
+    const nombresLalin = lalin!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLalin).size).toBe(nombresLalin.length);
+    expect(nombresLalin.filter((n) => lalin!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(17);
+    expect(nombresLalin.filter((n) => lalin!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const vigo = ciudadUrbana("vigo");
     expect(vigo?.etiqueta).toBe("Vigo (Pontevedra)");
     expect(zonaDeCiudad(vigo!, "Casco Vello")?.tipo).toBe("barrio");
@@ -519,7 +536,12 @@ describe("zonas de Burgos", () => {
     expect(ciudadesPontevedra[cangasIdx]?.label).toBe("Cangas");
     expect(ciudadesPontevedra[cangasIdx]?.negrita).toBeUndefined();
     expect(ciudadesPontevedra[cangasIdx - 1]?.label).toBe("A Estrada");
-    expect(ciudadesPontevedra[cangasIdx + 1]?.label).toBe("Vigo");
+    expect(ciudadesPontevedra[cangasIdx + 1]?.label).toBe("Lalín");
+    const lalinIdx = ciudadesPontevedra.findIndex((c) => c.value === "lalin");
+    expect(ciudadesPontevedra[lalinIdx]?.label).toBe("Lalín");
+    expect(ciudadesPontevedra[lalinIdx]?.negrita).toBeUndefined();
+    expect(ciudadesPontevedra[lalinIdx - 1]?.label).toBe("Cangas");
+    expect(ciudadesPontevedra[lalinIdx + 1]?.label).toBe("Vigo");
     const coruna = ciudadUrbana("coruna");
     expect(coruna?.etiqueta).toBe("A Coruña (A Coruña)");
     expect(zonaDeCiudad(coruna!, "Cidade Vella")?.tipo).toBe("barrio");

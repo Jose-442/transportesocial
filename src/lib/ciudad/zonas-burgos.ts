@@ -65,9 +65,12 @@
  * Ribeira es barrio. Polígono Industrial de Ribeira entra aparte.
  * Toedo es barrio. Polígono Industrial de Toedo entra aparte.
  * Parada y Paradela quedan las dos.
- * Cangas: debajo de Pontevedra, detrás de A Estrada y delante de Vigo. Los barrios de la lista y los dos polígonos.
+ * Cangas: debajo de Pontevedra, detrás de A Estrada y delante de Lalín. Los barrios de la lista y los dos polígonos.
  * Cangas (casco urbano) es el casco. Cangas no entra aparte.
  * A Serra de Nacente y A Serra de Poente quedan las dos.
+ * Lalín: debajo de Pontevedra, detrás de Cangas y delante de Vigo. Los barrios de la lista y las dos áreas industriales.
+ * Lalín (casco urbano) es el casco. Lalín no entra aparte.
+ * Botos es barrio. Polígono Industrial de Botos entra aparte.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
  * Santiago de Compostela: zonas del Concello y parroquias del padrón.
@@ -2045,6 +2048,31 @@ const BARRIOS_CANGAS: ZonaCiudad[] = [
 const POLIGONOS_CANGAS: ZonaCiudad[] = [
   { nombre: "A Portela", tipo: "poligono" },
   { nombre: "Alto de San Cosme", tipo: "poligono" },
+];
+
+const BARRIOS_LALIN: ZonaCiudad[] = [
+  { nombre: "A Laxe", tipo: "barrio" },
+  { nombre: "A Xesta", tipo: "barrio" },
+  { nombre: "Botos", tipo: "barrio" },
+  { nombre: "Catasós", tipo: "barrio" },
+  { nombre: "Donramiro", tipo: "barrio" },
+  { nombre: "Filgueira", tipo: "barrio" },
+  { nombre: "Goiás", tipo: "barrio" },
+  { nombre: "Lalín (casco urbano)", tipo: "barrio" },
+  { nombre: "Moneixas", tipo: "barrio" },
+  { nombre: "Noceda", tipo: "barrio" },
+  { nombre: "O Corpiño", tipo: "barrio" },
+  { nombre: "O Castro", tipo: "barrio" },
+  { nombre: "Prado", tipo: "barrio" },
+  { nombre: "Sello", tipo: "barrio" },
+  { nombre: "Soutolongo", tipo: "barrio" },
+  { nombre: "Vilatuxe", tipo: "barrio" },
+  { nombre: "Zobra", tipo: "barrio" },
+];
+
+const POLIGONOS_LALIN: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Botos", tipo: "poligono" },
+  { nombre: "Parque Empresarial Lalín 2000", tipo: "poligono" },
 ];
 
 const BARRIOS_CORUNA: ZonaCiudad[] = [
@@ -11460,6 +11488,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cangas",
     etiqueta: "Cangas (Pontevedra)",
     zonas: [...BARRIOS_CANGAS, ...POLIGONOS_CANGAS],
+  },
+  {
+    id: "lalin",
+    nombre: "Lalín",
+    etiqueta: "Lalín (Pontevedra)",
+    zonas: [...BARRIOS_LALIN, ...POLIGONOS_LALIN],
   },
   {
     id: "vigo",
