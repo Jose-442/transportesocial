@@ -195,6 +195,10 @@
  * Avellaneda y Mas Xirgu entran como polígono. En el barrio van dentro de Palau – Avellaneda – Mas Xirgu.
  * Pressupostos participats - Ajuntament de Girona+3 es la fuente. No entra en el desplegable.
  * Girona no entra como barrio.
+ * Lloret de Mar: debajo de Girona, detrás de la capital y delante de Granada. Los barrios de la lista y tres polígonos.
+ * Mas Arboç – Sant Quirze queda con ese nombre.
+ * Zona Industrial de Lloret de Mar (carretera de Vidreres), Polígono Industrial Sector 3 B-13 y Zona Industrial Nau B2, Sector Q entran los tres.
+ * Lloret de Mar no entra como barrio.
  * Ávila: los barrios y los polígonos de la lista.
  * Salamanca: los barrios y los polígonos de la lista.
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
@@ -4364,6 +4368,65 @@ const POLIGONOS_GIRONA: ZonaCiudad[] = [
   { nombre: "Mas Xirgu", tipo: "poligono" },
   { nombre: "Pla d'Abastaments", tipo: "poligono" },
   { nombre: "Torroella-Nestlé", tipo: "poligono" },
+];
+
+const BARRIOS_LLORET: ZonaCiudad[] = [
+  { nombre: "Alegries", tipo: "barrio" },
+  { nombre: "Barri dels Pescadors", tipo: "barrio" },
+  { nombre: "Barri de la Riera", tipo: "barrio" },
+  { nombre: "Bloch", tipo: "barrio" },
+  { nombre: "Can Ballell", tipo: "barrio" },
+  { nombre: "Can Carbó", tipo: "barrio" },
+  { nombre: "Can Coll d'Horta", tipo: "barrio" },
+  { nombre: "Can Ribalaigua", tipo: "barrio" },
+  { nombre: "Can Sabata", tipo: "barrio" },
+  { nombre: "Condado del Jaruco", tipo: "barrio" },
+  { nombre: "Els Llorers", tipo: "barrio" },
+  { nombre: "Els Pinars", tipo: "barrio" },
+  { nombre: "Fenals", tipo: "barrio" },
+  { nombre: "Font Bandina", tipo: "barrio" },
+  { nombre: "Font de Sant Llorenç", tipo: "barrio" },
+  { nombre: "La Creu de Lloret", tipo: "barrio" },
+  { nombre: "La Montgoda", tipo: "barrio" },
+  { nombre: "La Riviera", tipo: "barrio" },
+  { nombre: "La Soleia", tipo: "barrio" },
+  { nombre: "Lloret Blau", tipo: "barrio" },
+  { nombre: "Lloret de Dalt", tipo: "barrio" },
+  { nombre: "Lloret Residencial", tipo: "barrio" },
+  { nombre: "Lloret Verd", tipo: "barrio" },
+  { nombre: "Mas Baell", tipo: "barrio" },
+  { nombre: "Mas Arboç – Sant Quirze", tipo: "barrio" },
+  { nombre: "Mas Romeu Residencial", tipo: "barrio" },
+  { nombre: "Mas Vilà", tipo: "barrio" },
+  { nombre: "El Molí", tipo: "barrio" },
+  { nombre: "Montlloret", tipo: "barrio" },
+  { nombre: "Monterrey", tipo: "barrio" },
+  { nombre: "Normax", tipo: "barrio" },
+  { nombre: "Nucli Antic", tipo: "barrio" },
+  { nombre: "Papalús", tipo: "barrio" },
+  { nombre: "Puig d'en Pla", tipo: "barrio" },
+  { nombre: "Puigventós", tipo: "barrio" },
+  { nombre: "Roca Grossa", tipo: "barrio" },
+  { nombre: "Santa Clotilde", tipo: "barrio" },
+  { nombre: "Santa Cristina", tipo: "barrio" },
+  { nombre: "Serra Brava", tipo: "barrio" },
+  { nombre: "Sepulcre Romà", tipo: "barrio" },
+  { nombre: "Sol i Terra", tipo: "barrio" },
+  { nombre: "Solterra", tipo: "barrio" },
+  { nombre: "Suro Gros", tipo: "barrio" },
+  { nombre: "Turó de Lloret", tipo: "barrio" },
+  { nombre: "UCSA", tipo: "barrio" },
+  { nombre: "Urcasa", tipo: "barrio" },
+  { nombre: "Vinya Rosa", tipo: "barrio" },
+];
+
+const POLIGONOS_LLORET: ZonaCiudad[] = [
+  {
+    nombre: "Zona Industrial de Lloret de Mar (carretera de Vidreres)",
+    tipo: "poligono",
+  },
+  { nombre: "Polígono Industrial Sector 3 B-13", tipo: "poligono" },
+  { nombre: "Zona Industrial Nau B2, Sector Q", tipo: "poligono" },
 ];
 
 const BARRIOS_AVILA: ZonaCiudad[] = [
@@ -12844,6 +12907,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Girona",
     etiqueta: "Girona (Girona)",
     zonas: [...BARRIOS_GIRONA, ...POLIGONOS_GIRONA],
+  },
+  {
+    id: "lloret",
+    nombre: "Lloret de Mar",
+    etiqueta: "Lloret de Mar (Girona)",
+    zonas: [...BARRIOS_LLORET, ...POLIGONOS_LLORET],
   },
   {
     id: "avila",

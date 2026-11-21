@@ -100,6 +100,7 @@ describe("zonas de Burgos", () => {
       "vilaseca",
       "lleida",
       "girona",
+      "lloret",
       "avila",
       "salamanca",
       "madrid",
@@ -4760,8 +4761,10 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cordobaIdx + 2]?.negrita).toBe(true);
     expect(ciudades[cordobaIdx + 3]?.label).toBe("Girona");
     expect(ciudades[cordobaIdx + 3]?.negrita).toBe(true);
-    expect(ciudades[cordobaIdx + 4]?.label).toBe("Granada");
-    expect(ciudades[cordobaIdx + 4]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx + 4]?.label).toBe("Lloret de Mar");
+    expect(ciudades[cordobaIdx + 4]?.negrita).toBeUndefined();
+    expect(ciudades[cordobaIdx + 5]?.label).toBe("Granada");
+    expect(ciudades[cordobaIdx + 5]?.negrita).toBe(true);
     const girona = ciudadUrbana("girona");
     expect(girona?.etiqueta).toBe("Girona (Girona)");
     expect(girona?.nombre).toBe("Girona");
@@ -4796,8 +4799,53 @@ describe("zonas de Burgos", () => {
     expect(ciudades[gironaIdx]?.label).toBe("Girona");
     expect(ciudades[gironaIdx]?.negrita).toBe(true);
     expect(ciudades[gironaIdx - 1]?.label).toBe("Cuenca");
-    expect(ciudades[gironaIdx + 1]?.label).toBe("Granada");
-    expect(ciudades[gironaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[gironaIdx + 1]?.label).toBe("Lloret de Mar");
+    expect(ciudades[gironaIdx + 1]?.negrita).toBeUndefined();
+    const lloret = ciudadUrbana("lloret");
+    expect(lloret?.etiqueta).toBe("Lloret de Mar (Girona)");
+    expect(lloret?.nombre).toBe("Lloret de Mar");
+    expect(zonaDeCiudad(lloret!, "Fenals")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lloret!, "Can Coll d'Horta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lloret!, "Mas Arboç – Sant Quirze")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(lloret!, "Puig d'en Pla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(lloret!, "Lloret de Mar")).toBeNull();
+    expect(
+      zonaDeCiudad(
+        lloret!,
+        "Zona Industrial de Lloret de Mar (carretera de Vidreres)"
+      )?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(lloret!, "Polígono Industrial Sector 3 B-13")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(lloret!, "Zona Industrial Nau B2, Sector Q")?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(lloret!, "Polígono Industrial Sector 3 B-13")!
+      )
+    ).toBe("Polígono Industrial Sector 3 B-13");
+    const nombresLloret = lloret!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLloret).size).toBe(nombresLloret.length);
+    expect(
+      nombresLloret.filter(
+        (n) => lloret!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(47);
+    expect(
+      nombresLloret.filter(
+        (n) => lloret!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const lloretIdx = ciudades.findIndex((c) => c.value === "lloret");
+    expect(ciudades[lloretIdx]?.label).toBe("Lloret de Mar");
+    expect(ciudades[lloretIdx]?.negrita).toBeUndefined();
+    expect(ciudades[lloretIdx - 1]?.label).toBe("Girona");
+    expect(ciudades[lloretIdx + 1]?.label).toBe("Granada");
+    expect(ciudades[lloretIdx + 1]?.negrita).toBe(true);
     const oviedoIdx = ciudades.findIndex((c) => c.value === "oviedo");
     expect(ciudades[oviedoIdx]?.label).toBe("Oviedo");
     expect(ciudades[oviedoIdx]?.negrita).toBe(true);
