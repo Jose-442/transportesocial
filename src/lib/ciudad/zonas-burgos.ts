@@ -919,10 +919,13 @@
  * El Portal, Estella del Marqués y Pozoalbero están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Puerto Real: debajo de Cádiz, detrás de Jerez de la Frontera y delante de San Roque. Los barrios de la lista y cinco polígonos.
  * Río San Pedro sigue como barrio. El polígono se llama Río San Pedro – Zona Industrial.
- * San Roque: debajo de Cádiz, detrás de Puerto Real y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * San Roque: debajo de Cádiz, detrás de Puerto Real y delante de Sanlúcar de Barrameda. Los barrios de la lista y cuatro polígonos.
  * San Roque (casco urbano) queda con ese nombre. San Roque no entra aparte.
  * Guadarranque está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Campamento sigue como barrio. El polígono se llama Campamento (Incosur).
+ * Sanlúcar de Barrameda: debajo de Cádiz, detrás de San Roque y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
+ * La Gallarda y Las Palmeras están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Sanlúcar de Barrameda no entra como barrio.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12078,6 +12081,54 @@ const POLIGONOS_SAN_ROQUE: ZonaCiudad[] = [
   },
 ];
 
+const BARRIOS_SANLUCAR: ZonaCiudad[] = [
+  { nombre: "Algaida", tipo: "barrio" },
+  { nombre: "Almendral", tipo: "barrio" },
+  { nombre: "Alto de las Cuevas", tipo: "barrio" },
+  { nombre: "Atalaya", tipo: "barrio" },
+  { nombre: "Bajo de Guía", tipo: "barrio" },
+  { nombre: "Banda Playa", tipo: "barrio" },
+  { nombre: "Barrio Alto", tipo: "barrio" },
+  { nombre: "Barrio Bajo", tipo: "barrio" },
+  { nombre: "Barriada Andalucía", tipo: "barrio" },
+  { nombre: "Barriada Arboledilla", tipo: "barrio" },
+  { nombre: "Barriada de los Ángeles", tipo: "barrio" },
+  { nombre: "Barriada de los Marineros (Virgen del Mar)", tipo: "barrio" },
+  { nombre: "Barriada Rubiños", tipo: "barrio" },
+  { nombre: "Bonanza", tipo: "barrio" },
+  { nombre: "Capuchinos", tipo: "barrio" },
+  { nombre: "Dehesilla", tipo: "barrio" },
+  { nombre: "El Palomar", tipo: "barrio" },
+  { nombre: "El Palmar", tipo: "barrio" },
+  { nombre: "El Pino", tipo: "barrio" },
+  { nombre: "El Vergel", tipo: "barrio" },
+  { nombre: "Espíritu Santo", tipo: "barrio" },
+  { nombre: "La Jara", tipo: "barrio" },
+  { nombre: "La Colonia", tipo: "barrio" },
+  { nombre: "La Gallarda", tipo: "barrio" },
+  { nombre: "Las Piletas", tipo: "barrio" },
+  { nombre: "Las Palmeras", tipo: "barrio" },
+  { nombre: "Los Colonos", tipo: "barrio" },
+  { nombre: "Los Naranjos", tipo: "barrio" },
+  { nombre: "Marbella", tipo: "barrio" },
+  { nombre: "Miraflores", tipo: "barrio" },
+  { nombre: "Monteolivete", tipo: "barrio" },
+  { nombre: "Pastrana", tipo: "barrio" },
+  { nombre: "Picacho", tipo: "barrio" },
+  { nombre: "Sanlúcar Club de Campo", tipo: "barrio" },
+  { nombre: "Verdigones", tipo: "barrio" },
+  { nombre: "Villa Horacia", tipo: "barrio" },
+];
+
+const POLIGONOS_SANLUCAR: ZonaCiudad[] = [
+  { nombre: "Polígono · La Gallarda", tipo: "poligono" },
+  { nombre: "Polígono · Las Palmeras", tipo: "poligono" },
+  {
+    nombre: "Parque Empresarial Las Dunas (antiguo Rematacaudales)",
+    tipo: "poligono",
+  },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13614,6 +13665,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Roque",
     etiqueta: "San Roque (Cádiz)",
     zonas: [...BARRIOS_SAN_ROQUE, ...POLIGONOS_SAN_ROQUE],
+  },
+  {
+    id: "sanlucar",
+    nombre: "Sanlúcar de Barrameda",
+    etiqueta: "Sanlúcar de Barrameda (Cádiz)",
+    zonas: [...BARRIOS_SANLUCAR, ...POLIGONOS_SANLUCAR],
   },
 ];
 

@@ -269,6 +269,7 @@ describe("zonas de Burgos", () => {
       "jerez",
       "puertoreal",
       "sanroque",
+      "sanlucar",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5386,8 +5387,57 @@ describe("zonas de Burgos", () => {
     expect(ciudades[sanRoqueIdx]?.label).toBe("San Roque");
     expect(ciudades[sanRoqueIdx]?.negrita).toBeUndefined();
     expect(ciudades[sanRoqueIdx - 1]?.label).toBe("Puerto Real");
-    expect(ciudades[sanRoqueIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[sanRoqueIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[sanRoqueIdx + 1]?.label).toBe("Sanlúcar de Barrameda");
+    expect(ciudades[sanRoqueIdx + 1]?.negrita).toBeUndefined();
+    const sanlucar = ciudadUrbana("sanlucar");
+    expect(sanlucar?.etiqueta).toBe("Sanlúcar de Barrameda (Cádiz)");
+    expect(sanlucar?.nombre).toBe("Sanlúcar de Barrameda");
+    expect(zonaDeCiudad(sanlucar!, "Bajo de Guía")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanlucar!, "Bonanza")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanlucar!, "La Gallarda")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanlucar!, "Las Palmeras")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanlucar!, "Sanlúcar de Barrameda")).toBeNull();
+    expect(zonaDeCiudad(sanlucar!, "Polígono · La Gallarda")?.tipo).toBe(
+      "poligono"
+    );
+    expect(etiquetaZona(zonaDeCiudad(sanlucar!, "Polígono · La Gallarda")!)).toBe(
+      "Polígono · La Gallarda"
+    );
+    expect(zonaDeCiudad(sanlucar!, "Polígono · Las Palmeras")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(
+        sanlucar!,
+        "Parque Empresarial Las Dunas (antiguo Rematacaudales)"
+      )?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(
+          sanlucar!,
+          "Parque Empresarial Las Dunas (antiguo Rematacaudales)"
+        )!
+      )
+    ).toBe("Polígono · Parque Empresarial Las Dunas (antiguo Rematacaudales)");
+    const nombresSanlucar = sanlucar!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanlucar).size).toBe(nombresSanlucar.length);
+    expect(
+      nombresSanlucar.filter(
+        (n) => sanlucar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(36);
+    expect(
+      nombresSanlucar.filter(
+        (n) => sanlucar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const sanlucarIdx = ciudades.findIndex((c) => c.value === "sanlucar");
+    expect(ciudades[sanlucarIdx]?.label).toBe("Sanlúcar de Barrameda");
+    expect(ciudades[sanlucarIdx]?.negrita).toBeUndefined();
+    expect(ciudades[sanlucarIdx - 1]?.label).toBe("San Roque");
+    expect(ciudades[sanlucarIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[sanlucarIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();
