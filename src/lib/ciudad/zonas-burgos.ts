@@ -947,10 +947,13 @@
  * Sanlúcar de Barrameda: debajo de Cádiz, detrás de San Roque y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
  * La Gallarda y Las Palmeras están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Sanlúcar de Barrameda no entra como barrio.
- * Agüimes: Las Palmas, detrás de A Coruña y delante de Albacete. Los barrios de la lista y dos polígonos.
+ * Agüimes: Las Palmas, detrás de A Coruña y delante de Arucas. Los barrios de la lista y dos polígonos.
  * Agüimes (casco) queda con ese nombre. Agüimes no entra aparte.
  * Polígono Residencial de Arinaga es barrio. Polígono Industrial de Arinaga es polígono.
  * Espinales (Los) es barrio. Espinales Industrial es polígono.
+ * Arucas: Las Palmas, detrás de Agüimes y delante de Albacete. Los barrios de la lista. Sin polígonos.
+ * Arucas (casco) queda con ese nombre. Arucas no entra aparte.
+ * El Portichuelo, Hoya López y Rosa Silva entran. Montaña Blanca entra una sola vez.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12413,6 +12416,52 @@ const POLIGONOS_AGUIMES: ZonaCiudad[] = [
   { nombre: "Espinales Industrial", tipo: "poligono" },
 ];
 
+const BARRIOS_ARUCAS: ZonaCiudad[] = [
+  { nombre: "Arucas (casco)", tipo: "barrio" },
+  { nombre: "Bañaderos", tipo: "barrio" },
+  { nombre: "Barreto", tipo: "barrio" },
+  { nombre: "Cardones", tipo: "barrio" },
+  { nombre: "Cardonal", tipo: "barrio" },
+  { nombre: "Cruz de Pineda", tipo: "barrio" },
+  { nombre: "El Arco", tipo: "barrio" },
+  { nombre: "El Cerrillo", tipo: "barrio" },
+  { nombre: "El Puertillo", tipo: "barrio" },
+  { nombre: "Fuente del Laurel", tipo: "barrio" },
+  { nombre: "Hoya de San Juan", tipo: "barrio" },
+  { nombre: "Hoya de Aríñez", tipo: "barrio" },
+  { nombre: "Juan XXIII", tipo: "barrio" },
+  { nombre: "La Goleta", tipo: "barrio" },
+  { nombre: "La Montañeta", tipo: "barrio" },
+  { nombre: "La Palmita", tipo: "barrio" },
+  { nombre: "La Solana", tipo: "barrio" },
+  { nombre: "Las Chorreras", tipo: "barrio" },
+  { nombre: "Los Castillos", tipo: "barrio" },
+  { nombre: "Los Portales", tipo: "barrio" },
+  { nombre: "Los Peñones", tipo: "barrio" },
+  { nombre: "Llano Blanco", tipo: "barrio" },
+  { nombre: "Lomo de Arucas", tipo: "barrio" },
+  { nombre: "Lomo de Quintanilla", tipo: "barrio" },
+  { nombre: "Lomo Espino", tipo: "barrio" },
+  { nombre: "Mirador de Los Portales", tipo: "barrio" },
+  { nombre: "Montaña Blanca", tipo: "barrio" },
+  { nombre: "San Andrés", tipo: "barrio" },
+  { nombre: "San Francisco Javier", tipo: "barrio" },
+  { nombre: "San Gregorio", tipo: "barrio" },
+  { nombre: "Santidad Alta", tipo: "barrio" },
+  { nombre: "Santidad Baja", tipo: "barrio" },
+  { nombre: "Santa Flora", tipo: "barrio" },
+  { nombre: "Tinocas", tipo: "barrio" },
+  { nombre: "Trapiche", tipo: "barrio" },
+  { nombre: "Trasmontaña", tipo: "barrio" },
+  { nombre: "Visvique", tipo: "barrio" },
+  { nombre: "Virgen del Pino", tipo: "barrio" },
+  { nombre: "El Portichuelo", tipo: "barrio" },
+  { nombre: "Hoya López", tipo: "barrio" },
+  { nombre: "Rosa Silva", tipo: "barrio" },
+];
+
+const POLIGONOS_ARUCAS: ZonaCiudad[] = [];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13997,6 +14046,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Agüimes",
     etiqueta: "Agüimes (Las Palmas)",
     zonas: [...BARRIOS_AGUIMES, ...POLIGONOS_AGUIMES],
+  },
+  {
+    id: "arucas",
+    nombre: "Arucas",
+    etiqueta: "Arucas (Las Palmas)",
+    zonas: [...BARRIOS_ARUCAS, ...POLIGONOS_ARUCAS],
   },
 ];
 
