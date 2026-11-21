@@ -1005,10 +1005,14 @@
  * La Orotava (casco histórico y centro) queda con ese nombre. La Orotava no entra aparte.
  * Pinolere y Pinoleris quedan las dos. San Jerónimo es barrio. Polígono Industrial San Jerónimo es polígono.
  * El Trompo y La Villa no entran: son áreas comerciales. Ayuntamiento de La Orotava+3 y Vitalinaves+3 son fuentes. No entran.
- * Los Realejos: debajo de Santa Cruz de Tenerife, detrás de La Orotava y delante de Santander. Los barrios de la lista y dos polígonos.
+ * Los Realejos: debajo de Santa Cruz de Tenerife, detrás de La Orotava y delante de San Cristóbal de La Laguna. Los barrios de la lista y dos polígonos.
  * Realejo Alto y Realejo Bajo quedan las dos. Los Realejos no entra como barrio.
  * San Benito está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * La Gañanía y San Benito son dos polígonos distintos. Los Realejos+3 y occet.es+2 son fuentes. No entran.
+ * San Cristóbal de La Laguna: debajo de Santa Cruz de Tenerife, detrás de Los Realejos y delante de Santander. Los barrios de la lista y cuatro polígonos.
+ * La Laguna (casco) queda con ese nombre. San Cristóbal de La Laguna no entra aparte.
+ * Los Majuelos incluye el Polígono 5e: entra una sola vez. Los dos enclaves del Parque Científico y Tecnológico quedan los dos.
+ * Ayuntamiento de La Laguna+2 y Gobierno de Canarias+4 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -13205,6 +13209,48 @@ const POLIGONOS_LOS_REALEJOS: ZonaCiudad[] = [
   { nombre: "Polígono · San Benito", tipo: "poligono" },
 ];
 
+const BARRIOS_LA_LAGUNA: ZonaCiudad[] = [
+  { nombre: "Bajamar", tipo: "barrio" },
+  { nombre: "El Ortigal", tipo: "barrio" },
+  { nombre: "Finca España", tipo: "barrio" },
+  { nombre: "Geneto", tipo: "barrio" },
+  { nombre: "Gracia", tipo: "barrio" },
+  { nombre: "Guajara", tipo: "barrio" },
+  { nombre: "Guamasa", tipo: "barrio" },
+  { nombre: "Jardina", tipo: "barrio" },
+  { nombre: "La Cuesta", tipo: "barrio" },
+  { nombre: "La Laguna (casco)", tipo: "barrio" },
+  { nombre: "La Vega Lagunera", tipo: "barrio" },
+  { nombre: "Las Chumberas", tipo: "barrio" },
+  { nombre: "Las Mercedes", tipo: "barrio" },
+  { nombre: "Las Montañas", tipo: "barrio" },
+  { nombre: "Los Andenes", tipo: "barrio" },
+  { nombre: "Los Baldíos", tipo: "barrio" },
+  { nombre: "Los Rodeos", tipo: "barrio" },
+  { nombre: "Los Valles", tipo: "barrio" },
+  { nombre: "Punta del Hidalgo", tipo: "barrio" },
+  { nombre: "San Lázaro", tipo: "barrio" },
+  { nombre: "Taco", tipo: "barrio" },
+  { nombre: "Tejina", tipo: "barrio" },
+  { nombre: "Valle de Guerra", tipo: "barrio" },
+  { nombre: "Vega de las Mercedes", tipo: "barrio" },
+];
+
+const POLIGONOS_LA_LAGUNA: ZonaCiudad[] = [
+  { nombre: "Las Torres de Taco", tipo: "poligono" },
+  { nombre: "Los Majuelos (incluye el ámbito del Polígono 5e)", tipo: "poligono" },
+  {
+    nombre:
+      "Parque Científico y Tecnológico de Tenerife – Enclave Las Mantecas (INtech La Laguna e IACtec)",
+    tipo: "poligono",
+  },
+  {
+    nombre:
+      "Parque Científico y Tecnológico de Tenerife – Enclave Innovaparq ULL",
+    tipo: "poligono",
+  },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14876,6 +14922,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Los Realejos",
     etiqueta: "Los Realejos (Santa Cruz de Tenerife)",
     zonas: [...BARRIOS_LOS_REALEJOS, ...POLIGONOS_LOS_REALEJOS],
+  },
+  {
+    id: "lalaguna",
+    nombre: "San Cristóbal de La Laguna",
+    etiqueta: "San Cristóbal de La Laguna (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_LA_LAGUNA, ...POLIGONOS_LA_LAGUNA],
   },
 ];
 

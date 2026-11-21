@@ -291,6 +291,7 @@ describe("zonas de Burgos", () => {
       "granadilla",
       "laorotava",
       "losrealejos",
+      "lalaguna",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4851,12 +4852,67 @@ describe("zonas de Burgos", () => {
     expect(ciudades[losRealejosIdx]?.label).toBe("Los Realejos");
     expect(ciudades[losRealejosIdx]?.negrita).toBeUndefined();
     expect(ciudades[losRealejosIdx - 1]?.label).toBe("La Orotava");
-    expect(ciudades[losRealejosIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[losRealejosIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[losRealejosIdx + 1]?.label).toBe(
+      "San Cristóbal de La Laguna"
+    );
+    expect(ciudades[losRealejosIdx + 1]?.negrita).toBeUndefined();
+    const laLaguna = ciudadUrbana("lalaguna");
+    expect(laLaguna?.etiqueta).toBe(
+      "San Cristóbal de La Laguna (Santa Cruz de Tenerife)"
+    );
+    expect(laLaguna?.nombre).toBe("San Cristóbal de La Laguna");
+    expect(zonaDeCiudad(laLaguna!, "La Laguna (casco)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laLaguna!, "Tejina")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laLaguna!, "Taco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laLaguna!, "Bajamar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laLaguna!, "Punta del Hidalgo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laLaguna!, "San Cristóbal de La Laguna")).toBeNull();
+    expect(zonaDeCiudad(laLaguna!, "Las Torres de Taco")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(
+        laLaguna!,
+        "Los Majuelos (incluye el ámbito del Polígono 5e)"
+      )?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(
+        laLaguna!,
+        "Parque Científico y Tecnológico de Tenerife – Enclave Las Mantecas (INtech La Laguna e IACtec)"
+      )?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(
+        laLaguna!,
+        "Parque Científico y Tecnológico de Tenerife – Enclave Innovaparq ULL"
+      )?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(laLaguna!, "Polígono 5e")).toBeNull();
+    const nombresLaLaguna = laLaguna!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLaLaguna).size).toBe(nombresLaLaguna.length);
+    expect(
+      nombresLaLaguna.filter(
+        (n) => laLaguna!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(24);
+    expect(
+      nombresLaLaguna.filter(
+        (n) => laLaguna!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(4);
+    const laLagunaIdx = ciudades.findIndex((c) => c.value === "lalaguna");
+    expect(ciudades[laLagunaIdx]?.label).toBe("San Cristóbal de La Laguna");
+    expect(ciudades[laLagunaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[laLagunaIdx - 1]?.label).toBe("Los Realejos");
+    expect(ciudades[laLagunaIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[laLagunaIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("Los Realejos");
+    expect(ciudades[santanderIdx - 1]?.label).toBe(
+      "San Cristóbal de La Laguna"
+    );
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");
