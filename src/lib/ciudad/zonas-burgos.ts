@@ -190,6 +190,11 @@
  * Gran Indústria I y Gran Indústria II quedan las dos.
  * Vila-seca no entra como barrio.
  * Lleida: los barrios y los polígonos de la lista.
+ * Girona: capital, en negrita, detrás de Cuenca y delante de Granada. Los barrios de la lista y cinco polígonos.
+ * Carme – Vista Alegre, Domeny – Taialà, Figuerola – Bonastruc, Montilivi – La Creueta, Palau – Avellaneda – Mas Xirgu, Pedreres – Fora Muralla y Pla de Palau – Sant Pau quedan con esos nombres.
+ * Avellaneda y Mas Xirgu entran como polígono. En el barrio van dentro de Palau – Avellaneda – Mas Xirgu.
+ * Pressupostos participats - Ajuntament de Girona+3 es la fuente. No entra en el desplegable.
+ * Girona no entra como barrio.
  * Ávila: los barrios y los polígonos de la lista.
  * Salamanca: los barrios y los polígonos de la lista.
  * Madrid: los 131 barrios oficiales y las áreas industriales de la lista.
@@ -4317,6 +4322,48 @@ const POLIGONOS_LLEIDA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Vilanoveta", tipo: "poligono" },
   { nombre: "Polígono Industrial de Gardeny", tipo: "poligono" },
   { nombre: "Zona Industrial de la N-240", tipo: "poligono" },
+];
+
+const BARRIOS_GIRONA: ZonaCiudad[] = [
+  { nombre: "Barri Vell", tipo: "barrio" },
+  { nombre: "Campdorà", tipo: "barrio" },
+  { nombre: "Can Gibert del Pla", tipo: "barrio" },
+  { nombre: "Carme – Vista Alegre", tipo: "barrio" },
+  { nombre: "Devesa-Güell", tipo: "barrio" },
+  { nombre: "Domeny – Taialà", tipo: "barrio" },
+  { nombre: "Eixample", tipo: "barrio" },
+  { nombre: "Est", tipo: "barrio" },
+  { nombre: "Figuerola – Bonastruc", tipo: "barrio" },
+  { nombre: "Font de la Pólvora", tipo: "barrio" },
+  { nombre: "Fontajau", tipo: "barrio" },
+  { nombre: "Germans Sàbat", tipo: "barrio" },
+  { nombre: "Grup Sant Daniel", tipo: "barrio" },
+  { nombre: "Mas Catofa", tipo: "barrio" },
+  { nombre: "Mas Ramada", tipo: "barrio" },
+  { nombre: "Mercadal", tipo: "barrio" },
+  { nombre: "Montilivi – La Creueta", tipo: "barrio" },
+  { nombre: "Montjuïc", tipo: "barrio" },
+  { nombre: "Palau – Avellaneda – Mas Xirgu", tipo: "barrio" },
+  { nombre: "Pedreres – Fora Muralla", tipo: "barrio" },
+  { nombre: "Pedret", tipo: "barrio" },
+  { nombre: "Pla de Palau – Sant Pau", tipo: "barrio" },
+  { nombre: "Pont Major", tipo: "barrio" },
+  { nombre: "Pujada de la Torrassa", tipo: "barrio" },
+  { nombre: "Sant Daniel", tipo: "barrio" },
+  { nombre: "Sant Narcís", tipo: "barrio" },
+  { nombre: "Sant Ponç", tipo: "barrio" },
+  { nombre: "Santa Eugènia", tipo: "barrio" },
+  { nombre: "Torre de Taialà", tipo: "barrio" },
+  { nombre: "Torre Gironella", tipo: "barrio" },
+  { nombre: "Vila-roja", tipo: "barrio" },
+];
+
+const POLIGONOS_GIRONA: ZonaCiudad[] = [
+  { nombre: "Avellaneda", tipo: "poligono" },
+  { nombre: "Carretera de Sant Feliu", tipo: "poligono" },
+  { nombre: "Mas Xirgu", tipo: "poligono" },
+  { nombre: "Pla d'Abastaments", tipo: "poligono" },
+  { nombre: "Torroella-Nestlé", tipo: "poligono" },
 ];
 
 const BARRIOS_AVILA: ZonaCiudad[] = [
@@ -12791,6 +12838,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Lleida",
     etiqueta: "Lleida (Lleida)",
     zonas: [...BARRIOS_LLEIDA, ...POLIGONOS_LLEIDA],
+  },
+  {
+    id: "girona",
+    nombre: "Girona",
+    etiqueta: "Girona (Girona)",
+    zonas: [...BARRIOS_GIRONA, ...POLIGONOS_GIRONA],
   },
   {
     id: "avila",

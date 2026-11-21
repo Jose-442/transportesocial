@@ -99,6 +99,7 @@ describe("zonas de Burgos", () => {
       "salou",
       "vilaseca",
       "lleida",
+      "girona",
       "avila",
       "salamanca",
       "madrid",
@@ -4757,8 +4758,46 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cordobaIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[cordobaIdx + 2]?.label).toBe("Cuenca");
     expect(ciudades[cordobaIdx + 2]?.negrita).toBe(true);
-    expect(ciudades[cordobaIdx + 3]?.label).toBe("Granada");
+    expect(ciudades[cordobaIdx + 3]?.label).toBe("Girona");
     expect(ciudades[cordobaIdx + 3]?.negrita).toBe(true);
+    expect(ciudades[cordobaIdx + 4]?.label).toBe("Granada");
+    expect(ciudades[cordobaIdx + 4]?.negrita).toBe(true);
+    const girona = ciudadUrbana("girona");
+    expect(girona?.etiqueta).toBe("Girona (Girona)");
+    expect(girona?.nombre).toBe("Girona");
+    expect(zonaDeCiudad(girona!, "Barri Vell")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(girona!, "Sant Narcís")?.tipo).toBe("barrio");
+    expect(
+      zonaDeCiudad(girona!, "Palau – Avellaneda – Mas Xirgu")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(girona!, "Grup Sant Daniel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(girona!, "Sant Daniel")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(girona!, "Girona")).toBeNull();
+    expect(zonaDeCiudad(girona!, "Avellaneda")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(girona!, "Mas Xirgu")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(girona!, "Pla d'Abastaments")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(girona!, "Torroella-Nestlé")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(girona!, "Avellaneda")!)).toBe(
+      "Polígono · Avellaneda"
+    );
+    const nombresGirona = girona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGirona).size).toBe(nombresGirona.length);
+    expect(
+      nombresGirona.filter(
+        (n) => girona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(31);
+    expect(
+      nombresGirona.filter(
+        (n) => girona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(5);
+    const gironaIdx = ciudades.findIndex((c) => c.value === "girona");
+    expect(ciudades[gironaIdx]?.label).toBe("Girona");
+    expect(ciudades[gironaIdx]?.negrita).toBe(true);
+    expect(ciudades[gironaIdx - 1]?.label).toBe("Cuenca");
+    expect(ciudades[gironaIdx + 1]?.label).toBe("Granada");
+    expect(ciudades[gironaIdx + 1]?.negrita).toBe(true);
     const oviedoIdx = ciudades.findIndex((c) => c.value === "oviedo");
     expect(ciudades[oviedoIdx]?.label).toBe("Oviedo");
     expect(ciudades[oviedoIdx]?.negrita).toBe(true);
