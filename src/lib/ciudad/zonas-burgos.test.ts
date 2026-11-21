@@ -112,6 +112,7 @@ describe("zonas de Burgos", () => {
       "pozuelo",
       "valdemoro",
       "villanuevacanada",
+      "villaviciosa",
       "coslada",
       "majadahonda",
       "mejorada",
@@ -1466,6 +1467,26 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresVillanuevaCanada).size).toBe(nombresVillanuevaCanada.length);
     expect(nombresVillanuevaCanada.filter((n) => villanuevaCanada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(6);
     expect(nombresVillanuevaCanada.filter((n) => villanuevaCanada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const villaviciosa = ciudadUrbana("villaviciosa");
+    expect(villaviciosa?.etiqueta).toBe("Villaviciosa de Odón (Madrid)");
+    expect(villaviciosa?.nombre).toBe("Villaviciosa de Odón");
+    expect(zonaDeCiudad(villaviciosa!, "Campodón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "Castillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "Castillo de Villaviciosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "El Bosque")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "El Bosque Alto")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "El Bosque Bajo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "Señorío de Villaviciosa")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villaviciosa!, "Villaviciosa de Odón")).toBeNull();
+    expect(zonaDeCiudad(villaviciosa!, "La Florida")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(villaviciosa!, "La Florida")!)).toBe("Polígono · La Florida");
+    expect(zonaDeCiudad(villaviciosa!, "Pinares Llanos")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(villaviciosa!, "Quitapesares (Villapark)")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(villaviciosa!, "Quitapesares (Villapark)")!)).toBe("Polígono · Quitapesares (Villapark)");
+    const nombresVillaviciosa = villaviciosa!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVillaviciosa).size).toBe(nombresVillaviciosa.length);
+    expect(nombresVillaviciosa.filter((n) => villaviciosa!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(23);
+    expect(nombresVillaviciosa.filter((n) => villaviciosa!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(3);
     const coslada = ciudadUrbana("coslada");
     expect(coslada?.etiqueta).toBe("Coslada (Madrid)");
     expect(coslada?.nombre).toBe("Coslada");
@@ -4310,7 +4331,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 33).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 34).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4344,6 +4365,7 @@ describe("zonas de Burgos", () => {
       "Tres Cantos",
       "Valdemoro",
       "Villanueva de la Cañada",
+      "Villaviciosa de Odón",
     ]);
     expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
     const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");

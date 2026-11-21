@@ -208,6 +208,10 @@
  * Torrelodones no entra como barrio.
  * Villanueva de la Cañada: debajo de Madrid, detrás de Valdemoro. Los barrios de la lista y los dos polígonos.
  * Villanueva de la Cañada no entra como barrio.
+ * Villaviciosa de Odón: debajo de Madrid, detrás de Villanueva de la Cañada. Los barrios de la lista y los tres polígonos.
+ * El Bosque, El Bosque Alto y El Bosque Bajo quedan los tres.
+ * Castillo y Castillo de Villaviciosa quedan los dos.
+ * Villaviciosa de Odón no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -5025,6 +5029,38 @@ const BARRIOS_VILLANUEVA_CANADA: ZonaCiudad[] = [
 const POLIGONOS_VILLANUEVA_CANADA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Calle Navarra", tipo: "poligono" },
   { nombre: "Polígono Industrial Sector IV – La Pasada", tipo: "poligono" },
+];
+
+const BARRIOS_VILLAVICIOSA: ZonaCiudad[] = [
+  { nombre: "Alamillo", tipo: "barrio" },
+  { nombre: "Alhambra", tipo: "barrio" },
+  { nombre: "Antonio Machado", tipo: "barrio" },
+  { nombre: "Campodón", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "Castillo", tipo: "barrio" },
+  { nombre: "Castillo de Villaviciosa", tipo: "barrio" },
+  { nombre: "Cerro de las Nieves", tipo: "barrio" },
+  { nombre: "El Bosque", tipo: "barrio" },
+  { nombre: "El Bosque Alto", tipo: "barrio" },
+  { nombre: "El Bosque Bajo", tipo: "barrio" },
+  { nombre: "El Cerrillo", tipo: "barrio" },
+  { nombre: "El Vaillo", tipo: "barrio" },
+  { nombre: "Ensanche", tipo: "barrio" },
+  { nombre: "La Bruja", tipo: "barrio" },
+  { nombre: "La Vega", tipo: "barrio" },
+  { nombre: "Las Salinas", tipo: "barrio" },
+  { nombre: "Los Montes de la Villa", tipo: "barrio" },
+  { nombre: "Monreal", tipo: "barrio" },
+  { nombre: "Río Guadarrama y Casa de Roque", tipo: "barrio" },
+  { nombre: "Sacedón", tipo: "barrio" },
+  { nombre: "Señorío de Villaviciosa", tipo: "barrio" },
+  { nombre: "Tenería", tipo: "barrio" },
+];
+
+const POLIGONOS_VILLAVICIOSA: ZonaCiudad[] = [
+  { nombre: "La Florida", tipo: "poligono" },
+  { nombre: "Pinares Llanos", tipo: "poligono" },
+  { nombre: "Quitapesares (Villapark)", tipo: "poligono" },
 ];
 
 const BARRIOS_COSLADA: ZonaCiudad[] = [
@@ -11671,6 +11707,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Villanueva de la Cañada",
     etiqueta: "Villanueva de la Cañada (Madrid)",
     zonas: [...BARRIOS_VILLANUEVA_CANADA, ...POLIGONOS_VILLANUEVA_CANADA],
+  },
+  {
+    id: "villaviciosa",
+    nombre: "Villaviciosa de Odón",
+    etiqueta: "Villaviciosa de Odón (Madrid)",
+    zonas: [...BARRIOS_VILLAVICIOSA, ...POLIGONOS_VILLAVICIOSA],
   },
   {
     id: "coslada",
