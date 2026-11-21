@@ -262,6 +262,7 @@ describe("zonas de Burgos", () => {
       "marratxi",
       "santaeularia",
       "cadiz",
+      "algeciras",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5098,8 +5099,45 @@ describe("zonas de Burgos", () => {
     expect(ciudades[cadizIdx]?.label).toBe("Cádiz");
     expect(ciudades[cadizIdx]?.negrita).toBe(true);
     expect(ciudades[cadizIdx - 1]?.label).toBe("Plasencia");
-    expect(ciudades[cadizIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[cadizIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[cadizIdx + 1]?.label).toBe("Algeciras");
+    expect(ciudades[cadizIdx + 1]?.negrita).toBeUndefined();
+    const algeciras = ciudadUrbana("algeciras");
+    expect(algeciras?.etiqueta).toBe("Algeciras (Cádiz)");
+    expect(algeciras?.nombre).toBe("Algeciras");
+    expect(zonaDeCiudad(algeciras!, "El Rinconcillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(algeciras!, "Getares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(algeciras!, "La Bajadilla")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(algeciras!, "San José Artesano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(algeciras!, "Villa Vieja")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(algeciras!, "Algeciras")).toBeNull();
+    expect(zonaDeCiudad(algeciras!, "Cortijo Real")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(algeciras!, "Cortijo Real")!)).toBe(
+      "Polígono · Cortijo Real"
+    );
+    expect(zonaDeCiudad(algeciras!, "La Menacha")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(algeciras!, "Las Pilas")?.tipo).toBe("poligono");
+    expect(
+      zonaDeCiudad(algeciras!, "Parque Empresarial Bahía de Algeciras")?.tipo
+    ).toBe("poligono");
+    const nombresAlgeciras = algeciras!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlgeciras).size).toBe(nombresAlgeciras.length);
+    expect(
+      nombresAlgeciras.filter(
+        (n) => algeciras!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(25);
+    expect(
+      nombresAlgeciras.filter(
+        (n) => algeciras!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(4);
+    const algecirasIdx = ciudades.findIndex((c) => c.value === "algeciras");
+    expect(ciudades[algecirasIdx]?.label).toBe("Algeciras");
+    expect(ciudades[algecirasIdx]?.negrita).toBeUndefined();
+    expect(ciudades[algecirasIdx - 1]?.label).toBe("Cádiz");
+    expect(ciudades[algecirasIdx - 1]?.negrita).toBe(true);
+    expect(ciudades[algecirasIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[algecirasIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

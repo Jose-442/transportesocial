@@ -905,8 +905,9 @@
  * Santa Eulària des Riu: debajo de Illes Balears, detrás de Marratxí y delante de Pamplona. Los barrios de la lista y seis polígonos.
  * Santa Eulària des Riu (casco urbano) queda con ese nombre. Santa Eulària des Riu no entra aparte.
  * Can Negre está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
- * Cádiz: capital, detrás de Plasencia y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * Cádiz: capital, detrás de Plasencia y delante de Algeciras. Los barrios de la lista y cuatro polígonos.
  * Recinto Exterior de la Zona Franca y Recinto Interior de la Zona Franca quedan los dos.
+ * Algeciras: debajo de Cádiz, justo detrás de la capital y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11736,6 +11737,41 @@ const POLIGONOS_CADIZ: ZonaCiudad[] = [
   { nombre: "Zona portuaria e industrial", tipo: "poligono" },
 ];
 
+const BARRIOS_ALGECIRAS: ZonaCiudad[] = [
+  { nombre: "Adalides", tipo: "barrio" },
+  { nombre: "Acebuchal", tipo: "barrio" },
+  { nombre: "El Cobre", tipo: "barrio" },
+  { nombre: "El Faro", tipo: "barrio" },
+  { nombre: "El Pelayo", tipo: "barrio" },
+  { nombre: "El Rinconcillo", tipo: "barrio" },
+  { nombre: "El Saladillo", tipo: "barrio" },
+  { nombre: "Getares", tipo: "barrio" },
+  { nombre: "La Bajadilla", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "La Piñera", tipo: "barrio" },
+  { nombre: "La Reconquista", tipo: "barrio" },
+  { nombre: "Las Herrizas", tipo: "barrio" },
+  { nombre: "Los Guijos", tipo: "barrio" },
+  { nombre: "Los Pastores", tipo: "barrio" },
+  { nombre: "Los Pinos", tipo: "barrio" },
+  { nombre: "María Cristina", tipo: "barrio" },
+  { nombre: "Pescadores", tipo: "barrio" },
+  { nombre: "San Bernabé", tipo: "barrio" },
+  { nombre: "San García", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "San José Artesano", tipo: "barrio" },
+  { nombre: "San Severiano", tipo: "barrio" },
+  { nombre: "Villa Nueva", tipo: "barrio" },
+  { nombre: "Villa Vieja", tipo: "barrio" },
+];
+
+const POLIGONOS_ALGECIRAS: ZonaCiudad[] = [
+  { nombre: "Cortijo Real", tipo: "poligono" },
+  { nombre: "La Menacha", tipo: "poligono" },
+  { nombre: "Las Pilas", tipo: "poligono" },
+  { nombre: "Parque Empresarial Bahía de Algeciras", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13230,6 +13266,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Cádiz",
     etiqueta: "Cádiz (Cádiz)",
     zonas: [...BARRIOS_CADIZ, ...POLIGONOS_CADIZ],
+  },
+  {
+    id: "algeciras",
+    nombre: "Algeciras",
+    etiqueta: "Algeciras (Cádiz)",
+    zonas: [...BARRIOS_ALGECIRAS, ...POLIGONOS_ALGECIRAS],
   },
 ];
 
