@@ -103,6 +103,7 @@ describe("zonas de Burgos", () => {
       "alcorcon",
       "torrejon",
       "parla",
+      "paracuellos",
       "alcobendas",
       "rivas",
       "lasrozas",
@@ -1296,6 +1297,25 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresParla).size).toBe(nombresParla.length);
     expect(nombresParla.filter((n) => parla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(30);
     expect(nombresParla.filter((n) => parla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(6);
+    const paracuellos = ciudadUrbana("paracuellos");
+    expect(paracuellos?.etiqueta).toBe("Paracuellos de Jarama (Madrid)");
+    expect(paracuellos?.nombre).toBe("Paracuellos de Jarama");
+    expect(zonaDeCiudad(paracuellos!, "Altos de Jarama")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paracuellos!, "Belvis de Jarama")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paracuellos!, "Miramadrid")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paracuellos!, "Poblado del INTA")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(paracuellos!, "Paracuellos de Jarama")).toBeNull();
+    expect(zonaDeCiudad(paracuellos!, "El Cervellón I")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paracuellos!, "El Cervellón II")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paracuellos!, "El Cervellón III")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(paracuellos!, "El Cervellón I")!)).toBe("Polígono · El Cervellón I");
+    expect(zonaDeCiudad(paracuellos!, "Igarsa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paracuellos!, "La Granja")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(paracuellos!, "La Perla")?.tipo).toBe("poligono");
+    const nombresParacuellos = paracuellos!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresParacuellos).size).toBe(nombresParacuellos.length);
+    expect(nombresParacuellos.filter((n) => paracuellos!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
+    expect(nombresParacuellos.filter((n) => paracuellos!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(9);
     const alcobendas = ciudadUrbana("alcobendas");
     expect(alcobendas?.etiqueta).toBe("Alcobendas (Madrid)");
     expect(alcobendas?.nombre).toBe("Alcobendas");
@@ -4245,7 +4265,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 29).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 30).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4266,6 +4286,7 @@ describe("zonas de Burgos", () => {
       "Mejorada del Campo",
       "Móstoles",
       "Navalcarnero",
+      "Paracuellos de Jarama",
       "Parla",
       "Pinto",
       "Pozuelo de Alarcón",

@@ -198,6 +198,9 @@
  * Mejorada del Campo: debajo de Madrid, detrás de Majadahonda y delante de Móstoles. Los barrios de la lista y los once polígonos.
  * Las Acacias es barrio. Acacias es polígono.
  * Mejorada entra como polígono. Mejorada del Campo no entra como barrio.
+ * Paracuellos de Jarama: debajo de Madrid, detrás de Navalcarnero y delante de Parla. Los barrios de la lista y los nueve polígonos.
+ * El Cervellón I, II y III quedan los tres.
+ * Paracuellos de Jarama no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -5118,6 +5121,33 @@ const POLIGONOS_MEJORADA: ZonaCiudad[] = [
   { nombre: "Mejorada", tipo: "poligono" },
   { nombre: "Miralrío", tipo: "poligono" },
   { nombre: "Prado Concejal", tipo: "poligono" },
+];
+
+const BARRIOS_PARACUELLOS: ZonaCiudad[] = [
+  { nombre: "Altos de Jarama", tipo: "barrio" },
+  { nombre: "Belvis de Jarama", tipo: "barrio" },
+  { nombre: "Berrocales de Jarama", tipo: "barrio" },
+  { nombre: "Casco Antiguo", tipo: "barrio" },
+  { nombre: "El Avalón", tipo: "barrio" },
+  { nombre: "El Picón", tipo: "barrio" },
+  { nombre: "La Paleta", tipo: "barrio" },
+  { nombre: "Las Cometas", tipo: "barrio" },
+  { nombre: "Miramadrid", tipo: "barrio" },
+  { nombre: "Poblado del INTA", tipo: "barrio" },
+  { nombre: "Residencial Jarama", tipo: "barrio" },
+  { nombre: "Valti", tipo: "barrio" },
+];
+
+const POLIGONOS_PARACUELLOS: ZonaCiudad[] = [
+  { nombre: "El Cervellón I", tipo: "poligono" },
+  { nombre: "El Cervellón II", tipo: "poligono" },
+  { nombre: "El Cervellón III", tipo: "poligono" },
+  { nombre: "Igarsa", tipo: "poligono" },
+  { nombre: "La Granja", tipo: "poligono" },
+  { nombre: "Las Huertas", tipo: "poligono" },
+  { nombre: "Los Caces", tipo: "poligono" },
+  { nombre: "Los Polvorines", tipo: "poligono" },
+  { nombre: "La Perla", tipo: "poligono" },
 ];
 
 const BARRIOS_COLLADO_VILLALBA: ZonaCiudad[] = [
@@ -11531,6 +11561,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Parla",
     etiqueta: "Parla (Madrid)",
     zonas: [...BARRIOS_PARLA, ...POLIGONOS_PARLA],
+  },
+  {
+    id: "paracuellos",
+    nombre: "Paracuellos de Jarama",
+    etiqueta: "Paracuellos de Jarama (Madrid)",
+    zonas: [...BARRIOS_PARACUELLOS, ...POLIGONOS_PARACUELLOS],
   },
   {
     id: "alcobendas",
