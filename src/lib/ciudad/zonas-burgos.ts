@@ -993,10 +993,14 @@
  * Adeje Casco queda con ese nombre. Adeje no entra aparte.
  * Los Olivos está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Las fases de La Atalaya no entran aparte. Gobierno de Canarias+2 y Ayuntamiento de Adeje+1 son fuentes. No entran.
- * Arona: debajo de Santa Cruz de Tenerife, detrás de Adeje y delante de Santander. Los barrios de la lista y tres polígonos.
+ * Arona: debajo de Santa Cruz de Tenerife, detrás de Adeje y delante de Granadilla de Abona. Los barrios de la lista y tres polígonos.
  * Arona (casco) queda con ese nombre. Arona no entra aparte.
  * Cho y Cho II quedan las dos como barrio. Cho (Cho II) es el polígono.
  * Costa del Silencio está en las dos listas. El barrio se queda con el nombre corto. El polígono sale como Costa del Silencio (zona industrial).
+ * Granadilla de Abona: debajo de Santa Cruz de Tenerife, detrás de Arona y delante de Santander. Los barrios de la lista y un polígono.
+ * Granadilla de Abona (casco) queda con ese nombre. Granadilla de Abona no entra aparte.
+ * Polígono Industrial de Granadilla entra una sola vez. SP2-01, SP2-02, ITER, Parque Tecnológico y el puerto no entran aparte.
+ * Ayuntamiento de Granadilla de Abona+3, Gobierno de Canarias+3 y polgran.com+3 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -13080,6 +13084,50 @@ const POLIGONOS_ARONA: ZonaCiudad[] = [
   { nombre: "Parque La Reina", tipo: "poligono" },
 ];
 
+const BARRIOS_GRANADILLA: ZonaCiudad[] = [
+  { nombre: "Arenas del Mar", tipo: "barrio" },
+  { nombre: "Atogo", tipo: "barrio" },
+  { nombre: "Casablanca", tipo: "barrio" },
+  { nombre: "Castro", tipo: "barrio" },
+  { nombre: "Chávez", tipo: "barrio" },
+  { nombre: "Charco del Pino", tipo: "barrio" },
+  { nombre: "Chimiche", tipo: "barrio" },
+  { nombre: "Chuchurumbache", tipo: "barrio" },
+  { nombre: "Cruz de las Ánimas", tipo: "barrio" },
+  { nombre: "Cruz de Tea", tipo: "barrio" },
+  { nombre: "El Cabezo", tipo: "barrio" },
+  { nombre: "El Desierto", tipo: "barrio" },
+  { nombre: "El Draguito", tipo: "barrio" },
+  { nombre: "El Médano", tipo: "barrio" },
+  { nombre: "El Salto", tipo: "barrio" },
+  { nombre: "El Topo", tipo: "barrio" },
+  { nombre: "Ensenada Pelada", tipo: "barrio" },
+  { nombre: "La Cantera", tipo: "barrio" },
+  { nombre: "La Higuera", tipo: "barrio" },
+  { nombre: "La Mareta", tipo: "barrio" },
+  { nombre: "La Tejita", tipo: "barrio" },
+  { nombre: "Las Palomas", tipo: "barrio" },
+  { nombre: "Las Rosas", tipo: "barrio" },
+  { nombre: "Las Vegas", tipo: "barrio" },
+  { nombre: "Los Abrigos", tipo: "barrio" },
+  { nombre: "Los Barrancos", tipo: "barrio" },
+  { nombre: "Los Blanquitos", tipo: "barrio" },
+  { nombre: "Los Cuervos", tipo: "barrio" },
+  { nombre: "Los Llanos", tipo: "barrio" },
+  { nombre: "Montaña Gorda", tipo: "barrio" },
+  { nombre: "Montaña de Yaco", tipo: "barrio" },
+  { nombre: "San Isidro", tipo: "barrio" },
+  { nombre: "Vicácaro", tipo: "barrio" },
+  { nombre: "Vista Gorda", tipo: "barrio" },
+  { nombre: "Vistas de Yaco", tipo: "barrio" },
+  { nombre: "Yaco", tipo: "barrio" },
+  { nombre: "Granadilla de Abona (casco)", tipo: "barrio" },
+];
+
+const POLIGONOS_GRANADILLA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Granadilla", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14733,6 +14781,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Arona",
     etiqueta: "Arona (Santa Cruz de Tenerife)",
     zonas: [...BARRIOS_ARONA, ...POLIGONOS_ARONA],
+  },
+  {
+    id: "granadilla",
+    nombre: "Granadilla de Abona",
+    etiqueta: "Granadilla de Abona (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_GRANADILLA, ...POLIGONOS_GRANADILLA],
   },
 ];
 

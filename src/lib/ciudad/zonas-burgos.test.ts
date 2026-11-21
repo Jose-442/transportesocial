@@ -288,6 +288,7 @@ describe("zonas de Burgos", () => {
       "santacruztenerife",
       "adeje",
       "arona",
+      "granadilla",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4726,12 +4727,54 @@ describe("zonas de Burgos", () => {
     expect(ciudades[aronaIdx]?.label).toBe("Arona");
     expect(ciudades[aronaIdx]?.negrita).toBeUndefined();
     expect(ciudades[aronaIdx - 1]?.label).toBe("Adeje");
-    expect(ciudades[aronaIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[aronaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[aronaIdx + 1]?.label).toBe("Granadilla de Abona");
+    expect(ciudades[aronaIdx + 1]?.negrita).toBeUndefined();
+    const granadilla = ciudadUrbana("granadilla");
+    expect(granadilla?.etiqueta).toBe(
+      "Granadilla de Abona (Santa Cruz de Tenerife)"
+    );
+    expect(granadilla?.nombre).toBe("Granadilla de Abona");
+    expect(
+      zonaDeCiudad(granadilla!, "Granadilla de Abona (casco)")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(granadilla!, "El Médano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granadilla!, "San Isidro")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granadilla!, "Los Abrigos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granadilla!, "Yaco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(granadilla!, "Granadilla de Abona")).toBeNull();
+    expect(
+      zonaDeCiudad(granadilla!, "Polígono Industrial de Granadilla")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(granadilla!, "SP2-01")).toBeNull();
+    expect(zonaDeCiudad(granadilla!, "Parque Tecnológico")).toBeNull();
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(granadilla!, "Polígono Industrial de Granadilla")!
+      )
+    ).toBe("Polígono Industrial de Granadilla");
+    const nombresGranadilla = granadilla!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresGranadilla).size).toBe(nombresGranadilla.length);
+    expect(
+      nombresGranadilla.filter(
+        (n) => granadilla!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(37);
+    expect(
+      nombresGranadilla.filter(
+        (n) =>
+          granadilla!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(1);
+    const granadillaIdx = ciudades.findIndex((c) => c.value === "granadilla");
+    expect(ciudades[granadillaIdx]?.label).toBe("Granadilla de Abona");
+    expect(ciudades[granadillaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[granadillaIdx - 1]?.label).toBe("Arona");
+    expect(ciudades[granadillaIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[granadillaIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("Arona");
+    expect(ciudades[santanderIdx - 1]?.label).toBe("Granadilla de Abona");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");
