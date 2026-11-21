@@ -285,6 +285,8 @@
  * Benagalbón y Cotomar quedan como barrio.
  * Cala del Moral (La) queda como barrio. Área comercial de La Cala del Moral como polígono.
  * Alhaurín de la Torre: los barrios y los polígonos de la lista.
+ * Alhaurín el Grande: debajo de Málaga, detrás de Alhaurín de la Torre y delante de Antequera. Los barrios de la lista y los dos polígonos.
+ * Alhaurín el Grande no entra como barrio.
  * Antequera: los barrios, los núcleos rurales y los polígonos de la lista.
  * Villanueva de Cauche y Los Nogales entran una sola vez.
  * Ronda: los barrios, las pedanías y los polígonos de la lista.
@@ -7133,6 +7135,24 @@ const POLIGONOS_ALHAURIN_TORRE: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Zamorilla", tipo: "poligono" },
 ];
 
+const BARRIOS_ALHAURIN_GRANDE: ZonaCiudad[] = [
+  { nombre: "Alhaurín Golf", tipo: "barrio" },
+  { nombre: "Buenavista", tipo: "barrio" },
+  { nombre: "El Cigarral", tipo: "barrio" },
+  { nombre: "El Parral", tipo: "barrio" },
+  { nombre: "El Zángano", tipo: "barrio" },
+  { nombre: "Fuente del Perro", tipo: "barrio" },
+  { nombre: "Interlén", tipo: "barrio" },
+  { nombre: "La Chíchara", tipo: "barrio" },
+  { nombre: "La Paca", tipo: "barrio" },
+  { nombre: "Villafranco del Guadalhorce", tipo: "barrio" },
+];
+
+const POLIGONOS_ALHAURIN_GRANDE: ZonaCiudad[] = [
+  { nombre: "Los Pedregales", tipo: "poligono" },
+  { nombre: "La Rosa", tipo: "poligono" },
+];
+
 const BARRIOS_ANTEQUERA: ZonaCiudad[] = [
   { nombre: "Albarizas", tipo: "barrio" },
   { nombre: "Altos de Santa Catalina", tipo: "barrio" },
@@ -11923,6 +11943,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Alhaurín de la Torre",
     etiqueta: "Alhaurín de la Torre (Málaga)",
     zonas: [...BARRIOS_ALHAURIN_TORRE, ...POLIGONOS_ALHAURIN_TORRE],
+  },
+  {
+    id: "alhaurinelgrande",
+    nombre: "Alhaurín el Grande",
+    etiqueta: "Alhaurín el Grande (Málaga)",
+    zonas: [...BARRIOS_ALHAURIN_GRANDE, ...POLIGONOS_ALHAURIN_GRANDE],
   },
   {
     id: "antequera",

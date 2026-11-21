@@ -148,6 +148,7 @@ describe("zonas de Burgos", () => {
       "torremolinos",
       "rincondelavictoria",
       "alhaurindelatorre",
+      "alhaurinelgrande",
       "antequera",
       "ronda",
       "huelva",
@@ -2122,6 +2123,22 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresAlhaurin).size).toBe(nombresAlhaurin.length);
     expect(nombresAlhaurin.filter((n) => alhaurin!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(47);
     expect(nombresAlhaurin.filter((n) => alhaurin!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(4);
+    const alhaurinGrande = ciudadUrbana("alhaurinelgrande");
+    expect(alhaurinGrande?.etiqueta).toBe("Alhaurín el Grande (Málaga)");
+    expect(alhaurinGrande?.nombre).toBe("Alhaurín el Grande");
+    expect(zonaDeCiudad(alhaurinGrande!, "Alhaurín Golf")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alhaurinGrande!, "Villafranco del Guadalhorce")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alhaurinGrande!, "El Zángano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alhaurinGrande!, "La Chíchara")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(alhaurinGrande!, "Alhaurín el Grande")).toBeNull();
+    expect(zonaDeCiudad(alhaurinGrande!, "Los Pedregales")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(alhaurinGrande!, "Los Pedregales")!)).toBe("Polígono · Los Pedregales");
+    expect(zonaDeCiudad(alhaurinGrande!, "La Rosa")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(alhaurinGrande!, "La Rosa")!)).toBe("Polígono · La Rosa");
+    const nombresAlhaurinGrande = alhaurinGrande!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAlhaurinGrande).size).toBe(nombresAlhaurinGrande.length);
+    expect(nombresAlhaurinGrande.filter((n) => alhaurinGrande!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(10);
+    expect(nombresAlhaurinGrande.filter((n) => alhaurinGrande!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const antequera = ciudadUrbana("antequera");
     expect(antequera?.etiqueta).toBe("Antequera (Málaga)");
     expect(antequera?.nombre).toBe("Antequera");
@@ -4371,26 +4388,28 @@ describe("zonas de Burgos", () => {
     const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");
     expect(ciudades[malagaIdx + 1]?.label).toBe("Alhaurín de la Torre");
     expect(ciudades[malagaIdx + 1]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 2]?.label).toBe("Antequera");
+    expect(ciudades[malagaIdx + 2]?.label).toBe("Alhaurín el Grande");
     expect(ciudades[malagaIdx + 2]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 3]?.label).toBe("Benalmádena");
+    expect(ciudades[malagaIdx + 3]?.label).toBe("Antequera");
     expect(ciudades[malagaIdx + 3]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 4]?.label).toBe("Estepona");
+    expect(ciudades[malagaIdx + 4]?.label).toBe("Benalmádena");
     expect(ciudades[malagaIdx + 4]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 5]?.label).toBe("Fuengirola");
+    expect(ciudades[malagaIdx + 5]?.label).toBe("Estepona");
     expect(ciudades[malagaIdx + 5]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 6]?.label).toBe("Marbella");
+    expect(ciudades[malagaIdx + 6]?.label).toBe("Fuengirola");
     expect(ciudades[malagaIdx + 6]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 7]?.label).toBe("Mijas");
+    expect(ciudades[malagaIdx + 7]?.label).toBe("Marbella");
     expect(ciudades[malagaIdx + 7]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 8]?.label).toBe("Rincón de la Victoria");
+    expect(ciudades[malagaIdx + 8]?.label).toBe("Mijas");
     expect(ciudades[malagaIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 9]?.label).toBe("Ronda");
+    expect(ciudades[malagaIdx + 9]?.label).toBe("Rincón de la Victoria");
     expect(ciudades[malagaIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 10]?.label).toBe("Torremolinos");
+    expect(ciudades[malagaIdx + 10]?.label).toBe("Ronda");
     expect(ciudades[malagaIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[malagaIdx + 11]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 11]?.label).toBe("Torremolinos");
     expect(ciudades[malagaIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades[malagaIdx + 12]?.label).toBe("Vélez-Málaga");
+    expect(ciudades[malagaIdx + 12]?.negrita).toBeUndefined();
     expect(ciudades.find((c) => c.value === "almeria")?.negrita).toBe(true);
     const almeriaIdx = ciudades.findIndex((c) => c.value === "almeria");
     expect(ciudades[almeriaIdx + 1]?.label).toBe("El Ejido");
