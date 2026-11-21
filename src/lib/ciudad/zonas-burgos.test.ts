@@ -276,6 +276,7 @@ describe("zonas de Burgos", () => {
       "puertoreal",
       "sanroque",
       "sanlucar",
+      "aguimes",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5690,10 +5691,51 @@ describe("zonas de Burgos", () => {
     expect(ciudades[ribeiraIdx]?.negrita).toBeUndefined();
     expect(ciudades[ribeiraIdx - 1]?.label).toBe("Oleiros");
     expect(ciudades[ribeiraIdx + 1]?.label).toBe("Santiago de Compostela");
+    const aguimes = ciudadUrbana("aguimes");
+    expect(aguimes?.etiqueta).toBe("Agüimes (Las Palmas)");
+    expect(aguimes?.nombre).toBe("Agüimes");
+    expect(zonaDeCiudad(aguimes!, "Agüimes (casco)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguimes!, "Playa de Arinaga")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguimes!, "Polígono Residencial de Arinaga")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(aguimes!, "Temisas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguimes!, "Agüimes")).toBeNull();
+    expect(zonaDeCiudad(aguimes!, "Espinales (Los)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(aguimes!, "Polígono Industrial de Arinaga")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(aguimes!, "Espinales Industrial")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      etiquetaZona(zonaDeCiudad(aguimes!, "Polígono Industrial de Arinaga")!)
+    ).toBe("Polígono Industrial de Arinaga");
+    expect(etiquetaZona(zonaDeCiudad(aguimes!, "Espinales Industrial")!)).toBe(
+      "Polígono · Espinales Industrial"
+    );
+    const nombresAguimes = aguimes!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresAguimes).size).toBe(nombresAguimes.length);
+    expect(
+      nombresAguimes.filter(
+        (n) => aguimes!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(16);
+    expect(
+      nombresAguimes.filter(
+        (n) => aguimes!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const aguimesIdx = ciudades.findIndex((c) => c.value === "aguimes");
+    expect(ciudades[aguimesIdx]?.label).toBe("Agüimes");
+    expect(ciudades[aguimesIdx]?.negrita).toBeUndefined();
+    expect(ciudades[aguimesIdx - 1]?.label).toBe("Santiago de Compostela");
+    expect(ciudades[aguimesIdx + 1]?.label).toBe("Albacete");
+    expect(ciudades[aguimesIdx + 1]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
-    expect(ciudades[albaceteIdx - 1]?.label).toBe("Santiago de Compostela");
+    expect(ciudades[albaceteIdx - 1]?.label).toBe("Agüimes");
     expect(ciudades[albaceteIdx + 1]?.label).toBe("Hellín");
     expect(ciudades[albaceteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[albaceteIdx + 2]?.label).toBe("Alicante");

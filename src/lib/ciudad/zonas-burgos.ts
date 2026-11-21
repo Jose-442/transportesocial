@@ -947,6 +947,10 @@
  * Sanlúcar de Barrameda: debajo de Cádiz, detrás de San Roque y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
  * La Gallarda y Las Palmeras están en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Sanlúcar de Barrameda no entra como barrio.
+ * Agüimes: Las Palmas, detrás de A Coruña y delante de Albacete. Los barrios de la lista y dos polígonos.
+ * Agüimes (casco) queda con ese nombre. Agüimes no entra aparte.
+ * Polígono Residencial de Arinaga es barrio. Polígono Industrial de Arinaga es polígono.
+ * Espinales (Los) es barrio. Espinales Industrial es polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12385,6 +12389,30 @@ const POLIGONOS_SANLUCAR: ZonaCiudad[] = [
   },
 ];
 
+const BARRIOS_AGUIMES: ZonaCiudad[] = [
+  { nombre: "Agüimes (casco)", tipo: "barrio" },
+  { nombre: "Corralillos (Los)", tipo: "barrio" },
+  { nombre: "Cruce de Arinaga", tipo: "barrio" },
+  { nombre: "Edén (El)", tipo: "barrio" },
+  { nombre: "Espinales (Los)", tipo: "barrio" },
+  { nombre: "Goleta (La)", tipo: "barrio" },
+  { nombre: "Banda (La)", tipo: "barrio" },
+  { nombre: "Las Rosas", tipo: "barrio" },
+  { nombre: "Llano Blanco", tipo: "barrio" },
+  { nombre: "Montaña de Los Vélez", tipo: "barrio" },
+  { nombre: "Montaña San Francisco", tipo: "barrio" },
+  { nombre: "Oasis (El)", tipo: "barrio" },
+  { nombre: "Playa de Arinaga", tipo: "barrio" },
+  { nombre: "Polígono Residencial de Arinaga", tipo: "barrio" },
+  { nombre: "Temisas", tipo: "barrio" },
+  { nombre: "Vargas", tipo: "barrio" },
+];
+
+const POLIGONOS_AGUIMES: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Arinaga", tipo: "poligono" },
+  { nombre: "Espinales Industrial", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13963,6 +13991,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Sanlúcar de Barrameda",
     etiqueta: "Sanlúcar de Barrameda (Cádiz)",
     zonas: [...BARRIOS_SANLUCAR, ...POLIGONOS_SANLUCAR],
+  },
+  {
+    id: "aguimes",
+    nombre: "Agüimes",
+    etiqueta: "Agüimes (Las Palmas)",
+    zonas: [...BARRIOS_AGUIMES, ...POLIGONOS_AGUIMES],
   },
 ];
 
