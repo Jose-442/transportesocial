@@ -206,6 +206,8 @@
  * San Martín de la Vega no entra como barrio.
  * Torrelodones: debajo de Madrid, detrás de Torrejón de Ardoz y delante de Tres Cantos. Los barrios de la lista. Sin polígonos.
  * Torrelodones no entra como barrio.
+ * Villanueva de la Cañada: debajo de Madrid, detrás de Valdemoro. Los barrios de la lista y los dos polígonos.
+ * Villanueva de la Cañada no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -5009,6 +5011,20 @@ const POLIGONOS_VALDEMORO: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Valmor", tipo: "poligono" },
   { nombre: "Polígono Industrial La Peluquera", tipo: "poligono" },
   { nombre: "Polígono Industrial Yesos Ibéricos", tipo: "poligono" },
+];
+
+const BARRIOS_VILLANUEVA_CANADA: ZonaCiudad[] = [
+  { nombre: "Casco Urbano", tipo: "barrio" },
+  { nombre: "El Valle de los Rosales", tipo: "barrio" },
+  { nombre: "Guadamonte", tipo: "barrio" },
+  { nombre: "La Mocha Chica", tipo: "barrio" },
+  { nombre: "La Raya del Palancar", tipo: "barrio" },
+  { nombre: "Villafranca del Castillo", tipo: "barrio" },
+];
+
+const POLIGONOS_VILLANUEVA_CANADA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial Calle Navarra", tipo: "poligono" },
+  { nombre: "Polígono Industrial Sector IV – La Pasada", tipo: "poligono" },
 ];
 
 const BARRIOS_COSLADA: ZonaCiudad[] = [
@@ -11649,6 +11665,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Valdemoro",
     etiqueta: "Valdemoro (Madrid)",
     zonas: [...BARRIOS_VALDEMORO, ...POLIGONOS_VALDEMORO],
+  },
+  {
+    id: "villanuevacanada",
+    nombre: "Villanueva de la Cañada",
+    etiqueta: "Villanueva de la Cañada (Madrid)",
+    zonas: [...BARRIOS_VILLANUEVA_CANADA, ...POLIGONOS_VILLANUEVA_CANADA],
   },
   {
     id: "coslada",

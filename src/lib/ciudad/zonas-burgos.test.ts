@@ -111,6 +111,7 @@ describe("zonas de Burgos", () => {
       "ssreyes",
       "pozuelo",
       "valdemoro",
+      "villanuevacanada",
       "coslada",
       "majadahonda",
       "mejorada",
@@ -1450,6 +1451,21 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresValdemoro).size).toBe(nombresValdemoro.length);
     expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(49);
     expect(nombresValdemoro.filter((n) => valdemoro!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(10);
+    const villanuevaCanada = ciudadUrbana("villanuevacanada");
+    expect(villanuevaCanada?.etiqueta).toBe("Villanueva de la Cañada (Madrid)");
+    expect(villanuevaCanada?.nombre).toBe("Villanueva de la Cañada");
+    expect(zonaDeCiudad(villanuevaCanada!, "Casco Urbano")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villanuevaCanada!, "Villafranca del Castillo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villanuevaCanada!, "Guadamonte")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(villanuevaCanada!, "Villanueva de la Cañada")).toBeNull();
+    expect(zonaDeCiudad(villanuevaCanada!, "Polígono Industrial Calle Navarra")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(villanuevaCanada!, "Polígono Industrial Calle Navarra")!)).toBe("Polígono Industrial Calle Navarra");
+    expect(zonaDeCiudad(villanuevaCanada!, "Polígono Industrial Sector IV – La Pasada")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(villanuevaCanada!, "Polígono Industrial Sector IV – La Pasada")!)).toBe("Polígono Industrial Sector IV – La Pasada");
+    const nombresVillanuevaCanada = villanuevaCanada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresVillanuevaCanada).size).toBe(nombresVillanuevaCanada.length);
+    expect(nombresVillanuevaCanada.filter((n) => villanuevaCanada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(6);
+    expect(nombresVillanuevaCanada.filter((n) => villanuevaCanada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
     const coslada = ciudadUrbana("coslada");
     expect(coslada?.etiqueta).toBe("Coslada (Madrid)");
     expect(coslada?.nombre).toBe("Coslada");
@@ -4294,7 +4310,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 32).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 33).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4327,6 +4343,7 @@ describe("zonas de Burgos", () => {
       "Torrelodones",
       "Tres Cantos",
       "Valdemoro",
+      "Villanueva de la Cañada",
     ]);
     expect(ciudades.find((c) => c.value === "malaga")?.negrita).toBe(true);
     const malagaIdx = ciudades.findIndex((c) => c.value === "malaga");
