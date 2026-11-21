@@ -289,6 +289,7 @@ describe("zonas de Burgos", () => {
       "adeje",
       "arona",
       "granadilla",
+      "laorotava",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4769,12 +4770,55 @@ describe("zonas de Burgos", () => {
     expect(ciudades[granadillaIdx]?.label).toBe("Granadilla de Abona");
     expect(ciudades[granadillaIdx]?.negrita).toBeUndefined();
     expect(ciudades[granadillaIdx - 1]?.label).toBe("Arona");
-    expect(ciudades[granadillaIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[granadillaIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[granadillaIdx + 1]?.label).toBe("La Orotava");
+    expect(ciudades[granadillaIdx + 1]?.negrita).toBeUndefined();
+    const laOrotava = ciudadUrbana("laorotava");
+    expect(laOrotava?.etiqueta).toBe("La Orotava (Santa Cruz de Tenerife)");
+    expect(laOrotava?.nombre).toBe("La Orotava");
+    expect(
+      zonaDeCiudad(laOrotava!, "La Orotava (casco histórico y centro)")?.tipo
+    ).toBe("barrio");
+    expect(zonaDeCiudad(laOrotava!, "La Perdoma")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOrotava!, "Pinolere")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOrotava!, "Pinoleris")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOrotava!, "San Jerónimo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOrotava!, "Las Cañadas del Teide")?.tipo).toBe(
+      "barrio"
+    );
+    expect(zonaDeCiudad(laOrotava!, "La Orotava")).toBeNull();
+    expect(
+      zonaDeCiudad(laOrotava!, "Polígono Industrial San Jerónimo")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(laOrotava!, "El Trompo")).toBeNull();
+    expect(zonaDeCiudad(laOrotava!, "La Villa")).toBeNull();
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(laOrotava!, "Polígono Industrial San Jerónimo")!
+      )
+    ).toBe("Polígono Industrial San Jerónimo");
+    const nombresLaOrotava = laOrotava!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLaOrotava).size).toBe(nombresLaOrotava.length);
+    expect(
+      nombresLaOrotava.filter(
+        (n) => laOrotava!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(33);
+    expect(
+      nombresLaOrotava.filter(
+        (n) =>
+          laOrotava!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(1);
+    const laOrotavaIdx = ciudades.findIndex((c) => c.value === "laorotava");
+    expect(ciudades[laOrotavaIdx]?.label).toBe("La Orotava");
+    expect(ciudades[laOrotavaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[laOrotavaIdx - 1]?.label).toBe("Granadilla de Abona");
+    expect(ciudades[laOrotavaIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[laOrotavaIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("Granadilla de Abona");
+    expect(ciudades[santanderIdx - 1]?.label).toBe("La Orotava");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");

@@ -997,10 +997,14 @@
  * Arona (casco) queda con ese nombre. Arona no entra aparte.
  * Cho y Cho II quedan las dos como barrio. Cho (Cho II) es el polígono.
  * Costa del Silencio está en las dos listas. El barrio se queda con el nombre corto. El polígono sale como Costa del Silencio (zona industrial).
- * Granadilla de Abona: debajo de Santa Cruz de Tenerife, detrás de Arona y delante de Santander. Los barrios de la lista y un polígono.
+ * Granadilla de Abona: debajo de Santa Cruz de Tenerife, detrás de Arona y delante de La Orotava. Los barrios de la lista y un polígono.
  * Granadilla de Abona (casco) queda con ese nombre. Granadilla de Abona no entra aparte.
  * Polígono Industrial de Granadilla entra una sola vez. SP2-01, SP2-02, ITER, Parque Tecnológico y el puerto no entran aparte.
  * Ayuntamiento de Granadilla de Abona+3, Gobierno de Canarias+3 y polgran.com+3 son fuentes. No entran.
+ * La Orotava: debajo de Santa Cruz de Tenerife, detrás de Granadilla de Abona y delante de Santander. Los barrios de la lista y un polígono.
+ * La Orotava (casco histórico y centro) queda con ese nombre. La Orotava no entra aparte.
+ * Pinolere y Pinoleris quedan las dos. San Jerónimo es barrio. Polígono Industrial San Jerónimo es polígono.
+ * El Trompo y La Villa no entran: son áreas comerciales. Ayuntamiento de La Orotava+3 y Vitalinaves+3 son fuentes. No entran.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -13128,6 +13132,46 @@ const POLIGONOS_GRANADILLA: ZonaCiudad[] = [
   { nombre: "Polígono Industrial de Granadilla", tipo: "poligono" },
 ];
 
+const BARRIOS_LA_OROTAVA: ZonaCiudad[] = [
+  { nombre: "Aguamansa", tipo: "barrio" },
+  { nombre: "Barroso", tipo: "barrio" },
+  { nombre: "Bebedero (El)", tipo: "barrio" },
+  { nombre: "Benijos", tipo: "barrio" },
+  { nombre: "Camino de Chasna", tipo: "barrio" },
+  { nombre: "Chasna", tipo: "barrio" },
+  { nombre: "Dehesa Alta", tipo: "barrio" },
+  { nombre: "Dehesa Baja", tipo: "barrio" },
+  { nombre: "Durazno (El)", tipo: "barrio" },
+  { nombre: "Hacienda Perdida", tipo: "barrio" },
+  { nombre: "La Candelaria", tipo: "barrio" },
+  { nombre: "La Florida", tipo: "barrio" },
+  { nombre: "La Habanera", tipo: "barrio" },
+  { nombre: "La Luz", tipo: "barrio" },
+  { nombre: "La Marzagana", tipo: "barrio" },
+  { nombre: "La Orotava (casco histórico y centro)", tipo: "barrio" },
+  { nombre: "La Perdoma", tipo: "barrio" },
+  { nombre: "Las Arenas", tipo: "barrio" },
+  { nombre: "Las Candias", tipo: "barrio" },
+  { nombre: "Las Cañadas del Teide", tipo: "barrio" },
+  { nombre: "Las Cuevas", tipo: "barrio" },
+  { nombre: "Los Frontones", tipo: "barrio" },
+  { nombre: "Los Gómez", tipo: "barrio" },
+  { nombre: "Los Rechazos", tipo: "barrio" },
+  { nombre: "Montijos", tipo: "barrio" },
+  { nombre: "Pino Alto", tipo: "barrio" },
+  { nombre: "Pinolere", tipo: "barrio" },
+  { nombre: "Pinoleris", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Jerónimo", tipo: "barrio" },
+  { nombre: "San Miguel", tipo: "barrio" },
+  { nombre: "El Sauce", tipo: "barrio" },
+  { nombre: "El Rincón", tipo: "barrio" },
+];
+
+const POLIGONOS_LA_OROTAVA: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial San Jerónimo", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14787,6 +14831,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Granadilla de Abona",
     etiqueta: "Granadilla de Abona (Santa Cruz de Tenerife)",
     zonas: [...BARRIOS_GRANADILLA, ...POLIGONOS_GRANADILLA],
+  },
+  {
+    id: "laorotava",
+    nombre: "La Orotava",
+    etiqueta: "La Orotava (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_LA_OROTAVA, ...POLIGONOS_LA_OROTAVA],
   },
 ];
 
