@@ -954,10 +954,13 @@
  * Arucas: Las Palmas, detrás de Agüimes y delante de Ingenio. Los barrios de la lista. Sin polígonos.
  * Arucas (casco) queda con ese nombre. Arucas no entra aparte.
  * El Portichuelo, Hoya López y Rosa Silva entran. Montaña Blanca entra una sola vez.
- * Ingenio: Las Palmas, detrás de Arucas y delante de Albacete. Los barrios de la lista y tres polígonos.
+ * Ingenio: Las Palmas, detrás de Arucas y delante de La Oliva. Los barrios de la lista y tres polígonos.
  * Ingenio (casco urbano) queda con ese nombre. Ingenio no entra aparte.
  * La Pasadilla y Pasadilla quedan las dos. Las Majoreras es barrio. Las Majoreras – Lomo el Cardón es polígono.
  * transparencia.ingenio.es+5 es la fuente. No entra en el desplegable.
+ * La Oliva: Las Palmas, detrás de Ingenio y delante de Albacete. Los barrios de la lista y dos polígonos.
+ * La Oliva (casco) queda con ese nombre. La Oliva no entra aparte.
+ * El Cotillo (Tostón) queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -12505,6 +12508,26 @@ const POLIGONOS_INGENIO: ZonaCiudad[] = [
   { nombre: "Lomo Cementerio", tipo: "poligono" },
 ];
 
+const BARRIOS_LA_OLIVA: ZonaCiudad[] = [
+  { nombre: "Corralejo", tipo: "barrio" },
+  { nombre: "El Cotillo (Tostón)", tipo: "barrio" },
+  { nombre: "El Roque", tipo: "barrio" },
+  { nombre: "La Caldereta", tipo: "barrio" },
+  { nombre: "La Capellanía", tipo: "barrio" },
+  { nombre: "La Oliva (casco)", tipo: "barrio" },
+  { nombre: "Lajares", tipo: "barrio" },
+  { nombre: "Majanicho", tipo: "barrio" },
+  { nombre: "Parque Holandés", tipo: "barrio" },
+  { nombre: "Tindaya", tipo: "barrio" },
+  { nombre: "Vallebrón", tipo: "barrio" },
+  { nombre: "Villaverde", tipo: "barrio" },
+];
+
+const POLIGONOS_LA_OLIVA: ZonaCiudad[] = [
+  { nombre: "Casilla Costa", tipo: "poligono" },
+  { nombre: "SAU PSI-2 La Oliva", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14101,6 +14124,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Ingenio",
     etiqueta: "Ingenio (Las Palmas)",
     zonas: [...BARRIOS_INGENIO, ...POLIGONOS_INGENIO],
+  },
+  {
+    id: "laoliva",
+    nombre: "La Oliva",
+    etiqueta: "La Oliva (Las Palmas)",
+    zonas: [...BARRIOS_LA_OLIVA, ...POLIGONOS_LA_OLIVA],
   },
 ];
 

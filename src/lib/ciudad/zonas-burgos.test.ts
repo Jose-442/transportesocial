@@ -279,6 +279,7 @@ describe("zonas de Burgos", () => {
       "aguimes",
       "arucas",
       "ingenio",
+      "laoliva",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5801,12 +5802,44 @@ describe("zonas de Burgos", () => {
     expect(ciudades[ingenioIdx]?.label).toBe("Ingenio");
     expect(ciudades[ingenioIdx]?.negrita).toBeUndefined();
     expect(ciudades[ingenioIdx - 1]?.label).toBe("Arucas");
-    expect(ciudades[ingenioIdx + 1]?.label).toBe("Albacete");
-    expect(ciudades[ingenioIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[ingenioIdx + 1]?.label).toBe("La Oliva");
+    expect(ciudades[ingenioIdx + 1]?.negrita).toBeUndefined();
+    const laOliva = ciudadUrbana("laoliva");
+    expect(laOliva?.etiqueta).toBe("La Oliva (Las Palmas)");
+    expect(laOliva?.nombre).toBe("La Oliva");
+    expect(zonaDeCiudad(laOliva!, "Corralejo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOliva!, "El Cotillo (Tostón)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOliva!, "La Oliva (casco)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOliva!, "Lajares")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOliva!, "Parque Holandés")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(laOliva!, "La Oliva")).toBeNull();
+    expect(zonaDeCiudad(laOliva!, "Casilla Costa")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(laOliva!, "SAU PSI-2 La Oliva")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(laOliva!, "Casilla Costa")!)).toBe(
+      "Polígono · Casilla Costa"
+    );
+    const nombresLaOliva = laOliva!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresLaOliva).size).toBe(nombresLaOliva.length);
+    expect(
+      nombresLaOliva.filter(
+        (n) => laOliva!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(12);
+    expect(
+      nombresLaOliva.filter(
+        (n) => laOliva!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const laOlivaIdx = ciudades.findIndex((c) => c.value === "laoliva");
+    expect(ciudades[laOlivaIdx]?.label).toBe("La Oliva");
+    expect(ciudades[laOlivaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[laOlivaIdx - 1]?.label).toBe("Ingenio");
+    expect(ciudades[laOlivaIdx + 1]?.label).toBe("Albacete");
+    expect(ciudades[laOlivaIdx + 1]?.negrita).toBe(true);
     const albaceteIdx = ciudades.findIndex((c) => c.value === "albacete");
     expect(ciudades[albaceteIdx]?.label).toBe("Albacete");
     expect(ciudades[albaceteIdx]?.negrita).toBe(true);
-    expect(ciudades[albaceteIdx - 1]?.label).toBe("Ingenio");
+    expect(ciudades[albaceteIdx - 1]?.label).toBe("La Oliva");
     expect(ciudades[albaceteIdx + 1]?.label).toBe("Hellín");
     expect(ciudades[albaceteIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[albaceteIdx + 2]?.label).toBe("Alicante");
