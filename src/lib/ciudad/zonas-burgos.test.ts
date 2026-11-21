@@ -256,6 +256,7 @@ describe("zonas de Burgos", () => {
       "calvia",
       "ciutadella",
       "llucmajor",
+      "manacor",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4853,8 +4854,55 @@ describe("zonas de Burgos", () => {
     expect(ciudades[llucmajorIdx]?.label).toBe("Llucmajor");
     expect(ciudades[llucmajorIdx]?.negrita).toBeUndefined();
     expect(ciudades[llucmajorIdx - 1]?.label).toBe("Ciutadella de Menorca");
-    expect(ciudades[llucmajorIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[llucmajorIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[llucmajorIdx + 1]?.label).toBe("Manacor");
+    expect(ciudades[llucmajorIdx + 1]?.negrita).toBeUndefined();
+    const manacor = ciudadUrbana("manacor");
+    expect(manacor?.etiqueta).toBe("Manacor (Illes Balears)");
+    expect(manacor?.nombre).toBe("Manacor");
+    expect(zonaDeCiudad(manacor!, "Cala Anguila")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manacor!, "Manacor (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manacor!, "Porto Cristo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manacor!, "s’Illot")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manacor!, "Son Macià")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(manacor!, "Manacor")).toBeNull();
+    expect(zonaDeCiudad(manacor!, "Polígono Industrial de Manacor")?.tipo).toBe(
+      "poligono"
+    );
+    expect(
+      zonaDeCiudad(manacor!, "Polígono Agroalimentario de Manacor")?.tipo
+    ).toBe("poligono");
+    expect(
+      zonaDeCiudad(
+        manacor!,
+        "Son Talent (zona de servicios y actividad económica)"
+      )?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(
+        zonaDeCiudad(
+          manacor!,
+          "Son Talent (zona de servicios y actividad económica)"
+        )!
+      )
+    ).toBe("Polígono · Son Talent (zona de servicios y actividad económica)");
+    const nombresManacor = manacor!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresManacor).size).toBe(nombresManacor.length);
+    expect(
+      nombresManacor.filter(
+        (n) => manacor!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(9);
+    expect(
+      nombresManacor.filter(
+        (n) => manacor!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const manacorIdx = ciudades.findIndex((c) => c.value === "manacor");
+    expect(ciudades[manacorIdx]?.label).toBe("Manacor");
+    expect(ciudades[manacorIdx]?.negrita).toBeUndefined();
+    expect(ciudades[manacorIdx - 1]?.label).toBe("Llucmajor");
+    expect(ciudades[manacorIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[manacorIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

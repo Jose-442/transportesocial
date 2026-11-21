@@ -889,9 +889,12 @@
  * Ciutadella de Menorca: debajo de Illes Balears, detrás de Calvià y delante de Llucmajor. Los barrios de la lista y un polígono.
  * Ciutadella (casco urbano) queda con ese nombre. Ciutadella de Menorca no entra aparte.
  * Polígono Industrial de Ciutadella (POICI) queda con ese nombre.
- * Llucmajor: debajo de Illes Balears, detrás de Ciutadella de Menorca y delante de Ciudad Real. Los barrios de la lista y dos polígonos.
+ * Llucmajor: debajo de Illes Balears, detrás de Ciutadella de Menorca y delante de Manacor. Los barrios de la lista y dos polígonos.
  * Llucmajor (casco urbano) queda con ese nombre. Llucmajor no entra aparte.
  * Son Noguera y Son Fosquet quedan como polígonos.
+ * Manacor: debajo de Illes Balears, detrás de Llucmajor y delante de Ciudad Real. Los barrios de la lista y tres polígonos.
+ * Manacor (casco urbano) queda con ese nombre. Manacor no entra aparte.
+ * s’Illot queda con ese nombre. Son Talent queda como polígono.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11496,6 +11499,24 @@ const POLIGONOS_LLUCMAJOR: ZonaCiudad[] = [
   { nombre: "Son Fosquet", tipo: "poligono" },
 ];
 
+const BARRIOS_MANACOR: ZonaCiudad[] = [
+  { nombre: "Cala Anguila", tipo: "barrio" },
+  { nombre: "Cala Domingos", tipo: "barrio" },
+  { nombre: "Cala Mandia", tipo: "barrio" },
+  { nombre: "Cala Murada", tipo: "barrio" },
+  { nombre: "Cala Romàntica", tipo: "barrio" },
+  { nombre: "Manacor (casco urbano)", tipo: "barrio" },
+  { nombre: "Porto Cristo", tipo: "barrio" },
+  { nombre: "s’Illot", tipo: "barrio" },
+  { nombre: "Son Macià", tipo: "barrio" },
+];
+
+const POLIGONOS_MANACOR: ZonaCiudad[] = [
+  { nombre: "Polígono Industrial de Manacor", tipo: "poligono" },
+  { nombre: "Polígono Agroalimentario de Manacor", tipo: "poligono" },
+  { nombre: "Son Talent (zona de servicios y actividad económica)", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -12954,6 +12975,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Llucmajor",
     etiqueta: "Llucmajor (Illes Balears)",
     zonas: [...BARRIOS_LLUCMAJOR, ...POLIGONOS_LLUCMAJOR],
+  },
+  {
+    id: "manacor",
+    nombre: "Manacor",
+    etiqueta: "Manacor (Illes Balears)",
+    zonas: [...BARRIOS_MANACOR, ...POLIGONOS_MANACOR],
   },
 ];
 
