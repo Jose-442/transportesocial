@@ -71,8 +71,11 @@
  * Lalín: debajo de Pontevedra, detrás de Cangas y delante de Marín. Los barrios de la lista y las dos áreas industriales.
  * Lalín (casco urbano) es el casco. Lalín no entra aparte.
  * Botos es barrio. Polígono Industrial de Botos entra aparte.
- * Marín: debajo de Pontevedra, detrás de Lalín y delante de Vigo. Los barrios de la lista y la zona industrial del puerto.
+ * Marín: debajo de Pontevedra, detrás de Lalín y delante de Redondela. Los barrios de la lista y la zona industrial del puerto.
  * Marín no entra como barrio.
+ * Redondela: debajo de Pontevedra, detrás de Marín y delante de Vigo. Los barrios de la lista y el polígono O Muro.
+ * Redondela (casco urbano) es el casco. Redondela no entra aparte.
+ * Asnelle de Abaixo y Asnelle de Arriba quedan las dos.
  * A Coruña: barrios del plano del Concello. Sin los muelles.
  * Polígonos Agrela, Pocomaco, Vío, el Parque Ofimático y Someso.
  * Santiago de Compostela: zonas del Concello y parroquias del padrón.
@@ -2101,6 +2104,29 @@ const BARRIOS_MARIN: ZonaCiudad[] = [
 
 const POLIGONOS_MARIN: ZonaCiudad[] = [
   { nombre: "Puerto de Marín (zona industrial y logística portuaria)", tipo: "poligono" },
+];
+
+const BARRIOS_REDONDELA: ZonaCiudad[] = [
+  { nombre: "A Portela", tipo: "barrio" },
+  { nombre: "Asnelle de Abaixo", tipo: "barrio" },
+  { nombre: "Asnelle de Arriba", tipo: "barrio" },
+  { nombre: "Cabeiro", tipo: "barrio" },
+  { nombre: "Cedeira", tipo: "barrio" },
+  { nombre: "Cesantes", tipo: "barrio" },
+  { nombre: "Chapela", tipo: "barrio" },
+  { nombre: "Negros", tipo: "barrio" },
+  { nombre: "Quintela", tipo: "barrio" },
+  { nombre: "Reboreda", tipo: "barrio" },
+  { nombre: "Redondela (casco urbano)", tipo: "barrio" },
+  { nombre: "Saxamonde", tipo: "barrio" },
+  { nombre: "Trasmañó", tipo: "barrio" },
+  { nombre: "Ventosela", tipo: "barrio" },
+  { nombre: "Vilar de Infesta", tipo: "barrio" },
+  { nombre: "O Viso", tipo: "barrio" },
+];
+
+const POLIGONOS_REDONDELA: ZonaCiudad[] = [
+  { nombre: "O Muro", tipo: "poligono" },
 ];
 
 const BARRIOS_CORUNA: ZonaCiudad[] = [
@@ -11528,6 +11554,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Marín",
     etiqueta: "Marín (Pontevedra)",
     zonas: [...BARRIOS_MARIN, ...POLIGONOS_MARIN],
+  },
+  {
+    id: "redondela",
+    nombre: "Redondela",
+    etiqueta: "Redondela (Pontevedra)",
+    zonas: [...BARRIOS_REDONDELA, ...POLIGONOS_REDONDELA],
   },
   {
     id: "vigo",
