@@ -111,6 +111,7 @@ describe("zonas de Burgos", () => {
       "valdemoro",
       "coslada",
       "majadahonda",
+      "mejorada",
       "colladovillalba",
       "boadilla",
       "aranjuez",
@@ -1458,6 +1459,23 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresMaja).size).toBe(nombresMaja.length);
     expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(60);
     expect(nombresMaja.filter((n) => majadahonda!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const mejorada = ciudadUrbana("mejorada");
+    expect(mejorada?.etiqueta).toBe("Mejorada del Campo (Madrid)");
+    expect(mejorada?.nombre).toBe("Mejorada del Campo");
+    expect(zonaDeCiudad(mejorada!, "El Trébol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mejorada!, "Las Acacias")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mejorada!, "Los Ángeles")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mejorada!, "Mejorada del Campo")).toBeNull();
+    expect(zonaDeCiudad(mejorada!, "Acacias")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(mejorada!, "Acacias")!)).toBe("Polígono · Acacias");
+    expect(zonaDeCiudad(mejorada!, "Mejorada")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(mejorada!, "Mejorada")!)).toBe("Polígono · Mejorada");
+    expect(zonaDeCiudad(mejorada!, "Camino Alto de Velilla")?.tipo).toBe("poligono");
+    expect(zonaDeCiudad(mejorada!, "La Ladrillera Sur")?.tipo).toBe("poligono");
+    const nombresMejorada = mejorada!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMejorada).size).toBe(nombresMejorada.length);
+    expect(nombresMejorada.filter((n) => mejorada!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(12);
+    expect(nombresMejorada.filter((n) => mejorada!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(11);
     const collado = ciudadUrbana("colladovillalba");
     expect(collado?.etiqueta).toBe("Collado Villalba (Madrid)");
     expect(collado?.nombre).toBe("Collado Villalba");
@@ -4227,7 +4245,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 28).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 29).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4245,6 +4263,7 @@ describe("zonas de Burgos", () => {
       "Las Rozas de Madrid",
       "Leganés",
       "Majadahonda",
+      "Mejorada del Campo",
       "Móstoles",
       "Navalcarnero",
       "Parla",

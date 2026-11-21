@@ -195,6 +195,9 @@
  * Majadahonda: los barrios y los polígonos de la lista.
  * El Carralero queda como barrio. Polígono Industrial Carralero como polígono.
  * Los Satélites queda como barrio.
+ * Mejorada del Campo: debajo de Madrid, detrás de Majadahonda y delante de Móstoles. Los barrios de la lista y los once polígonos.
+ * Las Acacias es barrio. Acacias es polígono.
+ * Mejorada entra como polígono. Mejorada del Campo no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -5086,6 +5089,35 @@ const BARRIOS_MAJADAHONDA: ZonaCiudad[] = [
 const POLIGONOS_MAJADAHONDA: ZonaCiudad[] = [
   { nombre: "Paraje I+D", tipo: "poligono" },
   { nombre: "Polígono Industrial Carralero", tipo: "poligono" },
+];
+
+const BARRIOS_MEJORADA: ZonaCiudad[] = [
+  { nombre: "El Balcón", tipo: "barrio" },
+  { nombre: "El Olivar Grande", tipo: "barrio" },
+  { nombre: "El Tallar", tipo: "barrio" },
+  { nombre: "El Trébol", tipo: "barrio" },
+  { nombre: "La Elleta", tipo: "barrio" },
+  { nombre: "La Granja", tipo: "barrio" },
+  { nombre: "La Vega", tipo: "barrio" },
+  { nombre: "Las Acacias", tipo: "barrio" },
+  { nombre: "Los Ángeles", tipo: "barrio" },
+  { nombre: "Los Olivos", tipo: "barrio" },
+  { nombre: "Valdecelada", tipo: "barrio" },
+  { nombre: "Villaflores", tipo: "barrio" },
+];
+
+const POLIGONOS_MEJORADA: ZonaCiudad[] = [
+  { nombre: "Acacias", tipo: "poligono" },
+  { nombre: "Aragón", tipo: "poligono" },
+  { nombre: "Camino Alto de Velilla", tipo: "poligono" },
+  { nombre: "Inducamp", tipo: "poligono" },
+  { nombre: "La Huerta", tipo: "poligono" },
+  { nombre: "La Ladrillera Sur", tipo: "poligono" },
+  { nombre: "La Raya de Velilla", tipo: "poligono" },
+  { nombre: "Magdaleno", tipo: "poligono" },
+  { nombre: "Mejorada", tipo: "poligono" },
+  { nombre: "Miralrío", tipo: "poligono" },
+  { nombre: "Prado Concejal", tipo: "poligono" },
 ];
 
 const BARRIOS_COLLADO_VILLALBA: ZonaCiudad[] = [
@@ -11547,6 +11579,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Majadahonda",
     etiqueta: "Majadahonda (Madrid)",
     zonas: [...BARRIOS_MAJADAHONDA, ...POLIGONOS_MAJADAHONDA],
+  },
+  {
+    id: "mejorada",
+    nombre: "Mejorada del Campo",
+    etiqueta: "Mejorada del Campo (Madrid)",
+    zonas: [...BARRIOS_MEJORADA, ...POLIGONOS_MEJORADA],
   },
   {
     id: "colladovillalba",
