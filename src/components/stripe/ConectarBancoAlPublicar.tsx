@@ -55,9 +55,9 @@ export function ConectarBancoAlPublicar({
         onClick={onConectar}
       >
         {loading
-          ? "Abriendo Stripe…"
+          ? "Abriendo…"
           : accountId
-            ? "Completar en Stripe"
+            ? "Terminar de conectar el banco"
             : "Conectar cuenta bancaria"}
       </Button>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}

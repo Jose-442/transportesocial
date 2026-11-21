@@ -44,7 +44,7 @@ export function StripeConnectSection({
       <div className="space-y-2 border-t border-zinc-100 pt-4">
         <p className="text-sm text-amber-700">
           Cuenta en revisión. Si acabas de conectar, recarga la página en unos
-          segundos o pulsa de nuevo para completar datos en Stripe.
+          segundos o pulsa de nuevo para terminar de conectar el banco.
         </p>
         <Button
           type="button"
@@ -54,7 +54,7 @@ export function StripeConnectSection({
           disabled={loading}
           onClick={onConectar}
         >
-          {loading ? "Abriendo Stripe…" : "Completar en Stripe"}
+          {loading ? "Abriendo…" : "Terminar de conectar el banco"}
         </Button>
         {error && <p className="text-sm text-red-600">{error}</p>}
       </div>
@@ -74,7 +74,7 @@ export function StripeConnectSection({
         disabled={loading}
         onClick={onConectar}
       >
-        {loading ? "Abriendo Stripe…" : "Conectar cuenta bancaria"}
+        {loading ? "Abriendo…" : "Conectar cuenta bancaria"}
       </Button>
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
