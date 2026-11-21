@@ -220,6 +220,7 @@ describe("zonas de Burgos", () => {
       "aguilas",
       "yecla",
       "sanjavier",
+      "sanpedrodelpinatar",
       "cieza",
       "mazarron",
       "totana",
@@ -3801,6 +3802,20 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresSanJavier).size).toBe(nombresSanJavier.length);
     expect(nombresSanJavier.filter((n) => sanjavier!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(18);
     expect(nombresSanJavier.filter((n) => sanjavier!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(2);
+    const sanPedroPinatar = ciudadUrbana("sanpedrodelpinatar");
+    expect(sanPedroPinatar?.etiqueta).toBe("San Pedro del Pinatar (Murcia)");
+    expect(sanPedroPinatar?.nombre).toBe("San Pedro del Pinatar");
+    expect(zonaDeCiudad(sanPedroPinatar!, "El Mojón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanPedroPinatar!, "Lo Pagán")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanPedroPinatar!, "San Pedro del Pinatar (casco urbano)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanPedroPinatar!, "Villananitos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(sanPedroPinatar!, "San Pedro del Pinatar")).toBeNull();
+    expect(zonaDeCiudad(sanPedroPinatar!, "Las Beatas")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(sanPedroPinatar!, "Las Beatas")!)).toBe("Polígono · Las Beatas");
+    const nombresSanPedroPinatar = sanPedroPinatar!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresSanPedroPinatar).size).toBe(nombresSanPedroPinatar.length);
+    expect(nombresSanPedroPinatar.filter((n) => sanPedroPinatar!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(8);
+    expect(nombresSanPedroPinatar.filter((n) => sanPedroPinatar!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(1);
     const cieza = ciudadUrbana("cieza");
     expect(cieza?.etiqueta).toBe("Cieza (Murcia)");
     expect(cieza?.nombre).toBe("Cieza");
@@ -4733,12 +4748,14 @@ describe("zonas de Burgos", () => {
     expect(ciudades[murciaIdx + 7]?.negrita).toBeUndefined();
     expect(ciudades[murciaIdx + 8]?.label).toBe("San Javier");
     expect(ciudades[murciaIdx + 8]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 9]?.label).toBe("Torre-Pacheco");
+    expect(ciudades[murciaIdx + 9]?.label).toBe("San Pedro del Pinatar");
     expect(ciudades[murciaIdx + 9]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 10]?.label).toBe("Totana");
+    expect(ciudades[murciaIdx + 10]?.label).toBe("Torre-Pacheco");
     expect(ciudades[murciaIdx + 10]?.negrita).toBeUndefined();
-    expect(ciudades[murciaIdx + 11]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 11]?.label).toBe("Totana");
     expect(ciudades[murciaIdx + 11]?.negrita).toBeUndefined();
+    expect(ciudades[murciaIdx + 12]?.label).toBe("Yecla");
+    expect(ciudades[murciaIdx + 12]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 1]?.label).toBe("Almendralejo");
     expect(ciudades[badajozIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[badajozIdx + 2]?.label).toBe("Don Benito");

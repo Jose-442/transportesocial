@@ -687,6 +687,8 @@
  * Los Cabos queda con ese nombre.
  * La Manga del Mar Menor entra en San Javier. En Cartagena ya está la suya.
  * Polígono Industrial Venta del Pino y Polígono Industrial Los Urreas quedan los dos. Las fases de Los Urreas son el mismo polígono.
+ * San Pedro del Pinatar: debajo de Murcia, detrás de San Javier y delante de Torre-Pacheco. Los barrios de la lista y el polígono Las Beatas.
+ * San Pedro del Pinatar (casco urbano) es el casco. San Pedro del Pinatar no entra aparte.
  * Cieza: debajo de Murcia, entre Cartagena y Lorca. Los seis barrios del mapa y las pedanías del padrón. Los tres polígonos.
  * La Era-La Asunción queda con ese nombre. También se escribe La Era-Asunción. Entra una sola vez.
  * Residencial Ascoy queda como barrio. Ascoy queda como pedanía.
@@ -10205,6 +10207,21 @@ const POLIGONOS_SAN_JAVIER: ZonaCiudad[] = [
   { nombre: "Polígono Industrial Los Urreas", tipo: "poligono" },
 ];
 
+const BARRIOS_SAN_PEDRO_PINATAR: ZonaCiudad[] = [
+  { nombre: "El Mojón", tipo: "barrio" },
+  { nombre: "Las Esperanzas", tipo: "barrio" },
+  { nombre: "Los Antolinos", tipo: "barrio" },
+  { nombre: "Los Cuarteros", tipo: "barrio" },
+  { nombre: "Lo Pagán", tipo: "barrio" },
+  { nombre: "Los Sáez", tipo: "barrio" },
+  { nombre: "San Pedro del Pinatar (casco urbano)", tipo: "barrio" },
+  { nombre: "Villananitos", tipo: "barrio" },
+];
+
+const POLIGONOS_SAN_PEDRO_PINATAR: ZonaCiudad[] = [
+  { nombre: "Las Beatas", tipo: "poligono" },
+];
+
 const BARRIOS_CIEZA: ZonaCiudad[] = [
   { nombre: "San Joaquín", tipo: "barrio" },
   { nombre: "La Era-La Asunción", tipo: "barrio" },
@@ -12423,6 +12440,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "San Javier",
     etiqueta: "San Javier (Murcia)",
     zonas: [...BARRIOS_SAN_JAVIER, ...POLIGONOS_SAN_JAVIER],
+  },
+  {
+    id: "sanpedrodelpinatar",
+    nombre: "San Pedro del Pinatar",
+    etiqueta: "San Pedro del Pinatar (Murcia)",
+    zonas: [...BARRIOS_SAN_PEDRO_PINATAR, ...POLIGONOS_SAN_PEDRO_PINATAR],
   },
   {
     id: "cieza",
