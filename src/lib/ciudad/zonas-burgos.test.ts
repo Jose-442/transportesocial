@@ -258,6 +258,7 @@ describe("zonas de Burgos", () => {
       "llucmajor",
       "manacor",
       "mao",
+      "marratxi",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4937,8 +4938,43 @@ describe("zonas de Burgos", () => {
     expect(ciudades[maoIdx]?.label).toBe("Maó");
     expect(ciudades[maoIdx]?.negrita).toBeUndefined();
     expect(ciudades[maoIdx - 1]?.label).toBe("Manacor");
-    expect(ciudades[maoIdx + 1]?.label).toBe("Ciudad Real");
-    expect(ciudades[maoIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[maoIdx + 1]?.label).toBe("Marratxí");
+    expect(ciudades[maoIdx + 1]?.negrita).toBeUndefined();
+    const marratxi = ciudadUrbana("marratxi");
+    expect(marratxi?.etiqueta).toBe("Marratxí (Illes Balears)");
+    expect(marratxi?.nombre).toBe("Marratxí");
+    expect(zonaDeCiudad(marratxi!, "Cas Capità")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Es Pont d’Inca")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Es Pont d’Inca Nou")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Pòrtol")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Sa Cabaneta")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Son Macià")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(marratxi!, "Marratxí")).toBeNull();
+    expect(zonaDeCiudad(marratxi!, "Can Rubiol")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(marratxi!, "Can Rubiol")!)).toBe(
+      "Polígono · Can Rubiol"
+    );
+    expect(
+      zonaDeCiudad(marratxi!, "Polígono Industrial de Marratxí")?.tipo
+    ).toBe("poligono");
+    const nombresMarratxi = marratxi!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresMarratxi).size).toBe(nombresMarratxi.length);
+    expect(
+      nombresMarratxi.filter(
+        (n) => marratxi!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(22);
+    expect(
+      nombresMarratxi.filter(
+        (n) => marratxi!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(2);
+    const marratxiIdx = ciudades.findIndex((c) => c.value === "marratxi");
+    expect(ciudades[marratxiIdx]?.label).toBe("Marratxí");
+    expect(ciudades[marratxiIdx]?.negrita).toBeUndefined();
+    expect(ciudades[marratxiIdx - 1]?.label).toBe("Maó");
+    expect(ciudades[marratxiIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[marratxiIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

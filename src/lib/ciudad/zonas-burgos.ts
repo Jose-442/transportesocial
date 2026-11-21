@@ -895,9 +895,11 @@
  * Manacor: debajo de Illes Balears, detrás de Llucmajor y delante de Maó. Los barrios de la lista y tres polígonos.
  * Manacor (casco urbano) queda con ese nombre. Manacor no entra aparte.
  * s’Illot queda con ese nombre. Son Talent queda como polígono.
- * Maó: debajo de Illes Balears, detrás de Manacor y delante de Ciudad Real. Los barrios de la lista y un polígono.
+ * Maó: debajo de Illes Balears, detrás de Manacor y delante de Marratxí. Los barrios de la lista y un polígono.
  * Maó (casco urbano) queda con ese nombre. Maó no entra aparte.
  * POIMA (Polígono Industrial de Maó) queda con ese nombre.
+ * Marratxí: debajo de Illes Balears, detrás de Maó y delante de Ciudad Real. Los barrios de la lista y dos polígonos.
+ * Can Rubiol queda como polígono. Polígono Industrial de Marratxí queda con ese nombre.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11547,6 +11549,36 @@ const POLIGONOS_MAO: ZonaCiudad[] = [
   { nombre: "POIMA (Polígono Industrial de Maó)", tipo: "poligono" },
 ];
 
+const BARRIOS_MARRATXI: ZonaCiudad[] = [
+  { nombre: "Cas Capità", tipo: "barrio" },
+  { nombre: "Cas Miot", tipo: "barrio" },
+  { nombre: "Can Carbonell", tipo: "barrio" },
+  { nombre: "Es Caülls", tipo: "barrio" },
+  { nombre: "Es Figueral", tipo: "barrio" },
+  { nombre: "Es Garrovers", tipo: "barrio" },
+  { nombre: "Es Pla de na Tesa", tipo: "barrio" },
+  { nombre: "Es Pont d’Inca", tipo: "barrio" },
+  { nombre: "Es Pont d’Inca Nou", tipo: "barrio" },
+  { nombre: "Marratxinet", tipo: "barrio" },
+  { nombre: "Planera", tipo: "barrio" },
+  { nombre: "Pòrtol", tipo: "barrio" },
+  { nombre: "Sa Cabaneta", tipo: "barrio" },
+  { nombre: "Sa Cabana", tipo: "barrio" },
+  { nombre: "Sant Marçal", tipo: "barrio" },
+  { nombre: "Sant Llatzet", tipo: "barrio" },
+  { nombre: "Ses Cases Noves", tipo: "barrio" },
+  { nombre: "Son Ametller", tipo: "barrio" },
+  { nombre: "Son Daviu", tipo: "barrio" },
+  { nombre: "Son Macià", tipo: "barrio" },
+  { nombre: "Son Ramonell", tipo: "barrio" },
+  { nombre: "Son Verí", tipo: "barrio" },
+];
+
+const POLIGONOS_MARRATXI: ZonaCiudad[] = [
+  { nombre: "Can Rubiol", tipo: "poligono" },
+  { nombre: "Polígono Industrial de Marratxí", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13017,6 +13049,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Maó",
     etiqueta: "Maó (Illes Balears)",
     zonas: [...BARRIOS_MAO, ...POLIGONOS_MAO],
+  },
+  {
+    id: "marratxi",
+    nombre: "Marratxí",
+    etiqueta: "Marratxí (Illes Balears)",
+    zonas: [...BARRIOS_MARRATXI, ...POLIGONOS_MARRATXI],
   },
 ];
 
