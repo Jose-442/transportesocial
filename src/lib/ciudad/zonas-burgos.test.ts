@@ -261,6 +261,7 @@ describe("zonas de Burgos", () => {
       "mao",
       "marratxi",
       "santaeularia",
+      "cadiz",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -5057,6 +5058,48 @@ describe("zonas de Burgos", () => {
     expect(ciudades[santaEulariaIdx - 1]?.label).toBe("Marratxí");
     expect(ciudades[santaEulariaIdx + 1]?.label).toBe("Pamplona");
     expect(ciudades[santaEulariaIdx + 1]?.negrita).toBe(true);
+    const cadiz = ciudadUrbana("cadiz");
+    expect(cadiz?.etiqueta).toBe("Cádiz (Cádiz)");
+    expect(cadiz?.nombre).toBe("Cádiz");
+    expect(zonaDeCiudad(cadiz!, "El Pópulo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cadiz!, "La Viña")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cadiz!, "Puntales")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cadiz!, "Barriada de La Paz")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cadiz!, "Paseo Marítimo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(cadiz!, "Cádiz")).toBeNull();
+    expect(
+      zonaDeCiudad(cadiz!, "Recinto Exterior de la Zona Franca")?.tipo
+    ).toBe("poligono");
+    expect(
+      etiquetaZona(zonaDeCiudad(cadiz!, "Recinto Exterior de la Zona Franca")!)
+    ).toBe("Polígono · Recinto Exterior de la Zona Franca");
+    expect(
+      zonaDeCiudad(cadiz!, "Recinto Interior de la Zona Franca")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(cadiz!, "Zona Industrial de Cádiz")?.tipo).toBe(
+      "poligono"
+    );
+    expect(zonaDeCiudad(cadiz!, "Zona portuaria e industrial")?.tipo).toBe(
+      "poligono"
+    );
+    const nombresCadiz = cadiz!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresCadiz).size).toBe(nombresCadiz.length);
+    expect(
+      nombresCadiz.filter(
+        (n) => cadiz!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(32);
+    expect(
+      nombresCadiz.filter(
+        (n) => cadiz!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(4);
+    const cadizIdx = ciudades.findIndex((c) => c.value === "cadiz");
+    expect(ciudades[cadizIdx]?.label).toBe("Cádiz");
+    expect(ciudades[cadizIdx]?.negrita).toBe(true);
+    expect(ciudades[cadizIdx - 1]?.label).toBe("Plasencia");
+    expect(ciudades[cadizIdx + 1]?.label).toBe("Ciudad Real");
+    expect(ciudades[cadizIdx + 1]?.negrita).toBe(true);
     const amesIdx = ciudades.findIndex((c) => c.value === "ames");
     expect(ciudades[amesIdx]?.label).toBe("Ames");
     expect(ciudades[amesIdx]?.negrita).toBeUndefined();

@@ -905,6 +905,8 @@
  * Santa Eulària des Riu: debajo de Illes Balears, detrás de Marratxí y delante de Pamplona. Los barrios de la lista y seis polígonos.
  * Santa Eulària des Riu (casco urbano) queda con ese nombre. Santa Eulària des Riu no entra aparte.
  * Can Negre está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * Cádiz: capital, detrás de Plasencia y delante de Ciudad Real. Los barrios de la lista y cuatro polígonos.
+ * Recinto Exterior de la Zona Franca y Recinto Interior de la Zona Franca quedan los dos.
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -11692,6 +11694,48 @@ const POLIGONOS_SANTA_EULARIA: ZonaCiudad[] = [
   { nombre: "Can Xiquet Pou", tipo: "poligono" },
 ];
 
+const BARRIOS_CADIZ: ZonaCiudad[] = [
+  { nombre: "Alameda-San Carlos", tipo: "barrio" },
+  { nombre: "Asdrúbal", tipo: "barrio" },
+  { nombre: "Astilleros", tipo: "barrio" },
+  { nombre: "Bahía Blanca", tipo: "barrio" },
+  { nombre: "Barriada de La Paz", tipo: "barrio" },
+  { nombre: "Brasil", tipo: "barrio" },
+  { nombre: "Brunete", tipo: "barrio" },
+  { nombre: "Candelaria", tipo: "barrio" },
+  { nombre: "Callejones", tipo: "barrio" },
+  { nombre: "Cerro del Moro", tipo: "barrio" },
+  { nombre: "Cuarteles", tipo: "barrio" },
+  { nombre: "El Balón", tipo: "barrio" },
+  { nombre: "El Mentidero", tipo: "barrio" },
+  { nombre: "El Pópulo", tipo: "barrio" },
+  { nombre: "Falla", tipo: "barrio" },
+  { nombre: "Hospital de Mujeres", tipo: "barrio" },
+  { nombre: "La Laguna", tipo: "barrio" },
+  { nombre: "Loreto", tipo: "barrio" },
+  { nombre: "Puntales", tipo: "barrio" },
+  { nombre: "Residencia", tipo: "barrio" },
+  { nombre: "San Antonio", tipo: "barrio" },
+  { nombre: "San Felipe", tipo: "barrio" },
+  { nombre: "San Francisco-Mina", tipo: "barrio" },
+  { nombre: "San José", tipo: "barrio" },
+  { nombre: "San Juan", tipo: "barrio" },
+  { nombre: "San Severiano", tipo: "barrio" },
+  { nombre: "Santa María", tipo: "barrio" },
+  { nombre: "Santa María del Mar", tipo: "barrio" },
+  { nombre: "Segunda Aguada", tipo: "barrio" },
+  { nombre: "Trille", tipo: "barrio" },
+  { nombre: "La Viña", tipo: "barrio" },
+  { nombre: "Paseo Marítimo", tipo: "barrio" },
+];
+
+const POLIGONOS_CADIZ: ZonaCiudad[] = [
+  { nombre: "Recinto Exterior de la Zona Franca", tipo: "poligono" },
+  { nombre: "Recinto Interior de la Zona Franca", tipo: "poligono" },
+  { nombre: "Zona Industrial de Cádiz", tipo: "poligono" },
+  { nombre: "Zona portuaria e industrial", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -13180,6 +13224,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Santa Eulària des Riu",
     etiqueta: "Santa Eulària des Riu (Illes Balears)",
     zonas: [...BARRIOS_SANTA_EULARIA, ...POLIGONOS_SANTA_EULARIA],
+  },
+  {
+    id: "cadiz",
+    nombre: "Cádiz",
+    etiqueta: "Cádiz (Cádiz)",
+    zonas: [...BARRIOS_CADIZ, ...POLIGONOS_CADIZ],
   },
 ];
 
