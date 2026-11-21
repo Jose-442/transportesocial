@@ -204,6 +204,8 @@
  * San Martín de la Vega: debajo de Madrid, detrás de San Fernando de Henares y delante de San Sebastián de los Reyes. Los barrios de la lista y el polígono Aimayr (Almayr).
  * Las fábricas de dentro de Aimayr no entran aparte.
  * San Martín de la Vega no entra como barrio.
+ * Torrelodones: debajo de Madrid, detrás de Torrejón de Ardoz y delante de Tres Cantos. Los barrios de la lista. Sin polígonos.
+ * Torrelodones no entra como barrio.
  * Collado Villalba: los barrios y los polígonos de la lista.
  * Los Llanos queda como barrio. Polígono Industrial Los Llanos como polígono.
  * Los Negrales queda en Collado Villalba.
@@ -4667,6 +4669,24 @@ const POLIGONOS_TORREJON: ZonaCiudad[] = [
   { nombre: "Polígono Industrial El Rosario", tipo: "poligono" },
   { nombre: "Polígono Industrial Las Polvaredas", tipo: "poligono" },
 ];
+
+const BARRIOS_TORRELODONES: ZonaCiudad[] = [
+  { nombre: "Casco Urbano (Pueblo)", tipo: "barrio" },
+  { nombre: "Colonia de la Estación", tipo: "barrio" },
+  { nombre: "El Gasco", tipo: "barrio" },
+  { nombre: "La Berzosilla", tipo: "barrio" },
+  { nombre: "Los Bomberos", tipo: "barrio" },
+  { nombre: "Los Peñascales", tipo: "barrio" },
+  { nombre: "Los Prados", tipo: "barrio" },
+  { nombre: "Los Robles", tipo: "barrio" },
+  { nombre: "Las Marías", tipo: "barrio" },
+  { nombre: "Las Rozuelas", tipo: "barrio" },
+  { nombre: "Montealegre", tipo: "barrio" },
+  { nombre: "La Cañada", tipo: "barrio" },
+  { nombre: "Barrio Vasco", tipo: "barrio" },
+];
+
+const POLIGONOS_TORRELODONES: ZonaCiudad[] = [];
 
 const BARRIOS_PARLA: ZonaCiudad[] = [
   { nombre: "Barrio 2001", tipo: "barrio" },
@@ -11575,6 +11595,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Torrejón de Ardoz",
     etiqueta: "Torrejón de Ardoz (Madrid)",
     zonas: [...BARRIOS_TORREJON, ...POLIGONOS_TORREJON],
+  },
+  {
+    id: "torrelodones",
+    nombre: "Torrelodones",
+    etiqueta: "Torrelodones (Madrid)",
+    zonas: [...BARRIOS_TORRELODONES, ...POLIGONOS_TORRELODONES],
   },
   {
     id: "parla",

@@ -102,6 +102,7 @@ describe("zonas de Burgos", () => {
       "fuenlabrada",
       "alcorcon",
       "torrejon",
+      "torrelodones",
       "parla",
       "paracuellos",
       "alcobendas",
@@ -1279,6 +1280,18 @@ describe("zonas de Burgos", () => {
     expect(new Set(nombresTorrejon).size).toBe(nombresTorrejon.length);
     expect(nombresTorrejon.filter((n) => torrejon!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(40);
     expect(nombresTorrejon.filter((n) => torrejon!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(17);
+    const torrelodones = ciudadUrbana("torrelodones");
+    expect(torrelodones?.etiqueta).toBe("Torrelodones (Madrid)");
+    expect(torrelodones?.nombre).toBe("Torrelodones");
+    expect(zonaDeCiudad(torrelodones!, "Casco Urbano (Pueblo)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrelodones!, "Los Peñascales")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrelodones!, "Las Marías")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrelodones!, "Barrio Vasco")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(torrelodones!, "Torrelodones")).toBeNull();
+    const nombresTorrelodones = torrelodones!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresTorrelodones).size).toBe(nombresTorrelodones.length);
+    expect(nombresTorrelodones.filter((n) => torrelodones!.zonas.find((z) => z.nombre === n)?.tipo === "barrio").length).toBe(13);
+    expect(nombresTorrelodones.filter((n) => torrelodones!.zonas.find((z) => z.nombre === n)?.tipo === "poligono").length).toBe(0);
     const parla = ciudadUrbana("parla");
     expect(parla?.etiqueta).toBe("Parla (Madrid)");
     expect(parla?.nombre).toBe("Parla");
@@ -4281,7 +4294,7 @@ describe("zonas de Burgos", () => {
     expect(ciudades[burgosIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[burgosIdx + 2]?.label).toBe("Miranda de Ebro");
     const madridIdx = ciudades.findIndex((c) => c.value === "madrid");
-    expect(ciudades.slice(madridIdx, madridIdx + 31).map((c) => c.label)).toEqual([
+    expect(ciudades.slice(madridIdx, madridIdx + 32).map((c) => c.label)).toEqual([
       "Madrid",
       "Alcalá de Henares",
       "Alcobendas",
@@ -4311,6 +4324,7 @@ describe("zonas de Burgos", () => {
       "San Martín de la Vega",
       "San Sebastián de los Reyes",
       "Torrejón de Ardoz",
+      "Torrelodones",
       "Tres Cantos",
       "Valdemoro",
     ]);
