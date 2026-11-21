@@ -287,6 +287,7 @@ describe("zonas de Burgos", () => {
       "telde",
       "santacruztenerife",
       "adeje",
+      "arona",
     ]);
     const burgos = ciudadUrbana("burgos");
     const aranda = ciudadUrbana("aranda");
@@ -4689,12 +4690,48 @@ describe("zonas de Burgos", () => {
     expect(ciudades[adejeIdx]?.label).toBe("Adeje");
     expect(ciudades[adejeIdx]?.negrita).toBeUndefined();
     expect(ciudades[adejeIdx - 1]?.label).toBe("Santa Cruz de Tenerife");
-    expect(ciudades[adejeIdx + 1]?.label).toBe("Santander");
-    expect(ciudades[adejeIdx + 1]?.negrita).toBe(true);
+    expect(ciudades[adejeIdx + 1]?.label).toBe("Arona");
+    expect(ciudades[adejeIdx + 1]?.negrita).toBeUndefined();
+    const arona = ciudadUrbana("arona");
+    expect(arona?.etiqueta).toBe("Arona (Santa Cruz de Tenerife)");
+    expect(arona?.nombre).toBe("Arona");
+    expect(zonaDeCiudad(arona!, "Arona (casco)")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Los Cristianos")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Playa de las Américas")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Cho")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Cho II")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Costa del Silencio")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arona!, "Arona")).toBeNull();
+    expect(zonaDeCiudad(arona!, "Cho (Cho II)")?.tipo).toBe("poligono");
+    expect(
+      zonaDeCiudad(arona!, "Costa del Silencio (zona industrial)")?.tipo
+    ).toBe("poligono");
+    expect(zonaDeCiudad(arona!, "Parque La Reina")?.tipo).toBe("poligono");
+    expect(etiquetaZona(zonaDeCiudad(arona!, "Parque La Reina")!)).toBe(
+      "Polígono · Parque La Reina"
+    );
+    const nombresArona = arona!.zonas.map((z) => z.nombre);
+    expect(new Set(nombresArona).size).toBe(nombresArona.length);
+    expect(
+      nombresArona.filter(
+        (n) => arona!.zonas.find((z) => z.nombre === n)?.tipo === "barrio"
+      ).length
+    ).toBe(37);
+    expect(
+      nombresArona.filter(
+        (n) => arona!.zonas.find((z) => z.nombre === n)?.tipo === "poligono"
+      ).length
+    ).toBe(3);
+    const aronaIdx = ciudades.findIndex((c) => c.value === "arona");
+    expect(ciudades[aronaIdx]?.label).toBe("Arona");
+    expect(ciudades[aronaIdx]?.negrita).toBeUndefined();
+    expect(ciudades[aronaIdx - 1]?.label).toBe("Adeje");
+    expect(ciudades[aronaIdx + 1]?.label).toBe("Santander");
+    expect(ciudades[aronaIdx + 1]?.negrita).toBe(true);
     const santanderIdx = ciudades.findIndex((c) => c.value === "santander");
     expect(ciudades[santanderIdx]?.label).toBe("Santander");
     expect(ciudades[santanderIdx]?.negrita).toBe(true);
-    expect(ciudades[santanderIdx - 1]?.label).toBe("Adeje");
+    expect(ciudades[santanderIdx - 1]?.label).toBe("Arona");
     expect(ciudades[santanderIdx + 1]?.label).toBe("Camargo");
     expect(ciudades[santanderIdx + 1]?.negrita).toBeUndefined();
     expect(ciudades[santanderIdx + 2]?.label).toBe("Castro-Urdiales");

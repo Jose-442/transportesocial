@@ -989,10 +989,14 @@
  * Mayorazgo es barrio. El Mayorazgo (polígono industrial) es polígono. Moraditas es barrio. Las Moraditas (zona industrial) es polígono.
  * Costa Sur y El Mayorazgo son los dos polígonos propiamente dichos; el resto entran como zonas industriales.
  * Santa Cruz de Tenerife no entra como barrio. Urbanismo Santa Cruz+1 y Santa Cruz de Tenerife+2 son fuentes. No entran.
- * Adeje: debajo de Santa Cruz de Tenerife, detrás de la capital y delante de Santander. Los barrios de la lista y dos polígonos.
+ * Adeje: debajo de Santa Cruz de Tenerife, detrás de la capital y delante de Arona. Los barrios de la lista y dos polígonos.
  * Adeje Casco queda con ese nombre. Adeje no entra aparte.
  * Los Olivos está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
  * Las fases de La Atalaya no entran aparte. Gobierno de Canarias+2 y Ayuntamiento de Adeje+1 son fuentes. No entran.
+ * Arona: debajo de Santa Cruz de Tenerife, detrás de Adeje y delante de Santander. Los barrios de la lista y tres polígonos.
+ * Arona (casco) queda con ese nombre. Arona no entra aparte.
+ * Cho y Cho II quedan las dos como barrio. Cho (Cho II) es el polígono.
+ * Costa del Silencio está en las dos listas. El barrio se queda con el nombre corto. El polígono sale como Costa del Silencio (zona industrial).
  */
 export type TipoZona = "barrio" | "poligono";
 
@@ -13030,6 +13034,52 @@ const POLIGONOS_ADEJE: ZonaCiudad[] = [
   { nombre: "Polígono · Los Olivos", tipo: "poligono" },
 ];
 
+const BARRIOS_ARONA: ZonaCiudad[] = [
+  { nombre: "Arona (casco)", tipo: "barrio" },
+  { nombre: "Barranco Oscuro", tipo: "barrio" },
+  { nombre: "Bebedero (El)", tipo: "barrio" },
+  { nombre: "Benítez", tipo: "barrio" },
+  { nombre: "Buzanada", tipo: "barrio" },
+  { nombre: "Cabo Blanco", tipo: "barrio" },
+  { nombre: "Casas (Las)", tipo: "barrio" },
+  { nombre: "Casas Viejas (Las)", tipo: "barrio" },
+  { nombre: "Chayofa", tipo: "barrio" },
+  { nombre: "Cho", tipo: "barrio" },
+  { nombre: "Cho II", tipo: "barrio" },
+  { nombre: "Coromoto", tipo: "barrio" },
+  { nombre: "Costa del Silencio", tipo: "barrio" },
+  { nombre: "Cruz del Guanche", tipo: "barrio" },
+  { nombre: "Estrella (La)", tipo: "barrio" },
+  { nombre: "Estrella del Sur (La)", tipo: "barrio" },
+  { nombre: "Fraile (El)", tipo: "barrio" },
+  { nombre: "Finca La Estrella", tipo: "barrio" },
+  { nombre: "Florida (La)", tipo: "barrio" },
+  { nombre: "Galletas (Las)", tipo: "barrio" },
+  { nombre: "Guargacho", tipo: "barrio" },
+  { nombre: "Guaza", tipo: "barrio" },
+  { nombre: "Llanos de Guaza", tipo: "barrio" },
+  { nombre: "Los Cristianos", tipo: "barrio" },
+  { nombre: "Montaña Frías", tipo: "barrio" },
+  { nombre: "Morro de los Gatos", tipo: "barrio" },
+  { nombre: "Oasis del Sur", tipo: "barrio" },
+  { nombre: "Palm-Mar", tipo: "barrio" },
+  { nombre: "Playa de las Américas", tipo: "barrio" },
+  { nombre: "Rosas (Las)", tipo: "barrio" },
+  { nombre: "Rosas del Guanche (Las)", tipo: "barrio" },
+  { nombre: "Sabinita Alta", tipo: "barrio" },
+  { nombre: "Sabinita (La)", tipo: "barrio" },
+  { nombre: "Toscales (Los)", tipo: "barrio" },
+  { nombre: "Túnez", tipo: "barrio" },
+  { nombre: "Valle de San Lorenzo", tipo: "barrio" },
+  { nombre: "Vento", tipo: "barrio" },
+];
+
+const POLIGONOS_ARONA: ZonaCiudad[] = [
+  { nombre: "Cho (Cho II)", tipo: "poligono" },
+  { nombre: "Costa del Silencio (zona industrial)", tipo: "poligono" },
+  { nombre: "Parque La Reina", tipo: "poligono" },
+];
+
 export const CIUDADES_URBANAS: CiudadUrbana[] = [
   {
     id: "burgos",
@@ -14677,6 +14727,12 @@ export const CIUDADES_URBANAS: CiudadUrbana[] = [
     nombre: "Adeje",
     etiqueta: "Adeje (Santa Cruz de Tenerife)",
     zonas: [...BARRIOS_ADEJE, ...POLIGONOS_ADEJE],
+  },
+  {
+    id: "arona",
+    nombre: "Arona",
+    etiqueta: "Arona (Santa Cruz de Tenerife)",
+    zonas: [...BARRIOS_ARONA, ...POLIGONOS_ARONA],
   },
 ];
 
