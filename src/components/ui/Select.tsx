@@ -25,8 +25,10 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   error?: string;
   options: SelectOption[];
   placeholder?: string;
-  /** Compatibilidad: la lista siempre empuja el formulario (ya no flota). */
+  /** Compatibilidad antigua (ya no flota en ningún caso). */
   listaDebajo?: boolean;
+  /** Select del navegador: no hay lista propia encima del formulario. */
+  nativo?: boolean;
 };
 
 function textoBusqueda(valor: string): string {
@@ -36,7 +38,73 @@ function textoBusqueda(valor: string): string {
     .toLocaleLowerCase("es");
 }
 
-export function Select({
+const selectVisibleClass =
+  "w-full min-h-11 cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200";
+
+function SelectNativo({
+  label,
+  labelRight,
+  hint,
+  error,
+  options,
+  placeholder = "Selecciona…",
+  className = "",
+  id,
+  ...props
+}: Omit<Props, "listaDebajo" | "nativo">) {
+  const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
+  const tieneVacio = options.some((opt) => opt.value === "");
+  const valor = String(props.value ?? "");
+  const vacio = valor.trim() === "";
+
+  return (
+    <label
+      htmlFor={selectId}
+      className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
+      {labelRight ? (
+        <span className="flex items-start justify-between gap-3">
+          <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">
+            {label}
+          </span>
+          <span className="mt-0.5 shrink-0">{labelRight}</span>
+        </span>
+      ) : (
+        <span className="text-sm font-medium text-zinc-800">{label}</span>
+      )}
+      <select
+        id={selectId}
+        className={[
+          selectVisibleClass,
+          error ? "border-red-400 ring-2 ring-red-100" : "",
+          className,
+        ].join(" ")}
+        {...props}
+      >
+        {!tieneVacio && (
+          <option value="" disabled hidden>
+            {placeholder}
+          </option>
+        )}
+        {opcionesEnGrupos(options)}
+      </select>
+      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
+      {error && <p className="text-xs text-red-600">{error}</p>}
+    </label>
+  );
+}
+
+export function Select({ nativo = false, ...props }: Props) {
+  if (nativo) {
+    return <SelectNativo {...props} />;
+  }
+  return <SelectBuscable {...props} />;
+}
+
+function SelectBuscable({
   label,
   labelRight,
   hint,
@@ -47,7 +115,7 @@ export function Select({
   className = "",
   id,
   ...props
-}: Props) {
+}: Omit<Props, "nativo">) {
   void _listaDebajo;
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const tieneVacio = options.some((opt) => opt.value === "");

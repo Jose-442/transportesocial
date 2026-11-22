@@ -138,7 +138,7 @@ export function PublicarCiudadForm({
         placeholder="Barrio o polígono"
         value={desde}
         options={opcionesZona}
-        listaDebajo
+        nativo
         onChange={(e) => setDesde(e.target.value)}
       />
       <Select
@@ -146,7 +146,7 @@ export function PublicarCiudadForm({
         placeholder="Barrio o polígono"
         value={hasta}
         options={opcionesZona}
-        listaDebajo
+        nativo
         onChange={(e) => setHasta(e.target.value)}
       />
       <DatePickerInput label="Día" value={fecha} onChange={setFecha} required />
