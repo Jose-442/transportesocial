@@ -57,18 +57,24 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
       />
       <Select
         label="Desde"
-        placeholder="Barrio o polígono"
+        placeholder={
+          actual ? "Barrio o polígono" : "Elige primero el municipio"
+        }
         value={desde}
         options={opcionesZona}
         nativo
+        disabled={!actual}
         onChange={(e) => setDesde(e.target.value)}
       />
       <Select
         label="Hasta"
-        placeholder="Barrio o polígono"
+        placeholder={
+          actual ? "Barrio o polígono" : "Elige primero el municipio"
+        }
         value={hasta}
         options={opcionesZona}
         nativo
+        disabled={!actual}
         onChange={(e) => setHasta(e.target.value)}
       />
       <DatePickerInput

@@ -123,7 +123,13 @@ export function PublicarCiudadForm({
 
   return (
     <div className="space-y-4">
+      {!actual ? (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          Primero elige el municipio. Luego podrás elegir Desde y Hasta.
+        </p>
+      ) : null}
       <Select
+        id="ciudad-municipio"
         label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual?.id ?? ""}
         options={opcionesCiudad}
@@ -135,18 +141,24 @@ export function PublicarCiudadForm({
       />
       <Select
         label="Desde"
-        placeholder="Barrio o polígono"
+        placeholder={
+          actual ? "Barrio o polígono" : "Elige primero el municipio"
+        }
         value={desde}
         options={opcionesZona}
         nativo
+        disabled={!actual}
         onChange={(e) => setDesde(e.target.value)}
       />
       <Select
         label="Hasta"
-        placeholder="Barrio o polígono"
+        placeholder={
+          actual ? "Barrio o polígono" : "Elige primero el municipio"
+        }
         value={hasta}
         options={opcionesZona}
         nativo
+        disabled={!actual}
         onChange={(e) => setHasta(e.target.value)}
       />
       <DatePickerInput label="Día" value={fecha} onChange={setFecha} required />

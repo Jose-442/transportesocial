@@ -80,12 +80,13 @@ function SelectNativo({
         className={[
           selectVisibleClass,
           error ? "border-red-400 ring-2 ring-red-100" : "",
+          props.disabled ? "cursor-not-allowed bg-zinc-50 text-zinc-500" : "",
           className,
         ].join(" ")}
         {...props}
       >
         {!tieneVacio && (
-          <option value="" disabled hidden>
+          <option value="" disabled>
             {placeholder}
           </option>
         )}
@@ -97,15 +98,18 @@ function SelectNativo({
   );
 }
 
-export function Select({ nativo = false, options, ...props }: Props) {
-  // Listas de barrio/polígono: siempre el select del navegador (abre abajo, no tapa).
-  const esBarrioOPoligono = options.some(
-    (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
-  );
+export function Select({ nativo = false, options, label, ...props }: Props) {
+  // Desde/Hasta o grupos barrio/polígono: select del navegador (abre abajo, no tapa).
+  const esBarrioOPoligono =
+    label === "Desde" ||
+    label === "Hasta" ||
+    options.some(
+      (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
+    );
   if (nativo || esBarrioOPoligono) {
-    return <SelectNativo {...props} options={options} />;
+    return <SelectNativo {...props} label={label} options={options} />;
   }
-  return <SelectBuscable {...props} options={options} />;
+  return <SelectBuscable {...props} label={label} options={options} />;
 }
 
 function SelectBuscable({
