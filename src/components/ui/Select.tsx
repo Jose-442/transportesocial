@@ -99,14 +99,18 @@ function SelectNativo({
 }
 
 export function Select({ nativo = false, options, label, ...props }: Props) {
-  // Desde/Hasta o grupos barrio/polígono: select del navegador (abre abajo, no tapa).
+  // Barrios/polígonos: lista propia debajo del campo.
+  // El select nativo de Windows abre hacia arriba y tapa la cabecera.
   const esBarrioOPoligono =
     label === "Desde" ||
     label === "Hasta" ||
     options.some(
       (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
     );
-  if (nativo || esBarrioOPoligono) {
+  if (esBarrioOPoligono) {
+    return <SelectBuscable {...props} label={label} options={options} />;
+  }
+  if (nativo) {
     return <SelectNativo {...props} label={label} options={options} />;
   }
   return <SelectBuscable {...props} label={label} options={options} />;
@@ -158,8 +162,15 @@ function SelectBuscable({
 
   useEffect(() => {
     if (!abierto) return;
+    const caja = boxRef.current;
     const lista = listaRef.current;
-    if (!lista) return;
+    if (!caja || !lista) return;
+    // Deja sitio arriba del campo para que la lista quepa debajo, no arriba.
+    const topeDeseado = 72;
+    const cajaTop = caja.getBoundingClientRect().top;
+    if (cajaTop > topeDeseado + 40) {
+      window.scrollBy({ top: cajaTop - topeDeseado, behavior: "smooth" });
+    }
     const menu = document.querySelector("nav.fixed.bottom-0");
     const menuAlto =
       menu instanceof HTMLElement

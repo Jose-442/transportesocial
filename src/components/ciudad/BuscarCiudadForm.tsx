@@ -60,7 +60,6 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
         placeholder="Barrio o polígono"
         value={desde}
         options={opcionesZona}
-        nativo
         disabled={!actual}
         onChange={(e) => setDesde(e.target.value)}
       />
@@ -69,7 +68,6 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
         placeholder="Barrio o polígono"
         value={hasta}
         options={opcionesZona}
-        nativo
         disabled={!actual}
         onChange={(e) => setHasta(e.target.value)}
       />
