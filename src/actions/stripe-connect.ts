@@ -62,25 +62,28 @@ async function marcarPayoutsConnectEnPerfil(input: {
   }
 }
 
+/** Devuelve true si la cuenta ya sirve para cobrar (y lo guarda en el perfil). */
 export async function sincronizarStripeConnectUsuario(
   userId: string
-): Promise<void> {
-  if (!isStripeConfigured()) return;
+): Promise<boolean> {
+  if (!isStripeConfigured()) return false;
 
   const supabase = await createClient();
   const { data: profile } = await supabase
     .from("profiles")
-    .select("stripe_connect_account_id")
+    .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
     .eq("id", userId)
     .maybeSingle();
 
   const accountId = profile?.stripe_connect_account_id;
-  if (!accountId) return;
+  if (!accountId) return false;
 
   try {
     const account = await obtenerCuentaConnect(accountId);
     const listo =
-      connectPayoutsActivos(account) || connectOnboardingCompletado(account);
+      connectPayoutsActivos(account) ||
+      connectOnboardingCompletado(account) ||
+      Boolean(account.charges_enabled);
 
     const ok = await marcarPayoutsConnectEnPerfil({ userId, listo });
     if (!ok) {
@@ -92,9 +95,24 @@ export async function sincronizarStripeConnectUsuario(
         console.error("[sincronizarStripeConnectUsuario] user update", error);
       }
     }
+    return listo;
   } catch (err) {
     console.error("[sincronizarStripeConnectUsuario]", accountId, err);
+    return Boolean(profile?.stripe_connect_payouts_enabled);
   }
+}
+
+/** Para el cliente al volver de Stripe (?connect=return). */
+export async function sincronizarMiStripeConnect(): Promise<{
+  listo: boolean;
+}> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { listo: false };
+  const listo = await sincronizarStripeConnectUsuario(user.id);
+  return { listo };
 }
 
 export async function sincronizarStripeConnectPorCuenta(

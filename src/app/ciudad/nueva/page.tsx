@@ -38,7 +38,9 @@ export default async function NuevaCiudadPage({
       });
       if (reabrir.url) redirect(reabrir.url);
     } else if (connectParam === "return") {
+      // Sincroniza y recarga sin ?connect=return (si no, el botón del banco se queda).
       await sincronizarStripeConnectUsuario(user.id);
+      redirect("/ciudad/nueva");
     }
     const profileResult = await getOrCreateProfile(supabase, user);
     if (profileResult.profile) {

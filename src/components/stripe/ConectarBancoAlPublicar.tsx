@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { iniciarOnboardingStripeConnect } from "@/actions/stripe-connect";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  iniciarOnboardingStripeConnect,
+  sincronizarMiStripeConnect,
+} from "@/actions/stripe-connect";
 import { Button } from "@/components/ui/Button";
 import {
   TEXTO_CONECTAR_BANCO_PUBLICAR,
@@ -17,8 +21,39 @@ export function ConectarBancoAlPublicar({
   accountId: string | null;
   returnPath: string;
 }) {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [listo, setListo] = useState(payoutsEnabled);
+  const [sincronizando, setSincronizando] = useState(false);
+  const syncHecho = useRef(false);
+
+  useEffect(() => {
+    setListo(payoutsEnabled);
+  }, [payoutsEnabled]);
+
+  // Por si la página aún muestra el botón tras volver de Stripe.
+  useEffect(() => {
+    if (listo || syncHecho.current) return;
+    if (typeof window === "undefined") return;
+    const qs = new URLSearchParams(window.location.search);
+    if (qs.get("connect") !== "return") return;
+
+    syncHecho.current = true;
+    setSincronizando(true);
+    void (async () => {
+      try {
+        const { listo: ok } = await sincronizarMiStripeConnect();
+        if (ok) setListo(true);
+        router.replace(returnPath);
+        router.refresh();
+      } catch {
+        // Si falla, el usuario puede pulsar el botón otra vez.
+      } finally {
+        setSincronizando(false);
+      }
+    })();
+  }, [listo, returnPath, router]);
 
   async function onConectar() {
     setLoading(true);
@@ -41,10 +76,18 @@ export function ConectarBancoAlPublicar({
     }
   }
 
-  if (payoutsEnabled) {
+  if (listo) {
     return (
       <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
         Cuenta bancaria conectada. Ya pueden reservarte y cobrarás en tu banco.
+      </p>
+    );
+  }
+
+  if (sincronizando) {
+    return (
+      <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-zinc-800">
+        Comprobando la cuenta bancaria…
       </p>
     );
   }
