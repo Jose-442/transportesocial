@@ -1,11 +1,15 @@
 import { Suspense } from "react";
 import { NuevaRutaForm } from "@/components/rutas/NuevaRutaForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
-import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
+import {
+  iniciarOnboardingStripeConnect,
+  sincronizarStripeConnectUsuario,
+} from "@/actions/stripe-connect";
 import { createClient } from "@/lib/supabase/server";
 import { getOrCreateProfile } from "@/lib/profile";
 import { identidadListaParaPagar } from "@/lib/identidad-pago";
 import { perfilVehiculoIncompleto } from "@/lib/vehiculo";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Conductor, publica tu ruta" };
@@ -34,7 +38,13 @@ export default async function NuevaRutaPage({
   let bancoListo = false;
   let bancoAccountId: string | null = null;
   if (user) {
-    if (connectParam === "return" || connectParam === "refresh") {
+    if (connectParam === "refresh") {
+      await sincronizarStripeConnectUsuario(user.id);
+      const reabrir = await iniciarOnboardingStripeConnect({
+        returnPath: "/rutas/nueva",
+      });
+      if (reabrir.url) redirect(reabrir.url);
+    } else if (connectParam === "return") {
       await sincronizarStripeConnectUsuario(user.id);
     }
     const profileResult = await getOrCreateProfile(supabase, user);

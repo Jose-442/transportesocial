@@ -65,6 +65,32 @@ export async function sincronizarStripeConnectPorCuenta(
     .eq("stripe_connect_account_id", accountId);
 }
 
+function mensajeErrorStripeConnect(err: unknown): string {
+  const raw =
+    err instanceof Error && err.message
+      ? err.message
+      : typeof err === "object" &&
+          err &&
+          "message" in err &&
+          typeof (err as { message: unknown }).message === "string"
+        ? (err as { message: string }).message
+        : "";
+
+  if (/rate.?limit|too many requests/i.test(raw)) {
+    return "Stripe está ocupado. Espera medio minuto y pulsa otra vez.";
+  }
+  if (/account link|expired|invalid.*link/i.test(raw)) {
+    return "El enlace con el banco caducó. Pulsa otra vez para abrir uno nuevo.";
+  }
+  if (/No autenticado|not authenticated/i.test(raw)) {
+    return "Tu sesión se ha cerrado. Entra otra vez en Mi cuenta.";
+  }
+  if (raw && !/\b(the|and|invalid|failed|unable|please|required)\b/i.test(raw)) {
+    return raw;
+  }
+  return "No se pudo abrir la conexión con el banco. Pulsa otra vez en unos segundos.";
+}
+
 export async function iniciarOnboardingStripeConnect(opts?: {
   returnPath?: string;
 }): Promise<{
@@ -80,18 +106,21 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (!user?.email) return { error: "No autenticado." };
+    if (!user?.email) return { error: "No autenticado. Entra otra vez." };
 
     const admin = createAdminClient();
-    const lector = admin ?? supabase;
+    if (!admin) {
+      return { error: "Falta configuración del servidor para guardar el banco." };
+    }
 
-    const { data: profile, error: profileError } = await lector
+    const { data: profile, error: profileError } = await admin
       .from("profiles")
       .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
       .eq("id", user.id)
       .single();
 
     if (profileError) {
+      console.error("[iniciarOnboardingStripeConnect] profile", profileError);
       return { error: supabaseErrorMessage(profileError) };
     }
 
@@ -101,20 +130,21 @@ export async function iniciarOnboardingStripeConnect(opts?: {
       const account = await crearCuentaConnectExpress(user.email);
       accountId = account.id;
     } else {
-      // Cuentas a medias creadas sin forzar particular (podían pedir empresa).
       accountId = await asegurarCuentaConnectParticular(accountId, user.email);
     }
 
     if (accountId !== profile?.stripe_connect_account_id) {
-      const escritor = admin ?? supabase;
-      const { error } = await escritor
+      const { error } = await admin
         .from("profiles")
         .update({
           stripe_connect_account_id: accountId,
           stripe_connect_payouts_enabled: false,
         })
         .eq("id", user.id);
-      if (error) return { error: supabaseErrorMessage(error) };
+      if (error) {
+        console.error("[iniciarOnboardingStripeConnect] save", error);
+        return { error: supabaseErrorMessage(error) };
+      }
     }
 
     const origin = await getRequestOrigin();
@@ -126,10 +156,6 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     return { url };
   } catch (err) {
     console.error("[iniciarOnboardingStripeConnect]", err);
-    const msg =
-      err instanceof Error && err.message
-        ? err.message
-        : "No se pudo abrir la conexión con el banco.";
-    return { error: msg };
+    return { error: mensajeErrorStripeConnect(err) };
   }
 }

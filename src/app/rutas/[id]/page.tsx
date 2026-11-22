@@ -49,7 +49,10 @@ import {
   MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA,
 } from "@/lib/stripe/conductor-cobro";
 import { ConectarBancoAlPublicar } from "@/components/stripe/ConectarBancoAlPublicar";
-import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
+import {
+  iniciarOnboardingStripeConnect,
+  sincronizarStripeConnectUsuario,
+} from "@/actions/stripe-connect";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import {
@@ -127,10 +130,16 @@ export default async function RutaDetallePage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (
-    user &&
-    (connectParam === "return" || connectParam === "refresh")
-  ) {
+  if (user && connectParam === "refresh") {
+    // Stripe manda aquí si el enlace caducó: hay que abrir uno nuevo.
+    await sincronizarStripeConnectUsuario(user.id);
+    const reabrir = await iniciarOnboardingStripeConnect({
+      returnPath: `/rutas/${id}`,
+    });
+    if (reabrir.url) {
+      redirect(reabrir.url);
+    }
+  } else if (user && connectParam === "return") {
     await sincronizarStripeConnectUsuario(user.id);
   }
 

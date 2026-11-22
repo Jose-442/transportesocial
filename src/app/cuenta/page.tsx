@@ -18,7 +18,10 @@ import { EditarVehiculoForm } from "@/components/cuenta/EditarVehiculoForm";
 import { StripeConnectSection } from "@/components/cuenta/StripeConnectSection";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { abrirPortalSuscripcion } from "@/actions/cuenta";
-import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
+import {
+  iniciarOnboardingStripeConnect,
+  sincronizarStripeConnectUsuario,
+} from "@/actions/stripe-connect";
 import { CUENTA_BTN_SECONDARY } from "@/components/cuenta/cuenta-ui";
 import { parseCuentaVolver, hrefTrasGuardarVehiculo } from "@/lib/cuenta-volver";
 
@@ -41,7 +44,19 @@ export default async function CuentaPage({
 
   const connectParam =
     typeof params.connect === "string" ? params.connect : undefined;
-  if (connectParam === "return" || connectParam === "refresh") {
+  if (connectParam === "refresh") {
+    try {
+      await sincronizarStripeConnectUsuario(user.id);
+      const reabrir = await iniciarOnboardingStripeConnect({
+        returnPath: "/cuenta",
+      });
+      if (reabrir.url) redirect(reabrir.url);
+    } catch (err) {
+      console.error("[cuenta connect refresh]", err);
+    }
+    redirect("/cuenta");
+  }
+  if (connectParam === "return") {
     try {
       await sincronizarStripeConnectUsuario(user.id);
     } catch (err) {

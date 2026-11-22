@@ -1,8 +1,12 @@
 import { PublicarCiudadForm } from "@/components/ciudad/PublicarCiudadForm";
 import { requirePublicationAccess } from "@/actions/publication-fee";
-import { sincronizarStripeConnectUsuario } from "@/actions/stripe-connect";
+import {
+  iniciarOnboardingStripeConnect,
+  sincronizarStripeConnectUsuario,
+} from "@/actions/stripe-connect";
 import { createClient } from "@/lib/supabase/server";
 import { getOrCreateProfile } from "@/lib/profile";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +31,13 @@ export default async function NuevaCiudadPage({
   let bancoListo = false;
   let bancoAccountId: string | null = null;
   if (user) {
-    if (connectParam === "return" || connectParam === "refresh") {
+    if (connectParam === "refresh") {
+      await sincronizarStripeConnectUsuario(user.id);
+      const reabrir = await iniciarOnboardingStripeConnect({
+        returnPath: "/ciudad/nueva",
+      });
+      if (reabrir.url) redirect(reabrir.url);
+    } else if (connectParam === "return") {
       await sincronizarStripeConnectUsuario(user.id);
     }
     const profileResult = await getOrCreateProfile(supabase, user);
