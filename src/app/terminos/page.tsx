@@ -116,7 +116,7 @@ export default function TerminosPage() {
 
         <section>
           <h3 className="mb-2 font-semibold text-zinc-900">
-            Declaración obligatoria del conductor
+            Declaración del conductor
           </h3>
           <p className="mb-3">
             Antes de publicar un viaje, el Conductor acepta esta declaración:

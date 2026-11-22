@@ -9,9 +9,6 @@ export function DeclaracionConductor({
 }) {
   return (
     <div className="space-y-3 rounded-xl border border-zinc-300 bg-white p-4">
-      <p className="text-sm font-semibold text-zinc-900">
-        Declaración obligatoria del conductor
-      </p>
       <div className="space-y-3 text-sm leading-relaxed text-zinc-800">
         {DECLARACION_CONDUCTOR.map((parrafo) => (
           <p key={parrafo}>{parrafo}</p>
