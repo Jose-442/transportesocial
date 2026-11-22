@@ -128,7 +128,7 @@ export function PublicarCiudadForm({
         label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual?.id ?? ""}
         options={opcionesCiudad}
-        placeholder="Selecciona…"
+        placeholder="Selecciona o empieza a escribir…"
         onChange={(v) => {
           setCiudad(v);
           setDesde("");

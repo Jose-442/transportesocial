@@ -49,7 +49,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
         label={ETIQUETA_MUNICIPIO_URBANO}
         value={actual?.id ?? ""}
         options={opcionesCiudad}
-        placeholder="Selecciona…"
+        placeholder="Selecciona o empieza a escribir…"
         onChange={(v) => {
           setCiudad(v);
           setDesde("");
