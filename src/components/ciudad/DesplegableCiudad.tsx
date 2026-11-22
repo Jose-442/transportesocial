@@ -11,7 +11,6 @@ type Props = {
   placeholder?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
-  onAbiertoChange?: (abierto: boolean) => void;
 };
 
 function textoBusqueda(valor: string): string {
@@ -22,9 +21,8 @@ function textoBusqueda(valor: string): string {
 }
 
 /**
- * Al abrir: panel fijo entre la cabecera y el menú de abajo.
- * La etiqueta y la casilla quedan siempre a la vista; la lista no las tapa
- * ni se mete debajo de la cabecera.
+ * Al abrir: pantalla fija entre cabecera y menú inferior.
+ * Arriba siempre se ve la etiqueta (Desde/Hasta) y la casilla de filtrar.
  */
 export function DesplegableCiudad({
   label,
@@ -33,7 +31,6 @@ export function DesplegableCiudad({
   placeholder = "Selecciona…",
   disabled = false,
   onChange,
-  onAbiertoChange,
 }: Props) {
   const tituloId = useId();
   const [abierto, setAbierto] = useState(false);
@@ -62,37 +59,39 @@ export function DesplegableCiudad({
   }, []);
 
   useEffect(() => {
-    onAbiertoChange?.(abierto);
-  }, [abierto, onAbiertoChange]);
-
-  useEffect(() => {
     if (!abierto) return;
-    const medirHueco = () => {
+
+    const medir = () => {
       const cab = document.querySelector("header.sticky");
       const menu = document.querySelector("nav.fixed.bottom-0");
-      setHueco({
-        top:
-          cab instanceof HTMLElement
-            ? Math.ceil(cab.getBoundingClientRect().bottom)
-            : 56,
-        bottom:
-          menu instanceof HTMLElement
-            ? Math.ceil(window.innerHeight - menu.getBoundingClientRect().top)
-            : 72,
-      });
+      const top =
+        cab instanceof HTMLElement
+          ? Math.max(56, Math.ceil(cab.getBoundingClientRect().bottom))
+          : 56;
+      const bottom =
+        menu instanceof HTMLElement
+          ? Math.max(
+              64,
+              Math.ceil(window.innerHeight - menu.getBoundingClientRect().top)
+            )
+          : 72;
+      setHueco({ top, bottom });
     };
-    medirHueco();
-    window.addEventListener("resize", medirHueco);
-    const prev = document.body.style.overflow;
+    medir();
+    window.addEventListener("resize", medir);
+
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") cerrar();
     }
     document.addEventListener("keydown", onKey);
+
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       document.removeEventListener("keydown", onKey);
-      window.removeEventListener("resize", medirHueco);
+      window.removeEventListener("resize", medir);
     };
   }, [abierto]);
 
@@ -100,24 +99,24 @@ export function DesplegableCiudad({
     montado && abierto
       ? createPortal(
           <div
-            className="fixed inset-x-0 z-50 flex flex-col bg-white"
+            className="fixed inset-x-0 z-[100] flex flex-col bg-white shadow-xl"
             style={{ top: hueco.top, bottom: hueco.bottom }}
             role="dialog"
             aria-modal="true"
             aria-labelledby={tituloId}
           >
-            <div className="mx-auto flex w-full max-w-none flex-col gap-1.5 px-4 pt-3 pb-2 lg:px-10 xl:px-16">
-              <div className="flex items-center justify-between gap-2">
+            <div className="shrink-0 border-b border-zinc-200 bg-white px-4 pt-3 pb-3 lg:px-10 xl:px-16">
+              <div className="mb-2 flex items-center justify-between gap-3">
                 <p
                   id={tituloId}
-                  className="text-sm font-medium text-zinc-800"
+                  className="text-base font-bold text-zinc-900"
                 >
                   {label}
                 </p>
                 <button
                   type="button"
                   onClick={cerrar}
-                  className="shrink-0 rounded-lg px-2 py-1 text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
+                  className="rounded-lg bg-zinc-100 px-3 py-1.5 text-sm font-semibold text-zinc-800 hover:bg-zinc-200"
                 >
                   Cerrar
                 </button>
@@ -127,12 +126,12 @@ export function DesplegableCiudad({
                 type="text"
                 value={consulta}
                 placeholder="Escribe para filtrar…"
-                className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                className="w-full min-h-11 rounded-xl border border-zinc-300 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
                 onChange={(e) => setConsulta(e.target.value)}
               />
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto border-t border-zinc-200 px-2">
-              <div className="mx-auto w-full max-w-none lg:px-8 xl:px-14">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1">
+              <div className="mx-auto w-full lg:px-8 xl:px-14">
                 {visibles.length === 0 ? (
                   <p className="px-3 py-4 text-sm text-zinc-500">
                     Sin coincidencias

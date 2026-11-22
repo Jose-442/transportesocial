@@ -64,10 +64,6 @@ export function PublicarCiudadForm({
   const [declaracionAceptada, setDeclaracionAceptada] = useState(false);
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
-  /** Qué lista está abierta: se oculta todo lo de debajo para no taparlo. */
-  const [abierto, setAbierto] = useState<
-    null | "municipio" | "desde" | "hasta"
-  >(null);
 
   const actual = ciudadUrbana(ciudad);
   const opcionesZona = actual ? zonasParaDesplegable(actual) : [];
@@ -128,183 +124,155 @@ export function PublicarCiudadForm({
 
   return (
     <div className="space-y-4">
-      {abierto === null || abierto === "municipio" ? (
-        <DesplegableCiudad
-          label={ETIQUETA_MUNICIPIO_URBANO}
-          value={actual?.id ?? ""}
-          options={opcionesCiudad}
-          placeholder="Selecciona…"
-          onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
-          onChange={(v) => {
-            setCiudad(v);
-            setDesde("");
-            setHasta("");
-          }}
-        />
-      ) : null}
-      {abierto === null || abierto === "desde" ? (
-        <DesplegableCiudad
-          label="Desde"
-          placeholder="Barrio o polígono"
-          value={desde}
-          options={opcionesZona}
-          disabled={!actual}
-          onAbiertoChange={(o) => setAbierto(o ? "desde" : null)}
-          onChange={setDesde}
-        />
-      ) : null}
-      {abierto === null || abierto === "hasta" ? (
-        <DesplegableCiudad
-          label="Hasta"
-          placeholder="Barrio o polígono"
-          value={hasta}
-          options={opcionesZona}
-          disabled={!actual}
-          onAbiertoChange={(o) => setAbierto(o ? "hasta" : null)}
-          onChange={setHasta}
-        />
-      ) : null}
+      <DesplegableCiudad
+        label={ETIQUETA_MUNICIPIO_URBANO}
+        value={actual?.id ?? ""}
+        options={opcionesCiudad}
+        placeholder="Selecciona…"
+        onChange={(v) => {
+          setCiudad(v);
+          setDesde("");
+          setHasta("");
+        }}
+      />
+      <DesplegableCiudad
+        label="Desde"
+        placeholder="Barrio o polígono"
+        value={desde}
+        options={opcionesZona}
+        disabled={!actual}
+        onChange={setDesde}
+      />
+      <DesplegableCiudad
+        label="Hasta"
+        placeholder="Barrio o polígono"
+        value={hasta}
+        options={opcionesZona}
+        disabled={!actual}
+        onChange={setHasta}
+      />
+      <DatePickerInput label="Día" value={fecha} onChange={setFecha} required />
+      <TimePickerInput label="Hora" value={hora} onChange={setHora} required />
 
-      {abierto === null ? (
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-zinc-800">
+          ¿Qué ofreces en este trayecto?
+        </p>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          {TIPOS.map((opcion) => (
+            <button
+              key={opcion.value}
+              type="button"
+              onClick={() => setTipo(opcion.value)}
+              className={botonClase(tipo === opcion.value)}
+            >
+              {opcion.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {llevaBulto && (
         <>
-          <DatePickerInput
-            label="Día"
-            value={fecha}
-            onChange={setFecha}
-            required
+          <Select
+            label="Espacio para el bulto"
+            placeholder="Elige una opción"
+            value={espacio}
+            options={ESPACIO_SELECT_OPTIONS}
+            onChange={(e) => setEspacio(e.target.value)}
           />
-          <TimePickerInput
-            label="Hora"
-            value={hora}
-            onChange={setHora}
-            required
+          <Input
+            label="Precio por el porte del bulto"
+            hint="Euros enteros. Solo para repartir gastos."
+            inputMode="numeric"
+            value={precioBulto}
+            onChange={(e) => setPrecioBulto(textoPrecioEntero(e.target.value))}
           />
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-zinc-800">
-              ¿Qué ofreces en este trayecto?
-            </p>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              {TIPOS.map((opcion) => (
-                <button
-                  key={opcion.value}
-                  type="button"
-                  onClick={() => setTipo(opcion.value)}
-                  className={botonClase(tipo === opcion.value)}
-                >
-                  {opcion.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {llevaBulto && (
-            <>
-              <Select
-                label="Espacio para el bulto"
-                placeholder="Elige una opción"
-                value={espacio}
-                options={ESPACIO_SELECT_OPTIONS}
-                onChange={(e) => setEspacio(e.target.value)}
-              />
-              <Input
-                label="Precio por el porte del bulto"
-                hint="Euros enteros. Solo para repartir gastos."
-                inputMode="numeric"
-                value={precioBulto}
-                onChange={(e) =>
-                  setPrecioBulto(textoPrecioEntero(e.target.value))
-                }
-              />
-              {visibleBulto > 0 && (
-                <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-                  Precio visible para quien reserve el bulto:{" "}
-                  <strong>{formatEur(visibleBulto)}</strong>
-                </p>
-              )}
-            </>
-          )}
-
-          {llevaPlaza && (
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-zinc-800">
-                Plazas (máximo {MAX_ASIENTOS_POR_VIAJE})
-              </p>
-              <div className="flex gap-2">
-                {([1, 2, 3] as const).map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setPlazas(String(n))}
-                    className={botonClase(plazas === String(n))}
-                  >
-                    {n}
-                  </button>
-                ))}
-              </div>
-              <Input
-                label="Precio por acompañante"
-                hint="Euros enteros. Solo para repartir gastos."
-                inputMode="numeric"
-                value={precioPlaza}
-                onChange={(e) =>
-                  setPrecioPlaza(textoPrecioEntero(e.target.value))
-                }
-              />
-              {visiblePlaza > 0 && (
-                <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-                  Precio visible por acompañante:{" "}
-                  <strong>{formatEur(visiblePlaza)}</strong>
-                </p>
-              )}
-            </div>
-          )}
-
-          {(llevaBulto || llevaPlaza) && (
-            <ConectarBancoAlPublicar
-              payoutsEnabled={bancoListo}
-              accountId={bancoAccountId}
-              returnPath="/ciudad/nueva"
-            />
-          )}
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-zinc-800">
-              ¿Aceptas mascotas en este trayecto?
-            </p>
-            <div className="flex gap-2">
-              {(
-                [
-                  ["si", "Sí, acompañadas"],
-                  ["no", "No"],
-                ] as const
-              ).map(([value, texto]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setMascotas(value)}
-                  className={botonClase(mascotas === value)}
-                >
-                  {texto}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <DeclaracionConductor
-            aceptada={declaracionAceptada}
-            onChange={setDeclaracionAceptada}
-          />
-          {error && (
-            <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-800">
-              {error}
+          {visibleBulto > 0 && (
+            <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+              Precio visible para quien reserve el bulto:{" "}
+              <strong>{formatEur(visibleBulto)}</strong>
             </p>
           )}
-          <Button type="button" fullWidth disabled={enviando} onClick={publicar}>
-            {enviando ? "Publicando…" : "Publicar trayecto"}
-          </Button>
         </>
-      ) : null}
+      )}
+
+      {llevaPlaza && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-zinc-800">
+            Plazas (máximo {MAX_ASIENTOS_POR_VIAJE})
+          </p>
+          <div className="flex gap-2">
+            {([1, 2, 3] as const).map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setPlazas(String(n))}
+                className={botonClase(plazas === String(n))}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <Input
+            label="Precio por acompañante"
+            hint="Euros enteros. Solo para repartir gastos."
+            inputMode="numeric"
+            value={precioPlaza}
+            onChange={(e) => setPrecioPlaza(textoPrecioEntero(e.target.value))}
+          />
+          {visiblePlaza > 0 && (
+            <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+              Precio visible por acompañante:{" "}
+              <strong>{formatEur(visiblePlaza)}</strong>
+            </p>
+          )}
+        </div>
+      )}
+
+      {(llevaBulto || llevaPlaza) && (
+        <ConectarBancoAlPublicar
+          payoutsEnabled={bancoListo}
+          accountId={bancoAccountId}
+          returnPath="/ciudad/nueva"
+        />
+      )}
+
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-zinc-800">
+          ¿Aceptas mascotas en este trayecto?
+        </p>
+        <div className="flex gap-2">
+          {(
+            [
+              ["si", "Sí, acompañadas"],
+              ["no", "No"],
+            ] as const
+          ).map(([value, texto]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setMascotas(value)}
+              className={botonClase(mascotas === value)}
+            >
+              {texto}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <DeclaracionConductor
+        aceptada={declaracionAceptada}
+        onChange={setDeclaracionAceptada}
+      />
+      {error && (
+        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-800">
+          {error}
+        </p>
+      )}
+      <Button type="button" fullWidth disabled={enviando} onClick={publicar}>
+        {enviando ? "Publicando…" : "Publicar trayecto"}
+      </Button>
     </div>
   );
 }

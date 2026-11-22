@@ -20,9 +20,6 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
   const [hasta, setHasta] = useState(inicial.hasta);
   const [fecha, setFecha] = useState(inicial.fecha);
   const [error, setError] = useState("");
-  const [abierto, setAbierto] = useState<
-    null | "municipio" | "desde" | "hasta"
-  >(null);
 
   const actual = ciudadUrbana(ciudad);
   const opcionesZona = actual ? zonasParaDesplegable(actual) : [];
@@ -48,56 +45,43 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
 
   return (
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4">
-      {abierto === null || abierto === "municipio" ? (
-        <DesplegableCiudad
-          label={ETIQUETA_MUNICIPIO_URBANO}
-          value={actual?.id ?? ""}
-          options={opcionesCiudad}
-          placeholder="Selecciona…"
-          onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
-          onChange={(v) => {
-            setCiudad(v);
-            setDesde("");
-            setHasta("");
-          }}
-        />
-      ) : null}
-      {abierto === null || abierto === "desde" ? (
-        <DesplegableCiudad
-          label="Desde"
-          placeholder="Barrio o polígono"
-          value={desde}
-          options={opcionesZona}
-          disabled={!actual}
-          onAbiertoChange={(o) => setAbierto(o ? "desde" : null)}
-          onChange={setDesde}
-        />
-      ) : null}
-      {abierto === null || abierto === "hasta" ? (
-        <DesplegableCiudad
-          label="Hasta"
-          placeholder="Barrio o polígono"
-          value={hasta}
-          options={opcionesZona}
-          disabled={!actual}
-          onAbiertoChange={(o) => setAbierto(o ? "hasta" : null)}
-          onChange={setHasta}
-        />
-      ) : null}
-      {abierto === null ? (
-        <>
-          <DatePickerInput
-            label="Día"
-            hint="Si lo dejas vacío, enseña los próximos."
-            value={fecha}
-            onChange={setFecha}
-          />
-          {error && <p className="text-sm text-red-700">{error}</p>}
-          <Button type="button" fullWidth onClick={buscar}>
-            Buscar
-          </Button>
-        </>
-      ) : null}
+      <DesplegableCiudad
+        label={ETIQUETA_MUNICIPIO_URBANO}
+        value={actual?.id ?? ""}
+        options={opcionesCiudad}
+        placeholder="Selecciona…"
+        onChange={(v) => {
+          setCiudad(v);
+          setDesde("");
+          setHasta("");
+        }}
+      />
+      <DesplegableCiudad
+        label="Desde"
+        placeholder="Barrio o polígono"
+        value={desde}
+        options={opcionesZona}
+        disabled={!actual}
+        onChange={setDesde}
+      />
+      <DesplegableCiudad
+        label="Hasta"
+        placeholder="Barrio o polígono"
+        value={hasta}
+        options={opcionesZona}
+        disabled={!actual}
+        onChange={setHasta}
+      />
+      <DatePickerInput
+        label="Día"
+        hint="Si lo dejas vacío, enseña los próximos."
+        value={fecha}
+        onChange={setFecha}
+      />
+      {error && <p className="text-sm text-red-700">{error}</p>}
+      <Button type="button" fullWidth onClick={buscar}>
+        Buscar
+      </Button>
     </div>
   );
 }
