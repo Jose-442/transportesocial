@@ -53,7 +53,6 @@ import {
   iniciarOnboardingStripeConnect,
   sincronizarStripeConnectUsuario,
 } from "@/actions/stripe-connect";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { cargarParadasPorRutas } from "@/lib/rutas/cargar-paradas";
 import {
   esBusquedaDeTramo,
