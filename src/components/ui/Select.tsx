@@ -25,7 +25,7 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   error?: string;
   options: SelectOption[];
   placeholder?: string;
-  /** El listado sale debajo de la casilla, para que el título siga a la vista. */
+  /** Compatibilidad: la lista siempre empuja el formulario (ya no flota). */
   listaDebajo?: boolean;
 };
 
@@ -43,11 +43,12 @@ export function Select({
   error,
   options,
   placeholder = "Selecciona…",
-  listaDebajo = false,
+  listaDebajo: _listaDebajo = false,
   className = "",
   id,
   ...props
 }: Props) {
+  void _listaDebajo;
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const tieneVacio = options.some((opt) => opt.value === "");
   const valor = String(props.value ?? "");
@@ -59,7 +60,7 @@ export function Select({
   const [consulta, setConsulta] = useState("");
   const [escribiendo, setEscribiendo] = useState(false);
   const [activo, setActivo] = useState(0);
-  const [maxAlto, setMaxAlto] = useState(280);
+  const [maxAlto, setMaxAlto] = useState(200);
 
   const filtro = escribiendo ? textoBusqueda(consulta) : "";
   const visibles = filtro
@@ -81,23 +82,21 @@ export function Select({
 
   useEffect(() => {
     if (!abierto) return;
-    const caja = boxRef.current;
-    const campo = caja?.closest("[data-campo]");
-    if (!caja || !(campo instanceof HTMLElement)) return;
+    const lista = listaRef.current;
+    if (!lista) return;
     const menu = document.querySelector("nav.fixed.bottom-0");
     const menuAlto =
       menu instanceof HTMLElement
         ? Math.ceil(menu.getBoundingClientRect().height)
         : 80;
-    const limite = window.innerHeight - menuAlto - 12;
-    const tituloTop = campo.getBoundingClientRect().top;
-    const bottom = caja.getBoundingClientRect().bottom;
-    const quiere = 240;
-    let delta = bottom + quiere > limite ? bottom + quiere - limite : 0;
-    if (tituloTop - delta < 72) delta = Math.max(0, tituloTop - 72);
-    if (delta > 8) window.scrollBy({ top: delta, behavior: "smooth" });
-    const libre = limite - (bottom - delta);
-    setMaxAlto(Math.max(140, Math.min(320, Math.floor(libre))));
+    const limite = window.innerHeight - menuAlto - 16;
+    const top = lista.getBoundingClientRect().top;
+    const libre = Math.max(120, Math.floor(limite - top));
+    setMaxAlto(Math.min(220, libre));
+    const falta = lista.getBoundingClientRect().bottom - limite;
+    if (falta > 8) {
+      window.scrollBy({ top: falta + 12, behavior: "smooth" });
+    }
   }, [abierto, visibles.length]);
 
   useEffect(() => {
@@ -130,47 +129,6 @@ export function Select({
       setEscribiendo(false);
     }
   }
-
-  const opcionesLista =
-    visibles.length === 0 ? (
-      <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
-    ) : (
-      visibles.map((opt, indice) => {
-        const marcado = opt.value === valor;
-        const tituloGrupo =
-          opt.group && visibles[indice - 1]?.group !== opt.group
-            ? opt.group
-            : "";
-        return (
-          <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
-            {tituloGrupo && (
-              <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
-                {tituloGrupo}
-              </p>
-            )}
-            <button
-              type="button"
-              role="option"
-              aria-selected={marcado}
-              className={[
-                "block w-full rounded-lg py-2 text-left text-base",
-                opt.bajoCapital ? "pr-3 pl-6" : "px-3",
-                opt.negrita ? "font-bold" : "",
-                indice === activo
-                  ? "bg-emerald-600 text-white"
-                  : marcado
-                    ? "bg-emerald-50 text-zinc-900"
-                    : "text-zinc-900 hover:bg-emerald-50",
-              ].join(" ")}
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => elegir(opt)}
-            >
-              {opt.label}
-            </button>
-          </div>
-        );
-      })
-    );
 
   return (
     <label
@@ -240,29 +198,55 @@ export function Select({
           >
             ▾
           </span>
-          {abierto && !props.disabled && !listaDebajo && (
-            <div
-              id={`${selectId}-lista`}
-              ref={listaRef}
-              role="listbox"
-              aria-label={label}
-              className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-              style={{ maxHeight: maxAlto }}
-            >
-              {opcionesLista}
-            </div>
-          )}
         </div>
-        {abierto && !props.disabled && listaDebajo ? (
+        {abierto && !props.disabled ? (
           <div
             id={`${selectId}-lista`}
             ref={listaRef}
             role="listbox"
             aria-label={label}
             className="w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-            style={{ maxHeight: Math.min(maxAlto, 220) }}
+            style={{ maxHeight: maxAlto }}
           >
-            {opcionesLista}
+            {visibles.length === 0 ? (
+              <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
+            ) : (
+              visibles.map((opt, indice) => {
+                const marcado = opt.value === valor;
+                const tituloGrupo =
+                  opt.group && visibles[indice - 1]?.group !== opt.group
+                    ? opt.group
+                    : "";
+                return (
+                  <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
+                    {tituloGrupo ? (
+                      <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
+                        {tituloGrupo}
+                      </p>
+                    ) : null}
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={marcado}
+                      className={[
+                        "block w-full rounded-lg py-2 text-left text-base",
+                        opt.bajoCapital ? "pr-3 pl-6" : "px-3",
+                        opt.negrita ? "font-bold" : "",
+                        indice === activo
+                          ? "bg-emerald-600 text-white"
+                          : marcado
+                            ? "bg-emerald-50 text-zinc-900"
+                            : "text-zinc-900 hover:bg-emerald-50",
+                      ].join(" ")}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => elegir(opt)}
+                    >
+                      {opt.label}
+                    </button>
+                  </div>
+                );
+              })
+            )}
           </div>
         ) : null}
       </div>
