@@ -71,52 +71,65 @@ export async function iniciarOnboardingStripeConnect(opts?: {
   error?: string;
   url?: string;
 }> {
-  if (!isStripeConfigured()) {
-    return { error: "Stripe no configurado en el servidor." };
-  }
+  try {
+    if (!isStripeConfigured()) {
+      return { error: "Stripe no configurado en el servidor." };
+    }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user?.email) return { error: "No autenticado." };
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user?.email) return { error: "No autenticado." };
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
-    .eq("id", user.id)
-    .single();
+    const admin = createAdminClient();
+    const lector = admin ?? supabase;
 
-  if (profileError) {
-    return { error: supabaseErrorMessage(profileError) };
-  }
-
-  let accountId = profile?.stripe_connect_account_id ?? null;
-
-  if (!accountId) {
-    const account = await crearCuentaConnectExpress(user.email);
-    accountId = account.id;
-  } else {
-    // Cuentas a medias creadas sin forzar particular (podían pedir empresa).
-    accountId = await asegurarCuentaConnectParticular(accountId, user.email);
-  }
-
-  if (accountId !== profile?.stripe_connect_account_id) {
-    const { error } = await supabase
+    const { data: profile, error: profileError } = await lector
       .from("profiles")
-      .update({
-        stripe_connect_account_id: accountId,
-        stripe_connect_payouts_enabled: false,
-      })
-      .eq("id", user.id);
-    if (error) return { error: supabaseErrorMessage(error) };
-  }
+      .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
+      .eq("id", user.id)
+      .single();
 
-  const origin = await getRequestOrigin();
-  const url = await crearEnlaceOnboardingConnect(
-    accountId,
-    origin,
-    opts?.returnPath
-  );
-  return { url };
+    if (profileError) {
+      return { error: supabaseErrorMessage(profileError) };
+    }
+
+    let accountId = profile?.stripe_connect_account_id ?? null;
+
+    if (!accountId) {
+      const account = await crearCuentaConnectExpress(user.email);
+      accountId = account.id;
+    } else {
+      // Cuentas a medias creadas sin forzar particular (podían pedir empresa).
+      accountId = await asegurarCuentaConnectParticular(accountId, user.email);
+    }
+
+    if (accountId !== profile?.stripe_connect_account_id) {
+      const escritor = admin ?? supabase;
+      const { error } = await escritor
+        .from("profiles")
+        .update({
+          stripe_connect_account_id: accountId,
+          stripe_connect_payouts_enabled: false,
+        })
+        .eq("id", user.id);
+      if (error) return { error: supabaseErrorMessage(error) };
+    }
+
+    const origin = await getRequestOrigin();
+    const url = await crearEnlaceOnboardingConnect(
+      accountId,
+      origin,
+      opts?.returnPath
+    );
+    return { url };
+  } catch (err) {
+    console.error("[iniciarOnboardingStripeConnect]", err);
+    const msg =
+      err instanceof Error && err.message
+        ? err.message
+        : "No se pudo abrir la conexión con el banco.";
+    return { error: msg };
+  }
 }

@@ -23,15 +23,21 @@ export function ConectarBancoAlPublicar({
   async function onConectar() {
     setLoading(true);
     setError(null);
-    const result = await iniciarOnboardingStripeConnect({ returnPath });
-    setLoading(false);
-
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    if (result.url) {
-      window.location.href = result.url;
+    try {
+      const result = await iniciarOnboardingStripeConnect({ returnPath });
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      if (result.url) {
+        window.location.href = result.url;
+        return;
+      }
+      setError("No se pudo abrir Stripe. Prueba otra vez.");
+    } catch {
+      setError("Error al abrir Stripe. Recarga la página y prueba otra vez.");
+    } finally {
+      setLoading(false);
     }
   }
 
