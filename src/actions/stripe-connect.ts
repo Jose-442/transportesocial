@@ -19,11 +19,16 @@ export async function sincronizarStripeConnectUsuario(
 ): Promise<void> {
   if (!isStripeConfigured()) return;
 
-  const admin = createAdminClient();
   const supabase = await createClient();
-  const db = admin ?? supabase;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  // Preferir sesión del usuario al actualizar SU ficha (el admin a veces no escribe).
+  const soyYo = user?.id === userId;
+  const admin = createAdminClient();
+  const lector = soyYo ? supabase : admin ?? supabase;
 
-  const { data: profile } = await db
+  const { data: profile } = await lector
     .from("profiles")
     .select("stripe_connect_account_id")
     .eq("id", userId)
@@ -36,12 +41,29 @@ export async function sincronizarStripeConnectUsuario(
     const account = await obtenerCuentaConnect(accountId);
     const listo =
       connectPayoutsActivos(account) || connectOnboardingCompletado(account);
-    await db
+
+    const { error } = await supabase
       .from("profiles")
       .update({
         stripe_connect_payouts_enabled: listo,
       })
       .eq("id", userId);
+
+    if (error) {
+      console.error("[sincronizarStripeConnectUsuario] user update", error);
+      if (admin) {
+        const { error: adminErr } = await admin
+          .from("profiles")
+          .update({ stripe_connect_payouts_enabled: listo })
+          .eq("id", userId);
+        if (adminErr) {
+          console.error(
+            "[sincronizarStripeConnectUsuario] admin update",
+            adminErr
+          );
+        }
+      }
+    }
   } catch (err) {
     console.error("[sincronizarStripeConnectUsuario]", accountId, err);
   }

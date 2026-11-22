@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 export const MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA =
   "Este viaje aún no se puede reservar. El conductor tiene que conectar su cuenta bancaria.";
@@ -14,18 +15,33 @@ export async function errorSiConductorNoPuedeRecibirReservas(
   conductorId: string
 ): Promise<string | null> {
   const admin = createAdminClient();
-  if (!admin) return MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA;
-
-  const { data } = await admin
-    .from("profiles")
-    .select("stripe_connect_payouts_enabled")
-    .eq("id", conductorId)
-    .maybeSingle();
-
-  if (!data?.stripe_connect_payouts_enabled) {
-    return MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA;
+  if (admin) {
+    const { data, error } = await admin
+      .from("profiles")
+      .select("stripe_connect_payouts_enabled")
+      .eq("id", conductorId)
+      .maybeSingle();
+    if (!error && data) {
+      return data.stripe_connect_payouts_enabled
+        ? null
+        : MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA;
+    }
   }
-  return null;
+
+  // Si el admin no responde, leer con la sesión (los perfiles son visibles).
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("profiles")
+      .select("stripe_connect_payouts_enabled")
+      .eq("id", conductorId)
+      .maybeSingle();
+    if (data?.stripe_connect_payouts_enabled) return null;
+  } catch (err) {
+    console.error("[errorSiConductorNoPuedeRecibirReservas]", conductorId, err);
+  }
+
+  return MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA;
 }
 
 export async function conductorPuedeRecibirReservas(

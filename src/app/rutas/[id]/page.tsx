@@ -143,6 +143,8 @@ export default async function RutaDetallePage({
     redirect(`/rutas/${id}`);
   } else if (user && connectParam === "return") {
     await sincronizarStripeConnectUsuario(user.id);
+    // Quitar ?connect=return y recargar ya con el banco sincronizado.
+    redirect(`/rutas/${id}`);
   }
 
   let reservaPendienteId: string | null = null;
@@ -244,14 +246,11 @@ export default async function RutaDetallePage({
   );
   let bancoAccountIdPropio: string | null = null;
   if (esPropio && user && !conductorAceptaReservas) {
-    const admin = createAdminClient();
-    const { data: propioBanco } = admin
-      ? await admin
-          .from("profiles")
-          .select("stripe_connect_account_id")
-          .eq("id", user.id)
-          .maybeSingle()
-      : { data: null };
+    const { data: propioBanco } = await supabase
+      .from("profiles")
+      .select("stripe_connect_account_id")
+      .eq("id", user.id)
+      .maybeSingle();
     bancoAccountIdPropio = propioBanco?.stripe_connect_account_id ?? null;
   }
   const nombreProponente = proponente?.display_name?.trim() || "Usuario";
