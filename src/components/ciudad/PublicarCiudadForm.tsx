@@ -128,18 +128,20 @@ export function PublicarCiudadForm({
 
   return (
     <div className="space-y-4">
-      <DesplegableCiudad
-        label={ETIQUETA_MUNICIPIO_URBANO}
-        value={actual?.id ?? ""}
-        options={opcionesCiudad}
-        placeholder="Selecciona…"
-        onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
-        onChange={(v) => {
-          setCiudad(v);
-          setDesde("");
-          setHasta("");
-        }}
-      />
+      {abierto === null || abierto === "municipio" ? (
+        <DesplegableCiudad
+          label={ETIQUETA_MUNICIPIO_URBANO}
+          value={actual?.id ?? ""}
+          options={opcionesCiudad}
+          placeholder="Selecciona…"
+          onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
+          onChange={(v) => {
+            setCiudad(v);
+            setDesde("");
+            setHasta("");
+          }}
+        />
+      ) : null}
       {abierto === null || abierto === "desde" ? (
         <DesplegableCiudad
           label="Desde"

@@ -48,18 +48,20 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
 
   return (
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-4">
-      <DesplegableCiudad
-        label={ETIQUETA_MUNICIPIO_URBANO}
-        value={actual?.id ?? ""}
-        options={opcionesCiudad}
-        placeholder="Selecciona…"
-        onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
-        onChange={(v) => {
-          setCiudad(v);
-          setDesde("");
-          setHasta("");
-        }}
-      />
+      {abierto === null || abierto === "municipio" ? (
+        <DesplegableCiudad
+          label={ETIQUETA_MUNICIPIO_URBANO}
+          value={actual?.id ?? ""}
+          options={opcionesCiudad}
+          placeholder="Selecciona…"
+          onAbiertoChange={(o) => setAbierto(o ? "municipio" : null)}
+          onChange={(v) => {
+            setCiudad(v);
+            setDesde("");
+            setHasta("");
+          }}
+        />
+      ) : null}
       {abierto === null || abierto === "desde" ? (
         <DesplegableCiudad
           label="Desde"
