@@ -85,8 +85,16 @@ function mensajeErrorStripeConnect(err: unknown): string {
   if (/rate.?limit|too many requests/i.test(raw)) {
     return "Stripe está ocupado. Espera medio minuto y pulsa otra vez.";
   }
+  if (/account_update|account_onboarding/i.test(raw)) {
+    return "Hay que terminar el alta del banco. Pulsa otra vez para continuar donde lo dejaste.";
+  }
+  if (/No such account|no such account/i.test(raw)) {
+    return "La cuenta del banco ya no existe. Pulsa otra vez para crear una nueva.";
+  }
   if (raw) {
-    return `No se pudo abrir el banco: ${raw.slice(0, 200)}`;
+    // Nunca mostrar el inglés crudo de Stripe al conductor.
+    console.error("[stripe-connect mensaje]", raw);
+    return "No se pudo abrir el banco. Pulsa otra vez en unos segundos.";
   }
   return "No se pudo abrir la conexión con el banco. Pulsa otra vez en unos segundos.";
 }

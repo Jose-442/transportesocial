@@ -85,13 +85,31 @@ function rutaVueltaConnect(path: string | undefined, query: string): string {
   return `${limpia}?${query}`;
 }
 
+async function crearAccountLink(
+  accountId: string,
+  origin: string,
+  returnPath: string | undefined,
+  type: "account_onboarding" | "account_update"
+): Promise<string> {
+  const stripe = getStripeServer();
+  const link = await stripe.accountLinks.create({
+    account: accountId,
+    refresh_url: `${origin}${rutaVueltaConnect(returnPath, "connect=refresh")}`,
+    return_url: `${origin}${rutaVueltaConnect(returnPath, "connect=return")}`,
+    type,
+  });
+  if (!link.url) {
+    throw new Error("No se pudo crear el enlace de Stripe.");
+  }
+  return link.url;
+}
+
 export async function crearEnlaceOnboardingConnect(
   accountId: string,
   origin: string,
   returnPath?: string
 ): Promise<string> {
-  const stripe = getStripeServer();
-  const account = await stripe.accounts.retrieve(accountId);
+  const account = await obtenerCuentaConnect(accountId);
 
   if (!account.details_submitted) {
     try {
@@ -101,16 +119,27 @@ export async function crearEnlaceOnboardingConnect(
     }
   }
 
-  const link = await stripe.accountLinks.create({
-    account: accountId,
-    refresh_url: `${origin}${rutaVueltaConnect(returnPath, "connect=refresh")}`,
-    return_url: `${origin}${rutaVueltaConnect(returnPath, "connect=return")}`,
-    type: account.details_submitted ? "account_update" : "account_onboarding",
-  });
-  if (!link.url) {
-    throw new Error("No se pudo crear el enlace de Stripe.");
+  // Stripe a veces marca details_submitted pero solo admite account_onboarding.
+  const tipoPreferido: "account_onboarding" | "account_update" =
+    account.details_submitted ? "account_update" : "account_onboarding";
+
+  try {
+    return await crearAccountLink(accountId, origin, returnPath, tipoPreferido);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (
+      tipoPreferido === "account_update" &&
+      /account_onboarding/i.test(msg)
+    ) {
+      return crearAccountLink(
+        accountId,
+        origin,
+        returnPath,
+        "account_onboarding"
+      );
+    }
+    throw err;
   }
-  return link.url;
 }
 
 /** Onboarding Express completado (formulario enviado en Stripe). */
