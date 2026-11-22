@@ -382,11 +382,14 @@ export function DatePickerInput({
     if (part === "month" && nextMonth && !nextDay) abrirDia.current = true;
   }
 
+  // Vacío hasta tener mes Y día: si no, al elegir mes salta a Hora y se abren los dos.
+  const fechaIncompleta = !parts.month || !parts.day;
+
   return (
     <fieldset
       className="space-y-1.5"
       data-campo=""
-      {...(!value ? { "data-campo-vacio": "" } : {})}
+      {...(fechaIncompleta ? { "data-campo-vacio": "" } : {})}
       {...(error ? { "data-campo-error": "" } : {})}
     >
       {label ? (
