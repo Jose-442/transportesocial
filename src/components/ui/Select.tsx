@@ -131,6 +131,47 @@ export function Select({
     }
   }
 
+  const opcionesLista =
+    visibles.length === 0 ? (
+      <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
+    ) : (
+      visibles.map((opt, indice) => {
+        const marcado = opt.value === valor;
+        const tituloGrupo =
+          opt.group && visibles[indice - 1]?.group !== opt.group
+            ? opt.group
+            : "";
+        return (
+          <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
+            {tituloGrupo && (
+              <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
+                {tituloGrupo}
+              </p>
+            )}
+            <button
+              type="button"
+              role="option"
+              aria-selected={marcado}
+              className={[
+                "block w-full rounded-lg py-2 text-left text-base",
+                opt.bajoCapital ? "pr-3 pl-6" : "px-3",
+                opt.negrita ? "font-bold" : "",
+                indice === activo
+                  ? "bg-emerald-600 text-white"
+                  : marcado
+                    ? "bg-emerald-50 text-zinc-900"
+                    : "text-zinc-900 hover:bg-emerald-50",
+              ].join(" ")}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => elegir(opt)}
+            >
+              {opt.label}
+            </button>
+          </div>
+        );
+      })
+    );
+
   return (
     <label
       htmlFor={selectId}
@@ -163,94 +204,67 @@ export function Select({
         )}
         {opcionesEnGrupos(options)}
       </select>
-      <div ref={boxRef} className="relative">
-        <input
-          id={selectId}
-          type="text"
-          role="combobox"
-          aria-label={label}
-          aria-expanded={abierto}
-          aria-autocomplete="list"
-          aria-controls={`${selectId}-lista`}
-          disabled={props.disabled}
-          placeholder={elegido?.label || placeholder}
-          value={textoVisible}
-          className={[
-            "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 pr-10 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
-            vacio && !escribiendo ? "text-zinc-400" : "",
-            error ? "border-red-400 ring-2 ring-red-100" : "",
-            className,
-          ].join(" ")}
-          onFocus={() => {
-            if (props.disabled) return;
-            setAbierto(true);
-          }}
-          onChange={(e) => {
-            setConsulta(e.target.value);
-            setEscribiendo(true);
-            setAbierto(true);
-          }}
-          onKeyDown={alTeclado}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
-        >
-          ▾
-        </span>
-        {abierto && !props.disabled && (
+      <div ref={boxRef} className="space-y-1">
+        <div className="relative">
+          <input
+            id={selectId}
+            type="text"
+            role="combobox"
+            aria-label={label}
+            aria-expanded={abierto}
+            aria-autocomplete="list"
+            aria-controls={`${selectId}-lista`}
+            disabled={props.disabled}
+            placeholder={elegido?.label || placeholder}
+            value={textoVisible}
+            className={[
+              "w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 pr-10 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
+              vacio && !escribiendo ? "text-zinc-400" : "",
+              error ? "border-red-400 ring-2 ring-red-100" : "",
+              className,
+            ].join(" ")}
+            onFocus={() => {
+              if (props.disabled) return;
+              setAbierto(true);
+            }}
+            onChange={(e) => {
+              setConsulta(e.target.value);
+              setEscribiendo(true);
+              setAbierto(true);
+            }}
+            onKeyDown={alTeclado}
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
+          >
+            ▾
+          </span>
+          {abierto && !props.disabled && !listaDebajo && (
+            <div
+              id={`${selectId}-lista`}
+              ref={listaRef}
+              role="listbox"
+              aria-label={label}
+              className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+              style={{ maxHeight: maxAlto }}
+            >
+              {opcionesLista}
+            </div>
+          )}
+        </div>
+        {abierto && !props.disabled && listaDebajo ? (
           <div
             id={`${selectId}-lista`}
             ref={listaRef}
             role="listbox"
             aria-label={label}
-            className={
-              listaDebajo
-                ? "relative z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-                : "absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-            }
-            style={{ maxHeight: maxAlto }}
+            className="w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+            style={{ maxHeight: Math.min(maxAlto, 220) }}
           >
-            {visibles.length === 0 && (
-              <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
-            )}
-            {visibles.map((opt, indice) => {
-              const marcado = opt.value === valor;
-              const tituloGrupo =
-                opt.group && visibles[indice - 1]?.group !== opt.group
-                  ? opt.group
-                  : "";
-              return (
-                <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
-                  {tituloGrupo && (
-                    <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
-                      {tituloGrupo}
-                    </p>
-                  )}
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={marcado}
-                    className={[
-                      "block w-full rounded-lg py-2 text-left text-base",
-                      opt.bajoCapital ? "pr-3 pl-6" : "px-3",
-                      opt.negrita ? "font-bold" : "",
-                      indice === activo
-                        ? "bg-emerald-600 text-white"
-                        : marcado
-                          ? "bg-emerald-50 text-zinc-900"
-                          : "text-zinc-900 hover:bg-emerald-50",
-                    ].join(" ")}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => elegir(opt)}
-                  >
-                    {opt.label}
-                  </button>
-                </div>
-              );
-            })}
+            {opcionesLista}
           </div>
-        )}
+        ) : null}
       </div>
       {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
       {error && <p className="text-xs text-red-600">{error}</p>}
