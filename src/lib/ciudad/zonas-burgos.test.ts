@@ -357,7 +357,7 @@ describe("zonas de Burgos", () => {
     expect(zonaDeCiudad(castro!, "Vallegón")?.tipo).toBe("poligono");
     expect(zonaDeCiudad(camargo!, "Maliaño")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(camargo!, "Muriedas")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(camargo!, "Camargo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(camargo!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(camargo!, "Polígono · Camargo")?.tipo).toBe("poligono");
     expect(etiquetaZona(zonaDeCiudad(camargo!, "Polígono · Camargo")!)).toBe(
       "Polígono · Camargo"
@@ -2518,7 +2518,7 @@ describe("zonas de Burgos", () => {
     const nijar = ciudadUrbana("nijar");
     expect(nijar?.etiqueta).toBe("Níjar (Almería)");
     expect(nijar?.nombre).toBe("Níjar");
-    expect(zonaDeCiudad(nijar!, "Níjar")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(nijar!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(nijar!, "San José")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(nijar!, "Las Negras")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(nijar!, "Rodalquilar")?.tipo).toBe("barrio");
@@ -4041,7 +4041,7 @@ describe("zonas de Burgos", () => {
     const mazarron = ciudadUrbana("mazarron");
     expect(mazarron?.etiqueta).toBe("Mazarrón (Murcia)");
     expect(mazarron?.nombre).toBe("Mazarrón");
-    expect(zonaDeCiudad(mazarron!, "Mazarrón")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(mazarron!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(mazarron!, "Puerto de Mazarrón")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(mazarron!, "Bolnuevo")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(mazarron!, "Ifre-Cañada de Gallego")?.tipo).toBe("barrio");
@@ -4393,7 +4393,7 @@ describe("zonas de Burgos", () => {
     expect(arteixo?.etiqueta).toBe("Arteixo (A Coruña)");
     expect(arteixo?.nombre).toBe("Arteixo");
     expect(zonaDeCiudad(arteixo!, "A Baiuca")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(arteixo!, "Arteixo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(arteixo!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(arteixo!, "Meicende")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(arteixo!, "Morás")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(arteixo!, "Suevos")?.tipo).toBe("barrio");
@@ -4414,7 +4414,7 @@ describe("zonas de Burgos", () => {
     expect(carballo?.nombre).toBe("Carballo");
     expect(zonaDeCiudad(carballo!, "A Granxa")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(carballo!, "Bértoa")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(carballo!, "Carballo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(carballo!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(carballo!, "Vilela")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(carballo!, "Parque Empresarial de Bértoa fase I")).toBeNull();
     expect(zonaDeCiudad(carballo!, "Parque Empresarial de Bértoa fase II")).toBeNull();
@@ -4430,7 +4430,7 @@ describe("zonas de Burgos", () => {
     expect(culleredo?.nombre).toBe("Culleredo");
     expect(zonaDeCiudad(culleredo!, "Almeiras")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(culleredo!, "A Marisqueira")?.tipo).toBe("barrio");
-    expect(zonaDeCiudad(culleredo!, "Culleredo")?.tipo).toBe("barrio");
+    expect(zonaDeCiudad(culleredo!, "Centro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(culleredo!, "Ledoño")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(culleredo!, "Alvedro")?.tipo).toBe("barrio");
     expect(zonaDeCiudad(culleredo!, "Monte Xalo")?.tipo).toBe("barrio");

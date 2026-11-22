@@ -17,7 +17,7 @@
  * Castro-Urdiales: juntas vecinales, pedanías y barrios que nombra el Ayuntamiento.
  * Polígonos Vallegón y La Tejera.
  * Camargo: debajo de Santander, detrás de la capital y delante de Castro-Urdiales. Los barrios de la lista y doce polígonos.
- * Camargo está en las dos listas. El barrio se queda con el nombre corto. El polígono sale con la marca delante.
+ * El casco se llama Centro (no se repite el nombre del municipio). El polígono sale con la marca delante.
  * Vitoria-Gasteiz: 28 barrios del plano municipal (sin las tres «zonas rurales»,
  * porque los pueblos van con su nombre) y los núcleos del Ayuntamiento.
  * Ocho polígonos de la página de industria del Ayuntamiento.
@@ -738,7 +738,7 @@
  * El polígono de Ascoy entra como Polígono Industrial Sierra Ascoy.
  * Cieza Norte no entra. Sigue en proyecto.
  * Mazarrón: debajo de Murcia, entre Lorca y Molina de Segura. El núcleo, el Puerto, Bolnuevo y las pedanías del padrón.
- * El núcleo del padrón entra como Mazarrón. Es el casco.
+ * El casco se llama Centro (no se repite el nombre del municipio).
  * Puerto de Mazarrón entra. No es pedanía. Es el otro núcleo.
  * Bolnuevo entra. La pedanía del padrón es Moreras. Bolnuevo es el pueblo de la costa.
  * Las Moreras entra como Moreras. La Majada entra como Majada. El Saladillo entra como Saladillo. La Atalaya entra como Atalaya.
@@ -854,15 +854,15 @@
  * O Milladoiro sigue como barrio.
  * Bertamiráns y Bertamiráns – O Bosque quedan los dos. Igual Bugallido, Ortoño y Piñeiro con su zona de al lado.
  * Arteixo: debajo de A Coruña, detrás de Ames y delante de Carballo. Los barrios de la lista y los cinco polígonos.
- * Arteixo entra también como barrio, como lo escribiste.
+ * El casco se llama Centro (no se repite el nombre del municipio).
  * Morás sigue como barrio. El parque empresarial entra aparte.
  * Suevos sigue como barrio. El parque empresarial entra aparte. Suevos de Abaixo y Suevos de Arriba quedan los dos.
  * Barrañán y Barrañán de Arriba quedan los dos. Igual Chamín, Oseiro y Sol y Mar con su zona de al lado.
  * Carballo: debajo de A Coruña, detrás de Arteixo y delante de Culleredo. Los barrios de la lista y los tres polígonos.
- * Carballo entra también como barrio, como lo escribiste.
+ * El casco se llama Centro (no se repite el nombre del municipio).
  * Bértoa sigue como barrio. Parque Empresarial de Bértoa queda con ese nombre. Las fases I y II son el mismo polígono.
  * Culleredo: debajo de A Coruña, detrás de Carballo y delante de Ferrol. Los barrios de la lista y los cinco polígonos.
- * Culleredo entra también como barrio, como lo escribiste.
+ * El casco se llama Centro (no se repite el nombre del municipio).
  * A Marisqueira sigue como barrio. El polígono se llama Polígono Industrial A Marisqueira.
  * Alvedro sigue como barrio. El parque empresarial entra aparte.
  * Ledoño sigue como barrio. El centro logístico y la zona industrial entran aparte, los dos.
@@ -1291,7 +1291,7 @@ const POLIGONOS_CASTRO: ZonaCiudad[] = [
 
 const BARRIOS_CAMARGO: ZonaCiudad[] = [
   { nombre: "Cacicedo", tipo: "barrio" },
-  { nombre: "Camargo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Escobedo", tipo: "barrio" },
   { nombre: "Herrera", tipo: "barrio" },
   { nombre: "Igollo", tipo: "barrio" },
@@ -1522,7 +1522,7 @@ const POLIGONOS_LEON: ZonaCiudad[] = [
 
 const BARRIOS_SAN_ANDRES: ZonaCiudad[] = [
   { nombre: "Trobajo del Camino", tipo: "barrio" },
-  { nombre: "San Andrés del Rabanedo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Villabalter", tipo: "barrio" },
   { nombre: "Ferral del Bernesga", tipo: "barrio" },
   { nombre: "Pinilla", tipo: "barrio" },
@@ -4176,7 +4176,7 @@ const POLIGONOS_EL_VENDRELL: ZonaCiudad[] = [
 const BARRIOS_CAMBRILS: ZonaCiudad[] = [
   { nombre: "Ardiaca", tipo: "barrio" },
   { nombre: "Barri Marítim", tipo: "barrio" },
-  { nombre: "Cambrils", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Cambrils Badia", tipo: "barrio" },
   { nombre: "Cambrils Mediterrània", tipo: "barrio" },
   { nombre: "Cambrils Platja", tipo: "barrio" },
@@ -8021,7 +8021,7 @@ const BARRIOS_NIJAR: ZonaCiudad[] = [
   { nombre: "Los Cortijillos", tipo: "barrio" },
   { nombre: "Los Grillos", tipo: "barrio" },
   { nombre: "Los Nietos", tipo: "barrio" },
-  { nombre: "Níjar", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Pozo de los Frailes", tipo: "barrio" },
   { nombre: "Pozo del Capitán", tipo: "barrio" },
   { nombre: "Pueblo Blanco", tipo: "barrio" },
@@ -10830,7 +10830,7 @@ const POLIGONOS_CIEZA: ZonaCiudad[] = [
 ];
 
 const BARRIOS_MAZARRON: ZonaCiudad[] = [
-  { nombre: "Mazarrón", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Puerto de Mazarrón", tipo: "barrio" },
   { nombre: "Bolnuevo", tipo: "barrio" },
   { nombre: "Atalaya", tipo: "barrio" },
@@ -11336,7 +11336,7 @@ const POLIGONOS_AMES: ZonaCiudad[] = [
 
 const BARRIOS_ARTEIXO: ZonaCiudad[] = [
   { nombre: "A Baiuca", tipo: "barrio" },
-  { nombre: "Arteixo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Barrañán", tipo: "barrio" },
   { nombre: "Chamín", tipo: "barrio" },
   { nombre: "Froxel", tipo: "barrio" },
@@ -11385,7 +11385,7 @@ const BARRIOS_CARBALLO: ZonaCiudad[] = [
   { nombre: "Berdillo", tipo: "barrio" },
   { nombre: "Bértoa", tipo: "barrio" },
   { nombre: "Cances", tipo: "barrio" },
-  { nombre: "Carballo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Entrecruces", tipo: "barrio" },
   { nombre: "Goiáns", tipo: "barrio" },
   { nombre: "Hospital", tipo: "barrio" },
@@ -11413,7 +11413,7 @@ const BARRIOS_CULLEREDO: ZonaCiudad[] = [
   { nombre: "Boedo", tipo: "barrio" },
   { nombre: "Celas", tipo: "barrio" },
   { nombre: "Cordeda", tipo: "barrio" },
-  { nombre: "Culleredo", tipo: "barrio" },
+  { nombre: "Centro", tipo: "barrio" },
   { nombre: "Ledoño", tipo: "barrio" },
   { nombre: "O Burgo", tipo: "barrio" },
   { nombre: "Orro", tipo: "barrio" },
