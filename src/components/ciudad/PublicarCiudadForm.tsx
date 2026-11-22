@@ -18,6 +18,7 @@ import {
 } from "@/lib/ciudad/zonas-burgos";
 import { MAX_ASIENTOS_POR_VIAJE } from "@/lib/constants";
 import { ESPACIO_SELECT_OPTIONS } from "@/lib/espacio-opciones";
+import { DRAFT_KEYS } from "@/lib/form-draft";
 import { textoPrecioEntero } from "@/lib/precio-minimo";
 import { calcPrecioConComision, formatEur } from "@/lib/pricing";
 import {
@@ -26,12 +27,43 @@ import {
   type TipoOfertaRuta,
 } from "@/lib/ruta-oferta";
 import { ConectarBancoAlPublicar } from "@/components/stripe/ConectarBancoAlPublicar";
+import { useFormDraft } from "@/lib/use-form-draft";
 
 const TIPOS: { value: TipoOfertaRuta; label: string }[] = [
   { value: "solo_bulto", label: "Solo para bulto" },
   { value: "solo_pasajeros", label: "Solo para pasajeros" },
   { value: "bulto_y_pasajeros", label: "Para bulto y pasajeros" },
 ];
+
+type CiudadDraft = {
+  ciudad: string;
+  desde: string;
+  hasta: string;
+  fecha: string;
+  hora: string;
+  tipo: TipoOfertaRuta | "";
+  espacio: string;
+  precioBulto: string;
+  plazas: string;
+  precioPlaza: string;
+  mascotas: "" | "si" | "no";
+  declaracionAceptada: boolean;
+};
+
+const VACIO: CiudadDraft = {
+  ciudad: "",
+  desde: "",
+  hasta: "",
+  fecha: "",
+  hora: "",
+  tipo: "",
+  espacio: "",
+  precioBulto: "",
+  plazas: "",
+  precioPlaza: "",
+  mascotas: "",
+  declaracionAceptada: false,
+};
 
 function botonClase(activo: boolean): string {
   return [
@@ -50,32 +82,28 @@ export function PublicarCiudadForm({
   bancoAccountId?: string | null;
 } = {}) {
   const router = useRouter();
-  const [ciudad, setCiudad] = useState("");
-  const [desde, setDesde] = useState("");
-  const [hasta, setHasta] = useState("");
-  const [fecha, setFecha] = useState("");
-  const [hora, setHora] = useState("");
-  const [tipo, setTipo] = useState<TipoOfertaRuta | "">("");
-  const [espacio, setEspacio] = useState("");
-  const [precioBulto, setPrecioBulto] = useState("");
-  const [plazas, setPlazas] = useState("");
-  const [precioPlaza, setPrecioPlaza] = useState("");
-  const [mascotas, setMascotas] = useState<"" | "si" | "no">("");
-  const [declaracionAceptada, setDeclaracionAceptada] = useState(false);
+  const { form, setForm, ready, clear } = useFormDraft(
+    DRAFT_KEYS.nuevaCiudad,
+    VACIO
+  );
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  const actual = ciudadUrbana(ciudad);
+  const actual = ciudadUrbana(form.ciudad);
   const opcionesZona = actual ? zonasParaDesplegable(actual) : [];
   const opcionesCiudad = ciudadesParaDesplegable();
-  const llevaBulto = tipoOfertaLlevaBulto(tipo);
-  const llevaPlaza = tipoOfertaLlevaPasajeros(tipo);
-  const visibleBulto = precioBulto
-    ? calcPrecioConComision(Number(precioBulto) || 0)
+  const llevaBulto = tipoOfertaLlevaBulto(form.tipo);
+  const llevaPlaza = tipoOfertaLlevaPasajeros(form.tipo);
+  const visibleBulto = form.precioBulto
+    ? calcPrecioConComision(Number(form.precioBulto) || 0)
     : 0;
-  const visiblePlaza = precioPlaza
-    ? calcPrecioConComision(Number(precioPlaza) || 0)
+  const visiblePlaza = form.precioPlaza
+    ? calcPrecioConComision(Number(form.precioPlaza) || 0)
     : 0;
+
+  function patch(parcial: Partial<CiudadDraft>) {
+    setForm((prev) => ({ ...prev, ...parcial }));
+  }
 
   async function publicar() {
     if (enviando) return;
@@ -83,7 +111,7 @@ export function PublicarCiudadForm({
       setError("Elige el municipio.");
       return;
     }
-    if (!declaracionAceptada) {
+    if (!form.declaracionAceptada) {
       setError(MENSAJE_DECLARACION_CONDUCTOR);
       return;
     }
@@ -91,16 +119,16 @@ export function PublicarCiudadForm({
     setEnviando(true);
     const formData = new FormData();
     formData.set("ciudad", actual.id);
-    formData.set("desde", desde);
-    formData.set("hasta", hasta);
-    formData.set("fecha_salida", fecha);
-    formData.set("hora_salida", hora);
-    formData.set("tipo_oferta", tipo);
-    formData.set("espacio_tamano", espacio);
-    formData.set("precio_neto", precioBulto);
-    formData.set("plazas_acompanante", plazas);
-    formData.set("precio_neto_plaza", precioPlaza);
-    formData.set("acepta_mascotas", mascotas);
+    formData.set("desde", form.desde);
+    formData.set("hasta", form.hasta);
+    formData.set("fecha_salida", form.fecha);
+    formData.set("hora_salida", form.hora);
+    formData.set("tipo_oferta", form.tipo);
+    formData.set("espacio_tamano", form.espacio);
+    formData.set("precio_neto", form.precioBulto);
+    formData.set("plazas_acompanante", form.plazas);
+    formData.set("precio_neto_plaza", form.precioPlaza);
+    formData.set("acepta_mascotas", form.mascotas);
     formData.set("declaracion_conductor", "1");
     try {
       const result = await crearRutaCiudad(formData);
@@ -110,6 +138,7 @@ export function PublicarCiudadForm({
         return;
       }
       if ("id" in result && result.id) {
+        clear();
         router.push(`/rutas/${result.id}`);
         router.refresh();
         return;
@@ -122,6 +151,10 @@ export function PublicarCiudadForm({
     }
   }
 
+  if (!ready) {
+    return <p className="text-sm text-zinc-500">Cargando…</p>;
+  }
+
   return (
     <div className="space-y-4">
       <DesplegableCiudad
@@ -130,34 +163,42 @@ export function PublicarCiudadForm({
         options={opcionesCiudad}
         placeholder="Selecciona o empieza a escribir…"
         onChange={(v) => {
-          setCiudad(v);
-          setDesde("");
-          setHasta("");
+          patch({ ciudad: v, desde: "", hasta: "" });
         }}
       />
       <DesplegableCiudad
         label="Desde"
         placeholder="Barrio o polígono"
-        value={desde}
+        value={form.desde}
         options={opcionesZona}
         disabled={!actual}
-        onChange={setDesde}
+        onChange={(v) => patch({ desde: v })}
       />
       <DesplegableCiudad
         label="Hasta"
         placeholder="Barrio o polígono"
-        value={hasta}
+        value={form.hasta}
         options={opcionesZona}
         disabled={!actual}
-        onChange={setHasta}
+        onChange={(v) => patch({ hasta: v })}
       />
-      <DatePickerInput label="Día" value={fecha} onChange={setFecha} required />
-      <TimePickerInput label="Hora" value={hora} onChange={setHora} required />
+      <DatePickerInput
+        label="Día"
+        value={form.fecha}
+        onChange={(v) => patch({ fecha: v })}
+        required
+      />
+      <TimePickerInput
+        label="Hora"
+        value={form.hora}
+        onChange={(v) => patch({ hora: v })}
+        required
+      />
 
       <div
         className="space-y-2"
         data-campo=""
-        {...(!tipo ? { "data-campo-vacio": "" } : {})}
+        {...(!form.tipo ? { "data-campo-vacio": "" } : {})}
       >
         <p className="text-sm font-medium text-zinc-800">
           ¿Qué ofreces en este trayecto?
@@ -167,8 +208,8 @@ export function PublicarCiudadForm({
             <button
               key={opcion.value}
               type="button"
-              onClick={() => setTipo(opcion.value)}
-              className={botonClase(tipo === opcion.value)}
+              onClick={() => patch({ tipo: opcion.value })}
+              className={botonClase(form.tipo === opcion.value)}
             >
               {opcion.label}
             </button>
@@ -181,18 +222,20 @@ export function PublicarCiudadForm({
           <Select
             label="Espacio para el bulto"
             placeholder="Elige una opción"
-            value={espacio}
+            value={form.espacio}
             options={ESPACIO_SELECT_OPTIONS}
             required
-            onChange={(e) => setEspacio(e.target.value)}
+            onChange={(e) => patch({ espacio: e.target.value })}
           />
           <Input
             label="Precio por el porte del bulto"
             hint="Euros enteros. Solo para repartir gastos."
             inputMode="numeric"
             required
-            value={precioBulto}
-            onChange={(e) => setPrecioBulto(textoPrecioEntero(e.target.value))}
+            value={form.precioBulto}
+            onChange={(e) =>
+              patch({ precioBulto: textoPrecioEntero(e.target.value) })
+            }
           />
           {visibleBulto > 0 && (
             <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
@@ -208,7 +251,7 @@ export function PublicarCiudadForm({
           <div
             className="space-y-3"
             data-campo=""
-            {...(!plazas ? { "data-campo-vacio": "" } : {})}
+            {...(!form.plazas ? { "data-campo-vacio": "" } : {})}
           >
             <p className="text-sm font-medium text-zinc-800">
               Plazas (máximo {MAX_ASIENTOS_POR_VIAJE})
@@ -218,8 +261,8 @@ export function PublicarCiudadForm({
                 <button
                   key={n}
                   type="button"
-                  onClick={() => setPlazas(String(n))}
-                  className={botonClase(plazas === String(n))}
+                  onClick={() => patch({ plazas: String(n) })}
+                  className={botonClase(form.plazas === String(n))}
                 >
                   {n}
                 </button>
@@ -231,8 +274,10 @@ export function PublicarCiudadForm({
             hint="Euros enteros. Solo para repartir gastos."
             inputMode="numeric"
             required
-            value={precioPlaza}
-            onChange={(e) => setPrecioPlaza(textoPrecioEntero(e.target.value))}
+            value={form.precioPlaza}
+            onChange={(e) =>
+              patch({ precioPlaza: textoPrecioEntero(e.target.value) })
+            }
           />
           {visiblePlaza > 0 && (
             <p className="rounded-xl bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
@@ -254,7 +299,7 @@ export function PublicarCiudadForm({
       <div
         className="space-y-2"
         data-campo=""
-        {...(!mascotas ? { "data-campo-vacio": "" } : {})}
+        {...(!form.mascotas ? { "data-campo-vacio": "" } : {})}
       >
         <p className="text-sm font-medium text-zinc-800">
           ¿Aceptas mascotas en este trayecto?
@@ -269,8 +314,8 @@ export function PublicarCiudadForm({
             <button
               key={value}
               type="button"
-              onClick={() => setMascotas(value)}
-              className={botonClase(mascotas === value)}
+              onClick={() => patch({ mascotas: value })}
+              className={botonClase(form.mascotas === value)}
             >
               {texto}
             </button>
@@ -279,8 +324,8 @@ export function PublicarCiudadForm({
       </div>
 
       <DeclaracionConductor
-        aceptada={declaracionAceptada}
-        onChange={setDeclaracionAceptada}
+        aceptada={form.declaracionAceptada}
+        onChange={(v) => patch({ declaracionAceptada: v })}
       />
       {error && (
         <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-800">

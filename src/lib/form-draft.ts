@@ -148,6 +148,7 @@ export function saveOwnedDraft<T extends object>(
 export const DRAFT_KEYS = {
   login: "transporte-social-login-draft",
   nuevaRuta: "transporte-social-nueva-ruta-draft",
+  nuevaCiudad: "transporte-social-nueva-ciudad-draft",
   filtrosViajes: "transporte-social-filtros-viajes-draft",
   filtrosBultos: "transporte-social-filtros-bultos-draft",
   recuperar: "transporte-social-recuperar-draft",
