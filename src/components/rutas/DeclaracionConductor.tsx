@@ -10,8 +10,16 @@ export function DeclaracionConductor({
   return (
     <div className="space-y-3 rounded-xl border border-zinc-300 bg-white p-4">
       <div className="space-y-3 text-sm leading-relaxed text-zinc-800">
-        {DECLARACION_CONDUCTOR.map((parrafo) => (
-          <p key={parrafo}>{parrafo}</p>
+        {DECLARACION_CONDUCTOR.map((parrafo, i) => (
+          <p key={i}>
+            {parrafo.map((parte) =>
+              parte.negrita ? (
+                <strong key={parte.texto}>{parte.texto}</strong>
+              ) : (
+                <span key={parte.texto}>{parte.texto}</span>
+              )
+            )}
+          </p>
         ))}
       </div>
       <label className="flex cursor-pointer items-start gap-2 text-sm font-semibold text-zinc-900">

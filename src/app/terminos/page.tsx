@@ -122,8 +122,16 @@ export default function TerminosPage() {
             Antes de publicar un viaje, el Conductor acepta esta declaración:
           </p>
           <div className="space-y-3 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-zinc-800">
-            {DECLARACION_CONDUCTOR.map((parrafo) => (
-              <p key={parrafo}>{parrafo}</p>
+            {DECLARACION_CONDUCTOR.map((parrafo, i) => (
+              <p key={i}>
+                {parrafo.map((parte) =>
+                  parte.negrita ? (
+                    <strong key={parte.texto}>{parte.texto}</strong>
+                  ) : (
+                    <span key={parte.texto}>{parte.texto}</span>
+                  )
+                )}
+              </p>
             ))}
           </div>
         </section>
