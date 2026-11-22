@@ -1,10 +1,9 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { getRequestOrigin } from "@/lib/stripe/origin";
 import { isStripeConfigured } from "@/lib/stripe/server";
-import { supabaseErrorMessage } from "@/lib/supabase/errors";
+import { getSupabaseServerUrl } from "@/lib/supabase/env";
 import {
   asegurarCuentaConnectParticular,
   connectOnboardingCompletado,
@@ -14,21 +13,62 @@ import {
   obtenerCuentaConnect,
 } from "@/lib/stripe/connect";
 
+/** PATCH fiable a profiles (service role + Bearer). El client admin sin Bearer a veces no escribe. */
+async function marcarPayoutsConnectEnPerfil(input: {
+  userId?: string;
+  accountId?: string;
+  listo: boolean;
+}): Promise<boolean> {
+  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const supabaseUrl = getSupabaseServerUrl();
+  if (!serviceRole || !supabaseUrl) return false;
+
+  const filtro = input.userId
+    ? `id=eq.${encodeURIComponent(input.userId)}`
+    : input.accountId
+      ? `stripe_connect_account_id=eq.${encodeURIComponent(input.accountId)}`
+      : null;
+  if (!filtro) return false;
+
+  try {
+    const res = await fetch(
+      `${supabaseUrl.replace(/\/$/, "")}/rest/v1/profiles?${filtro}`,
+      {
+        method: "PATCH",
+        headers: {
+          apikey: serviceRole,
+          Authorization: `Bearer ${serviceRole}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          stripe_connect_payouts_enabled: input.listo,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(
+        "[marcarPayoutsConnectEnPerfil]",
+        res.status,
+        text.slice(0, 200)
+      );
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[marcarPayoutsConnectEnPerfil]", err);
+    return false;
+  }
+}
+
 export async function sincronizarStripeConnectUsuario(
   userId: string
 ): Promise<void> {
   if (!isStripeConfigured()) return;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  // Preferir sesión del usuario al actualizar SU ficha (el admin a veces no escribe).
-  const soyYo = user?.id === userId;
-  const admin = createAdminClient();
-  const lector = soyYo ? supabase : admin ?? supabase;
-
-  const { data: profile } = await lector
+  const { data: profile } = await supabase
     .from("profiles")
     .select("stripe_connect_account_id")
     .eq("id", userId)
@@ -42,26 +82,14 @@ export async function sincronizarStripeConnectUsuario(
     const listo =
       connectPayoutsActivos(account) || connectOnboardingCompletado(account);
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        stripe_connect_payouts_enabled: listo,
-      })
-      .eq("id", userId);
-
-    if (error) {
-      console.error("[sincronizarStripeConnectUsuario] user update", error);
-      if (admin) {
-        const { error: adminErr } = await admin
-          .from("profiles")
-          .update({ stripe_connect_payouts_enabled: listo })
-          .eq("id", userId);
-        if (adminErr) {
-          console.error(
-            "[sincronizarStripeConnectUsuario] admin update",
-            adminErr
-          );
-        }
+    const ok = await marcarPayoutsConnectEnPerfil({ userId, listo });
+    if (!ok) {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ stripe_connect_payouts_enabled: listo })
+        .eq("id", userId);
+      if (error) {
+        console.error("[sincronizarStripeConnectUsuario] user update", error);
       }
     }
   } catch (err) {
@@ -74,18 +102,10 @@ export async function sincronizarStripeConnectPorCuenta(
 ): Promise<void> {
   if (!isStripeConfigured()) return;
 
-  const admin = createAdminClient();
-  if (!admin) return;
-
   const account = await obtenerCuentaConnect(accountId);
   const listo =
     connectPayoutsActivos(account) || connectOnboardingCompletado(account);
-  await admin
-    .from("profiles")
-    .update({
-      stripe_connect_payouts_enabled: listo,
-    })
-    .eq("stripe_connect_account_id", accountId);
+  await marcarPayoutsConnectEnPerfil({ accountId, listo });
 }
 
 function mensajeRawStripe(err: unknown): string {
