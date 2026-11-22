@@ -60,6 +60,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
         placeholder="Barrio o polígono"
         value={desde}
         options={opcionesZona}
+        listaDebajo
         onChange={(e) => setDesde(e.target.value)}
       />
       <Select
@@ -67,6 +68,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
         placeholder="Barrio o polígono"
         value={hasta}
         options={opcionesZona}
+        listaDebajo
         onChange={(e) => setHasta(e.target.value)}
       />
       <DatePickerInput

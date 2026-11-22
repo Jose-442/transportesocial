@@ -43,12 +43,11 @@ export function Select({
   error,
   options,
   placeholder = "Selecciona…",
-  listaDebajo: _listaDebajo = false,
+  listaDebajo = false,
   className = "",
   id,
   ...props
 }: Props) {
-  void _listaDebajo;
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
   const tieneVacio = options.some((opt) => opt.value === "");
   const valor = String(props.value ?? "");
@@ -205,7 +204,11 @@ export function Select({
             ref={listaRef}
             role="listbox"
             aria-label={label}
-            className="absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+            className={
+              listaDebajo
+                ? "relative z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+                : "absolute top-full left-0 z-[60] mt-1 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
+            }
             style={{ maxHeight: maxAlto }}
           >
             {visibles.length === 0 && (
