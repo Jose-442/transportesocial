@@ -11,6 +11,44 @@ export const TEXTO_PRIMER_VIAJE_MAS_LARGO =
   "Publicar el 1º viaje es un poco más pesado. Los siguientes ya no.";
 
 async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> {
+  try {
+    const supabase = await createClient();
+
+    // 1) RPC (si está la migración 079): no depende de RLS raro.
+    const rpc = await supabase.rpc("conductor_puede_recibir_reservas", {
+      p_conductor_id: conductorId,
+    });
+    if (!rpc.error && typeof rpc.data === "boolean") {
+      return rpc.data;
+    }
+
+    // 2) Vista pública (migración 079).
+    const pub = await supabase
+      .from("perfiles_publicos")
+      .select("stripe_connect_payouts_enabled")
+      .eq("id", conductorId)
+      .maybeSingle();
+    if (!pub.error && pub.data && "stripe_connect_payouts_enabled" in pub.data) {
+      return Boolean(
+        (pub.data as { stripe_connect_payouts_enabled?: boolean })
+          .stripe_connect_payouts_enabled
+      );
+    }
+
+    // 3) Propia ficha (solo si eres el conductor).
+    const own = await supabase
+      .from("profiles")
+      .select("stripe_connect_payouts_enabled")
+      .eq("id", conductorId)
+      .maybeSingle();
+    if (!own.error && own.data) {
+      return Boolean(own.data.stripe_connect_payouts_enabled);
+    }
+  } catch (err) {
+    console.error("[leerPayoutsEnabled] session", conductorId, err);
+  }
+
+  // 4) Service role con Bearer (el admin sin Bearer devolvía [] y mentía).
   const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const supabaseUrl = getSupabaseServerUrl();
   if (serviceRole && supabaseUrl) {
@@ -37,18 +75,6 @@ async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> 
     } catch (err) {
       console.error("[leerPayoutsEnabled] rest", conductorId, err);
     }
-  }
-
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("profiles")
-      .select("stripe_connect_payouts_enabled")
-      .eq("id", conductorId)
-      .maybeSingle();
-    if (data) return Boolean(data.stripe_connect_payouts_enabled);
-  } catch (err) {
-    console.error("[leerPayoutsEnabled] session", conductorId, err);
   }
 
   return null;
