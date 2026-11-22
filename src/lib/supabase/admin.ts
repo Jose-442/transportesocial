@@ -2,26 +2,14 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseServerUrl } from "./env";
 
 /**
- * PostgREST en este proyecto rechaza Bearer con service_role (403 sin GRANT).
- * En REST solo va apikey. En Auth (borrar/cerrar cuenta) sí hace falta Bearer.
+ * Service role: apikey + Bearer. Sin Bearer, PostgREST responde 200 con []
+ * (parece ok pero no lee/escribe filas) y la web cree que el banco no está.
  */
 function createAdminFetch(serviceRole: string): typeof fetch {
   return async (input, init) => {
-    const url =
-      typeof input === "string"
-        ? input
-        : input instanceof URL
-          ? input.href
-          : input.url;
     const headers = new Headers(init?.headers);
     headers.set("apikey", serviceRole);
-    const esRpc = /\/rest\/v1\/rpc(?:\/|\?|$)/.test(url);
-    const esRestTabla = /\/rest\/v1(?:\/|\?|$)/.test(url) && !esRpc;
-    if (esRestTabla) {
-      headers.delete("Authorization");
-    } else {
-      headers.set("Authorization", `Bearer ${serviceRole}`);
-    }
+    headers.set("Authorization", `Bearer ${serviceRole}`);
     return fetch(input, { ...init, headers });
   };
 }
