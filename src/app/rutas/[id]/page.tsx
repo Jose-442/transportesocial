@@ -139,6 +139,8 @@ export default async function RutaDetallePage({
     if (reabrir.url) {
       redirect(reabrir.url);
     }
+    // Si falló, quitar ?connect=refresh para no quedar en bucle.
+    redirect(`/rutas/${id}`);
   } else if (user && connectParam === "return") {
     await sincronizarStripeConnectUsuario(user.id);
   }

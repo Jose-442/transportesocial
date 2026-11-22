@@ -20,13 +20,14 @@ export async function sincronizarStripeConnectUsuario(
   if (!isStripeConfigured()) return;
 
   const admin = createAdminClient();
-  if (!admin) return;
+  const supabase = await createClient();
+  const db = admin ?? supabase;
 
-  const { data: profile } = await admin
+  const { data: profile } = await db
     .from("profiles")
     .select("stripe_connect_account_id")
     .eq("id", userId)
-    .single();
+    .maybeSingle();
 
   const accountId = profile?.stripe_connect_account_id;
   if (!accountId) return;
@@ -35,7 +36,7 @@ export async function sincronizarStripeConnectUsuario(
     const account = await obtenerCuentaConnect(accountId);
     const listo =
       connectPayoutsActivos(account) || connectOnboardingCompletado(account);
-    await admin
+    await db
       .from("profiles")
       .update({
         stripe_connect_payouts_enabled: listo,
@@ -82,11 +83,8 @@ function mensajeErrorStripeConnect(err: unknown): string {
   if (/account link|expired|invalid.*link/i.test(raw)) {
     return "El enlace con el banco caducó. Pulsa otra vez para abrir uno nuevo.";
   }
-  if (/No autenticado|not authenticated/i.test(raw)) {
-    return "Tu sesión se ha cerrado. Entra otra vez en Mi cuenta.";
-  }
-  if (raw && !/\b(the|and|invalid|failed|unable|please|required)\b/i.test(raw)) {
-    return raw;
+  if (raw.trim()) {
+    return `No se pudo abrir el banco: ${raw.trim().slice(0, 160)}`;
   }
   return "No se pudo abrir la conexión con el banco. Pulsa otra vez en unos segundos.";
 }
@@ -108,20 +106,18 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     } = await supabase.auth.getUser();
     if (!user?.email) return { error: "No autenticado. Entra otra vez." };
 
-    const admin = createAdminClient();
-    if (!admin) {
-      return { error: "Falta configuración del servidor para guardar el banco." };
-    }
-
-    const { data: profile, error: profileError } = await admin
+    // Lectura/escritura con la sesión del usuario (su propia ficha).
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
 
     if (profileError) {
       console.error("[iniciarOnboardingStripeConnect] profile", profileError);
-      return { error: supabaseErrorMessage(profileError) };
+      return {
+        error: `No se pudo leer tu ficha: ${profileError.message}`,
+      };
     }
 
     let accountId = profile?.stripe_connect_account_id ?? null;
@@ -134,7 +130,7 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     }
 
     if (accountId !== profile?.stripe_connect_account_id) {
-      const { error } = await admin
+      const { error } = await supabase
         .from("profiles")
         .update({
           stripe_connect_account_id: accountId,
@@ -143,7 +139,9 @@ export async function iniciarOnboardingStripeConnect(opts?: {
         .eq("id", user.id);
       if (error) {
         console.error("[iniciarOnboardingStripeConnect] save", error);
-        return { error: supabaseErrorMessage(error) };
+        return {
+          error: `No se pudo guardar la cuenta bancaria: ${error.message}`,
+        };
       }
     }
 
