@@ -66,27 +66,48 @@ export async function sincronizarStripeConnectPorCuenta(
     .eq("stripe_connect_account_id", accountId);
 }
 
+function mensajeRawStripe(err: unknown): string {
+  if (err instanceof Error && err.message.trim()) return err.message.trim();
+  if (
+    typeof err === "object" &&
+    err &&
+    "message" in err &&
+    typeof (err as { message: unknown }).message === "string"
+  ) {
+    return (err as { message: string }).message.trim();
+  }
+  return "";
+}
+
 function mensajeErrorStripeConnect(err: unknown): string {
-  const raw =
-    err instanceof Error && err.message
-      ? err.message
-      : typeof err === "object" &&
-          err &&
-          "message" in err &&
-          typeof (err as { message: unknown }).message === "string"
-        ? (err as { message: string }).message
-        : "";
+  const raw = mensajeRawStripe(err);
 
   if (/rate.?limit|too many requests/i.test(raw)) {
     return "Stripe está ocupado. Espera medio minuto y pulsa otra vez.";
   }
-  if (/account link|expired|invalid.*link/i.test(raw)) {
-    return "El enlace con el banco caducó. Pulsa otra vez para abrir uno nuevo.";
-  }
-  if (raw.trim()) {
-    return `No se pudo abrir el banco: ${raw.trim().slice(0, 160)}`;
+  if (raw) {
+    return `No se pudo abrir el banco: ${raw.slice(0, 200)}`;
   }
   return "No se pudo abrir la conexión con el banco. Pulsa otra vez en unos segundos.";
+}
+
+async function guardarCuentaConnectPerfil(
+  userId: string,
+  accountId: string
+): Promise<string | null> {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      stripe_connect_account_id: accountId,
+      stripe_connect_payouts_enabled: false,
+    })
+    .eq("id", userId);
+  if (error) {
+    console.error("[guardarCuentaConnectPerfil]", error);
+    return `No se pudo guardar la cuenta bancaria: ${error.message}`;
+  }
+  return null;
 }
 
 export async function iniciarOnboardingStripeConnect(opts?: {
@@ -106,7 +127,6 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     } = await supabase.auth.getUser();
     if (!user?.email) return { error: "No autenticado. Entra otra vez." };
 
-    // Lectura/escritura con la sesión del usuario (su propia ficha).
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("stripe_connect_account_id, stripe_connect_payouts_enabled")
@@ -130,28 +150,39 @@ export async function iniciarOnboardingStripeConnect(opts?: {
     }
 
     if (accountId !== profile?.stripe_connect_account_id) {
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          stripe_connect_account_id: accountId,
-          stripe_connect_payouts_enabled: false,
-        })
-        .eq("id", user.id);
-      if (error) {
-        console.error("[iniciarOnboardingStripeConnect] save", error);
-        return {
-          error: `No se pudo guardar la cuenta bancaria: ${error.message}`,
-        };
-      }
+      const saveErr = await guardarCuentaConnectPerfil(user.id, accountId);
+      if (saveErr) return { error: saveErr };
     }
 
     const origin = await getRequestOrigin();
-    const url = await crearEnlaceOnboardingConnect(
-      accountId,
-      origin,
-      opts?.returnPath
-    );
-    return { url };
+    try {
+      const url = await crearEnlaceOnboardingConnect(
+        accountId,
+        origin,
+        opts?.returnPath
+      );
+      return { url };
+    } catch (linkErr) {
+      console.error(
+        "[iniciarOnboardingStripeConnect] accountLink",
+        accountId,
+        linkErr
+      );
+      // Cuenta vieja/rota: una sola vez, cuenta Express nueva y enlace nuevo.
+      const cuenta = await obtenerCuentaConnect(accountId).catch(() => null);
+      if (cuenta?.details_submitted) {
+        return { error: mensajeErrorStripeConnect(linkErr) };
+      }
+      const nueva = await crearCuentaConnectExpress(user.email);
+      const saveErr = await guardarCuentaConnectPerfil(user.id, nueva.id);
+      if (saveErr) return { error: saveErr };
+      const url = await crearEnlaceOnboardingConnect(
+        nueva.id,
+        origin,
+        opts?.returnPath
+      );
+      return { url };
+    }
   } catch (err) {
     console.error("[iniciarOnboardingStripeConnect]", err);
     return { error: mensajeErrorStripeConnect(err) };
