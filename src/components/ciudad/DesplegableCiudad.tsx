@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 import type { SelectOption } from "@/components/ui/Select";
 
 type Props = {
@@ -10,7 +11,6 @@ type Props = {
   placeholder?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
-  /** Avisa al formulario para ocultar lo de abajo y no taparlo. */
   onAbiertoChange?: (abierto: boolean) => void;
 };
 
@@ -21,25 +21,10 @@ function textoBusqueda(valor: string): string {
     .toLocaleLowerCase("es");
 }
 
-function altoCabeceraSitio(): number {
-  const cab = document.querySelector("header.sticky");
-  if (cab instanceof HTMLElement) {
-    return Math.ceil(cab.getBoundingClientRect().height);
-  }
-  return 56;
-}
-
-function altoMenuAbajo(): number {
-  const menu = document.querySelector("nav.fixed.bottom-0");
-  if (menu instanceof HTMLElement) {
-    return Math.ceil(menu.getBoundingClientRect().height);
-  }
-  return 80;
-}
-
 /**
- * Lista de municipio/barrio hasta el menú de abajo.
- * Etiqueta + casilla siempre encima de la lista (sin taparla).
+ * Al abrir: panel fijo entre la cabecera y el menú de abajo.
+ * La etiqueta y la casilla quedan siempre a la vista; la lista no las tapa
+ * ni se mete debajo de la cabecera.
  */
 export function DesplegableCiudad({
   label,
@@ -50,12 +35,11 @@ export function DesplegableCiudad({
   onChange,
   onAbiertoChange,
 }: Props) {
+  const tituloId = useId();
   const [abierto, setAbierto] = useState(false);
   const [consulta, setConsulta] = useState("");
-  const [alto, setAlto] = useState(320);
-  const listaRef = useRef<HTMLDivElement>(null);
-  const cajaRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [montado, setMontado] = useState(false);
+  const [hueco, setHueco] = useState({ top: 56, bottom: 72 });
 
   const elegido = options.find((opt) => opt.value === value);
   const filtro = textoBusqueda(consulta);
@@ -74,128 +58,148 @@ export function DesplegableCiudad({
   }
 
   useEffect(() => {
+    setMontado(true);
+  }, []);
+
+  useEffect(() => {
     onAbiertoChange?.(abierto);
   }, [abierto, onAbiertoChange]);
 
   useEffect(() => {
     if (!abierto) return;
-    function onDoc(e: MouseEvent) {
-      if (!cajaRef.current?.contains(e.target as Node)) cerrar();
+    const medirHueco = () => {
+      const cab = document.querySelector("header.sticky");
+      const menu = document.querySelector("nav.fixed.bottom-0");
+      setHueco({
+        top:
+          cab instanceof HTMLElement
+            ? Math.ceil(cab.getBoundingClientRect().bottom)
+            : 56,
+        bottom:
+          menu instanceof HTMLElement
+            ? Math.ceil(window.innerHeight - menu.getBoundingClientRect().top)
+            : 72,
+      });
+    };
+    medirHueco();
+    window.addEventListener("resize", medirHueco);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") cerrar();
     }
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", medirHueco);
+    };
   }, [abierto]);
 
-  useEffect(() => {
-    if (!abierto) return;
-
-    const cabAlto = altoCabeceraSitio();
-    const caja = cajaRef.current;
-    if (caja) {
-      const destino =
-        caja.getBoundingClientRect().top + window.scrollY - cabAlto - 8;
-      window.scrollTo({ top: Math.max(0, destino), behavior: "auto" });
-    }
-    inputRef.current?.focus({ preventScroll: true });
-
-    const medir = () => {
-      const lista = listaRef.current;
-      if (!lista) return;
-      // La lista empieza debajo de etiqueta+casilla; no se solapan.
-      const top = lista.getBoundingClientRect().top;
-      const libre = Math.floor(
-        window.innerHeight - altoMenuAbajo() - top - 8
-      );
-      setAlto(Math.max(180, libre));
-    };
-    medir();
-    const t1 = window.setTimeout(medir, 40);
-    const t2 = window.setTimeout(medir, 120);
-    window.addEventListener("resize", medir);
-    return () => {
-      window.clearTimeout(t1);
-      window.clearTimeout(t2);
-      window.removeEventListener("resize", medir);
-    };
-  }, [abierto, visibles.length]);
+  const panel =
+    montado && abierto
+      ? createPortal(
+          <div
+            className="fixed inset-x-0 z-50 flex flex-col bg-white"
+            style={{ top: hueco.top, bottom: hueco.bottom }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={tituloId}
+          >
+            <div className="mx-auto flex w-full max-w-none flex-col gap-1.5 px-4 pt-3 pb-2 lg:px-10 xl:px-16">
+              <div className="flex items-center justify-between gap-2">
+                <p
+                  id={tituloId}
+                  className="text-sm font-medium text-zinc-800"
+                >
+                  {label}
+                </p>
+                <button
+                  type="button"
+                  onClick={cerrar}
+                  className="shrink-0 rounded-lg px-2 py-1 text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
+                >
+                  Cerrar
+                </button>
+              </div>
+              <input
+                autoFocus
+                type="text"
+                value={consulta}
+                placeholder="Escribe para filtrar…"
+                className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                onChange={(e) => setConsulta(e.target.value)}
+              />
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto border-t border-zinc-200 px-2">
+              <div className="mx-auto w-full max-w-none lg:px-8 xl:px-14">
+                {visibles.length === 0 ? (
+                  <p className="px-3 py-4 text-sm text-zinc-500">
+                    Sin coincidencias
+                  </p>
+                ) : (
+                  visibles.map((opt, indice) => {
+                    const tituloGrupo =
+                      opt.group && visibles[indice - 1]?.group !== opt.group
+                        ? opt.group
+                        : "";
+                    const marcado = opt.value === value;
+                    return (
+                      <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
+                        {tituloGrupo ? (
+                          <p className="px-3 pt-3 pb-1 text-xs font-semibold text-zinc-500">
+                            {tituloGrupo}
+                          </p>
+                        ) : null}
+                        <button
+                          type="button"
+                          className={[
+                            "block w-full px-3 py-2.5 text-left text-base text-zinc-900",
+                            opt.bajoCapital ? "pl-6" : "",
+                            opt.negrita ? "font-bold" : "",
+                            marcado
+                              ? "bg-zinc-100 font-medium"
+                              : "hover:bg-zinc-50",
+                          ].join(" ")}
+                          onClick={() => {
+                            onChange(opt.value);
+                            cerrar();
+                          }}
+                        >
+                          {opt.label}
+                        </button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )
+      : null;
 
   return (
-    <div ref={cajaRef} className="block space-y-1.5">
+    <div className="block space-y-1.5">
       <p className="text-sm font-medium text-zinc-800">{label}</p>
-      {!abierto ? (
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={abrir}
-          className={[
-            "flex w-full min-h-11 items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left text-base",
-            disabled
-              ? "cursor-not-allowed bg-zinc-50 text-zinc-500"
-              : "text-zinc-900",
-            !elegido ? "text-zinc-400" : "",
-          ].join(" ")}
-        >
-          <span>{elegido?.label ?? placeholder}</span>
-          <span aria-hidden className="text-zinc-500">
-            ▾
-          </span>
-        </button>
-      ) : (
-        <>
-          <input
-            ref={inputRef}
-            type="text"
-            value={consulta}
-            placeholder="Escribe para filtrar…"
-            className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-            onChange={(e) => setConsulta(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") cerrar();
-            }}
-          />
-          <div
-            ref={listaRef}
-            className="w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white"
-            style={{ height: alto }}
-          >
-            {visibles.length === 0 ? (
-              <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
-            ) : (
-              visibles.map((opt, indice) => {
-                const tituloGrupo =
-                  opt.group && visibles[indice - 1]?.group !== opt.group
-                    ? opt.group
-                    : "";
-                const marcado = opt.value === value;
-                return (
-                  <div key={`${opt.group ?? ""}-${opt.value || opt.label}`}>
-                    {tituloGrupo ? (
-                      <p className="px-3 pt-2 pb-1 text-xs font-semibold text-zinc-500">
-                        {tituloGrupo}
-                      </p>
-                    ) : null}
-                    <button
-                      type="button"
-                      className={[
-                        "block w-full px-3 py-2.5 text-left text-base text-zinc-900",
-                        opt.bajoCapital ? "pl-6" : "",
-                        opt.negrita ? "font-bold" : "",
-                        marcado ? "bg-zinc-100 font-medium" : "hover:bg-zinc-50",
-                      ].join(" ")}
-                      onClick={() => {
-                        onChange(opt.value);
-                        cerrar();
-                      }}
-                    >
-                      {opt.label}
-                    </button>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </>
-      )}
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={abrir}
+        className={[
+          "flex w-full min-h-11 items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left text-base",
+          disabled
+            ? "cursor-not-allowed bg-zinc-50 text-zinc-500"
+            : "text-zinc-900",
+          !elegido ? "text-zinc-400" : "",
+        ].join(" ")}
+      >
+        <span>{elegido?.label ?? placeholder}</span>
+        <span aria-hidden className="text-zinc-500">
+          ▾
+        </span>
+      </button>
+      {panel}
     </div>
   );
 }
