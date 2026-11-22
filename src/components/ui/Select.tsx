@@ -99,8 +99,7 @@ function SelectNativo({
 }
 
 export function Select({ nativo = false, options, label, ...props }: Props) {
-  // Barrios/polígonos: lista propia debajo del campo.
-  // El select nativo de Windows abre hacia arriba y tapa la cabecera.
+  // Barrios: lista en el hueco del formulario (size>1). No flota ni tapa.
   const esBarrioOPoligono =
     label === "Desde" ||
     label === "Hasta" ||
@@ -108,12 +107,90 @@ export function Select({ nativo = false, options, label, ...props }: Props) {
       (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
     );
   if (esBarrioOPoligono) {
-    return <SelectBuscable {...props} label={label} options={options} />;
+    return <SelectBarrioEnFlujo {...props} label={label} options={options} />;
   }
   if (nativo) {
     return <SelectNativo {...props} label={label} options={options} />;
   }
   return <SelectBuscable {...props} label={label} options={options} />;
+}
+
+/** Crece hacia abajo dentro de la página; Hasta y el resto bajan. */
+function SelectBarrioEnFlujo({
+  label,
+  labelRight,
+  hint,
+  error,
+  options,
+  placeholder = "Barrio o polígono",
+  className = "",
+  id,
+  onChange,
+  onBlur,
+  ...props
+}: Omit<Props, "listaDebajo" | "nativo">) {
+  const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
+  const tieneVacio = options.some((opt) => opt.value === "");
+  const valor = String(props.value ?? "");
+  const vacio = valor.trim() === "";
+  const [abierto, setAbierto] = useState(false);
+  const filas = Math.min(8, Math.max(options.length + (tieneVacio ? 0 : 1), 2));
+
+  return (
+    <label
+      htmlFor={selectId}
+      className="block space-y-1.5"
+      data-campo=""
+      {...(vacio ? { "data-campo-vacio": "" } : {})}
+      {...(error ? { "data-campo-error": "" } : {})}
+    >
+      {labelRight ? (
+        <span className="flex items-start justify-between gap-3">
+          <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">
+            {label}
+          </span>
+          <span className="mt-0.5 shrink-0">{labelRight}</span>
+        </span>
+      ) : (
+        <span className="text-sm font-medium text-zinc-800">{label}</span>
+      )}
+      <select
+        id={selectId}
+        size={abierto && !props.disabled && options.length > 0 ? filas : 1}
+        className={[
+          "w-full cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
+          abierto && !props.disabled && options.length > 0
+            ? "min-h-[12rem]"
+            : "min-h-11",
+          error ? "border-red-400 ring-2 ring-red-100" : "",
+          props.disabled ? "cursor-not-allowed bg-zinc-50 text-zinc-500" : "",
+          className,
+        ].join(" ")}
+        {...props}
+        onFocus={(e) => {
+          if (!props.disabled && options.length > 0) setAbierto(true);
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setAbierto(false);
+          onBlur?.(e);
+        }}
+        onChange={(e) => {
+          setAbierto(false);
+          onChange?.(e);
+        }}
+      >
+        {!tieneVacio && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
+        {opcionesEnGrupos(options)}
+      </select>
+      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
+      {error && <p className="text-xs text-red-600">{error}</p>}
+    </label>
+  );
 }
 
 function SelectBuscable({
