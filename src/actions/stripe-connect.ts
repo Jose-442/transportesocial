@@ -6,6 +6,7 @@ import { getRequestOrigin } from "@/lib/stripe/origin";
 import { isStripeConfigured } from "@/lib/stripe/server";
 import { supabaseErrorMessage } from "@/lib/supabase/errors";
 import {
+  asegurarCuentaConnectParticular,
   connectOnboardingCompletado,
   connectPayoutsActivos,
   crearCuentaConnectExpress,
@@ -95,6 +96,12 @@ export async function iniciarOnboardingStripeConnect(opts?: {
   if (!accountId) {
     const account = await crearCuentaConnectExpress(user.email);
     accountId = account.id;
+  } else {
+    // Cuentas a medias creadas sin forzar particular (podían pedir empresa).
+    accountId = await asegurarCuentaConnectParticular(accountId, user.email);
+  }
+
+  if (accountId !== profile?.stripe_connect_account_id) {
     const { error } = await supabase
       .from("profiles")
       .update({

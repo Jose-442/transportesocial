@@ -1,6 +1,12 @@
 import type Stripe from "stripe";
 import { getStripeServer } from "./server";
 
+/** Solo particulares: en esta web no se admiten empresas. */
+const PERFIL_CONDUCTOR_PARTICULAR = {
+  product_description:
+    "Conductor particular en Transporte Social: comparte trayectos y portes.",
+} as const;
+
 export async function crearCuentaConnectExpress(
   email: string
 ): Promise<Stripe.Account> {
@@ -9,10 +15,53 @@ export async function crearCuentaConnectExpress(
     type: "express",
     country: "ES",
     email,
+    business_type: "individual",
+    business_profile: PERFIL_CONDUCTOR_PARTICULAR,
     capabilities: {
       transfers: { requested: true },
     },
   });
+}
+
+/**
+ * Garantiza cuenta Connect de particular.
+ * Si la cuenta antigua quedó como empresa (o sin tipo) y aún no se envió,
+ * se actualiza o se sustituye por una nueva solo particular.
+ */
+export async function asegurarCuentaConnectParticular(
+  accountId: string,
+  email: string
+): Promise<string> {
+  const stripe = getStripeServer();
+  const account = await stripe.accounts.retrieve(accountId);
+
+  if (account.business_type === "individual") {
+    return accountId;
+  }
+
+  // Ya enviada como empresa: no recrear (caso raro; la web no debe llegar aquí).
+  if (account.details_submitted) {
+    return accountId;
+  }
+
+  if (!account.business_type) {
+    try {
+      await stripe.accounts.update(accountId, {
+        business_type: "individual",
+        business_profile: PERFIL_CONDUCTOR_PARTICULAR,
+      });
+      return accountId;
+    } catch (err) {
+      console.error(
+        "[asegurarCuentaConnectParticular] update",
+        accountId,
+        err
+      );
+    }
+  }
+
+  const nueva = await crearCuentaConnectExpress(email);
+  return nueva.id;
 }
 
 function rutaVueltaConnect(path: string | undefined, query: string): string {
