@@ -97,11 +97,15 @@ function SelectNativo({
   );
 }
 
-export function Select({ nativo = false, ...props }: Props) {
-  if (nativo) {
-    return <SelectNativo {...props} />;
+export function Select({ nativo = false, options, ...props }: Props) {
+  // Listas de barrio/polígono: siempre el select del navegador (abre abajo, no tapa).
+  const esBarrioOPoligono = options.some(
+    (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
+  );
+  if (nativo || esBarrioOPoligono) {
+    return <SelectNativo {...props} options={options} />;
   }
-  return <SelectBuscable {...props} />;
+  return <SelectBuscable {...props} options={options} />;
 }
 
 function SelectBuscable({
