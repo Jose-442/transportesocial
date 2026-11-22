@@ -29,9 +29,17 @@ function altoCabeceraSitio(): number {
   return 56;
 }
 
+function altoMenuAbajo(): number {
+  const menu = document.querySelector("nav.fixed.bottom-0");
+  if (menu instanceof HTMLElement) {
+    return Math.ceil(menu.getBoundingClientRect().height);
+  }
+  return 80;
+}
+
 /**
- * Lista de municipio/barrio: crece hasta el menú de abajo.
- * La palabra del campo y la casilla se quedan visibles arriba.
+ * Lista de municipio/barrio hasta el menú de abajo.
+ * Etiqueta + casilla siempre encima de la lista (sin taparla).
  */
 export function DesplegableCiudad({
   label,
@@ -84,83 +92,67 @@ export function DesplegableCiudad({
     const cabAlto = altoCabeceraSitio();
     const caja = cajaRef.current;
     if (caja) {
-      const top = caja.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: Math.max(0, top - cabAlto - 8), behavior: "auto" });
+      const destino =
+        caja.getBoundingClientRect().top + window.scrollY - cabAlto - 8;
+      window.scrollTo({ top: Math.max(0, destino), behavior: "auto" });
     }
-
-    // Focus sin que el navegador esconda la etiqueta arriba.
     inputRef.current?.focus({ preventScroll: true });
 
     const medir = () => {
       const lista = listaRef.current;
       if (!lista) return;
+      // La lista empieza debajo de etiqueta+casilla; no se solapan.
       const top = lista.getBoundingClientRect().top;
-      const menu = document.querySelector("nav.fixed.bottom-0");
-      const menuAlto =
-        menu instanceof HTMLElement
-          ? Math.ceil(menu.getBoundingClientRect().height)
-          : 80;
-      const libre = Math.floor(window.innerHeight - menuAlto - top - 8);
-      setAlto(Math.max(200, libre));
+      const libre = Math.floor(
+        window.innerHeight - altoMenuAbajo() - top - 8
+      );
+      setAlto(Math.max(180, libre));
     };
     medir();
-    const t = window.setTimeout(medir, 40);
+    const t1 = window.setTimeout(medir, 40);
+    const t2 = window.setTimeout(medir, 120);
     window.addEventListener("resize", medir);
     return () => {
-      window.clearTimeout(t);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener("resize", medir);
     };
   }, [abierto, visibles.length]);
 
-  const [topeSticky, setTopeSticky] = useState(56);
-
-  useEffect(() => {
-    if (!abierto) return;
-    setTopeSticky(altoCabeceraSitio());
-  }, [abierto]);
-
   return (
-    <div ref={cajaRef} className="block">
+    <div ref={cajaRef} className="block space-y-1.5">
+      <p className="text-sm font-medium text-zinc-800">{label}</p>
       {!abierto ? (
-        <div className="space-y-1.5">
-          <p className="text-sm font-medium text-zinc-800">{label}</p>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={abrir}
-            className={[
-              "flex w-full min-h-11 items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left text-base",
-              disabled
-                ? "cursor-not-allowed bg-zinc-50 text-zinc-500"
-                : "text-zinc-900",
-              !elegido ? "text-zinc-400" : "",
-            ].join(" ")}
-          >
-            <span>{elegido?.label ?? placeholder}</span>
-            <span aria-hidden className="text-zinc-500">
-              ▾
-            </span>
-          </button>
-        </div>
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={abrir}
+          className={[
+            "flex w-full min-h-11 items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2 text-left text-base",
+            disabled
+              ? "cursor-not-allowed bg-zinc-50 text-zinc-500"
+              : "text-zinc-900",
+            !elegido ? "text-zinc-400" : "",
+          ].join(" ")}
+        >
+          <span>{elegido?.label ?? placeholder}</span>
+          <span aria-hidden className="text-zinc-500">
+            ▾
+          </span>
+        </button>
       ) : (
         <>
-          <div
-            className="sticky z-20 space-y-1.5 bg-white pt-1 pb-1.5"
-            style={{ top: topeSticky }}
-          >
-            <p className="text-sm font-medium text-zinc-800">{label}</p>
-            <input
-              ref={inputRef}
-              type="text"
-              value={consulta}
-              placeholder="Escribe para filtrar…"
-              className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-              onChange={(e) => setConsulta(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Escape") cerrar();
-              }}
-            />
-          </div>
+          <input
+            ref={inputRef}
+            type="text"
+            value={consulta}
+            placeholder="Escribe para filtrar…"
+            className="w-full min-h-11 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            onChange={(e) => setConsulta(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") cerrar();
+            }}
+          />
           <div
             ref={listaRef}
             className="w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white"
