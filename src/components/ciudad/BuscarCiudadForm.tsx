@@ -57,9 +57,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
       />
       <Select
         label="Desde"
-        placeholder={
-          actual ? "Barrio o polígono" : "Elige primero el municipio"
-        }
+        placeholder="Barrio o polígono"
         value={desde}
         options={opcionesZona}
         nativo
@@ -68,9 +66,7 @@ export function BuscarCiudadForm({ inicial }: { inicial: FiltrosCiudad }) {
       />
       <Select
         label="Hasta"
-        placeholder={
-          actual ? "Barrio o polígono" : "Elige primero el municipio"
-        }
+        placeholder="Barrio o polígono"
         value={hasta}
         options={opcionesZona}
         nativo

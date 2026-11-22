@@ -123,11 +123,6 @@ export function PublicarCiudadForm({
 
   return (
     <div className="space-y-4">
-      {!actual ? (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
-          Primero elige el municipio. Luego podrás elegir Desde y Hasta.
-        </p>
-      ) : null}
       <Select
         id="ciudad-municipio"
         label={ETIQUETA_MUNICIPIO_URBANO}
@@ -141,9 +136,7 @@ export function PublicarCiudadForm({
       />
       <Select
         label="Desde"
-        placeholder={
-          actual ? "Barrio o polígono" : "Elige primero el municipio"
-        }
+        placeholder="Barrio o polígono"
         value={desde}
         options={opcionesZona}
         nativo
@@ -152,9 +145,7 @@ export function PublicarCiudadForm({
       />
       <Select
         label="Hasta"
-        placeholder={
-          actual ? "Barrio o polígono" : "Elige primero el municipio"
-        }
+        placeholder="Barrio o polígono"
         value={hasta}
         options={opcionesZona}
         nativo
