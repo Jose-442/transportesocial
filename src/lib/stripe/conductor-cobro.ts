@@ -1,20 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseServerUrl } from "@/lib/supabase/env";
+import { MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA } from "@/lib/stripe/conductor-cobro-mensajes";
 
-export const MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA =
-  "Este viaje aún no se puede reservar. El conductor tiene que conectar su cuenta bancaria.";
-
-export const TEXTO_CONECTAR_BANCO_PUBLICAR =
-  "Para cobrar tus viajes, conecta tu cuenta bancaria. El dinero llega a ti y se evitan fraudes.";
-
-export const TEXTO_PRIMER_VIAJE_MAS_LARGO =
-  "Publicar el 1º viaje es un poco más pesado. Los siguientes ya no.";
+export {
+  MENSAJE_CONDUCTOR_SIN_BANCO_RESERVA,
+  TEXTO_CONECTAR_BANCO_PUBLICAR,
+  TEXTO_PRIMER_VIAJE_MAS_LARGO,
+} from "@/lib/stripe/conductor-cobro-mensajes";
 
 async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> {
   try {
     const supabase = await createClient();
 
-    // 1) RPC (si está la migración 079): no depende de RLS raro.
     const rpc = await supabase.rpc("conductor_puede_recibir_reservas", {
       p_conductor_id: conductorId,
     });
@@ -22,7 +19,6 @@ async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> 
       return rpc.data;
     }
 
-    // 2) Vista pública (migración 079).
     const pub = await supabase
       .from("perfiles_publicos")
       .select("stripe_connect_payouts_enabled")
@@ -35,7 +31,6 @@ async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> 
       );
     }
 
-    // 3) Propia ficha (solo si eres el conductor).
     const own = await supabase
       .from("profiles")
       .select("stripe_connect_payouts_enabled")
@@ -48,7 +43,6 @@ async function leerPayoutsEnabled(conductorId: string): Promise<boolean | null> 
     console.error("[leerPayoutsEnabled] session", conductorId, err);
   }
 
-  // 4) Service role con Bearer (el admin sin Bearer devolvía [] y mentía).
   const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   const supabaseUrl = getSupabaseServerUrl();
   if (serviceRole && supabaseUrl) {

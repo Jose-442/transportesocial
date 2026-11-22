@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import {
   TEXTO_CONECTAR_BANCO_PUBLICAR,
   TEXTO_PRIMER_VIAJE_MAS_LARGO,
-} from "@/lib/stripe/conductor-cobro";
+} from "@/lib/stripe/conductor-cobro-mensajes";
 
 export function ConectarBancoAlPublicar({
   payoutsEnabled,
