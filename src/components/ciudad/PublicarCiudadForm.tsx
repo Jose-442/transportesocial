@@ -154,7 +154,11 @@ export function PublicarCiudadForm({
       <DatePickerInput label="Día" value={fecha} onChange={setFecha} required />
       <TimePickerInput label="Hora" value={hora} onChange={setHora} required />
 
-      <div className="space-y-2">
+      <div
+        className="space-y-2"
+        data-campo=""
+        {...(!tipo ? { "data-campo-vacio": "" } : {})}
+      >
         <p className="text-sm font-medium text-zinc-800">
           ¿Qué ofreces en este trayecto?
         </p>
@@ -179,12 +183,14 @@ export function PublicarCiudadForm({
             placeholder="Elige una opción"
             value={espacio}
             options={ESPACIO_SELECT_OPTIONS}
+            required
             onChange={(e) => setEspacio(e.target.value)}
           />
           <Input
             label="Precio por el porte del bulto"
             hint="Euros enteros. Solo para repartir gastos."
             inputMode="numeric"
+            required
             value={precioBulto}
             onChange={(e) => setPrecioBulto(textoPrecioEntero(e.target.value))}
           />
@@ -198,26 +204,33 @@ export function PublicarCiudadForm({
       )}
 
       {llevaPlaza && (
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-zinc-800">
-            Plazas (máximo {MAX_ASIENTOS_POR_VIAJE})
-          </p>
-          <div className="flex gap-2">
-            {([1, 2, 3] as const).map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => setPlazas(String(n))}
-                className={botonClase(plazas === String(n))}
-              >
-                {n}
-              </button>
-            ))}
+        <>
+          <div
+            className="space-y-3"
+            data-campo=""
+            {...(!plazas ? { "data-campo-vacio": "" } : {})}
+          >
+            <p className="text-sm font-medium text-zinc-800">
+              Plazas (máximo {MAX_ASIENTOS_POR_VIAJE})
+            </p>
+            <div className="flex gap-2">
+              {([1, 2, 3] as const).map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setPlazas(String(n))}
+                  className={botonClase(plazas === String(n))}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
           </div>
           <Input
             label="Precio por acompañante"
             hint="Euros enteros. Solo para repartir gastos."
             inputMode="numeric"
+            required
             value={precioPlaza}
             onChange={(e) => setPrecioPlaza(textoPrecioEntero(e.target.value))}
           />
@@ -227,7 +240,7 @@ export function PublicarCiudadForm({
               <strong>{formatEur(visiblePlaza)}</strong>
             </p>
           )}
-        </div>
+        </>
       )}
 
       {(llevaBulto || llevaPlaza) && (
@@ -238,7 +251,11 @@ export function PublicarCiudadForm({
         />
       )}
 
-      <div className="space-y-2">
+      <div
+        className="space-y-2"
+        data-campo=""
+        {...(!mascotas ? { "data-campo-vacio": "" } : {})}
+      >
         <p className="text-sm font-medium text-zinc-800">
           ¿Aceptas mascotas en este trayecto?
         </p>
