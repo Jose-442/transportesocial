@@ -1,11 +1,18 @@
 import type Stripe from "stripe";
 import { getStripeServer } from "./server";
 
-/** Solo particulares: en esta web no se admiten empresas. */
-const PERFIL_CONDUCTOR_PARTICULAR = {
-  product_description:
-    "Conductor particular en Transporte Social: comparte trayectos y portes.",
-} as const;
+/**
+ * Solo particulares. Prefijamos URL + descripción + MCC para que Stripe
+ * no muestre el paso «Datos de la empresa» (web / qué vendes).
+ */
+const PERFIL_CONDUCTOR_PARTICULAR: Stripe.AccountUpdateParams.BusinessProfile =
+  {
+    url: "https://www.transportesocial.es",
+    product_description:
+      "Conductor particular en Transporte Social: comparte trayectos y portes.",
+    // Servicios de transporte (no taxis): evita la pregunta de sector.
+    mcc: "4789",
+  };
 
 export async function crearCuentaConnectExpress(
   email: string
@@ -23,10 +30,19 @@ export async function crearCuentaConnectExpress(
   });
 }
 
+/** Rellena el perfil de negocio en cuentas ya creadas (salta el paso de web). */
+export async function prefijarPerfilConnectParticular(
+  accountId: string
+): Promise<void> {
+  const stripe = getStripeServer();
+  await stripe.accounts.update(accountId, {
+    business_profile: PERFIL_CONDUCTOR_PARTICULAR,
+  });
+}
+
 /**
- * Garantiza cuenta Connect de particular.
- * Si la cuenta antigua quedó como empresa (o sin tipo) y aún no se envió,
- * se actualiza o se sustituye por una nueva solo particular.
+ * Garantiza cuenta Connect de particular con perfil prefijado.
+ * Si quedó como empresa y aún no se envió, se sustituye por una nueva.
  */
 export async function asegurarCuentaConnectParticular(
   accountId: string,
@@ -35,33 +51,33 @@ export async function asegurarCuentaConnectParticular(
   const stripe = getStripeServer();
   const account = await stripe.accounts.retrieve(accountId);
 
-  if (account.business_type === "individual") {
-    return accountId;
+  if (account.business_type === "company" && !account.details_submitted) {
+    const nueva = await crearCuentaConnectExpress(email);
+    return nueva.id;
   }
 
-  // Ya enviada como empresa: no recrear (caso raro; la web no debe llegar aquí).
   if (account.details_submitted) {
     return accountId;
   }
 
-  if (!account.business_type) {
-    try {
-      await stripe.accounts.update(accountId, {
-        business_type: "individual",
-        business_profile: PERFIL_CONDUCTOR_PARTICULAR,
-      });
-      return accountId;
-    } catch (err) {
-      console.error(
-        "[asegurarCuentaConnectParticular] update",
-        accountId,
-        err
-      );
+  try {
+    const update: Stripe.AccountUpdateParams = {
+      business_profile: PERFIL_CONDUCTOR_PARTICULAR,
+    };
+    if (account.business_type !== "individual") {
+      update.business_type = "individual";
     }
+    await stripe.accounts.update(accountId, update);
+    return accountId;
+  } catch (err) {
+    console.error(
+      "[asegurarCuentaConnectParticular] update",
+      accountId,
+      err
+    );
+    const nueva = await crearCuentaConnectExpress(email);
+    return nueva.id;
   }
-
-  const nueva = await crearCuentaConnectExpress(email);
-  return nueva.id;
 }
 
 function rutaVueltaConnect(path: string | undefined, query: string): string {
@@ -76,6 +92,14 @@ export async function crearEnlaceOnboardingConnect(
   returnPath?: string
 ): Promise<string> {
   const stripe = getStripeServer();
+  // Por si la cuenta es antigua: rellenar web/descripción antes del enlace.
+  if (!(await obtenerCuentaConnect(accountId)).details_submitted) {
+    try {
+      await prefijarPerfilConnectParticular(accountId);
+    } catch (err) {
+      console.error("[crearEnlaceOnboardingConnect] prefill", accountId, err);
+    }
+  }
   const account = await stripe.accounts.retrieve(accountId);
   const link = await stripe.accountLinks.create({
     account: accountId,
