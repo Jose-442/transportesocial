@@ -27,6 +27,8 @@ type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   placeholder?: string;
   /** Compatibilidad antigua (ya no flota en ningún caso). */
   listaDebajo?: boolean;
+  /** Lista alta hasta el menú inferior de la pantalla. */
+  listaHastaAbajo?: boolean;
   /** Select del navegador: no hay lista propia encima del formulario. */
   nativo?: boolean;
 };
@@ -99,98 +101,29 @@ function SelectNativo({
 }
 
 export function Select({ nativo = false, options, label, ...props }: Props) {
-  // Barrios: lista en el hueco del formulario (size>1). No flota ni tapa.
-  const esBarrioOPoligono =
+  // Municipio / Desde / Hasta de ciudad: lista propia (sin azul de Windows),
+  // en el flujo de la página y alta hasta el menú de abajo.
+  const esCiudadDesplegable =
     label === "Desde" ||
     label === "Hasta" ||
+    label === "Municipios de más de 25000 habitantes" ||
     options.some(
       (opt) => opt.group === "Barrios" || opt.group === "Polígonos"
     );
-  if (esBarrioOPoligono) {
-    return <SelectBarrioEnFlujo {...props} label={label} options={options} />;
+  if (esCiudadDesplegable) {
+    return (
+      <SelectBuscable
+        {...props}
+        label={label}
+        options={options}
+        listaHastaAbajo
+      />
+    );
   }
   if (nativo) {
     return <SelectNativo {...props} label={label} options={options} />;
   }
   return <SelectBuscable {...props} label={label} options={options} />;
-}
-
-/** Crece hacia abajo dentro de la página; Hasta y el resto bajan. */
-function SelectBarrioEnFlujo({
-  label,
-  labelRight,
-  hint,
-  error,
-  options,
-  placeholder = "Barrio o polígono",
-  className = "",
-  id,
-  onChange,
-  onBlur,
-  ...props
-}: Omit<Props, "listaDebajo" | "nativo">) {
-  const selectId = id ?? label.toLowerCase().replace(/\s+/g, "-");
-  const tieneVacio = options.some((opt) => opt.value === "");
-  const valor = String(props.value ?? "");
-  const vacio = valor.trim() === "";
-  const [abierto, setAbierto] = useState(false);
-  const filas = Math.min(8, Math.max(options.length + (tieneVacio ? 0 : 1), 2));
-
-  return (
-    <label
-      htmlFor={selectId}
-      className="block space-y-1.5"
-      data-campo=""
-      {...(vacio ? { "data-campo-vacio": "" } : {})}
-      {...(error ? { "data-campo-error": "" } : {})}
-    >
-      {labelRight ? (
-        <span className="flex items-start justify-between gap-3">
-          <span className="min-w-0 text-sm font-medium leading-snug text-zinc-800">
-            {label}
-          </span>
-          <span className="mt-0.5 shrink-0">{labelRight}</span>
-        </span>
-      ) : (
-        <span className="text-sm font-medium text-zinc-800">{label}</span>
-      )}
-      <select
-        id={selectId}
-        size={abierto && !props.disabled && options.length > 0 ? filas : 1}
-        className={[
-          "w-full cursor-pointer rounded-xl border border-zinc-200 bg-white px-3 py-2 text-base text-zinc-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200",
-          abierto && !props.disabled && options.length > 0
-            ? "min-h-[12rem]"
-            : "min-h-11",
-          error ? "border-red-400 ring-2 ring-red-100" : "",
-          props.disabled ? "cursor-not-allowed bg-zinc-50 text-zinc-500" : "",
-          className,
-        ].join(" ")}
-        {...props}
-        onFocus={(e) => {
-          if (!props.disabled && options.length > 0) setAbierto(true);
-          props.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          setAbierto(false);
-          onBlur?.(e);
-        }}
-        onChange={(e) => {
-          setAbierto(false);
-          onChange?.(e);
-        }}
-      >
-        {!tieneVacio && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
-        {opcionesEnGrupos(options)}
-      </select>
-      {hint && !error && <p className="text-xs text-zinc-500">{hint}</p>}
-      {error && <p className="text-xs text-red-600">{error}</p>}
-    </label>
-  );
 }
 
 function SelectBuscable({
@@ -201,6 +134,7 @@ function SelectBuscable({
   options,
   placeholder = "Selecciona…",
   listaDebajo: _listaDebajo = false,
+  listaHastaAbajo = false,
   className = "",
   id,
   ...props
@@ -217,7 +151,7 @@ function SelectBuscable({
   const [consulta, setConsulta] = useState("");
   const [escribiendo, setEscribiendo] = useState(false);
   const [activo, setActivo] = useState(0);
-  const [maxAlto, setMaxAlto] = useState(200);
+  const [maxAlto, setMaxAlto] = useState(listaHastaAbajo ? 480 : 200);
 
   const filtro = escribiendo ? textoBusqueda(consulta) : "";
   const visibles = filtro
@@ -242,26 +176,29 @@ function SelectBuscable({
     const caja = boxRef.current;
     const lista = listaRef.current;
     if (!caja || !lista) return;
-    // Deja sitio arriba del campo para que la lista quepa debajo, no arriba.
-    const topeDeseado = 72;
+
+    const topeDeseado = 64;
     const cajaTop = caja.getBoundingClientRect().top;
-    if (cajaTop > topeDeseado + 40) {
-      window.scrollBy({ top: cajaTop - topeDeseado, behavior: "smooth" });
+    if (cajaTop > topeDeseado + 24) {
+      window.scrollBy({ top: cajaTop - topeDeseado, behavior: "auto" });
     }
-    const menu = document.querySelector("nav.fixed.bottom-0");
-    const menuAlto =
-      menu instanceof HTMLElement
-        ? Math.ceil(menu.getBoundingClientRect().height)
-        : 80;
-    const limite = window.innerHeight - menuAlto - 16;
-    const top = lista.getBoundingClientRect().top;
-    const libre = Math.max(120, Math.floor(limite - top));
-    setMaxAlto(Math.min(220, libre));
-    const falta = lista.getBoundingClientRect().bottom - limite;
-    if (falta > 8) {
-      window.scrollBy({ top: falta + 12, behavior: "smooth" });
-    }
-  }, [abierto, visibles.length]);
+
+    const medir = () => {
+      const menu = document.querySelector("nav.fixed.bottom-0");
+      const menuAlto =
+        menu instanceof HTMLElement
+          ? Math.ceil(menu.getBoundingClientRect().height)
+          : 80;
+      const limite = window.innerHeight - menuAlto - 12;
+      const top = lista.getBoundingClientRect().top;
+      const libre = Math.max(180, Math.floor(limite - top));
+      // Hasta el final de la pantalla (menú de abajo); sin tope corto.
+      setMaxAlto(listaHastaAbajo ? libre : Math.min(280, libre));
+    };
+    medir();
+    const t = window.setTimeout(medir, 50);
+    return () => window.clearTimeout(t);
+  }, [abierto, visibles.length, listaHastaAbajo]);
 
   useEffect(() => {
     setActivo(0);
@@ -346,10 +283,11 @@ function SelectBuscable({
               className,
             ].join(" ")}
             onFocus={() => {
-              if (props.disabled) return;
+              if (props.disabled || options.length === 0) return;
               setAbierto(true);
             }}
             onChange={(e) => {
+              if (props.disabled || options.length === 0) return;
               setConsulta(e.target.value);
               setEscribiendo(true);
               setAbierto(true);
@@ -369,8 +307,12 @@ function SelectBuscable({
             ref={listaRef}
             role="listbox"
             aria-label={label}
-            className="w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1 shadow-lg"
-            style={{ maxHeight: maxAlto }}
+            className="relative z-0 w-full overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1"
+            style={
+              listaHastaAbajo
+                ? { height: maxAlto, maxHeight: maxAlto }
+                : { maxHeight: maxAlto }
+            }
           >
             {visibles.length === 0 ? (
               <p className="px-3 py-2 text-sm text-zinc-500">Sin coincidencias</p>
@@ -393,14 +335,12 @@ function SelectBuscable({
                       role="option"
                       aria-selected={marcado}
                       className={[
-                        "block w-full rounded-lg py-2 text-left text-base",
+                        "block w-full py-2 text-left text-base text-zinc-900",
                         opt.bajoCapital ? "pr-3 pl-6" : "px-3",
                         opt.negrita ? "font-bold" : "",
-                        indice === activo
-                          ? "bg-emerald-600 text-white"
-                          : marcado
-                            ? "bg-emerald-50 text-zinc-900"
-                            : "text-zinc-900 hover:bg-emerald-50",
+                        marcado || indice === activo
+                          ? "bg-zinc-100"
+                          : "hover:bg-zinc-50",
                       ].join(" ")}
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => elegir(opt)}
