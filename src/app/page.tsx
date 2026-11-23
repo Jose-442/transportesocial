@@ -31,9 +31,11 @@ export default async function HomePage() {
               .portada-hero {
                 grid-template-columns: 1.05fr 0.95fr;
                 gap: 32px;
-                padding: 16px 40px 20px;
+                /* Abajo: hueco real para la barra fija, que no tape el 3.er botón */
+                padding: 12px 40px 5.75rem;
                 align-items: start;
-                min-height: calc(100dvh - 2.5rem - 5.5rem);
+                min-height: calc(100dvh - 2.5rem);
+                box-sizing: border-box;
               }
             }
             @media (min-width: 1280px) {
@@ -50,7 +52,7 @@ export default async function HomePage() {
             }
             @media (min-width: 768px) {
               .portada-hero-izq {
-                transform: translateY(-4mm);
+                transform: translateY(-1.2cm);
               }
             }
 
