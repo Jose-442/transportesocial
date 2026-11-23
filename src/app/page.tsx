@@ -91,7 +91,7 @@ export default async function HomePage() {
             .portada-hero h1 {
               margin: 0 0 8px;
               font-family: "Segoe UI", system-ui, sans-serif;
-              font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+              font-size: calc(clamp(1.1rem, 2.2vw, 1.85rem) + 1pt);
               line-height: 1.12;
               font-weight: 800;
             }
@@ -101,7 +101,7 @@ export default async function HomePage() {
             }
             .portada-lead {
               margin: 0;
-              font-size: 14px;
+              font-size: calc(14px + 1pt);
               line-height: 1.4;
               color: #ecfdf5;
               max-width: 34ch;
@@ -115,7 +115,7 @@ export default async function HomePage() {
               background: rgba(255,255,255,.1);
               border: 1px solid rgba(255,255,255,.18);
               font-family: "Segoe UI", system-ui, sans-serif;
-              font-size: 13px;
+              font-size: calc(13px + 1pt);
               line-height: 1.4;
               color: #e6fffa;
               max-width: 520px;
@@ -131,19 +131,19 @@ export default async function HomePage() {
               margin-top: 6px;
               letter-spacing: .03em;
               color: #fff;
-              font-size: 14px;
+              font-size: calc(14px + 1pt);
               white-space: nowrap;
             }
 
             .portada-hint {
               margin: 0 0 8px;
-              font-size: 13px;
+              font-size: calc(13px + 1pt);
               font-weight: 600;
               color: #fff;
             }
             .portada-hint-soft {
               margin: 0;
-              font-size: 12px;
+              font-size: calc(12px + 1pt);
               color: #d1fae5;
               font-weight: 400;
             }
@@ -162,10 +162,13 @@ export default async function HomePage() {
               text-align: left !important;
               border-radius: 14px !important;
               padding: 13px 16px !important;
-              font-size: 15px !important;
+              font-size: calc(15px + 1pt) !important;
               font-weight: 700 !important;
               min-height: 0 !important;
               box-shadow: 0 6px 16px rgba(0,0,0,.12);
+            }
+            .portada-btn-aviso > span:first-child {
+              font-size: calc(12px + 1pt) !important;
             }
             .portada-btn-viaje {
               background: #10b981 !important;
@@ -219,7 +222,7 @@ export default async function HomePage() {
               height: auto;
             }
             .portada-gratis {
-              font-size: 14px;
+              font-size: calc(14px + 1pt);
               line-height: 1.35;
               color: #fff;
             }
