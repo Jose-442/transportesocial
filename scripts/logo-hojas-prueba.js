@@ -19,12 +19,11 @@ async function main() {
   // Subido: exactamente sobre los puntos (no debajo)
   const left = { x: 52, y: 285 };
   const right = { x: 471, y: 285 };
-  const bg = "#f2f5ef";
 
   function leaf(cx, cy, rot, scale) {
+    // Solo la hoja (sin círculo blanco que tapa letras)
     return `
       <g transform="translate(${cx},${cy}) rotate(${rot}) scale(${scale})">
-        <circle cx="0" cy="0" r="16" fill="${bg}"/>
         <path d="M0,-15 C9,-10 10,2 0,19 C-10,2 -9,-10 0,-15 Z"
           fill="#4ade80"
           stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round"/>
