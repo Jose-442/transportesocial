@@ -48,6 +48,11 @@ export default async function HomePage() {
               display: flex;
               flex-direction: column;
             }
+            @media (min-width: 768px) {
+              .portada-hero-izq {
+                transform: translateY(-4mm);
+              }
+            }
 
             .portada-logo-row {
               display: flex;
