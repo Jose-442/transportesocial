@@ -29,8 +29,8 @@ export default async function HomePage() {
             }
             @media (min-width: 768px) {
               .portada-hero {
-                grid-template-columns: 0.95fr 1.15fr;
-                gap: 28px;
+                grid-template-columns: 1.05fr 0.95fr;
+                gap: 32px;
                 /* Arriba sin recortar logo/título; abajo hueco para la barra fija */
                 padding: 16px 40px 6.5rem;
                 align-items: start;
@@ -211,7 +211,8 @@ export default async function HomePage() {
             }
             @media (min-width: 768px) {
               .portada-visual {
-                padding-top: calc(4cm + 15mm);
+                /* Menos hueco arriba para que quepa el texto debajo de la foto */
+                padding-top: calc(2.5cm + 10mm);
               }
             }
             .portada-foto {
@@ -226,13 +227,25 @@ export default async function HomePage() {
             .portada-foto img {
               display: block;
               width: 100%;
-              max-width: 44rem;
+              max-width: 36rem;
               height: auto;
+            }
+            @media (min-width: 768px) {
+              .portada-foto img {
+                max-height: min(42vh, 26rem);
+                width: auto;
+                max-width: min(100%, 36rem);
+                object-fit: contain;
+              }
             }
             .portada-gratis {
               font-size: calc(14px + 2pt);
               line-height: 1.35;
               color: #fff;
+              /* Que no lo tape la barra fija de abajo */
+              padding-bottom: 0.5rem;
+              position: relative;
+              z-index: 1;
             }
             .portada-gratis b { color: #5eead4; }
 
