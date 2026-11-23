@@ -31,12 +31,14 @@ export default async function HomePage() {
               .portada-hero {
                 grid-template-columns: 1fr 1.08fr;
                 gap: 28px;
-                /* Arriba sin recortar logo/título; abajo hueco para la barra fija */
-                padding: 16px 40px 6.5rem;
+                padding: 16px 40px 0;
                 align-items: stretch;
+                /* Exacto la 1ª pantalla bajo la cabecera; la barra fija no tapa nada */
+                height: calc(100dvh - 2.75rem);
                 min-height: calc(100dvh - 2.75rem);
+                max-height: calc(100dvh - 2.75rem);
                 box-sizing: border-box;
-                overflow: visible;
+                overflow: hidden;
               }
             }
             @media (min-width: 1280px) {
@@ -206,20 +208,24 @@ export default async function HomePage() {
             .portada-btn-aviso:hover { background: #6ee7b7 !important; }
             .portada-icon { font-size: 22px; line-height: 1; }
 
-            /* Foto + texto: pegados abajo de la primera pantalla */
+            /* Foto + texto: abajo de la 1ª pantalla; el texto SIEMPRE visible encima de la barra */
             .portada-visual {
               display: flex;
               flex-direction: column;
               justify-content: flex-start;
-              gap: 12px;
+              gap: 10px;
               min-width: 0;
             }
             @media (min-width: 768px) {
               .portada-visual {
                 padding-top: 0;
+                /* Hueco = altura de la barra fija; el texto queda a ras, sin taparse */
+                padding-bottom: 5.5rem;
                 height: 100%;
-                min-height: 100%;
+                min-height: 0;
+                max-height: 100%;
                 justify-content: flex-end;
+                box-sizing: border-box;
               }
             }
             .portada-foto {
@@ -230,6 +236,13 @@ export default async function HomePage() {
               padding: 8px;
               display: grid;
               place-items: center;
+              min-height: 0;
+            }
+            @media (min-width: 768px) {
+              .portada-foto {
+                /* Deja sitio al texto «es gratis» debajo */
+                max-height: calc(100% - 4.5rem);
+              }
             }
             .portada-foto img {
               display: block;
@@ -237,11 +250,20 @@ export default async function HomePage() {
               max-width: 40rem;
               height: auto;
             }
+            @media (min-width: 768px) {
+              .portada-foto img {
+                max-width: min(100%, 40rem);
+                max-height: 100%;
+                width: auto;
+                object-fit: contain;
+              }
+            }
             .portada-gratis {
               font-size: calc(14px + 2pt);
               line-height: 1.35;
               color: #fff;
               padding-bottom: 0;
+              flex-shrink: 0;
             }
             .portada-gratis b { color: #5eead4; }
 
