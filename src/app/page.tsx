@@ -133,7 +133,7 @@ export default async function HomePage() {
               <span className="block lg:whitespace-nowrap">
                 Y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
               </span>
-              <span className="block lg:whitespace-nowrap">¡ PUBLICA TU VIAJE!</span>
+              <span className="block lg:whitespace-nowrap">PUBLICA TU VIAJE</span>
             </p>
             </div>
             <div className="mt-3 grid gap-2 lg:mb-2 lg:mt-3 lg:max-w-xl">

@@ -7,13 +7,13 @@ export function HomeSofaHighlight() {
   return (
     <div className="flex min-w-0 max-w-full flex-col items-stretch gap-4 overflow-x-hidden px-1 sm:gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-6 lg:px-0">
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        ¡¡Compartiendo gastos!!
+        Compartiendo gastos
         <br />
         Más económico, más
         <br />
         eficiente, menos tiempo
         <br />
-        ¡Ahorra en cada trayecto!!
+        Ahorra en cada trayecto
       </p>
       <div className="mx-auto flex w-full max-w-[19rem] shrink-0 justify-center leading-none sm:max-w-[22rem] lg:max-w-[36rem]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -24,15 +24,15 @@ export function HomeSofaHighlight() {
         />
       </div>
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
-        ¡¡De tú a tú!!
+        De tú a tú
         <br />
-        ¡¡Pasajeros, bultos y mascotas!!
+        Pasajeros, bultos y mascotas
         <br />
         Tienes tambien la opción
         <br />
         de solicitar una rebaja
         <br />
-        ¡Y la diferencia vuelve a tu bolsillo!
+        Y la diferencia vuelve a tu bolsillo
       </p>
     </div>
   );
