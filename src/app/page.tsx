@@ -60,13 +60,14 @@ export default async function HomePage() {
               min-width: 0;
             }
 
-            /* Aviso + 3 botones: 1 cm de aire bajo logo/título (PC) */
+            /* Solo aviso + 3 botones (NO logo ni título) */
             .portada-izq-baja {
               margin-top: 0;
             }
             @media (min-width: 768px) {
               .portada-izq-baja {
                 margin-top: 1cm;
+                transform: translateY(-1.2cm);
               }
             }
 
