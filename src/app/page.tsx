@@ -17,14 +17,15 @@ export default async function HomePage() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            .portada-mock { background: #065f46; }
+            .portada-mock { background: #047857; }
 
             .portada-hero {
               display: grid;
               grid-template-columns: 1fr;
               gap: 24px;
               padding: 20px 16px 24px;
-              background: linear-gradient(145deg, #047857, #065f46);
+              /* Un poco más claro que antes (#065f46) */
+              background: linear-gradient(145deg, #059669, #047857);
               color: #fff;
             }
             @media (min-width: 768px) {
