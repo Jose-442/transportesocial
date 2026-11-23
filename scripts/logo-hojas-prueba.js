@@ -33,8 +33,8 @@ async function main() {
   }
 
   const svg = Buffer.from(`<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-    ${leaf(left.x, left.y, -50, 2.15 * u)}
-    ${leaf(right.x, right.y, 50, 2.15 * u)}
+    ${leaf(left.x, left.y, -50, 2.5 * u)}
+    ${leaf(right.x, right.y, 50, 2.5 * u)}
   </svg>`);
 
   const overlay = await sharp(svg).png().toBuffer();
