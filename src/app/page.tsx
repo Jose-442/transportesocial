@@ -31,11 +31,12 @@ export default async function HomePage() {
               .portada-hero {
                 grid-template-columns: 1.05fr 0.95fr;
                 gap: 32px;
-                /* Abajo: hueco real para la barra fija, que no tape el 3.er botón */
-                padding: 12px 40px 5.75rem;
+                /* Arriba sin recortar logo/título; abajo hueco para la barra fija */
+                padding: 16px 40px 6.5rem;
                 align-items: start;
-                min-height: calc(100dvh - 2.5rem);
+                min-height: calc(100dvh - 2.75rem);
                 box-sizing: border-box;
+                overflow: visible;
               }
             }
             @media (min-width: 1280px) {
@@ -49,11 +50,6 @@ export default async function HomePage() {
               min-width: 0;
               display: flex;
               flex-direction: column;
-            }
-            @media (min-width: 768px) {
-              .portada-hero-izq {
-                transform: translateY(-1.2cm);
-              }
             }
 
             .portada-logo-row {
