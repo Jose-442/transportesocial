@@ -25,9 +25,9 @@ async function main() {
     return `
       <g transform="translate(${cx},${cy}) rotate(${rot}) scale(${scale})">
         <path d="M0,-15 C9,-10 10,2 0,19 C-10,2 -9,-10 0,-15 Z"
-          fill="#4ade80"
-          stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M0,-11 L0,14" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+          fill="#1a5c3a"
+          stroke="#0f3d28" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M0,-11 L0,14" fill="none" stroke="#0f3d28" stroke-width="1.5"/>
       </g>`;
   }
 
