@@ -369,7 +369,7 @@ export default async function HomePage() {
               <div className="portada-logo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={BRAND.logo}
+                  src={BRAND.logoHojasPrueba}
                   alt="Transporte Social"
                   width={265}
                   height={265}
