@@ -18,7 +18,7 @@ async function main() {
 
   // Subido: exactamente sobre los puntos (no debajo)
   const left = { x: 52, y: 285 };
-  const right = { x: 471, y: 285 };
+  const right = { x: 471, y: 272 };
 
   function leaf(cx, cy, rot, scale) {
     // Solo la hoja (sin círculo blanco que tapa letras)
