@@ -16,26 +16,25 @@ async function main() {
   const h = meta.height;
   const u = w / 512;
 
-  // Una sola hoja por lado, más grande y más clara
+  // Subido: exactamente sobre los puntos (no debajo)
+  const left = { x: 52, y: 285 };
+  const right = { x: 471, y: 285 };
+  const bg = "#f2f5ef";
+
   function leaf(cx, cy, rot, scale) {
     return `
       <g transform="translate(${cx},${cy}) rotate(${rot}) scale(${scale})">
-        <path d="M0,-28 C16,-18 18,4 0,34 C-18,4 -16,-18 0,-28 Z"
-          fill="#4ade80" fill-opacity="0.95"
-          stroke="#22c55e" stroke-width="2.2" stroke-linejoin="round"/>
-        <path d="M0,-20 L0,24" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+        <circle cx="0" cy="0" r="16" fill="${bg}"/>
+        <path d="M0,-15 C9,-10 10,2 0,19 C-10,2 -9,-10 0,-15 Z"
+          fill="#4ade80"
+          stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M0,-11 L0,14" fill="none" stroke="#16a34a" stroke-width="1.5"/>
       </g>`;
   }
 
-  const cx = w / 2;
-  const cy = h / 2;
-  const r = w * 0.42;
-  const leftX = cx - r * 0.96;
-  const rightX = cx + r * 0.96;
-
   const svg = Buffer.from(`<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-    ${leaf(leftX, cy, -48, 1.55 * u)}
-    ${leaf(rightX, cy, 48, 1.55 * u)}
+    ${leaf(left.x, left.y, -50, 1.76 * u)}
+    ${leaf(right.x, right.y, 50, 1.76 * u)}
   </svg>`);
 
   const overlay = await sharp(svg).png().toBuffer();
@@ -44,7 +43,7 @@ async function main() {
     .png()
     .toFile(outPath);
 
-  console.log("ok", w, h, "->", outPath);
+  console.log("ok", left, right);
 }
 
 main().catch((e) => {
