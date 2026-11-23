@@ -5,7 +5,7 @@ const FRASE_TITULAR_CLASS =
 
 export function HomeSofaHighlight() {
   return (
-    <div className="flex min-w-0 max-w-full flex-col items-stretch gap-4 overflow-x-hidden px-1 sm:gap-5 lg:flex-row lg:items-center lg:justify-center lg:gap-6 lg:px-0">
+    <div className="flex min-w-0 max-w-full flex-col items-stretch gap-6 overflow-x-hidden px-2 py-2 sm:gap-7 lg:flex-row lg:items-center lg:justify-center lg:gap-8 lg:px-0 lg:py-4">
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>
         Compartiendo gastos
         <br />
@@ -20,7 +20,7 @@ export function HomeSofaHighlight() {
         <img
           src={BRAND.heroSofa}
           alt="Transporte Social — compartiendo ruta con humor"
-          className="mx-auto h-auto w-full max-w-[19rem] sm:max-w-[22rem] lg:max-w-[36rem]"
+          className="mx-auto h-auto w-full max-w-[19rem] rounded-2xl sm:max-w-[22rem] lg:max-w-[36rem]"
         />
       </div>
       <p className={`${FRASE_TITULAR_CLASS} lg:flex-1`}>

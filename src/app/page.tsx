@@ -1,7 +1,5 @@
 import { Libre_Baskerville } from "next/font/google";
 import { ButtonLink } from "@/components/ui/Button";
-import { BrandLogo } from "@/components/brand/BrandLogo";
-import { HomeSofaHighlight } from "@/components/home/HomeSofaHighlight";
 import { BRAND } from "@/lib/brand";
 
 const camaraFont = Libre_Baskerville({
@@ -10,269 +8,482 @@ const camaraFont = Libre_Baskerville({
   subsets: ["latin"],
 });
 
-const anuncioFont = Libre_Baskerville({
-  weight: "700",
-  subsets: ["latin"],
-});
-
+/**
+ * Portada = mockup (diseno/mockup-portada-propuesta.html) con enlaces reales.
+ */
 export default async function HomePage() {
   return (
     <>
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            img.portada-nevera {
+            .portada-mock { background: #065f46; }
+
+            .portada-hero {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 24px;
+              padding: 20px 16px 24px;
+              background: linear-gradient(145deg, #047857, #065f46);
+              color: #fff;
+            }
+            @media (min-width: 768px) {
+              .portada-hero {
+                grid-template-columns: 1.05fr 0.95fr;
+                gap: 32px;
+                padding: 16px 40px 20px;
+                align-items: start;
+                min-height: calc(100dvh - 2.5rem - 5.5rem);
+              }
+            }
+            @media (min-width: 1280px) {
+              .portada-hero {
+                padding-left: 56px;
+                padding-right: 56px;
+              }
+            }
+
+            .portada-hero-izq {
+              min-width: 0;
+              display: flex;
+              flex-direction: column;
+            }
+
+            .portada-logo-row {
+              display: flex;
+              gap: 16px;
+              align-items: flex-start;
+              margin-bottom: 0;
+              min-width: 0;
+            }
+
+            /* Aviso + 3 botones: 1 cm de aire bajo logo/título (PC) */
+            .portada-izq-baja {
+              margin-top: 0;
+            }
+            @media (min-width: 768px) {
+              .portada-izq-baja {
+                margin-top: 1cm;
+              }
+            }
+
+            /* Logo portada: tamaño fijo en px (3 mm ≈ 11 px por lado) */
+            .portada-logo {
+              width: 242px;
+              max-width: 242px;
+              flex-shrink: 0;
+              position: relative;
+              z-index: 2;
+              transform: translateY(2mm);
+            }
+            .portada-logo img {
               display: block;
-              width: 100%;
-              max-width: 17rem;
+              width: 242px;
               height: auto;
-              margin: 0 auto;
-              padding: 0;
-              vertical-align: top;
             }
-            @media (min-width: 768px) {
-              img.portada-nevera {
-                width: calc(30rem + 2cm);
-                max-width: none;
-              }
+
+            .portada-titulos {
+              min-width: 0;
+              flex: 1;
+              padding-top: 4px;
+              margin-left: 20mm;
             }
-            img.portada-nevera-hero {
+            .portada-hero h1 {
+              margin: 0 0 8px;
+              font-family: "Segoe UI", system-ui, sans-serif;
+              font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+              line-height: 1.12;
+              font-weight: 800;
+            }
+            .portada-hero h1 span {
               display: block;
-              width: 100%;
-              max-width: 17.5rem;
-              height: auto;
-              margin: 0 auto;
-              padding: 0;
-              vertical-align: top;
+              white-space: nowrap;
             }
-            @media (min-width: 768px) {
-              img.portada-nevera-hero {
-                width: calc(22rem + 2cm);
-                max-width: 92vw;
-              }
-            }
-            @media (min-width: 1024px) {
-              img.portada-nevera-hero {
-                width: calc(36rem + 2cm);
-                max-width: none;
-              }
-            }
-            .portada-rebaja {
-              width: 100%;
-              max-width: 17.5rem;
-            }
-            @media (min-width: 768px) {
-              .portada-rebaja {
-                width: calc(22rem + 2cm);
-                max-width: 92vw;
-              }
-            }
-            @media (min-width: 1024px) {
-              .portada-rebaja {
-                width: calc(36rem + 2cm);
-                max-width: 100%;
-              }
-            }
-            .portada-rebaja img.portada-nevera-hero {
-              width: 100%;
-              max-width: none;
+            .portada-lead {
               margin: 0;
+              font-size: 14px;
+              line-height: 1.4;
+              color: #ecfdf5;
+              max-width: 34ch;
+              font-family: "Segoe UI", system-ui, sans-serif;
             }
-            .portada-anuncio {
-              color: #c8f5f0;
-              text-shadow:
-                0 1px 1px rgba(0, 20, 20, 0.45);
+
+            .portada-prioridad {
+              margin: 0 0 12px;
+              padding: 12px 14px;
+              border-radius: 12px;
+              background: rgba(255,255,255,.1);
+              border: 1px solid rgba(255,255,255,.18);
+              font-family: "Segoe UI", system-ui, sans-serif;
+              font-size: 13px;
+              line-height: 1.4;
+              color: #e6fffa;
+              max-width: 520px;
+            }
+            .portada-prioridad span { display: block; }
+            @media (min-width: 768px) {
+              .portada-prioridad span {
+                white-space: nowrap;
+              }
+            }
+            .portada-prioridad strong {
+              display: block;
+              margin-top: 6px;
+              letter-spacing: .03em;
+              color: #fff;
+              font-size: 14px;
+              white-space: nowrap;
+            }
+
+            .portada-hint {
+              margin: 0 0 8px;
+              font-size: 13px;
+              font-weight: 600;
+              color: #fff;
+            }
+            .portada-hint-soft {
+              margin: 0;
+              font-size: 12px;
+              color: #d1fae5;
+              font-weight: 400;
+            }
+
+            .portada-acciones {
+              display: grid;
+              gap: 14px;
+              max-width: 440px;
+            }
+            .portada-acciones a {
+              display: flex !important;
+              align-items: center;
+              justify-content: flex-start !important;
+              gap: 10px;
+              width: 100%;
+              text-align: left !important;
+              border-radius: 14px !important;
+              padding: 13px 16px !important;
+              font-size: 15px !important;
+              font-weight: 700 !important;
+              min-height: 0 !important;
+              box-shadow: 0 6px 16px rgba(0,0,0,.12);
+            }
+            .portada-btn-viaje {
+              background: #10b981 !important;
+              color: #052e1c !important;
+              border: none !important;
+            }
+            .portada-btn-viaje:hover { background: #34d399 !important; }
+            .portada-btn-muni {
+              background: #fff !important;
+              color: #064e3b !important;
+              border: none !important;
+            }
+            .portada-btn-muni:hover { background: #ecfdf5 !important; }
+            .portada-btn-aviso {
+              background: #34d399 !important;
+              color: #064e3b !important;
+              border: 1px solid #6ee7b7 !important;
+              flex-direction: column !important;
+              align-items: flex-start !important;
+              gap: 2px !important;
+            }
+            .portada-btn-aviso:hover { background: #6ee7b7 !important; }
+            .portada-icon { font-size: 22px; line-height: 1; }
+
+            /* Foto + texto debajo: un poco más abajo */
+            .portada-visual {
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              gap: 12px;
+              min-width: 0;
+            }
+            @media (min-width: 768px) {
+              .portada-visual {
+                padding-top: calc(4cm + 15mm);
+              }
+            }
+            .portada-foto {
+              background: #0f3d2e;
+              border-radius: 18px;
+              border: 1px solid rgba(255,255,255,.2);
+              overflow: hidden;
+              padding: 12px;
+              display: grid;
+              place-items: center;
+            }
+            .portada-foto img {
+              display: block;
+              width: 100%;
+              max-width: 32rem;
+              height: auto;
+            }
+            .portada-gratis {
+              font-size: 14px;
+              line-height: 1.35;
+              color: #fff;
+            }
+            .portada-gratis b { color: #5eead4; }
+
+            .portada-banda {
+              background: #ecfdf5;
+              padding: 40px 16px 28px;
+            }
+            @media (min-width: 768px) {
+              .portada-banda { padding: 48px 48px 36px; }
+            }
+            .portada-frases {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 24px;
+              align-items: center;
+              margin-bottom: 36px;
+            }
+            @media (min-width: 1024px) {
+              .portada-frases {
+                grid-template-columns: 1fr auto 1fr;
+                gap: 28px;
+              }
+            }
+            .portada-frases p {
+              margin: 0;
+              font-size: clamp(1.1rem, 2vw, 1.4rem);
+              font-weight: 750;
+              line-height: 1.25;
+              color: #065f46;
+              text-align: center;
+            }
+            @media (min-width: 1024px) {
+              .portada-frases p { text-align: left; }
+            }
+            .portada-sofa {
+              margin: 0 auto;
+              width: 100%;
+              max-width: 22rem;
+            }
+            @media (min-width: 1024px) {
+              .portada-sofa { max-width: 36rem; }
+            }
+            .portada-sofa img {
+              display: block;
+              width: 100%;
+              height: auto;
+              border-radius: 16px;
+            }
+            .portada-buscar {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 16px;
+              max-width: 820px;
+              margin: 0 auto;
+            }
+            @media (min-width: 640px) {
+              .portada-buscar { grid-template-columns: 1fr 1fr; }
+            }
+            .portada-buscar a {
+              display: flex !important;
+              align-items: center;
+              justify-content: center !important;
+              gap: 10px;
+              border-radius: 14px !important;
+              padding: 14px 16px !important;
+              font-size: 15px !important;
+              font-weight: 700 !important;
+              min-height: 0 !important;
+              box-shadow: none !important;
+            }
+            .portada-buscar-blanco {
+              background: #fff !important;
+              color: #065f46 !important;
+              border: 1px solid #a7f3d0 !important;
+            }
+            .portada-buscar-verde {
+              background: #059669 !important;
+              color: #fff !important;
+              border-color: transparent !important;
+            }
+            .portada-camara {
+              text-align: center;
+              padding: 28px 24px 40px;
+              background: #ecfdf5;
+            }
+            .portada-camara p { margin: 0 0 14px; }
+            .portada-camara img {
+              display: block;
+              margin: 0 auto;
+              width: 100%;
+              max-width: 10rem;
+              height: auto;
             }
           `,
         }}
       />
-    <div className="space-y-6 px-4 py-4 lg:space-y-0 lg:px-0 lg:py-0">
-      <div className="lg:flex lg:min-h-[calc(100dvh-8rem)] lg:flex-col">
-        {/* Hero: en PC ocupa la mitad superior de la pantalla */}
-        <section className="grid grid-cols-1 items-stretch overflow-visible rounded-3xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white md:grid-cols-2 lg:min-h-0 lg:flex-[3] lg:rounded-none">
-          <div className="flex min-w-0 flex-col p-3 sm:p-6 lg:px-10 lg:pt-4 lg:pb-6 xl:px-16 xl:pt-5 xl:pb-8">
-            <div className="mb-3 sm:mb-4 lg:mb-2">
-            <div className="flex min-w-0 items-start gap-3">
-              <div className="-mt-[4mm] -mb-[4mm] -ml-[4mm] -mr-[4mm] w-[calc(40%+8mm)] max-w-[calc(9rem+8mm)] shrink-0 -translate-x-[4mm] overflow-hidden sm:max-w-[calc(10rem+8mm)] md:w-[calc(46%+8mm)] md:max-w-[calc(16rem+8mm)] lg:max-w-[calc(18rem+8mm)] xl:max-w-[calc(20rem+8mm)]">
-                <BrandLogo
-                  size="hero"
-                  showText={false}
-                  onDark
-                  plain
-                  linked={false}
-                  className="w-full"
+
+      <div className="portada-mock">
+        <section className="portada-hero">
+          <div className="portada-hero-izq">
+            <div className="portada-logo-row">
+              <div className="portada-logo">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={BRAND.logo}
+                  alt="Transporte Social"
+                  width={242}
+                  height={242}
                 />
               </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-sm font-bold leading-[1.12] text-white sm:text-base md:text-lg lg:text-2xl xl:text-3xl">
-                  <span className="block whitespace-nowrap">Viaja barato.</span>
-                  <span className="block whitespace-nowrap">Y con bultos y mascotas.</span>
+              <div className="portada-titulos">
+                <h1>
+                  <span>Viaja barato.</span>
+                  <span>Y con bultos y mascotas.</span>
                 </h1>
-                <p className="mt-1 text-xs text-emerald-50 sm:text-sm lg:text-base">
-                  <span className="lg:block">
-                    Conectamos conductores fiables{" "}
-                  </span>
-                  <span className="lg:block">
-                    con quienes necesitan viajar, enviar un paquete o{" "}
-                  </span>
-                  <span className="lg:block">
-                    desplazarse con su mascota compartiendo ruta.
-                  </span>
+                <p className="portada-lead">
+                  Conectamos conductores fiables con quienes necesitan viajar,
+                  enviar un paquete o desplazarse con su mascota compartiendo
+                  ruta.
                 </p>
               </div>
             </div>
-            <p
-              className={`${anuncioFont.className} portada-anuncio mt-2 min-w-0 max-w-full text-sm leading-snug sm:text-base`}
-            >
-              <span className="block lg:whitespace-nowrap">
-                📍 Arrancamos en la provincia de Burgos, en la conexión Burgos ↔ Madrid.
-              </span>
-              <span className="block lg:whitespace-nowrap">
-                Y el corredor Madrid ↔ Andalucía es clave ahora, con muchísima demanda.
-              </span>
-              <span className="block lg:whitespace-nowrap">PUBLICA TU VIAJE</span>
-            </p>
-            </div>
-            <div className="mt-3 grid gap-2 lg:mb-2 lg:mt-3 lg:max-w-xl">
-              <p className="px-1 text-sm font-semibold leading-snug text-white sm:text-base">
-                Anuncia tu espacio y asientos libres
-              </p>
-              <ButtonLink
-                href="/rutas/nueva"
-                variant="primary"
-                fullWidth
-                className="!h-auto !items-start !justify-start flex-col gap-1 px-3 py-2.5 text-left"
-              >
-                <span className="flex items-center gap-2 text-sm font-semibold leading-snug sm:text-base">
-                  <span className="text-2xl leading-none" aria-hidden>
+
+            <div className="portada-izq-baja">
+              <div className="portada-prioridad">
+                <span>
+                  Arrancamos en la provincia de Burgos, en la conexión Burgos ↔
+                  Madrid.
+                </span>
+                <span>
+                  El corredor Madrid ↔ Andalucía es clave ahora, con muchísima
+                  demanda.
+                </span>
+                <strong>¡PUBLICA TU VIAJE!</strong>
+              </div>
+
+              <p className="portada-hint">Anuncia tu espacio y asientos libres</p>
+              <div className="portada-acciones">
+                <ButtonLink
+                  href="/rutas/nueva"
+                  variant="primary"
+                  fullWidth
+                  className="portada-btn-viaje"
+                >
+                  <span className="portada-icon" aria-hidden>
                     🚚
                   </span>
-                  PUBLICAR ruta de una localidad a otra
-                </span>
-              </ButtonLink>
-              <p className="px-1 text-xs leading-snug text-emerald-50 sm:text-sm">
-                Podrás editar el viaje mientras no haya reservas.
-              </p>
-              <ButtonLink
-                href="/ciudad/nueva"
-                variant="secondary"
-                fullWidth
-                className="!h-auto !items-start !justify-start flex-col gap-1 border-white bg-white px-3 py-2.5 text-left text-emerald-950 hover:bg-emerald-50"
-              >
-                <span className="flex items-center gap-2 text-sm font-semibold leading-snug text-emerald-950 sm:text-base">
-                  <span className="text-2xl leading-none" aria-hidden>
+                  Publicar viaje de una localidad a otra
+                </ButtonLink>
+                <p className="portada-hint-soft">
+                  Podrás editar el viaje mientras no haya reservas.
+                </p>
+                <ButtonLink
+                  href="/ciudad/nueva"
+                  variant="secondary"
+                  fullWidth
+                  className="portada-btn-muni"
+                >
+                  <span className="portada-icon" aria-hidden>
                     🏘️
                   </span>
                   PUBLICAR ruta dentro de mi municipio
-                </span>
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="flex items-center justify-center self-stretch px-3 pb-4 pt-1 md:min-h-[14rem] md:px-4 md:pb-3 md:pt-0 lg:min-h-0">
-            <div className="portada-rebaja flex flex-col items-start">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={BRAND.heroNevera}
-                alt=""
-                className="portada-nevera-hero"
-              />
-              <div className="mt-4 w-full md:hidden">
+                </ButtonLink>
                 <ButtonLink
                   href="/bultos/nuevo?entrada=portada"
                   variant="secondary"
                   fullWidth
-                  className="!h-auto !items-start !justify-start flex-col gap-1 border-emerald-300 bg-emerald-400 px-3 py-2.5 text-left text-emerald-950 hover:border-emerald-200 hover:bg-emerald-300"
+                  className="portada-btn-aviso"
                 >
-                  <span className="flex items-center gap-2 text-xs font-semibold text-emerald-900 sm:text-sm">
-                    <span className="text-2xl leading-none" aria-hidden>
+                  <span className="flex items-center gap-2 text-xs font-semibold sm:text-sm">
+                    <span className="portada-icon" aria-hidden>
                       📦
                     </span>
                     (Soy Remitente/Pasajero)
                   </span>
-                  <span className="text-sm font-semibold leading-snug sm:text-base">
-                    AVISARME si un conductor hace esta ruta
-                  </span>
+                  <span>AVISARME si un conductor hace esta ruta</span>
                 </ButtonLink>
               </div>
-              <div className="mt-8 text-left text-lg leading-snug text-white md:text-xl">
-                <p className="font-semibold">
-                  <span className="text-[#00b4c4]" aria-hidden>
-                    ✓{" "}
-                  </span>
-                  Usar Transporte Social es gratis
-                </p>
-                <p className="mt-1 md:whitespace-nowrap md:-translate-x-[2.5cm]">
-                  Además custodiamos el importe del viaje hasta confirmar que todo ha ido bien.
-                </p>
-              </div>
-              <div className="mt-4 hidden w-full md:block">
-              <ButtonLink
-                href="/bultos/nuevo?entrada=portada"
-                variant="secondary"
-                fullWidth
-                className="!h-auto !items-start !justify-start flex-col gap-1 border-emerald-300 bg-emerald-400 px-3 py-2.5 text-left text-emerald-950 hover:border-emerald-200 hover:bg-emerald-300"
-              >
-                <span className="flex items-center gap-2 text-xs font-semibold text-emerald-900 sm:text-sm">
-                  <span className="text-2xl leading-none" aria-hidden>
-                    📦
-                  </span>
-                  (Soy Remitente/Pasajero)
-                </span>
-                <span className="text-sm font-semibold leading-snug sm:text-base">
-                  AVISARME si un conductor hace esta ruta
-                </span>
-              </ButtonLink>
-              </div>
+            </div>
+          </div>
+
+          <div className="portada-visual">
+            <div className="portada-foto">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={BRAND.heroNevera} alt="" />
+            </div>
+            <div className="portada-gratis">
+              <b>✓</b> Usar Transporte Social es gratis
+              <br />
+              Además custodiamos el importe del viaje hasta confirmar que todo
+              ha ido bien.
             </div>
           </div>
         </section>
 
-        {/* Nevera + botones de búsqueda */}
-        <section className="mt-0 space-y-0 md:pb-8 lg:flex lg:flex-[2] lg:flex-col lg:justify-start lg:gap-0 lg:px-10 lg:pt-0 lg:pb-12 xl:px-16">
-          <HomeSofaHighlight />
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:mt-5 lg:gap-5">
+        <section className="portada-banda">
+          <div className="portada-frases">
+            <p>
+              Compartiendo gastos
+              <br />
+              Más económico, más eficiente, menos tiempo
+              <br />
+              Ahorra en cada trayecto
+            </p>
+            <div className="portada-sofa">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={BRAND.heroSofa}
+                alt="Transporte Social — compartiendo ruta con humor"
+              />
+            </div>
+            <p>
+              De tú a tú
+              <br />
+              Pasajeros, bultos y mascotas
+              <br />
+              Tienes también la opción de solicitar una rebaja
+              <br />
+              Y la diferencia vuelve a tu bolsillo
+            </p>
+          </div>
+
+          <div className="portada-buscar">
             <ButtonLink
               href="/rutas"
               variant="secondary"
               fullWidth
-              className="!h-auto flex-col gap-1 px-4 py-3"
+              className="portada-buscar-blanco"
             >
-              <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                <span className="text-2xl leading-none sm:text-3xl" aria-hidden>
-                  🔍
-                </span>
-                Buscar viaje de una localidad a otra
+              <span className="portada-icon" aria-hidden>
+                🔍
               </span>
+              Buscar viaje de una localidad a otra
             </ButtonLink>
             <ButtonLink
               href="/ciudad"
               variant="primary"
               fullWidth
-              className="!h-auto flex-col gap-1 px-4 py-3"
+              className="portada-buscar-verde"
             >
-              <span className="flex w-full items-center justify-center gap-2 text-base font-semibold leading-snug sm:text-lg">
-                <span className="inline-flex items-center leading-none" aria-hidden>
-                  <img src="/brand/casitas.png" alt="" className="h-10 w-auto sm:hidden" />
-                  <span className="hidden text-3xl sm:inline">🏘️</span>
-                </span>
-                Buscar ruta dentro de mi municipio
+              <span className="portada-icon" aria-hidden>
+                🏘️
               </span>
+              Buscar ruta dentro de mi municipio
             </ButtonLink>
           </div>
+        </section>
+
+        <section className="portada-camara">
           <p
-            className={`${camaraFont.className} mt-6 text-center text-lg italic leading-snug text-orange-500 sm:mt-8 sm:text-xl`}
+            className={`${camaraFont.className} text-lg italic leading-snug text-orange-500 sm:text-xl`}
           >
             Iniciativa de movilidad con el respaldo institucional de la Cámara
             de Comercio de Burgos.
           </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/logo-camara-burgos.jpg"
             alt="Cámara de Comercio de Burgos"
-            className="mx-auto mt-4 block h-auto w-full max-w-[10rem]"
           />
         </section>
       </div>
-    </div>
     </>
   );
 }
