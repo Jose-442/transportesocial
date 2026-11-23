@@ -9,7 +9,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex h-10 max-w-none items-center justify-between gap-3 px-4 lg:px-12 xl:px-16">
-        <nav className="flex min-w-0 items-center gap-6 text-[calc(13px+1pt)] text-zinc-700 sm:gap-12">
+        <nav className="flex min-w-0 items-center gap-6 text-[calc(13px+2pt)] text-zinc-700 sm:gap-12">
           <a
             href="/quienes-somos"
             className="min-w-0 truncate font-medium transition-colors hover:text-emerald-800"
@@ -33,7 +33,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
           <ButtonLink
             href="/login"
             variant="secondary"
-            className="h-8 shrink-0 rounded-full border border-zinc-300 px-3.5 text-[calc(13px+1pt)] font-semibold"
+            className="h-8 shrink-0 rounded-full border border-zinc-300 px-3.5 text-[calc(13px+2pt)] font-semibold"
           >
             Entrar
           </ButtonLink>
