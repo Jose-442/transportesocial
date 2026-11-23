@@ -28,7 +28,7 @@ export function HomeSofaHighlight() {
         <br />
         Pasajeros, bultos y mascotas
         <br />
-        Tienes tambien la opción
+        Tienes también la opción
         <br />
         de solicitar una rebaja
         <br />

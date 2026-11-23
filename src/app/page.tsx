@@ -79,12 +79,9 @@ export default async function HomePage() {
               margin: 0;
             }
             .portada-anuncio {
-              color: #9af7ef;
+              color: #c8f5f0;
               text-shadow:
-                0 0 1px rgba(0, 30, 30, 0.9),
-                0 1px 1px rgba(0, 20, 20, 0.75),
-                0 0 8px rgba(80, 255, 230, 0.95),
-                0 0 18px rgba(0, 210, 190, 0.8);
+                0 1px 1px rgba(0, 20, 20, 0.45);
             }
           `,
         }}
@@ -258,7 +255,7 @@ export default async function HomePage() {
                   <img src="/brand/casitas.png" alt="" className="h-10 w-auto sm:hidden" />
                   <span className="hidden text-3xl sm:inline">🏘️</span>
                 </span>
-                Buscar ruta dentro de mi municipio.
+                Buscar ruta dentro de mi municipio
               </span>
             </ButtonLink>
           </div>
