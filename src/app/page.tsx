@@ -72,7 +72,7 @@ export default async function HomePage() {
               }
             }
 
-            /* Logo portada: tamaño fijo en px (3 mm ≈ 11 px por lado) */
+            /* Logo: caja 242 (no empuja layout); imagen +3 mm a cada lado */
             .portada-logo {
               width: 242px;
               max-width: 242px;
@@ -80,11 +80,15 @@ export default async function HomePage() {
               position: relative;
               z-index: 2;
               transform: translateY(2mm);
+              overflow: visible;
             }
             .portada-logo img {
               display: block;
-              width: 242px;
+              width: calc(242px + 6mm);
+              max-width: none;
               height: auto;
+              margin-left: -3mm;
+              margin-top: -3mm;
             }
 
             .portada-titulos {
@@ -336,8 +340,8 @@ export default async function HomePage() {
                 <img
                   src={BRAND.logo}
                   alt="Transporte Social"
-                  width={242}
-                  height={242}
+                  width={265}
+                  height={265}
                 />
               </div>
               <div className="portada-titulos">
