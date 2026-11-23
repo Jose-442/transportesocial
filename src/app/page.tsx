@@ -33,7 +33,7 @@ export default async function HomePage() {
                 gap: 28px;
                 /* Arriba sin recortar logo/título; abajo hueco para la barra fija */
                 padding: 16px 40px 6.5rem;
-                align-items: start;
+                align-items: stretch;
                 min-height: calc(100dvh - 2.75rem);
                 box-sizing: border-box;
                 overflow: visible;
@@ -50,6 +50,11 @@ export default async function HomePage() {
               min-width: 0;
               display: flex;
               flex-direction: column;
+            }
+            @media (min-width: 768px) {
+              .portada-hero-izq {
+                align-self: start;
+              }
             }
 
             .portada-logo-row {
@@ -201,7 +206,7 @@ export default async function HomePage() {
             .portada-btn-aviso:hover { background: #6ee7b7 !important; }
             .portada-icon { font-size: 22px; line-height: 1; }
 
-            /* Foto + texto debajo: un poco más abajo */
+            /* Foto + texto: pegados abajo de la primera pantalla */
             .portada-visual {
               display: flex;
               flex-direction: column;
@@ -211,8 +216,10 @@ export default async function HomePage() {
             }
             @media (min-width: 768px) {
               .portada-visual {
-                /* Hueco arriba moderado: foto un poco mayor y texto visible */
-                padding-top: 2cm;
+                padding-top: 0;
+                height: 100%;
+                min-height: 100%;
+                justify-content: flex-end;
               }
             }
             .portada-foto {
@@ -234,7 +241,7 @@ export default async function HomePage() {
               font-size: calc(14px + 2pt);
               line-height: 1.35;
               color: #fff;
-              padding-bottom: 0.5rem;
+              padding-bottom: 0;
             }
             .portada-gratis b { color: #5eead4; }
 
