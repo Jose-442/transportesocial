@@ -9,7 +9,7 @@ export function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex h-11 max-w-none items-center justify-between gap-3 px-4 lg:px-12 xl:px-16">
-        <nav className="flex min-w-0 items-center gap-8 text-[calc(13px+2pt)] text-zinc-700 sm:gap-20">
+        <nav className="flex min-w-0 items-center gap-3 text-[calc(13px+2pt)] text-zinc-700 sm:gap-20">
           <a
             href="/quienes-somos"
             className="min-w-0 truncate font-medium transition-colors hover:text-emerald-800"

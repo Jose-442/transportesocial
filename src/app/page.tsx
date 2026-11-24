@@ -27,6 +27,8 @@ export default async function HomePage() {
               /* Un poco más claro que antes (#065f46) */
               background: linear-gradient(145deg, #059669, #047857);
               color: #fff;
+              overflow-x: hidden;
+              max-width: 100%;
             }
             @media (min-width: 768px) {
               .portada-hero {
@@ -62,10 +64,20 @@ export default async function HomePage() {
 
             .portada-logo-row {
               display: flex;
-              gap: 16px;
-              align-items: flex-start;
+              flex-direction: column;
+              gap: 12px;
+              align-items: center;
               margin-bottom: 0;
               min-width: 0;
+              text-align: center;
+            }
+            @media (min-width: 768px) {
+              .portada-logo-row {
+                flex-direction: row;
+                gap: 16px;
+                align-items: flex-start;
+                text-align: left;
+              }
             }
 
             /* Solo aviso + 3 botones (NO logo ni título) */
@@ -79,30 +91,50 @@ export default async function HomePage() {
               }
             }
 
-            /* Logo: caja 242 (no empuja layout); imagen +3 mm a cada lado */
+            /* Logo: en móvil cabe; en PC caja 242 (no empuja layout) */
             .portada-logo {
-              width: 242px;
-              max-width: 242px;
+              width: min(168px, 46vw);
+              max-width: 100%;
               flex-shrink: 0;
               position: relative;
               z-index: 2;
-              transform: translateY(2mm);
               overflow: visible;
+            }
+            @media (min-width: 768px) {
+              .portada-logo {
+                width: 242px;
+                max-width: 242px;
+                transform: translateY(2mm);
+              }
             }
             .portada-logo img {
               display: block;
-              width: calc(242px + 6mm);
-              max-width: none;
+              width: 100%;
+              max-width: 100%;
               height: auto;
-              margin-left: -3mm;
-              margin-top: -3mm;
+            }
+            @media (min-width: 768px) {
+              .portada-logo img {
+                width: calc(242px + 6mm);
+                max-width: none;
+                margin-left: -3mm;
+                margin-top: -3mm;
+              }
             }
 
             .portada-titulos {
               min-width: 0;
-              flex: 1;
-              padding-top: 4px;
-              margin-left: 20mm;
+              width: 100%;
+              padding-top: 0;
+              margin-left: 0;
+            }
+            @media (min-width: 768px) {
+              .portada-titulos {
+                flex: 1;
+                width: auto;
+                padding-top: 4px;
+                margin-left: 20mm;
+              }
             }
             .portada-hero h1 {
               margin: 0 0 8px;
@@ -113,15 +145,24 @@ export default async function HomePage() {
             }
             .portada-hero h1 span {
               display: block;
-              white-space: nowrap;
+            }
+            @media (min-width: 768px) {
+              .portada-hero h1 span {
+                white-space: nowrap;
+              }
             }
             .portada-lead {
-              margin: 0;
+              margin: 0 auto;
               font-size: calc(14px + 2pt);
               line-height: 1.4;
               color: #ecfdf5;
               max-width: 34ch;
               font-family: "Segoe UI", system-ui, sans-serif;
+            }
+            @media (min-width: 768px) {
+              .portada-lead {
+                margin: 0;
+              }
             }
 
             .portada-prioridad {
@@ -148,7 +189,11 @@ export default async function HomePage() {
               letter-spacing: .03em;
               color: #fff;
               font-size: calc(14px + 2pt);
-              white-space: nowrap;
+            }
+            @media (min-width: 768px) {
+              .portada-prioridad strong {
+                white-space: nowrap;
+              }
             }
 
             .portada-hint {
