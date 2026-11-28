@@ -1040,7 +1040,7 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "San Cristóbal", tipo: "barrio" },
   { nombre: "Villímar", tipo: "barrio" },
   { nombre: "Los Vadillos", tipo: "barrio" },
-  { nombre: "Río Vena", tipo: "barrio" },
+  { nombre: "Rio Vena Barrio", tipo: "barrio" },
   { nombre: "Los Ríos - Vista Alegre", tipo: "barrio" },
   { nombre: "San Pedro de la Fuente", tipo: "barrio" },
   { nombre: "Fuentecillas", tipo: "barrio" },
