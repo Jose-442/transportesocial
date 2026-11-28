@@ -9,18 +9,12 @@ export const DECLARACION_CONDUCTOR: FragmentoDeclaracion[][] = [
   [
     {
       texto:
-        "Confirmo que realizaría este desplazamiento igualmente aunque no reciba ninguna reserva a través de Transporte Social.",
+        "Confirmo que es un viaje personal (",
     },
-  ],
-  [
+    { texto: "no por encargo", negrita: true },
     {
       texto:
-        "Declaro asimismo que el viaje responde a una necesidad propia, ",
-    },
-    { texto: "que no es por encargo", negrita: true },
-    {
-      texto:
-        " y que las cantidades recibidas se destinan exclusivamente a compartir los gastos admisibles del trayecto.",
+        ") que haría igualmente sin reserva en Transporte Social, y que el importe solo cubre gastos compartidos.",
     },
   ],
 ];
