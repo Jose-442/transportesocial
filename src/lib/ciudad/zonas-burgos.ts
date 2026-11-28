@@ -1036,6 +1036,7 @@ const BARRIOS_BURGOS: ZonaCiudad[] = [
   { nombre: "Gamonal Norte", tipo: "barrio" },
   { nombre: "Gamonal Sur", tipo: "barrio" },
   { nombre: "G-9", tipo: "barrio" },
+  { nombre: "G-3", tipo: "barrio" },
   { nombre: "Capiscol", tipo: "barrio" },
   { nombre: "San Cristóbal", tipo: "barrio" },
   { nombre: "Villímar", tipo: "barrio" },
