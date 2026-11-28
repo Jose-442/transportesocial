@@ -46,7 +46,7 @@ export default async function NuevaRutaPage({
       if (reabrir.url) redirect(reabrir.url);
     } else if (connectParam === "return") {
       await sincronizarStripeConnectUsuario(user.id);
-      redirect("/rutas/nueva");
+      redirect("/rutas/nueva?vuelta_banco=1");
     }
     const profileResult = await getOrCreateProfile(supabase, user);
     if (profileResult.profile) {

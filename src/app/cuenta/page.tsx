@@ -62,7 +62,7 @@ export default async function CuentaPage({
     } catch (err) {
       console.error("[cuenta connect return]", err);
     }
-    redirect("/cuenta");
+    redirect("/cuenta?vuelta_banco=1");
   }
 
   const result = await getOrCreateProfile(supabase, user);

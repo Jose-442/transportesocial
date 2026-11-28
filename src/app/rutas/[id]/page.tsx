@@ -142,8 +142,8 @@ export default async function RutaDetallePage({
     redirect(`/rutas/${id}`);
   } else if (user && connectParam === "return") {
     await sincronizarStripeConnectUsuario(user.id);
-    // Quitar ?connect=return y recargar ya con el banco sincronizado.
-    redirect(`/rutas/${id}`);
+    // Quitar ?connect=return y volver junto al bloque del banco.
+    redirect(`/rutas/${id}?vuelta_banco=1`);
   }
 
   let reservaPendienteId: string | null = null;
