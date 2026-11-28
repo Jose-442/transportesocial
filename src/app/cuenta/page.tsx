@@ -262,9 +262,16 @@ export default async function CuentaPage({
         <CuentaPrivacidadSection displayName={profile.display_name} />
       </Card>
 
-      <ButtonLink href="/cuenta/incidencias" fullWidth>
-        Incidencias, mejoras y quejas
-      </ButtonLink>
+      <div className="space-y-2">
+        <p className="text-sm text-zinc-600">
+          Si en alguna población de más de 25.000 habitantes que aparece en la
+          app falta un barrio o polígono, o se llama de otra forma, por favor
+          comunícalo.
+        </p>
+        <ButtonLink href="/cuenta/incidencias" fullWidth>
+          Incidencias, mejoras y quejas
+        </ButtonLink>
+      </div>
 
       <form action={cerrarSesion}>
         <Button
