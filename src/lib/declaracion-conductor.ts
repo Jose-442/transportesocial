@@ -14,7 +14,7 @@ export const DECLARACION_CONDUCTOR: FragmentoDeclaracion[][] = [
     { texto: "no por encargo", negrita: true },
     {
       texto:
-        ") que haría igualmente sin reserva en Transporte Social, y que el importe solo cubre gastos compartidos.",
+        ") y que haría igualmente sin reservas en Transporte Social, y que el importe solo cubre gastos compartidos.",
     },
   ],
 ];
